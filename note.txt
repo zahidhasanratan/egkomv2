@@ -1,0 +1,15 @@
+Super Admin Login : http://127.0.0.1:8000/super-admin/login
+user : egkom@gmail.com
+pass : 5464654646
+
+user Login : http://127.0.0.1:8000/login
+
+user : support@esoft.com.bd
+pass : 5464654646
+
+
+<img src="{{ asset('storage/logos/' . $companyLogoPath) }}" alt="Company Logo">
+
+
+
+
