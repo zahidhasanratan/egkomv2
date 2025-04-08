@@ -39,4 +39,14 @@ class Hotel extends Model
         'property_types' => 'array', // Cast as array
         'apartments' => 'array',     // Cast as array
     ];
+
+    public function getRouteKey()
+    {
+        return Crypt::encrypt($this->id);
+    }
+
+    public function rooms()
+    {
+        return $this->hasMany(Room::class);
+    }
 }

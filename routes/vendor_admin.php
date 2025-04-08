@@ -7,6 +7,7 @@ use App\Http\Controllers\Vendor\VendorController;
 use App\Http\Controllers\Vendor\OwnerController;
 use App\Http\Controllers\Vendor\BankingController;
 use App\Http\Controllers\Vendor\ManageHotel;
+use App\Http\Controllers\Vendor\ManageRoomController;
 use App\Http\Controllers\Superadmin\DashboardController;
 use App\Http\Controllers\admin\AdminDashboardController;
 use App\Http\Controllers\admin\MenuController;
@@ -55,7 +56,11 @@ Route::prefix('vendor-admin')->group(function () {
         Route::put('/hotel/{hotel}', [ManageHotel::class, 'update'])->name('vendor-admin.hotel.update');
         Route::delete('/hotel/{hotel}', [ManageHotel::class, 'destroy'])->name('vendor-admin.hotel.destroy');
 
+
+        Route::get('/vendor-admin/room/{id}', [ManageRoomController::class, 'index'])->name('vendor-admin.room.index');
+        Route::get('/room-create/{id}', [ManageRoomController::class, 'create'])->name('vendor-admin.room.create');
     });
+    Route::post('/vendor-admin/room/store', [ManageRoomController::class, 'store'])->name('vendor-admin.room.store');
     /*Admin Panel Ended */
 
 });

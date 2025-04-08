@@ -26,7 +26,7 @@
                 <li class="nk-menu-item has-sub"><a href="#" class="nk-menu-link nk-menu-toggle"><span class="nk-menu-icon"><em class="icon ni ni-dashlite-alt"></em></span><span class="nk-menu-text">Manage Room</span></a>
                     <ul class="nk-menu-sub">
                        @foreach(\App\Models\Hotel::all()->where('status','submitted') as $hotel)
-                        <li class="nk-menu-item"><a href="#" class="nk-menu-link"><span class="nk-menu-text">{{ $hotel->description }}</span></a></li>
+                        <li class="nk-menu-item"><a href="{{ route('vendor-admin.room.index',\Illuminate\Support\Facades\Crypt::encrypt($hotel->id)) }}" class="nk-menu-link"><span class="nk-menu-text">{{ $hotel->description }}</span></a></li>
                         @endforeach
                     </ul>
                 </li>
