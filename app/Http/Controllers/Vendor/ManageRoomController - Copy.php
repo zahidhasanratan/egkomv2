@@ -9,7 +9,6 @@ use App\Models\RoomPhoto;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Log;
 
 class ManageRoomController extends Controller
 {
@@ -49,11 +48,11 @@ class ManageRoomController extends Controller
             'total_beds' => 'required|integer|min:0',
             'wifi_details' => 'nullable|string|max:255',
             'appliances' => 'nullable|array',
-            'appliances.*' => 'in:AC,TV,Fridge,Microwave,Fan,Lamp,Light,Water heater/Geyser,WiFi Router,Crockeries,Gas Stove,Electric Kettle,Room Heater,Hair Dryer',
+            'appliances.*' => 'in:AC,TV,Fridge,Microwave,Fan,Lamp,Light,Water heater/Geyser,WiFi Router,Crockeries,Gas Stove,Electric Kettle,Room Heater,Hair Dryer', // Updated
             'furniture' => 'nullable|array',
             'amenities' => 'nullable|array',
-            'custom_appliances' => 'nullable|array',
-            'custom_appliances.*' => 'nullable|string|max:255',
+            'custom_appliances' => 'nullable|array', // Updated
+            'custom_appliances.*' => 'nullable|string|max:255', // Updated
             'custom_furniture' => 'nullable|array',
             'custom_amenities' => 'nullable|array',
             'cancellation_policies' => 'nullable|array',
@@ -75,7 +74,7 @@ class ManageRoomController extends Controller
         ]);
 
         // Merge custom fields with predefined ones
-        $appliances = array_unique(array_filter(array_merge($request->appliances ?? [], $request->custom_appliances ?? [])));
+        $appliances = array_unique(array_filter(array_merge($request->appliances ?? [], $request->custom_appliances ?? []))); // Updated
         $furniture = array_merge($request->furniture ?? [], $request->custom_furniture ?? []);
         $amenities = array_merge($request->amenities ?? [], $request->custom_amenities ?? []);
 
@@ -131,7 +130,7 @@ class ManageRoomController extends Controller
                     $path = $photo->store('room_photos', 'public');
                     RoomPhoto::create([
                         'room_id' => $room->id,
-                        'photo_path' => $path, // Changed from 'path' to 'photo_path'
+                        'path' => $path,
                         'category' => $category,
                     ]);
                 }

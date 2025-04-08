@@ -15,12 +15,7 @@
 
                             </div>
                             <div class="nk-block-head-content">
-                                @if (session('success'))
-                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                        {{ session('success') }}
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    </div>
-                                @endif
+
                                 <ul class="nk-block-tools g-3">
                                     <li>
                                         <div class="drodown">
