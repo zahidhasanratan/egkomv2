@@ -54,10 +54,8 @@ class ManageRoomController extends Controller
             'amenities' => 'nullable|array',
             'custom_appliances' => 'nullable|array',
             'custom_appliances.*' => 'nullable|string|max:255',
-            'custom_furniture' => 'nullable|array', // Added validation
-            'custom_furniture.*' => 'nullable|string|max:255', // Added validation
-            'custom_amenities' => 'nullable|array', // Added validation
-            'custom_amenities.*' => 'nullable|string|max:255', // Added validation
+            'custom_furniture' => 'nullable|array',
+            'custom_amenities' => 'nullable|array',
             'cancellation_policies' => 'nullable|array',
             'cancellation_policies.*' => 'in:flexible,non_refundable,partially_refundable,long_term',
             'is_active' => 'boolean',
@@ -78,8 +76,8 @@ class ManageRoomController extends Controller
 
         // Merge custom fields with predefined ones
         $appliances = array_unique(array_filter(array_merge($request->appliances ?? [], $request->custom_appliances ?? [])));
-        $furniture = array_unique(array_filter(array_merge($request->furniture ?? [], $request->custom_furniture ?? []))); // Added array_unique and array_filter for consistency
-        $amenities = array_unique(array_filter(array_merge($request->amenities ?? [], $request->custom_amenities ?? []))); // Added array_unique and array_filter for consistency
+        $furniture = array_merge($request->furniture ?? [], $request->custom_furniture ?? []);
+        $amenities = array_merge($request->amenities ?? [], $request->custom_amenities ?? []);
 
         // Determine status based on save_draft
         $status = $request->has('save_draft') && $request->save_draft == '1' ? 'draft' : 'published';
