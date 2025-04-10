@@ -59,8 +59,9 @@ Route::prefix('vendor-admin')->group(function () {
 
         Route::get('/vendor-admin/room/{id}', [ManageRoomController::class, 'index'])->name('vendor-admin.room.index');
         Route::get('/room-create/{id}', [ManageRoomController::class, 'create'])->name('vendor-admin.room.create');
+        Route::post('/vendor-admin/room/store', [ManageRoomController::class, 'store'])->name('vendor-admin.room.store');
+
     });
-    Route::post('/vendor-admin/room/store', [ManageRoomController::class, 'store'])->name('vendor-admin.room.store');
     /*Admin Panel Ended */
 
 });

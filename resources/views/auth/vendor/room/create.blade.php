@@ -275,6 +275,7 @@
                                             </div>
 
                                             <!-- Appliances Information -->
+                                            <!-- Appliances Information -->
                                             <div class="row mt-15">
                                                 <div class="checkbox-section">
                                                     <h3 class="can-tittle">Appliances Information</h3>
@@ -304,19 +305,24 @@
 
                                                     <div class="row">
                                                         <div class="col-md-5">
-                                                            <div class="section">
+                                                            <div class="section appliances-section">
                                                                 <div class="input-container" style="display: none;">
                                                                     <div class="form-group mb-3 d-flex align-items-center">
-                                                                        <input type="text" class="form-control" placeholder="Enter something">
-                                                                        <button class="btn btn-danger btn-sm">Delete</button>
+                                                                        <input type="text" class="form-control" placeholder="Enter custom appliance">
+                                                                        <button type="button" class="btn btn-danger btn-sm ms-2">Delete</button>
                                                                     </div>
                                                                 </div>
-                                                                <button class="add-more add-rule-btn btn add-button">Add More</button>
+                                                                <div class="custom-inputs"></div> <!-- Container for added inputs -->
+                                                                <button type="button" class="add-more add-rule-btn btn add-button">Add More</button>
+                                                                @error('custom_appliances.*')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
+
 
                                             <!-- Furniture Information -->
                                             <div class="row mt-15">
@@ -344,20 +350,23 @@
 
                                                     <div class="row">
                                                         <div class="col-md-5">
-                                                            <div class="section">
+                                                            <div class="section furniture-section">
                                                                 <div class="input-container" style="display: none;">
                                                                     <div class="form-group mb-3 d-flex align-items-center">
-                                                                        <input type="text" class="form-control" placeholder="Enter something">
-                                                                        <button class="btn btn-danger btn-sm">Delete</button>
+                                                                        <input type="text" class="form-control" placeholder="Enter custom furniture">
+                                                                        <button type="button" class="btn btn-danger btn-sm ms-2">Delete</button>
                                                                     </div>
                                                                 </div>
-                                                                <button class="add-more add-rule-btn btn add-button">Add More</button>
+                                                                <div class="custom-inputs"></div> <!-- Container for added inputs -->
+                                                                <button type="button" class="add-more add-rule-btn btn add-button">Add More</button>
+                                                                @error('custom_furniture.*')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <!-- Cancellation Policies -->
                                             <div class="row mt-15">
                                                 <div class="col-md-12">
@@ -419,6 +428,7 @@
 
                                         <!-- Amenities -->
                                         <div class="tab-pane" id="tabItem4">
+                                            <!-- Room Amenities -->
                                             <div class="row mt-15">
                                                 <div class="checkbox-section">
                                                     <h3 class="label-chk">Room Amenities</h3>
@@ -445,14 +455,18 @@
 
                                                     <div class="row">
                                                         <div class="col-md-5">
-                                                            <div class="section">
+                                                            <div class="section amenities-section">
                                                                 <div class="input-container" style="display: none;">
                                                                     <div class="form-group mb-3 d-flex align-items-center">
-                                                                        <input type="text" class="form-control" placeholder="Enter something">
-                                                                        <button class="btn btn-danger btn-sm">Delete</button>
+                                                                        <input type="text" class="form-control" placeholder="Enter custom amenity">
+                                                                        <button type="button" class="btn btn-danger btn-sm ms-2">Delete</button>
                                                                     </div>
                                                                 </div>
-                                                                <button class="add-more add-rule-btn btn add-button">Add More</button>
+                                                                <div class="custom-inputs"></div> <!-- Container for added inputs -->
+                                                                <button type="button" class="add-more add-rule-btn btn add-button">Add More</button>
+                                                                @error('custom_amenities.*')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
                                                             </div>
                                                         </div>
                                                     </div>
@@ -676,7 +690,49 @@
             display: none;
         }
     </style>
+    <!-- JavaScript for "Add More" -->
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to set up "Add More" for a section
+            function setupAddMore(sectionSelector, inputName) {
+                const section = document.querySelector(sectionSelector);
+                if (!section) {
+                    console.warn(`Section not found: ${sectionSelector}`);
+                    return;
+                }
+
+                const addButton = section.querySelector('.add-button');
+                const template = section.querySelector('.input-container');
+                const customInputsContainer = section.querySelector('.custom-inputs');
+
+                if (!addButton || !template || !customInputsContainer) {
+                    console.warn(`Missing elements in ${sectionSelector}: addButton, template, or customInputsContainer`);
+                    return;
+                }
+
+                addButton.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const newInput = template.cloneNode(true);
+                    newInput.style.display = 'block';
+                    newInput.querySelector('input').name = inputName + '[]';
+                    customInputsContainer.appendChild(newInput);
+                });
+
+                section.addEventListener('click', function (e) {
+                    if (e.target.classList.contains('btn-danger')) {
+                        e.preventDefault();
+                        e.target.closest('.input-container').remove();
+                    }
+                });
+            }
+
+            // Set up each section
+            setupAddMore('.appliances-section', 'custom_appliances');
+            setupAddMore('.furniture-section', 'custom_furniture');
+            setupAddMore('.amenities-section', 'custom_amenities');
+        });
+    </script>
     <script type="text/javascript">
         document.getElementById('propertyCategory').addEventListener('change', function() {
             var propertyTypeContainer = document.getElementById('propertyTypeContainer');
@@ -1369,38 +1425,7 @@
         });
     </script>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll(".add-more").forEach((button) => {
-                button.addEventListener("click", function (event) {
-                    event.preventDefault(); // Prevent form submission
-                    const inputContainer = this.previousElementSibling;
-                    const newFormGroup = document.createElement("div");
-                    newFormGroup.classList.add("form-group", "mb-1", "d-flex", "align-items-center");
-                    newFormGroup.style.gap = "10px";
 
-                    const inputField = document.createElement("input");
-                    inputField.type = "text";
-                    inputField.classList.add("form-control");
-                    inputField.placeholder = "Enter something";
-
-                    const deleteButton = document.createElement("button");
-                    deleteButton.innerText = "Delete";
-                    deleteButton.classList.add("delete-btn");
-                    deleteButton.type = "button"; // Prevent form submission
-
-                    deleteButton.addEventListener("click", function (event) {
-                        event.preventDefault(); // Prevent form submission
-                        newFormGroup.remove();
-                    });
-
-                    newFormGroup.appendChild(inputField);
-                    newFormGroup.appendChild(deleteButton);
-                    inputContainer.parentNode.insertBefore(newFormGroup, this);
-                });
-            });
-        });
-    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

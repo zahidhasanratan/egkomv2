@@ -22,7 +22,13 @@ class ManageRoomController extends Controller
             abort(404, 'Invalid hotel ID');
         }
 
-        return view('auth.vendor.room.index', ['hotel' => $hotel]);
+        // Fetch rooms with pagination (e.g., 10 rooms per page)
+        $roomList = Room::where('hotel_id', $hotel->id)->paginate(10);
+
+        return view('auth.vendor.room.index', [
+            'hotel' => $hotel,
+            'roomList' => $roomList
+        ]);
     }
     public function create($id){
         $hotelId = Crypt::decrypt($id);

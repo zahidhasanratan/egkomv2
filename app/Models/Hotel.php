@@ -40,10 +40,7 @@ class Hotel extends Model
         'apartments' => 'array',     // Cast as array
     ];
 
-    public function getRouteKey()
-    {
-        return Crypt::encrypt($this->id);
-    }
+
 
     public function rooms()
     {
