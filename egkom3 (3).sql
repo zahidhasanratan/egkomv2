@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 27, 2025 at 10:23 AM
+-- Generation Time: Apr 15, 2025 at 07:08 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.23
 
@@ -128,7 +128,17 @@ INSERT INTO `activity_logs` (`id`, `browser`, `os`, `ip_address`, `activity_time
 (83, 'Chrome on Windows', 'Windows', '127.0.0.1', '06:10:53', 'Logged In', '2025-03-23 00:10:53', '2025-03-23 00:10:53'),
 (84, 'Chrome on Windows', 'Windows', '127.0.0.1', '03:22:21', 'Logged In', '2025-03-23 21:22:21', '2025-03-23 21:22:21'),
 (85, 'Chrome on Windows', 'Windows', '127.0.0.1', '03:14:36', 'Logged In', '2025-03-24 21:14:36', '2025-03-24 21:14:36'),
-(86, 'Chrome on Windows', 'Windows', '127.0.0.1', '03:32:11', 'Logged In', '2025-03-26 21:32:11', '2025-03-26 21:32:11');
+(86, 'Chrome on Windows', 'Windows', '127.0.0.1', '03:32:11', 'Logged In', '2025-03-26 21:32:11', '2025-03-26 21:32:11'),
+(87, 'Chrome on Windows', 'Windows', '127.0.0.1', '04:30:36', 'Logged In', '2025-04-05 22:30:36', '2025-04-05 22:30:36'),
+(88, 'Chrome on Windows', 'Windows', '127.0.0.1', '03:48:50', 'Logged In', '2025-04-06 21:48:50', '2025-04-06 21:48:50'),
+(89, 'Chrome on Windows', 'Windows', '127.0.0.1', '03:15:22', 'Logged In', '2025-04-07 21:15:22', '2025-04-07 21:15:22'),
+(90, 'Chrome on Windows', 'Windows', '127.0.0.1', '03:48:05', 'Logged In', '2025-04-09 21:48:05', '2025-04-09 21:48:05'),
+(91, 'Chrome on Windows', 'Windows', '127.0.0.1', '06:28:35', 'Logged In', '2025-04-10 00:28:35', '2025-04-10 00:28:35'),
+(92, 'Chrome on Windows', 'Windows', '127.0.0.1', '04:40:12', 'Logged In', '2025-04-11 22:40:12', '2025-04-11 22:40:12'),
+(93, 'Chrome on Windows', 'Windows', '127.0.0.1', '10:53:01', 'Logged In', '2025-04-12 04:53:01', '2025-04-12 04:53:01'),
+(94, 'Chrome on Windows', 'Windows', '127.0.0.1', '03:17:18', 'Logged In', '2025-04-12 21:17:18', '2025-04-12 21:17:18'),
+(95, 'Chrome on Windows', 'Windows', '127.0.0.1', '08:57:00', 'Logged In', '2025-04-13 02:57:00', '2025-04-13 02:57:00'),
+(96, 'Chrome on Windows', 'Windows', '127.0.0.1', '03:23:13', 'Logged In', '2025-04-14 21:23:13', '2025-04-14 21:23:13');
 
 -- --------------------------------------------------------
 
@@ -368,7 +378,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (30, '2025_03_22_034315_create_owners_table', 9),
 (32, '2025_03_22_064013_create_bankings_table', 10),
 (33, '2025_03_23_084227_create_hotels_table', 11),
-(34, '2025_03_25_040931_add_missing_columns_to_hotels_table', 12);
+(34, '2025_03_25_040931_add_missing_columns_to_hotels_table', 12),
+(35, '2025_04_07_062342_create_rooms_table', 13),
+(36, '2025_04_07_082752_create_room_photos_table', 14);
 
 -- --------------------------------------------------------
 
@@ -531,6 +543,88 @@ CREATE TABLE `properties` (
 
 INSERT INTO `properties` (`id`, `vendor_id`, `property_name`, `property_category`, `property_type`, `room_types`, `country_name`, `district_name`, `city_town_village`, `postcode`, `house_number`, `road_number_name`, `building_age`, `building_size`, `building_stories`, `landmark_details`, `google_map_link`, `company_logo`, `apartment_count`, `apartments`, `total_capacity`, `car_parking`, `has_reception`, `elevators`, `generators`, `fire_exits`, `wheelchair_access`, `male_housekeeping`, `female_housekeeping`, `has_kids_zone`, `kids_zone_count`, `view_type`, `security_guards`, `has_cafe_restaurant`, `cafe_restaurant_count`, `cafe_restaurant_names`, `has_pool`, `pool_count`, `has_bar`, `bar_count`, `has_gym`, `gym_count`, `has_party_center`, `party_center_details`, `has_conference_hall`, `conference_hall_details`, `status`, `created_at`, `updated_at`) VALUES
 (15, 7, 'Veronica Berry', 'Hotels', 'hotel', '[\"Single Room\",\"Double Room\",\"Twin Room\",\"Suite\",\"Family Room\",\"Penthouse Suite\",\"Accessible Room\"]', 'Bangladesh', 'Gopalganj', 'Atque assumenda volu', 'Saepe qui incididunt', '712', 'Kalia Davenport', 2008, 18, 10, 'Voluptatem porro vol', 'Quos labore eum quas', 'storage/logos/1742619391_logo.png', 3, '[{\"name\":\"123123\",\"number\":\"123\",\"floor\":\"123\"},{\"name\":\"1233\",\"number\":\"123\",\"floor\":\"123\"},{\"name\":\"123\",\"number\":\"123\",\"floor\":\"123\"}]', 234, 234, 1, 4, 3, 1, 0, 1, 2, 0, NULL, 'sdf sadf', 4, 1, NULL, '[]', 1, 1, 1, 1, 1, 1, 1, 'asdf asdf', 1, 'wer wer', 'submitted', '2025-03-20 02:00:59', '2025-03-23 00:06:25');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rooms`
+--
+
+CREATE TABLE `rooms` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `hotel_id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `number` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `floor_number` int(11) NOT NULL,
+  `price_per_night` decimal(10,2) NOT NULL,
+  `weekend_price` decimal(10,2) DEFAULT NULL,
+  `holiday_price` decimal(10,2) DEFAULT NULL,
+  `discount_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `discount_value` decimal(10,2) DEFAULT NULL,
+  `total_persons` int(11) NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `size` int(11) NOT NULL,
+  `total_rooms` int(11) NOT NULL,
+  `total_washrooms` int(11) NOT NULL,
+  `total_beds` int(11) NOT NULL,
+  `wifi_details` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `appliances` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`appliances`)),
+  `furniture` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`furniture`)),
+  `amenities` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`amenities`)),
+  `cancellation_policy` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `status` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `rooms`
+--
+
+INSERT INTO `rooms` (`id`, `hotel_id`, `name`, `number`, `floor_number`, `price_per_night`, `weekend_price`, `holiday_price`, `discount_type`, `discount_value`, `total_persons`, `description`, `size`, `total_rooms`, `total_washrooms`, `total_beds`, `wifi_details`, `appliances`, `furniture`, `amenities`, `cancellation_policy`, `is_active`, `status`, `created_at`, `updated_at`) VALUES
+(13, 7, 'Germane Hopkins', '3833', 515, '676.00', '840.00', '978.00', 'percentage', NULL, 0, 'Ut neque harum volup', 84, 0, 0, 0, 'Labore exercitatione', '\"[\\\"AC\\\",\\\"Fan\\\",\\\"Light\\\",\\\"Water heater\\\\\\/Geyser\\\",\\\"Crockeries\\\",\\\"Room Heater\\\",\\\"Hair Dryer\\\"]\"', '\"[\\\"Dining Table with Chair\\\",\\\"Sofa\\\\\\/Couch\\\",\\\"Tea Table\\\",\\\"Clothing Cabinet\\\",\\\"Iron Stand\\\",\\\"Locker\\\\\\/Safe\\\"]\"', '\"[\\\"Shampoo\\\",\\\"Towel\\\",\\\"Water bottle\\\",\\\"Fruit basket\\\",\\\"Complimentary drinks\\\"]\"', NULL, 1, 'published', '2025-04-08 04:11:47', '2025-04-13 00:54:50'),
+(15, 7, 'Lunea Carr', '675', 240, '750.00', '33.00', '225.00', 'percentage', NULL, 0, 'Vel adipisci id qui', 48, 0, 0, 0, 'Nisi vitae est aut e', '\"[\\\"Hair Dryer\\\"]\"', '\"[\\\"Sofa\\\\\\/Couch\\\",\\\"Tea Table\\\",\\\"Bedside Table\\\",\\\"Locker\\\\\\/Safe\\\"]\"', '\"[\\\"Tissue\\\",\\\"Shampoo\\\",\\\"Free laundry\\\",\\\"Complimentary drinks\\\",\\\"Add\\\\\\/type Manually\\\"]\"', NULL, 0, 'published', '2025-04-08 04:51:30', '2025-04-08 04:51:30'),
+(16, 7, 'Merrill Williams', '394', 820, '30.00', '227.00', '637.00', 'percentage', NULL, 0, 'Vel illum totam ven', 21, 0, 0, 0, 'Modi qui nisi ea min', '\"[\\\"AC\\\",\\\"TV\\\",\\\"Fridge\\\",\\\"Microwave\\\",\\\"Fan\\\",\\\"Lamp\\\",\\\"Room Heater\\\",\\\"1111\\\",\\\"333\\\"]\"', '\"[\\\"Bed\\\",\\\"Tea Table\\\",\\\"Bedside Table\\\",\\\"Clothes Drying Hanger\\\",\\\"Iron Stand\\\"]\"', '\"[\\\"Soap\\\",\\\"Shampoo\\\",\\\"Toothbrush\\\",\\\"Towel\\\",\\\"Water bottle\\\",\\\"Complimentary drinks\\\",\\\"Buffet breakfast\\\"]\"', NULL, 0, 'drafted', '2025-04-10 00:32:50', '2025-04-10 00:32:50'),
+(17, 7, 'Beverly Pratt', '772', 364, '692.00', '975.00', '723.00', 'amount', NULL, 0, 'Est dolor illum ess', 30, 0, 0, 0, 'Provident irure et', '\"[\\\"AC\\\",\\\"TV\\\",\\\"Fridge\\\",\\\"Fan\\\",\\\"Lamp\\\",\\\"Light\\\",\\\"Water heater\\\\\\/Geyser\\\",\\\"WiFi Router\\\",\\\"Gas Stove\\\",\\\"Electric Kettle\\\",\\\"Room Heater\\\",\\\"11\\\",\\\"22\\\"]\"', '\"[\\\"Bed\\\",\\\"Dining Table with Chair\\\",\\\"Tea Table\\\",\\\"Bedside Table\\\",\\\"Shoe Rack\\\",\\\"Iron Stand\\\",\\\"333\\\",\\\"44\\\"]\"', '\"[\\\"Soap\\\",\\\"Tissue\\\",\\\"Toothbrush\\\",\\\"Towel\\\",\\\"Air freshener\\\",\\\"Fruit basket\\\",\\\"Complimentary drinks\\\",\\\"Buffet breakfast\\\"]\"', NULL, 0, 'published', '2025-04-10 01:01:00', '2025-04-10 01:01:00'),
+(19, 7, 'Winter Stone', '390', 873, '942.00', '371.00', '437.00', 'amount', NULL, 0, 'Ut occaecat quia eni', 97, 0, 0, 0, 'Dignissimos vel labo', '\"[\\\"AC\\\",\\\"Microwave\\\",\\\"Fan\\\",\\\"Lamp\\\",\\\"Light\\\",\\\"Water heater\\\\\\/Geyser\\\",\\\"WiFi Router\\\",\\\"Crockeries\\\",\\\"Electric Kettle\\\"]\"', '\"[\\\"Sofa\\\\\\/Couch\\\",\\\"Tea Table\\\",\\\"Shoe Rack\\\",\\\"Clothing Cabinet\\\",\\\"Clothes Drying Hanger\\\",\\\"Iron Stand\\\"]\"', '\"[\\\"Soap\\\",\\\"Tissue\\\",\\\"Shampoo\\\",\\\"Toothbrush\\\",\\\"Towel\\\",\\\"Air freshener\\\",\\\"Fruit basket\\\",\\\"Add\\\\\\/type Manually\\\"]\"', NULL, 0, 'published', '2025-04-13 01:37:07', '2025-04-13 01:37:07'),
+(20, 7, 'Madeson Fletcher', '639', 975, '79.00', '633.00', '599.00', 'percentage', NULL, 0, 'Est dolorem consequu', 7, 0, 0, 0, 'Excepteur quidem sun', '\"[\\\"AC\\\",\\\"Fan\\\",\\\"Lamp\\\",\\\"WiFi Router\\\",\\\"Crockeries\\\",\\\"Room Heater\\\",\\\"Hair Dryer\\\"]\"', '\"[\\\"Dining Table with Chair\\\",\\\"Sofa\\\\\\/Couch\\\",\\\"Tea Table\\\",\\\"Shoe Rack\\\",\\\"Clothes Drying Hanger\\\"]\"', '\"[\\\"Soap\\\",\\\"Tissue\\\",\\\"Water bottle\\\",\\\"Free laundry\\\",\\\"Air freshener\\\",\\\"Fruit basket\\\"]\"', '[\"partially_refundable\"]', 0, 'published', '2025-04-13 02:23:16', '2025-04-13 02:23:16'),
+(21, 7, 'Kevyn Mcbride', '966', 202, '623.00', '938.00', '56.00', 'amount', NULL, 0, 'Sint est duis delec', 14, 0, 0, 0, 'Aute cupidatat ratio', '\"[\\\"AC\\\",\\\"TV\\\",\\\"Fridge\\\",\\\"Lamp\\\",\\\"Crockeries\\\",\\\"Gas Stove\\\"]\"', '\"[\\\"Bed\\\",\\\"Dining Table with Chair\\\",\\\"Sofa\\\\\\/Couch\\\",\\\"Tea Table\\\",\\\"Bedside Table\\\",\\\"Shoe Rack\\\",\\\"Clothes Drying Hanger\\\",\\\"Iron Stand\\\"]\"', '\"[\\\"Tissue\\\",\\\"Shampoo\\\",\\\"Water bottle\\\",\\\"Air freshener\\\",\\\"Fruit basket\\\",\\\"Complimentary drinks\\\",\\\"Buffet breakfast\\\"]\"', '[\"non_refundable\",\"partially_refundable\"]', 1, 'published', '2025-04-13 03:54:22', '2025-04-13 03:54:22'),
+(22, 7, 'Nash Stephenson', '573', 919, '150.00', '604.00', '950.00', 'percentage', NULL, 0, 'Beatae cillum nostru', 2, 0, 0, 0, 'Vel et suscipit eum', '\"[\\\"AC\\\",\\\"TV\\\",\\\"Lamp\\\",\\\"Light\\\",\\\"Water heater\\\\\\/Geyser\\\",\\\"Crockeries\\\",\\\"Gas Stove\\\",\\\"Electric Kettle\\\"]\"', '\"[\\\"Bed\\\",\\\"Dining Table with Chair\\\",\\\"Bedside Table\\\",\\\"Shoe Rack\\\",\\\"Clothing Cabinet\\\",\\\"Clothes Drying Hanger\\\"]\"', '\"[\\\"Soap\\\",\\\"Shampoo\\\",\\\"Fruit basket\\\",\\\"Buffet breakfast\\\",\\\"Add\\\\\\/type Manually\\\"]\"', '[\"flexible\",\"long_term\"]', 1, 'published', '2025-04-13 03:59:24', '2025-04-13 03:59:24'),
+(23, 7, 'Bianca Rosee', '8477', 638, '978.00', '630.00', '661.00', 'percentage', NULL, 0, 'Voluptatem quia vol', 11, 0, 0, 0, 'Fugit numquam maior', '\"[\\\"Fan\\\",\\\"Light\\\",\\\"Crockeries\\\"]\"', '\"[\\\"Dining Table with Chair\\\",\\\"Sofa\\\\\\/Couch\\\",\\\"Shoe Rack\\\"]\"', '\"[\\\"Soap\\\",\\\"Toothbrush\\\",\\\"Water bottle\\\",\\\"Free laundry\\\",\\\"Fruit basket\\\",\\\"Complimentary drinks\\\",\\\"Add\\\\\\/type Manually\\\"]\"', '[\"non_refundable\",\"long_term\"]', 0, 'published', '2025-04-13 04:04:07', '2025-04-14 22:39:14');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `room_photos`
+--
+
+CREATE TABLE `room_photos` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `room_id` bigint(20) UNSIGNED NOT NULL,
+  `category` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `photo_path` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `room_photos`
+--
+
+INSERT INTO `room_photos` (`id`, `room_id`, `category`, `photo_path`, `created_at`, `updated_at`) VALUES
+(6, 13, 'kitchen', 'room_photos/sOPlsjoRpO664LNZtCqeyWxx4AIBzYDUVpYqJX2h.jpg', '2025-04-08 04:11:48', '2025-04-08 04:11:48'),
+(7, 13, 'washroom', 'room_photos/aAkLMQmW1SyuqntHtjjkn4mZKm5ULp9oeajMLGam.jpg', '2025-04-08 04:11:48', '2025-04-08 04:11:48'),
+(12, 15, 'kitchen', 'room_photos/QVfjMGTz4ajsg6xob6HCqB2lIaYsQRBWBu7nmRCH.jpg', '2025-04-08 04:51:30', '2025-04-08 04:51:30'),
+(13, 16, 'kitchen', 'room_photos/g2w7SZGHj58j2zstFGvKOUfmtjsGKoF39I72FKh2.jpg', '2025-04-10 00:32:51', '2025-04-10 00:32:51'),
+(14, 16, 'kitchen', 'room_photos/RxMsPAQh71MvGSc3TH3sKFbzFX7AauFoXafGcKhd.jpg', '2025-04-10 00:32:51', '2025-04-10 00:32:51'),
+(17, 13, 'parking', 'room_photos/bAKVzElIqleIECpCkGNgLI77vcuwYplMBgCIO0kN.jpg', '2025-04-13 00:54:50', '2025-04-13 00:54:50'),
+(18, 13, 'washroom', 'room_photos/IisG6ab9lrJOx5JTAScN1VQIVb6h2FwDZqkzA8Yc.jpg', '2025-04-13 01:13:19', '2025-04-13 01:13:19'),
+(19, 13, 'washroom', 'room_photos/XCJyzbPPQjR1n3n5U57SEVLNojdHQJ2KwOrFkyZ7.jpg', '2025-04-13 01:13:19', '2025-04-13 01:13:19'),
+(21, 19, 'kitchen', 'room_photos/XzSaJvLYvjFL8xvg0CXW3hT8pNCGcc1Abu4mXVr6.jpg', '2025-04-13 01:37:07', '2025-04-13 01:37:07'),
+(22, 20, 'kitchen', 'room_photos/uKaLuUzyndRtT6IHxjwGyiHrsALF11JNnKrumKrC.jpg', '2025-04-13 02:23:16', '2025-04-13 02:23:16'),
+(31, 23, 'kitchen', 'room_photos/ABwPLIj8MmqMu0kvbGezdRlvRHgMaXyB0OO8ziuz.jpg', '2025-04-14 22:38:24', '2025-04-14 22:38:24'),
+(33, 23, 'kitchen', 'room_photos/w5iubbkCObPkh9N12DRveEq5UHhKiwHhrTz9Qz6B.jpg', '2025-04-14 22:38:24', '2025-04-14 22:38:24');
 
 -- --------------------------------------------------------
 
@@ -737,6 +831,20 @@ ALTER TABLE `properties`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `rooms`
+--
+ALTER TABLE `rooms`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `rooms_hotel_id_foreign` (`hotel_id`);
+
+--
+-- Indexes for table `room_photos`
+--
+ALTER TABLE `room_photos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `room_photos_room_id_foreign` (`room_id`);
+
+--
 -- Indexes for table `small_advertises`
 --
 ALTER TABLE `small_advertises`
@@ -771,7 +879,7 @@ ALTER TABLE `vendors`
 -- AUTO_INCREMENT for table `activity_logs`
 --
 ALTER TABLE `activity_logs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
 
 --
 -- AUTO_INCREMENT for table `bankings`
@@ -813,7 +921,7 @@ ALTER TABLE `menus`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `owners`
@@ -838,6 +946,18 @@ ALTER TABLE `personal_access_tokens`
 --
 ALTER TABLE `properties`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT for table `rooms`
+--
+ALTER TABLE `rooms`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+
+--
+-- AUTO_INCREMENT for table `room_photos`
+--
+ALTER TABLE `room_photos`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `small_advertises`
@@ -872,6 +992,18 @@ ALTER TABLE `vendors`
 --
 ALTER TABLE `hotels`
   ADD CONSTRAINT `hotels_vendor_id_foreign` FOREIGN KEY (`vendor_id`) REFERENCES `vendors` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `rooms`
+--
+ALTER TABLE `rooms`
+  ADD CONSTRAINT `rooms_hotel_id_foreign` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `room_photos`
+--
+ALTER TABLE `room_photos`
+  ADD CONSTRAINT `room_photos_room_id_foreign` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

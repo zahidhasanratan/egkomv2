@@ -4,13 +4,13 @@
 
             <ul class="nk-menu">
                 <li class="nk-menu-item"><a href="{{ route('super-admin.dashboard') }}" class="nk-menu-link"><span class="nk-menu-icon"><em class="icon ni ni-dashboard-fill"></em></span><span class="nk-menu-text">Dashboard</span></a></li>
-                <li class="nk-menu-item has-sub"><a href="#" class="nk-menu-link nk-menu-toggle"><span class="nk-menu-icon"><em class="icon ni ni-calendar-booking-fill"></em></span><span class="nk-menu-text">Bookings</span></a>
-                    <ul class="nk-menu-sub">
-                        <li class="nk-menu-item"><a href="bookings.html" class="nk-menu-link"><span class="nk-menu-text">All Bookings</span></a></li>
-                        <li class="nk-menu-item"><a href="booking-add.html" class="nk-menu-link"><span class="nk-menu-text">Add Booking</span></a></li>
-                        <li class="nk-menu-item"><a href="booking-edit.html" class="nk-menu-link"><span class="nk-menu-text">Edit Booking</span></a></li>
-                    </ul>
-                </li>
+{{--                <li class="nk-menu-item has-sub"><a href="#" class="nk-menu-link nk-menu-toggle"><span class="nk-menu-icon"><em class="icon ni ni-calendar-booking-fill"></em></span><span class="nk-menu-text">Bookings</span></a>--}}
+                {{--                    <ul class="nk-menu-sub">--}}
+                {{--                        <li class="nk-menu-item"><a href="bookings.html" class="nk-menu-link"><span class="nk-menu-text">All Bookings</span></a></li>--}}
+                {{--                        <li class="nk-menu-item"><a href="booking-add.html" class="nk-menu-link"><span class="nk-menu-text">Add Booking</span></a></li>--}}
+                {{--                        <li class="nk-menu-item"><a href="booking-edit.html" class="nk-menu-link"><span class="nk-menu-text">Edit Booking</span></a></li>--}}
+                {{--                    </ul>--}}
+                {{--                </li>--}}
                 <li class="nk-menu-item has-sub"><a href="#" class="nk-menu-link nk-menu-toggle"><span class="nk-menu-icon"><em class="icon ni ni-calendar-booking-fill"></em></span><span class="nk-menu-text">Vendor</span></a>
                     <ul class="nk-menu-sub">
                         <li class="nk-menu-item"><a href="{{ route('super-admin.vendor.create') }}" class="nk-menu-link"><span class="nk-menu-text">Add Vendor</span></a></li>
@@ -18,38 +18,44 @@
                     </ul>
                 </li>
 
-                <li class="nk-menu-item has-sub"><a href="#" class="nk-menu-link nk-menu-toggle"><span class="nk-menu-icon"><em class="icon ni ni-calendar-booking-fill"></em></span><span class="nk-menu-text">Payement Withdraw</span></a>
+                <li class="nk-menu-item has-sub"><a href="#" class="nk-menu-link nk-menu-toggle"><span class="nk-menu-icon"><em class="icon ni ni-dashlite-alt"></em></span><span class="nk-menu-text">Manage Hotel</span></a>
                     <ul class="nk-menu-sub">
-                        <li class="nk-menu-item"><a href="bookings.html" class="nk-menu-link"><span class="nk-menu-text">New Withdraw Request</span></a></li>
-                        <li class="nk-menu-item"><a href="booking-add.html" class="nk-menu-link"><span class="nk-menu-text">Completed Withdraw List</span></a></li>
-                        <li class="nk-menu-item"><a href="booking-edit.html" class="nk-menu-link"><span class="nk-menu-text">Pending Withdraw List</span></a></li>
-                        <li class="nk-menu-item"><a href="booking-edit.html" class="nk-menu-link"><span class="nk-menu-text">Reject Withdraw List</span></a></li>
+                        <li class="nk-menu-item"><a href="{{ route('super-admin.hotel.index') }}" class="nk-menu-link"><span class="nk-menu-text">All Hotel</span></a></li>
                     </ul>
                 </li>
 
-                <li class="nk-menu-item has-sub"><a href="#" class="nk-menu-link nk-menu-toggle"><span class="nk-menu-icon"><em class="icon ni ni-home-fill"></em></span><span class="nk-menu-text">Manage Hotel</span></a>
-                    <ul class="nk-menu-sub">
+{{--                <li class="nk-menu-item has-sub"><a href="#" class="nk-menu-link nk-menu-toggle"><span class="nk-menu-icon"><em class="icon ni ni-calendar-booking-fill"></em></span><span class="nk-menu-text">Payement Withdraw</span></a>--}}
+{{--                    <ul class="nk-menu-sub">--}}
+{{--                        <li class="nk-menu-item"><a href="bookings.html" class="nk-menu-link"><span class="nk-menu-text">New Withdraw Request</span></a></li>--}}
+{{--                        <li class="nk-menu-item"><a href="booking-add.html" class="nk-menu-link"><span class="nk-menu-text">Completed Withdraw List</span></a></li>--}}
+{{--                        <li class="nk-menu-item"><a href="booking-edit.html" class="nk-menu-link"><span class="nk-menu-text">Pending Withdraw List</span></a></li>--}}
+{{--                        <li class="nk-menu-item"><a href="booking-edit.html" class="nk-menu-link"><span class="nk-menu-text">Reject Withdraw List</span></a></li>--}}
+{{--                    </ul>--}}
+{{--                </li>--}}
 
-                        <li class="nk-menu-item"><a href="manage-hotel-add.html" class="nk-menu-link"><span class="nk-menu-text">Create</span></a></li>
-                        <li class="nk-menu-item"><a href="room-type.html" class="nk-menu-link"><span class="nk-menu-text">All</span></a></li>
+{{--                <li class="nk-menu-item has-sub"><a href="#" class="nk-menu-link nk-menu-toggle"><span class="nk-menu-icon"><em class="icon ni ni-home-fill"></em></span><span class="nk-menu-text">Manage Hotel</span></a>--}}
+{{--                    <ul class="nk-menu-sub">--}}
 
-                        <li class="nk-menu-item"><a href="room-list.html" class="nk-menu-link"><span class="nk-menu-text">Active</span></a></li>
-                        <li class="nk-menu-item"><a href="room-type.html" class="nk-menu-link"><span class="nk-menu-text">Featured</span></a></li>
+{{--                        <li class="nk-menu-item"><a href="manage-hotel-add.html" class="nk-menu-link"><span class="nk-menu-text">Create</span></a></li>--}}
+{{--                        <li class="nk-menu-item"><a href="room-type.html" class="nk-menu-link"><span class="nk-menu-text">All</span></a></li>--}}
 
-
-                        <!-- <li class="nk-menu-item"><a href="room-list.html" class="nk-menu-link"><span class="nk-menu-text">All Rooms</span></a></li>
-                        <li class="nk-menu-item"><a href="room-type.html" class="nk-menu-link"><span class="nk-menu-text">Room Types</span></a></li> -->
-                    </ul>
-                </li>
+{{--                        <li class="nk-menu-item"><a href="room-list.html" class="nk-menu-link"><span class="nk-menu-text">Active</span></a></li>--}}
+{{--                        <li class="nk-menu-item"><a href="room-type.html" class="nk-menu-link"><span class="nk-menu-text">Featured</span></a></li>--}}
 
 
+{{--                        <!-- <li class="nk-menu-item"><a href="room-list.html" class="nk-menu-link"><span class="nk-menu-text">All Rooms</span></a></li>--}}
+{{--                        <li class="nk-menu-item"><a href="room-type.html" class="nk-menu-link"><span class="nk-menu-text">Room Types</span></a></li> -->--}}
+{{--                    </ul>--}}
+{{--                </li>--}}
 
 
-                <li class="nk-menu-item has-sub"><a href="#" class="nk-menu-link nk-menu-toggle"><span class="nk-menu-icon"><em class="icon ni ni-reports"></em></span><span class="nk-menu-text">Reports</span></a>
-                    <ul class="nk-menu-sub">
-                        <li class="nk-menu-item"><a href="report-booking.html" class="nk-menu-link"><span class="nk-menu-text">Booking</span></a></li>
-                    </ul>
-                </li>
+
+
+{{--                <li class="nk-menu-item has-sub"><a href="#" class="nk-menu-link nk-menu-toggle"><span class="nk-menu-icon"><em class="icon ni ni-reports"></em></span><span class="nk-menu-text">Reports</span></a>--}}
+{{--                    <ul class="nk-menu-sub">--}}
+{{--                        <li class="nk-menu-item"><a href="report-booking.html" class="nk-menu-link"><span class="nk-menu-text">Booking</span></a></li>--}}
+{{--                    </ul>--}}
+{{--                </li>--}}
 
                 <li class="nk-menu-item">
                     <a href="{{ route('admin.dashboard') }}" class="nk-menu-link">

@@ -1,4 +1,4 @@
-@extends('auth.layout.vendor_admin_layout')
+@extends('auth.layout.super_admin_layout')
 
 @section('mainbody')
     <div class="nk-content ">
@@ -30,7 +30,7 @@
                                     </li>
                                 </ul>
 
-                                <form method="POST" action="{{ route('vendor-admin.hotel.update', $hotel->id) }}" enctype="multipart/form-data">
+                                <form method="POST" action="{{ route('super-admin.hotel.update', $hotel->id) }}" enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
 
@@ -401,6 +401,14 @@
                                                         <button type="submit" name="status" value="draft" class="btn btn-primary">Save & Drafts</button>
                                                     </div>
                                                 </div>
+                                                <div class="col-sm-2 col-md-2 mt-15">
+                                                    <div class="form-group form-check">
+                                                        <input type="hidden" name="approve" value="0">
+                                                        <input type="checkbox" name="approve" value="1" class="form-check-input" id="approveCheckbox" {{ $hotel->approve ? 'checked' : '' }}>
+                                                        <label class="form-check-label" for="approveCheckbox">Approve</label>
+                                                    </div>
+                                                </div>
+
                                             </div>
                                         </div>
 
@@ -498,6 +506,13 @@
                                                         <button type="submit" name="status" value="draft" class="btn btn-primary">Save & Drafts</button>
                                                     </div>
                                                 </div>
+                                                <div class="col-sm-2 col-md-2 mt-15">
+                                                    <div class="form-group form-check">
+                                                        <input type="hidden" name="approve" value="0">
+                                                        <input type="checkbox" name="approve" value="1" class="form-check-input" id="approveCheckbox" {{ $hotel->approve ? 'checked' : '' }}>
+                                                        <label class="form-check-label" for="approveCheckbox">Approve</label>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -589,6 +604,13 @@
                                                         <button type="submit" name="status" value="draft" class="btn btn-primary">Save & Drafts</button>
                                                     </div>
                                                 </div>
+                                                <div class="col-sm-2 col-md-2 mt-15">
+                                                    <div class="form-group form-check">
+                                                        <input type="hidden" name="approve" value="0">
+                                                        <input type="checkbox" name="approve" value="1" class="form-check-input" id="approveCheckbox" {{ $hotel->approve ? 'checked' : '' }}>
+                                                        <label class="form-check-label" for="approveCheckbox">Approve</label>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -604,7 +626,6 @@
                                                                 <label class="upload-label">Select Multiple Images</label>
                                                                 <div class="multiple-thumbnail-gallery">
                                                                     @php
-                                                                        // Ensure the field is treated as an array, decoding JSON if necessary
                                                                         $photos = is_string($hotel->$photoField) ? json_decode($hotel->$photoField, true) : $hotel->$photoField;
                                                                     @endphp
                                                                     @if(!empty($photos) && is_array($photos))
@@ -616,6 +637,8 @@
                                                                         @endforeach
                                                                     @endif
                                                                 </div>
+                                                                <!-- Hidden input to track removed photo indices -->
+                                                                <input type="hidden" name="removed_{{ $photoField }}" id="removed-{{ $photoField }}" value="">
                                                             </div>
                                                             @error("{$photoField}.*") <span class="text-danger">{{ $message }}</span> @enderror
                                                         </div>
@@ -633,6 +656,14 @@
                                                             <button type="submit" name="status" value="draft" class="btn btn-primary">Save & Drafts</button>
                                                         </div>
                                                     </div>
+                                                    <div class="col-sm-2 col-md-2 mt-15">
+                                                        <div class="form-group form-check">
+                                                            <input type="hidden" name="approve" value="0">
+                                                            <input type="checkbox" name="approve" value="1" class="form-check-input" id="approveCheckbox" {{ $hotel->approve ? 'checked' : '' }}>
+                                                            <label class="form-check-label" for="approveCheckbox">Approve</label>
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -651,6 +682,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const uploadedImages = {};
 
+            // Initialize multiple upload containers
             function initializeMultipleUpload(container) {
                 const fileInput = container.querySelector('.multiple-file-input');
                 const thumbnailGallery = container.querySelector('.multiple-thumbnail-gallery');
@@ -668,6 +700,8 @@
                             thumbnailItem.classList.add('multiple-thumbnail-item');
                             const img = document.createElement('img');
                             img.src = e.target.result;
+                            img.style.maxWidth = '100px';
+                            img.style.maxHeight = '100px';
                             const removeBtn = document.createElement('button');
                             removeBtn.innerHTML = '×';
                             removeBtn.classList.add('multiple-remove-btn');
@@ -687,12 +721,26 @@
                     }
                 });
 
+                // Handle removal of existing photos
                 thumbnailGallery.querySelectorAll('.multiple-remove-btn').forEach(btn => {
                     btn.addEventListener('click', function() {
                         const thumbnailItem = this.parentElement;
                         const field = this.dataset.field;
                         const index = this.dataset.index;
+                        const removedInput = document.getElementById(`removed-${field}`);
+                        let removedIndices = removedInput.value ? removedInput.value.split(',') : [];
+
+                        // Add the index to the removed list if not already present
+                        if (!removedIndices.includes(index)) {
+                            removedIndices.push(index);
+                            removedInput.value = removedIndices.join(',');
+                        }
+
+                        // Remove the thumbnail from the UI
                         thumbnailItem.remove();
+
+                        // Optional AJAX call to remove immediately (uncomment if desired)
+                        /*
                         fetch(`/vendor-admin/hotel/remove-photo/${field}/${index}`, {
                             method: 'DELETE',
                             headers: {
@@ -702,32 +750,34 @@
                             if (data.success) {
                                 console.log('Image removed successfully');
                             }
-                        });
+                        }).catch(error => console.error('Error removing photo:', error));
+                        */
                     });
                 });
             }
 
+            // Initialize all upload containers
             const uploadContainers = document.querySelectorAll('.multiple-upload-container');
             uploadContainers.forEach(container => {
                 initializeMultipleUpload(container);
             });
 
+            // Existing "Add More" functionality (for custom fields)
             document.querySelectorAll('.delete-custom-rule').forEach(btn => {
                 btn.addEventListener('click', function() {
                     this.parentElement.remove();
                 });
             });
 
-            // "Add More" functionality
             document.querySelectorAll('.add-more').forEach(button => {
                 button.addEventListener('click', function() {
                     const inputContainer = this.previousElementSibling;
                     const newFormGroup = document.createElement('div');
                     newFormGroup.classList.add('form-group', 'mb-3', 'd-flex', 'align-items-center');
                     newFormGroup.innerHTML = `
-                        <input type="text" class="form-control" name="${inputContainer.querySelector('input').name}" placeholder="Enter something">
-                        <button type="button" class="btn btn-danger btn-sm delete-custom-rule">Delete</button>
-                    `;
+                    <input type="text" class="form-control" name="${inputContainer.querySelector('input').name}" placeholder="Enter something">
+                    <button type="button" class="btn btn-danger btn-sm delete-custom-rule">Delete</button>
+                `;
                     newFormGroup.querySelector('.delete-custom-rule').addEventListener('click', function() {
                         newFormGroup.remove();
                     });
@@ -736,19 +786,19 @@
             });
 
             // Check All functionality
-            document.getElementById('property-all').addEventListener('change', function() {
+            document.getElementById('property-all')?.addEventListener('change', function() {
                 document.querySelectorAll('.checkbox-item-property').forEach(checkbox => {
                     checkbox.checked = this.checked;
                 });
             });
 
-            document.getElementById('check-in-all').addEventListener('change', function() {
+            document.getElementById('check-in-all')?.addEventListener('change', function() {
                 document.querySelectorAll('.checkbox-item-checkin').forEach(checkbox => {
                     checkbox.checked = this.checked;
                 });
             });
 
-            document.getElementById('facilities-all').addEventListener('change', function() {
+            document.getElementById('facilities-all')?.addEventListener('change', function() {
                 document.querySelectorAll('.checkbox-item-facility').forEach(checkbox => {
                     checkbox.checked = this.checked;
                 });
@@ -766,13 +816,13 @@
             });
 
             // Add More Facilities
-            document.getElementById('add-more-btn').addEventListener('click', function() {
+            document.getElementById('add-more-btn')?.addEventListener('click', function() {
                 const facilityField = document.createElement('div');
                 facilityField.classList.add('input-field');
                 facilityField.innerHTML = `
-                    <input class="form-control" type="text" name="custom_facilities[]" placeholder="Facility name" />
-                    <button type="button" class="btn btn-danger btn-sm delete-custom-rule">Delete</button>
-                `;
+                <input class="form-control" type="text" name="custom_facilities[]" placeholder="Facility name" />
+                <button type="button" class="btn btn-danger btn-sm delete-custom-rule">Delete</button>
+            `;
                 facilityField.querySelector('.delete-custom-rule').addEventListener('click', () => {
                     facilityField.remove();
                 });
@@ -780,16 +830,16 @@
             });
 
             // Add More Check-in Methods
-            document.getElementById('addRuleBtn').addEventListener('click', function() {
+            document.getElementById('addRuleBtn')?.addEventListener('click', function() {
                 const formContainer = document.getElementById('formContainer');
                 const newField = document.createElement('div');
                 newField.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3');
                 newField.innerHTML = `
-                    <div class="form-group">
-                        <input type="text" class="form-control" name="custom_check_in_methods[]" placeholder="" required>
-                        <button type="button" class="btn btn-danger btn-sm delete-custom-rule">Delete</button>
-                    </div>
-                `;
+                <div class="form-group">
+                    <input type="text" class="form-control" name="custom_check_in_methods[]" placeholder="" required>
+                    <button type="button" class="btn btn-danger btn-sm delete-custom-rule">Delete</button>
+                </div>
+            `;
                 formContainer.appendChild(newField);
                 newField.querySelector('.delete-custom-rule').addEventListener('click', function() {
                     formContainer.removeChild(newField);
@@ -799,7 +849,7 @@
             // Hotel Facilities Categories
             const facilityDropdown = document.getElementById('facilityDropdown');
             const dynamicFormContainer = document.getElementById('dynamicFormContainer');
-            document.getElementById('addFacilityButton').addEventListener('click', function() {
+            document.getElementById('addFacilityButton')?.addEventListener('click', function() {
                 const selectedFacility = facilityDropdown.value;
                 if (!selectedFacility) return;
                 const uniqueId = `facility-group-${selectedFacility}-${Date.now()}`;
@@ -808,12 +858,12 @@
                 newFieldGroup.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3', 'mb-3');
                 newFieldGroup.setAttribute('id', uniqueId);
                 newFieldGroup.innerHTML = `
-                    <div class="form-group">
-                        <label for="input-${uniqueId}">${label}</label>
-                        <input type="text" class="form-control facility-input" id="input-${uniqueId}" name="custom_facility_details[]" placeholder="Enter ${label}" required>
-                    </div>
-                    <button type="button" class="btn btn-danger btn-sm mt-3 delete-facility-btn">Delete</button>
-                `;
+                <div class="form-group">
+                    <label for="input-${uniqueId}">${label}</label>
+                    <input type="text" class="form-control facility-input" id="input-${uniqueId}" name="custom_facility_details[]" placeholder="Enter ${label}" required>
+                </div>
+                <button type="button" class="btn btn-danger btn-sm mt-3 delete-facility-btn">Delete</button>
+            `;
                 dynamicFormContainer.appendChild(newFieldGroup);
                 newFieldGroup.querySelector('.delete-facility-btn').addEventListener('click', function() {
                     dynamicFormContainer.removeChild(newFieldGroup);
@@ -835,7 +885,7 @@
                 restaurant: ['Restaurant Name', 'Distance'], entertainment: ['Attraction Point', 'Distance'], hospital: ['Hospital/Police Station Name', 'Distance'],
                 transport: ['Transport/Airport Name', 'Distance'], shopping: ['Shopping/ATM Name', 'Distance']
             };
-            document.getElementById('addNearbyAreaBtn').addEventListener('click', function() {
+            document.getElementById('addNearbyAreaBtn')?.addEventListener('click', function() {
                 const selectedValue = document.getElementById('areaSelector').value;
                 const formContainer = document.getElementById('dynamicFieldsContainer');
                 if (!sectionLabelsMap[selectedValue]) return;
@@ -843,20 +893,20 @@
                 const newFieldGroup = document.createElement('div');
                 newFieldGroup.classList.add('col-md-6', 'col-lg-6', 'col-xxl-6', 'mb-3');
                 newFieldGroup.innerHTML = `
-                    <div class="form-group">
-                        <label>${fieldLabels[0]}</label>
-                        <input type="text" class="form-control" name="custom_nearby_area_details[]" placeholder="Enter ${fieldLabels[0]}" required>
-                    </div>
-                    <div class="form-group mt-2">
-                        <label>${fieldLabels[1]}</label>
-                        <input type="text" class="form-control" name="custom_nearby_area_details[]" placeholder="Enter ${fieldLabels[1]}" required>
-                    </div>
-                    <button type="button" class="btn btn-danger btn-sm mt-3 removeFieldGroupBtn">Delete</button>
-                `;
+                <div class="form-group">
+                    <label>${fieldLabels[0]}</label>
+                    <input type="text" class="form-control" name="custom_nearby_area_details[]" placeholder="Enter ${fieldLabels[0]}" required>
+                </div>
+                <div class="form-group mt-2">
+                    <label>${fieldLabels[1]}</label>
+                    <input type="text" class="form-control" name="custom_nearby_area_details[]" placeholder="Enter ${fieldLabels[1]}" required>
+                </div>
+                <button type="button" class="btn btn-danger btn-sm mt-3 removeFieldGroupBtn">Delete</button>
+            `;
                 formContainer.appendChild(newFieldGroup);
             });
 
-            document.getElementById('dynamicFieldsContainer').addEventListener('click', function(event) {
+            document.getElementById('dynamicFieldsContainer')?.addEventListener('click', function(event) {
                 if (event.target.classList.contains('removeFieldGroupBtn')) {
                     event.target.closest('.col-md-6').remove();
                 }

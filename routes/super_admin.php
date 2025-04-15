@@ -9,6 +9,7 @@ use App\Http\Controllers\admin\PageController;
 use App\Http\Controllers\admin\BigAdvertiseController;
 use App\Http\Controllers\admin\SmallAdvertiseController;
 use App\Http\Controllers\Superadmin\SettingsController;
+use App\Http\Controllers\Vendor\ManageHotel;
 
 // Super Admin Login Routes
 Route::prefix('super-admin')->group(function () {
@@ -34,12 +35,13 @@ Route::prefix('super-admin')->group(function () {
         Route::get('vendor/allList', [DashboardController::class, 'allVendorList'])->name('super-admin.vendor.index');
 
 
+//        ManageHotel
+        Route::get('/super-admin/hotel', [ManageHotel::class, 'indexSuper'])->name('super-admin.hotel.index');
+        Route::get('/hotel/{hotel}/edit', [ManageHotel::class, 'editSuper'])->name('super-admin.hotel.edit');
+        Route::put('/hotel/{hotel}', [ManageHotel::class, 'updateSuper'])->name('super-admin.hotel.update');
+        Route::post('/admin/hotel/{hotel}/toggle-approve', [ManageHotel::class, 'toggleApprove']);
 
-
-
-
-
-/*Admin Panel Started */
+        /*Admin Panel Started */
 
         Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
         Route::resource('menu', MenuController::class);

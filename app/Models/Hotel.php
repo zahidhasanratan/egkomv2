@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Hotel extends Model
 {
     protected $fillable = [
-        'vendor_id', 'status', 'description', 'pets_allowed', 'pets_details',
+        'vendor_id', 'status', 'approve', 'description', 'pets_allowed', 'pets_details',
         'events_allowed', 'events_details', 'smoking_allowed', 'smoking_details',
         'quiet_hours', 'photography_allowed', 'photography_details', 'check_in_window',
         'check_out_time', 'food_laundry', 'check_in_rules', 'custom_check_in_rules',
@@ -39,7 +39,6 @@ class Hotel extends Model
         'property_types' => 'array', // Cast as array
         'apartments' => 'array',     // Cast as array
     ];
-
 
 
     public function rooms()

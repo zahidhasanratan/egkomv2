@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="{{ asset('assets/super_admin') }}/assets/css/dashlitee1e3.css?ver=3.2.4">
     <link id="skin-default" rel="stylesheet" href="{{ asset('assets/super_admin') }}/assets/css/themee1e3.css?ver=3.2.4">
 
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 </head>
 
 <body class="nk-body bg-lighter npc-general has-sidebar ">
