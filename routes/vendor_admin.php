@@ -60,7 +60,10 @@ Route::prefix('vendor-admin')->group(function () {
         Route::get('/vendor-admin/room/{id}', [ManageRoomController::class, 'index'])->name('vendor-admin.room.index');
         Route::get('/room-create/{id}', [ManageRoomController::class, 'create'])->name('vendor-admin.room.create');
         Route::post('/vendor-admin/room/store', [ManageRoomController::class, 'store'])->name('vendor-admin.room.store');
-
+        Route::delete('/room/{hotel}', [ManageRoomController::class, 'destroy'])->name('vendor-admin.room.destroy');
+        Route::get('/room/{room}/edit', [ManageRoomController::class, 'edit'])->name('vendor-admin.room.edit');
+        Route::put('/room/{room}', [ManageRoomController::class, 'update'])->name('vendor-admin.room.update');
+        Route::post('vendor-admin/room/delete-photo', [ManageRoomController::class, 'deletePhoto'])->name('vendor-admin.room.delete-photo');
     });
     /*Admin Panel Ended */
 

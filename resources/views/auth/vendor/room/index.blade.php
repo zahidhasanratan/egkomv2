@@ -117,7 +117,7 @@
                                                                 <div class="dropdown-menu dropdown-menu-end">
                                                                     <ul class="link-list-opt no-bdr">
                                                                         <li>
-                                                                            <a href="{{ route('vendor-admin.hotel.edit', $hotel) }}">
+                                                                            <a href="{{ route('vendor-admin.room.edit', $hotel) }}">
                                                                                 <em class="icon ni ni-edit"></em>
                                                                                 <span>Edit</span>
                                                                             </a>
@@ -125,7 +125,7 @@
                                                                         <li>
 
                                                                             <a href="javascript:void(0);"
-                                                                               onclick="deleteHotel(event, '{{ route('vendor-admin.hotel.destroy', $hotel) }}')">
+                                                                               onclick="deleteHotel(event, '{{ route('vendor-admin.room.destroy', $hotel) }}')">
                                                                                 <em class="icon ni ni-trash"></em>
                                                                                 <span>Delete</span>
                                                                             </a>
