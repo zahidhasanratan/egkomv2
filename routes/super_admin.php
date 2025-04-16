@@ -10,6 +10,7 @@ use App\Http\Controllers\admin\BigAdvertiseController;
 use App\Http\Controllers\admin\SmallAdvertiseController;
 use App\Http\Controllers\Superadmin\SettingsController;
 use App\Http\Controllers\Vendor\ManageHotel;
+use App\Http\Controllers\Vendor\ManageRoomController;
 
 // Super Admin Login Routes
 Route::prefix('super-admin')->group(function () {
@@ -41,6 +42,13 @@ Route::prefix('super-admin')->group(function () {
         Route::put('/hotel/{hotel}', [ManageHotel::class, 'updateSuper'])->name('super-admin.hotel.update');
         Route::post('/admin/hotel/{hotel}/toggle-approve', [ManageHotel::class, 'toggleApprove']);
 
+
+//      Mange Room
+
+        Route::get('/super-admin/room/{id}', [ManageRoomController::class, 'indexSuper'])->name('super-admin.room.index');
+        Route::get('/room/{room}/edit', [ManageRoomController::class, 'editSuper'])->name('super-admin.room.edit');
+        Route::put('/room/{room}', [ManageRoomController::class, 'updateSuper'])->name('super-admin.room.update');
+        Route::post('super-admin/room/delete-photo', [ManageRoomController::class, 'deletePhoto'])->name('super-admin.room.delete-photo');
         /*Admin Panel Started */
 
         Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
