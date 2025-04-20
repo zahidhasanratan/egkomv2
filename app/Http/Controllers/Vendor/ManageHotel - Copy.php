@@ -7,7 +7,6 @@ use App\Models\Hotel;
 use App\Models\Owner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ManageHotel extends Controller
@@ -79,7 +78,6 @@ class ManageHotel extends Controller
             'facility_category' => 'nullable|string',
             'custom_facilities' => 'nullable|array',
             'custom_facilities.*' => 'nullable|string',
-            'custom_facilities_icon.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'nearby_areas' => 'nullable|array',
             'nearby_areas.*' => 'nullable|string',
             'custom_nearby_areas' => 'nullable|array',
@@ -118,42 +116,35 @@ class ManageHotel extends Controller
         $photoFields = [
             'kitchen_photos', 'washroom_photos', 'parking_lot_photos', 'entrance_gate_photos',
             'lift_stairs_photos', 'spa_photos', 'bar_photos', 'transport_photos', 'rooftop_photos',
-            'gym_photos', 'security_photos', 'amenities_photos', 'custom_facilities_icon',
+            'gym_photos', 'security_photos', 'amenities_photos',
         ];
 
         foreach ($photoFields as $field) {
             if ($request->hasFile($field)) {
                 $paths = [];
                 foreach ($request->file($field) as $file) {
-                    if ($file->isValid()) {
-                        $path = $file->store('hotel_photos', 'public');
-                        $paths[] = $path;
-                    }
+                    $path = $file->store('hotel_photos', 'public');
+                    $paths[] = $path;
                 }
-                $data[$field] = !empty($paths) ? json_encode($paths) : null; // Store as JSON or null if no valid files
-            } else {
-                $data[$field] = null; // Explicitly set to null if no files uploaded
+                $data[$field] = json_encode($paths); // Store as JSON
             }
+            // No need to explicitly set to null; database will handle it if column is nullable
         }
 
         // Add vendor_id
         $data['vendor_id'] = auth()->user()->id;
 
-        // Log data for debugging (remove in production)
-        Log::debug('Hotel store data:', $data);
+        // Debugging (optional, remove in production)
+        // dd($data);
 
-        try {
-            // Insert new hotel record
-            Hotel::create($data);
-        } catch (\Exception $e) {
-            Log::error('Error creating hotel record: ' . $e->getMessage(), ['data' => $data]);
-            throw $e; // Re-throw for debugging; replace with user-friendly error in production
-        }
+        // Insert new hotel record
+        Hotel::create($data);
 
         // Redirect based on status
         if ($request->status === 'submitted') {
             return redirect()->route('vendor-admin.hotel.index')->with('success', 'Hotel submitted successfully!');
         } else {
+//            return redirect()->back()->with('success', 'Hotel saved as draft!');
             return redirect()->route('vendor-admin.hotel.index')->with('success', 'Hotel Info Saved as Draft!');
         }
     }

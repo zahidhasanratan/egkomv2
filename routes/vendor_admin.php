@@ -42,7 +42,7 @@ Route::prefix('vendor-admin')->group(function () {
         Route::get('/owner-info', [OwnerController::class, 'create'])->name('vendor-admin.owner.create');
         Route::get('/owners-bankInfo', [OwnerController::class, 'bankInfo'])->name('owners.bankInfo');
         Route::post('/owners-banking', [BankingController::class, 'store'])->name('bankings.store');
-        Route::post('/owners-banking', [BankingController::class, 'store'])->name('bankings.store');
+//        Route::post('/owners-banking', [BankingController::class, 'store'])->name('bankings.store');
 
 
         Route::get('/hotel-create', [ManageHotel::class, 'create'])->name('vendor-admin.hotel.create');

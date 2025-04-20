@@ -11,6 +11,9 @@ use App\Http\Controllers\admin\SmallAdvertiseController;
 use App\Http\Controllers\Superadmin\SettingsController;
 use App\Http\Controllers\Vendor\ManageHotel;
 use App\Http\Controllers\Vendor\ManageRoomController;
+use App\Http\Controllers\Vendor\VendorController;
+use App\Http\Controllers\Vendor\OwnerController;
+use App\Http\Controllers\Vendor\BankingController;
 
 // Super Admin Login Routes
 Route::prefix('super-admin')->group(function () {
@@ -34,7 +37,16 @@ Route::prefix('super-admin')->group(function () {
         Route::get('vendor/create', [DashboardController::class, 'vendor_create'])->name('super-admin.vendor.create');
         Route::post('vendor/store', [DashboardController::class, 'vendor_store'])->name('super-admin.vendor.store');
         Route::get('vendor/allList', [DashboardController::class, 'allVendorList'])->name('super-admin.vendor.index');
+        Route::get('vendor/{id}/edit', [DashboardController::class, 'vendor_edit'])->name('super-admin.vendor.edit');
+        Route::put('vendor/{id}', [DashboardController::class, 'vendor_update'])->name('super-admin.vendor.update');
 
+
+        Route::get('vendor/details/{id}', [DashboardController::class, 'vendor_index'])->name('super-admin.vendor.details');
+        Route::get('/owner-info/{id}', [OwnerController::class, 'createSuper'])->name('super.vendor-admin.owner.details');
+        Route::post('/vendor-info', [VendorController::class, 'storeSuper'])->name('super.vendor.info.store');
+        Route::post('/owners', [OwnerController::class, 'storeSuper'])->name('super.owners.store');
+        Route::post('/owners-banking', [BankingController::class, 'storeSuper'])->name('super.bankings.store');
+        Route::get('/owners-bankInfo/{id}', [OwnerController::class, 'bankInfoSuper'])->name('super.owners.bankInfo');
 
 //        ManageHotel
         Route::get('/super-admin/hotel', [ManageHotel::class, 'indexSuper'])->name('super-admin.hotel.index');

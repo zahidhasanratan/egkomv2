@@ -14,13 +14,16 @@
                             </div>
                             <div class="nk-block-head-content">
                                 <div class="toggle-wrap nk-block-tools-toggle">
-                                    <a href="#" class="btn btn-icon btn-trigger toggle-expand me-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
+                                    <a href="#" class="btn btn-icon btn-trigger toggle-expand me-n1"
+                                       data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                     <div class="toggle-expand-content" data-content="pageMenu">
                                         <ul class="nk-block-tools g-3">
 
                                             <li class="nk-block-tools-opt">
                                                 <div class="drodown">
-                                                    <a href="{{ route('super-admin.vendor.create') }}" class="btn btn-icon btn-primary"><em class="icon ni ni-plus"></em></a>
+                                                    <a href="{{ route('super-admin.vendor.create') }}"
+                                                       class="btn btn-icon btn-primary"><em
+                                                            class="icon ni ni-plus"></em></a>
 
                                                 </div>
                                             </li>
@@ -55,8 +58,10 @@
                                             <tbody>
                                             @foreach($vendorList as $vendorList)
                                                 <tr>
-                                                    <td><input type="checkbox" class="custom-control-input" id="uid1"></td>
-                                                    <td><span class="text-primary">{{ $vendorList->vendorId }}</span></td>
+                                                    <td><input type="checkbox" class="custom-control-input" id="uid1">
+                                                    </td>
+                                                    <td><span class="text-primary">{{ $vendorList->vendorId }}</span>
+                                                    </td>
                                                     <td>
                                                         <a href="#">
                                                             <div class="user-card">
@@ -66,14 +71,17 @@
 }, array_slice(explode(' ', $vendorList->hotel_name), 0, 2))) }}</span>
                                                                 </div>
                                                                 <div class="user-info">
-                                                                    <span class="tb-lead">{{ $vendorList->hotel_name }} <span class="dot dot-success d-md-none ms-1"></span></span>
+                                                                    <span class="tb-lead">{{ $vendorList->hotel_name }} <span
+                                                                            class="dot dot-success d-md-none ms-1"></span></span>
                                                                     <span>{{ $vendorList->email }}</span>
                                                                 </div>
                                                             </div>
                                                         </a>
                                                     </td>
 
-                                                    <td><span class="tb-status">{{ $vendorList->contact_person_name }}</span></td>
+                                                    <td><span
+                                                            class="tb-status">{{ $vendorList->contact_person_name }}</span>
+                                                    </td>
                                                     <td>{{ $vendorList->phone }}</td>
                                                     <td>{{ $vendorList->email }}</td>
 
@@ -82,11 +90,34 @@
                                                         <ul class="nk-tb-actions gx-1">
                                                             <li>
                                                                 <div class="drodown">
-                                                                    <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown" aria-expanded="false"><em class="icon ni ni-more-h"></em></a>
+                                                                    <a href="#"
+                                                                       class="dropdown-toggle btn btn-icon btn-trigger"
+                                                                       data-bs-toggle="dropdown"
+                                                                       aria-expanded="false"><em
+                                                                            class="icon ni ni-more-h"></em></a>
                                                                     <div class="dropdown-menu dropdown-menu-end">
                                                                         <ul class="link-list-opt no-bdr">
-{{--                                                                            <li><a href="#"><em class="icon ni ni-mail-fill"></em><span>Send Email</span></a></li>--}}
-                                                                            <li><a href="booking-edit.html"><em class="icon ni ni-edit-fill"></em><span>Edit</span></a></li>
+
+                                                                            <li>
+                                                                                <a href="{{ route('super-admin.vendor.edit',$vendorList->id) }}"><em
+                                                                                        class="icon ni ni-edit-fill"></em><span>Edit</span></a>
+                                                                            </li>
+                                                                            <li>
+                                                                                <a href="{{ route('super-admin.vendor.details', $vendorList->id) }}">
+                                                                                    <em class="icon ni ni-user"></em>
+                                                                                    <span>Vendor Info</span>
+                                                                                </a>
+                                                                            </li>
+
+                                                                            <li>
+                                                                                <a href="{{ route('super.vendor-admin.owner.details',$vendorList->id) }}"><em
+                                                                                        class="icon ni ni-building"></em><span>Owner Details</span></a>
+                                                                            </li>
+                                                                            <li>
+                                                                                <a href="{{ route('super.owners.bankInfo',$vendorList->id) }}"><em
+                                                                                        class="icon ni ni ni-bag"></em><span>Owner Banking Info</span></a>
+                                                                            </li>
+
                                                                         </ul>
                                                                     </div>
                                                                 </div>
@@ -104,12 +135,13 @@
                                 <!-- DataTables JS and CSS -->
 
                                 <!-- DataTables JS and CSS -->
-                                <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+                                <link rel="stylesheet"
+                                      href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
                                 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                                 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
                                 <script>
-                                    $(document).ready(function() {
+                                    $(document).ready(function () {
                                         // Initialize DataTables
                                         $('#booking-table').DataTable({
                                             "paging": true,  // Enable pagination

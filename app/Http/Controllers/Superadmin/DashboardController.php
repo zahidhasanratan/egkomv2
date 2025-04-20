@@ -6,8 +6,10 @@ namespace App\Http\Controllers\SuperAdmin;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\HotelSetting;
+use App\Models\Property;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
@@ -19,10 +21,16 @@ class DashboardController extends Controller
         return view('auth.super_admin.dashboard');
     }
 
-    public function vendor_index()
-    {
 
-        return view('auth.vendor.dashboard');
+
+    public function vendor_index($id)
+    {
+        $property = Property::where('vendor_id', $id)->first();
+        return view('auth.super_admin.vendor.info', compact('property'));
+    }
+
+    public function vendor_details($id){
+        return $id;
     }
 
 
@@ -34,6 +42,7 @@ class DashboardController extends Controller
         // Return the view and pass the data to it
         return view('auth.super_admin.activityLog', compact('activityLogs'));
     }
+
     public function accountSettings()
     {
         $hotelSetting = HotelSetting::first(); // Get the first hotel setting record
@@ -44,6 +53,7 @@ class DashboardController extends Controller
         }
         return view('auth.super_admin.accountSettings', compact('hotelSetting'));
     }
+
     public function updateSettings(Request $request)
     {
         // Validate the incoming data
@@ -119,7 +129,7 @@ class DashboardController extends Controller
     public function allVendorList()
     {
         $vendorList = Vendor::all();
-        return view('auth.super_admin.allVendorList',compact('vendorList'));
+        return view('auth.super_admin.allVendorList', compact('vendorList'));
     }
 
     public function vendor_store(Request $request)
@@ -198,5 +208,86 @@ class DashboardController extends Controller
         return redirect()->route('super-admin.vendor.index')->with('success', 'Vendor created successfully!');
     }
 
+    public function vendor_edit($id)
+    {
+        $vendor = Vendor::findOrFail($id);
+        return view('auth.super_admin.vendor_edit', compact('vendor'));
+    }
+
+    public function vendor_update(Request $request, $id)
+    {
+        $vendor = Vendor::findOrFail($id);
+
+        $validated = $request->validate([
+            'hotel_name' => 'required|string|max:255',
+            'contact_person_name' => 'required|string|max:255',
+            'contact_person_dob' => 'nullable|date',
+            'contact_person_designation' => 'nullable|string|max:255',
+            'phone' => 'required|string|max:15',
+            'email' => 'required|email|max:255|unique:vendors,email,' . $vendor->id,
+            'address_house' => 'nullable|string|max:255',
+            'address_city' => 'nullable|string|max:255',
+            'address_district' => 'nullable|string|max:255',
+            'address_area' => 'nullable|string|max:255',
+            'address_landmark' => 'nullable|string|max:255',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'hotel_pictures' => 'nullable|array',
+            'hotel_pictures.*' => 'image|mimes:jpeg,png,jpg,gif',
+            'bank_check_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'nid' => 'nullable|string|max:255',
+            'trade_license_bin_tin' => 'nullable|string|max:255',
+            'bank_details' => 'nullable|string|max:255',
+            'password' => 'nullable|string|min:8',
+        ]);
+
+        // Handle file uploads
+        if ($request->hasFile('profile_picture')) {
+            // Delete old picture if exists
+            if ($vendor->profile_picture) {
+                Storage::disk('public')->delete($vendor->profile_picture);
+            }
+            $validated['profile_picture'] = $request->file('profile_picture')->store('profile_pictures', 'public');
+        }
+
+        if ($request->hasFile('logo')) {
+            if ($vendor->logo) {
+                Storage::disk('public')->delete($vendor->logo);
+            }
+            $validated['logo'] = $request->file('logo')->store('hotel_logos', 'public');
+        }
+
+        if ($request->hasFile('hotel_pictures')) {
+            // Delete old pictures
+            $oldPictures = json_decode($vendor->hotel_pictures, true) ?? [];
+            foreach ($oldPictures as $picture) {
+                Storage::disk('public')->delete($picture);
+            }
+            $hotelPictures = [];
+            foreach ($request->file('hotel_pictures') as $file) {
+                $hotelPictures[] = $file->store('hotel_pictures', 'public');
+            }
+            $validated['hotel_pictures'] = json_encode($hotelPictures);
+        }
+
+        if ($request->hasFile('bank_check_picture')) {
+            if ($vendor->bank_check_picture) {
+                Storage::disk('public')->delete($vendor->bank_check_picture);
+            }
+            $validated['bank_check_picture'] = $request->file('bank_check_picture')->store('bank_check_pictures', 'public');
+        }
+
+        // Update password if provided
+        if ($request->filled('password')) {
+            $validated['password'] = bcrypt($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
+
+        // Update vendor
+        $vendor->update($validated);
+
+        return redirect()->route('super-admin.vendor.index')->with('success', 'Vendor updated successfully!');
+    }
 
 }

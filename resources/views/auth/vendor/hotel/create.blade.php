@@ -694,7 +694,7 @@
                                                 <div class="col-md-6 col-lg-4 col-xxl-3">
                                                     <div class="form-group mt-15">
                                                         <label class="form-label">Entrance Gate/Main Gate Photos</label>
-                                                        <div class="multiple-upload-container" id="upload-container-3">
+                                                        <div class="multiple-upload-container" id="upload-container-4">
                                                             <input type="file" class="multiple-file-input" name="entrance_gate_photos[]" accept="image/*" multiple>
                                                             <label class="upload-label">Select Multiple Images</label>
                                                             <div class="multiple-thumbnail-gallery"></div>
@@ -706,7 +706,7 @@
                                                 <div class="col-md-6 col-lg-4 col-xxl-3">
                                                     <div class="form-group mt-15">
                                                         <label class="form-label">Lift, Stairs, wheelchair area Photos</label>
-                                                        <div class="multiple-upload-container" id="upload-container-3">
+                                                        <div class="multiple-upload-container" id="upload-container-5">
                                                             <input type="file" class="multiple-file-input" name="lift_stairs_photos[]" accept="image/*" multiple>
                                                             <label class="upload-label">Select Multiple Images</label>
                                                             <div class="multiple-thumbnail-gallery"></div>
@@ -718,7 +718,7 @@
                                                 <div class="col-md-6 col-lg-4 col-xxl-3">
                                                     <div class="form-group mt-15">
                                                         <label class="form-label">Spa & Massage Center Photos</label>
-                                                        <div class="multiple-upload-container" id="upload-container-3">
+                                                        <div class="multiple-upload-container" id="upload-container-6">
                                                             <input type="file" class="multiple-file-input" name="spa_photos[]" accept="image/*" multiple>
                                                             <label class="upload-label">Select Multiple Images</label>
                                                             <div class="multiple-thumbnail-gallery"></div>
@@ -730,7 +730,7 @@
                                                 <div class="col-md-6 col-lg-4 col-xxl-3">
                                                     <div class="form-group mt-15">
                                                         <label class="form-label">Bar Photos</label>
-                                                        <div class="multiple-upload-container" id="upload-container-3">
+                                                        <div class="multiple-upload-container" id="upload-container-7">
                                                             <input type="file" class="multiple-file-input" name="bar_photos[]" accept="image/*" multiple>
                                                             <label class="upload-label">Select Multiple Images</label>
                                                             <div class="multiple-thumbnail-gallery"></div>
@@ -742,7 +742,7 @@
                                                 <div class="col-md-6 col-lg-4 col-xxl-3">
                                                     <div class="form-group mt-15">
                                                         <label class="form-label">Hotels Car & Bus Photo</label>
-                                                        <div class="multiple-upload-container" id="upload-container-3">
+                                                        <div class="multiple-upload-container" id="upload-container-8">
                                                             <input type="file" class="multiple-file-input" name="transport_photos[]" accept="image/*" multiple>
                                                             <label class="upload-label">Select Multiple Images</label>
                                                             <div class="multiple-thumbnail-gallery"></div>
@@ -754,7 +754,7 @@
                                                 <div class="col-md-6 col-lg-4 col-xxl-3">
                                                     <div class="form-group mt-15">
                                                         <label class="form-label">Rooftop, Garde, Sitting area Photos</label>
-                                                        <div class="multiple-upload-container" id="upload-container-3">
+                                                        <div class="multiple-upload-container" id="upload-container-9">
                                                             <input type="file" class="multiple-file-input" name="rooftop_photos[]" accept="image/*" multiple>
                                                             <label class="upload-label">Select Multiple Images</label>
                                                             <div class="multiple-thumbnail-gallery"></div>
@@ -766,7 +766,7 @@
                                                 <div class="col-md-6 col-lg-4 col-xxl-3">
                                                     <div class="form-group mt-15">
                                                         <label class="form-label">Gym, Game room & Kids Zone Photos</label>
-                                                        <div class="multiple-upload-container" id="upload-container-3">
+                                                        <div class="multiple-upload-container" id="upload-container-10">
                                                             <input type="file" class="multiple-file-input" name="gym_photos[]" accept="image/*" multiple>
                                                             <label class="upload-label">Select Multiple Images</label>
                                                             <div class="multiple-thumbnail-gallery"></div>
@@ -778,7 +778,7 @@
                                                 <div class="col-md-6 col-lg-4 col-xxl-3">
                                                     <div class="form-group mt-15">
                                                         <label class="form-label">CCTV, fire extinguisher & Surveillance Photos</label>
-                                                        <div class="multiple-upload-container" id="upload-container-3">
+                                                        <div class="multiple-upload-container" id="upload-container-11">
                                                             <input type="file" class="multiple-file-input" name="security_photos[]" accept="image/*" multiple>
                                                             <label class="upload-label">Select Multiple Images</label>
                                                             <div class="multiple-thumbnail-gallery"></div>
@@ -790,7 +790,7 @@
                                                 <div class="col-md-6 col-lg-4 col-xxl-3">
                                                     <div class="form-group mt-15">
                                                         <label class="form-label">Hotel/Property Amenities Photos</label>
-                                                        <div class="multiple-upload-container" id="upload-container-3">
+                                                        <div class="multiple-upload-container" id="upload-container-12">
                                                             <input type="file" class="multiple-file-input" name="amenities_photos[]" accept="image/*" multiple>
                                                             <label class="upload-label">Select Multiple Images</label>
                                                             <div class="multiple-thumbnail-gallery"></div>
@@ -822,6 +822,7 @@
             </div>
         </div>
     </div>
+
     <script type="text/javascript">
         document.getElementById('propertyCategory').addEventListener('change', function() {
             var propertyTypeContainer = document.getElementById('propertyTypeContainer');
@@ -852,7 +853,7 @@
                 options[selectedValue].forEach(function(option) {
                     var li = document.createElement('li');
                     li.innerHTML = `
-                      <div class="form-check">
+                      <div class class="form-check">
                           <input
                               class="form-check-input"
                               type="checkbox"
@@ -870,12 +871,7 @@
                 propertyTypeContainer.style.display = 'none';
             }
         });
-
-
-
     </script>
-
-
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -884,14 +880,18 @@
             function initializeMultipleUpload(container) {
                 const fileInput = container.querySelector('.multiple-file-input');
                 const thumbnailGallery = container.querySelector('.multiple-thumbnail-gallery');
-                const containerId = container.id;
+                const containerId = container.id || `dynamic-${Date.now()}`; // Fallback ID for dynamic containers
 
                 uploadedImages[containerId] = [];
 
                 fileInput.addEventListener('change', function(event) {
+                    console.log(`File input changed in container: ${containerId}`);
                     const files = event.target.files;
                     for (let file of files) {
-                        if (!file.type.startsWith('image/')) continue;
+                        if (!file.type.startsWith('image/')) {
+                            console.warn(`File ${file.name} is not an image`);
+                            continue;
+                        }
                         const reader = new FileReader();
                         reader.onload = function(e) {
                             const thumbnailItem = document.createElement('div');
@@ -906,13 +906,15 @@
                                 const index = uploadedImages[containerId].indexOf(file);
                                 if (index > -1) {
                                     uploadedImages[containerId].splice(index, 1);
+                                    console.log(`Removed file ${file.name} from container ${containerId}`);
                                 }
                             });
                             thumbnailItem.appendChild(img);
                             thumbnailItem.appendChild(removeBtn);
                             thumbnailGallery.appendChild(thumbnailItem);
                             uploadedImages[containerId].push(file);
-                        }
+                            console.log(`Added thumbnail for file ${file.name} in container ${containerId}`);
+                        };
                         reader.readAsDataURL(file);
                     }
                 });
@@ -921,30 +923,59 @@
             // Initialize for all upload containers dynamically
             const uploadContainers = document.querySelectorAll('.multiple-upload-container');
             uploadContainers.forEach(container => {
+                console.log(`Initializing upload container: ${container.id}`);
                 initializeMultipleUpload(container);
             });
 
-            // Handle save button click
-            const submitBtn = document.getElementById('submitBtn');
-            submitBtn.addEventListener('click', () => {
-                for (const [containerId, files] of Object.entries(uploadedImages)) {
-                    console.log(`Images from ${containerId}:`);
-                    files.forEach(file => {
-                        console.log(file.name);
-                    });
-                }
-                alert('Images have been logged in the console!');
+            // Handle Add More button for custom facilities
+            const facilityContainer = document.getElementById('facility-container');
+            const addMoreBtn = document.getElementById('add-more-btn');
+
+            addMoreBtn.addEventListener('click', function(event) {
+                event.preventDefault();
+                console.log('Add More button clicked for custom facilities');
+
+                const facilityField = document.createElement('div');
+                facilityField.classList.add('input-field', 'd-flex', 'align-items-center', 'mb-3');
+                facilityField.style.gap = '10px';
+                const uniqueId = Date.now();
+                facilityField.innerHTML = `
+                    <div class="form-group flex-grow-1">
+                        <label for="custom_facility_${uniqueId}">Facility Name</label>
+                        <input class="form-control" type="text" name="custom_facilities[]" id="custom_facility_${uniqueId}" placeholder="Enter facility name" />
+                    </div>
+                    <div class="form-group">
+                        <label for="custom_facility_icon_${uniqueId}">Facility Icon</label>
+                        <div class="multiple-upload-container" id="upload-container-dynamic-${uniqueId}">
+                            <input class="form-control multiple-file-input" type="file" name="custom_facilities_icon[]" id="custom_facility_icon_${uniqueId}" accept="image/*" />
+                            <label class="upload-label">Browse Image</label>
+                            <div class="multiple-thumbnail-gallery"></div>
+                        </div>
+                        @error('custom_facilities_icon.*') <span class="text-danger">{{ $message }}</span> @enderror
+                </div>
+                <button type="button" class="btn btn-danger btn-sm delete-btn">Delete</button>
+`;
+
+                // Initialize file upload for the new field
+                const uploadContainer = facilityField.querySelector('.multiple-upload-container');
+                initializeMultipleUpload(uploadContainer);
+
+                // Add delete functionality
+                const deleteBtn = facilityField.querySelector('.delete-btn');
+                deleteBtn.addEventListener('click', () => {
+                    console.log('Delete button clicked for facility field');
+                    facilityField.remove();
+                });
+
+                facilityContainer.appendChild(facilityField);
+                console.log('New facility field added to container');
             });
         });
     </script>
 
-
     <script type="text/javascript">
-        // JavaScript to handle "Check All" functionality
-        document.getElementById("site-off").addEventListener("change", function() {
-            // Get all checkboxes with the class "checkbox-item"
+        document.getElementById("site-off")?.addEventListener("change", function() {
             let checkboxes = document.querySelectorAll(".checkbox-item");
-            // Set checked status based on "Check All" checkbox
             checkboxes.forEach(function(checkbox) {
                 checkbox.checked = document.getElementById("site-off").checked;
             });
@@ -956,7 +987,7 @@
             const checkbox = document.getElementById("property-ownership");
             const options = document.getElementById("ownership-options");
 
-            checkbox.addEventListener("change", () => {
+            checkbox?.addEventListener("change", () => {
                 if (checkbox.checked) {
                     options.classList.remove("hidden");
                 } else {
@@ -964,7 +995,6 @@
                 }
             });
         });
-
     </script>
 
     <script>
@@ -980,15 +1010,10 @@
         }
     </script>
 
-
-
-    <!-- Select Number of Apartments/ Rooms dynamic  form -->
     <script>
-        document.getElementById('apartment-count').addEventListener('change', function() {
+        document.getElementById('apartment-count')?.addEventListener('change', function() {
             const count = parseInt(this.value);
             const dynamicFormsContainer = document.getElementById('dynamic-forms');
-
-            // Clear previous forms
             dynamicFormsContainer.innerHTML = '';
 
             if (count > 0) {
@@ -996,36 +1021,32 @@
                     const formGroup = document.createElement('div');
                     formGroup.classList.add('apartment-form');
 
-                    // Apartment Number Field
                     const apartmentNumberLabel = document.createElement('label');
                     apartmentNumberLabel.textContent = `Apartment ${i} Number:`;
                     apartmentNumberLabel.setAttribute('for', `apartment-${i}-number`);
                     const apartmentNumberInput = document.createElement('input');
                     apartmentNumberInput.type = 'text';
                     apartmentNumberInput.id = `apartment-${i}-number`;
-                    apartmentNumberInput.name = `apartment-${i}-number`;
+                    apartmentNumberInput.name = `apartments[${i}][number]`;
                     apartmentNumberInput.classList.add('form-control');
 
-                    // Apartment Floor Number Field
                     const apartmentFloorLabel = document.createElement('label');
                     apartmentFloorLabel.textContent = `Apartment ${i} Floor Number:`;
                     apartmentFloorLabel.setAttribute('for', `apartment-${i}-floor`);
                     const apartmentFloorInput = document.createElement('input');
                     apartmentFloorInput.type = 'text';
                     apartmentFloorInput.id = `apartment-${i}-floor`;
-                    apartmentFloorInput.name = `apartment-${i}-floor`;
+                    apartmentFloorInput.name = `apartments[${i}][floor]`;
                     apartmentFloorInput.classList.add('form-control');
 
-                    // Apartment/Rooms Name Field
                     const apartmentNameLabel = document.createElement('label');
                     apartmentNameLabel.textContent = `Apartment/Rooms ${i} Name:`;
                     apartmentNameLabel.setAttribute('for', `apartment-${i}-name`);
                     const apartmentNameInput = document.createElement('input');
                     apartmentNameInput.type = 'text';
                     apartmentNameInput.id = `apartment-${i}-name`;
-                    apartmentNameInput.name = `apartment-${i}-name`;
+                    apartmentNameInput.name = `apartments[${i}][name]`;
                     apartmentNameInput.classList.add('form-control');
-
 
                     formGroup.appendChild(apartmentNameLabel);
                     formGroup.appendChild(apartmentNameInput);
@@ -1034,13 +1055,11 @@
                     formGroup.appendChild(apartmentFloorLabel);
                     formGroup.appendChild(apartmentFloorInput);
 
-
                     dynamicFormsContainer.appendChild(formGroup);
                 }
             }
         });
     </script>
-
 
     <script>
         document.querySelector('form').addEventListener('submit', function(event) {
@@ -1048,13 +1067,10 @@
         });
     </script>
 
-    <!-- Ownership Yes or no -->
     <script>
-        // Get all radio buttons
         const radioButtons = document.querySelectorAll('input[name="showFields"]');
         const additionalFields = document.getElementById('additionalFields');
 
-        // Add event listener to each radio button
         radioButtons.forEach(radio => {
             radio.addEventListener('change', function() {
                 if (this.value === 'yes') {
@@ -1066,24 +1082,18 @@
         });
     </script>
 
-
-    <!-- Property Ownership -->
     <script>
         $(document).ready(function() {
-            // Initialize Select2
             $('.js-select2').select2();
 
-            // Handle property ownership change
-            $('#propertyOwnershipss').on('change', function() {
+            $('#propertyOwnershipss')?.on('change', function() {
                 const selectedValue = $(this).val();
                 const partnerFields = $('.partner-fields');
                 const leaseDates = $('.lease-dates');
 
-                // Hide all conditional fields first
                 partnerFields.slideUp();
                 leaseDates.slideUp();
 
-                // Show relevant fields based on selection
                 if (selectedValue === 'Partnership') {
                     partnerFields.slideDown();
                 } else if (selectedValue === 'Leased') {
@@ -1093,12 +1103,7 @@
         });
     </script>
 
-
-
-
-
     <script>
-        // Function to handle bar selection
         function initializeBarSelection() {
             const barRadioButtons = document.querySelectorAll('input[name="barOption"]');
             const barSelectContainer = document.getElementById('barSelectContainer');
@@ -1110,16 +1115,14 @@
                         barSelectContainer.style.display = 'block';
                     } else {
                         barSelectContainer.style.display = 'none';
-                        barNumberSelect.value = ''; // Reset select when hiding
+                        barNumberSelect.value = '';
                     }
                 });
             });
         }
 
-        // Initialize when DOM is loaded
         document.addEventListener('DOMContentLoaded', initializeBarSelection);
     </script>
-
 
     <script>
         class KidsZoneManager {
@@ -1128,9 +1131,7 @@
             }
 
             initializeAllKidsZones() {
-                // Find all kids zone sections
                 const kidsZoneSections = document.querySelectorAll('[data-kids-zone]');
-
                 kidsZoneSections.forEach(section => {
                     this.initializeSingleKidsZone(section);
                 });
@@ -1147,13 +1148,12 @@
                             selectContainer.style.display = 'block';
                         } else {
                             selectContainer.style.display = 'none';
-                            numberSelect.value = ''; // Reset select when hiding
+                            numberSelect.value = '';
                         }
                     });
                 });
             }
 
-            // Method to get all selections
             getAllSelections() {
                 const selections = {};
                 const sections = document.querySelectorAll('[data-kids-zone]');
@@ -1172,7 +1172,6 @@
                 return selections;
             }
 
-            // Method to add a new kids zone section dynamically
             addNewKidsZone(containerId, zoneNumber) {
                 const container = document.getElementById(containerId);
                 const newSection = `
@@ -1211,18 +1210,8 @@
             }
         }
 
-        // Initialize the manager
         const kidsZoneManager = new KidsZoneManager();
-
-        // Example usage:
-        // To add a new kids zone section:
-        // kidsZoneManager.addNewKidsZone('container-id', 3);
-
-        // To get all selections:
-        // const selections = kidsZoneManager.getAllSelections();
-        // console.log(selections);
     </script>
-
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -1231,31 +1220,29 @@
             const yesFields = document.getElementById("yesFields");
             const noFields = document.getElementById("noFields");
 
-            yesOption.addEventListener("change", function () {
+            yesOption?.addEventListener("change", function () {
                 if (this.checked) {
                     yesFields.classList.remove("hidden");
                     noFields.classList.add("hidden");
                 }
             });
 
-            noOption.addEventListener("change", function () {
+            noOption?.addEventListener("change", function () {
                 if (this.checked) {
                     noFields.classList.remove("hidden");
                     yesFields.classList.add("hidden");
                 }
             });
         });
-
     </script>
-
 
     <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", function () {
-            const divisionSelect = document.getElementById("division");
-            const districtSelect = document.getElementById("district");
-            const districtContainer = document.getElementById("districtContainer");
-            const placeCheckboxList = document.getElementById("placeCheckboxList");
-            const placeOptions = document.getElementById("placeOptions");
+            divisionSelect = document.getElementById("division");
+            districtSelect = document.getElementById("district");
+            districtContainer = document.getElementById("districtContainer");
+            placeCheckboxList = document.getElementById("placeCheckboxList");
+            placeOptions = document.getElementById("placeOptions");
 
             const data = {
                 Hotels: {
@@ -1281,13 +1268,10 @@
                 }
             };
 
-
-
-            // Populate districts based on selected division
-            divisionSelect.addEventListener("change", function () {
+            divisionSelect?.addEventListener("change", function () {
                 const division = this.value;
                 districtSelect.innerHTML = '<option value="" disabled selected>Choose Property Type</option>';
-                placeOptions.innerHTML = ""; // Clear previous options
+                placeOptions.innerHTML = "";
                 placeCheckboxList.style.display = "none";
 
                 if (data[division]) {
@@ -1301,11 +1285,10 @@
                 }
             });
 
-            // Display checkboxes based on selected district
-            districtSelect.addEventListener("change", function () {
+            districtSelect?.addEventListener("change", function () {
                 const division = divisionSelect.value;
                 const district = this.value;
-                placeOptions.innerHTML = ""; // Clear existing checkboxes
+                placeOptions.innerHTML = "";
 
                 if (data[division] && data[division].districts[district]) {
                     placeCheckboxList.style.display = "block";
@@ -1333,18 +1316,10 @@
                 }
             });
         });
-
-
     </script>
 
-
-
-    <!-- selct all Facilities  Check box -->
     <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", function () {
-
-
-            // Popular Facilities
             document.querySelector("#facilities-all").addEventListener("change", function () {
                 console.log("Facilities Select All toggled");
                 const facilitiesCheckboxes = document.querySelectorAll(".checkbox-item-facility");
@@ -1353,74 +1328,30 @@
                     console.log(`Checkbox ${checkbox.id} set to ${checkbox.checked}`);
                 });
             });
-
         });
-
     </script>
 
-
-
-
-
-
-
-
-
-
-    <!-- Add more Faciliteies -->
-    <script>
-        const facilityContainer = document.getElementById('facility-container');
-
-        // Function to add a new input and image field
-        const addMoreBtn = document.getElementById('add-more-btn');
-        addMoreBtn.addEventListener('click', function () {
-            const facilityField = document.createElement('div');
-            facilityField.classList.add('input-field');
-            facilityField.innerHTML = `
-        <input class="form-control" type="text" name="custom_facilities[]" placeholder="Facility name" />
-        <button type="button" class="delete-btn">Delete</button>
-    `;
-            const deleteBtn = facilityField.querySelector('.delete-btn');
-            deleteBtn.addEventListener('click', () => {
-                facilityField.remove();
-            });
-            document.getElementById('facility-container').appendChild(facilityField);
-        });
-
-        // Add event listener to the "Add More" button
-        addMoreBtn.addEventListener('click', addFacilityField);
-    </script>
-    <!-- Add more Faciliteies -->
-
-
-    <!-- Check In Method -->
     <script type="text/javascript">
-        // JavaScript to handle "Check All" functionality for the Check in method section
         document.getElementById("check-in-all").addEventListener("change", function () {
-            // Get all checkboxes with the class "checkbox-item-checkin"
             let checkinCheckboxes = document.querySelectorAll(".checkbox-item-checkin");
-
-            // Set checked status based on "Check All" checkbox
             checkinCheckboxes.forEach(function (checkbox) {
                 checkbox.checked = document.getElementById("check-in-all").checked;
             });
         });
     </script>
 
-
-
-    <!-- Add  more for Check in method -->
     <script>
-        document.getElementById('addRuleBtn').addEventListener('click', function () {
+        document.getElementById('addRuleBtn').addEventListener('click', function (event) {
+            event.preventDefault();
             const formContainer = document.getElementById('formContainer');
             const newField = document.createElement('div');
             newField.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3');
             newField.innerHTML = `
-        <div class="form-group">
-            <input type="text" class="form-control" name="custom_check_in_methods[]" placeholder="" required>
-            <button class="delete-btn">Delete</button>
-        </div>
-    `;
+                <div class="form-group">
+                    <input type="text" class="form-control" name="custom_check_in_methods[]" placeholder="" required>
+                    <button class="delete-btn">Delete</button>
+                </div>
+            `;
             formContainer.appendChild(newField);
             const deleteBtn = newField.querySelector('.delete-btn');
             deleteBtn.addEventListener('click', function () {
@@ -1429,18 +1360,12 @@
         });
     </script>
 
-
-    <!-- Yes Click then show Input Field  -->
     <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", function () {
-            // Find all radio groups with a target input
             document.querySelectorAll(".radio-group input[type='radio']").forEach(function (radio) {
                 radio.addEventListener("change", function () {
-                    // Get the target input element using the data attribute
                     const targetId = this.getAttribute("data-target");
                     const targetInput = document.getElementById(targetId);
-
-                    // Check if the target exists and show/hide it based on the value
                     if (targetInput) {
                         if (this.value === "yes") {
                             targetInput.classList.remove("hidden");
@@ -1451,87 +1376,55 @@
                 });
             });
         });
-
     </script>
 
-    <!-- Proferty -->
     <script type="text/javascript">
-
         document.querySelector("#property-all").addEventListener("change", function () {
-            // Get all checkboxes in the "Property Info" group
             const propertyCheckboxes = document.querySelectorAll(".checkbox-item-property");
-
-            // Set the checked state of all checkboxes to match the "Select All" checkbox
             propertyCheckboxes.forEach(function (checkbox) {
                 checkbox.checked = document.querySelector("#property-all").checked;
             });
         });
     </script>
 
-
-
-
-
-    <!-- Add more then show Input Overall -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // Add event listeners to all "Add More" buttons
             document.querySelectorAll(".add-more").forEach((button) => {
-                button.addEventListener("click", function () {
-                    const inputContainer = this.previousElementSibling; // Get the input container
-
-                    // Create a new form group with an input field and delete button
+                button.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    const inputContainer = this.previousElementSibling;
                     const newFormGroup = document.createElement("div");
                     newFormGroup.classList.add("form-group", "mb-1", "d-flex", "align-items-center");
-
-                    // Add a minimum gap of 10px between input and delete button
                     newFormGroup.style.gap = "10px";
-
-                    // Create new input field
                     const inputField = document.createElement("input");
                     inputField.type = "text";
                     inputField.classList.add("form-control");
                     inputField.placeholder = "Enter something";
-
-                    // Create delete button
                     const deleteButton = document.createElement("button");
                     deleteButton.innerText = "Delete";
                     deleteButton.classList.add("delete-btn");
-
-                    // Add functionality to delete button
                     deleteButton.addEventListener("click", function () {
-                        newFormGroup.remove(); // Remove the form group
+                        newFormGroup.remove();
                     });
-
-                    // Append input and delete button to the new form group
                     newFormGroup.appendChild(inputField);
                     newFormGroup.appendChild(deleteButton);
-
-                    // Insert the new form group before the "Add More" button
                     inputContainer.parentNode.insertBefore(newFormGroup, this);
                 });
             });
         });
     </script>
 
-
-    <!-- Hotel All Acilities -->
     <script>
         const facilityDropdown = document.getElementById('facilityDropdown');
         const dynamicFormContainer = document.getElementById('dynamicFormContainer');
         const addFacilityButton = document.getElementById('addFacilityButton');
 
-        // Automatically show input field when a facility is selected
         facilityDropdown.addEventListener('change', handleFacilitySelection);
-
-        // Handle "Add More" button click
-        addFacilityButton.addEventListener('click', addMoreFields);
+        addFacilityButton.addEventListener('click', function(event) { event.preventDefault(); addMoreFields(); });
 
         function handleFacilitySelection() {
             const selectedFacility = facilityDropdown.value;
-
             if (selectedFacility) {
-                // Check if an input already exists for the selected facility
                 const existingField = document.querySelector(`.facility-group-${selectedFacility}`);
                 if (!existingField) {
                     createInputField(selectedFacility);
@@ -1541,35 +1434,27 @@
 
         function addMoreFields() {
             const selectedFacility = facilityDropdown.value;
-
             if (!selectedFacility) {
                 alert('Please select a facility first.');
                 return;
             }
-
             createInputField(selectedFacility);
         }
 
         function createInputField(selectedFacility) {
             const uniqueId = `facility-group-${selectedFacility}-${Date.now()}`;
-
             const newFieldGroup = document.createElement('div');
             newFieldGroup.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3', 'mb-3', `facility-group-${selectedFacility}`);
             newFieldGroup.setAttribute('id', uniqueId);
-
             const label = getFacilityLabel(selectedFacility);
-
             newFieldGroup.innerHTML = `
-        <div class="form-group">
-            <label for="input-${uniqueId}">${label}</label>
-            <input type="text" class="form-control facility-input" id="input-${uniqueId}" placeholder="Enter ${label}" required>
-        </div>
-        <button type="button" class="btn btn-danger btn-sm mt-3 delete-facility-btn">Delete</button>
-    `;
-
+                <div class="form-group">
+                    <label for="input-${uniqueId}">${label}</label>
+                    <input type="text" class="form-control facility-input" id="input-${uniqueId}" name="facility_details[${selectedFacility}][]" placeholder="Enter ${label}">
+                </div>
+                <button type="button" class="btn btn-danger btn-sm mt-3 delete-facility-btn">Delete</button>
+            `;
             dynamicFormContainer.appendChild(newFieldGroup);
-
-            // Attach delete functionality to the button
             newFieldGroup.querySelector('.delete-facility-btn').addEventListener('click', function () {
                 dynamicFormContainer.removeChild(newFieldGroup);
             });
@@ -1596,13 +1481,9 @@
                 default: return 'Unknown Facility';
             }
         }
-
     </script>
 
-
-    <!-- All Near by location set up -->
     <script>
-        // Define labels for different section types
         const sectionLabelsMap = {
             restaurant: ['Restaurant Name', 'Distance'],
             entertainment: ['Attraction Point', 'Distance'],
@@ -1611,53 +1492,36 @@
             shopping: ['Shopping/ATM Name', 'Distance']
         };
 
-        // Button click to add new section
-        document.getElementById('addNearbyAreaBtn').addEventListener('click', function () {
+        document.getElementById('addNearbyAreaBtn').addEventListener('click', function (event) {
+            event.preventDefault();
             const selectedValue = document.getElementById('areaSelector').value;
             const formContainer = document.getElementById('dynamicFieldsContainer');
             if (!sectionLabelsMap[selectedValue]) {
-                alert("Please select a valid area.");
+                alert("Please select a valid nearby area category.");
                 return;
             }
-            const fieldGroupId = `field-group-${Date.now()}`;
-            const fieldLabels = sectionLabelsMap[selectedValue];
-            const newFieldGroup = document.createElement('div');
-            newFieldGroup.classList.add('col-md-6', 'col-lg-6', 'col-xxl-6', 'mb-3');
-            newFieldGroup.setAttribute('id', fieldGroupId);
-            newFieldGroup.innerHTML = `
-        <div class="form-group">
-            <label>${fieldLabels[0]}</label>
-            <input type="text" class="form-control" name="custom_nearby_area_details[]" placeholder="Enter ${fieldLabels[0]}" required>
-        </div>
-        <div class="form-group mt-2">
-            <label>${fieldLabels[1]}</label>
-            <input type="text" class="form-control" name="custom_nearby_area_details[]" placeholder="Enter ${fieldLabels[1]}" required>
-        </div>
-        <button type="button" class="btn btn-danger btn-sm mt-3 removeFieldGroupBtn">Delete</button>
-    `;
-            formContainer.appendChild(newFieldGroup);
-        });
 
-        // Delegated event handler for deleting field groups
-        document.getElementById('dynamicFieldsContainer').addEventListener('click', function (event) {
-            if (event.target.classList.contains('removeFieldGroupBtn')) {
-                event.target.closest('.col-md-6').remove();
-            }
+            const labels = sectionLabelsMap[selectedValue];
+            const uniqueId = `nearby-area-${selectedValue}-${Date.now()}`;
+            const newFieldGroup = document.createElement('div');
+            newFieldGroup.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3', 'mb-3');
+            newFieldGroup.setAttribute('id', uniqueId);
+            newFieldGroup.innerHTML = `
+                <div class="form-group">
+                    <label for="input-name-${uniqueId}">${labels[0]}</label>
+                    <input type="text" class="form-control" id="input-name-${uniqueId}" name="nearby_areas[${selectedValue}][name][]" placeholder="Enter ${labels[0]}" required>
+                </div>
+                <div class="form-group">
+                    <label for="input-distance-${uniqueId}">${labels[1]}</label>
+                    <input type="text" class="form-control" id="input-distance-${uniqueId}" name="nearby_areas[${selectedValue}][distance][]" placeholder="Enter ${labels[1]}" required>
+                </div>
+                <button type="button" class="btn btn-danger btn-sm mt-3 delete-nearby-btn">Delete</button>
+            `;
+            formContainer.appendChild(newFieldGroup);
+            newFieldGroup.querySelector('.delete-nearby-btn').addEventListener('click', function () {
+                formContainer.removeChild(newFieldGroup);
+            });
         });
     </script>
 
-<script>
-    document.querySelectorAll('.add-more').forEach(button => {
-        button.addEventListener('click', function(event) {
-            event.preventDefault(); // Prevents the button from acting as a submit button
-        });
-    });
-    document.getElementById("addRuleBtn").addEventListener("click", function(event) {
-        event.preventDefault(); // Stops form submission
-    });
-    document.getElementById("addFacilityButton").addEventListener("click", function(event) {
-        event.preventDefault(); // Stops form submission
-    });
-
-</script>
 @endsection
