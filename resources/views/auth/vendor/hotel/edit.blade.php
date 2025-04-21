@@ -491,61 +491,61 @@
                                                         <div>
                                                             <input type="checkbox" name="facilities[]" value="Free Wi-Fi" class="checkbox-item-facility" id="facility-wifi" {{ in_array('Free Wi-Fi', old('facilities', $hotel->facilities ?? [])) ? 'checked' : '' }}>
                                                             <label for="facility-wifi">
-                                                                <span><img class="fac-img" src="{{ asset('images/icons/wifi.png') }}"></span> Free Wi-Fi
+                                                                <span><img class="fac-img" src="{{ asset('../images/icons/mountain.png') }}"></span> Free Wi-Fi
                                                             </label>
                                                         </div>
                                                         <div>
                                                             <input type="checkbox" name="facilities[]" value="Hill View Or Sea View" class="checkbox-item-facility" id="facility-view" {{ in_array('Hill View Or Sea View', old('facilities', $hotel->facilities ?? [])) ? 'checked' : '' }}>
                                                             <label for="facility-view">
-                                                                <span><img class="fac-img" src="{{ asset('images/icons/view.png') }}"></span> Hill View Or Sea View
+                                                                <span><img class="fac-img" src="{{ asset('../images/icons/mountain.png') }}"></span> Hill View Or Sea View
                                                             </label>
                                                         </div>
                                                         <div>
                                                             <input type="checkbox" name="facilities[]" value="On-site restaurant" class="checkbox-item-facility" id="facility-restaurant" {{ in_array('On-site restaurant', old('facilities', $hotel->facilities ?? [])) ? 'checked' : '' }}>
                                                             <label for="facility-restaurant">
-                                                                <span><img class="fac-img" src="{{ asset('images/icons/restaurant.png') }}"></span> On-site restaurant
+                                                                <span><img class="fac-img" src="{{ asset('../images/icons/mountain.png') }}"></span> On-site restaurant
                                                             </label>
                                                         </div>
                                                         <div>
                                                             <input type="checkbox" name="facilities[]" value="Buffet Breakfast" class="checkbox-item-facility" id="facility-breakfast" {{ in_array('Buffet Breakfast', old('facilities', $hotel->facilities ?? [])) ? 'checked' : '' }}>
                                                             <label for="facility-breakfast">
-                                                                <span><img class="fac-img" src="{{ asset('images/icons/breakfast.png') }}"></span> Buffet Breakfast
+                                                                <span><img class="fac-img" src="{{ asset('../images/icons/mountain.png') }}"></span> Buffet Breakfast
                                                             </label>
                                                         </div>
                                                         <div>
                                                             <input type="checkbox" name="facilities[]" value="Bar/lounge" class="checkbox-item-facility" id="facility-bar" {{ in_array('Bar/lounge', old('facilities', $hotel->facilities ?? [])) ? 'checked' : '' }}>
                                                             <label for="facility-bar">
-                                                                <span><img class="fac-img" src="{{ asset('images/icons/bar.png') }}"></span> Bar/lounge
+                                                                <span><img class="fac-img" src="{{ asset('../images/icons/mountain.png') }}"></span> Bar/lounge
                                                             </label>
                                                         </div>
                                                         <div>
                                                             <input type="checkbox" name="facilities[]" value="Private Pool" class="checkbox-item-facility" id="facility-pool" {{ in_array('Private Pool', old('facilities', $hotel->facilities ?? [])) ? 'checked' : '' }}>
                                                             <label for="facility-pool">
-                                                                <span><img class="fac-img" src="{{ asset('images/icons/pool.png') }}"></span> Private Pool
+                                                                <span><img class="fac-img" src="{{ asset('../images/icons/mountain.png') }}"></span> Private Pool
                                                             </label>
                                                         </div>
                                                         <div>
                                                             <input type="checkbox" name="facilities[]" value="Fitness center & Spa services" class="checkbox-item-facility" id="facility-fitness" {{ in_array('Fitness center & Spa services', old('facilities', $hotel->facilities ?? [])) ? 'checked' : '' }}>
                                                             <label for="facility-fitness">
-                                                                <span><img class="fac-img" src="{{ asset('images/icons/fitness.png') }}"></span> Fitness center & Spa services
+                                                                <span><img class="fac-img" src="{{ asset('../images/icons/mountain.png') }}"></span> Fitness center & Spa services
                                                             </label>
                                                         </div>
                                                         <div>
                                                             <input type="checkbox" name="facilities[]" value="24-hour reception" class="checkbox-item-facility" id="facility-reception" {{ in_array('24-hour reception', old('facilities', $hotel->facilities ?? [])) ? 'checked' : '' }}>
                                                             <label for="facility-reception">
-                                                                <span><img class="fac-img" src="{{ asset('images/icons/reception.png') }}"></span> 24-hour reception
+                                                                <span><img class="fac-img" src="{{ asset('../images/icons/mountain.png') }}"></span> 24-hour reception
                                                             </label>
                                                         </div>
                                                         <div>
                                                             <input type="checkbox" name="facilities[]" value="Parking facilities" class="checkbox-item-facility" id="facility-parking" {{ in_array('Parking facilities', old('facilities', $hotel->facilities ?? [])) ? 'checked' : '' }}>
                                                             <label for="facility-parking">
-                                                                <span><img class="fac-img" src="{{ asset('images/icons/parking.png') }}"></span> Parking facilities
+                                                                <span><img class="fac-img" src="{{ asset('../images/icons/mountain.png') }}"></span> Parking facilities
                                                             </label>
                                                         </div>
                                                         <div>
                                                             <input type="checkbox" name="facilities[]" value="Airport shuttle service" class="checkbox-item-facility" id="facility-shuttle" {{ in_array('Airport shuttle service', old('facilities', $hotel->facilities ?? [])) ? 'checked' : '' }}>
                                                             <label for="facility-shuttle">
-                                                                <span><img class="fac-img" src="{{ asset('images/icons/shuttle.png') }}"></span> Airport shuttle service
+                                                                <span><img class="fac-img" src="{{ asset('../images/icons/mountain.png') }}"></span> Airport shuttle service
                                                             </label>
                                                         </div>
                                                     </div>

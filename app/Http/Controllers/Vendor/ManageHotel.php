@@ -174,16 +174,93 @@ class ManageHotel extends Controller
 
     public function update(Request $request, Hotel $hotel)
     {
+        // Validate the request
+        $validated = $request->validate([
+            'description' => 'nullable|string',
+            'pets_allowed' => 'nullable|in:yes,no',
+            'pets_details' => 'nullable|string',
+            'events_allowed' => 'nullable|in:yes,no',
+            'events_details' => 'nullable|string',
+            'smoking_allowed' => 'nullable|in:yes,no',
+            'smoking_details' => 'nullable|string',
+            'quiet_hours' => 'nullable|string',
+            'photography_allowed' => 'nullable|in:yes,no',
+            'photography_details' => 'nullable|string',
+            'check_in_window' => 'nullable|string',
+            'check_out_time' => 'nullable|string',
+            'food_laundry' => 'nullable|in:yes,no',
+            'check_in_rules' => 'nullable|array',
+            'check_in_rules.*' => 'string',
+            'custom_check_in_rules' => 'nullable|array',
+            'custom_check_in_rules.*' => 'nullable|string',
+            'property_info' => 'nullable|array',
+            'property_info.*' => 'string',
+            'custom_property_info' => 'nullable|array',
+            'custom_property_info.*' => 'nullable|string',
+            'age_restriction' => 'nullable|in:yes,no',
+            'age_restriction_details' => 'nullable|string',
+            'vlogging_allowed' => 'nullable|in:yes,no',
+            'vlogging_details' => 'nullable|string',
+            'child_policy' => 'nullable|string',
+            'extra_bed_policy' => 'nullable|string',
+            'cooking_policy' => 'nullable|string',
+            'directions' => 'nullable|string',
+            'additional_policy' => 'nullable|string',
+            'check_in_methods' => 'nullable|array',
+            'check_in_methods.*' => 'string',
+            'custom_check_in_methods' => 'nullable|array',
+            'custom_check_in_methods.*' => 'nullable|string',
+            'cancellation_policies' => 'nullable|array',
+            'cancellation_policies.*' => 'string',
+            'facilities' => 'nullable|array',
+            'facilities.*' => 'string',
+            'custom_facilities' => 'nullable|array',
+            'custom_facilities.*' => 'nullable|string',
+            'custom_facilities_icon.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'facility_category' => 'nullable|string',
+            'nearby_areas' => 'nullable|array',
+            'nearby_areas.*' => 'string',
+            'custom_nearby_areas' => 'nullable|array',
+            'custom_nearby_areas.*' => 'nullable|string',
+            'nearby_area_category' => 'nullable|string',
+            'kitchen_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'washroom_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'parking_lot_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'entrance_gate_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'lift_stairs_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'spa_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'bar_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'transport_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'rooftop_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gym_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'security_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'amenities_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'status' => 'required|in:submitted,draft',
+        ]);
 
+        // Initialize data array
+        $data = $validated;
 
         // Handle custom facilities icons
         $existingIcons = $hotel->custom_facilities_icon ?? [];
         $newIcons = [];
+        $removedIcons = $request->filled('removed_custom_facilities_icon')
+            ? array_filter(explode(',', $request->input('removed_custom_facilities_icon')), 'is_numeric')
+            : [];
 
+        // Delete removed icons
+        foreach ($removedIcons as $index) {
+            if (isset($existingIcons[$index])) {
+                Storage::disk('public')->delete($existingIcons[$index]);
+                unset($existingIcons[$index]);
+            }
+        }
+
+        // Handle new custom facility icons
         if ($request->hasFile('custom_facilities_icon')) {
             foreach ($request->file('custom_facilities_icon') as $index => $file) {
                 if ($file && $file->isValid()) {
-                    $path = $file->store('hotel_photos', 'public');
+                    $path = $file->store('hotel_facilities', 'public');
                     $newIcons[$index] = $path;
                 } else {
                     $newIcons[$index] = $existingIcons[$index] ?? null;
@@ -191,19 +268,8 @@ class ManageHotel extends Controller
             }
         }
 
-        // Handle removed custom facility icons
-        if ($request->filled('removed_custom_facilities_icon')) {
-            $removedIndices = array_filter(explode(',', $request->input('removed_custom_facilities_icon')), 'is_numeric');
-            foreach ($removedIndices as $index) {
-                if (isset($existingIcons[$index])) {
-                    Storage::disk('public')->delete($existingIcons[$index]);
-                    unset($existingIcons[$index]);
-                }
-            }
-        }
-
-        // Merge existing and new icons, preserving order
-        $data['custom_facilities_icon'] = array_values(array_replace($existingIcons, $newIcons));
+        // Merge existing and new icons
+        $data['custom_facilities_icon'] = array_values(array_filter(array_replace($existingIcons, $newIcons)));
 
         // Handle photo fields
         $photoFields = [
@@ -214,16 +280,24 @@ class ManageHotel extends Controller
 
         foreach ($photoFields as $field) {
             $existingPhotos = $hotel->$field ?? [];
-            // Ensure existingPhotos is an array
             if (!is_array($existingPhotos)) {
-                // If it's a string, attempt to convert it to an array
-                if (is_string($existingPhotos) && !empty($existingPhotos)) {
-                    $existingPhotos = json_decode($existingPhotos, true) ?? [$existingPhotos];
-                } else {
-                    $existingPhotos = [];
-                }
+                $existingPhotos = is_string($existingPhotos) && !empty($existingPhotos)
+                    ? json_decode($existingPhotos, true) ?? [$existingPhotos]
+                    : [];
             }
             $newPhotos = [];
+            $removedPhotos = $request->filled("removed_{$field}")
+                ? array_filter(explode(',', $request->input("removed_{$field}")), 'is_numeric')
+                : [];
+
+            // Delete removed photos
+            foreach ($removedPhotos as $index) {
+                if (isset($existingPhotos[$index])) {
+                    Storage::disk('public')->delete($existingPhotos[$index]);
+                    unset($existingPhotos[$index]);
+                }
+            }
+            $existingPhotos = array_values($existingPhotos);
 
             // Handle new uploads
             if ($request->hasFile($field)) {
@@ -235,19 +309,6 @@ class ManageHotel extends Controller
                 }
             }
 
-            // Handle removed photos
-            if ($request->filled("removed_{$field}")) {
-                $removedIndices = array_filter(explode(',', $request->input("removed_{$field}")), 'is_numeric');
-                foreach ($removedIndices as $index) {
-                    if (isset($existingPhotos[$index])) {
-                        Storage::disk('public')->delete($existingPhotos[$index]);
-                        unset($existingPhotos[$index]);
-                    }
-                }
-                // Reindex array to avoid gaps
-                $existingPhotos = array_values($existingPhotos);
-            }
-
             // Merge existing and new photos
             $data[$field] = array_merge($existingPhotos, $newPhotos);
         }
@@ -255,10 +316,13 @@ class ManageHotel extends Controller
         // Handle facilities with categories
         if ($request->has('facilities') && is_array($request->input('facilities'))) {
             $facilities = [];
-            foreach ($request->input('facilities') as $category => $items) {
-                if (is_array($items)) {
-                    $facilities[$category] = array_filter($items, fn($item) => !empty($item));
-                }
+            if (isset($request->input('facilities')[$request->input('facility_category')])) {
+                $category = $request->input('facility_category');
+                $facilities[$category] = array_filter($request->input('facilities')[$category], fn($item) => !empty($item));
+            }
+            // Include checkbox facilities
+            if (isset($request->input('facilities')['most_popular'])) {
+                $facilities['most_popular'] = array_filter($request->input('facilities')['most_popular'], fn($item) => !empty($item));
             }
             $data['facilities'] = !empty($facilities) ? $facilities : $hotel->facilities ?? [];
         }
@@ -266,20 +330,26 @@ class ManageHotel extends Controller
         // Handle nearby areas with categories
         if ($request->has('nearby_areas') && is_array($request->input('nearby_areas'))) {
             $nearbyAreas = [];
-            foreach ($request->input('nearby_areas') as $category => $data) {
-                if (isset($data['name']) && is_array($data['name']) && isset($data['distance']) && is_array($data['distance'])) {
-                    foreach ($data['name'] as $index => $name) {
-                        if (!empty($name) && isset($data['distance'][$index]) && !empty($data['distance'][$index])) {
+            $category = $request->input('nearby_area_category');
+            if (isset($request->input('nearby_areas')[$category]) && is_array($request->input('nearby_areas')[$category])) {
+                $categoryData = $request->input('nearby_areas')[$category];
+                if (isset($categoryData['name']) && isset($categoryData['distance'])) {
+                    foreach ($categoryData['name'] as $index => $name) {
+                        if (!empty($name) && isset($categoryData['distance'][$index]) && !empty($categoryData['distance'][$index])) {
                             $nearbyAreas[$category]['name'][] = $name;
-                            $nearbyAreas[$category]['distance'][] = $data['distance'][$index];
+                            $nearbyAreas[$category]['distance'][] = $categoryData['distance'][$index];
                         }
                     }
                 }
             }
+            // Include checkbox nearby areas
+            if (isset($request->input('nearby_areas')['most_popular'])) {
+                $nearbyAreas['most_popular'] = array_filter($request->input('nearby_areas')['most_popular'], fn($item) => !empty($item));
+            }
             $data['nearby_areas'] = !empty($nearbyAreas) ? $nearbyAreas : $hotel->nearby_areas ?? [];
         }
 
-        // Filter out empty custom fields to avoid storing unnecessary data
+        // Filter out empty custom fields
         $arrayFields = [
             'custom_check_in_rules', 'custom_property_info', 'custom_check_in_methods',
             'custom_facilities', 'custom_nearby_areas'
@@ -295,9 +365,10 @@ class ManageHotel extends Controller
         // Update the hotel
         $hotel->update($data);
 
-        return redirect()->route('vendor-admin.hotel.index')->with('success', 'Hotel updated successfully.');
+        // Redirect based on status
+        $message = $request->status === 'draft' ? 'Hotel saved as draft successfully.' : 'Hotel updated successfully.';
+        return redirect()->route('vendor-admin.hotel.index')->with('success', $message);
     }
-
 
     public function updateSuper(Request $request, Hotel $hotel)
     {
