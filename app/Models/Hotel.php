@@ -16,7 +16,7 @@ class Hotel extends Model
         'vlogging_allowed', 'vlogging_details', 'child_policy', 'extra_bed_policy',
         'cooking_policy', 'directions', 'additional_policy', 'check_in_methods',
         'custom_check_in_methods', 'cancellation_policies', 'facilities', 'facility_category',
-        'custom_facilities','custom_facilities_icon','custom_facilities', 'nearby_areas', 'custom_nearby_areas', 'nearby_area_category',
+        'custom_facilities','custom_facilities_icon','custom_facilities', 'nearby_areas','hotel_facilities', 'custom_nearby_areas', 'nearby_area_category',
         'custom_nearby_area_details', 'kitchen_photos', 'washroom_photos', 'parking_lot_photos',
         'entrance_gate_photos', 'lift_stairs_photos', 'spa_photos', 'bar_photos',
         'transport_photos', 'rooftop_photos', 'gym_photos', 'security_photos', 'amenities_photos',
@@ -35,6 +35,7 @@ class Hotel extends Model
         'custom_facilities' => 'array',
         'custom_facilities_icon' => 'array',
         'nearby_areas' => 'array',
+        'hotel_facilities' => 'array',
         'custom_nearby_areas' => 'array',
         'custom_nearby_area_details' => 'array',
         'property_types' => 'array', // Cast as array

@@ -35,10 +35,12 @@ class ManageHotel extends Controller
 
     public function store(Request $request)
     {
-        // Skip validation (assuming validation is handled elsewhere)
 
         // Prepare data array directly from the request inputs
         $data = $request->all();
+
+        // Log the raw request data for debugging
+        Log::debug('Request data:', $request->all());
 
         // Handle nearby_areas data
         if ($request->has('nearby_areas') && is_array($request->nearby_areas)) {
@@ -58,6 +60,36 @@ class ManageHotel extends Controller
             }
 
             $data['nearby_areas'] = json_encode($flatNearbyAreas);
+        }
+
+        // Handle hotel_facilities data
+        if ($request->has('hotel_facilities') && is_array($request->hotel_facilities)) {
+            $flatHotelFacilities = [];
+            Log::debug('Processing hotel_facilities:', $request->hotel_facilities);  // Log for debugging
+
+            foreach ($request->hotel_facilities as $category => $facilityNames) {
+                // Check if the category's facilities are an array (to handle the structure)
+                if (is_array($facilityNames)) {
+                    foreach ($facilityNames as $facility) {
+                        if (!empty($facility)) {
+                            $flatHotelFacilities[] = [
+                                'category' => $category,  // Using the category as the field
+                                'name' => $facility,      // Facility name in each category
+                            ];
+                        }
+                    }
+                }
+            }
+
+            // Log the processed facilities
+            Log::debug('Processed hotel_facilities:', $flatHotelFacilities);
+
+            // Only encode if we have any valid facilities
+            if (!empty($flatHotelFacilities)) {
+                $data['hotel_facilities'] = json_encode($flatHotelFacilities);
+            } else {
+                $data['hotel_facilities'] = null;  // If no valid facilities, set it to null
+            }
         }
 
         // Handle file uploads
@@ -85,24 +117,25 @@ class ManageHotel extends Controller
         // Add vendor_id
         $data['vendor_id'] = auth()->user()->id;
 
-        // Log data for debugging
-        Log::debug('Hotel store data:', $data);
+        // Log data for debugging before insertion
+        Log::debug('Final data to be saved:', $data);
 
         try {
+            // Create hotel record in the database
             Hotel::create($data);
         } catch (\Exception $e) {
+            // Log the error if hotel record creation fails
             Log::error('Error creating hotel record: ' . $e->getMessage(), ['data' => $data]);
             throw $e;
         }
 
-        // Redirect based on status
+        // Redirect based on the status
         if ($request->status === 'submitted') {
             return redirect()->route('vendor-admin.hotel.index')->with('success', 'Hotel submitted successfully!');
         } else {
             return redirect()->route('vendor-admin.hotel.index')->with('success', 'Hotel Info Saved as Draft!');
         }
     }
-
 
 
     public function edit(Hotel $hotel)

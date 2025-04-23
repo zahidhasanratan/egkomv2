@@ -1470,24 +1470,25 @@
 
         function createHotelFieldGroup(category) {
             const labels = hotelFacilitiesLabelsMap[category];
-            const uniqueId = `hotel-facility-${category.replace(/[^a-zA-Z0-9]/g, '')}-${Date.now()}`;
+            const categoryKey = category.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+            const uniqueId = `hotel-facility-${categoryKey}-${Date.now()}`;
+
             const newFieldGroup = document.createElement('div');
             newFieldGroup.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3', 'mb-3');
             newFieldGroup.setAttribute('id', uniqueId);
-
             newFieldGroup.innerHTML = `
             <div class="form-group">
                 <label for="input-${uniqueId}">${labels[0]}</label>
-                <input type="text" class="form-control" id="input-${uniqueId}" name="hotel_facilities[${category}][]" placeholder="Enter ${labels[0]}" required>
+                <input type="text" class="form-control" id="input-${uniqueId}" name="hotel_facilities[${categoryKey}][]" placeholder="Enter ${labels[0]}" required>
             </div>
             <button type="button" class="btn btn-danger btn-sm mt-2 delete-hotel-btn">Delete</button>
         `;
 
-            let categoryWrapper = document.getElementById(`wrapper-${category.replace(/[^a-zA-Z0-9]/g, '')}`);
+            let categoryWrapper = document.getElementById(`wrapper-${categoryKey}`);
             if (!categoryWrapper) {
                 categoryWrapper = document.createElement('div');
                 categoryWrapper.classList.add('col-12', 'mb-3');
-                categoryWrapper.id = `wrapper-${category.replace(/[^a-zA-Z0-9]/g, '')}`;
+                categoryWrapper.id = `wrapper-${categoryKey}`;
                 categoryWrapper.innerHTML = `<h5>${category}</h5><div class="row"></div>`;
                 hotelFormContainer.appendChild(categoryWrapper);
             }
@@ -1503,21 +1504,27 @@
             });
         }
 
-        hotelFacilitySelector.addEventListener('change', function () {
-            currentFacilityValue = this.value;
-            if (!hotelFacilitiesLabelsMap[currentFacilityValue]) return;
-            createHotelFieldGroup(currentFacilityValue);
-        });
+        if (hotelFacilitySelector) {
+            hotelFacilitySelector.addEventListener('change', function () {
+                currentFacilityValue = this.value;
+                if (!hotelFacilitiesLabelsMap[currentFacilityValue]) return;
+                createHotelFieldGroup(currentFacilityValue);
+            });
+        }
 
-        document.getElementById('addHotelFacility').addEventListener('click', function (event) {
-            event.preventDefault();
-            if (!hotelFacilitiesLabelsMap[currentFacilityValue]) {
-                alert("Please select a valid facility category first.");
-                return;
-            }
-            createHotelFieldGroup(currentFacilityValue);
-        });
+        const addHotelFacilityBtn = document.getElementById('addHotelFacility');
+        if (addHotelFacilityBtn) {
+            addHotelFacilityBtn.addEventListener('click', function (event) {
+                event.preventDefault();
+                if (!currentFacilityValue || !hotelFacilitiesLabelsMap[currentFacilityValue]) {
+                    alert("Please select a valid facility category first.");
+                    return;
+                }
+                createHotelFieldGroup(currentFacilityValue);
+            });
+        }
     </script>
+
 
 
     <script>
