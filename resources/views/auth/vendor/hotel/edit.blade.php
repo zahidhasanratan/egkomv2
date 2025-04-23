@@ -649,48 +649,9 @@
                                         </div>
 
                                         <!-- Nearby Area -->
-                                        <div class="tab-pane" id="tabItem1">
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <div class="form-group">
-                                                        <h3 class="can-tittle">Most Popular Nearby Area</h3>
-                                                        <div class="radio-group">
-                                                            <label>
-                                                                <input type="checkbox" name="nearby_areas[]" value="16.5 km from Himchori Waterfall" class="bar-radio-yes" {{ in_array('16.5 km from Himchori Waterfall', old('nearby_areas', $hotel->nearby_areas ?? [])) ? 'checked' : '' }}> 16.5 km from Himchori Waterfall
-                                                            </label>
-                                                            <label>
-                                                                <input type="checkbox" name="nearby_areas[]" value="0.25 km from Navy Jetty, from where Saint Martin bound ship sails" class="bar-radio-no" {{ in_array('0.25 km from Navy Jetty, from where Saint Martin bound ship sails', old('nearby_areas', $hotel->nearby_areas ?? [])) ? 'checked' : '' }}> 0.25 km from Navy Jetty, from where Saint Martin bound ship sails
-                                                            </label>
-                                                            <label>
-                                                                <input type="checkbox" name="nearby_areas[]" value="3.2 km from Coxs Bazar Airport" class="bar-radio-no" {{ in_array('3.2 km from Coxs Bazar Airport', old('nearby_areas', $hotel->nearby_areas ?? [])) ? 'checked' : '' }}> 3.2 km from Coxs Bazar Airport
-                                                            </label>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-md-5">
-                                                                <div class="section">
-                                                                    <div class="input-container" style="display: none;">
-                                                                        <div class="form-group mb-3 d-flex align-items-center">
-                                                                            <input type="text" class="form-control" name="custom_nearby_areas[]" placeholder="Enter something">
-                                                                            <button class="btn btn-danger btn-sm">Delete</button>
-                                                                        </div>
-                                                                    </div>
-                                                                    <!-- Added check for custom_nearby_areas -->
-                                                                    @if(!empty($hotel->custom_nearby_areas) && is_array($hotel->custom_nearby_areas))
-                                                                        @foreach(old('custom_nearby_areas', $hotel->custom_nearby_areas) as $area)
-                                                                            <div class="form-group mb-3 d-flex align-items-center">
-                                                                                <input type="text" class="form-control" name="custom_nearby_areas[]" value="{{ $area }}" placeholder="Enter something">
-                                                                                <button class="btn btn-danger btn-sm">Delete</button>
-                                                                            </div>
-                                                                        @endforeach
-                                                                    @endif
-                                                                    <button class="add-more add-rule-btn btn add-button">Add More</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        @error('nearby_areas') <span class="text-danger">{{ $message }}</span> @enderror
-                                                    </div>
-                                                </div>
 
+                                        <div class="tab-pane" id="tabItem1">
+                                            <div class="row gy-4">
                                                 <div class="col-md-12">
                                                     <div class="row">
                                                         <h3 class="can-tittle">Nearby Area Categories</h3>
@@ -698,11 +659,11 @@
                                                             <div class="form-group">
                                                                 <label for="areaSelector">Select Nearby Area</label>
                                                                 <select id="areaSelector" class="form-control js-facility-select js-select2" name="nearby_area_category">
-                                                                    <option value="restaurant" {{ old('nearby_area_category', $hotel->nearby_area_category) == 'restaurant' ? 'selected' : '' }}>Restaurant & Cafe</option>
-                                                                    <option value="entertainment" {{ old('nearby_area_category', $hotel->nearby_area_category) == 'entertainment' ? 'selected' : '' }}>Entertainment & Attraction Point</option>
-                                                                    <option value="hospital" {{ old('nearby_area_category', $hotel->nearby_area_category) == 'hospital' ? 'selected' : '' }}>Hospital & Police Station</option>
-                                                                    <option value="transport" {{ old('nearby_area_category', $hotel->nearby_area_category) == 'transport' ? 'selected' : '' }}>Transport & Airport</option>
-                                                                    <option value="shopping" {{ old('nearby_area_category', $hotel->nearby_area_category) == 'shopping' ? 'selected' : '' }}>Shopping & ATM</option>
+                                                                    <option value="restaurant" {{ old('nearby_area_category', $hotel->nearby_area_category ?? '') == 'restaurant' ? 'selected' : '' }}>Restaurant & Cafe</option>
+                                                                    <option value="entertainment" {{ old('nearby_area_category', $hotel->nearby_area_category ?? '') == 'entertainment' ? 'selected' : '' }}>Entertainment & Attraction Point</option>
+                                                                    <option value="hospital" {{ old('nearby_area_category', $hotel->nearby_area_category ?? '') == 'hospital' ? 'selected' : '' }}>Hospital & Police Station</option>
+                                                                    <option value="transport" {{ old('nearby_area_category', $hotel->nearby_area_category ?? '') == 'transport' ? 'selected' : '' }}>Transport & Airport</option>
+                                                                    <option value="shopping" {{ old('nearby_area_category', $hotel->nearby_area_category ?? '') == 'shopping' ? 'selected' : '' }}>Shopping & ATM</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -710,45 +671,39 @@
                                                             <button class="add-more add-rule-btn btn add-button" id="addNearbyAreaBtn">Add More +</button>
                                                         </div>
                                                         <div class="row mt-3" id="dynamicFieldsContainer">
-                                                            <!-- Added check for nearby_areas -->
-                                                            @if(!empty($hotel->nearby_areas) && is_array($hotel->nearby_areas))
-                                                                @foreach(old('nearby_areas', $hotel->nearby_areas) as $category => $areas)
-                                                                    @if(is_array($areas) && isset($areas['name']) && is_array($areas['name']))
-                                                                        @foreach($areas['name'] as $index => $name)
-                                                                            <div class="col-md-6 col-lg-4 col-xxl-3 mb-3">
-                                                                                <div class="form-group">
-                                                                                    <label>{{ ucfirst($category) }} Name</label>
-                                                                                    <input type="text" class="form-control" name="nearby_areas[{{ $category }}][name][]" value="{{ $name }}" placeholder="Enter {{ $category }} name" required>
-                                                                                </div>
-                                                                                <div class="form-group">
-                                                                                    <label>Distance</label>
-                                                                                    <input type="text" class="form-control" name="nearby_areas[{{ $category }}][distance][]" value="{{ $areas['distance'][$index] ?? '' }}" placeholder="Enter distance" required>
-                                                                                </div>
-                                                                                <button type="button" class="btn btn-danger btn-sm mt-3 delete-nearby-btn">Delete</button>
+                                                            @if(isset($hotel->nearby_areas) && is_array($hotel->nearby_areas) && count($hotel->nearby_areas) > 0)
+                                                                @foreach($hotel->nearby_areas as $index => $area)
+                                                                    @if(is_array($area) && !empty($area['category']) && !empty($area['name']) && !empty($area['distance']))
+                                                                        <div class="col-md-6 col-lg-4 col-xxl-3 mb-3 nearby-area-field">
+                                                                            <div class="form-group">
+                                                                                <label>{{ ucfirst($area['category']) }} Name</label>
+                                                                                <input type="hidden" name="nearby_areas[{{ $area['category'] }}][category][]" value="{{ $area['category'] }}">
+                                                                                <input type="text" class="form-control" name="nearby_areas[{{ $area['category'] }}][name][]" value="{{ old("nearby_areas.{$area['category']}.name.{$index}", $area['name']) }}" placeholder="Enter {{ $area['category'] }} name" required>
                                                                             </div>
-                                                                        @endforeach
+                                                                            <div class="form-group">
+                                                                                <label>Distance</label>
+                                                                                <input type="text" class="form-control" name="nearby_areas[{{ $area['category'] }}][distance][]" value="{{ old("nearby_areas.{$area['category']}.distance.{$index}", $area['distance']) }}" placeholder="Enter distance" required>
+                                                                            </div>
+                                                                            <button type="button" class="btn btn-danger btn-sm mt-3 delete-nearby-btn">Delete</button>
+                                                                        </div>
+                                                                    @else
+                                                                    <!-- Debugging: Log invalid area data -->
+                                                                        <div class="alert alert-warning">
+                                                                            Invalid area data at index {{ $index }}: {{ json_encode($area) }}
+                                                                        </div>
                                                                     @endif
                                                                 @endforeach
+                                                            @else
+                                                            <!-- Debugging: Log when nearby_areas is empty or not an array -->
+                                                                <div class="alert alert-info">
+                                                                    No nearby areas found. Data: {{ json_encode($hotel->nearby_areas) }}
+                                                                </div>
                                                             @endif
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            <div class="row">
-                                                <div class="col-sm-2 col-md-2 mt-15">
-                                                    <div class="form-group">
-                                                        <button type="submit" name="status" value="submitted" class="btn btn-primary btn-submit">Submit</button>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-2 col-md-2 mt-15">
-                                                    <div class="form-group">
-                                                        <button type="submit" name="status" value="draft" class="btn btn-primary">Save & Drafts</button>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
-
                                         <!-- Photos -->
                                         <div class="tab-pane" id="Photos">
                                             @php
@@ -904,20 +859,20 @@
                 facilityField.style.gap = '10px';
                 const uniqueId = Date.now();
                 facilityField.innerHTML = `
-                    <div class="form-group flex-grow-1">
-                        <label for="custom_facility_${uniqueId}">Facility Name</label>
-                        <input class="form-control" type="text" name="custom_facilities[]" id="custom_facility_${uniqueId}" placeholder="Enter facility name" />
-                    </div>
-                    <div class="form-group">
-                        <label for="custom_facility_icon_${uniqueId}">Facility Icon</label>
-                        <div class="multiple-upload-container" id="upload-container-dynamic-${uniqueId}">
-                            <input class="form-control multiple-file-input" type="file" name="custom_facilities_icon[]" id="custom_facility_icon_${uniqueId}" accept="image/*" />
-                            <label class="upload-label">Browse Image</label>
-                            <div class="multiple-thumbnail-gallery"></div>
-                        </div>
-                    </div>
-                    <button type="button" class="btn btn-danger btn-sm delete-btn">Delete</button>
-                `;
+            <div class="form-group flex-grow-1">
+                <label for="custom_facility_${uniqueId}">Facility Name</label>
+                <input class="form-control" type="text" name="custom_facilities[]" id="custom_facility_${uniqueId}" placeholder="Enter facility name" />
+            </div>
+            <div class="form-group">
+                <label for="custom_facility_icon_${uniqueId}">Facility Icon</label>
+                <div class="multiple-upload-container" id="upload-container-dynamic-${uniqueId}">
+                    <input class="form-control multiple-file-input" type="file" name="custom_facilities_icon[]" id="custom_facility_icon_${uniqueId}" accept="image/*" />
+                    <label class="upload-label">Browse Image</label>
+                    <div class="multiple-thumbnail-gallery"></div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-danger btn-sm delete-btn">Delete</button>
+        `;
 
                 const uploadContainer = facilityField.querySelector('.multiple-upload-container');
                 initializeMultipleUpload(uploadContainer);
@@ -939,11 +894,11 @@
                 const newField = document.createElement('div');
                 newField.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3');
                 newField.innerHTML = `
-                    <div class="form-group">
-                        <input type="text" class="form-control" name="custom_check_in_methods[]" placeholder="">
-                        <button class="delete-btn btn btn-danger btn-sm">Delete</button>
-                    </div>
-                `;
+            <div class="form-group">
+                <input type="text" class="form-control" name="custom_check_in_methods[]" placeholder="">
+                <button class="delete-btn btn btn-danger btn-sm">Delete</button>
+            </div>
+        `;
                 formContainer.appendChild(newField);
                 const deleteBtn = newField.querySelector('.delete-btn');
                 deleteBtn.addEventListener('click', function() {
@@ -1018,11 +973,11 @@
                 const newField = document.createElement('div');
                 newField.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3', 'mb-3');
                 newField.innerHTML = `
-                    <div class="form-group">
-                        <input type="text" class="form-control" name="facilities[${selectedCategory}][]" placeholder="Enter ${selectedCategory} facility">
-                        <button type="button" class="btn btn-danger btn-sm mt-2 delete-facility-btn">Delete</button>
-                    </div>
-                `;
+            <div class="form-group">
+                <input type="text" class="form-control" name="facilities[${selectedCategory}][]" placeholder="Enter ${selectedCategory} facility">
+                <button type="button" class="btn btn-danger btn-sm mt-2 delete-facility-btn">Delete</button>
+            </div>
+        `;
                 dynamicFormContainer.appendChild(newField);
                 const deleteBtn = newField.querySelector('.delete-facility-btn');
                 deleteBtn.addEventListener('click', () => {
@@ -1040,24 +995,34 @@
                 event.preventDefault();
                 console.log('Add Nearby Area button clicked');
                 const selectedCategory = areaSelector.value;
+                const uniqueId = Date.now();
                 const newField = document.createElement('div');
-                newField.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3', 'mb-3');
+                newField.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3', 'mb-3', 'nearby-area-field');
                 newField.innerHTML = `
-                    <div class="form-group">
-                        <label>${selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1)} Name</label>
-                        <input type="text" class="form-control" name="nearby_areas[${selectedCategory}][name][]" placeholder="Enter ${selectedCategory} name" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Distance</label>
-                        <input type="text" class="form-control" name="nearby_areas[${selectedCategory}][distance][]" placeholder="Enter distance" required>
-                    </div>
-                    <button type="button" class="btn btn-danger btn-sm mt-3 delete-nearby-btn">Delete</button>
-                `;
+            <div class="form-group">
+                <label>${selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1)} Name</label>
+                <input type="hidden" name="nearby_areas[${selectedCategory}][category][]" value="${selectedCategory}">
+                <input type="text" class="form-control" name="nearby_areas[${selectedCategory}][name][]" placeholder="Enter ${selectedCategory} name" required>
+            </div>
+            <div class="form-group">
+                <label>Distance</label>
+                <input type="text" class="form-control" name="nearby_areas[${selectedCategory}][distance][]" placeholder="Enter distance" required>
+            </div>
+            <button type="button" class="btn btn-danger btn-sm mt-3 delete-nearby-btn">Delete</button>
+        `;
                 dynamicFieldsContainer.appendChild(newField);
                 const deleteBtn = newField.querySelector('.delete-nearby-btn');
                 deleteBtn.addEventListener('click', () => {
                     console.log('Delete nearby area field clicked');
                     newField.remove();
+                });
+            });
+
+            // Handle existing nearby area field deletions
+            dynamicFieldsContainer.querySelectorAll('.delete-nearby-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    console.log('Delete existing nearby area field clicked');
+                    btn.closest('.nearby-area-field').remove();
                 });
             });
 

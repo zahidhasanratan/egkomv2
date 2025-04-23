@@ -530,40 +530,129 @@
                                             </div>
 
                                             <!-- All Facilities -->
-                                            <div class="row mt-15">
-                                                <div class="checkbox-section">
+                                            <!-- All Facilities -->
+
+                                            <div class="container mt-15">
+                                                <div class="row">
                                                     <h3 class="can-tittle">Hotel Facilities Categories</h3>
-                                                    <div class="row">
-                                                        <div class="col-md-5">
-                                                            <label for="facilityDropdown">Select Facility</label>
-                                                            <select id="facilityDropdown" class="form-control js-facility-select js-select2" name="facility_category">
-                                                                <option value="general">General Services</option>
-                                                                <option value="activities">Activities & Entertainment</option>
-                                                                <option value="safety">Safety & Security</option>
-                                                                <option value="technology">Technology, Media & Wi-Fi</option>
-                                                                <option value="bedroom">Bedroom Features</option>
-                                                                <option value="bathroom">Bathroom Amenities</option>
-                                                                <option value="living">Living Room Features</option>
-                                                                <option value="kitchen">Kitchen Facilities</option>
-                                                                <option value="food">Food & Beverages</option>
-                                                                <option value="parking">Parking Availability</option>
-                                                                <option value="view">View from the Hotel</option>
-                                                                <option value="frontdesk">Front Desk Services</option>
-                                                                <option value="housekeeping">Housekeeping & Cleaning</option>
-                                                                <option value="room">Room Amenities</option>
-                                                                <option value="business">Business & Meeting Services</option>
-                                                                <option value="languages">Languages Spoken</option>
+
+                                                    <!-- Dropdown -->
+                                                    <div class="col-lg-5">
+                                                        <div class="form-group">
+                                                            <label for="hotelFacilitySelector">Select Facility</label>
+                                                            <select id="hotelFacilitySelector" class="form-control">
+                                                                <option value="" disabled selected>Select category</option>
+                                                                <option value="General Services">General Services</option>
+                                                                <option value="Activities & Entertainment">Activities & Entertainment</option>
+                                                                <option value="Safety & Security">Safety & Security</option>
+                                                                <option value="Technology, Media & Wi-Fi">Technology, Media & Wi-Fi</option>
+                                                                <option value="Bedroom Features">Bedroom Features</option>
+                                                                <option value="Bathroom Amenities">Bathroom Amenities</option>
+                                                                <option value="Living Room Features">Living Room Features</option>
+                                                                <option value="Kitchen Facilities">Kitchen Facilities</option>
+                                                                <option value="Food & Beverages">Food & Beverages</option>
+                                                                <option value="Parking Availability">Parking Availability</option>
+                                                                <option value="View from the Hotel">View from the Hotel</option>
+                                                                <option value="Front Desk Services">Front Desk Services</option>
+                                                                <option value="Housekeeping & Cleaning">Housekeeping & Cleaning</option>
+                                                                <option value="Room Amenities">Room Amenities</option>
+                                                                <option value="Business & Meeting Services">Business & Meeting Services</option>
+                                                                <option value="Languages Spoken">Languages Spoken</option>
                                                             </select>
                                                         </div>
-                                                        <div class="col-md-3 mt-3">
-                                                            <button class="add-rule-btn btn add-button" id="addFacilityButton">Add More +</button>
-                                                        </div>
-                                                        <div class="row mt-3" id="dynamicFormContainer">
-                                                            <!-- Dynamically added fields will appear here -->
+                                                    </div>
+
+                                                    <!-- Add More Button -->
+                                                    <div class="col-md-3 mt-4">
+                                                        <button class="btn btn-primary" id="addHotelFacility">Add More +</button>
+                                                    </div>
+
+                                                    <!-- Dynamic Field Container -->
+                                                    <div class="col-12 mt-4">
+                                                        <div class="row" id="dynamicFieldsContainerHotelFacility">
+                                                            <!-- Category-specific wrappers will be added here -->
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            <script>
+                                                const hotelFacilitiesLabelsMap = {
+                                                    'General Services': ['General Services Name'],
+                                                    'Activities & Entertainment': ['Activities & Entertainment Name'],
+                                                    'Safety & Security': ['Security Feature Name'],
+                                                    'Technology, Media & Wi-Fi': ['Technology, Media & Wi-Fi Name'],
+                                                    'Bedroom Features': ['Bedroom Feature Name'],
+                                                    'Bathroom Amenities': ['Bathroom Amenity'],
+                                                    'Living Room Features': ['Living Room Feature'],
+                                                    'Kitchen Facilities': ['Kitchen Facility'],
+                                                    'Food & Beverages': ['Food & Beverage Option'],
+                                                    'Parking Availability': ['Parking Option'],
+                                                    'View from the Hotel': ['View Type'],
+                                                    'Front Desk Services': ['Front Desk Service'],
+                                                    'Housekeeping & Cleaning': ['Housekeeping & Cleaning Service'],
+                                                    'Room Amenities': ['Room Amenity'],
+                                                    'Business & Meeting Services': ['Business & Meeting Service'],
+                                                    'Languages Spoken': ['Language']
+                                                };
+
+                                                const hotelFacilitySelector = document.getElementById('hotelFacilitySelector');
+                                                const hotelFormContainer = document.getElementById('dynamicFieldsContainerHotelFacility');
+                                                let currentFacilityValue = '';
+
+                                                function createHotelFieldGroup(category) {
+                                                    const labels = hotelFacilitiesLabelsMap[category];
+                                                    const uniqueId = `hotel-facility-${category.replace(/[^a-zA-Z0-9]/g, '')}-${Date.now()}`;
+                                                    const newFieldGroup = document.createElement('div');
+                                                    newFieldGroup.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3', 'mb-3');
+                                                    newFieldGroup.setAttribute('id', uniqueId);
+
+                                                    newFieldGroup.innerHTML = `
+            <div class="form-group">
+                <label for="input-${uniqueId}">${labels[0]}</label>
+                <input type="text" class="form-control" id="input-${uniqueId}" name="hotel_facilities[${category}][]" placeholder="Enter ${labels[0]}" required>
+            </div>
+            <button type="button" class="btn btn-danger btn-sm mt-2 delete-hotel-btn">Delete</button>
+        `;
+
+                                                    let categoryWrapper = document.getElementById(`wrapper-${category.replace(/[^a-zA-Z0-9]/g, '')}`);
+                                                    if (!categoryWrapper) {
+                                                        categoryWrapper = document.createElement('div');
+                                                        categoryWrapper.classList.add('col-12', 'mb-3');
+                                                        categoryWrapper.id = `wrapper-${category.replace(/[^a-zA-Z0-9]/g, '')}`;
+                                                        categoryWrapper.innerHTML = `<h5>${category}</h5><div class="row"></div>`;
+                                                        hotelFormContainer.appendChild(categoryWrapper);
+                                                    }
+
+                                                    const row = categoryWrapper.querySelector('.row');
+                                                    row.appendChild(newFieldGroup);
+
+                                                    newFieldGroup.querySelector('.delete-hotel-btn').addEventListener('click', function () {
+                                                        row.removeChild(newFieldGroup);
+                                                        if (row.children.length === 0) {
+                                                            hotelFormContainer.removeChild(categoryWrapper);
+                                                        }
+                                                    });
+                                                }
+
+                                                hotelFacilitySelector.addEventListener('change', function () {
+                                                    currentFacilityValue = this.value;
+                                                    if (!hotelFacilitiesLabelsMap[currentFacilityValue]) return;
+                                                    createHotelFieldGroup(currentFacilityValue);
+                                                });
+
+                                                document.getElementById('addHotelFacility').addEventListener('click', function (event) {
+                                                    event.preventDefault();
+                                                    if (!hotelFacilitiesLabelsMap[currentFacilityValue]) {
+                                                        alert("Please select a valid facility category first.");
+                                                        return;
+                                                    }
+                                                    createHotelFieldGroup(currentFacilityValue);
+                                                });
+                                            </script>
+
+
+
 
                                             <div class="row">
                                                 <div class="col-sm-2 col-md-2 mt-15">
@@ -613,29 +702,114 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-12">
+
+                                                <div class="container mt-4">
                                                     <div class="row">
                                                         <h3 class="can-tittle">Nearby Area Categories</h3>
+
+                                                        <!-- Dropdown -->
                                                         <div class="col-lg-5">
                                                             <div class="form-group">
                                                                 <label for="areaSelector">Select Nearby Area</label>
-                                                                <select id="areaSelector" class="form-control js-facility-select js-select2" name="nearby_area_category">
-                                                                    <option value="restaurant">Restaurant & Cafe</option>
-                                                                    <option value="entertainment">Entertainment & Attraction Point</option>
-                                                                    <option value="hospital">Hospital & Police Station</option>
-                                                                    <option value="transport">Transport & Airport</option>
-                                                                    <option value="shopping">Shopping & ATM</option>
+                                                                <select id="areaSelector" class="form-control">
+                                                                    <option value="" disabled selected>Select category</option>
+                                                                    <option value="Restaurant & Cafe">Restaurant & Cafe</option>
+                                                                    <option value="Entertainment & Attraction Point">Entertainment & Attraction Point</option>
+                                                                    <option value="Hospital & Police Station">Hospital & Police Station</option>
+                                                                    <option value="Transport & Airport">Transport & Airport</option>
+                                                                    <option value="Shopping & ATM">Shopping & ATM</option>
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-3 mt-3">
-                                                            <button class="add-more add-rule-btn btn add-button" id="addNearbyAreaBtn">Add More +</button>
+
+                                                        <!-- Add More Button -->
+                                                        <div class="col-md-3 mt-4">
+                                                            <button class="btn btn-primary" id="addNearbyAreaBtn">Add More +</button>
                                                         </div>
-                                                        <div class="row mt-3" id="dynamicFieldsContainer">
-                                                            <!-- Dynamically added fields will appear here -->
+
+                                                        <!-- Dynamic Field Container -->
+                                                        <div class="col-12 mt-4">
+                                                            <div class="row" id="dynamicFieldsContainer">
+                                                                <!-- Category-specific wrappers will be added here -->
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                <script>
+                                                    const sectionLabelsMap = {
+                                                        'Restaurant & Cafe': ['Restaurant & Cafe Name', 'Distance'],
+                                                        'Entertainment & Attraction Point': ['Entertainment & Attraction Point', 'Distance'],
+                                                        'Hospital & Police Station': ['Hospital & Police Station Name', 'Distance'],
+                                                        'Transport & Airport': ['TTransport & Airport Name', 'Distance'],
+                                                        'Shopping & ATM': ['Shopping & ATM', 'Distance']
+                                                    };
+
+                                                    const areaSelector = document.getElementById('areaSelector');
+                                                    const formContainer = document.getElementById('dynamicFieldsContainer');
+                                                    let currentSelectedValue = '';
+
+                                                    function createFieldGroup(category) {
+                                                        const labels = sectionLabelsMap[category];
+                                                        const uniqueId = `nearby-area-${category.replace(/[^a-zA-Z0-9]/g, '')}-${Date.now()}`;
+                                                        const newFieldGroup = document.createElement('div');
+                                                        newFieldGroup.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3', 'mb-3');
+                                                        newFieldGroup.setAttribute('id', uniqueId);
+                                                        newFieldGroup.innerHTML = `
+            <div class="form-group">
+                <label for="input-name-${uniqueId}">${labels[0]}</label>
+                <input type="text" class="form-control" id="input-name-${uniqueId}" name="nearby_areas[${category}][name][]" placeholder="Enter ${labels[0]}" required>
+            </div>
+            <div class="form-group">
+                <label for="input-distance-${uniqueId}">${labels[1]}</label>
+                <input type="text" class="form-control" id="input-distance-${uniqueId}" name="nearby_areas[${category}][distance][]" placeholder="Enter ${labels[1]}" required>
+            </div>
+            <button type="button" class="btn btn-danger btn-sm mt-3 delete-nearby-btn">Delete</button>
+        `;
+
+                                                        // Find or create container for this category
+                                                        let categoryWrapper = document.getElementById(`wrapper-${category.replace(/[^a-zA-Z0-9]/g, '')}`);
+                                                        if (!categoryWrapper) {
+                                                            categoryWrapper = document.createElement('div');
+                                                            categoryWrapper.classList.add('col-12', 'mb-3');
+                                                            categoryWrapper.id = `wrapper-${category.replace(/[^a-zA-Z0-9]/g, '')}`;
+                                                            categoryWrapper.innerHTML = `<h5>${category}</h5><div class="row"></div>`;
+                                                            formContainer.appendChild(categoryWrapper);
+                                                        }
+
+                                                        const row = categoryWrapper.querySelector('.row');
+                                                        row.appendChild(newFieldGroup);
+
+                                                        // Delete logic
+                                                        newFieldGroup.querySelector('.delete-nearby-btn').addEventListener('click', function () {
+                                                            row.removeChild(newFieldGroup);
+                                                            // Remove wrapper if no more children
+                                                            if (row.children.length === 0) {
+                                                                formContainer.removeChild(categoryWrapper);
+                                                            }
+                                                        });
+                                                    }
+
+                                                    // On category select
+                                                    areaSelector.addEventListener('change', function () {
+                                                        currentSelectedValue = this.value;
+                                                        if (!sectionLabelsMap[currentSelectedValue]) return;
+                                                        // Add one by default
+                                                        createFieldGroup(currentSelectedValue);
+                                                    });
+
+                                                    // On "Add More +" click
+                                                    document.getElementById('addNearbyAreaBtn').addEventListener('click', function (event) {
+                                                        event.preventDefault();
+                                                        if (!sectionLabelsMap[currentSelectedValue]) {
+                                                            alert("Please select a valid nearby area category first.");
+                                                            return;
+                                                        }
+                                                        createFieldGroup(currentSelectedValue);
+                                                    });
+                                                </script>
+
+
                                             </div>
 
                                             <div class="row">
@@ -1414,114 +1588,6 @@
         });
     </script>
 
-    <script>
-        const facilityDropdown = document.getElementById('facilityDropdown');
-        const dynamicFormContainer = document.getElementById('dynamicFormContainer');
-        const addFacilityButton = document.getElementById('addFacilityButton');
 
-        facilityDropdown.addEventListener('change', handleFacilitySelection);
-        addFacilityButton.addEventListener('click', function(event) { event.preventDefault(); addMoreFields(); });
-
-        function handleFacilitySelection() {
-            const selectedFacility = facilityDropdown.value;
-            if (selectedFacility) {
-                const existingField = document.querySelector(`.facility-group-${selectedFacility}`);
-                if (!existingField) {
-                    createInputField(selectedFacility);
-                }
-            }
-        }
-
-        function addMoreFields() {
-            const selectedFacility = facilityDropdown.value;
-            if (!selectedFacility) {
-                alert('Please select a facility first.');
-                return;
-            }
-            createInputField(selectedFacility);
-        }
-
-        function createInputField(selectedFacility) {
-            const uniqueId = `facility-group-${selectedFacility}-${Date.now()}`;
-            const newFieldGroup = document.createElement('div');
-            newFieldGroup.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3', 'mb-3', `facility-group-${selectedFacility}`);
-            newFieldGroup.setAttribute('id', uniqueId);
-            const label = getFacilityLabel(selectedFacility);
-            newFieldGroup.innerHTML = `
-                <div class="form-group">
-                    <label for="input-${uniqueId}">${label}</label>
-                    <input type="text" class="form-control facility-input" id="input-${uniqueId}" name="facility_details[${selectedFacility}][]" placeholder="Enter ${label}">
-                </div>
-                <button type="button" class="btn btn-danger btn-sm mt-3 delete-facility-btn">Delete</button>
-            `;
-            dynamicFormContainer.appendChild(newFieldGroup);
-            newFieldGroup.querySelector('.delete-facility-btn').addEventListener('click', function () {
-                dynamicFormContainer.removeChild(newFieldGroup);
-            });
-        }
-
-        function getFacilityLabel(selectedFacility) {
-            switch (selectedFacility) {
-                case 'general': return 'General Service';
-                case 'activities': return 'Activity Name';
-                case 'safety': return 'Safety Measure';
-                case 'technology': return 'Technology Feature';
-                case 'bedroom': return 'Bedroom Feature';
-                case 'bathroom': return 'Bathroom Amenity';
-                case 'living': return 'Living Room Feature';
-                case 'kitchen': return 'Kitchen Facility';
-                case 'food': return 'Food/Beverage';
-                case 'parking': return 'Parking Option';
-                case 'view': return 'View Option';
-                case 'frontdesk': return 'Front Desk Service';
-                case 'housekeeping': return 'Housekeeping Service';
-                case 'room': return 'Room Amenity';
-                case 'business': return 'Business Service';
-                case 'languages': return 'Language';
-                default: return 'Unknown Facility';
-            }
-        }
-    </script>
-
-    <script>
-        const sectionLabelsMap = {
-            restaurant: ['Restaurant Name', 'Distance'],
-            entertainment: ['Attraction Point', 'Distance'],
-            hospital: ['Hospital/Police Station Name', 'Distance'],
-            transport: ['Transport/Airport Name', 'Distance'],
-            shopping: ['Shopping/ATM Name', 'Distance']
-        };
-
-        document.getElementById('addNearbyAreaBtn').addEventListener('click', function (event) {
-            event.preventDefault();
-            const selectedValue = document.getElementById('areaSelector').value;
-            const formContainer = document.getElementById('dynamicFieldsContainer');
-            if (!sectionLabelsMap[selectedValue]) {
-                alert("Please select a valid nearby area category.");
-                return;
-            }
-
-            const labels = sectionLabelsMap[selectedValue];
-            const uniqueId = `nearby-area-${selectedValue}-${Date.now()}`;
-            const newFieldGroup = document.createElement('div');
-            newFieldGroup.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3', 'mb-3');
-            newFieldGroup.setAttribute('id', uniqueId);
-            newFieldGroup.innerHTML = `
-                <div class="form-group">
-                    <label for="input-name-${uniqueId}">${labels[0]}</label>
-                    <input type="text" class="form-control" id="input-name-${uniqueId}" name="nearby_areas[${selectedValue}][name][]" placeholder="Enter ${labels[0]}" required>
-                </div>
-                <div class="form-group">
-                    <label for="input-distance-${uniqueId}">${labels[1]}</label>
-                    <input type="text" class="form-control" id="input-distance-${uniqueId}" name="nearby_areas[${selectedValue}][distance][]" placeholder="Enter ${labels[1]}" required>
-                </div>
-                <button type="button" class="btn btn-danger btn-sm mt-3 delete-nearby-btn">Delete</button>
-            `;
-            formContainer.appendChild(newFieldGroup);
-            newFieldGroup.querySelector('.delete-nearby-btn').addEventListener('click', function () {
-                formContainer.removeChild(newFieldGroup);
-            });
-        });
-    </script>
 
 @endsection
