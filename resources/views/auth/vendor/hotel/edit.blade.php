@@ -652,6 +652,7 @@
 
                                         <div class="tab-pane" id="tabItem1">
                                             <div class="row gy-4">
+
                                                 <div class="col-md-12">
                                                     <div class="row">
                                                         <h3 class="can-tittle">Nearby Area Categories</h3>
@@ -670,6 +671,7 @@
                                                         <div class="col-md-3 mt-3">
                                                             <button class="add-more add-rule-btn btn add-button" id="addNearbyAreaBtn">Add More +</button>
                                                         </div>
+
                                                         <div class="row mt-3" id="dynamicFieldsContainer">
                                                             @if(isset($hotel->nearby_areas) && is_array($hotel->nearby_areas) && count($hotel->nearby_areas) > 0)
                                                                 @foreach($hotel->nearby_areas as $index => $area)
@@ -700,8 +702,11 @@
                                                                 </div>
                                                             @endif
                                                         </div>
+
                                                     </div>
+
                                                 </div>
+
                                             </div>
                                         </div>
                                         <!-- Photos -->

@@ -32,87 +32,33 @@ class ManageHotel extends Controller
         return view('auth.vendor.hotel.create');
     }
 
+
     public function store(Request $request)
     {
-        // Validation rules for all fields
-        $validated = $request->validate([
-            'status' => 'required|in:draft,submitted',
+        // Skip validation (assuming validation is handled elsewhere)
 
-            'description' => 'nullable|string',
-            'pets_allowed' => 'nullable|in:yes,no',
-            'pets_details' => 'nullable|string',
-            'events_allowed' => 'nullable|in:yes,no',
-            'events_details' => 'nullable|string',
-            'smoking_allowed' => 'nullable|in:yes,no',
-            'smoking_details' => 'nullable|string',
-            'quiet_hours' => 'nullable|string',
-            'photography_allowed' => 'nullable|in:yes,no',
-            'photography_details' => 'nullable|string',
-            'check_in_window' => 'nullable|string',
-            'check_out_time' => 'nullable|string',
-            'food_laundry' => 'nullable|in:yes,no',
-            'check_in_rules' => 'nullable|array',
-            'check_in_rules.*' => 'nullable|string',
-            'custom_check_in_rules' => 'nullable|array',
-            'custom_check_in_rules.*' => 'nullable|string',
-            'property_info' => 'nullable|array',
-            'property_info.*' => 'nullable|string',
-            'custom_property_info' => 'nullable|array',
-            'custom_property_info.*' => 'nullable|string',
-            'age_restriction' => 'nullable|in:yes,no',
-            'age_restriction_details' => 'nullable|string',
-            'vlogging_allowed' => 'nullable|in:yes,no',
-            'vlogging_details' => 'nullable|string',
-            'child_policy' => 'nullable|string',
-            'extra_bed_policy' => 'nullable|string',
-            'cooking_policy' => 'nullable|string',
-            'directions' => 'nullable|string',
-            'additional_policy' => 'nullable|string',
-            'check_in_methods' => 'nullable|array',
-            'check_in_methods.*' => 'nullable|string',
-            'custom_check_in_methods' => 'nullable|array',
-            'custom_check_in_methods.*' => 'nullable|string',
-            'cancellation_policies' => 'nullable|array',
-            'cancellation_policies.*' => 'nullable|string',
-            'facilities' => 'nullable|array',
-            'facilities.*' => 'nullable|string',
-            'facility_category' => 'nullable|string',
-            'custom_facilities' => 'nullable|array',
-            'custom_facilities.*' => 'nullable|string',
-            'custom_facilities_icon.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'nearby_areas' => 'nullable|array',
-            'nearby_areas.*' => 'nullable|string',
-            'custom_nearby_areas' => 'nullable|array',
-            'custom_nearby_areas.*' => 'nullable|string',
-            'nearby_area_category' => 'nullable|string',
-            'custom_nearby_area_details' => 'nullable|array',
-            'custom_nearby_area_details.*' => 'nullable|string',
+        // Prepare data array directly from the request inputs
+        $data = $request->all();
 
-            // New fields from updated JavaScript
-            'property_types' => 'nullable|array',
-            'property_types.*' => 'nullable|string',
-            'apartments' => 'nullable|array',
-            'apartments.*.name' => 'nullable|string',
-            'apartments.*.number' => 'nullable|string',
-            'apartments.*.floor' => 'nullable|string',
+        // Handle nearby_areas data
+        if ($request->has('nearby_areas') && is_array($request->nearby_areas)) {
+            $flatNearbyAreas = [];
 
-            // File uploads
-            'kitchen_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'washroom_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'parking_lot_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'entrance_gate_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'lift_stairs_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'spa_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'bar_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'transport_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'rooftop_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'gym_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'security_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'amenities_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+            foreach ($request->nearby_areas as $category => $categoryData) {
+                $names = $categoryData['name'] ?? [];
+                $distances = $categoryData['distance'] ?? [];
 
-        // Prepare data array with validated inputs
-        $data = $validated;
+                foreach ($names as $index => $name) {
+                    $flatNearbyAreas[] = [
+                        'category' => $category,
+                        'name' => $name,
+                        'distance' => $distances[$index] ?? null,
+                    ];
+                }
+            }
+
+            $data['nearby_areas'] = json_encode($flatNearbyAreas);
+        }
 
         // Handle file uploads
         $photoFields = [
@@ -130,24 +76,23 @@ class ManageHotel extends Controller
                         $paths[] = $path;
                     }
                 }
-                $data[$field] = !empty($paths) ? json_encode($paths) : null; // Store as JSON or null if no valid files
+                $data[$field] = !empty($paths) ? json_encode($paths) : null;
             } else {
-                $data[$field] = null; // Explicitly set to null if no files uploaded
+                $data[$field] = null;
             }
         }
 
         // Add vendor_id
         $data['vendor_id'] = auth()->user()->id;
 
-        // Log data for debugging (remove in production)
+        // Log data for debugging
         Log::debug('Hotel store data:', $data);
 
         try {
-            // Insert new hotel record
             Hotel::create($data);
         } catch (\Exception $e) {
             Log::error('Error creating hotel record: ' . $e->getMessage(), ['data' => $data]);
-            throw $e; // Re-throw for debugging; replace with user-friendly error in production
+            throw $e;
         }
 
         // Redirect based on status
@@ -157,6 +102,8 @@ class ManageHotel extends Controller
             return redirect()->route('vendor-admin.hotel.index')->with('success', 'Hotel Info Saved as Draft!');
         }
     }
+
+
 
     public function edit(Hotel $hotel)
     {

@@ -31,6 +31,7 @@
                                     </li>
                                 </ul>
 
+
                                 <form method="POST" action="{{ route('vendor-admin.hotel.store') }}" enctype="multipart/form-data">
                                     @csrf
                                     <div class="tab-content">
@@ -576,81 +577,6 @@
                                                 </div>
                                             </div>
 
-                                            <script>
-                                                const hotelFacilitiesLabelsMap = {
-                                                    'General Services': ['General Services Name'],
-                                                    'Activities & Entertainment': ['Activities & Entertainment Name'],
-                                                    'Safety & Security': ['Security Feature Name'],
-                                                    'Technology, Media & Wi-Fi': ['Technology, Media & Wi-Fi Name'],
-                                                    'Bedroom Features': ['Bedroom Feature Name'],
-                                                    'Bathroom Amenities': ['Bathroom Amenity'],
-                                                    'Living Room Features': ['Living Room Feature'],
-                                                    'Kitchen Facilities': ['Kitchen Facility'],
-                                                    'Food & Beverages': ['Food & Beverage Option'],
-                                                    'Parking Availability': ['Parking Option'],
-                                                    'View from the Hotel': ['View Type'],
-                                                    'Front Desk Services': ['Front Desk Service'],
-                                                    'Housekeeping & Cleaning': ['Housekeeping & Cleaning Service'],
-                                                    'Room Amenities': ['Room Amenity'],
-                                                    'Business & Meeting Services': ['Business & Meeting Service'],
-                                                    'Languages Spoken': ['Language']
-                                                };
-
-                                                const hotelFacilitySelector = document.getElementById('hotelFacilitySelector');
-                                                const hotelFormContainer = document.getElementById('dynamicFieldsContainerHotelFacility');
-                                                let currentFacilityValue = '';
-
-                                                function createHotelFieldGroup(category) {
-                                                    const labels = hotelFacilitiesLabelsMap[category];
-                                                    const uniqueId = `hotel-facility-${category.replace(/[^a-zA-Z0-9]/g, '')}-${Date.now()}`;
-                                                    const newFieldGroup = document.createElement('div');
-                                                    newFieldGroup.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3', 'mb-3');
-                                                    newFieldGroup.setAttribute('id', uniqueId);
-
-                                                    newFieldGroup.innerHTML = `
-            <div class="form-group">
-                <label for="input-${uniqueId}">${labels[0]}</label>
-                <input type="text" class="form-control" id="input-${uniqueId}" name="hotel_facilities[${category}][]" placeholder="Enter ${labels[0]}" required>
-            </div>
-            <button type="button" class="btn btn-danger btn-sm mt-2 delete-hotel-btn">Delete</button>
-        `;
-
-                                                    let categoryWrapper = document.getElementById(`wrapper-${category.replace(/[^a-zA-Z0-9]/g, '')}`);
-                                                    if (!categoryWrapper) {
-                                                        categoryWrapper = document.createElement('div');
-                                                        categoryWrapper.classList.add('col-12', 'mb-3');
-                                                        categoryWrapper.id = `wrapper-${category.replace(/[^a-zA-Z0-9]/g, '')}`;
-                                                        categoryWrapper.innerHTML = `<h5>${category}</h5><div class="row"></div>`;
-                                                        hotelFormContainer.appendChild(categoryWrapper);
-                                                    }
-
-                                                    const row = categoryWrapper.querySelector('.row');
-                                                    row.appendChild(newFieldGroup);
-
-                                                    newFieldGroup.querySelector('.delete-hotel-btn').addEventListener('click', function () {
-                                                        row.removeChild(newFieldGroup);
-                                                        if (row.children.length === 0) {
-                                                            hotelFormContainer.removeChild(categoryWrapper);
-                                                        }
-                                                    });
-                                                }
-
-                                                hotelFacilitySelector.addEventListener('change', function () {
-                                                    currentFacilityValue = this.value;
-                                                    if (!hotelFacilitiesLabelsMap[currentFacilityValue]) return;
-                                                    createHotelFieldGroup(currentFacilityValue);
-                                                });
-
-                                                document.getElementById('addHotelFacility').addEventListener('click', function (event) {
-                                                    event.preventDefault();
-                                                    if (!hotelFacilitiesLabelsMap[currentFacilityValue]) {
-                                                        alert("Please select a valid facility category first.");
-                                                        return;
-                                                    }
-                                                    createHotelFieldGroup(currentFacilityValue);
-                                                });
-                                            </script>
-
 
 
 
@@ -711,7 +637,7 @@
                                                         <div class="col-lg-5">
                                                             <div class="form-group">
                                                                 <label for="areaSelector">Select Nearby Area</label>
-                                                                <select id="areaSelector" class="form-control">
+                                                                <select id="areaSelector" name="area_category" class="form-control">
                                                                     <option value="" disabled selected>Select category</option>
                                                                     <option value="Restaurant & Cafe">Restaurant & Cafe</option>
                                                                     <option value="Entertainment & Attraction Point">Entertainment & Attraction Point</option>
@@ -736,78 +662,6 @@
                                                     </div>
                                                 </div>
 
-                                                <script>
-                                                    const sectionLabelsMap = {
-                                                        'Restaurant & Cafe': ['Restaurant & Cafe Name', 'Distance'],
-                                                        'Entertainment & Attraction Point': ['Entertainment & Attraction Point', 'Distance'],
-                                                        'Hospital & Police Station': ['Hospital & Police Station Name', 'Distance'],
-                                                        'Transport & Airport': ['TTransport & Airport Name', 'Distance'],
-                                                        'Shopping & ATM': ['Shopping & ATM', 'Distance']
-                                                    };
-
-                                                    const areaSelector = document.getElementById('areaSelector');
-                                                    const formContainer = document.getElementById('dynamicFieldsContainer');
-                                                    let currentSelectedValue = '';
-
-                                                    function createFieldGroup(category) {
-                                                        const labels = sectionLabelsMap[category];
-                                                        const uniqueId = `nearby-area-${category.replace(/[^a-zA-Z0-9]/g, '')}-${Date.now()}`;
-                                                        const newFieldGroup = document.createElement('div');
-                                                        newFieldGroup.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3', 'mb-3');
-                                                        newFieldGroup.setAttribute('id', uniqueId);
-                                                        newFieldGroup.innerHTML = `
-            <div class="form-group">
-                <label for="input-name-${uniqueId}">${labels[0]}</label>
-                <input type="text" class="form-control" id="input-name-${uniqueId}" name="nearby_areas[${category}][name][]" placeholder="Enter ${labels[0]}" required>
-            </div>
-            <div class="form-group">
-                <label for="input-distance-${uniqueId}">${labels[1]}</label>
-                <input type="text" class="form-control" id="input-distance-${uniqueId}" name="nearby_areas[${category}][distance][]" placeholder="Enter ${labels[1]}" required>
-            </div>
-            <button type="button" class="btn btn-danger btn-sm mt-3 delete-nearby-btn">Delete</button>
-        `;
-
-                                                        // Find or create container for this category
-                                                        let categoryWrapper = document.getElementById(`wrapper-${category.replace(/[^a-zA-Z0-9]/g, '')}`);
-                                                        if (!categoryWrapper) {
-                                                            categoryWrapper = document.createElement('div');
-                                                            categoryWrapper.classList.add('col-12', 'mb-3');
-                                                            categoryWrapper.id = `wrapper-${category.replace(/[^a-zA-Z0-9]/g, '')}`;
-                                                            categoryWrapper.innerHTML = `<h5>${category}</h5><div class="row"></div>`;
-                                                            formContainer.appendChild(categoryWrapper);
-                                                        }
-
-                                                        const row = categoryWrapper.querySelector('.row');
-                                                        row.appendChild(newFieldGroup);
-
-                                                        // Delete logic
-                                                        newFieldGroup.querySelector('.delete-nearby-btn').addEventListener('click', function () {
-                                                            row.removeChild(newFieldGroup);
-                                                            // Remove wrapper if no more children
-                                                            if (row.children.length === 0) {
-                                                                formContainer.removeChild(categoryWrapper);
-                                                            }
-                                                        });
-                                                    }
-
-                                                    // On category select
-                                                    areaSelector.addEventListener('change', function () {
-                                                        currentSelectedValue = this.value;
-                                                        if (!sectionLabelsMap[currentSelectedValue]) return;
-                                                        // Add one by default
-                                                        createFieldGroup(currentSelectedValue);
-                                                    });
-
-                                                    // On "Add More +" click
-                                                    document.getElementById('addNearbyAreaBtn').addEventListener('click', function (event) {
-                                                        event.preventDefault();
-                                                        if (!sectionLabelsMap[currentSelectedValue]) {
-                                                            alert("Please select a valid nearby area category first.");
-                                                            return;
-                                                        }
-                                                        createFieldGroup(currentSelectedValue);
-                                                    });
-                                                </script>
 
 
                                             </div>
@@ -989,6 +843,8 @@
                                         </div>
                                     </div>
                                 </form>
+
+
                             </div>
                         </div>
                     </div>
@@ -1587,6 +1443,162 @@
             });
         });
     </script>
+
+    <script>
+        const hotelFacilitiesLabelsMap = {
+            'General Services': ['General Services Name'],
+            'Activities & Entertainment': ['Activities & Entertainment Name'],
+            'Safety & Security': ['Security Feature Name'],
+            'Technology, Media & Wi-Fi': ['Technology, Media & Wi-Fi Name'],
+            'Bedroom Features': ['Bedroom Feature Name'],
+            'Bathroom Amenities': ['Bathroom Amenity'],
+            'Living Room Features': ['Living Room Feature'],
+            'Kitchen Facilities': ['Kitchen Facility'],
+            'Food & Beverages': ['Food & Beverage Option'],
+            'Parking Availability': ['Parking Option'],
+            'View from the Hotel': ['View Type'],
+            'Front Desk Services': ['Front Desk Service'],
+            'Housekeeping & Cleaning': ['Housekeeping & Cleaning Service'],
+            'Room Amenities': ['Room Amenity'],
+            'Business & Meeting Services': ['Business & Meeting Service'],
+            'Languages Spoken': ['Language']
+        };
+
+        const hotelFacilitySelector = document.getElementById('hotelFacilitySelector');
+        const hotelFormContainer = document.getElementById('dynamicFieldsContainerHotelFacility');
+        let currentFacilityValue = '';
+
+        function createHotelFieldGroup(category) {
+            const labels = hotelFacilitiesLabelsMap[category];
+            const uniqueId = `hotel-facility-${category.replace(/[^a-zA-Z0-9]/g, '')}-${Date.now()}`;
+            const newFieldGroup = document.createElement('div');
+            newFieldGroup.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3', 'mb-3');
+            newFieldGroup.setAttribute('id', uniqueId);
+
+            newFieldGroup.innerHTML = `
+            <div class="form-group">
+                <label for="input-${uniqueId}">${labels[0]}</label>
+                <input type="text" class="form-control" id="input-${uniqueId}" name="hotel_facilities[${category}][]" placeholder="Enter ${labels[0]}" required>
+            </div>
+            <button type="button" class="btn btn-danger btn-sm mt-2 delete-hotel-btn">Delete</button>
+        `;
+
+            let categoryWrapper = document.getElementById(`wrapper-${category.replace(/[^a-zA-Z0-9]/g, '')}`);
+            if (!categoryWrapper) {
+                categoryWrapper = document.createElement('div');
+                categoryWrapper.classList.add('col-12', 'mb-3');
+                categoryWrapper.id = `wrapper-${category.replace(/[^a-zA-Z0-9]/g, '')}`;
+                categoryWrapper.innerHTML = `<h5>${category}</h5><div class="row"></div>`;
+                hotelFormContainer.appendChild(categoryWrapper);
+            }
+
+            const row = categoryWrapper.querySelector('.row');
+            row.appendChild(newFieldGroup);
+
+            newFieldGroup.querySelector('.delete-hotel-btn').addEventListener('click', function () {
+                row.removeChild(newFieldGroup);
+                if (row.children.length === 0) {
+                    hotelFormContainer.removeChild(categoryWrapper);
+                }
+            });
+        }
+
+        hotelFacilitySelector.addEventListener('change', function () {
+            currentFacilityValue = this.value;
+            if (!hotelFacilitiesLabelsMap[currentFacilityValue]) return;
+            createHotelFieldGroup(currentFacilityValue);
+        });
+
+        document.getElementById('addHotelFacility').addEventListener('click', function (event) {
+            event.preventDefault();
+            if (!hotelFacilitiesLabelsMap[currentFacilityValue]) {
+                alert("Please select a valid facility category first.");
+                return;
+            }
+            createHotelFieldGroup(currentFacilityValue);
+        });
+    </script>
+
+
+    <script>
+        const sectionLabelsMap = {
+            'Restaurant & Cafe': ['Restaurant & Cafe Name', 'Distance'],
+            'Entertainment & Attraction Point': ['Entertainment & Attraction Point', 'Distance'],
+            'Hospital & Police Station': ['Hospital & Police Station Name', 'Distance'],
+            'Transport & Airport': ['Transport & Airport Name', 'Distance'],
+            'Shopping & ATM': ['Shopping & ATM', 'Distance']
+        };
+
+        const areaSelector = document.getElementById('areaSelector');
+        const formContainer = document.getElementById('dynamicFieldsContainer');
+        let currentSelectedValue = '';
+
+        function createFieldGroup(category) {
+            const labels = sectionLabelsMap[category];
+            const uniqueId = `nearby-area-${category.replace(/[^a-zA-Z0-9]/g, '')}-${Date.now()}`;
+            const categoryKey = category.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+
+            const newFieldGroup = document.createElement('div');
+            newFieldGroup.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3', 'mb-3');
+            newFieldGroup.setAttribute('id', uniqueId);
+            newFieldGroup.innerHTML = `
+        <div class="form-group">
+            <label for="input-name-${uniqueId}">${labels[0]}</label>
+            <input type="text" class="form-control" id="input-name-${uniqueId}" name="nearby_areas[${categoryKey}][name][]" placeholder="Enter ${labels[0]}" required>
+        </div>
+        <div class="form-group">
+            <label for="input-distance-${uniqueId}">${labels[1]}</label>
+            <input type="text" class="form-control" id="input-distance-${uniqueId}" name="nearby_areas[${categoryKey}][distance][]" placeholder="Enter ${labels[1]}" required>
+        </div>
+        <button type="button" class="btn btn-danger btn-sm mt-3 delete-nearby-btn">Delete</button>
+    `;
+
+            let categoryWrapper = document.getElementById(`wrapper-${categoryKey}`);
+            if (!categoryWrapper) {
+                categoryWrapper = document.createElement('div');
+                categoryWrapper.classList.add('col-12', 'mb-3');
+                categoryWrapper.id = `wrapper-${categoryKey}`;
+                categoryWrapper.innerHTML = `<h5>${category}</h5><div class="row"></div>`;
+                formContainer.appendChild(categoryWrapper);
+            }
+
+            const row = categoryWrapper.querySelector('.row');
+            row.appendChild(newFieldGroup);
+
+            // Add event listener to delete button after adding the field
+            newFieldGroup.querySelector('.delete-nearby-btn').addEventListener('click', function () {
+                row.removeChild(newFieldGroup);
+                if (row.children.length === 0) {
+                    formContainer.removeChild(categoryWrapper);
+                }
+            });
+        }
+
+        // Ensure areaSelector exists before adding event listener
+        if (areaSelector) {
+            areaSelector.addEventListener('change', function () {
+                currentSelectedValue = this.value;
+                if (!sectionLabelsMap[currentSelectedValue]) return;
+                createFieldGroup(currentSelectedValue);
+            });
+        }
+
+        // Ensure addNearbyAreaBtn exists before adding event listener
+        const addNearbyAreaBtn = document.getElementById('addNearbyAreaBtn');
+        if (addNearbyAreaBtn) {
+            addNearbyAreaBtn.addEventListener('click', function (event) {
+                event.preventDefault();
+                if (!currentSelectedValue || !sectionLabelsMap[currentSelectedValue]) {
+                    alert("Please select a valid nearby area category first.");
+                    return;
+                }
+                createFieldGroup(currentSelectedValue);
+            });
+        }
+
+    </script>
+
+
 
 
 
