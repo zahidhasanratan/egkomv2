@@ -203,43 +203,96 @@
                                                 </div>
 
                                                 <div class="col-md-12 col-lg-12 col-xxl-12">
+
+                                                    @php
+                                                        // 1) Grab the raw saved/old data
+                                                        $rawRules = old('check_in_rules', $hotel->check_in_rules);
+
+                                                        // 2) Normalize into an array
+                                                        if (is_string($rawRules)) {
+                                                            $savedRules = json_decode($rawRules, true) ?: [];
+                                                        } elseif (is_array($rawRules)) {
+                                                            $savedRules = $rawRules;
+                                                        } else {
+                                                            $savedRules = [];
+                                                        }
+
+                                                        // 3) Our three predefined options
+                                                        $predefinedRules = [
+                                                            'Pay in advance',
+                                                            'Security money for keys',
+                                                            'Rentals',
+                                                        ];
+
+                                                        // 4) Extract anything else as “custom”
+                                                        $customRules = array_values(array_diff($savedRules, $predefinedRules));
+                                                    @endphp
+
                                                     <div class="form-group">
                                                         <label class="form-label">Check-in rules if any</label>
+
+                                                        {{-- Checkbox rules --}}
                                                         <div class="radio-group">
-                                                            <label>
-                                                                <input type="checkbox" name="check_in_rules[]" value="Pay in advance" class="bar-radio-yes" {{ in_array('Pay in advance', old('check_in_rules', $hotel->check_in_rules ?? [])) ? 'checked' : '' }}> Pay in advance
-                                                            </label>
-                                                            <label>
-                                                                <input type="checkbox" name="check_in_rules[]" value="Security money for keys" class="bar-radio-no" {{ in_array('Security money for keys', old('check_in_rules', $hotel->check_in_rules ?? [])) ? 'checked' : '' }}> Security money for keys
-                                                            </label>
-                                                            <label>
-                                                                <input type="checkbox" name="check_in_rules[]" value="Rentals" class="bar-radio-no" {{ in_array('Rentals', old('check_in_rules', $hotel->check_in_rules ?? [])) ? 'checked' : '' }}> Rentals
-                                                            </label>
+                                                            @foreach($predefinedRules as $rule)
+                                                                <label>
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        name="check_in_rules[]"
+                                                                        value="{{ $rule }}"
+                                                                        {{ in_array($rule, $savedRules) ? 'checked' : '' }}
+                                                                    >
+                                                                    {{ $rule }}
+                                                                </label>
+                                                            @endforeach
                                                         </div>
-                                                        <div class="row">
-                                                            <div class="col-md-5">
-                                                                <div class="section">
-                                                                    <div class="input-container" style="display: none;">
-                                                                        <div class="form-group mb-3 d-flex align-items-center">
-                                                                            <input type="text" class="form-control" name="custom_check_in_rules[]" placeholder="Enter something">
-                                                                            <button class="btn btn-danger btn-sm">Delete</button>
-                                                                        </div>
+
+                                                        {{-- Dynamic custom input fields --}}
+                                                        <div id="custom-checkin-wrapper">
+                                                            @if(count($customRules))
+                                                                @foreach($customRules as $text)
+                                                                    <div class="form-group mb-2 d-flex align-items-center">
+                                                                        <input
+                                                                            type="text"
+                                                                            name="custom_check_in_rules[]"
+                                                                            class="form-control"
+                                                                            value="{{ $text }}"
+                                                                        >
+                                                                        <button
+                                                                            type="button"
+                                                                            class="btn btn-danger btn-sm ms-2 remove-checkin"
+                                                                        >Delete</button>
                                                                     </div>
-                                                                    <!-- Added check for custom_check_in_rules -->
-                                                                    @if(!empty($hotel->custom_check_in_rules) && is_array($hotel->custom_check_in_rules))
-                                                                        @foreach(old('custom_check_in_rules', $hotel->custom_check_in_rules) as $rule)
-                                                                            <div class="form-group mb-3 d-flex align-items-center">
-                                                                                <input type="text" class="form-control" name="custom_check_in_rules[]" value="{{ $rule }}" placeholder="Enter something">
-                                                                                <button class="btn btn-danger btn-sm">Delete</button>
-                                                                            </div>
-                                                                        @endforeach
-                                                                    @endif
-                                                                    <button class="add-more add-rule-btn btn add-button">Add More</button>
+                                                                @endforeach
+                                                            @else
+                                                                <div class="form-group mb-2 d-flex align-items-center">
+                                                                    <input
+                                                                        type="text"
+                                                                        name="custom_check_in_rules[]"
+                                                                        class="form-control"
+                                                                        placeholder="Enter something"
+                                                                    >
+                                                                    <button
+                                                                        type="button"
+                                                                        class="btn btn-danger btn-sm ms-2 remove-checkin"
+                                                                        style="display: none;"
+                                                                    >Delete</button>
                                                                 </div>
-                                                            </div>
+                                                            @endif
                                                         </div>
-                                                        @error('check_in_rules') <span class="text-danger">{{ $message }}</span> @enderror
+
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-sm btn-primary mt-2"
+                                                            id="add-checkin-rule"
+                                                        >Add More</button>
+
+                                                        @error('check_in_rules')
+                                                        <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
                                                     </div>
+
+
+
                                                 </div>
                                             </div>
 
@@ -586,53 +639,49 @@
 
                                             <!-- All Facilities -->
                                             <div class="row mt-15">
-                                                <div class="checkbox-section">
+                                                <div class="row">
                                                     <h3 class="can-tittle">Hotel Facilities Categories</h3>
-                                                    <div class="row">
-                                                        <div class="col-md-5">
-                                                            <label for="facilityDropdown">Select Facility</label>
-                                                            <select id="facilityDropdown" class="form-control js-facility-select js-select2" name="facility_category">
-                                                                <option value="general" {{ old('facility_category', $hotel->facility_category) == 'general' ? 'selected' : '' }}>General Services</option>
-                                                                <option value="activities" {{ old('facility_category', $hotel->facility_category) == 'activities' ? 'selected' : '' }}>Activities & Entertainment</option>
-                                                                <option value="safety" {{ old('facility_category', $hotel->facility_category) == 'safety' ? 'selected' : '' }}>Safety & Security</option>
-                                                                <option value="technology" {{ old('facility_category', $hotel->facility_category) == 'technology' ? 'selected' : '' }}>Technology, Media & Wi-Fi</option>
-                                                                <option value="bedroom" {{ old('facility_category', $hotel->facility_category) == 'bedroom' ? 'selected' : '' }}>Bedroom Features</option>
-                                                                <option value="bathroom" {{ old('facility_category', $hotel->facility_category) == 'bathroom' ? 'selected' : '' }}>Bathroom Amenities</option>
-                                                                <option value="living" {{ old('facility_category', $hotel->facility_category) == 'living' ? 'selected' : '' }}>Living Room Features</option>
-                                                                <option value="kitchen" {{ old('facility_category', $hotel->facility_category) == 'kitchen' ? 'selected' : '' }}>Kitchen Facilities</option>
-                                                                <option value="food" {{ old('facility_category', $hotel->facility_category) == 'food' ? 'selected' : '' }}>Food & Beverages</option>
-                                                                <option value="parking" {{ old('facility_category', $hotel->facility_category) == 'parking' ? 'selected' : '' }}>Parking Availability</option>
-                                                                <option value="view" {{ old('facility_category', $hotel->facility_category) == 'view' ? 'selected' : '' }}>View from the Hotel</option>
-                                                                <option value="frontdesk" {{ old('facility_category', $hotel->facility_category) == 'frontdesk' ? 'selected' : '' }}>Front Desk Services</option>
-                                                                <option value="housekeeping" {{ old('facility_category', $hotel->facility_category) == 'housekeeping' ? 'selected' : '' }}>Housekeeping & Cleaning</option>
-                                                                <option value="room" {{ old('facility_category', $hotel->facility_category) == 'room' ? 'selected' : '' }}>Room Amenities</option>
-                                                                <option value="business" {{ old('facility_category', $hotel->facility_category) == 'business' ? 'selected' : '' }}>Business & Meeting Services</option>
-                                                                <option value="languages" {{ old('facility_category', $hotel->facility_category) == 'languages' ? 'selected' : '' }}>Languages Spoken</option>
+
+                                                    <!-- Dropdown -->
+                                                    <div class="col-lg-5">
+                                                        <div class="form-group">
+                                                            <label for="hotelFacilitySelector">Select Facility</label>
+                                                            <select id="hotelFacilitySelector" class="form-control">
+                                                                <option value="" disabled selected>Select category</option>
+                                                                <option value="General Services">General Services</option>
+                                                                <option value="Activities & Entertainment">Activities & Entertainment</option>
+                                                                <option value="Safety & Security">Safety & Security</option>
+                                                                <option value="Technology, Media & Wi-Fi">Technology, Media & Wi-Fi</option>
+                                                                <option value="Bedroom Features">Bedroom Features</option>
+                                                                <option value="Bathroom Amenities">Bathroom Amenities</option>
+                                                                <option value="Living Room Features">Living Room Features</option>
+                                                                <option value="Kitchen Facilities">Kitchen Facilities</option>
+                                                                <option value="Food & Beverages">Food & Beverages</option>
+                                                                <option value="Parking Availability">Parking Availability</option>
+                                                                <option value="View from the Hotel">View from the Hotel</option>
+                                                                <option value="Front Desk Services">Front Desk Services</option>
+                                                                <option value="Housekeeping & Cleaning">Housekeeping & Cleaning</option>
+                                                                <option value="Room Amenities">Room Amenities</option>
+                                                                <option value="Business & Meeting Services">Business & Meeting Services</option>
+                                                                <option value="Languages Spoken">Languages Spoken</option>
                                                             </select>
                                                         </div>
-                                                        <div class="col-md-3 mt-3">
-                                                            <button class="add-rule-btn btn add-button" id="addFacilityButton">Add More +</button>
-                                                        </div>
-                                                        <div class="row mt-3" id="dynamicFormContainer">
-                                                            <!-- Added check for facilities -->
-                                                            @if(!empty($hotel->facilities) && is_array($hotel->facilities))
-                                                                @foreach(old('facilities', $hotel->facilities) as $category => $items)
-                                                                    @if(is_array($items))
-                                                                        @foreach($items as $item)
-                                                                            <div class="col-md-6 col-lg-4 col-xxl-3 mb-3">
-                                                                                <div class="form-group">
-                                                                                    <input type="text" class="form-control" name="facilities[{{ $category }}][]" value="{{ $item }}" placeholder="Enter {{ $category }} facility">
-                                                                                    <button type="button" class="btn btn-danger btn-sm mt-2 delete-facility-btn">Delete</button>
-                                                                                </div>
-                                                                            </div>
-                                                                        @endforeach
-                                                                    @endif
-                                                                @endforeach
-                                                            @endif
+                                                    </div>
+
+                                                    <!-- Add More Button -->
+                                                    <div class="col-md-3 mt-4">
+                                                        <button class="btn btn-primary" id="addHotelFacility">Add More +</button>
+                                                    </div>
+
+                                                    <!-- Dynamic Field Container -->
+                                                    <div class="col-12 mt-4">
+                                                        <div class="row" id="dynamicFieldsContainerHotelFacility">
+                                                            <!-- Category-specific wrappers will be added here -->
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+
+                                                                                            </div>
 
                                             <div class="row">
                                                 <div class="col-sm-2 col-md-2 mt-15">
@@ -651,58 +700,69 @@
                                         <!-- Nearby Area -->
 
                                         <div class="tab-pane" id="tabItem1">
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <h3 class="can-tittle">Most Popular Nearby Area</h3>
+                                                    <div class="radio-group">
+                                                        <label>
+                                                            <input type="checkbox" name="nearby_areas[]" value="16.5 km from Himchori Waterfall" class="bar-radio-yes"> 16.5 km from Himchori Waterfall
+                                                        </label>
+                                                        <label>
+                                                            <input type="checkbox" name="nearby_areas[]" value="0.25 km from Navy Jetty, from where Saint Martin bound ship sails" class="bar-radio-no"> 0.25 km from Navy Jetty, from where Saint Martin bound ship sails
+                                                        </label>
+                                                        <label>
+                                                            <input type="checkbox" name="nearby_areas[]" value="3.2 km from Cox's Bazar Airport" class="bar-radio-no"> 3.2 km from Cox's Bazar Airport
+                                                        </label>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                            <div class="section">
+                                                                <div class="input-container" style="display: none;">
+                                                                    <div class="form-group mb-3 d-flex align-items-center">
+                                                                        <input type="text" class="form-control" name="custom_nearby_areas[]" placeholder="Enter something">
+                                                                        <button class="btn btn-danger btn-sm">Delete</button>
+                                                                    </div>
+                                                                </div>
+                                                                <button class="add-more add-rule-btn btn add-button">Add More</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    @error('nearby_areas') <span class="text-danger">{{ $message }}</span> @enderror
+                                                </div>
+                                            </div>
+
                                             <div class="row gy-4">
 
                                                 <div class="col-md-12">
+
                                                     <div class="row">
                                                         <h3 class="can-tittle">Nearby Area Categories</h3>
+                                                        <!-- Dropdown -->
                                                         <div class="col-lg-5">
                                                             <div class="form-group">
                                                                 <label for="areaSelector">Select Nearby Area</label>
-                                                                <select id="areaSelector" class="form-control js-facility-select js-select2" name="nearby_area_category">
-                                                                    <option value="restaurant" {{ old('nearby_area_category', $hotel->nearby_area_category ?? '') == 'restaurant' ? 'selected' : '' }}>Restaurant & Cafe</option>
-                                                                    <option value="entertainment" {{ old('nearby_area_category', $hotel->nearby_area_category ?? '') == 'entertainment' ? 'selected' : '' }}>Entertainment & Attraction Point</option>
-                                                                    <option value="hospital" {{ old('nearby_area_category', $hotel->nearby_area_category ?? '') == 'hospital' ? 'selected' : '' }}>Hospital & Police Station</option>
-                                                                    <option value="transport" {{ old('nearby_area_category', $hotel->nearby_area_category ?? '') == 'transport' ? 'selected' : '' }}>Transport & Airport</option>
-                                                                    <option value="shopping" {{ old('nearby_area_category', $hotel->nearby_area_category ?? '') == 'shopping' ? 'selected' : '' }}>Shopping & ATM</option>
+                                                                <select id="areaSelector" name="area_category" class="form-control">
+                                                                    <option value="" disabled selected>Select category</option>
+                                                                    <option value="Restaurant & Cafe">Restaurant & Cafe</option>
+                                                                    <option value="Entertainment & Attraction Point">Entertainment & Attraction Point</option>
+                                                                    <option value="Hospital & Police Station">Hospital & Police Station</option>
+                                                                    <option value="Transport & Airport">Transport & Airport</option>
+                                                                    <option value="Shopping & ATM">Shopping & ATM</option>
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-3 mt-3">
-                                                            <button class="add-more add-rule-btn btn add-button" id="addNearbyAreaBtn">Add More +</button>
+
+                                                        <!-- Add More Button -->
+                                                        <div class="col-md-3 mt-4">
+                                                            <button class="btn btn-primary" id="addNearbyAreaBtn">Add More +</button>
                                                         </div>
 
-                                                        <div class="row mt-3" id="dynamicFieldsContainer">
-                                                            @if(isset($hotel->nearby_areas) && is_array($hotel->nearby_areas) && count($hotel->nearby_areas) > 0)
-                                                                @foreach($hotel->nearby_areas as $index => $area)
-                                                                    @if(is_array($area) && !empty($area['category']) && !empty($area['name']) && !empty($area['distance']))
-                                                                        <div class="col-md-6 col-lg-4 col-xxl-3 mb-3 nearby-area-field">
-                                                                            <div class="form-group">
-                                                                                <label>{{ ucfirst($area['category']) }} Name</label>
-                                                                                <input type="hidden" name="nearby_areas[{{ $area['category'] }}][category][]" value="{{ $area['category'] }}">
-                                                                                <input type="text" class="form-control" name="nearby_areas[{{ $area['category'] }}][name][]" value="{{ old("nearby_areas.{$area['category']}.name.{$index}", $area['name']) }}" placeholder="Enter {{ $area['category'] }} name" required>
-                                                                            </div>
-                                                                            <div class="form-group">
-                                                                                <label>Distance</label>
-                                                                                <input type="text" class="form-control" name="nearby_areas[{{ $area['category'] }}][distance][]" value="{{ old("nearby_areas.{$area['category']}.distance.{$index}", $area['distance']) }}" placeholder="Enter distance" required>
-                                                                            </div>
-                                                                            <button type="button" class="btn btn-danger btn-sm mt-3 delete-nearby-btn">Delete</button>
-                                                                        </div>
-                                                                    @else
-                                                                    <!-- Debugging: Log invalid area data -->
-                                                                        <div class="alert alert-warning">
-                                                                            Invalid area data at index {{ $index }}: {{ json_encode($area) }}
-                                                                        </div>
-                                                                    @endif
-                                                                @endforeach
-                                                            @else
-                                                            <!-- Debugging: Log when nearby_areas is empty or not an array -->
-                                                                <div class="alert alert-info">
-                                                                    No nearby areas found. Data: {{ json_encode($hotel->nearby_areas) }}
-                                                                </div>
-                                                            @endif
+                                                        <!-- Dynamic Field Container -->
+                                                        <div class="col-12 mt-4">
+                                                            <div class="row" id="dynamicFieldsContainer">
+                                                                <!-- Category-specific wrappers will be added here -->
+                                                            </div>
                                                         </div>
-
                                                     </div>
 
                                                 </div>
@@ -773,6 +833,7 @@
                                         </div>
                                     </div>
                                 </form>
+
                             </div>
                         </div>
                     </div>
@@ -781,34 +842,67 @@
         </div>
     </div>
 
+    <script type="text/javascript">
+        document.getElementById('propertyCategory').addEventListener('change', function() {
+            var propertyTypeContainer = document.getElementById('propertyTypeContainer');
+            var propertyType = document.getElementById('propertyType');
+            propertyType.innerHTML = ''; // Clear previous options
+
+            var options = {
+                'Hotel': [
+                    { id: 'option1', value: 'Only Apartment', label: 'Only Apartment' },
+                    { id: 'option2', value: 'Only room', label: 'Only room' },
+                    { id: 'option3', value: 'Only Bed', label: 'Only Bed' }
+                ],
+                'House': [
+                    { id: 'option4', value: 'Kitchen', label: 'Kitchen' }
+                ],
+                'Resort': [
+                    { id: 'option6', value: 'Room', label: 'Room' }
+                ],
+                'Apartment': [
+                    { id: 'option7', value: 'Apartment', label: 'Apartment' },
+                    { id: 'option8', value: 'Only room', label: 'Only room' },
+                    { id: 'option9', value: 'Only Bed', label: 'Only Bed' }
+                ]
+            };
+
+            var selectedValue = this.value;
+            if (options[selectedValue]) {
+                options[selectedValue].forEach(function(option) {
+                    var li = document.createElement('li');
+                    li.innerHTML = `
+                      <div class class="form-check">
+                          <input
+                              class="form-check-input"
+                              type="checkbox"
+                              id="${option.id}"
+                              value="${option.value}">
+                          <label class="form-check-label" for="${option.id}">
+                              ${option.label}
+                          </label>
+                      </div>
+                  `;
+                    propertyType.appendChild(li);
+                });
+                propertyTypeContainer.style.display = 'block';
+            } else {
+                propertyTypeContainer.style.display = 'none';
+            }
+        });
+    </script>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const uploadedImages = {};
-            const removedIndices = {};
 
-            // Initialize multiple upload containers
             function initializeMultipleUpload(container) {
                 const fileInput = container.querySelector('.multiple-file-input');
                 const thumbnailGallery = container.querySelector('.multiple-thumbnail-gallery');
-                const containerId = container.id || `dynamic-${Date.now()}`;
-                const fieldName = fileInput.name.replace('[]', '');
+                const containerId = container.id || `dynamic-${Date.now()}`; // Fallback ID for dynamic containers
 
                 uploadedImages[containerId] = [];
-                removedIndices[fieldName] = removedIndices[fieldName] || [];
 
-                // Handle existing image removal
-                container.querySelectorAll('.multiple-remove-btn').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const index = btn.getAttribute('data-index');
-                        const thumbnailItem = btn.parentElement;
-                        thumbnailItem.remove();
-                        removedIndices[fieldName].push(index);
-                        document.getElementById(`removed_${fieldName}`).value = removedIndices[fieldName].join(',');
-                        console.log(`Removed existing image index ${index} for ${fieldName}`);
-                    });
-                });
-
-                // Handle new uploads
                 fileInput.addEventListener('change', function(event) {
                     console.log(`File input changed in container: ${containerId}`);
                     const files = event.target.files;
@@ -845,8 +939,9 @@
                 });
             }
 
-            // Initialize all upload containers
-            document.querySelectorAll('.multiple-upload-container').forEach(container => {
+            // Initialize for all upload containers dynamically
+            const uploadContainers = document.querySelectorAll('.multiple-upload-container');
+            uploadContainers.forEach(container => {
                 console.log(`Initializing upload container: ${container.id}`);
                 initializeMultipleUpload(container);
             });
@@ -864,24 +959,27 @@
                 facilityField.style.gap = '10px';
                 const uniqueId = Date.now();
                 facilityField.innerHTML = `
-            <div class="form-group flex-grow-1">
-                <label for="custom_facility_${uniqueId}">Facility Name</label>
-                <input class="form-control" type="text" name="custom_facilities[]" id="custom_facility_${uniqueId}" placeholder="Enter facility name" />
-            </div>
-            <div class="form-group">
-                <label for="custom_facility_icon_${uniqueId}">Facility Icon</label>
-                <div class="multiple-upload-container" id="upload-container-dynamic-${uniqueId}">
-                    <input class="form-control multiple-file-input" type="file" name="custom_facilities_icon[]" id="custom_facility_icon_${uniqueId}" accept="image/*" />
-                    <label class="upload-label">Browse Image</label>
-                    <div class="multiple-thumbnail-gallery"></div>
+                    <div class="form-group flex-grow-1">
+                        <label for="custom_facility_${uniqueId}">Facility Name</label>
+                        <input class="form-control" type="text" name="custom_facilities[]" id="custom_facility_${uniqueId}" placeholder="Enter facility name" />
+                    </div>
+                    <div class="form-group">
+                        <label for="custom_facility_icon_${uniqueId}">Facility Icon</label>
+                        <div class="multiple-upload-container" id="upload-container-dynamic-${uniqueId}">
+                            <input class="form-control multiple-file-input" type="file" name="custom_facilities_icon[]" id="custom_facility_icon_${uniqueId}" accept="image/*" />
+                            <label class="upload-label">Browse Image</label>
+                            <div class="multiple-thumbnail-gallery"></div>
+                        </div>
+                        @error('custom_facilities_icon.*') <span class="text-danger">{{ $message }}</span> @enderror
                 </div>
-            </div>
-            <button type="button" class="btn btn-danger btn-sm delete-btn">Delete</button>
-        `;
+                <button type="button" class="btn btn-danger btn-sm delete-btn">Delete</button>
+`;
 
+                // Initialize file upload for the new field
                 const uploadContainer = facilityField.querySelector('.multiple-upload-container');
                 initializeMultipleUpload(uploadContainer);
 
+                // Add delete functionality
                 const deleteBtn = facilityField.querySelector('.delete-btn');
                 deleteBtn.addEventListener('click', () => {
                     console.log('Delete button clicked for facility field');
@@ -891,153 +989,646 @@
                 facilityContainer.appendChild(facilityField);
                 console.log('New facility field added to container');
             });
+        });
+    </script>
 
-            // Handle dynamic check-in methods
-            document.getElementById('addRuleBtn').addEventListener('click', function(event) {
-                event.preventDefault();
-                const formContainer = document.getElementById('formContainer');
-                const newField = document.createElement('div');
-                newField.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3');
-                newField.innerHTML = `
-            <div class="form-group">
-                <input type="text" class="form-control" name="custom_check_in_methods[]" placeholder="">
-                <button class="delete-btn btn btn-danger btn-sm">Delete</button>
-            </div>
-        `;
-                formContainer.appendChild(newField);
-                const deleteBtn = newField.querySelector('.delete-btn');
-                deleteBtn.addEventListener('click', function() {
-                    formContainer.removeChild(newField);
+    <script type="text/javascript">
+        document.getElementById("site-off")?.addEventListener("change", function() {
+            let checkboxes = document.querySelectorAll(".checkbox-item");
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = document.getElementById("site-off").checked;
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", () => {
+            const checkbox = document.getElementById("property-ownership");
+            const options = document.getElementById("ownership-options");
+
+            checkbox?.addEventListener("change", () => {
+                if (checkbox.checked) {
+                    options.classList.remove("hidden");
+                } else {
+                    options.classList.add("hidden");
+                }
+            });
+        });
+    </script>
+
+    <script>
+        function showLabel(text) {
+            const labelDiv = document.getElementById('labelText');
+            labelDiv.textContent = text;
+            labelDiv.style.display = 'block';
+        }
+
+        function hideLabel() {
+            const labelDiv = document.getElementById('labelText');
+            labelDiv.style.display = 'none';
+        }
+    </script>
+
+    <script>
+        document.getElementById('apartment-count')?.addEventListener('change', function() {
+            const count = parseInt(this.value);
+            const dynamicFormsContainer = document.getElementById('dynamic-forms');
+            dynamicFormsContainer.innerHTML = '';
+
+            if (count > 0) {
+                for (let i = 1; i <= count; i++) {
+                    const formGroup = document.createElement('div');
+                    formGroup.classList.add('apartment-form');
+
+                    const apartmentNumberLabel = document.createElement('label');
+                    apartmentNumberLabel.textContent = `Apartment ${i} Number:`;
+                    apartmentNumberLabel.setAttribute('for', `apartment-${i}-number`);
+                    const apartmentNumberInput = document.createElement('input');
+                    apartmentNumberInput.type = 'text';
+                    apartmentNumberInput.id = `apartment-${i}-number`;
+                    apartmentNumberInput.name = `apartments[${i}][number]`;
+                    apartmentNumberInput.classList.add('form-control');
+
+                    const apartmentFloorLabel = document.createElement('label');
+                    apartmentFloorLabel.textContent = `Apartment ${i} Floor Number:`;
+                    apartmentFloorLabel.setAttribute('for', `apartment-${i}-floor`);
+                    const apartmentFloorInput = document.createElement('input');
+                    apartmentFloorInput.type = 'text';
+                    apartmentFloorInput.id = `apartment-${i}-floor`;
+                    apartmentFloorInput.name = `apartments[${i}][floor]`;
+                    apartmentFloorInput.classList.add('form-control');
+
+                    const apartmentNameLabel = document.createElement('label');
+                    apartmentNameLabel.textContent = `Apartment/Rooms ${i} Name:`;
+                    apartmentNameLabel.setAttribute('for', `apartment-${i}-name`);
+                    const apartmentNameInput = document.createElement('input');
+                    apartmentNameInput.type = 'text';
+                    apartmentNameInput.id = `apartment-${i}-name`;
+                    apartmentNameInput.name = `apartments[${i}][name]`;
+                    apartmentNameInput.classList.add('form-control');
+
+                    formGroup.appendChild(apartmentNameLabel);
+                    formGroup.appendChild(apartmentNameInput);
+                    formGroup.appendChild(apartmentNumberLabel);
+                    formGroup.appendChild(apartmentNumberInput);
+                    formGroup.appendChild(apartmentFloorLabel);
+                    formGroup.appendChild(apartmentFloorInput);
+
+                    dynamicFormsContainer.appendChild(formGroup);
+                }
+            }
+        });
+    </script>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function(event) {
+            console.log('Form is submitting with data:', new FormData(this));
+        });
+    </script>
+
+    <script>
+        const radioButtons = document.querySelectorAll('input[name="showFields"]');
+        const additionalFields = document.getElementById('additionalFields');
+
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.value === 'yes') {
+                    additionalFields.style.display = 'block';
+                } else {
+                    additionalFields.style.display = 'none';
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('.js-select2').select2();
+
+            $('#propertyOwnershipss')?.on('change', function() {
+                const selectedValue = $(this).val();
+                const partnerFields = $('.partner-fields');
+                const leaseDates = $('.lease-dates');
+
+                partnerFields.slideUp();
+                leaseDates.slideUp();
+
+                if (selectedValue === 'Partnership') {
+                    partnerFields.slideDown();
+                } else if (selectedValue === 'Leased') {
+                    leaseDates.slideDown();
+                }
+            });
+        });
+    </script>
+
+    <script>
+        function initializeBarSelection() {
+            const barRadioButtons = document.querySelectorAll('input[name="barOption"]');
+            const barSelectContainer = document.getElementById('barSelectContainer');
+            const barNumberSelect = document.getElementById('barNumberSelect');
+
+            barRadioButtons.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'yes') {
+                        barSelectContainer.style.display = 'block';
+                    } else {
+                        barSelectContainer.style.display = 'none';
+                        barNumberSelect.value = '';
+                    }
                 });
             });
+        }
 
-            // Handle dynamic fields for custom_check_in_rules, custom_property_info, custom_nearby_areas
-            document.querySelectorAll('.add-more').forEach(button => {
-                button.addEventListener('click', function(event) {
+        document.addEventListener('DOMContentLoaded', initializeBarSelection);
+    </script>
+
+    <script>
+        class KidsZoneManager {
+            constructor() {
+                this.initializeAllKidsZones();
+            }
+
+            initializeAllKidsZones() {
+                const kidsZoneSections = document.querySelectorAll('[data-kids-zone]');
+                kidsZoneSections.forEach(section => {
+                    this.initializeSingleKidsZone(section);
+                });
+            }
+
+            initializeSingleKidsZone(section) {
+                const radioButtons = section.querySelectorAll('input[type="radio"]');
+                const selectContainer = section.querySelector('.select-container');
+                const numberSelect = section.querySelector('.number-select');
+
+                radioButtons.forEach(radio => {
+                    radio.addEventListener('change', () => {
+                        if (radio.value === 'yes') {
+                            selectContainer.style.display = 'block';
+                        } else {
+                            selectContainer.style.display = 'none';
+                            numberSelect.value = '';
+                        }
+                    });
+                });
+            }
+
+            getAllSelections() {
+                const selections = {};
+                const sections = document.querySelectorAll('[data-kids-zone]');
+
+                sections.forEach(section => {
+                    const id = section.getAttribute('data-kids-zone');
+                    const selectedRadio = section.querySelector('input[type="radio"]:checked');
+                    const numberSelect = section.querySelector('.number-select');
+
+                    selections[`kidsZone${id}`] = {
+                        hasKidsZone: selectedRadio ? selectedRadio.value : null,
+                        numberOfKids: selectedRadio?.value === 'yes' ? numberSelect.value : null
+                    };
+                });
+
+                return selections;
+            }
+
+            addNewKidsZone(containerId, zoneNumber) {
+                const container = document.getElementById(containerId);
+                const newSection = `
+                    <div class="col-md-6 col-lg-4 col-xxl-3">
+                        <div class="form-group">
+                            <label class="form-label">Kids Zone ${zoneNumber}</label>
+                            <div class="radio-group" data-kids-zone="${zoneNumber}">
+                                <div>
+                                    <label>
+                                        <input type="radio" name="kidsZone${zoneNumber}" value="yes" class="radio-yes"> Yes
+                                    </label>
+                                </div>
+                                <div>
+                                    <label>
+                                        <input type="radio" name="kidsZone${zoneNumber}" value="no" class="radio-no"> No
+                                    </label>
+                                </div>
+                                <div class="select-container" style="display: none;">
+                                    <label>Select number of kids:</label>
+                                    <select class="form-select number-select">
+                                        <option value="">Select number</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                container.insertAdjacentHTML('beforeend', newSection);
+                this.initializeSingleKidsZone(container.lastElementChild.querySelector('[data-kids-zone]'));
+            }
+        }
+
+        const kidsZoneManager = new KidsZoneManager();
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const yesOption = document.getElementById("yesOption");
+            const noOption = document.getElementById("noOption");
+            const yesFields = document.getElementById("yesFields");
+            const noFields = document.getElementById("noFields");
+
+            yesOption?.addEventListener("change", function () {
+                if (this.checked) {
+                    yesFields.classList.remove("hidden");
+                    noFields.classList.add("hidden");
+                }
+            });
+
+            noOption?.addEventListener("change", function () {
+                if (this.checked) {
+                    noFields.classList.remove("hidden");
+                    yesFields.classList.add("hidden");
+                }
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            divisionSelect = document.getElementById("division");
+            districtSelect = document.getElementById("district");
+            districtContainer = document.getElementById("districtContainer");
+            placeCheckboxList = document.getElementById("placeCheckboxList");
+            placeOptions = document.getElementById("placeOptions");
+
+            const data = {
+                Hotels: {
+                    districts: {
+                        "hotel": ["Single Room", "Double Room", "Twin Room", "Suite", "Family Room", "Penthouse Suite", "Accessible Room" ],
+                        "Luxury Hotels": ["Single Room", "Double Room", "Twin Room", "Suite", "Family Room", "Penthouse Suite", "Accessible Room"],
+                        "farmgate": ["Single Room", "Double Room", "Twin Room", "Suite", "Family Room", "Penthouse Suite", "Accessible Room"]
+                    }
+                },
+                chittagong: {
+                    districts: {
+                        agrabad: ["Area 1", "Area 2", "Area 3"],
+                        halishahar: ["Location X", "Location Y", "Location Z"],
+                        patenga: ["Site P", "Site Q", "Site R"]
+                    }
+                },
+                khulna: {
+                    districts: {
+                        khalishpur: ["Zone 1", "Zone 2", "Zone 3"],
+                        sonadanga: ["Point A", "Point B", "Point C"],
+                        rupsha: ["Spot X", "Spot Y", "Spot Z"]
+                    }
+                }
+            };
+
+            divisionSelect?.addEventListener("change", function () {
+                const division = this.value;
+                districtSelect.innerHTML = '<option value="" disabled selected>Choose Property Type</option>';
+                placeOptions.innerHTML = "";
+                placeCheckboxList.style.display = "none";
+
+                if (data[division]) {
+                    districtContainer.style.display = "block";
+                    Object.keys(data[division].districts).forEach(district => {
+                        const option = document.createElement("option");
+                        option.value = district;
+                        option.textContent = district.charAt(0).toUpperCase() + district.slice(1);
+                        districtSelect.appendChild(option);
+                    });
+                }
+            });
+
+            districtSelect?.addEventListener("change", function () {
+                const division = divisionSelect.value;
+                const district = this.value;
+                placeOptions.innerHTML = "";
+
+                if (data[division] && data[division].districts[district]) {
+                    placeCheckboxList.style.display = "block";
+                    data[division].districts[district].forEach((place, index) => {
+                        const listItem = document.createElement("li");
+                        const checkboxContainer = document.createElement("div");
+                        checkboxContainer.classList.add("form-check");
+
+                        const checkbox = document.createElement("input");
+                        checkbox.type = "checkbox";
+                        checkbox.classList.add("form-check-input");
+                        checkbox.id = `checkbox${index}`;
+                        checkbox.value = place;
+
+                        const label = document.createElement("label");
+                        label.classList.add("form-check-label");
+                        label.htmlFor = `checkbox${index}`;
+                        label.textContent = place;
+
+                        checkboxContainer.appendChild(checkbox);
+                        checkboxContainer.appendChild(label);
+                        listItem.appendChild(checkboxContainer);
+                        placeOptions.appendChild(listItem);
+                    });
+                }
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelector("#facilities-all").addEventListener("change", function () {
+                console.log("Facilities Select All toggled");
+                const facilitiesCheckboxes = document.querySelectorAll(".checkbox-item-facility");
+                facilitiesCheckboxes.forEach(function (checkbox) {
+                    checkbox.checked = document.querySelector("#facilities-all").checked;
+                    console.log(`Checkbox ${checkbox.id} set to ${checkbox.checked}`);
+                });
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        document.getElementById("check-in-all").addEventListener("change", function () {
+            let checkinCheckboxes = document.querySelectorAll(".checkbox-item-checkin");
+            checkinCheckboxes.forEach(function (checkbox) {
+                checkbox.checked = document.getElementById("check-in-all").checked;
+            });
+        });
+    </script>
+
+    <script>
+        document.getElementById('addRuleBtn').addEventListener('click', function (event) {
+            event.preventDefault();
+            const formContainer = document.getElementById('formContainer');
+            const newField = document.createElement('div');
+            newField.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3');
+            newField.innerHTML = `
+                <div class="form-group">
+                    <input type="text" class="form-control" name="custom_check_in_methods[]" placeholder="" required>
+                    <button class="delete-btn">Delete</button>
+                </div>
+            `;
+            formContainer.appendChild(newField);
+            const deleteBtn = newField.querySelector('.delete-btn');
+            deleteBtn.addEventListener('click', function () {
+                formContainer.removeChild(newField);
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".radio-group input[type='radio']").forEach(function (radio) {
+                radio.addEventListener("change", function () {
+                    const targetId = this.getAttribute("data-target");
+                    const targetInput = document.getElementById(targetId);
+                    if (targetInput) {
+                        if (this.value === "yes") {
+                            targetInput.classList.remove("hidden");
+                        } else {
+                            targetInput.classList.add("hidden");
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        document.querySelector("#property-all").addEventListener("change", function () {
+            const propertyCheckboxes = document.querySelectorAll(".checkbox-item-property");
+            propertyCheckboxes.forEach(function (checkbox) {
+                checkbox.checked = document.querySelector("#property-all").checked;
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".add-more").forEach((button) => {
+                button.addEventListener("click", function (event) {
                     event.preventDefault();
                     const inputContainer = this.previousElementSibling;
-                    const newFormGroup = document.createElement('div');
-                    newFormGroup.classList.add('form-group', 'mb-3', 'd-flex', 'align-items-center');
-                    newFormGroup.style.gap = '10px';
-                    const inputField = document.createElement('input');
-                    inputField.type = 'text';
-                    inputField.classList.add('form-control');
-                    inputField.placeholder = 'Enter something';
-                    inputField.name = inputContainer.querySelector('input')?.name || 'custom_field[]';
-                    const deleteButton = document.createElement('button');
-                    deleteButton.innerText = 'Delete';
-                    deleteButton.classList.add('btn', 'btn-danger', 'btn-sm');
-                    deleteButton.addEventListener('click', function() {
+                    const newFormGroup = document.createElement("div");
+                    newFormGroup.classList.add("form-group", "mb-1", "d-flex", "align-items-center");
+                    newFormGroup.style.gap = "10px";
+                    const inputField = document.createElement("input");
+                    inputField.type = "text";
+                    inputField.classList.add("form-control");
+                    inputField.placeholder = "Enter something";
+                    const deleteButton = document.createElement("button");
+                    deleteButton.innerText = "Delete";
+                    deleteButton.classList.add("delete-btn");
+                    deleteButton.addEventListener("click", function () {
                         newFormGroup.remove();
                     });
                     newFormGroup.appendChild(inputField);
                     newFormGroup.appendChild(deleteButton);
-                    inputContainer.appendChild(newFormGroup);
+                    inputContainer.parentNode.insertBefore(newFormGroup, this);
                 });
             });
-
-            // Handle radio group visibility
-            document.querySelectorAll('.radio-group input[type="radio"]').forEach(radio => {
-                radio.addEventListener('change', function() {
-                    const targetId = this.getAttribute('data-target');
-                    const targetInput = document.getElementById(targetId);
-                    if (targetInput) {
-                        targetInput.classList.toggle('hidden', this.value !== 'yes');
-                    }
-                });
-            });
-
-            // Handle Select All checkboxes
-            document.getElementById('facilities-all')?.addEventListener('change', function() {
-                document.querySelectorAll('.checkbox-item-facility').forEach(checkbox => {
-                    checkbox.checked = this.checked;
-                });
-            });
-
-            document.getElementById('check-in-all')?.addEventListener('change', function() {
-                document.querySelectorAll('.checkbox-item-checkin').forEach(checkbox => {
-                    checkbox.checked = this.checked;
-                });
-            });
-
-            document.getElementById('property-all')?.addEventListener('change', function() {
-                document.querySelectorAll('.checkbox-item-property').forEach(checkbox => {
-                    checkbox.checked = this.checked;
-                });
-            });
-
-            // Handle facility categories
-            const facilityDropdown = document.getElementById('facilityDropdown');
-            const dynamicFormContainer = document.getElementById('dynamicFormContainer');
-            const addFacilityButton = document.getElementById('addFacilityButton');
-
-            addFacilityButton.addEventListener('click', function(event) {
-                event.preventDefault();
-                console.log('Add Facility button clicked');
-                const selectedCategory = facilityDropdown.value;
-                const newField = document.createElement('div');
-                newField.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3', 'mb-3');
-                newField.innerHTML = `
-            <div class="form-group">
-                <input type="text" class="form-control" name="facilities[${selectedCategory}][]" placeholder="Enter ${selectedCategory} facility">
-                <button type="button" class="btn btn-danger btn-sm mt-2 delete-facility-btn">Delete</button>
-            </div>
-        `;
-                dynamicFormContainer.appendChild(newField);
-                const deleteBtn = newField.querySelector('.delete-facility-btn');
-                deleteBtn.addEventListener('click', () => {
-                    console.log('Delete facility field clicked');
-                    newField.remove();
-                });
-            });
-
-            // Handle nearby area categories
-            const areaSelector = document.getElementById('areaSelector');
-            const dynamicFieldsContainer = document.getElementById('dynamicFieldsContainer');
-            const addNearbyAreaBtn = document.getElementById('addNearbyAreaBtn');
-
-            addNearbyAreaBtn.addEventListener('click', function(event) {
-                event.preventDefault();
-                console.log('Add Nearby Area button clicked');
-                const selectedCategory = areaSelector.value;
-                const uniqueId = Date.now();
-                const newField = document.createElement('div');
-                newField.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3', 'mb-3', 'nearby-area-field');
-                newField.innerHTML = `
-            <div class="form-group">
-                <label>${selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1)} Name</label>
-                <input type="hidden" name="nearby_areas[${selectedCategory}][category][]" value="${selectedCategory}">
-                <input type="text" class="form-control" name="nearby_areas[${selectedCategory}][name][]" placeholder="Enter ${selectedCategory} name" required>
-            </div>
-            <div class="form-group">
-                <label>Distance</label>
-                <input type="text" class="form-control" name="nearby_areas[${selectedCategory}][distance][]" placeholder="Enter distance" required>
-            </div>
-            <button type="button" class="btn btn-danger btn-sm mt-3 delete-nearby-btn">Delete</button>
-        `;
-                dynamicFieldsContainer.appendChild(newField);
-                const deleteBtn = newField.querySelector('.delete-nearby-btn');
-                deleteBtn.addEventListener('click', () => {
-                    console.log('Delete nearby area field clicked');
-                    newField.remove();
-                });
-            });
-
-            // Handle existing nearby area field deletions
-            dynamicFieldsContainer.querySelectorAll('.delete-nearby-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    console.log('Delete existing nearby area field clicked');
-                    btn.closest('.nearby-area-field').remove();
-                });
-            });
-
-            // Initialize Select2 for dropdowns
-            if (typeof $.fn.select2 !== 'undefined') {
-                $('.js-select2').select2({
-                    placeholder: 'Select an option',
-                    allowClear: true
-                });
-            }
         });
     </script>
+
+    <script>
+        const hotelFacilitiesLabelsMap = {
+            'General Services': ['General Services Name'],
+            'Activities & Entertainment': ['Activities & Entertainment Name'],
+            'Safety & Security': ['Security Feature Name'],
+            'Technology, Media & Wi-Fi': ['Technology, Media & Wi-Fi Name'],
+            'Bedroom Features': ['Bedroom Feature Name'],
+            'Bathroom Amenities': ['Bathroom Amenity'],
+            'Living Room Features': ['Living Room Feature'],
+            'Kitchen Facilities': ['Kitchen Facility'],
+            'Food & Beverages': ['Food & Beverage Option'],
+            'Parking Availability': ['Parking Option'],
+            'View from the Hotel': ['View Type'],
+            'Front Desk Services': ['Front Desk Service'],
+            'Housekeeping & Cleaning': ['Housekeeping & Cleaning Service'],
+            'Room Amenities': ['Room Amenity'],
+            'Business & Meeting Services': ['Business & Meeting Service'],
+            'Languages Spoken': ['Language']
+        };
+
+        const hotelFacilitySelector = document.getElementById('hotelFacilitySelector');
+        const hotelFormContainer = document.getElementById('dynamicFieldsContainerHotelFacility');
+        let currentFacilityValue = '';
+
+        function createHotelFieldGroup(category) {
+            const labels = hotelFacilitiesLabelsMap[category];
+            const categoryKey = category.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+            const uniqueId = `hotel-facility-${categoryKey}-${Date.now()}`;
+
+            const newFieldGroup = document.createElement('div');
+            newFieldGroup.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3', 'mb-3');
+            newFieldGroup.setAttribute('id', uniqueId);
+            newFieldGroup.innerHTML = `
+            <div class="form-group">
+                <label for="input-${uniqueId}">${labels[0]}</label>
+                <input type="text" class="form-control" id="input-${uniqueId}" name="hotel_facilities[${categoryKey}][]" placeholder="Enter ${labels[0]}" required>
+            </div>
+            <button type="button" class="btn btn-danger btn-sm mt-2 delete-hotel-btn">Delete</button>
+        `;
+
+            let categoryWrapper = document.getElementById(`wrapper-${categoryKey}`);
+            if (!categoryWrapper) {
+                categoryWrapper = document.createElement('div');
+                categoryWrapper.classList.add('col-12', 'mb-3');
+                categoryWrapper.id = `wrapper-${categoryKey}`;
+                categoryWrapper.innerHTML = `<h5>${category}</h5><div class="row"></div>`;
+                hotelFormContainer.appendChild(categoryWrapper);
+            }
+
+            const row = categoryWrapper.querySelector('.row');
+            row.appendChild(newFieldGroup);
+
+            newFieldGroup.querySelector('.delete-hotel-btn').addEventListener('click', function () {
+                row.removeChild(newFieldGroup);
+                if (row.children.length === 0) {
+                    hotelFormContainer.removeChild(categoryWrapper);
+                }
+            });
+        }
+
+        if (hotelFacilitySelector) {
+            hotelFacilitySelector.addEventListener('change', function () {
+                currentFacilityValue = this.value;
+                if (!hotelFacilitiesLabelsMap[currentFacilityValue]) return;
+                createHotelFieldGroup(currentFacilityValue);
+            });
+        }
+
+        const addHotelFacilityBtn = document.getElementById('addHotelFacility');
+        if (addHotelFacilityBtn) {
+            addHotelFacilityBtn.addEventListener('click', function (event) {
+                event.preventDefault();
+                if (!currentFacilityValue || !hotelFacilitiesLabelsMap[currentFacilityValue]) {
+                    alert("Please select a valid facility category first.");
+                    return;
+                }
+                createHotelFieldGroup(currentFacilityValue);
+            });
+        }
+    </script>
+
+
+
+    <script>
+        const sectionLabelsMap = {
+            'Restaurant & Cafe': ['Restaurant & Cafe Name', 'Distance'],
+            'Entertainment & Attraction Point': ['Entertainment & Attraction Point', 'Distance'],
+            'Hospital & Police Station': ['Hospital & Police Station Name', 'Distance'],
+            'Transport & Airport': ['Transport & Airport Name', 'Distance'],
+            'Shopping & ATM': ['Shopping & ATM', 'Distance']
+        };
+
+        const areaSelector = document.getElementById('areaSelector');
+        const formContainer = document.getElementById('dynamicFieldsContainer');
+        let currentSelectedValue = '';
+
+        function createFieldGroup(category) {
+            const labels = sectionLabelsMap[category];
+            const uniqueId = `nearby-area-${category.replace(/[^a-zA-Z0-9]/g, '')}-${Date.now()}`;
+            const categoryKey = category.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+
+            const newFieldGroup = document.createElement('div');
+            newFieldGroup.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3', 'mb-3');
+            newFieldGroup.setAttribute('id', uniqueId);
+            newFieldGroup.innerHTML = `
+        <div class="form-group">
+            <label for="input-name-${uniqueId}">${labels[0]}</label>
+            <input type="text" class="form-control" id="input-name-${uniqueId}" name="nearby_areas[${categoryKey}][name][]" placeholder="Enter ${labels[0]}" required>
+        </div>
+        <div class="form-group">
+            <label for="input-distance-${uniqueId}">${labels[1]}</label>
+            <input type="text" class="form-control" id="input-distance-${uniqueId}" name="nearby_areas[${categoryKey}][distance][]" placeholder="Enter ${labels[1]}" required>
+        </div>
+        <button type="button" class="btn btn-danger btn-sm mt-3 delete-nearby-btn">Delete</button>
+    `;
+
+            let categoryWrapper = document.getElementById(`wrapper-${categoryKey}`);
+            if (!categoryWrapper) {
+                categoryWrapper = document.createElement('div');
+                categoryWrapper.classList.add('col-12', 'mb-3');
+                categoryWrapper.id = `wrapper-${categoryKey}`;
+                categoryWrapper.innerHTML = `<h5>${category}</h5><div class="row"></div>`;
+                formContainer.appendChild(categoryWrapper);
+            }
+
+            const row = categoryWrapper.querySelector('.row');
+            row.appendChild(newFieldGroup);
+
+            // Add event listener to delete button after adding the field
+            newFieldGroup.querySelector('.delete-nearby-btn').addEventListener('click', function () {
+                row.removeChild(newFieldGroup);
+                if (row.children.length === 0) {
+                    formContainer.removeChild(categoryWrapper);
+                }
+            });
+        }
+
+        // Ensure areaSelector exists before adding event listener
+        if (areaSelector) {
+            areaSelector.addEventListener('change', function () {
+                currentSelectedValue = this.value;
+                if (!sectionLabelsMap[currentSelectedValue]) return;
+                createFieldGroup(currentSelectedValue);
+            });
+        }
+
+        // Ensure addNearbyAreaBtn exists before adding event listener
+        const addNearbyAreaBtn = document.getElementById('addNearbyAreaBtn');
+        if (addNearbyAreaBtn) {
+            addNearbyAreaBtn.addEventListener('click', function (event) {
+                event.preventDefault();
+                if (!currentSelectedValue || !sectionLabelsMap[currentSelectedValue]) {
+                    alert("Please select a valid nearby area category first.");
+                    return;
+                }
+                createFieldGroup(currentSelectedValue);
+            });
+        }
+
+    </script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const wrapper = document.getElementById('custom-checkin-wrapper');
+            const addBtn  = document.getElementById('add-checkin-rule');
+
+            // Add new custom field
+            addBtn.addEventListener('click', () => {
+                const group = document.createElement('div');
+                group.className = 'form-group mb-2 d-flex align-items-center';
+
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.name = 'custom_check_in_rules[]';
+                input.className = 'form-control';
+                input.placeholder = 'Enter something';
+
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button';
+                removeBtn.className = 'btn btn-danger btn-sm ms-2 remove-checkin';
+                removeBtn.textContent = 'Delete';
+                removeBtn.addEventListener('click', () => group.remove());
+
+                group.appendChild(input);
+                group.appendChild(removeBtn);
+                wrapper.appendChild(group);
+            });
+
+            // Delegate delete clicks
+            wrapper.addEventListener('click', e => {
+                if (e.target.classList.contains('remove-checkin')) {
+                    e.target.closest('.form-group').remove();
+                }
+            });
+        });
+    </script>
+
 @endsection

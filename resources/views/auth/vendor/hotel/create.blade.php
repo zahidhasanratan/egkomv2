@@ -206,47 +206,60 @@
                                                 <div class="col-md-12 col-lg-12 col-xxl-12">
                                                     <div class="form-group">
                                                         <label class="form-label">Check-in rules if any</label>
+
+                                                        {{-- Checkbox rules --}}
                                                         <div class="radio-group">
                                                             <label>
-                                                                <input type="checkbox" name="check_in_rules[]" value="Pay in advance" class="bar-radio-yes"> Pay in advance
+                                                                <input type="checkbox" name="check_in_rules[]" value="Pay in advance"> Pay in advance
                                                             </label>
                                                             <label>
-                                                                <input type="checkbox" name="check_in_rules[]" value="Security money for keys" class="bar-radio-no"> Security money for keys
+                                                                <input type="checkbox" name="check_in_rules[]" value="Security money for keys"> Security money for keys
                                                             </label>
                                                             <label>
-                                                                <input type="checkbox" name="check_in_rules[]" value="Rentals" class="bar-radio-no"> Rentals
+                                                                <input type="checkbox" name="check_in_rules[]" value="Rentals"> Rentals
                                                             </label>
                                                         </div>
-                                                        <div class="row">
-                                                            <div class="col-md-5">
-                                                                <div class="section">
-                                                                    <div class="input-container" style="display: none;">
-                                                                        <div class="form-group mb-3 d-flex align-items-center">
-                                                                            <input type="text" class="form-control" name="custom_check_in_rules[]" placeholder="Enter something">
-                                                                            <button class="btn btn-danger btn-sm">Delete</button>
-                                                                        </div>
-                                                                    </div>
-                                                                    <button class="add-more add-rule-btn btn add-button">Add More</button>
-                                                                </div>
+
+                                                        {{-- Dynamic custom input fields --}}
+                                                        <div id="custom-checkin-wrapper">
+                                                            <div class="form-group mb-2 d-flex align-items-center">
+                                                                <input type="text" name="custom_check_in_rules[]" class="form-control" placeholder="Enter something">
+                                                                <button type="button" class="btn btn-danger btn-sm ms-2 remove-checkin" style="display: none;">Delete</button>
                                                             </div>
                                                         </div>
+                                                        <button type="button" class="btn btn-sm btn-primary mt-2" id="add-checkin-rule">Add More</button>
+
                                                         @error('check_in_rules') <span class="text-danger">{{ $message }}</span> @enderror
                                                     </div>
+
+
                                                 </div>
+
+
                                             </div>
 
                                             <!-- Start: Property Information -->
                                             <div class="row mt-15">
+
                                                 <div class="checkbox-section">
                                                     <h3 class="can-tittle">Property Info</h3>
+
+                                                    <!-- “Select All” toggle and predefined checkboxes -->
                                                     <div class="chk-all-sec">
                                                         <div class="form-group">
                                                             <div class="custom-control custom-switch checked">
-                                                                <input type="checkbox" class="custom-control-input select-all" name="property_all" id="property-all" data-target="checkbox-item-property">
-                                                                <label class="custom-control-label" for="property-all">Select All Property Info</label>
+                                                                <input type="checkbox"
+                                                                       class="custom-control-input select-all"
+                                                                       name="property_all"
+                                                                       id="property-all"
+                                                                       data-target="checkbox-item-property">
+                                                                <label class="custom-control-label" for="property-all">
+                                                                    Select All Property Info
+                                                                </label>
                                                             </div>
                                                         </div>
                                                     </div>
+
                                                     <label><input type="checkbox" name="property_info[]" value="Guests must climb stairs" class="checkbox-item-property"> Guests must climb stairs</label><br>
                                                     <label><input type="checkbox" name="property_info[]" value="No lift/Elevator" class="checkbox-item-property"> No lift/Elevator</label><br>
                                                     <label><input type="checkbox" name="property_info[]" value="Potential noise during stays" class="checkbox-item-property"> Potential noise during stays</label><br>
@@ -257,21 +270,73 @@
                                                     <label><input type="checkbox" name="property_info[]" value="Weapon(s) on the property" class="checkbox-item-property"> Weapon(s) on the property</label><br>
                                                     <label><input type="checkbox" name="property_info[]" value="Commercial shops in the building" class="checkbox-item-property"> Commercial shops in the building</label><br>
                                                     <label><input type="checkbox" name="property_info[]" value="Offices in the building" class="checkbox-item-property"> Offices in the building</label><br>
-                                                    <div class="row">
-                                                        <div class="col-md-5">
-                                                            <div class="section">
-                                                                <div class="input-container" style="display: none;">
-                                                                    <div class="form-group mb-3 d-flex align-items-center">
-                                                                        <input type="text" class="form-control" name="custom_property_info[]" placeholder="Enter something">
-                                                                        <button class="btn btn-danger btn-sm">Delete</button>
-                                                                    </div>
-                                                                </div>
-                                                                <button class="add-more add-rule-btn btn add-button">Add More</button>
-                                                            </div>
+
+                                                    <!-- Dynamic “Custom Property Info” inputs -->
+                                                    <div id="custom-property-wrapper">
+                                                        <div class="form-group mb-3 d-flex align-items-center">
+                                                            <input type="text"
+                                                                   name="custom_property_info[]"
+                                                                   class="form-control"
+                                                                   placeholder="Enter something">
+                                                            <button type="button"
+                                                                    class="btn btn-danger btn-sm ms-2 remove-property-info"
+                                                                    style="display: none;">
+                                                                Delete
+                                                            </button>
                                                         </div>
                                                     </div>
-                                                    @error('property_info') <span class="text-danger">{{ $message }}</span> @enderror
+                                                    <button type="button"
+                                                            class="btn btn-primary btn-sm mt-2"
+                                                            id="add-property-info">
+                                                        Add More
+                                                    </button>
+
+                                                    @error('property_info')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                    @enderror
                                                 </div>
+
+                                                <script>
+                                                    document.addEventListener('DOMContentLoaded', function () {
+                                                        const wrapper = document.getElementById('custom-property-wrapper');
+                                                        const addBtn  = document.getElementById('add-property-info');
+
+                                                        addBtn.addEventListener('click', function () {
+                                                            // Create a new input group
+                                                            const group = document.createElement('div');
+                                                            group.className = 'form-group mb-3 d-flex align-items-center';
+
+                                                            // Text input
+                                                            const input = document.createElement('input');
+                                                            input.type = 'text';
+                                                            input.name = 'custom_property_info[]';
+                                                            input.className = 'form-control';
+                                                            input.placeholder = 'Enter something';
+
+                                                            // Delete button
+                                                            const removeBtn = document.createElement('button');
+                                                            removeBtn.type = 'button';
+                                                            removeBtn.className = 'btn btn-danger btn-sm ms-2 remove-property-info';
+                                                            removeBtn.textContent = 'Delete';
+                                                            removeBtn.style.display = 'inline-block';
+
+                                                            removeBtn.addEventListener('click', () => group.remove());
+
+                                                            // Append and show
+                                                            group.appendChild(input);
+                                                            group.appendChild(removeBtn);
+                                                            wrapper.appendChild(group);
+                                                        });
+
+                                                        // Attach delete to any existing remove buttons
+                                                        wrapper.addEventListener('click', function (e) {
+                                                            if (e.target.classList.contains('remove-property-info')) {
+                                                                e.target.closest('.form-group').remove();
+                                                            }
+                                                        });
+                                                    });
+                                                </script>
+
                                             </div>
 
                                             <!-- Start: Arrival Guideline Information -->
@@ -598,41 +663,27 @@
                                         <div class="tab-pane" id="tabItem1">
                                             <div class="row">
                                                 <div class="col-lg-12">
+
                                                     <div class="form-group">
                                                         <h3 class="can-tittle">Most Popular Nearby Area</h3>
-                                                        <div class="radio-group">
-                                                            <label>
-                                                                <input type="checkbox" name="nearby_areas[]" value="16.5 km from Himchori Waterfall" class="bar-radio-yes"> 16.5 km from Himchori Waterfall
-                                                            </label>
-                                                            <label>
-                                                                <input type="checkbox" name="nearby_areas[]" value="0.25 km from Navy Jetty, from where Saint Martin bound ship sails" class="bar-radio-no"> 0.25 km from Navy Jetty, from where Saint Martin bound ship sails
-                                                            </label>
-                                                            <label>
-                                                                <input type="checkbox" name="nearby_areas[]" value="3.2 km from Cox's Bazar Airport" class="bar-radio-no"> 3.2 km from Cox's Bazar Airport
-                                                            </label>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-md-5">
-                                                                <div class="section">
-                                                                    <div class="input-container" style="display: none;">
-                                                                        <div class="form-group mb-3 d-flex align-items-center">
-                                                                            <input type="text" class="form-control" name="custom_nearby_areas[]" placeholder="Enter something">
-                                                                            <button class="btn btn-danger btn-sm">Delete</button>
-                                                                        </div>
-                                                                    </div>
-                                                                    <button class="add-more add-rule-btn btn add-button">Add More</button>
-                                                                </div>
+                                                        <div id="nearby-areas-wrapper">
+                                                            <div class="form-group mb-3 d-flex align-items-center">
+                                                                <input type="text" name="custom_nearby_areas[]" class="form-control" placeholder="Enter something">
+                                                                <button type="button" class="btn btn-danger btn-sm ms-2 remove-area-btn" style="display: none;">Delete</button>
                                                             </div>
                                                         </div>
-                                                        @error('nearby_areas') <span class="text-danger">{{ $message }}</span> @enderror
+                                                        <button type="button" class="btn btn-primary btn-sm mt-2" id="add-nearby-area">Add More</button>
+                                                        @error('custom_nearby_areas') <span class="text-danger">{{ $message }}</span> @enderror
                                                     </div>
+
+
                                                 </div>
 
 
                                                 <div class="container mt-4">
+
                                                     <div class="row">
                                                         <h3 class="can-tittle">Nearby Area Categories</h3>
-
                                                         <!-- Dropdown -->
                                                         <div class="col-lg-5">
                                                             <div class="form-group">
@@ -660,6 +711,8 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
+
                                                 </div>
 
 
@@ -1445,6 +1498,42 @@
     </script>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const addButton = document.getElementById('add-nearby-area');
+            const wrapper = document.getElementById('nearby-areas-wrapper');
+
+            addButton.addEventListener('click', function () {
+                const group = document.createElement('div');
+                group.className = 'form-group mb-3 d-flex align-items-center';
+
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.name = 'custom_nearby_areas[]';
+                input.className = 'form-control';
+                input.placeholder = 'Enter something';
+
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button';
+                removeBtn.className = 'btn btn-danger btn-sm ms-2 remove-area-btn';
+                removeBtn.textContent = 'Delete';
+
+                removeBtn.addEventListener('click', () => group.remove());
+
+                group.appendChild(input);
+                group.appendChild(removeBtn);
+                wrapper.appendChild(group);
+            });
+
+            // If you ever add dynamic fields from backend (like old input), attach delete event again
+            document.querySelectorAll('.remove-area-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.target.closest('.form-group').remove();
+                });
+            });
+        });
+    </script>
+
+    <script>
         const hotelFacilitiesLabelsMap = {
             'General Services': ['General Services Name'],
             'Activities & Entertainment': ['Activities & Entertainment Name'],
@@ -1524,9 +1613,6 @@
             });
         }
     </script>
-
-
-
     <script>
         const sectionLabelsMap = {
             'Restaurant & Cafe': ['Restaurant & Cafe Name', 'Distance'],
@@ -1605,7 +1691,41 @@
 
     </script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const wrapper = document.getElementById('custom-checkin-wrapper');
+            const addBtn = document.getElementById('add-checkin-rule');
 
+            addBtn.addEventListener('click', function () {
+                const group = document.createElement('div');
+                group.className = 'form-group mb-2 d-flex align-items-center';
+
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.name = 'custom_check_in_rules[]';
+                input.className = 'form-control';
+                input.placeholder = 'Enter something';
+
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button';
+                removeBtn.className = 'btn btn-danger btn-sm ms-2 remove-checkin';
+                removeBtn.textContent = 'Delete';
+
+                removeBtn.addEventListener('click', () => group.remove());
+
+                group.appendChild(input);
+                group.appendChild(removeBtn);
+                wrapper.appendChild(group);
+            });
+
+            // Attach delete buttons to existing (if any)
+            document.querySelectorAll('.remove-checkin').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    this.closest('.form-group').remove();
+                });
+            });
+        });
+    </script>
 
 
 

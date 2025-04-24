@@ -35,7 +35,6 @@ class ManageHotel extends Controller
 
     public function store(Request $request)
     {
-
         // Prepare data array directly from the request inputs
         $data = $request->all();
 
@@ -65,32 +64,52 @@ class ManageHotel extends Controller
         // Handle hotel_facilities data
         if ($request->has('hotel_facilities') && is_array($request->hotel_facilities)) {
             $flatHotelFacilities = [];
-            Log::debug('Processing hotel_facilities:', $request->hotel_facilities);  // Log for debugging
+            Log::debug('Processing hotel_facilities:', $request->hotel_facilities);
 
             foreach ($request->hotel_facilities as $category => $facilityNames) {
-                // Check if the category's facilities are an array (to handle the structure)
                 if (is_array($facilityNames)) {
                     foreach ($facilityNames as $facility) {
                         if (!empty($facility)) {
                             $flatHotelFacilities[] = [
-                                'category' => $category,  // Using the category as the field
-                                'name' => $facility,      // Facility name in each category
+                                'category' => $category,
+                                'name' => $facility,
                             ];
                         }
                     }
                 }
             }
 
-            // Log the processed facilities
             Log::debug('Processed hotel_facilities:', $flatHotelFacilities);
 
-            // Only encode if we have any valid facilities
-            if (!empty($flatHotelFacilities)) {
-                $data['hotel_facilities'] = json_encode($flatHotelFacilities);
-            } else {
-                $data['hotel_facilities'] = null;  // If no valid facilities, set it to null
-            }
+            $data['hotel_facilities'] = !empty($flatHotelFacilities)
+                ? json_encode($flatHotelFacilities)
+                : null;
         }
+
+        // ✅ Handle custom_nearby_areas
+        if ($request->has('custom_nearby_areas') && is_array($request->custom_nearby_areas)) {
+            $customAreas = array_filter($request->custom_nearby_areas, function ($area) {
+                return !empty($area);
+            });
+
+            $data['custom_nearby_areas'] = !empty($customAreas)
+                ? json_encode(array_values($customAreas))
+                : null;
+        }
+
+        // ✅ Merge check_in_rules[] and custom_check_in_rules[]
+        $checkInRules = $request->check_in_rules ?? [];
+        $customRules = $request->custom_check_in_rules ?? [];
+
+        $customRules = array_filter($customRules, function ($val) {
+            return !empty(trim($val));
+        });
+
+        $mergedCheckinRules = array_merge($checkInRules, $customRules);
+
+        $data['check_in_rules'] = !empty($mergedCheckinRules)
+            ? json_encode(array_values($mergedCheckinRules))
+            : null;
 
         // Handle file uploads
         $photoFields = [
@@ -305,6 +324,13 @@ class ManageHotel extends Controller
                 $facilities['most_popular'] = array_filter($request->input('facilities')['most_popular'], fn($item) => !empty($item));
             }
             $data['facilities'] = !empty($facilities) ? $facilities : $hotel->facilities ?? [];
+        }
+
+        if ($request->has('custom_property_info') && is_array($request->custom_property_info)) {
+            $customPropertyInfo = array_filter($request->custom_property_info, fn($i) => !empty(trim($i)));
+            $data['custom_property_info'] = $customPropertyInfo
+                ? json_encode(array_values($customPropertyInfo))
+                : null;
         }
 
         // Handle nearby areas with categories
