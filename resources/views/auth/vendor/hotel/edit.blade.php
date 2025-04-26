@@ -1065,6 +1065,7 @@
                                                                     @enderror
                                                                 </div>
 
+
                                                                 <button type="button"
                                                                         class="btn btn-danger btn-sm delete-btn">Delete
                                                                 </button>
@@ -1116,7 +1117,52 @@
                                                     <span class="text-danger">{{ $message }}</span>
                                                     @enderror
                                                 </div>
+                                                <div class="row">
+                                                    <div class="container mt-15">
+                                                        <div class="row">
+                                                            <h3 class="can-tittle">Hotel Facilities Categories</h3>
 
+                                                            <!-- Dropdown -->
+                                                            <div class="col-lg-5">
+                                                                <div class="form-group">
+                                                                    <label for="hotelFacilitySelector">Select Facility</label>
+                                                                    <select id="hotelFacilitySelector" class="form-control">
+                                                                        <option value="" disabled selected>Select category</option>
+                                                                        <option value="General Services">General Services</option>
+                                                                        <option value="Activities & Entertainment">Activities & Entertainment</option>
+                                                                        <option value="Safety & Security">Safety & Security</option>
+                                                                        <option value="Technology, Media & Wi-Fi">Technology, Media & Wi-Fi</option>
+                                                                        <option value="Bedroom Features">Bedroom Features</option>
+                                                                        <option value="Bathroom Amenities">Bathroom Amenities</option>
+                                                                        <option value="Living Room Features">Living Room Features</option>
+                                                                        <option value="Kitchen Facilities">Kitchen Facilities</option>
+                                                                        <option value="Food & Beverages">Food & Beverages</option>
+                                                                        <option value="Parking Availability">Parking Availability</option>
+                                                                        <option value="View from the Hotel">View from the Hotel</option>
+                                                                        <option value="Front Desk Services">Front Desk Services</option>
+                                                                        <option value="Housekeeping & Cleaning">Housekeeping & Cleaning</option>
+                                                                        <option value="Room Amenities">Room Amenities</option>
+                                                                        <option value="Business & Meeting Services">Business & Meeting Services</option>
+                                                                        <option value="Languages Spoken">Languages Spoken</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Add More Button -->
+                                                            <div class="col-md-3 mt-4">
+                                                                <button class="btn btn-primary" id="addHotelFacility">Add More +</button>
+                                                            </div>
+
+                                                            <!-- Dynamic Field Container -->
+                                                            <div class="col-12 mt-4">
+                                                                <div class="row" id="dynamicFieldsContainerHotelFacility">
+                                                                    <!-- Category-specific wrappers will be added here -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
                                                 <!-- Save / Submit Buttons -->
                                                 <div class="row">
                                                     <div class="col-sm-2 col-md-2 mt-15">
