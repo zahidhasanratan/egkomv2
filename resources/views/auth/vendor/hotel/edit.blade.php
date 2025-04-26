@@ -1118,6 +1118,7 @@
                                                     @enderror
                                                 </div>
                                                 <div class="row">
+
                                                     <div class="container mt-15">
                                                         <div class="row">
                                                             <h3 class="can-tittle">Hotel Facilities Categories</h3>
@@ -1159,8 +1160,11 @@
                                                                     <!-- Category-specific wrappers will be added here -->
                                                                 </div>
                                                             </div>
+
                                                         </div>
                                                     </div>
+
+
 
                                                 </div>
                                                 <!-- Save / Submit Buttons -->
@@ -2083,12 +2087,33 @@
             'Languages Spoken': ['Language']
         };
 
+        const hotelFacilitiesCategoryKeysMap = {
+            'general_services': 'General Services',
+            'activities___entertainment': 'Activities & Entertainment',
+            'safety___security': 'Safety & Security',
+            'technology__media___wi_fi': 'Technology, Media & Wi-Fi',
+            'bedroom_features': 'Bedroom Features',
+            'bathroom_amenities': 'Bathroom Amenities',
+            'living_room_features': 'Living Room Features',
+            'kitchen_facilities': 'Kitchen Facilities',
+            'food___beverages': 'Food & Beverages',
+            'parking_availability': 'Parking Availability',
+            'view_from_the_hotel': 'View from the Hotel',
+            'front_desk_services': 'Front Desk Services',
+            'housekeeping___cleaning': 'Housekeeping & Cleaning',
+            'room_amenities': 'Room Amenities',
+            'business___meeting_services': 'Business & Meeting Services',
+            'languages_spoken': 'Languages Spoken'
+        };
+
         const hotelFacilitySelector = document.getElementById('hotelFacilitySelector');
         const hotelFormContainer = document.getElementById('dynamicFieldsContainerHotelFacility');
         let currentFacilityValue = '';
 
-        function createHotelFieldGroup(category) {
+        function createHotelFieldGroup(category, value = '') {
             const labels = hotelFacilitiesLabelsMap[category];
+            if (!labels) return;
+
             const categoryKey = category.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
             const uniqueId = `hotel-facility-${categoryKey}-${Date.now()}`;
 
@@ -2098,7 +2123,7 @@
             newFieldGroup.innerHTML = `
             <div class="form-group">
                 <label for="input-${uniqueId}">${labels[0]}</label>
-                <input type="text" class="form-control" id="input-${uniqueId}" name="hotel_facilities[${categoryKey}][]" placeholder="Enter ${labels[0]}" required>
+                <input type="text" class="form-control" id="input-${uniqueId}" name="hotel_facilities[${categoryKey}][]" placeholder="Enter ${labels[0]}" value="${value}" required>
             </div>
             <button type="button" class="btn btn-danger btn-sm mt-2 delete-hotel-btn">Delete</button>
         `;
@@ -2123,6 +2148,7 @@
             });
         }
 
+        // For dropdown selection
         if (hotelFacilitySelector) {
             hotelFacilitySelector.addEventListener('change', function () {
                 currentFacilityValue = this.value;
@@ -2131,6 +2157,7 @@
             });
         }
 
+        // For Add More button
         const addHotelFacilityBtn = document.getElementById('addHotelFacility');
         if (addHotelFacilityBtn) {
             addHotelFacilityBtn.addEventListener('click', function (event) {
@@ -2142,7 +2169,21 @@
                 createHotelFieldGroup(currentFacilityValue);
             });
         }
+
+        // Now load existing hotel facilities if available
+        const hotelFacilitiesData = {!! json_encode($hotelFacilities ?? []) !!};
+        hotelFacilitiesData.forEach(facility => {
+            const categoryKey = facility.category; // example: general_services
+            const name = facility.name;
+
+            const category = hotelFacilitiesCategoryKeysMap[categoryKey]; // convert back to readable category
+
+            if (category && hotelFacilitiesLabelsMap[category]) {
+                createHotelFieldGroup(category, name);
+            }
+        });
     </script>
+
 
 
 
