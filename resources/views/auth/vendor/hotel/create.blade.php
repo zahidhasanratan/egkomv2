@@ -660,6 +660,7 @@
                                         </div>
 
                                         <!-- Nearby Area -->
+
                                         <div class="tab-pane" id="tabItem1">
                                             <div class="row">
                                                 <div class="col-lg-12">
@@ -732,6 +733,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
 
                                         <!-- Photos -->
                                         <div class="tab-pane" id="Photos">

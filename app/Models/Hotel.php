@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Hotel extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'vendor_id', 'status', 'approve', 'description', 'pets_allowed', 'pets_details',
         'events_allowed', 'events_details', 'smoking_allowed', 'smoking_details',
@@ -16,11 +18,11 @@ class Hotel extends Model
         'vlogging_allowed', 'vlogging_details', 'child_policy', 'extra_bed_policy',
         'cooking_policy', 'directions', 'additional_policy', 'check_in_methods',
         'custom_check_in_methods', 'cancellation_policies', 'facilities', 'facility_category',
-        'custom_facilities','custom_facilities_icon','custom_facilities', 'nearby_areas','hotel_facilities', 'custom_nearby_areas', 'nearby_area_category',
-        'custom_nearby_area_details', 'kitchen_photos', 'washroom_photos', 'parking_lot_photos',
-        'entrance_gate_photos', 'lift_stairs_photos', 'spa_photos', 'bar_photos',
-        'transport_photos', 'rooftop_photos', 'gym_photos', 'security_photos', 'amenities_photos',
-        'property_types', 'apartments', // New fields
+        'custom_facilities', 'custom_facilities_icon', 'nearby_areas', 'hotel_facilities',
+        'custom_nearby_areas', 'nearby_area_category', 'custom_nearby_area_details',
+        'kitchen_photos', 'washroom_photos', 'parking_lot_photos', 'entrance_gate_photos',
+        'lift_stairs_photos', 'spa_photos', 'bar_photos', 'transport_photos', 'rooftop_photos',
+        'gym_photos', 'security_photos', 'amenities_photos', 'property_types', 'apartments',
     ];
 
     protected $casts = [
@@ -38,10 +40,23 @@ class Hotel extends Model
         'hotel_facilities' => 'array',
         'custom_nearby_areas' => 'array',
         'custom_nearby_area_details' => 'array',
-        'property_types' => 'array', // Cast as array
-        'apartments' => 'array',     // Cast as array
-    ];
+        'property_types' => 'array',
+        'apartments' => 'array',
 
+        // ✅ Photo fields casted as arrays
+        'kitchen_photos' => 'array',
+        'washroom_photos' => 'array',
+        'parking_lot_photos' => 'array',
+        'entrance_gate_photos' => 'array',
+        'lift_stairs_photos' => 'array',
+        'spa_photos' => 'array',
+        'bar_photos' => 'array',
+        'transport_photos' => 'array',
+        'rooftop_photos' => 'array',
+        'gym_photos' => 'array',
+        'security_photos' => 'array',
+        'amenities_photos' => 'array',
+    ];
 
     public function rooms()
     {
