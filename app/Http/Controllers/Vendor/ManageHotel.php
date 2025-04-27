@@ -166,6 +166,15 @@ class ManageHotel extends Controller
         return view('auth.vendor.hotel.edit', compact('hotel','hotelFacilities'));
     }
 
+    public function show(Hotel $hotel)
+    {
+        if ($hotel->vendor_id !== auth()->user()->id) {
+            return redirect()->route('vendor-admin.hotel.index')->with('error', 'Unauthorized access.');
+        }
+        $hotelFacilities = json_decode($hotel->hotel_facilities, true);
+        return view('auth.vendor.hotel.show', compact('hotel','hotelFacilities'));
+    }
+
     public function editSuper(Hotel $hotel)
     {
         return view('auth.super_admin.hotel.edit', compact('hotel'));

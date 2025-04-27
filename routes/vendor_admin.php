@@ -53,6 +53,7 @@ Route::prefix('vendor-admin')->group(function () {
 
 
         Route::get('/hotel/{hotel}/edit', [ManageHotel::class, 'edit'])->name('vendor-admin.hotel.edit');
+        Route::get('/hotel/{hotel}/show', [ManageHotel::class, 'show'])->name('vendor-admin.hotel.show');
         Route::put('/hotel/{hotel}', [ManageHotel::class, 'update'])->name('vendor-admin.hotel.update');
         Route::delete('/hotel/{hotel}', [ManageHotel::class, 'destroy'])->name('vendor-admin.hotel.destroy');
 
