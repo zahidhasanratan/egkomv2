@@ -2186,7 +2186,6 @@
 
 
 
-
     <script>
         const sectionLabelsMap = {
             'Restaurant & Cafe': ['Restaurant & Cafe Name', 'Distance'],
@@ -2200,7 +2199,7 @@
         const formContainer = document.getElementById('dynamicFieldsContainer');
         let currentSelectedValue = '';
 
-        function createFieldGroup(category) {
+        function createFieldGroup(category, nameValue = '', distanceValue = '') {
             const labels = sectionLabelsMap[category];
             const uniqueId = `nearby-area-${category.replace(/[^a-zA-Z0-9]/g, '')}-${Date.now()}`;
             const categoryKey = category.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
@@ -2209,16 +2208,22 @@
             newFieldGroup.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3', 'mb-3');
             newFieldGroup.setAttribute('id', uniqueId);
             newFieldGroup.innerHTML = `
-        <div class="form-group">
-            <label for="input-name-${uniqueId}">${labels[0]}</label>
-            <input type="text" class="form-control" id="input-name-${uniqueId}" name="nearby_areas[${categoryKey}][name][]" placeholder="Enter ${labels[0]}" required>
-        </div>
-        <div class="form-group">
-            <label for="input-distance-${uniqueId}">${labels[1]}</label>
-            <input type="text" class="form-control" id="input-distance-${uniqueId}" name="nearby_areas[${categoryKey}][distance][]" placeholder="Enter ${labels[1]}" required>
-        </div>
-        <button type="button" class="btn btn-danger btn-sm mt-3 delete-nearby-btn">Delete</button>
-    `;
+            <div class="form-group">
+                <label for="input-name-${uniqueId}">${labels[0]}</label>
+                <input type="text" class="form-control" id="input-name-${uniqueId}"
+                    name="nearby_areas[${categoryKey}][name][]"
+                    placeholder="Enter ${labels[0]}"
+                    value="${nameValue}" required>
+            </div>
+            <div class="form-group">
+                <label for="input-distance-${uniqueId}">${labels[1]}</label>
+                <input type="text" class="form-control" id="input-distance-${uniqueId}"
+                    name="nearby_areas[${categoryKey}][distance][]"
+                    placeholder="Enter ${labels[1]}"
+                    value="${distanceValue}" required>
+            </div>
+            <button type="button" class="btn btn-danger btn-sm mt-3 delete-nearby-btn">Delete</button>
+        `;
 
             let categoryWrapper = document.getElementById(`wrapper-${categoryKey}`);
             if (!categoryWrapper) {
@@ -2232,7 +2237,6 @@
             const row = categoryWrapper.querySelector('.row');
             row.appendChild(newFieldGroup);
 
-            // Add event listener to delete button after adding the field
             newFieldGroup.querySelector('.delete-nearby-btn').addEventListener('click', function () {
                 row.removeChild(newFieldGroup);
                 if (row.children.length === 0) {
@@ -2241,7 +2245,6 @@
             });
         }
 
-        // Ensure areaSelector exists before adding event listener
         if (areaSelector) {
             areaSelector.addEventListener('change', function () {
                 currentSelectedValue = this.value;
@@ -2250,7 +2253,6 @@
             });
         }
 
-        // Ensure addNearbyAreaBtn exists before adding event listener
         const addNearbyAreaBtn = document.getElementById('addNearbyAreaBtn');
         if (addNearbyAreaBtn) {
             addNearbyAreaBtn.addEventListener('click', function (event) {
@@ -2263,7 +2265,44 @@
             });
         }
 
+        // 💥 Show existing data
+        function populateExistingNearbyAreas(existingData) {
+            if (!existingData) return;
+
+            Object.keys(existingData).forEach(function (categoryKey) {
+                const formattedCategory = categoryKey.replace(/_/g, ' ').replace(/\s+/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+
+                // Find the real section label
+                let actualCategory = '';
+                Object.keys(sectionLabelsMap).forEach(section => {
+                    const sectionKey = section.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+                    if (sectionKey === categoryKey) {
+                        actualCategory = section;
+                    }
+                });
+
+                if (!actualCategory) {
+                    console.warn(`Category not found for key: ${categoryKey}`);
+                    return;
+                }
+
+                const names = existingData[categoryKey]['name'] || [];
+                const distances = existingData[categoryKey]['distance'] || [];
+
+                names.forEach((name, index) => {
+                    const distance = distances[index] || '';
+                    createFieldGroup(actualCategory, name, distance);
+                });
+            });
+        }
+
+        // Call this after page load
+        document.addEventListener('DOMContentLoaded', function () {
+            const existingNearbyAreas = @json($hotel->nearby_areas);
+            populateExistingNearbyAreas(existingNearbyAreas);
+        });
     </script>
+
 
 
     <script>
