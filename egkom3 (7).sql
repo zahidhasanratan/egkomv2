@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 20, 2025 at 11:40 AM
+-- Generation Time: Apr 29, 2025 at 06:52 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.23
 
@@ -150,7 +150,24 @@ INSERT INTO `activity_logs` (`id`, `browser`, `os`, `ip_address`, `activity_time
 (105, 'Chrome on Windows', 'Windows', '127.0.0.1', '07:49:31', 'Logged In', '2025-04-17 01:49:31', '2025-04-17 01:49:31'),
 (106, 'Chrome on Windows', 'Windows', '127.0.0.1', '04:29:06', 'Logged In', '2025-04-18 22:29:06', '2025-04-18 22:29:06'),
 (107, 'Chrome on Windows', 'Windows', '127.0.0.1', '08:40:03', 'Logged In', '2025-04-19 02:40:03', '2025-04-19 02:40:03'),
-(108, 'Chrome on Windows', 'Windows', '127.0.0.1', '04:43:38', 'Logged In', '2025-04-19 22:43:38', '2025-04-19 22:43:38');
+(108, 'Chrome on Windows', 'Windows', '127.0.0.1', '04:43:38', 'Logged In', '2025-04-19 22:43:38', '2025-04-19 22:43:38'),
+(109, 'Chrome on Windows', 'Windows', '127.0.0.1', '06:08:38', 'Logged In', '2025-04-21 00:08:38', '2025-04-21 00:08:38'),
+(110, 'Chrome on Windows', 'Windows', '127.0.0.1', '04:58:49', 'Logged In', '2025-04-21 22:58:49', '2025-04-21 22:58:49'),
+(111, 'Chrome on Windows', 'Windows', '127.0.0.1', '09:14:55', 'Logged In', '2025-04-22 03:14:55', '2025-04-22 03:14:55'),
+(112, 'Chrome on Windows', 'Windows', '127.0.0.1', '03:36:42', 'Logged In', '2025-04-22 21:36:42', '2025-04-22 21:36:42'),
+(113, 'Chrome on Windows', 'Windows', '127.0.0.1', '03:20:43', 'Logged In', '2025-04-23 21:20:43', '2025-04-23 21:20:43'),
+(114, 'Chrome on Windows', 'Windows', '127.0.0.1', '03:51:11', 'Logged In', '2025-04-25 21:51:11', '2025-04-25 21:51:11'),
+(115, 'Chrome on Windows', 'Windows', '127.0.0.1', '05:02:57', 'Logged In', '2025-04-25 23:02:57', '2025-04-25 23:02:57'),
+(116, 'Chrome on Windows', 'Windows', '127.0.0.1', '05:09:55', 'Logged In', '2025-04-25 23:09:55', '2025-04-25 23:09:55'),
+(117, 'Chrome on Windows', 'Windows', '127.0.0.1', '06:54:31', 'Logged In', '2025-04-26 00:54:31', '2025-04-26 00:54:31'),
+(118, 'Chrome on Windows', 'Windows', '127.0.0.1', '06:57:10', 'Logged In', '2025-04-26 00:57:10', '2025-04-26 00:57:10'),
+(119, 'Chrome on Windows', 'Windows', '127.0.0.1', '07:29:13', 'Logged In', '2025-04-26 01:29:13', '2025-04-26 01:29:13'),
+(120, 'Chrome on Windows', 'Windows', '127.0.0.1', '07:31:09', 'Logged In', '2025-04-26 01:31:09', '2025-04-26 01:31:09'),
+(121, 'Chrome on Windows', 'Windows', '127.0.0.1', '03:25:59', 'Logged In', '2025-04-26 21:25:59', '2025-04-26 21:25:59'),
+(122, 'Chrome on Windows', 'Windows', '127.0.0.1', '04:03:48', 'Logged In', '2025-04-26 22:03:48', '2025-04-26 22:03:48'),
+(123, 'Chrome on Windows', 'Windows', '127.0.0.1', '04:15:25', 'Logged In', '2025-04-27 22:15:25', '2025-04-27 22:15:25'),
+(124, 'Chrome on Windows', 'Windows', '127.0.0.1', '10:07:37', 'Logged In', '2025-04-28 04:07:37', '2025-04-28 04:07:37'),
+(125, 'Chrome on Windows', 'Windows', '127.0.0.1', '04:21:01', 'Logged In', '2025-04-28 22:21:01', '2025-04-28 22:21:01');
 
 -- --------------------------------------------------------
 
@@ -264,6 +281,7 @@ CREATE TABLE `hotels` (
   `facility_category` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `custom_facilities` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `nearby_areas` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`nearby_areas`)),
+  `hotel_facilities` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `custom_nearby_areas` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`custom_nearby_areas`)),
   `nearby_area_category` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `custom_nearby_area_details` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`custom_nearby_area_details`)),
@@ -291,15 +309,10 @@ CREATE TABLE `hotels` (
 -- Dumping data for table `hotels`
 --
 
-INSERT INTO `hotels` (`id`, `vendor_id`, `description`, `pets_allowed`, `pets_details`, `events_allowed`, `events_details`, `smoking_allowed`, `smoking_details`, `quiet_hours`, `photography_allowed`, `photography_details`, `check_in_window`, `check_out_time`, `food_laundry`, `check_in_rules`, `custom_check_in_rules`, `property_info`, `custom_property_info`, `age_restriction`, `age_restriction_details`, `vlogging_allowed`, `vlogging_details`, `child_policy`, `extra_bed_policy`, `cooking_policy`, `directions`, `additional_policy`, `check_in_methods`, `custom_check_in_methods`, `cancellation_policies`, `facilities`, `custom_facilities_icon`, `custom_facility_icons`, `facility_category`, `custom_facilities`, `nearby_areas`, `custom_nearby_areas`, `nearby_area_category`, `custom_nearby_area_details`, `kitchen_photos`, `washroom_photos`, `parking_lot_photos`, `entrance_gate_photos`, `lift_stairs_photos`, `spa_photos`, `bar_photos`, `transport_photos`, `rooftop_photos`, `gym_photos`, `security_photos`, `amenities_photos`, `property_types`, `apartments`, `status`, `approve`, `created_at`, `updated_at`) VALUES
-(7, 7, 'Sea Pearl Beach Resort & Spa Cox\'s Bazar', 'no', NULL, 'yes', 'Repudiandae est duc', 'no', NULL, 'Asperiores id lorem', 'no', NULL, '08:00-10:00', '7:00 PM', 'yes', '[\"Pay in advance\",\"Security money for keys\",\"Rentals\"]', '[]', '[\"Guests must climb stairs\",\"No lift\\/Elevator\",\"Potential noise during stays\",\"Pet(s) live on the property\",\"No parking on the property\",\"Property has shared spaces\",\"Limited essential amenities\",\"Weapon(s) on the property\",\"Commercial shops in the building\",\"Offices in the building\"]', '[]', 'yes', 'Fugit esse sed arch', 'yes', 'Voluptatem culpa d', 'Delectus vero paria', 'Et consectetur est e', 'Tempora atque maiore', 'Ad ea odio eiusmod a', 'Ut veniam sunt fac', '[\"In-person\\/Self check-in\",\"Keypad\",\"Lockbox\"]', NULL, '[\"Non-refundable\",\"Partially refundable\",\"Long-term\\/Monthly staying policy\"]', '[\"Free Wi-Fi\",\"Hill View Or Sea View\",\"On-site restaurant\",\"Buffet Breakfast\",\"Bar\\/lounge\",\"Private Pool\",\"Fitness center & Spa services\",\"24-hour reception\",\"Parking facilities\",\"Airport shuttle service\"]', NULL, NULL, 'activities', NULL, '[\"16.5 km from Himchori Waterfall\",\"0.25 km from Navy Jetty, from where Saint Martin bound ship sails\",\"3.2 km from Cox\'s Bazar Airport\"]', '[\"Aliqua Pariatur Ne\",\"Voluptatum est dolo\",\"Aperiam rem eligendi\",\"Labore veniam volup\"]', 'entertainment', '[\"resu name\",\"11\",\"restu 2\",\"22\",\"enter11\",\"enter22\"]', '[\"hotel_photos\\/1ImlA82NkiizxGX1DZAq13WJTDtclDF0Aa38RyVy.jpg\"]', '[\"hotel_photos\\/cuvZk8Dgjc6rknPTuMEx9ST3PbqznHoA85C15Bzb.jpg\",\"hotel_photos\\/irppynQkLpe31yrwejyJiKXH34Mq1krNBLpoXhOX.jpg\",\"hotel_photos\\/oASObr1HdqG1yi7Ev9rOHBYv2ZAWSQmDBp7lVQIM.jpg\"]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', NULL, NULL, 'submitted', 1, '2025-03-24 22:34:57', '2025-04-19 00:19:51'),
-(8, 7, 'Shopno Bilash', 'no', NULL, 'no', NULL, 'yes', 'Expedita reprehender', 'Quidem sed et id vel', 'no', NULL, '08:00-10:00', '8:00 PM', 'yes', '[\"Pay in advance\",\"Security money for keys\"]', '[]', '[\"Guests must climb stairs\",\"Pet(s) live on the property\",\"No parking on the property\",\"Property has shared spaces\"]', '[]', 'yes', 'Ut est nulla placeat', 'yes', 'Sunt velit illum e', 'Ut quasi iste volupt', 'Iste ex temporibus a', 'Cillum consectetur d', 'Dolore dolor aperiam', 'Optio laboriosam a', '[\"Bell boy\",\"In-person\\/Self check-in\",\"Smart lock\"]', NULL, '[\"Non-refundable\",\"Partially refundable\",\"Long-term\\/Monthly staying policy\"]', '[\"Free Wi-Fi\",\"Hill View Or Sea View\",\"On-site restaurant\",\"Buffet Breakfast\",\"Bar\\/lounge\",\"Private Pool\",\"Fitness center & Spa services\",\"24-hour reception\",\"Parking facilities\",\"Airport shuttle service\"]', NULL, NULL, 'general', NULL, '[\"16.5 km from Himchori Waterfall\",\"0.25 km from Navy Jetty, from where Saint Martin bound ship sails\"]', '[]', 'restaurant', NULL, '[\"hotel_photos\\/kCd9ARqL3YUtf1uUot91JAbPYTU0nDfmZom7mwVH.jpg\"]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', NULL, NULL, 'submitted', 1, '2025-03-25 00:22:54', '2025-04-15 21:45:37'),
-(9, 7, 'Hotel Sea Palace', 'no', NULL, 'yes', 'Nisi amet qui in of', 'yes', 'Consequuntur adipisi', 'Alias ut inventore l', 'yes', 'Est ut consectetur', '20:00-22:00', '11:00 AM', 'no', '[\"Pay in advance\"]', '[null]', '[\"Potential noise during stays\",\"No parking on the property\",\"Weapon(s) on the property\",\"Offices in the building\"]', '[null]', 'no', NULL, 'yes', 'Beatae debitis cupid', 'Asperiores voluptate', 'Qui doloribus tempor', 'Dolor a inventore no', 'Eum possimus libero', 'Distinctio Magnam o', '[\"Building staff\",\"Housekeeping\",\"Bell boy\",\"Keypad\",\"Lockbox\"]', NULL, '[\"Flexible\",\"Non-refundable\",\"Long-term\\/Monthly staying policy\"]', '[\"Free Wi-Fi\",\"Hill View Or Sea View\",\"On-site restaurant\",\"Buffet Breakfast\",\"Bar\\/lounge\",\"Private Pool\",\"Fitness center & Spa services\",\"24-hour reception\",\"Parking facilities\",\"Airport shuttle service\"]', NULL, NULL, 'general', NULL, '[\"16.5 km from Himchori Waterfall\",\"0.25 km from Navy Jetty, from where Saint Martin bound ship sails\"]', '[null]', 'restaurant', NULL, '[\"hotel_photos\\/fH5FyGf47XvgErVovJRXnFMnDp1fZvCd98LOsr5i.jpg\"]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'draft', 1, '2025-03-26 21:59:49', '2025-04-15 04:02:35'),
-(12, 7, 'Aut dignissimos temp', 'no', NULL, 'no', NULL, 'no', NULL, 'Laborum Quia reicie', 'no', NULL, '00:00-02:00', '11:00 PM', 'no', '[\"Pay in advance\",\"Security money for keys\"]', '[]', '[\"Guests must climb stairs\",\"Potential noise during stays\",\"No parking on the property\",\"Property has shared spaces\",\"Limited essential amenities\",\"Weapon(s) on the property\",\"Commercial shops in the building\",\"Offices in the building\"]', '[]', 'yes', 'Nisi dolor culpa num', 'yes', 'Incididunt reprehend', 'Reprehenderit enim', 'Voluptas non omnis u', 'Enim quia quia recus', 'Nihil commodi volupt', 'Qui et atque natus N', '[\"Housekeeping\",\"Bell boy\",\"Smart lock\",\"Keypad\"]', '[\"saf sdaf\"]', '[\"Non-refundable\",\"Partially refundable\",\"Long-term\\/Monthly staying policy\"]', '[\"Free Wi-Fi\",\"Hill View Or Sea View\",\"On-site restaurant\",\"Buffet Breakfast\",\"Bar\\/lounge\",\"Private Pool\",\"Fitness center & Spa services\",\"24-hour reception\",\"Parking facilities\",\"Airport shuttle service\"]', NULL, NULL, 'room', NULL, '[\"16.5 km from Himchori Waterfall\",\"0.25 km from Navy Jetty, from where Saint Martin bound ship sails\"]', '[\"sf\",\"zzzzzzzzzz\"]', 'entertainment', NULL, '[\"hotel_photos\\/MhyGHY5ibdrl7TjUYJD9ozUcXsJ5ijC1zBIEUd5x.jpg\",\"hotel_photos\\/vbkVtmCQs0yOYWwD1LpkiMT1v1W2RCN2VGsZHlkM.jpg\"]', '[\"hotel_photos\\/sw8O6PvfFFAdO17e4pXJSkGkfyL15xmV8BtZmMaH.jpg\",\"hotel_photos\\/wbm8xBr4ZIQBxLK2SYaiWJft6KK967Ui6Va3DkhQ.jpg\"]', '[\"hotel_photos\\/STWN2UdGXTyWOA39SgcEpB83YWOmCHNurDHwTwLM.png\"]', '[\"hotel_photos\\/FcMkUsTTjUw3A0dwOVydsEXA04cmu18e7acWk0cv.jpg\"]', '[\"hotel_photos\\/wJXDyM0z9faI1jsutLQ3vAEGZmi55aGz1WOejRai.png\"]', '[\"hotel_photos\\/HxTXPeZ5wPDeXgQMW5PwACkwI1h4i0zNmBIBhIbw.jpg\"]', '[\"hotel_photos\\/U9YgfpW63E5kNNiqpGZ8fU6V9DgfV0JJPRBWtZHG.jpg\"]', '[\"hotel_photos\\/RLCa3GhPW1EwGnYd6oOrmApXadd2Qw0m78Evy7BW.jpg\"]', '[\"hotel_photos\\/JFruNNWFaCRRcsDIS1GAJTpkMBFkr1QdPb1RxlTO.jpg\"]', '[\"hotel_photos\\/QRYfEVYYLrTgs6FMx4B536aoTgm5z8mscXMvysnz.jpg\",\"hotel_photos\\/AkcXpf0IY4EAdPwBB9idvIi3VYL9cqGxw4A8VYlF.jpg\",\"hotel_photos\\/lilOkEyDp6B6NyBhuQV6u6oosM54GLOv097hkwWY.jpg\",\"hotel_photos\\/ZAX736d1CdLEHHWodHMDncgviRyXijGy0ReypdeO.jpg\",\"hotel_photos\\/OLL6ReASxxayhHhUe4G6z1LZnOGT5Jdm86kiGeCZ.jpg\",\"hotel_photos\\/gzTqyQkRWB8ooRyYambji3UfmUF17jMybom3RnO1.png\",\"hotel_photos\\/LajdmXI7EaG9JakpDwYGoPKCH0YzuzElCAJRXQlU.png\",\"hotel_photos\\/oUkufqRgB5B3IGgTNeGvnNuxY8CsQszgCe0lS4Xk.png\",\"hotel_photos\\/JqmeJYSqrUQmvJ4DZJZX5eRPXzfL3h7TDhGQvpIE.jpg\",\"hotel_photos\\/ZI8IXLzTDvvUecfTIogToNYQYURmwSHmBhEQdIH2.jpg\"]', '[\"hotel_photos\\/faFnwuL6uhOwVuhMkxdO9vAWpRh4OmoDr6sQblv9.png\"]', '[\"hotel_photos\\/Me5Asl4DXK5kjOGn4XCfHdlz54F3rkdLnb4m1P8R.png\"]', NULL, NULL, 'draft', 0, '2025-03-27 00:10:30', '2025-04-15 21:43:43'),
-(14, 7, 'Nobis ex aut nisi la', 'yes', 'Aperiam eligendi ven', 'no', NULL, 'yes', 'Sit doloremque exce', 'Quasi eu error quod', 'yes', 'Ullamco sequi natus', '16:00-18:00', '4:00 PM', 'yes', '[\"Security money for keys\"]', '[null]', '[\"Guests must climb stairs\",\"No lift\\/Elevator\",\"Pet(s) live on the property\",\"Property has shared spaces\",\"Limited essential amenities\",\"Weapon(s) on the property\",\"Commercial shops in the building\"]', '[null]', 'yes', 'Quibusdam officia qu', 'yes', 'Unde est necessitati', 'Aut fugit quis cons', 'Cupiditate autem lor', 'Consequatur modi no', 'Voluptas ab corporis', 'Dolor quisquam nihil', '[\"Building staff\",\"Bell boy\",\"In-person\\/Self check-in\",\"Smart lock\",\"Lockbox\"]', NULL, '[\"Flexible\",\"Partially refundable\"]', '[\"Hill View Or Sea View\",\"Bar\\/lounge\",\"Fitness center & Spa services\",\"24-hour reception\"]', NULL, NULL, 'technology', NULL, '[\"0.25 km from Navy Jetty, from where Saint Martin bound ship sails\"]', '[null]', 'transport', NULL, '[\"hotel_photos\\/kQfQT3fRzYtVczEADYBxC8HlqNywjgnR4khhcXnf.jpg\",\"hotel_photos\\/CWitqi4iutvwMILlaBzoSGQpOp5CSqnku4WMfp3b.jpg\"]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'submitted', 0, '2025-04-19 23:19:14', '2025-04-19 23:19:14'),
-(15, 7, 'Amet ad dolores ver', 'yes', 'Neque est eos atque', 'yes', 'Non placeat sed off', 'yes', 'Odit sed veniam mag', 'Inventore ut sed dol', 'yes', 'Dolorem qui cumque d', '22:00-00:00', '2:00 AM', 'yes', '[\"Pay in advance\",\"Security money for keys\"]', '[null]', '[\"Potential noise during stays\",\"Pet(s) live on the property\",\"Property has shared spaces\",\"Limited essential amenities\",\"Weapon(s) on the property\",\"Commercial shops in the building\",\"Offices in the building\"]', '[null]', 'no', NULL, 'yes', 'In mollitia eos do b', 'Nesciunt esse offic', 'Illo qui dolore maio', 'Ea est consequat La', 'Aute in mollit molli', 'Lorem officia minus', '[\"Building staff\",\"Bell boy\",\"In-person\\/Self check-in\",\"Smart lock\",\"Keypad\"]', NULL, '[\"Flexible\",\"Non-refundable\",\"Partially refundable\",\"Long-term\\/Monthly staying policy\"]', '[\"Hill View Or Sea View\",\"On-site restaurant\",\"Buffet Breakfast\",\"Private Pool\",\"Fitness center & Spa services\",\"24-hour reception\",\"Parking facilities\"]', '\"[\\\"hotel_photos\\\\\\/aXaYgICJVJv4KYJghCfRFdq87qOvMseabD5hrQ4S.jpg\\\",\\\"hotel_photos\\\\\\/cxed34Wii23E7YtMOz0rBI5lX2RhECMFvaPaGiiU.jpg\\\"]\"', NULL, 'safety', '[\"11\",\"22\"]', '[\"16.5 km from Himchori Waterfall\",\"3.2 km from Cox\'s Bazar Airport\"]', '[null]', 'transport', NULL, '[\"hotel_photos\\/1lLSzWss1lBMX8cAvuoUDYaSZuoPxtqY7p6jx8ai.jpg\"]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'submitted', 0, '2025-04-19 23:26:43', '2025-04-19 23:26:43'),
-(16, 7, 'Vero excepturi sunt', 'yes', 'Blanditiis molestias', 'no', 'Cillum tempore in n', 'no', 'Commodo animi quis', 'Dolor earum voluptat', 'no', 'Minus natus facilis', '08:00-10:00', '8:00 AM', 'no', '[\"Security money for keys\"]', '[\"Officia id quia nece\"]', '[\"No lift\\/Elevator\",\"Potential noise during stays\",\"No parking on the property\",\"Limited essential amenities\",\"Commercial shops in the building\",\"Offices in the building\"]', '[\"Adipisci autem dolor\"]', 'yes', 'Obcaecati nihil dict', 'no', NULL, 'Eum lorem est exerc', 'Commodi est et moll', 'Alias illum sequi e', 'Saepe asperiores tem', 'Ratione dolor eos as', '[\"Housekeeping\",\"Bell boy\",\"In-person\\/Self check-in\",\"Smart lock\",\"Keypad\"]', NULL, '[\"Flexible\",\"Non-refundable\",\"Partially refundable\"]', '[\"Free Wi-Fi\",\"On-site restaurant\",\"Buffet Breakfast\",\"Fitness center & Spa services\",\"24-hour reception\",\"Parking facilities\",\"Airport shuttle service\"]', '[\"hotel_photos\\/kGnsxLn4n8QowOVJTbS27X559M8vGRWllXsQhphQ.jpg\",\"hotel_photos\\/kV39NKJfBPCTZtkhIjNW6LmAnd3RbFPz3fv8pvrZ.jpg\",\"hotel_photos\\/8KQcndSDHkKlyRpS5J2VJK5gg7pDfS8wcJLig3px.jpg\"]', NULL, 'kitchen', '[\"111\",\"22\",\"33\"]', '[\"16.5 km from Himchori Waterfall\"]', '[]', 'entertainment', NULL, '[\"hotel_photos\\/g9YqZykgGacFLNLe9fu6F9jg5sX2QvJ6uFrBYJ9R.jpg\"]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[\"Hotel\",\"Apartment\",\"Resort\",\"Villa\",\"Guest House\"]', NULL, 'submitted', 0, '2025-04-19 23:31:30', '2025-04-20 00:28:30'),
-(17, 7, 'Quis aperiam dolor v', 'yes', 'Praesentium aut in d', 'yes', 'Aute ducimus dolor', 'no', NULL, 'Eum aliquid lorem cu', 'no', NULL, '12:00-14:00', '9:00 AM', 'yes', '[\"Pay in advance\"]', '[]', '[\"Guests must climb stairs\",\"Potential noise during stays\",\"No parking on the property\",\"Weapon(s) on the property\",\"Offices in the building\"]', '[]', 'no', NULL, 'no', NULL, 'Qui cupidatat reicie', 'Consectetur labore', 'Velit minus aliquam', 'Laborum impedit des', 'Voluptate doloremque', '[\"Bell boy\",\"In-person\\/Self check-in\",\"Smart lock\",\"Lockbox\"]', NULL, '[\"Flexible\",\"Long-term\\/Monthly staying policy\"]', '[\"Free Wi-Fi\",\"Hill View Or Sea View\",\"On-site restaurant\",\"Private Pool\",\"Fitness center & Spa services\",\"24-hour reception\",\"Airport shuttle service\"]', '[\"hotel_facilities\\/4wGCIpxeZa7WZZ1ri2xCmAoir9F6CQGWi1WeFPzj.jpg\"]', NULL, 'housekeeping', '[\"k\"]', '[\"16.5 km from Himchori Waterfall\"]', '[]', 'restaurant', NULL, '[\"hotel_photos\\/MMgmG8crN3zVf9EeVTMfarKUfaLA3CTXvbipuHGU.jpg\"]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', NULL, NULL, 'submitted', 0, '2025-04-20 00:29:54', '2025-04-20 03:10:15');
+INSERT INTO `hotels` (`id`, `vendor_id`, `description`, `pets_allowed`, `pets_details`, `events_allowed`, `events_details`, `smoking_allowed`, `smoking_details`, `quiet_hours`, `photography_allowed`, `photography_details`, `check_in_window`, `check_out_time`, `food_laundry`, `check_in_rules`, `custom_check_in_rules`, `property_info`, `custom_property_info`, `age_restriction`, `age_restriction_details`, `vlogging_allowed`, `vlogging_details`, `child_policy`, `extra_bed_policy`, `cooking_policy`, `directions`, `additional_policy`, `check_in_methods`, `custom_check_in_methods`, `cancellation_policies`, `facilities`, `custom_facilities_icon`, `custom_facility_icons`, `facility_category`, `custom_facilities`, `nearby_areas`, `hotel_facilities`, `custom_nearby_areas`, `nearby_area_category`, `custom_nearby_area_details`, `kitchen_photos`, `washroom_photos`, `parking_lot_photos`, `entrance_gate_photos`, `lift_stairs_photos`, `spa_photos`, `bar_photos`, `transport_photos`, `rooftop_photos`, `gym_photos`, `security_photos`, `amenities_photos`, `property_types`, `apartments`, `status`, `approve`, `created_at`, `updated_at`) VALUES
+(46, 7, 'Alias recusandae Do', 'no', NULL, 'no', NULL, 'yes', 'Maiores vel est occa', 'Quisquam aut quis en', 'no', NULL, '04:00-06:00', '9:00 AM', 'no', '\"[\\\"Pay in advance\\\",\\\"Security money for keys\\\",\\\"Rentals\\\",\\\"Et quos incidunt es\\\"]\"', '[\"Et quos incidunt es\"]', '[\"Guests must climb stairs\",\"Pet(s) live on the property\",\"No parking on the property\",\"Property has shared spaces\",\"Weapon(s) on the property\",\"Commercial shops in the building\",\"Offices in the building\"]', '[\"Corporis sit sunt do\"]', 'no', NULL, 'no', NULL, 'Quasi praesentium au', 'Porro qui voluptatib', 'Distinctio Est offi', 'A sint et rerum aut', 'Sed commodi cum prov', '[\"Building staff\",\"Housekeeping\",\"Bell boy\"]', NULL, NULL, '[\"Free Wi-Fi\",\"Hill View Or Sea View\",\"Private Pool\",\"Fitness center & Spa services\",\"24-hour reception\"]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '\"[\\\"hotel_photos\\\\\\/HTxIbNkksTwel67jAGGO2bo3LBbxG8ULaFI8iShM.jpg\\\",\\\"hotel_photos\\\\\\/hpGzNwNieoikJciWlyDr7CuBe620QGGCof3dLjkd.jpg\\\"]\"', '\"[\\\"hotel_photos\\\\\\/cpOx7YoIsD3P6hbdOhJogFw88q1o3NXs45MGITlk.jpg\\\",\\\"hotel_photos\\\\\\/F0RAbIlKwhmtRo5iF1fQUeVrZLQJ5OM2tVyJ5Pb7.jpg\\\",\\\"hotel_photos\\\\\\/mi0r9Zf5ML19GEiZwTquKSbFROdEqKp9yTnRZHiz.jpg\\\"]\"', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'submitted', 0, '2025-04-25 23:10:47', '2025-04-25 23:10:47'),
+(47, 7, 'Iste molestiae et vo', 'no', NULL, 'yes', 'Accusantium aliqua', 'no', NULL, 'Quia aut sapiente as', 'yes', 'Impedit nulla omnis', '18:00-20:00', '4:00 PM', 'no', '\"[\\\"Quia facere doloremq\\\"]\"', '[\"Quia facere doloremq\"]', '[\"Guests must climb stairs\",\"No lift\\/Elevator\",\"Pet(s) live on the property\",\"No parking on the property\",\"Property has shared spaces\",\"Limited essential amenities\",\"Weapon(s) on the property\",\"Offices in the building\"]', '[\"Minus velit voluptat\"]', 'no', NULL, 'no', NULL, 'In qui unde ea ut as', 'Optio quis rerum ve', 'Autem voluptatum pos', 'Quidem fugit volupt', 'Inventore sed quia e', '[\"In-person\\/Self check-in\",\"Keypad\"]', NULL, '[\"Flexible\",\"Non-refundable\",\"Partially refundable\",\"Long-term\\/Monthly staying policy\"]', '[\"Free Wi-Fi\",\"On-site restaurant\",\"Buffet Breakfast\",\"Bar\\/lounge\"]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '\"[\\\"hotel_photos\\\\\\/mhQOypSN6YIfJe34ZiSZdvTb62EZu3yLpVzdIA3w.jpg\\\"]\"', '\"[\\\"hotel_photos\\\\\\/J9raPNpgtPrFpvhmtFWYrBLUSBZCStT3z9K8pe44.jpg\\\"]\"', '\"[\\\"hotel_photos\\\\\\/LI0FauRQ1b0VFlGSnk3ohd0Kaexb1Nfn27kz7nO0.jpg\\\"]\"', '\"[\\\"hotel_photos\\\\\\/vifjqWP7nOOZSKGJ5iDSZVkHGaIZKkNWrZAtZCv6.jpg\\\"]\"', '\"[\\\"hotel_photos\\\\\\/Wl3TuWE94NGlgADQ2fatN8ctJITb4UGjEw85Nkg8.png\\\"]\"', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'submitted', 0, '2025-04-25 23:12:19', '2025-04-25 23:12:19'),
+(48, 7, 'Tempora voluptatibus', 'yes', 'Officia id incididu', 'yes', 'Facere numquam volup', 'yes', 'Earum temporibus tot', 'Aut rerum sed nostru', 'yes', 'Enim quam aliquip iu', '18:00-20:00', '10:00 AM', 'yes', '\"[\\\"Pay in advance\\\",\\\"Security money for keys\\\",\\\"Tempor consequatur\\\"]\"', '[\"Tempor consequatur\"]', '[\"Guests must climb stairs\",\"Pet(s) live on the property\",\"Weapon(s) on the property\"]', '[\"Dolor eos accusamus\",\"qwe\",\"qe\",null]', 'yes', 'Asperiores doloribus', 'no', NULL, 'Labore dolorem ea co', 'Quaerat nihil quia n', 'Reiciendis qui dolor', 'Architecto non perfe', 'Quis quia non conseq', '[\"Housekeeping\",\"In-person\\/Self check-in\",\"Keypad\",\"Lockbox\"]', '[\"123123\"]', '[\"Non-refundable\",\"Partially refundable\"]', '[\"Free Wi-Fi\"]', '\"[\\\"hotel_photos\\\\\\/hoyAozznjCq5ChuW69nh6qhlpPVavr19f3PVycSl.jpg\\\"]\"', NULL, NULL, '[\"fdgf\"]', '{\"transport___airport\":{\"name\":[\"t1\"],\"distance\":[\"d1\"]},\"entertainment___attraction_point\":{\"name\":[\"sadfasdf\"],\"distance\":[\"asdfasdfasd\"]}}', '\"[{\\\"category\\\":\\\"general_services\\\",\\\"name\\\":\\\"werwer\\\"},{\\\"category\\\":\\\"general_services\\\",\\\"name\\\":\\\"sdfsdf\\\"}]\"', '\"[\\\"123123\\\",\\\"22222\\\"]\"', NULL, NULL, '\"[\\\"hotel_photos\\\\\\/nH5YJUEKLSi2MyfqF8p5Tj73YQeVvaDBovLLtYSY.jpg\\\",\\\"hotel_photos\\\\\\/oZ1DuBRgy6wdUOqx5WoLTq0ukZ0FHXKHFF1D5Vt2.jpg\\\"]\"', '\"[\\\"hotel_photos\\\\\\/t3M0HfEWeFk5ruQqDdJTTZLiHBCH0BQcvIa6YgCv.jpg\\\",\\\"hotel_photos\\\\\\/qb8kyisAJU5tfZZQiUKGsNdjK2tgdm568xWgpJEQ.jpg\\\"]\"', '\"[\\\"hotel_photos\\\\\\/YjwFPC4E51atCAgddSmwJf09zqUOcGyF10NkHcN7.jpg\\\",\\\"hotel_photos\\\\\\/WrXsw2CdL6yY3KvouFzzQc5nkuvoyUl8s94o8pGV.jpg\\\"]\"', '\"[\\\"hotel_photos\\\\\\/7gWMo8iXMKpTRvT8vMioIgZCw7ozRF4WEADYBDgW.jpg\\\"]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', NULL, NULL, 'submitted', 1, '2025-04-25 23:23:34', '2025-04-27 23:24:57');
 
 -- --------------------------------------------------------
 
@@ -398,7 +411,23 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (33, '2025_03_23_084227_create_hotels_table', 11),
 (34, '2025_03_25_040931_add_missing_columns_to_hotels_table', 12),
 (35, '2025_04_07_062342_create_rooms_table', 13),
-(36, '2025_04_07_082752_create_room_photos_table', 14);
+(36, '2025_04_07_082752_create_room_photos_table', 14),
+(37, '2025_04_23_063659_create_nearby_areas_table', 15);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `nearby_areas`
+--
+
+CREATE TABLE `nearby_areas` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `category` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `distance` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -596,22 +625,6 @@ CREATE TABLE `rooms` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `rooms`
---
-
-INSERT INTO `rooms` (`id`, `hotel_id`, `name`, `number`, `floor_number`, `price_per_night`, `weekend_price`, `holiday_price`, `discount_type`, `discount_value`, `total_persons`, `description`, `size`, `total_rooms`, `total_washrooms`, `total_beds`, `wifi_details`, `appliances`, `furniture`, `amenities`, `cancellation_policy`, `is_active`, `status`, `created_at`, `updated_at`) VALUES
-(13, 7, 'Germane Hopkins', '3833', 515, '676.00', '840.00', '978.00', 'percentage', NULL, 0, 'Ut neque harum volup', 84, 0, 0, 0, 'Labore exercitatione', '\"[\\\"AC\\\",\\\"Fan\\\",\\\"Light\\\",\\\"Water heater\\\\\\/Geyser\\\",\\\"Crockeries\\\",\\\"Room Heater\\\",\\\"Hair Dryer\\\"]\"', '\"[\\\"Dining Table with Chair\\\",\\\"Sofa\\\\\\/Couch\\\",\\\"Tea Table\\\",\\\"Clothing Cabinet\\\",\\\"Iron Stand\\\",\\\"Locker\\\\\\/Safe\\\"]\"', '\"[\\\"Shampoo\\\",\\\"Towel\\\",\\\"Water bottle\\\",\\\"Fruit basket\\\",\\\"Complimentary drinks\\\"]\"', NULL, 0, 'published', '2025-04-08 04:11:47', '2025-04-13 00:54:50'),
-(15, 7, 'Lunea Carr', '675', 240, '750.00', '33.00', '225.00', 'percentage', NULL, 0, 'Vel adipisci id qui', 48, 0, 0, 0, 'Nisi vitae est aut e', '\"[\\\"Hair Dryer\\\"]\"', '\"[\\\"Sofa\\\\\\/Couch\\\",\\\"Tea Table\\\",\\\"Bedside Table\\\",\\\"Locker\\\\\\/Safe\\\"]\"', '\"[\\\"Tissue\\\",\\\"Shampoo\\\",\\\"Free laundry\\\",\\\"Complimentary drinks\\\",\\\"Add\\\\\\/type Manually\\\"]\"', NULL, 0, 'published', '2025-04-08 04:51:30', '2025-04-08 04:51:30'),
-(16, 7, 'Merrill Williams', '394', 820, '30.00', '227.00', '637.00', 'percentage', NULL, 0, 'Vel illum totam ven', 21, 0, 0, 0, 'Modi qui nisi ea min', '\"[\\\"AC\\\",\\\"TV\\\",\\\"Fridge\\\",\\\"Microwave\\\",\\\"Fan\\\",\\\"Lamp\\\",\\\"Room Heater\\\",\\\"1111\\\",\\\"333\\\"]\"', '\"[\\\"Bed\\\",\\\"Tea Table\\\",\\\"Bedside Table\\\",\\\"Clothes Drying Hanger\\\",\\\"Iron Stand\\\"]\"', '\"[\\\"Soap\\\",\\\"Shampoo\\\",\\\"Toothbrush\\\",\\\"Towel\\\",\\\"Water bottle\\\",\\\"Complimentary drinks\\\",\\\"Buffet breakfast\\\"]\"', NULL, 0, 'drafted', '2025-04-10 00:32:50', '2025-04-10 00:32:50'),
-(17, 7, 'Beverly Pratt', '772', 364, '692.00', '975.00', '723.00', 'amount', NULL, 0, 'Est dolor illum ess', 30, 0, 0, 0, 'Provident irure et', '\"[\\\"AC\\\",\\\"TV\\\",\\\"Fridge\\\",\\\"Fan\\\",\\\"Lamp\\\",\\\"Light\\\",\\\"Water heater\\\\\\/Geyser\\\",\\\"WiFi Router\\\",\\\"Gas Stove\\\",\\\"Electric Kettle\\\",\\\"Room Heater\\\",\\\"11\\\",\\\"22\\\"]\"', '\"[\\\"Bed\\\",\\\"Dining Table with Chair\\\",\\\"Tea Table\\\",\\\"Bedside Table\\\",\\\"Shoe Rack\\\",\\\"Iron Stand\\\",\\\"333\\\",\\\"44\\\"]\"', '\"[\\\"Soap\\\",\\\"Tissue\\\",\\\"Toothbrush\\\",\\\"Towel\\\",\\\"Air freshener\\\",\\\"Fruit basket\\\",\\\"Complimentary drinks\\\",\\\"Buffet breakfast\\\"]\"', NULL, 0, 'published', '2025-04-10 01:01:00', '2025-04-10 01:01:00'),
-(19, 7, 'Winter Stone', '390', 873, '942.00', '371.00', '437.00', 'amount', NULL, 0, 'Ut occaecat quia eni', 97, 0, 0, 0, 'Dignissimos vel labo', '\"[\\\"AC\\\",\\\"Microwave\\\",\\\"Fan\\\",\\\"Lamp\\\",\\\"Light\\\",\\\"Water heater\\\\\\/Geyser\\\",\\\"WiFi Router\\\",\\\"Crockeries\\\",\\\"Electric Kettle\\\"]\"', '\"[\\\"Sofa\\\\\\/Couch\\\",\\\"Tea Table\\\",\\\"Shoe Rack\\\",\\\"Clothing Cabinet\\\",\\\"Clothes Drying Hanger\\\",\\\"Iron Stand\\\"]\"', '\"[\\\"Soap\\\",\\\"Tissue\\\",\\\"Shampoo\\\",\\\"Toothbrush\\\",\\\"Towel\\\",\\\"Air freshener\\\",\\\"Fruit basket\\\",\\\"Add\\\\\\/type Manually\\\"]\"', NULL, 0, 'published', '2025-04-13 01:37:07', '2025-04-13 01:37:07'),
-(20, 7, 'Madeson Fletcher', '639', 975, '79.00', '633.00', '599.00', 'percentage', NULL, 0, 'Est dolorem consequu', 7, 0, 0, 0, 'Excepteur quidem sun', '\"[\\\"AC\\\",\\\"Fan\\\",\\\"Lamp\\\",\\\"WiFi Router\\\",\\\"Crockeries\\\",\\\"Room Heater\\\",\\\"Hair Dryer\\\"]\"', '\"[\\\"Dining Table with Chair\\\",\\\"Sofa\\\\\\/Couch\\\",\\\"Tea Table\\\",\\\"Shoe Rack\\\",\\\"Clothes Drying Hanger\\\"]\"', '\"[\\\"Soap\\\",\\\"Tissue\\\",\\\"Water bottle\\\",\\\"Free laundry\\\",\\\"Air freshener\\\",\\\"Fruit basket\\\"]\"', '[\"partially_refundable\"]', 0, 'published', '2025-04-13 02:23:16', '2025-04-13 02:23:16'),
-(21, 7, 'Kevyn Mcbride', '966', 202, '623.00', '938.00', '56.00', 'amount', NULL, 0, 'Sint est duis delec', 14, 0, 0, 0, 'Aute cupidatat ratio', '\"[\\\"AC\\\",\\\"TV\\\",\\\"Fridge\\\",\\\"Lamp\\\",\\\"Crockeries\\\",\\\"Gas Stove\\\"]\"', '\"[\\\"Bed\\\",\\\"Dining Table with Chair\\\",\\\"Sofa\\\\\\/Couch\\\",\\\"Tea Table\\\",\\\"Bedside Table\\\",\\\"Shoe Rack\\\",\\\"Clothes Drying Hanger\\\",\\\"Iron Stand\\\"]\"', '\"[\\\"Tissue\\\",\\\"Shampoo\\\",\\\"Water bottle\\\",\\\"Air freshener\\\",\\\"Fruit basket\\\",\\\"Complimentary drinks\\\",\\\"Buffet breakfast\\\"]\"', '[\"non_refundable\",\"partially_refundable\"]', 1, 'published', '2025-04-13 03:54:22', '2025-04-13 03:54:22'),
-(22, 7, 'Nash Stephenson', '573', 919, '150.00', '604.00', '950.00', 'percentage', NULL, 0, 'Beatae cillum nostru', 2, 0, 0, 0, 'Vel et suscipit eum', '\"[\\\"AC\\\",\\\"TV\\\",\\\"Lamp\\\",\\\"Light\\\",\\\"Water heater\\\\\\/Geyser\\\",\\\"Crockeries\\\",\\\"Gas Stove\\\",\\\"Electric Kettle\\\"]\"', '\"[\\\"Bed\\\",\\\"Dining Table with Chair\\\",\\\"Bedside Table\\\",\\\"Shoe Rack\\\",\\\"Clothing Cabinet\\\",\\\"Clothes Drying Hanger\\\"]\"', '\"[\\\"Soap\\\",\\\"Shampoo\\\",\\\"Fruit basket\\\",\\\"Buffet breakfast\\\",\\\"Add\\\\\\/type Manually\\\"]\"', '[\"flexible\",\"long_term\"]', 1, 'published', '2025-04-13 03:59:24', '2025-04-13 03:59:24'),
-(23, 7, 'Bianca Rosee', '8477', 638, '978.00', '630.00', '661.00', 'percentage', NULL, 0, 'Voluptatem quia vol', 11, 0, 0, 0, 'Fugit numquam maior', '\"[\\\"Fan\\\",\\\"Light\\\",\\\"Crockeries\\\"]\"', '\"[\\\"Dining Table with Chair\\\",\\\"Sofa\\\\\\/Couch\\\",\\\"Shoe Rack\\\"]\"', '\"[\\\"Soap\\\",\\\"Toothbrush\\\",\\\"Water bottle\\\",\\\"Free laundry\\\",\\\"Fruit basket\\\",\\\"Complimentary drinks\\\",\\\"Add\\\\\\/type Manually\\\"]\"', '[\"non_refundable\",\"long_term\"]', 0, 'published', '2025-04-13 04:04:07', '2025-04-14 22:39:14'),
-(27, 8, 'Kai Gonzalez', '130', 173, '761.00', '649.00', '652.00', 'amount', NULL, 0, 'Enim earum excepteur', 50, 0, 0, 0, 'Provident qui occae', '\"[\\\"AC\\\",\\\"TV\\\",\\\"Microwave\\\",\\\"Light\\\",\\\"Water heater\\\\\\/Geyser\\\",\\\"Gas Stove\\\",\\\"Hair Dryer\\\"]\"', '\"[\\\"Dining Table with Chair\\\",\\\"Tea Table\\\",\\\"Shoe Rack\\\",\\\"Clothing Cabinet\\\",\\\"Iron Stand\\\"]\"', '\"[\\\"Water bottle\\\",\\\"Fruit basket\\\",\\\"Complimentary drinks\\\"]\"', '[\"non_refundable\"]', 0, 'published', '2025-04-14 23:17:35', '2025-04-15 22:38:18');
-
 -- --------------------------------------------------------
 
 --
@@ -626,28 +639,6 @@ CREATE TABLE `room_photos` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `room_photos`
---
-
-INSERT INTO `room_photos` (`id`, `room_id`, `category`, `photo_path`, `created_at`, `updated_at`) VALUES
-(6, 13, 'kitchen', 'room_photos/sOPlsjoRpO664LNZtCqeyWxx4AIBzYDUVpYqJX2h.jpg', '2025-04-08 04:11:48', '2025-04-08 04:11:48'),
-(7, 13, 'washroom', 'room_photos/aAkLMQmW1SyuqntHtjjkn4mZKm5ULp9oeajMLGam.jpg', '2025-04-08 04:11:48', '2025-04-08 04:11:48'),
-(12, 15, 'kitchen', 'room_photos/QVfjMGTz4ajsg6xob6HCqB2lIaYsQRBWBu7nmRCH.jpg', '2025-04-08 04:51:30', '2025-04-08 04:51:30'),
-(13, 16, 'kitchen', 'room_photos/g2w7SZGHj58j2zstFGvKOUfmtjsGKoF39I72FKh2.jpg', '2025-04-10 00:32:51', '2025-04-10 00:32:51'),
-(14, 16, 'kitchen', 'room_photos/RxMsPAQh71MvGSc3TH3sKFbzFX7AauFoXafGcKhd.jpg', '2025-04-10 00:32:51', '2025-04-10 00:32:51'),
-(17, 13, 'parking', 'room_photos/bAKVzElIqleIECpCkGNgLI77vcuwYplMBgCIO0kN.jpg', '2025-04-13 00:54:50', '2025-04-13 00:54:50'),
-(18, 13, 'washroom', 'room_photos/IisG6ab9lrJOx5JTAScN1VQIVb6h2FwDZqkzA8Yc.jpg', '2025-04-13 01:13:19', '2025-04-13 01:13:19'),
-(19, 13, 'washroom', 'room_photos/XCJyzbPPQjR1n3n5U57SEVLNojdHQJ2KwOrFkyZ7.jpg', '2025-04-13 01:13:19', '2025-04-13 01:13:19'),
-(21, 19, 'kitchen', 'room_photos/XzSaJvLYvjFL8xvg0CXW3hT8pNCGcc1Abu4mXVr6.jpg', '2025-04-13 01:37:07', '2025-04-13 01:37:07'),
-(22, 20, 'kitchen', 'room_photos/uKaLuUzyndRtT6IHxjwGyiHrsALF11JNnKrumKrC.jpg', '2025-04-13 02:23:16', '2025-04-13 02:23:16'),
-(31, 23, 'kitchen', 'room_photos/ABwPLIj8MmqMu0kvbGezdRlvRHgMaXyB0OO8ziuz.jpg', '2025-04-14 22:38:24', '2025-04-14 22:38:24'),
-(33, 23, 'kitchen', 'room_photos/w5iubbkCObPkh9N12DRveEq5UHhKiwHhrTz9Qz6B.jpg', '2025-04-14 22:38:24', '2025-04-14 22:38:24'),
-(34, 27, 'kitchen', 'room_photos/WlnonlQCeBqK4bZkYjnNczfBl7J3LfD7YZZ3uHPa.jpg', '2025-04-14 23:17:36', '2025-04-14 23:17:36'),
-(35, 27, 'washroom', 'room_photos/THJ2yKIWy0VPcTtVzhDyY0300VQdxinK3TywqNKv.jpg', '2025-04-14 23:17:36', '2025-04-14 23:17:36'),
-(38, 27, 'parking', 'room_photos/A9TgAZhdy118FyMZi34gAnR3A21y9YQRVGYvc7jM.jpg', '2025-04-14 23:23:51', '2025-04-14 23:23:51'),
-(39, 27, 'entrance', 'room_photos/zcEeFfGnaql85GJpse9GsAsBQfCZZpy5lRpEOSRZ.jpg', '2025-04-14 23:23:51', '2025-04-14 23:23:51');
 
 -- --------------------------------------------------------
 
@@ -822,6 +813,12 @@ ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `nearby_areas`
+--
+ALTER TABLE `nearby_areas`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `owners`
 --
 ALTER TABLE `owners`
@@ -902,7 +899,7 @@ ALTER TABLE `vendors`
 -- AUTO_INCREMENT for table `activity_logs`
 --
 ALTER TABLE `activity_logs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=109;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=126;
 
 --
 -- AUTO_INCREMENT for table `bankings`
@@ -926,7 +923,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `hotels`
 --
 ALTER TABLE `hotels`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `hotel_settings`
@@ -944,7 +941,13 @@ ALTER TABLE `menus`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+
+--
+-- AUTO_INCREMENT for table `nearby_areas`
+--
+ALTER TABLE `nearby_areas`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `owners`

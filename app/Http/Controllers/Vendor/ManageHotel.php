@@ -166,6 +166,51 @@ class ManageHotel extends Controller
         return view('auth.vendor.hotel.edit', compact('hotel','hotelFacilities'));
     }
 
+    public function partOne(Hotel $hotel)
+    {
+        if ($hotel->vendor_id !== auth()->user()->id) {
+            return redirect()->route('vendor-admin.hotel.index')->with('error', 'Unauthorized access.');
+        }
+        $hotelFacilities = json_decode($hotel->hotel_facilities, true);
+        return view('auth.vendor.hotel.partOne', compact('hotel','hotelFacilities'));
+    }
+
+    public function partOneOne(Hotel $hotel)
+    {
+        if ($hotel->vendor_id !== auth()->user()->id) {
+            return redirect()->route('vendor-admin.hotel.index')->with('error', 'Unauthorized access.');
+        }
+        $hotelFacilities = json_decode($hotel->hotel_facilities, true);
+        return view('auth.vendor.hotel.partOneOne', compact('hotel','hotelFacilities'));
+    }
+
+    public function partTwo(Hotel $hotel)
+    {
+        if ($hotel->vendor_id !== auth()->user()->id) {
+            return redirect()->route('vendor-admin.hotel.index')->with('error', 'Unauthorized access.');
+        }
+        $hotelFacilities = json_decode($hotel->hotel_facilities, true);
+        return view('auth.vendor.hotel.partTwo', compact('hotel','hotelFacilities'));
+    }
+
+    public function partThree(Hotel $hotel)
+    {
+        if ($hotel->vendor_id !== auth()->user()->id) {
+            return redirect()->route('vendor-admin.hotel.index')->with('error', 'Unauthorized access.');
+        }
+        $hotelFacilities = json_decode($hotel->hotel_facilities, true);
+        return view('auth.vendor.hotel.partThree', compact('hotel','hotelFacilities'));
+    }
+
+    public function partFour(Hotel $hotel)
+    {
+        if ($hotel->vendor_id !== auth()->user()->id) {
+            return redirect()->route('vendor-admin.hotel.index')->with('error', 'Unauthorized access.');
+        }
+        $hotelFacilities = json_decode($hotel->hotel_facilities, true);
+        return view('auth.vendor.hotel.partFour', compact('hotel','hotelFacilities'));
+    }
+
     public function show(Hotel $hotel)
     {
         if ($hotel->vendor_id !== auth()->user()->id) {

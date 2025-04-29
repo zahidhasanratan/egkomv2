@@ -8,7 +8,7 @@
                     <div class="nk-block-head nk-block-head-sm">
                         <div class="nk-block-between">
                             <div class="nk-block-head-content">
-                                <h3 class="nk-block-title page-title">Edit Hotel / Property</h3>
+                                <h3 class="nk-block-title page-title">View Hotel / Property</h3>
                             </div>
                         </div>
                     </div>
@@ -333,6 +333,12 @@
                                                 </div>
                                             </div>
 
+                                            <div class="row mt-4">
+                                                <div class="col-12 text-center" style="margin-bottom:15px">
+                                                    <a href="{{ route('vendor-admin.hotel.editOneOne', $hotel) }}" class="btn btn-edit">Edit Details</a>
+                                                </div>
+                                            </div>
+
                                             <!-- Arrival Guideline Information -->
                                             <div class="card">
                                                 <div class="card-header">
@@ -442,7 +448,7 @@
                                             <!-- Edit Button -->
                                             <div class="row mt-4">
                                                 <div class="col-12 text-center">
-                                                    <a href="" class="btn btn-edit">Edit Details</a>
+                                                    <a href="{{ route('vendor-admin.hotel.editPone', $hotel) }}" class="btn btn-edit">Edit Details</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -640,7 +646,7 @@
                                             <!-- Edit Button -->
                                             <div class="row mt-4">
                                                 <div class="col-12 text-center">
-                                                    <a href="" class="btn btn-edit">Edit Details</a>
+                                                    <a href="{{ route('vendor-admin.hotel.editPtwo', $hotel) }}" class="btn btn-edit">Edit Details</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -827,7 +833,7 @@
                                             <!-- Edit Button -->
                                             <div class="row mt-4">
                                                 <div class="col-12 text-center">
-                                                    <a href="" class="btn btn-edit">Edit Details</a>
+                                                    <a href="{{ route('vendor-admin.hotel.editPfour', $hotel) }}" class="btn btn-edit">Edit Details</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -965,7 +971,7 @@
                                             <!-- Edit Button -->
                                             <div class="row mt-4">
                                                 <div class="col-12 text-center">
-                                                    <a href="" class="btn btn-edit">Edit Details</a>
+                                                    <a href="{{ route('vendor-admin.hotel.editPthree', $hotel) }}" class="btn btn-edit">Edit Details</a>
                                                 </div>
                                             </div>
                                         </div>

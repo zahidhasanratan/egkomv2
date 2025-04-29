@@ -81,12 +81,12 @@
                                                                                 <span>View</span>
                                                                             </a>
                                                                         </li>
-                                                                        <li>
-                                                                            <a href="{{ route('vendor-admin.hotel.edit', $hotel) }}">
-                                                                                <em class="icon ni ni-edit"></em>
-                                                                                <span>Edit</span>
-                                                                            </a>
-                                                                        </li>
+{{--                                                                        <li>--}}
+{{--                                                                            <a href="{{ route('vendor-admin.hotel.edit', $hotel) }}">--}}
+{{--                                                                                <em class="icon ni ni-edit"></em>--}}
+{{--                                                                                <span>Edit</span>--}}
+{{--                                                                            </a>--}}
+{{--                                                                        </li>--}}
                                                                         <li>
 {{--                                                                            <form action="{{ route('vendor-admin.hotel.destroy', $hotel) }}" method="POST" style="display:inline;">--}}
 {{--                                                                                @csrf--}}
