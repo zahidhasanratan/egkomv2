@@ -1,6 +1,8 @@
 @extends('auth.layout.vendor_admin_layout')
 
 @section('mainbody')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <div class="nk-content ">
         <div class="container-fluid">
             <div class="nk-content-inner">
@@ -216,9 +218,15 @@
                                         <div class="tab-pane active" id="tabItem3" style="padding: 20px;">
                                             <!-- Hotel / Property Description -->
                                             <div class="card">
-                                                <div class="card-header">
+                                                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
                                                     <h3 class="section-title">Hotel / Property Description</h3>
+
+                                                    <a href="{{ route('vendor-admin.hotel.editOne1', $hotel) }}" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
                                                 </div>
+
+
                                                 <div class="card-body">
                                                     <div class="row gy-4">
                                                         <div class="col-md-12">
@@ -231,8 +239,13 @@
 
                                             <!-- Property Policy And Rules -->
                                             <div class="card">
-                                                <div class="card-header">
+
+                                                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
                                                     <h3 class="section-title">Property Policy and Rules</h3>
+
+                                                    <a href="{{ route('vendor-admin.hotel.editOne2', $hotel) }}" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
                                                 </div>
                                                 <div class="card-body">
                                                     <div class="row gy-4">
@@ -308,8 +321,12 @@
 
                                             <!-- Property Information -->
                                             <div class="card">
-                                                <div class="card-header">
+
+                                                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
                                                     <h3 class="section-title">Property Info</h3>
+                                                    <a href="{{ route('vendor-admin.hotel.editOne3', $hotel) }}" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
                                                 </div>
                                                 <div class="card-body">
                                                     @php
@@ -333,16 +350,15 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row mt-4">
-                                                <div class="col-12 text-center" style="margin-bottom:15px">
-                                                    <a href="{{ route('vendor-admin.hotel.editOneOne', $hotel) }}" class="btn btn-edit">Edit Details</a>
-                                                </div>
-                                            </div>
 
                                             <!-- Arrival Guideline Information -->
                                             <div class="card">
-                                                <div class="card-header">
+
+                                                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
                                                     <h3 class="section-title">Arrival Guides</h3>
+                                                    <a href="{{ route('vendor-admin.hotel.editOne4', $hotel) }}" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
                                                 </div>
                                                 <div class="card-body">
                                                     <div class="row gy-4">
@@ -388,9 +404,13 @@
 
                                             <!-- Check in method -->
                                             <div class="card">
-                                                <div class="card-header">
+                                                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
                                                     <h3 class="section-title">Check-in Method</h3>
+                                                    <a href="{{ route('vendor-admin.hotel.editOne5', $hotel) }}" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
                                                 </div>
+
                                                 <div class="card-body">
                                                     @php
                                                         $checkInMethods = old('check_in_methods', $hotel->check_in_methods ?? []);
@@ -415,8 +435,12 @@
 
                                             <!-- Cancellation Policies -->
                                             <div class="card">
-                                                <div class="card-header">
+
+                                                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
                                                     <h3 class="section-title">Cancellation Policies</h3>
+                                                    <a href="{{ route('vendor-admin.hotel.editOneOne', $hotel) }}" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
                                                 </div>
                                                 <div class="card-body">
                                                     @php
@@ -550,8 +574,12 @@
                                         <div class="tab-pane" id="tabItem4" style="padding: 20px;">
                                             <!-- Most Popular Facilities -->
                                             <div class="card">
-                                                <div class="card-header">
+
+                                                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
                                                     <h3 class="section-title">Most Popular Facilities</h3>
+                                                    <a href="{{ route('vendor-admin.hotel.editPtwo', $hotel) }}" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
                                                 </div>
                                                 <div class="card-body">
                                                     @php
@@ -601,9 +629,14 @@
 
                                             <!-- Hotel Facilities Categories -->
                                             <div class="card">
-                                                <div class="card-header">
+                                                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
                                                     <h3 class="section-title">Hotel Facilities Categories</h3>
+                                                    <a href="{{ route('vendor-admin.hotel.editPtwo', $hotel) }}" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
                                                 </div>
+
+
                                                 <div class="card-body">
 
                                                     @php
@@ -643,12 +676,7 @@
                                                 </div>
                                             </div>
 
-                                            <!-- Edit Button -->
-                                            <div class="row mt-4">
-                                                <div class="col-12 text-center">
-                                                    <a href="{{ route('vendor-admin.hotel.editPtwo', $hotel) }}" class="btn btn-edit">Edit Details</a>
-                                                </div>
-                                            </div>
+
                                         </div>
 
                                         <style>
@@ -776,8 +804,12 @@
                                         <div class="tab-pane" id="tabItem1" style="padding: 20px;">
                                             <!-- Most Popular Nearby Area -->
                                             <div class="card">
-                                                <div class="card-header">
+
+                                                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
                                                     <h3 class="section-title">Most Popular Nearby Areas</h3>
+                                                    <a href="{{ route('vendor-admin.hotel.editPfour', $hotel) }}" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
                                                 </div>
                                                 <div class="card-body">
                                                     @php
@@ -799,8 +831,12 @@
 
                                             <!-- Nearby Area Categories -->
                                             <div class="card">
-                                                <div class="card-header">
+
+                                                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
                                                     <h3 class="section-title">Nearby Area Categories</h3>
+                                                    <a href="{{ route('vendor-admin.hotel.editPthree', $hotel) }}" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
                                                 </div>
                                                 <div class="card-body">
                                                     @php
@@ -830,12 +866,7 @@
                                                 </div>
                                             </div>
 
-                                            <!-- Edit Button -->
-                                            <div class="row mt-4">
-                                                <div class="col-12 text-center">
-                                                    <a href="{{ route('vendor-admin.hotel.editPfour', $hotel) }}" class="btn btn-edit">Edit Details</a>
-                                                </div>
-                                            </div>
+
                                         </div>
 
 
@@ -909,8 +940,12 @@
                                         <div class="tab-pane" id="Photos" style="padding: 20px;">
                                             <!-- Hotel Photos -->
                                             <div class="card">
-                                                <div class="card-header">
+
+                                                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
                                                     <h3 class="section-title">Hotel Photos</h3>
+                                                    <a href="{{ route('vendor-admin.hotel.editPthree', $hotel) }}" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
                                                 </div>
                                                 <div class="card-body">
                                                     <div class="row gy-4">
@@ -969,11 +1004,7 @@
                                             </div>
 
                                             <!-- Edit Button -->
-                                            <div class="row mt-4">
-                                                <div class="col-12 text-center">
-                                                    <a href="{{ route('vendor-admin.hotel.editPthree', $hotel) }}" class="btn btn-edit">Edit Details</a>
-                                                </div>
-                                            </div>
+
                                         </div>
 
                                     </div>

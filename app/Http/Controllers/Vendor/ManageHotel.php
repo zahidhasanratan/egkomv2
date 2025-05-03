@@ -166,13 +166,49 @@ class ManageHotel extends Controller
         return view('auth.vendor.hotel.edit', compact('hotel','hotelFacilities'));
     }
 
-    public function partOne(Hotel $hotel)
+
+    public function partOne1(Hotel $hotel)
     {
         if ($hotel->vendor_id !== auth()->user()->id) {
             return redirect()->route('vendor-admin.hotel.index')->with('error', 'Unauthorized access.');
         }
         $hotelFacilities = json_decode($hotel->hotel_facilities, true);
-        return view('auth.vendor.hotel.partOne', compact('hotel','hotelFacilities'));
+        return view('auth.vendor.hotel.part.partOne1', compact('hotel','hotelFacilities'));
+    }
+
+    public function partOne2(Hotel $hotel)
+    {
+        if ($hotel->vendor_id !== auth()->user()->id) {
+            return redirect()->route('vendor-admin.hotel.index')->with('error', 'Unauthorized access.');
+        }
+        $hotelFacilities = json_decode($hotel->hotel_facilities, true);
+        return view('auth.vendor.hotel.part.partOne2', compact('hotel','hotelFacilities'));
+    }
+
+    public function partOne3(Hotel $hotel)
+    {
+        if ($hotel->vendor_id !== auth()->user()->id) {
+            return redirect()->route('vendor-admin.hotel.index')->with('error', 'Unauthorized access.');
+        }
+        $hotelFacilities = json_decode($hotel->hotel_facilities, true);
+        return view('auth.vendor.hotel.part.partOne3', compact('hotel','hotelFacilities'));
+    }
+    public function partOne4(Hotel $hotel)
+    {
+        if ($hotel->vendor_id !== auth()->user()->id) {
+            return redirect()->route('vendor-admin.hotel.index')->with('error', 'Unauthorized access.');
+        }
+        $hotelFacilities = json_decode($hotel->hotel_facilities, true);
+        return view('auth.vendor.hotel.part.partOne4', compact('hotel','hotelFacilities'));
+    }
+
+    public function partOne5(Hotel $hotel)
+    {
+        if ($hotel->vendor_id !== auth()->user()->id) {
+            return redirect()->route('vendor-admin.hotel.index')->with('error', 'Unauthorized access.');
+        }
+        $hotelFacilities = json_decode($hotel->hotel_facilities, true);
+        return view('auth.vendor.hotel.part.partOne5', compact('hotel','hotelFacilities'));
     }
 
     public function partOneOne(Hotel $hotel)
