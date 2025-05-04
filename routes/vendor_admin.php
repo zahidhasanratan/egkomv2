@@ -60,9 +60,14 @@ Route::prefix('vendor-admin')->group(function () {
         Route::get('/hotel/{hotel}/partOne3', [ManageHotel::class, 'partOne3'])->name('vendor-admin.hotel.editOne3');
         Route::get('/hotel/{hotel}/partOne4', [ManageHotel::class, 'partOne4'])->name('vendor-admin.hotel.editOne4');
         Route::get('/hotel/{hotel}/partOne5', [ManageHotel::class, 'partOne5'])->name('vendor-admin.hotel.editOne5');
+        Route::get('/hotel/{hotel}/editOne6', [ManageHotel::class, 'partOne6'])->name('vendor-admin.hotel.editOne6');
         Route::get('/hotel/{hotel}/partTwo', [ManageHotel::class, 'partTwo'])->name('vendor-admin.hotel.editPtwo');
+        Route::get('/hotel/{hotel}/partTwo1', [ManageHotel::class, 'partTwo1'])->name('vendor-admin.hotel.editPtwo1');
+        Route::get('/hotel/{hotel}/partTwo2', [ManageHotel::class, 'partTwo2'])->name('vendor-admin.hotel.editPtwo2');
+
         Route::get('/hotel/{hotel}/partThree', [ManageHotel::class, 'partThree'])->name('vendor-admin.hotel.editPthree');
         Route::get('/hotel/{hotel}/partFour', [ManageHotel::class, 'partFour'])->name('vendor-admin.hotel.editPfour');
+        Route::get('/hotel/{hotel}/partFour2', [ManageHotel::class, 'partFour2'])->name('vendor-admin.hotel.editPfour2');
 
 
         Route::get('/hotel/{hotel}/show', [ManageHotel::class, 'show'])->name('vendor-admin.hotel.show');

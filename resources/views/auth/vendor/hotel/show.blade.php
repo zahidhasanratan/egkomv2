@@ -438,7 +438,7 @@
 
                                                 <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
                                                     <h3 class="section-title">Cancellation Policies</h3>
-                                                    <a href="{{ route('vendor-admin.hotel.editOneOne', $hotel) }}" title="Edit">
+                                                    <a href="{{ route('vendor-admin.hotel.editOne6', $hotel) }}" title="Edit">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
                                                 </div>
@@ -470,11 +470,11 @@
                                             </div>
 
                                             <!-- Edit Button -->
-                                            <div class="row mt-4">
-                                                <div class="col-12 text-center">
-                                                    <a href="{{ route('vendor-admin.hotel.editPone', $hotel) }}" class="btn btn-edit">Edit Details</a>
-                                                </div>
-                                            </div>
+{{--                                            <div class="row mt-4">--}}
+{{--                                                <div class="col-12 text-center">--}}
+{{--                                                    <a href="{{ route('vendor-admin.hotel.editPone', $hotel) }}" class="btn btn-edit">Edit Details</a>--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
                                         </div>
 
                                         <!-- Most Popular Facilities -->
@@ -577,7 +577,7 @@
 
                                                 <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
                                                     <h3 class="section-title">Most Popular Facilities</h3>
-                                                    <a href="{{ route('vendor-admin.hotel.editPtwo', $hotel) }}" title="Edit">
+                                                    <a href="{{ route('vendor-admin.hotel.editPtwo1', $hotel) }}" title="Edit">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
                                                 </div>
@@ -631,7 +631,7 @@
                                             <div class="card">
                                                 <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
                                                     <h3 class="section-title">Hotel Facilities Categories</h3>
-                                                    <a href="{{ route('vendor-admin.hotel.editPtwo', $hotel) }}" title="Edit">
+                                                    <a href="{{ route('vendor-admin.hotel.editPtwo2', $hotel) }}" title="Edit">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
                                                 </div>
@@ -834,7 +834,7 @@
 
                                                 <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
                                                     <h3 class="section-title">Nearby Area Categories</h3>
-                                                    <a href="{{ route('vendor-admin.hotel.editPthree', $hotel) }}" title="Edit">
+                                                    <a href="{{ route('vendor-admin.hotel.editPfour2', $hotel) }}" title="Edit">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
                                                 </div>

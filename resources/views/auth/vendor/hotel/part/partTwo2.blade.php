@@ -15,7 +15,14 @@
                     <div class="nk-block">
                         <div class="card card-bordered">
                             <div class="card-inner">
+                                <ul class="nav nav-tabs">
 
+                                    <li class="nav-item active">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#tabItem4">Facilities of Hotel /
+                                            Property</a>
+                                    </li>
+
+                                </ul>
 
                                 <form method="POST" action="{{ route('vendor-admin.hotel.update', $hotel->id) }}"
                                       enctype="multipart/form-data">
@@ -23,443 +30,7 @@
                                     @method('PUT')
                                     <div class="tab-content">
                                         <!-- Hotel Description -->
-                                        <div class="tab-pane active" id="tabItem3">
 
-                                            <!-- Property Policy And Rules -->
-                                            <div class="row gy-4">
-                                                <div class="col-md-12 col-lg-12 col-xxl-3">
-                                                    <h3 class="can-tittle" style="padding-top: 50px;">Property Policy
-                                                        and Rules</h3>
-                                                </div>
-
-                                                <div class="col-md-6 col-lg-4 col-xxl-3 pets-section">
-                                                    <div class="form-group">
-                                                        <label class="form-label">Pets allowed</label>
-                                                        <div class="radio-group">
-                                                            <label>
-                                                                <input type="radio" name="pets_allowed" value="yes"
-                                                                       class="bar-radio-yes"
-                                                                       data-target="pets-input" {{ old('pets_allowed', $hotel->pets_allowed) == 'yes' ? 'checked' : '' }}>
-                                                                Yes
-                                                            </label>
-                                                            <label>
-                                                                <input type="radio" name="pets_allowed" value="no"
-                                                                       class="bar-radio-no"
-                                                                       data-target="pets-input" {{ old('pets_allowed', $hotel->pets_allowed) == 'no' ? 'checked' : '' }}>
-                                                                No
-                                                            </label>
-                                                        </div>
-                                                        <div
-                                                            class="input-group {{ old('pets_allowed', $hotel->pets_allowed) == 'yes' ? '' : 'hidden' }}"
-                                                            id="pets-input">
-                                                            <textarea class="form-control" name="pets_details"
-                                                                      placeholder=""
-                                                                      style="height: 50px;">{{ old('pets_details', $hotel->pets_details) }}</textarea>
-                                                        </div>
-                                                        @error('pets_allowed') <span
-                                                            class="text-danger">{{ $message }}</span> @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6 col-lg-4 col-xxl-3 pets-section">
-                                                    <div class="form-group">
-                                                        <label class="form-label">Events & Party</label>
-                                                        <div class="radio-group">
-                                                            <label>
-                                                                <input type="radio" name="events_allowed" value="yes"
-                                                                       class="bar-radio-yes"
-                                                                       data-target="events-input" {{ old('events_allowed', $hotel->events_allowed) == 'yes' ? 'checked' : '' }}>
-                                                                Yes
-                                                            </label>
-                                                            <label>
-                                                                <input type="radio" name="events_allowed" value="no"
-                                                                       class="bar-radio-no"
-                                                                       data-target="events-input" {{ old('events_allowed', $hotel->events_allowed) == 'no' ? 'checked' : '' }}>
-                                                                No
-                                                            </label>
-                                                        </div>
-                                                        <div
-                                                            class="input-group {{ old('events_allowed', $hotel->events_allowed) == 'yes' ? '' : 'hidden' }}"
-                                                            id="events-input">
-                                                            <textarea class="form-control" name="events_details"
-                                                                      placeholder=""
-                                                                      style="height: 50px;">{{ old('events_details', $hotel->events_details) }}</textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6 col-lg-4 col-xxl-3 pets-section">
-                                                    <div class="form-group">
-                                                        <label class="form-label">Smoking</label>
-                                                        <div class="radio-group">
-                                                            <label>
-                                                                <input type="radio" name="smoking_allowed" value="yes"
-                                                                       class="bar-radio-yes"
-                                                                       data-target="Smoking-input" {{ old('smoking_allowed', $hotel->smoking_allowed) == 'yes' ? 'checked' : '' }}>
-                                                                Yes (Vaping Or e‑cigarettes)
-                                                            </label>
-                                                            <label>
-                                                                <input type="radio" name="smoking_allowed" value="no"
-                                                                       class="bar-radio-no"
-                                                                       data-target="Smoking-input" {{ old('smoking_allowed', $hotel->smoking_allowed) == 'no' ? 'checked' : '' }}>
-                                                                No
-                                                            </label>
-                                                        </div>
-                                                        <div
-                                                            class="input-group {{ old('smoking_allowed', $hotel->smoking_allowed) == 'yes' ? '' : 'hidden' }}"
-                                                            id="Smoking-input">
-                                                            <textarea class="form-control" name="smoking_details"
-                                                                      placeholder=""
-                                                                      style="height: 50px;">{{ old('smoking_details', $hotel->smoking_details) }}</textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label">Quiet Hours</label>
-                                                        <input type="text" class="form-control" name="quiet_hours"
-                                                               placeholder="Quiet Hours"
-                                                               value="{{ old('quiet_hours', $hotel->quiet_hours) }}">
-                                                        @error('quiet_hours') <span
-                                                            class="text-danger">{{ $message }}</span> @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6 col-lg-4 col-xxl-3 pets-section">
-                                                    <div class="form-group">
-                                                        <label class="form-label">Commercial photography and filming
-                                                            allowed</label>
-                                                        <div class="radio-group">
-                                                            <label>
-                                                                <input type="radio" name="photography_allowed"
-                                                                       value="yes" class="bar-radio-yes"
-                                                                       data-target="photography-input" {{ old('photography_allowed', $hotel->photography_allowed) == 'yes' ? 'checked' : '' }}>
-                                                                Yes
-                                                            </label>
-                                                            <label>
-                                                                <input type="radio" name="photography_allowed"
-                                                                       value="no" class="bar-radio-no"
-                                                                       data-target="photography-input" {{ old('photography_allowed', $hotel->photography_allowed) == 'no' ? 'checked' : '' }}>
-                                                                No
-                                                            </label>
-                                                        </div>
-                                                        <div
-                                                            class="input-group {{ old('photography_allowed', $hotel->photography_allowed) == 'yes' ? '' : 'hidden' }}"
-                                                            id="photography-input">
-                                                            <textarea class="form-control" name="photography_details"
-                                                                      placeholder=""
-                                                                      style="height: 50px;">{{ old('photography_details', $hotel->photography_details) }}</textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="check-in-window">Check-in window
-                                                            start and end time</label>
-                                                        <select class="form-select mb-3" name="check_in_window"
-                                                                id="check-in-window" aria-label="Large select example">
-                                                            <option value="">Select Check-in Time</option>
-                                                            <option
-                                                                value="00:00-02:00" {{ old('check_in_window', $hotel->check_in_window) == '00:00-02:00' ? 'selected' : '' }}>
-                                                                12:00 AM (Midnight) - 2:00 AM
-                                                            </option>
-                                                            <option
-                                                                value="02:00-04:00" {{ old('check_in_window', $hotel->check_in_window) == '02:00-04:00' ? 'selected' : '' }}>
-                                                                2:00 AM - 4:00 AM
-                                                            </option>
-                                                            <option
-                                                                value="04:00-06:00" {{ old('check_in_window', $hotel->check_in_window) == '04:00-06:00' ? 'selected' : '' }}>
-                                                                4:00 AM - 6:00 AM
-                                                            </option>
-                                                            <option
-                                                                value="06:00-08:00" {{ old('check_in_window', $hotel->check_in_window) == '06:00-08:00' ? 'selected' : '' }}>
-                                                                6:00 AM - 8:00 AM
-                                                            </option>
-                                                            <option
-                                                                value="08:00-10:00" {{ old('check_in_window', $hotel->check_in_window) == '08:00-10:00' ? 'selected' : '' }}>
-                                                                8:00 AM - 10:00 AM
-                                                            </option>
-                                                            <option
-                                                                value="10:00-12:00" {{ old('check_in_window', $hotel->check_in_window) == '10:00-12:00' ? 'selected' : '' }}>
-                                                                10:00 AM - 12:00 PM (Noon)
-                                                            </option>
-                                                            <option
-                                                                value="12:00-14:00" {{ old('check_in_window', $hotel->check_in_window) == '12:00-14:00' ? 'selected' : '' }}>
-                                                                12:00 PM (Noon) - 2:00 PM
-                                                            </option>
-                                                            <option
-                                                                value="14:00-16:00" {{ old('check_in_window', $hotel->check_in_window) == '14:00-16:00' ? 'selected' : '' }}>
-                                                                2:00 PM - 4:00 PM
-                                                            </option>
-                                                            <option
-                                                                value="16:00-18:00" {{ old('check_in_window', $hotel->check_in_window) == '16:00-18:00' ? 'selected' : '' }}>
-                                                                4:00 PM - 6:00 PM
-                                                            </option>
-                                                            <option
-                                                                value="18:00-20:00" {{ old('check_in_window', $hotel->check_in_window) == '18:00-20:00' ? 'selected' : '' }}>
-                                                                6:00 PM - 8:00 PM
-                                                            </option>
-                                                            <option
-                                                                value="20:00-22:00" {{ old('check_in_window', $hotel->check_in_window) == '20:00-22:00' ? 'selected' : '' }}>
-                                                                8:00 PM - 10:00 PM
-                                                            </option>
-                                                            <option
-                                                                value="22:00-00:00" {{ old('check_in_window', $hotel->check_in_window) == '22:00-00:00' ? 'selected' : '' }}>
-                                                                10:00 PM - 12:00 AM (Midnight)
-                                                            </option>
-                                                        </select>
-                                                        @error('check_in_window') <span
-                                                            class="text-danger">{{ $message }}</span> @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label">Check Out time</label>
-                                                        <select class="form-select mb-3" name="check_out_time"
-                                                                aria-label="Large select example">
-                                                            <option value="">Select Check Out time</option>
-                                                            <option
-                                                                value="1:00 AM" {{ old('check_out_time', $hotel->check_out_time) == '1:00 AM' ? 'selected' : '' }}>
-                                                                1:00 AM
-                                                            </option>
-                                                            <option
-                                                                value="2:00 AM" {{ old('check_out_time', $hotel->check_out_time) == '2:00 AM' ? 'selected' : '' }}>
-                                                                2:00 AM
-                                                            </option>
-                                                            <option
-                                                                value="3:00 AM" {{ old('check_out_time', $hotel->check_out_time) == '3:00 AM' ? 'selected' : '' }}>
-                                                                3:00 AM
-                                                            </option>
-                                                            <option
-                                                                value="4:00 AM" {{ old('check_out_time', $hotel->check_out_time) == '4:00 AM' ? 'selected' : '' }}>
-                                                                4:00 AM
-                                                            </option>
-                                                            <option
-                                                                value="5:00 AM" {{ old('check_out_time', $hotel->check_out_time) == '5:00 AM' ? 'selected' : '' }}>
-                                                                5:00 AM
-                                                            </option>
-                                                            <option
-                                                                value="6:00 AM" {{ old('check_out_time', $hotel->check_out_time) == '6:00 AM' ? 'selected' : '' }}>
-                                                                6:00 AM
-                                                            </option>
-                                                            <option
-                                                                value="7:00 AM" {{ old('check_out_time', $hotel->check_out_time) == '7:00 AM' ? 'selected' : '' }}>
-                                                                7:00 AM
-                                                            </option>
-                                                            <option
-                                                                value="8:00 AM" {{ old('check_out_time', $hotel->check_out_time) == '8:00 AM' ? 'selected' : '' }}>
-                                                                8:00 AM
-                                                            </option>
-                                                            <option
-                                                                value="9:00 AM" {{ old('check_out_time', $hotel->check_out_time) == '9:00 AM' ? 'selected' : '' }}>
-                                                                9:00 AM
-                                                            </option>
-                                                            <option
-                                                                value="10:00 AM" {{ old('check_out_time', $hotel->check_out_time) == '10:00 AM' ? 'selected' : '' }}>
-                                                                10:00 AM
-                                                            </option>
-                                                            <option
-                                                                value="11:00 AM" {{ old('check_out_time', $hotel->check_out_time) == '11:00 AM' ? 'selected' : '' }}>
-                                                                11:00 AM
-                                                            </option>
-                                                            <option
-                                                                value="12:00 PM" {{ old('check_out_time', $hotel->check_out_time) == '12:00 PM' ? 'selected' : '' }}>
-                                                                12:00 PM (Noon)
-                                                            </option>
-                                                            <option
-                                                                value="1:00 PM" {{ old('check_out_time', $hotel->check_out_time) == '1:00 PM' ? 'selected' : '' }}>
-                                                                1:00 PM
-                                                            </option>
-                                                            <option
-                                                                value="2:00 PM" {{ old('check_out_time', $hotel->check_out_time) == '2:00 PM' ? 'selected' : '' }}>
-                                                                2:00 PM
-                                                            </option>
-                                                            <option
-                                                                value="3:00 PM" {{ old('check_out_time', $hotel->check_out_time) == '3:00 PM' ? 'selected' : '' }}>
-                                                                3:00 PM
-                                                            </option>
-                                                            <option
-                                                                value="4:00 PM" {{ old('check_out_time', $hotel->check_out_time) == '4:00 PM' ? 'selected' : '' }}>
-                                                                4:00 PM
-                                                            </option>
-                                                            <option
-                                                                value="5:00 PM" {{ old('check_out_time', $hotel->check_out_time) == '5:00 PM' ? 'selected' : '' }}>
-                                                                5:00 PM
-                                                            </option>
-                                                            <option
-                                                                value="6:00 PM" {{ old('check_out_time', $hotel->check_out_time) == '6:00 PM' ? 'selected' : '' }}>
-                                                                6:00 PM
-                                                            </option>
-                                                            <option
-                                                                value="7:00 PM" {{ old('check_out_time', $hotel->check_out_time) == '7:00 PM' ? 'selected' : '' }}>
-                                                                7:00 PM
-                                                            </option>
-                                                            <option
-                                                                value="8:00 PM" {{ old('check_out_time', $hotel->check_out_time) == '8:00 PM' ? 'selected' : '' }}>
-                                                                8:00 PM
-                                                            </option>
-                                                            <option
-                                                                value="9:00 PM" {{ old('check_out_time', $hotel->check_out_time) == '9:00 PM' ? 'selected' : '' }}>
-                                                                9:00 PM
-                                                            </option>
-                                                            <option
-                                                                value="10:00 PM" {{ old('check_out_time', $hotel->check_out_time) == '10:00 PM' ? 'selected' : '' }}>
-                                                                10:00 PM
-                                                            </option>
-                                                            <option
-                                                                value="11:00 PM" {{ old('check_out_time', $hotel->check_out_time) == '11:00 PM' ? 'selected' : '' }}>
-                                                                11:00 PM
-                                                            </option>
-                                                            <option
-                                                                value="12:00 AM" {{ old('check_out_time', $hotel->check_out_time) == '12:00 AM' ? 'selected' : '' }}>
-                                                                12:00 AM (Midnight)
-                                                            </option>
-                                                        </select>
-                                                        @error('check_out_time') <span
-                                                            class="text-danger">{{ $message }}</span> @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label">Food & Laundry Facilities</label>
-                                                        <div class="bar-radio-group">
-                                                            <label>
-                                                                <input type="radio" name="food_laundry" value="yes"
-                                                                       class="bar-yes" {{ old('food_laundry', $hotel->food_laundry) == 'yes' ? 'checked' : '' }}>
-                                                                Yes
-                                                            </label>
-                                                            <label>
-                                                                <input type="radio" name="food_laundry" value="no"
-                                                                       class="bar-no" {{ old('food_laundry', $hotel->food_laundry) == 'no' ? 'checked' : '' }}>
-                                                                No
-                                                            </label>
-                                                        </div>
-                                                        @error('food_laundry') <span
-                                                            class="text-danger">{{ $message }}</span> @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-12 col-lg-12 col-xxl-12">
-
-                                                    @php
-                                                        // 1) Grab the raw saved/old data
-                                                        $rawRules = old('check_in_rules', $hotel->check_in_rules);
-
-                                                        // 2) Normalize into an array
-                                                        if (is_string($rawRules)) {
-                                                            $savedRules = json_decode($rawRules, true) ?: [];
-                                                        } elseif (is_array($rawRules)) {
-                                                            $savedRules = $rawRules;
-                                                        } else {
-                                                            $savedRules = [];
-                                                        }
-
-                                                        // 3) Our three predefined options
-                                                        $predefinedRules = [
-                                                            'Pay in advance',
-                                                            'Security money for keys',
-                                                            'Rentals',
-                                                        ];
-
-                                                        // 4) Extract anything else as “custom”
-                                                        $customRules = array_values(array_diff($savedRules, $predefinedRules));
-                                                    @endphp
-
-                                                    <div class="form-group">
-                                                        <label class="form-label">Check-in rules if any</label>
-
-                                                        {{-- Checkbox rules --}}
-                                                        <div class="radio-group">
-                                                            @foreach($predefinedRules as $rule)
-                                                                <label>
-                                                                    <input
-                                                                        type="checkbox"
-                                                                        name="check_in_rules[]"
-                                                                        value="{{ $rule }}"
-                                                                        {{ in_array($rule, $savedRules) ? 'checked' : '' }}
-                                                                    >
-                                                                    {{ $rule }}
-                                                                </label>
-                                                            @endforeach
-                                                        </div>
-
-                                                        {{-- Dynamic custom input fields --}}
-                                                        <div id="custom-checkin-wrapper">
-                                                            @if(count($customRules))
-                                                                @foreach($customRules as $text)
-                                                                    <div
-                                                                        class="form-group mb-2 d-flex align-items-center">
-                                                                        <input
-                                                                            type="text"
-                                                                            name="custom_check_in_rules[]"
-                                                                            class="form-control"
-                                                                            value="{{ $text }}"
-                                                                        >
-                                                                        <button
-                                                                            type="button"
-                                                                            class="btn btn-danger btn-sm ms-2 remove-checkin"
-                                                                        >Delete
-                                                                        </button>
-                                                                    </div>
-                                                                @endforeach
-                                                            @else
-                                                                <div class="form-group mb-2 d-flex align-items-center">
-                                                                    <input
-                                                                        type="text"
-                                                                        name="custom_check_in_rules[]"
-                                                                        class="form-control"
-                                                                        placeholder="Enter something"
-                                                                    >
-                                                                    <button
-                                                                        type="button"
-                                                                        class="btn btn-danger btn-sm ms-2 remove-checkin"
-                                                                        style="display: none;"
-                                                                    >Delete
-                                                                    </button>
-                                                                </div>
-                                                            @endif
-                                                        </div>
-
-                                                        <button
-                                                            type="button"
-                                                            class="btn btn-sm btn-primary mt-2"
-                                                            id="add-checkin-rule"
-                                                        >Add More
-                                                        </button>
-
-                                                        @error('check_in_rules')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                        @enderror
-                                                    </div>
-
-
-                                                </div>
-                                            </div>
-
-
-
-
-                                            <div class="row">
-                                                <div class="col-sm-2 col-md-2 mt-15">
-                                                    <div class="form-group">
-                                                        <button type="submit" name="status" value="submitted"
-                                                                class="btn btn-primary btn-submit">Submit
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-2 col-md-2 mt-15">
-                                                    <div class="form-group">
-                                                        <button type="submit" name="status" value="draft"
-                                                                class="btn btn-primary">Save & Drafts
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                         <!-- Hotel Description -->
 
                                         <!-- Most Popular Facilities -->
@@ -487,7 +58,82 @@
                                     @endphp
 
                                     <!-- Most Popular Facilities -->
+                                        <div class="tab-pane active" id="tabItem4">
+                                            <div class="row mt-15">
 
+                                                <div class="row">
+
+                                                    <div class="container mt-15">
+                                                        <div class="row">
+                                                            <h3 class="can-tittle">Hotel Facilities Categories</h3>
+
+                                                            <!-- Dropdown -->
+                                                            <div class="col-lg-5">
+                                                                <div class="form-group">
+                                                                    <label for="hotelFacilitySelector">Select Facility</label>
+                                                                    <select id="hotelFacilitySelector" class="form-control">
+                                                                        <option value="" disabled selected>Select category</option>
+                                                                        <option value="General Services">General Services</option>
+                                                                        <option value="Activities & Entertainment">Activities & Entertainment</option>
+                                                                        <option value="Safety & Security">Safety & Security</option>
+                                                                        <option value="Technology, Media & Wi-Fi">Technology, Media & Wi-Fi</option>
+                                                                        <option value="Bedroom Features">Bedroom Features</option>
+                                                                        <option value="Bathroom Amenities">Bathroom Amenities</option>
+                                                                        <option value="Living Room Features">Living Room Features</option>
+                                                                        <option value="Kitchen Facilities">Kitchen Facilities</option>
+                                                                        <option value="Food & Beverages">Food & Beverages</option>
+                                                                        <option value="Parking Availability">Parking Availability</option>
+                                                                        <option value="View from the Hotel">View from the Hotel</option>
+                                                                        <option value="Front Desk Services">Front Desk Services</option>
+                                                                        <option value="Housekeeping & Cleaning">Housekeeping & Cleaning</option>
+                                                                        <option value="Room Amenities">Room Amenities</option>
+                                                                        <option value="Business & Meeting Services">Business & Meeting Services</option>
+                                                                        <option value="Languages Spoken">Languages Spoken</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Add More Button -->
+                                                            <div class="col-md-3 mt-4">
+                                                                <button class="btn btn-primary" id="addHotelFacility">Add More +</button>
+                                                            </div>
+
+                                                            <!-- Dynamic Field Container -->
+                                                            <div class="col-12 mt-4">
+                                                                <div class="row" id="dynamicFieldsContainerHotelFacility">
+                                                                    <!-- Category-specific wrappers will be added here -->
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+
+
+                                                </div>
+                                                <!-- Save / Submit Buttons -->
+                                                <div class="row">
+                                                    <div class="col-sm-2 col-md-2 mt-15">
+                                                        <button type="submit"
+                                                                name="status"
+                                                                value="submitted"
+                                                                class="btn btn-primary btn-submit">
+                                                            Submit
+                                                        </button>
+                                                    </div>
+                                                    <div class="col-sm-2 col-md-2 mt-15">
+                                                        <button type="submit"
+                                                                name="status"
+                                                                value="draft"
+                                                                class="btn btn-primary">
+                                                            Save & Drafts
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
 
 
                                         <script>
@@ -508,7 +154,6 @@
                                                 }
                                             });
                                         </script>
-
 
 
 

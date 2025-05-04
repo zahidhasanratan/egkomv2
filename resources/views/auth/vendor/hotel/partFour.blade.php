@@ -125,54 +125,6 @@
 
 
 
-                                            <div class="container mt-4">
-                                                <div class="row">
-                                                    <h3 class="can-tittle">Nearby Area Categories</h3>
-                                                    <!-- Dropdown -->
-                                                    <div class="col-lg-5">
-                                                        <div class="form-group">
-                                                            <label for="areaSelector">Select Nearby Area</label>
-                                                            <select id="areaSelector" name="area_category"
-                                                                    class="form-control">
-                                                                <option value="" disabled selected>Select category</option>
-                                                                <option
-                                                                    value="Restaurant & Cafe" {{ $hotel->area_category == 'Restaurant & Cafe' ? 'selected' : '' }}>
-                                                                    Restaurant & Cafe
-                                                                </option>
-                                                                <option
-                                                                    value="Entertainment & Attraction Point" {{ $hotel->area_category == 'Entertainment & Attraction Point' ? 'selected' : '' }}>
-                                                                    Entertainment & Attraction Point
-                                                                </option>
-                                                                <option
-                                                                    value="Hospital & Police Station" {{ $hotel->area_category == 'Hospital & Police Station' ? 'selected' : '' }}>
-                                                                    Hospital & Police Station
-                                                                </option>
-                                                                <option
-                                                                    value="Transport & Airport" {{ $hotel->area_category == 'Transport & Airport' ? 'selected' : '' }}>
-                                                                    Transport & Airport
-                                                                </option>
-                                                                <option
-                                                                    value="Shopping & ATM" {{ $hotel->area_category == 'Shopping & ATM' ? 'selected' : '' }}>
-                                                                    Shopping & ATM
-                                                                </option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Add More Button -->
-                                                    <div class="col-md-3 mt-4">
-                                                        <button class="btn btn-primary" id="addNearbyAreaBtn">Add More +</button>
-                                                    </div>
-
-                                                    <!-- Dynamic Field Container -->
-                                                    <div class="col-12 mt-4">
-                                                        <div class="row" id="dynamicFieldsContainer">
-                                                            <!-- Category-specific wrappers will be added here -->
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
                                             <div class="row">
                                                 <div class="col-sm-2 col-md-2 mt-15">
                                                     <div class="form-group">
