@@ -75,10 +75,10 @@
                                                                        'Fitness center & Spa services','24-hour reception',
                                                                        'Parking facilities','Airport shuttle service'
                                                                     ], $savedFacilities)) === 10 ? 'checked' : '' }}>
-                                                                <label class="custom-control-label"
-                                                                       for="facilities-all">
-                                                                    Select All
-                                                                </label>
+{{--                                                                <label class="custom-control-label"--}}
+{{--                                                                       for="facilities-all">--}}
+{{--                                                                    Select All--}}
+{{--                                                                </label>--}}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -235,6 +235,135 @@
                                                     <span class="text-danger">{{ $message }}</span>
                                                     @enderror
                                                 </div>
+                                                <script>
+                                                    document.addEventListener('DOMContentLoaded', () => {
+                                                        const uploadedImages = {};
+
+                                                        function initializeMultipleUpload(container) {
+                                                            const fileInput = container.querySelector('.multiple-file-input');
+                                                            const thumbnailGallery = container.querySelector('.multiple-thumbnail-gallery');
+                                                            const containerId = container.id || `dynamic-${Date.now()}`; // Fallback ID for dynamic containers
+
+                                                            uploadedImages[containerId] = [];
+
+                                                            fileInput.addEventListener('change', function(event) {
+                                                                console.log(`File input changed in container: ${containerId}`);
+                                                                const files = event.target.files;
+                                                                for (let file of files) {
+                                                                    if (!file.type.startsWith('image/')) {
+                                                                        console.warn(`File ${file.name} is not an image`);
+                                                                        continue;
+                                                                    }
+                                                                    const reader = new FileReader();
+                                                                    reader.onload = function(e) {
+                                                                        const thumbnailItem = document.createElement('div');
+                                                                        thumbnailItem.classList.add('multiple-thumbnail-item');
+                                                                        const img = document.createElement('img');
+                                                                        img.src = e.target.result;
+                                                                        const removeBtn = document.createElement('button');
+                                                                        removeBtn.innerHTML = '×';
+                                                                        removeBtn.classList.add('multiple-remove-btn');
+                                                                        removeBtn.addEventListener('click', () => {
+                                                                            thumbnailItem.remove();
+                                                                            const index = uploadedImages[containerId].indexOf(file);
+                                                                            if (index > -1) {
+                                                                                uploadedImages[containerId].splice(index, 1);
+                                                                                console.log(`Removed file ${file.name} from container ${containerId}`);
+                                                                            }
+                                                                        });
+                                                                        thumbnailItem.appendChild(img);
+                                                                        thumbnailItem.appendChild(removeBtn);
+                                                                        thumbnailGallery.appendChild(thumbnailItem);
+                                                                        uploadedImages[containerId].push(file);
+                                                                        console.log(`Added thumbnail for file ${file.name} in container ${containerId}`);
+                                                                    };
+                                                                    reader.readAsDataURL(file);
+                                                                }
+                                                            });
+                                                        }
+
+                                                        // Initialize for all upload containers dynamically
+                                                        const uploadContainers = document.querySelectorAll('.multiple-upload-container');
+                                                        uploadContainers.forEach(container => {
+                                                            console.log(`Initializing upload container: ${container.id}`);
+                                                            initializeMultipleUpload(container);
+                                                        });
+
+                                                        // Handle Add More button for custom facilities
+                                                        const facilityContainer = document.getElementById('facility-container');
+                                                        const addMoreBtn = document.getElementById('add-more-btn');
+
+                                                        // ADD: facility checkbox selector
+                                                        const facilityCheckboxes = document.querySelectorAll('.checkbox-item-facility');
+                                                        const maxFacilities = 5;
+
+                                                        addMoreBtn.addEventListener('click', function(event) {
+                                                            event.preventDefault();
+                                                            console.log('Add More button clicked for custom facilities');
+
+                                                            // ✅ NEW: Count checked + added fields
+                                                            const checkedCount = document.querySelectorAll('.checkbox-item-facility:checked').length;
+                                                            const addedFieldsCount = facilityContainer.querySelectorAll('.input-field').length;
+                                                            const totalFacilities = checkedCount + addedFieldsCount;
+
+                                                            console.log(`Checked: ${checkedCount}, Added: ${addedFieldsCount}, Total: ${totalFacilities}`);
+
+                                                            if (totalFacilities >= maxFacilities) {
+                                                                alert(`You can only add/select up to ${maxFacilities} facilities.`);
+                                                                return; // ⛔ STOP: Don't add new field
+                                                            }
+
+                                                            const facilityField = document.createElement('div');
+                                                            facilityField.classList.add('input-field', 'd-flex', 'align-items-center', 'mb-3');
+                                                            facilityField.style.gap = '10px';
+                                                            const uniqueId = Date.now();
+                                                            facilityField.innerHTML = `
+            <div class="form-group flex-grow-1">
+                <label for="custom_facility_${uniqueId}">Facility Name</label>
+                <input class="form-control" type="text" name="custom_facilities[]" id="custom_facility_${uniqueId}" placeholder="Enter facility name" />
+            </div>
+            <div class="form-group">
+                <label for="custom_facility_icon_${uniqueId}">Facility Icon</label>
+                <div class="multiple-upload-container" id="upload-container-dynamic-${uniqueId}">
+                    <input class="form-control multiple-file-input" type="file" name="custom_facilities_icon[]" id="custom_facility_icon_${uniqueId}" accept="image/*" />
+                    <label class="upload-label">Browse Image</label>
+                    <div class="multiple-thumbnail-gallery"></div>
+                </div>
+                @error('custom_facilities_icon.*') <span class="text-danger">{{ $message }}</span> @enderror
+                                                            </div>
+                                                            <button type="button" class="btn btn-danger btn-sm delete-btn">Delete</button>
+`;
+
+                                                            // Initialize file upload for the new field
+                                                            const uploadContainer = facilityField.querySelector('.multiple-upload-container');
+                                                            initializeMultipleUpload(uploadContainer);
+
+                                                            // Add delete functionality
+                                                            const deleteBtn = facilityField.querySelector('.delete-btn');
+                                                            deleteBtn.addEventListener('click', () => {
+                                                                console.log('Delete button clicked for facility field');
+                                                                facilityField.remove();
+                                                            });
+
+                                                            facilityContainer.appendChild(facilityField);
+                                                            console.log('New facility field added to container');
+                                                        });
+
+                                                        // ✅ OPTIONAL: handle checkbox unchecking if you want live enforcement (optional)
+                                                        facilityCheckboxes.forEach(cb => {
+                                                            cb.addEventListener('change', function () {
+                                                                const checkedCount = document.querySelectorAll('.checkbox-item-facility:checked').length;
+                                                                const addedFieldsCount = facilityContainer.querySelectorAll('.input-field').length;
+                                                                const totalFacilities = checkedCount + addedFieldsCount;
+                                                                console.log(`Checkbox toggled. Total facilities now: ${totalFacilities}`);
+                                                                if (totalFacilities > maxFacilities) {
+                                                                    alert(`You can only add/select up to ${maxFacilities} facilities.`);
+                                                                    cb.checked = false;
+                                                                }
+                                                            });
+                                                        });
+                                                    });
+                                                </script>
 
                                                 <!-- Save / Submit Buttons -->
                                                 <div class="row">
@@ -345,105 +474,6 @@
         });
     </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const uploadedImages = {};
-
-            function initializeMultipleUpload(container) {
-                const fileInput = container.querySelector('.multiple-file-input');
-                const thumbnailGallery = container.querySelector('.multiple-thumbnail-gallery');
-                const containerId = container.id || `dynamic-${Date.now()}`; // Fallback ID for dynamic containers
-
-                uploadedImages[containerId] = [];
-
-                fileInput.addEventListener('change', function (event) {
-                    console.log(`File input changed in container: ${containerId}`);
-                    const files = event.target.files;
-                    for (let file of files) {
-                        if (!file.type.startsWith('image/')) {
-                            console.warn(`File ${file.name} is not an image`);
-                            continue;
-                        }
-                        const reader = new FileReader();
-                        reader.onload = function (e) {
-                            const thumbnailItem = document.createElement('div');
-                            thumbnailItem.classList.add('multiple-thumbnail-item');
-                            const img = document.createElement('img');
-                            img.src = e.target.result;
-                            const removeBtn = document.createElement('button');
-                            removeBtn.innerHTML = '×';
-                            removeBtn.classList.add('multiple-remove-btn');
-                            removeBtn.addEventListener('click', () => {
-                                thumbnailItem.remove();
-                                const index = uploadedImages[containerId].indexOf(file);
-                                if (index > -1) {
-                                    uploadedImages[containerId].splice(index, 1);
-                                    console.log(`Removed file ${file.name} from container ${containerId}`);
-                                }
-                            });
-                            thumbnailItem.appendChild(img);
-                            thumbnailItem.appendChild(removeBtn);
-                            thumbnailGallery.appendChild(thumbnailItem);
-                            uploadedImages[containerId].push(file);
-                            console.log(`Added thumbnail for file ${file.name} in container ${containerId}`);
-                        };
-                        reader.readAsDataURL(file);
-                    }
-                });
-            }
-
-            // Initialize for all upload containers dynamically
-            const uploadContainers = document.querySelectorAll('.multiple-upload-container');
-            uploadContainers.forEach(container => {
-                console.log(`Initializing upload container: ${container.id}`);
-                initializeMultipleUpload(container);
-            });
-
-            // Handle Add More button for custom facilities
-            const facilityContainer = document.getElementById('facility-container');
-            const addMoreBtn = document.getElementById('add-more-btn');
-
-            addMoreBtn.addEventListener('click', function (event) {
-                event.preventDefault();
-                console.log('Add More button clicked for custom facilities');
-
-                const facilityField = document.createElement('div');
-                facilityField.classList.add('input-field', 'd-flex', 'align-items-center', 'mb-3');
-                facilityField.style.gap = '10px';
-                const uniqueId = Date.now();
-                facilityField.innerHTML = `
-                    <div class="form-group flex-grow-1">
-                        <label for="custom_facility_${uniqueId}">Facility Name</label>
-                        <input class="form-control" type="text" name="custom_facilities[]" id="custom_facility_${uniqueId}" placeholder="Enter facility name" />
-                    </div>
-                    <div class="form-group">
-                        <label for="custom_facility_icon_${uniqueId}">Facility Icon</label>
-                        <div class="multiple-upload-container" id="upload-container-dynamic-${uniqueId}">
-                            <input class="form-control multiple-file-input" type="file" name="custom_facilities_icon[]" id="custom_facility_icon_${uniqueId}" accept="image/*" />
-                            <label class="upload-label">Browse Image</label>
-                            <div class="multiple-thumbnail-gallery"></div>
-                        </div>
-                        @error('custom_facilities_icon.*') <span class="text-danger">{{ $message }}</span> @enderror
-                </div>
-                <button type="button" class="btn btn-danger btn-sm delete-btn">Delete</button>
-`;
-
-                // Initialize file upload for the new field
-                const uploadContainer = facilityField.querySelector('.multiple-upload-container');
-                initializeMultipleUpload(uploadContainer);
-
-                // Add delete functionality
-                const deleteBtn = facilityField.querySelector('.delete-btn');
-                deleteBtn.addEventListener('click', () => {
-                    console.log('Delete button clicked for facility field');
-                    facilityField.remove();
-                });
-
-                facilityContainer.appendChild(facilityField);
-                console.log('New facility field added to container');
-            });
-        });
-    </script>
 
     <script type="text/javascript">
         document.getElementById("site-off")?.addEventListener("change", function () {
