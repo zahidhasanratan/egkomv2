@@ -612,9 +612,9 @@
                                                                 @if(!empty($facility))
                                                                     <li class="list-group-item">
                                                                         @if(isset($icons[$i]) && !in_array($i, explode(',', old('removed_custom_facilities_icon', ''))))
-                                                                            <img src="{ asset('../images/icons/mountain.png') }}" alt="{{ $facility }}" class="facility-icon">
+                                                                            <img src="{{ asset('../images/icons/mountain.png') }}" alt="{{ $facility }}" class="facility-icon">
                                                                         @else
-                                                                            <img src="{{ asset('../images/icons/mountain.png') }}" alt="Default" class="facility-icon">
+                                                                            <img src="{{ asset('../images/icons/mountain.png') }}" alt="{{ $facility }}" class="facility-icon">
                                                                         @endif
                                                                         {{ $facility }}
                                                                     </li>
