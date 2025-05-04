@@ -808,6 +808,56 @@
                                                         <button type="button" class="btn btn-primary btn-sm mt-2" id="add-nearby-area">Add More</button>
                                                         @error('custom_nearby_areas') <span class="text-danger">{{ $message }}</span> @enderror
                                                     </div>
+                                                    <script>
+                                                        document.addEventListener('DOMContentLoaded', function () {
+                                                            const maxNearbyAreas = 3;
+                                                            const addButton = document.getElementById('add-nearby-area');
+                                                            const wrapper = document.getElementById('nearby-areas-wrapper');
+
+                                                            function countNearbyFields() {
+                                                                return wrapper.querySelectorAll('input[name="custom_nearby_areas[]"]').length;
+                                                            }
+
+                                                            addButton.addEventListener('click', function () {
+                                                                const currentCount = countNearbyFields();
+
+                                                                if (currentCount >= maxNearbyAreas) {
+                                                                    alert(`You can only add up to ${maxNearbyAreas} areas.`);
+                                                                    return;
+                                                                }
+
+                                                                const group = document.createElement('div');
+                                                                group.className = 'form-group mb-3 d-flex align-items-center';
+
+                                                                const input = document.createElement('input');
+                                                                input.type = 'text';
+                                                                input.name = 'custom_nearby_areas[]';
+                                                                input.className = 'form-control';
+                                                                input.placeholder = 'Enter something';
+
+                                                                const removeBtn = document.createElement('button');
+                                                                removeBtn.type = 'button';
+                                                                removeBtn.className = 'btn btn-danger btn-sm ms-2 remove-area-btn';
+                                                                removeBtn.textContent = 'Delete';
+
+                                                                removeBtn.addEventListener('click', () => {
+                                                                    group.remove();
+                                                                });
+
+                                                                group.appendChild(input);
+                                                                group.appendChild(removeBtn);
+                                                                wrapper.appendChild(group);
+                                                            });
+
+                                                            // Attach delete to existing buttons (if any)
+                                                            document.querySelectorAll('.remove-area-btn').forEach(btn => {
+                                                                btn.addEventListener('click', (e) => {
+                                                                    e.target.closest('.form-group').remove();
+                                                                });
+                                                            });
+                                                        });
+                                                    </script>
+
 
 
                                                 </div>
@@ -1532,41 +1582,6 @@
         });
     </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const addButton = document.getElementById('add-nearby-area');
-            const wrapper = document.getElementById('nearby-areas-wrapper');
-
-            addButton.addEventListener('click', function () {
-                const group = document.createElement('div');
-                group.className = 'form-group mb-3 d-flex align-items-center';
-
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.name = 'custom_nearby_areas[]';
-                input.className = 'form-control';
-                input.placeholder = 'Enter something';
-
-                const removeBtn = document.createElement('button');
-                removeBtn.type = 'button';
-                removeBtn.className = 'btn btn-danger btn-sm ms-2 remove-area-btn';
-                removeBtn.textContent = 'Delete';
-
-                removeBtn.addEventListener('click', () => group.remove());
-
-                group.appendChild(input);
-                group.appendChild(removeBtn);
-                wrapper.appendChild(group);
-            });
-
-            // If you ever add dynamic fields from backend (like old input), attach delete event again
-            document.querySelectorAll('.remove-area-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.target.closest('.form-group').remove();
-                });
-            });
-        });
-    </script>
 
     <script>
         const hotelFacilitiesLabelsMap = {
