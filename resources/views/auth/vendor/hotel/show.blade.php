@@ -988,7 +988,7 @@
                                                                     @if(!empty($photos))
                                                                         <div class="photo-grid">
                                                                             @foreach($photos as $photoIndex => $photo)
-                                                                                <img src="{{ asset('storage/' . $photo) }}"
+                                                                                <img src="{{ asset('/' . $photo) }}"
                                                                                      alt="{{ $labels[$field] }} {{ $photoIndex + 1 }}"
                                                                                      class="photo-thumbnail">
                                                                             @endforeach

@@ -259,7 +259,7 @@
                                                                 @if(!empty($photos))
                                                                     @foreach($photos as $photoIndex => $photo)
                                                                         <div class="multiple-thumbnail-item">
-                                                                            <img src="{{ asset('storage/' . $photo) }}"
+                                                                            <img src="{{ asset('/' . $photo) }}"
                                                                                  alt="{{ $labels[$field] }} {{ $photoIndex }}"
                                                                                  class="img-thumbnail"
                                                                                  style="height: 100px; width: auto;">

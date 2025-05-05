@@ -54,6 +54,9 @@
                                                 <span class="sub-text" style="font-weight: bold">Hotel Property Name</span>
                                             </div>
                                             <div class="nk-tb-col">
+                                                <span class="sub-text" style="font-weight: bold">Vendor</span>
+                                            </div>
+                                            <div class="nk-tb-col">
                                                 <span class="sub-text" style="font-weight: bold">Status</span>
                                             </div>
                                             <div class="nk-tb-col">
@@ -65,6 +68,9 @@
                                             <div class="nk-tb-item">
                                                 <div class="nk-tb-col">
                                                     <span class="text-primary">{{ $hotel->description ?? 'No description' }}</span>
+                                                </div>
+                                                <div class="nk-tb-col">
+                                                    <span class="text-primary">{{ \App\Models\Vendor::where('id',$hotel->vendor_id)->first()->contact_person_name }}</span>
                                                 </div>
                                                 <div class="nk-tb-col">
                                                     <span class="text-primary">{{ $hotel->status ?? 'No Status' }}</span>
