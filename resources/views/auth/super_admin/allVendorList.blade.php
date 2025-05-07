@@ -102,21 +102,21 @@
                                                                                 <a href="{{ route('super-admin.vendor.edit',$vendorList->id) }}"><em
                                                                                         class="icon ni ni-edit-fill"></em><span>Edit</span></a>
                                                                             </li>
-{{--                                                                            <li>--}}
-{{--                                                                                <a href="{{ route('super-admin.vendor.details', $vendorList->id) }}">--}}
-{{--                                                                                    <em class="icon ni ni-user"></em>--}}
-{{--                                                                                    <span>Vendor Info</span>--}}
-{{--                                                                                </a>--}}
-{{--                                                                            </li>--}}
+                                                                            <li>
+                                                                                <a href="{{ route('super.vendor.infoCreate', $vendorList->id) }}">
+                                                                                    <em class="icon ni ni-user"></em>
+                                                                                    <span>Vendor Info</span>
+                                                                                </a>
+                                                                            </li>
 
-{{--                                                                            <li>--}}
-{{--                                                                                <a href="{{ route('super.vendor-admin.owner.details',$vendorList->id) }}"><em--}}
-{{--                                                                                        class="icon ni ni-building"></em><span>Owner Details</span></a>--}}
-{{--                                                                            </li>--}}
-{{--                                                                            <li>--}}
-{{--                                                                                <a href="{{ route('super.owners.bankInfo',$vendorList->id) }}"><em--}}
-{{--                                                                                        class="icon ni ni ni-bag"></em><span>Owner Banking Info</span></a>--}}
-{{--                                                                            </li>--}}
+                                                                            <li>
+                                                                                <a href="{{ route('super.vendor-admin.owner.details',$vendorList->id) }}"><em
+                                                                                        class="icon ni ni-building"></em><span>Owner Details</span></a>
+                                                                            </li>
+                                                                            <li>
+                                                                                <a href="{{ route('super.owners.bankInfo',$vendorList->id) }}"><em
+                                                                                        class="icon ni ni ni-bag"></em><span>Owner Banking Info</span></a>
+                                                                            </li>
 
                                                                         </ul>
                                                                     </div>

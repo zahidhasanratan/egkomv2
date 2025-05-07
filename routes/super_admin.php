@@ -40,6 +40,10 @@ Route::prefix('super-admin')->group(function () {
         Route::get('vendor/{id}/edit', [DashboardController::class, 'vendor_edit'])->name('super-admin.vendor.edit');
         Route::put('vendor/{id}', [DashboardController::class, 'vendor_update'])->name('super-admin.vendor.update');
 
+        Route::get('/vendor-info/{id}', [DashboardController::class, 'vendorInfoCreate'])->name('super.vendor.infoCreate');
+        Route::post('/Super-vendor-info', [DashboardController::class, 'vendorInfoStore'])->name('super.info.Store');
+
+        Route::get('/Super-vendor-owner-info', [OwnerController::class, 'createSuper'])->name('super-admin.owner.create');
 
         Route::get('vendor/details/{id}', [DashboardController::class, 'vendor_index'])->name('super-admin.vendor.details');
         Route::get('/owner-info/{id}', [OwnerController::class, 'createSuper'])->name('super.vendor-admin.owner.details');
@@ -71,6 +75,8 @@ Route::prefix('super-admin')->group(function () {
 
         Route::get('/pagedetails/{slug}', [PageController::class, 'details'])->name('page.details');
         Route::get('/ajaxsearch', [MenuController::class, 'searchajax'])->name('menu.ajaxsearch');
+
+
     });
     /*Admin Panel Ended */
 

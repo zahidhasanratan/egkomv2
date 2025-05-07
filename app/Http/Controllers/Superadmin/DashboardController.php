@@ -11,6 +11,7 @@ use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use function App\Http\Controllers\Vendor;
 
 class DashboardController extends Controller
 {
@@ -22,14 +23,14 @@ class DashboardController extends Controller
     }
 
 
-
     public function vendor_index($id)
     {
         $property = Property::where('vendor_id', $id)->first();
         return view('auth.super_admin.vendor.info', compact('property'));
     }
 
-    public function vendor_details($id){
+    public function vendor_details($id)
+    {
         return $id;
     }
 
@@ -131,6 +132,109 @@ class DashboardController extends Controller
         $vendorList = Vendor::all();
         return view('auth.super_admin.allVendorList', compact('vendorList'));
     }
+
+    public function vendorInfoCreate($id)
+    {
+        $property = Property::where('vendor_id', $id)->first();
+        return view('auth.super_admin.vendorInfo', compact('property'));
+    }
+
+    public function vendorInfoStore(Request $request)
+    {
+        $vendorId = $request->vendor_id;
+        $property = Property::where('vendor_id', $vendorId)->first();
+
+        $logoPath = $property->company_logo ?? null; // Retain old logo if not uploaded
+        if ($request->hasFile('company_logo')) {
+            $file = $request->file('company_logo');
+            if ($file->isValid()) {
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $destinationPath = public_path('storage/logos');
+
+                if (!file_exists($destinationPath)) {
+                    mkdir($destinationPath, 0777, true);
+                }
+
+                $file->move($destinationPath, $fileName);
+                $logoPath = 'storage/logos/' . $fileName;
+            }
+        }
+
+        $sanitizeInteger = function ($value) {
+            return is_numeric($value) && $value >= 0 ? (int)$value : null;
+        };
+
+        // Prepare only non-null data
+        $newData = [
+            'property_name' => $request->input('property_name'),
+            'property_category' => $request->input('property_category'),
+            'property_type' => $request->input('property_type'),
+            'room_types' => $request->has('room_types') ? $request->input('room_types') : ($property->room_types ?? []),
+            'country_name' => $request->input('country_name'),
+            'district_name' => $request->input('district_name'),
+            'city_town_village' => $request->input('city_town_village'),
+            'postcode' => $request->input('postcode'),
+            'house_number' => $request->input('house_number'),
+            'road_number_name' => $request->input('road_number_name'),
+            'building_age' => $sanitizeInteger($request->input('building_age')),
+            'building_size' => $sanitizeInteger($request->input('building_size')),
+            'building_stories' => $sanitizeInteger($request->input('building_stories')),
+            'landmark_details' => $request->input('landmark_details'),
+            'google_map_link' => $request->input('google_map_link'),
+            'company_logo' => $logoPath,
+            'apartment_count' => $sanitizeInteger($request->input('apartment_count')),
+            'apartments' => $request->input('apartments', []),
+            'total_capacity' => $sanitizeInteger($request->input('total_capacity')),
+            'car_parking' => $sanitizeInteger($request->input('total_car_parking')),
+            'has_reception' => $request->input('reception') === 'yes',
+            'elevators' => $sanitizeInteger($request->input('total_lifts')),
+            'generators' => $sanitizeInteger($request->input('total_generators')),
+            'fire_exits' => $sanitizeInteger($request->input('total_fire_exits')),
+            'wheelchair_access' => $request->input('wheelchair_access') === 'yes',
+            'male_housekeeping' => $sanitizeInteger($request->input('male_housekeeping')),
+            'female_housekeeping' => $sanitizeInteger($request->input('female_housekeeping')),
+            'has_kids_zone' => $request->input('kids_zone') === 'yes',
+            'kids_zone_count' => $sanitizeInteger($request->input('kids_zone_count')),
+            'view_type' => $request->input('view_from_hotel'),
+            'security_guards' => $sanitizeInteger($request->input('security_guards')),
+            'has_cafe_restaurant' => $request->input('cafe_restaurants') === 'yes',
+            'cafe_restaurant_count' => $sanitizeInteger($request->input('cafe_restaurants_count')),
+            'cafe_restaurant_names' => $request->input('cafe_restaurants_names', []),
+            'has_pool' => $request->input('pool') === 'yes',
+            'pool_count' => $sanitizeInteger($request->input('pool_count')),
+            'has_bar' => $request->input('bar') === 'yes',
+            'bar_count' => $sanitizeInteger($request->input('bar_count')),
+            'has_gym' => $request->input('gym') === 'yes',
+            'gym_count' => $sanitizeInteger($request->input('gym_count')),
+            'has_party_center' => $request->input('party_center') === 'yes',
+            'party_center_details' => $request->input('party_center_details'),
+            'has_conference_hall' => $request->input('conference_hall') === 'yes',
+            'conference_hall_details' => $request->input('conference_hall_details'),
+            'status' => $request->input('action') === 'submit' ? 'submitted' : 'draft',
+        ];
+
+        // Retain old values where new ones are not provided
+        $data = array_merge($property ? $property->toArray() : [], array_filter($newData, fn($value) => !is_null($value)));
+
+        // Update or create the property record
+        Property::updateOrCreate(
+            ['vendor_id' => $vendorId], // Condition
+            $data // Updated data
+        );
+
+        $message = $data['status'] === 'submitted' ? 'submitted' : 'saved as draft';
+//        return redirect()->route('vendor-admin.vendor.create')->with('success', "Property information $message successfully!");
+
+// Conditional redirect based on the status
+        if ($data['status'] === 'submitted') {
+            return redirect()->route('super.vendor.infoCreate',$vendorId)->with('success', "Property information $message successfully!");
+        } else {
+            return redirect()->route('super.vendor.infoCreate',$vendorId)->with('success', "Property information $message successfully!");
+        }
+
+    }
+
+
 
     public function vendor_store(Request $request)
     {
