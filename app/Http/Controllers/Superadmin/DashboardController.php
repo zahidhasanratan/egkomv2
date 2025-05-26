@@ -15,7 +15,7 @@ use function App\Http\Controllers\Vendor;
 
 class DashboardController extends Controller
 {
-    // Show the Super Admin Dashboard
+
     public function index()
     {
 
@@ -241,14 +241,14 @@ class DashboardController extends Controller
         $validated = $request->validate([
             'hotel_name' => 'required|string|max:255',
             'contact_person_name' => 'required|string|max:255',
-            'contact_person_dob' => 'nullable|date',
+//            'contact_person_dob' => 'nullable|date',
             'contact_person_designation' => 'nullable|string|max:255',
             'phone' => 'required|string|max:15',
             'email' => 'required|email|max:255|unique:vendors',
             'address_house' => 'nullable|string|max:255',
             'address_city' => 'nullable|string|max:255',
             'address_district' => 'nullable|string|max:255',
-            'address_area' => 'nullable|string|max:255',
+//            'address_area' => 'nullable|string|max:255',
             'address_landmark' => 'nullable|string|max:255',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif',
@@ -256,8 +256,8 @@ class DashboardController extends Controller
             'hotel_pictures.*' => 'image|mimes:jpeg,png,jpg,gif',
             'bank_check_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'nid' => 'nullable|string|max:255',
-            'trade_license_bin_tin' => 'nullable|string|max:255',
-            'bank_details' => 'nullable|string|max:255',
+//            'trade_license_bin_tin' => 'nullable|string|max:255',
+//            'bank_details' => 'nullable|string|max:255',
             'password' => 'required|string|min:8', // Validate password
         ]);
 
@@ -288,22 +288,22 @@ class DashboardController extends Controller
         $vendor = Vendor::create([
             'hotel_name' => $validated['hotel_name'],
             'contact_person_name' => $validated['contact_person_name'],
-            'contact_person_dob' => $validated['contact_person_dob'],
+//            'contact_person_dob' => $validated['contact_person_dob'],
             'contact_person_designation' => $validated['contact_person_designation'],
             'phone' => $validated['phone'],
             'email' => $validated['email'],
             'address_house' => $validated['address_house'],
             'address_city' => $validated['address_city'],
             'address_district' => $validated['address_district'],
-            'address_area' => $validated['address_area'],
+//            'address_area' => $validated['address_area'],
             'address_landmark' => $validated['address_landmark'],
             'profile_picture' => $profilePicture,
             'logo' => $logo,
             'hotel_pictures' => json_encode($hotelPictures), // Save hotel pictures as JSON
             'bank_check_picture' => $bankCheckPicture,
             'nid' => $validated['nid'],
-            'trade_license_bin_tin' => $validated['trade_license_bin_tin'],
-            'bank_details' => $validated['bank_details'],
+//            'trade_license_bin_tin' => $validated['trade_license_bin_tin'],
+//            'bank_details' => $validated['bank_details'],
             'password' => bcrypt($validated['password']), // Hash the password
         ]);
         $vendor->vendorId = 'Ven-' . $vendor->id; // Create the vendorId
@@ -325,14 +325,14 @@ class DashboardController extends Controller
         $validated = $request->validate([
             'hotel_name' => 'required|string|max:255',
             'contact_person_name' => 'required|string|max:255',
-            'contact_person_dob' => 'nullable|date',
+//            'contact_person_dob' => 'nullable|date',
             'contact_person_designation' => 'nullable|string|max:255',
             'phone' => 'required|string|max:15',
             'email' => 'required|email|max:255|unique:vendors,email,' . $vendor->id,
             'address_house' => 'nullable|string|max:255',
             'address_city' => 'nullable|string|max:255',
             'address_district' => 'nullable|string|max:255',
-            'address_area' => 'nullable|string|max:255',
+//            'address_area' => 'nullable|string|max:255',
             'address_landmark' => 'nullable|string|max:255',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif',
@@ -340,8 +340,8 @@ class DashboardController extends Controller
             'hotel_pictures.*' => 'image|mimes:jpeg,png,jpg,gif',
             'bank_check_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'nid' => 'nullable|string|max:255',
-            'trade_license_bin_tin' => 'nullable|string|max:255',
-            'bank_details' => 'nullable|string|max:255',
+//            'trade_license_bin_tin' => 'nullable|string|max:255',
+//            'bank_details' => 'nullable|string|max:255',
             'password' => 'nullable|string|min:8',
         ]);
 

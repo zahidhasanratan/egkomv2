@@ -506,6 +506,7 @@ class ManageHotel extends Controller
 
         // 1) Validate input
         $validated = $request->validate([
+            'property_type'               => 'nullable|string',
             'description'               => 'nullable|string',
             'pets_allowed'              => 'nullable|in:yes,no',
             'pets_details'              => 'nullable|string',
@@ -541,6 +542,7 @@ class ManageHotel extends Controller
             'nearby_areas'              => 'nullable|array',
             'custom_nearby_areas'       => 'nullable|array',
             'status'                    => 'required|in:draft,submitted',
+            'featured_photo.*'          => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'kitchen_photos.*'          => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'washroom_photos.*'         => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'parking_lot_photos.*'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -615,12 +617,38 @@ class ManageHotel extends Controller
 
         // 7) Handle multiple photo fields (remove + upload)
         $photoFields = [
-            'kitchen_photos', 'washroom_photos', 'parking_lot_photos',
+            'featured_photo','kitchen_photos', 'washroom_photos', 'parking_lot_photos',
             'entrance_gate_photos', 'lift_stairs_photos', 'spa_photos',
             'bar_photos', 'transport_photos', 'rooftop_photos',
             'gym_photos', 'security_photos', 'amenities_photos'
         ];
 
+        foreach ($photoFields as $field) {
+            $existingPhotos = json_decode($hotel->$field ?? '[]', true) ?: [];
+
+            // Handle removal
+            $removedIndexes = explode(',', $request->input('removed_' . $field, ''));
+            $remainingPhotos = [];
+            foreach ($existingPhotos as $index => $photo) {
+                if (!in_array((string)$index, $removedIndexes, true)) {
+                    $remainingPhotos[] = $photo;
+                }
+            }
+
+            // Handle new uploads
+            if ($request->hasFile($field)) {
+                $files = is_array($request->file($field)) ? $request->file($field) : [$request->file($field)];
+
+                foreach ($files as $file) {
+                    if ($file && $file->isValid()) {
+                        $path = $file->store('uploads/hotel_photos', 'public');
+                        $remainingPhotos[] = 'storage/' . $path;
+                    }
+                }
+            }
+
+            $data[$field] = json_encode($remainingPhotos);
+        }
 //        foreach ($photoFields as $field) {
 //            $existingPhotos = json_decode($hotel->$field ?? '[]', true);
 //            $existingPhotos = is_array($existingPhotos) ? $existingPhotos : [];
@@ -628,7 +656,10 @@ class ManageHotel extends Controller
 //            // Remove selected photos
 //            foreach (array_filter(explode(',', $request->input('removed_' . $field, ''))) as $index) {
 //                if (isset($existingPhotos[$index])) {
-//                    \Storage::disk('public')->delete($existingPhotos[$index]);
+//                    $filePath = public_path($existingPhotos[$index]);
+//                    if (file_exists($filePath)) {
+//                        unlink($filePath);  // Delete directly from public folder
+//                    }
 //                    unset($existingPhotos[$index]);
 //                }
 //            }
@@ -637,41 +668,15 @@ class ManageHotel extends Controller
 //            if ($request->hasFile($field)) {
 //                foreach ($request->file($field) as $file) {
 //                    if ($file->isValid()) {
-//                        $existingPhotos[] = $file->store('hotel_photos', 'public');
+//                        $filename = time() . '_' . $file->getClientOriginalName();
+//                        $file->move(public_path('hotel_photos'), $filename);
+//                        $existingPhotos[] = 'hotel_photos/' . $filename;  // Save relative path
 //                    }
 //                }
 //            }
 //
 //            $data[$field] = json_encode(array_values($existingPhotos));
 //        }
-        foreach ($photoFields as $field) {
-            $existingPhotos = json_decode($hotel->$field ?? '[]', true);
-            $existingPhotos = is_array($existingPhotos) ? $existingPhotos : [];
-
-            // Remove selected photos
-            foreach (array_filter(explode(',', $request->input('removed_' . $field, ''))) as $index) {
-                if (isset($existingPhotos[$index])) {
-                    $filePath = public_path($existingPhotos[$index]);
-                    if (file_exists($filePath)) {
-                        unlink($filePath);  // Delete directly from public folder
-                    }
-                    unset($existingPhotos[$index]);
-                }
-            }
-
-            // Add new uploads
-            if ($request->hasFile($field)) {
-                foreach ($request->file($field) as $file) {
-                    if ($file->isValid()) {
-                        $filename = time() . '_' . $file->getClientOriginalName();
-                        $file->move(public_path('hotel_photos'), $filename);
-                        $existingPhotos[] = 'hotel_photos/' . $filename;  // Save relative path
-                    }
-                }
-            }
-
-            $data[$field] = json_encode(array_values($existingPhotos));
-        }
 
         // 8) Always keep vendor_id
         $data['vendor_id'] = $hotel->vendor_id;

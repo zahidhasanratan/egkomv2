@@ -1,4 +1,4 @@
-@extends('auth.layout.vendor_admin_layout')
+@extends('auth.layout.super_admin_layout')
 
 @section('mainbody')
     <div class="nk-content ">
@@ -40,6 +40,19 @@
                                         <!-- Hotel Description -->
                                         <div class="tab-pane active" id="tabItem3">
                                             <div class="row gy-4">
+                                                <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                    <div class="form-group">
+                                                        <label for="property_type" class="form-label">Property Type</label>
+                                                        <select name="property_type" class="form-control">
+                                                            <option {{ $hotel->property_type == 'Hotels' ? 'selected' : '' }}>Hotels</option>
+                                                            <option {{ $hotel->property_type == 'Transit' ? 'selected' : '' }}>Transit</option>
+                                                            <option {{ $hotel->property_type == 'Resorts' ? 'selected' : '' }}>Resorts</option>
+                                                            <option {{ $hotel->property_type == 'Lodges' ? 'selected' : '' }}>Lodges</option>
+                                                            <option {{ $hotel->property_type == 'Guesthouses' ? 'selected' : '' }}>Guesthouses</option>
+                                                            <option {{ $hotel->property_type == 'Crisis' ? 'selected' : '' }}>Crisis</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
                                                 <div class="col-md-12 col-lg-12 col-xxl-3">
                                                     <div class="form-group">
                                                         <label class="form-label" for="default-textarea">Hotel /
@@ -1350,11 +1363,12 @@
                                         <div class="tab-pane" id="Photos">
                                             @php
                                                 $photoFields = [
-                                                    'kitchen_photos', 'washroom_photos', 'parking_lot_photos', 'entrance_gate_photos',
+                                                    'featured_photo','kitchen_photos', 'washroom_photos', 'parking_lot_photos', 'entrance_gate_photos',
                                                     'lift_stairs_photos', 'spa_photos', 'bar_photos', 'transport_photos',
                                                     'rooftop_photos', 'gym_photos', 'security_photos', 'amenities_photos'
                                                 ];
                                                 $labels = [
+                                                    'featured_photo' => 'Featured Photo Photo',
                                                     'kitchen_photos' => 'Kitchen Photo',
                                                     'washroom_photos' => 'Washroom Photo',
                                                     'parking_lot_photos' => 'Parking Lot Photos',
@@ -1379,7 +1393,6 @@
                                                             <div class="multiple-upload-container"
                                                                  id="upload-container-{{ $index + 1 }}">
                                                                 @php
-                                                                    // Decode the field and handle extra backslashes
                                                                     $photos = json_decode($hotel->$field, true);
                                                                     // Check if the decoded photos are an array
                                                                     if (is_array($photos)) {
@@ -1387,7 +1400,7 @@
                                                                             return str_replace("\\", "/", $photo); // Remove extra backslashes
                                                                         }, $photos);
                                                                     } else {
-                                                                        $photos = []; // If not an array, set to an empty array
+                                                                        $photos = [];
                                                                     }
                                                                 @endphp
 
@@ -1407,10 +1420,16 @@
                                                                     @endforeach
                                                                 @endif
 
-                                                                <input type="file" class="multiple-file-input"
-                                                                       name="{{ $field }}[]" accept="image/*" multiple>
-                                                                <label class="upload-label">Select Multiple
-                                                                    Images</label>
+                                                                @if($field === 'featured_photo')
+                                                                    <input type="file" class="multiple-file-input"
+                                                                           name="{{ $field }}" accept="image/*">
+                                                                    <label class="upload-label">Select Single Image</label>
+                                                                @else
+                                                                    <input type="file" class="multiple-file-input"
+                                                                           name="{{ $field }}[]" accept="image/*" multiple>
+                                                                    <label class="upload-label">Select Multiple Images</label>
+                                                                @endif
+
                                                                 <div class="multiple-thumbnail-gallery"></div>
                                                             </div>
                                                             <input type="hidden" name="removed_{{ $field }}"

@@ -31,132 +31,108 @@
                 <div class="col-md-11 col-11">
                     <div class="row">
                         <ul class="nav nav-tabs owl-carousel owl-theme owl-custom-tabbing" id="owl-company-logo">
+
                             <li class="nav-item">
-                                <a class="nav-link nav-custom active" href="#appartment" data-bs-toggle="tab">
+                                <a class="nav-link nav-custom active" href="#Hotel" data-bs-toggle="tab">
                         <span>
                           <i class="fa fa-building"></i>
-                        </span>
-                                    <span class=" d-md-inline-flex st-text">Apartment</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link nav-custom " href="#hotel" data-bs-toggle="tab">
-                        <span>
-                          <i class="fa fa-bed fa-bed-custom"></i>
-                        </span>
-                                    <span class="d-md-inline-flex st-text">Hotel</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link nav-custom" href="#resort" data-bs-toggle="tab">
-                        <span>
-                          <i class="fa fa-suitcase"></i>
-                        </span>
-                                    <span class="d-md-inline-flex st-text">Resort</span>
-                                </a>
-                            </li>
-
-
-                            <li class="nav-item">
-                                <a class="nav-link nav-custom " href="#others" data-bs-toggle="tab">
-                        <span>
-                          <i class="fa fa-bed fa-bed-custom"></i>
-                        </span>
-                                    <span class="d-md-inline-flex st-text">Others</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link nav-custom" href="#resort" data-bs-toggle="tab">
-                        <span>
-                          <i class="fa fa-suitcase"></i>
-                        </span>
-                                    <span class="d-md-inline-flex st-text">Resort</span>
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link nav-custom " href="#hotel" data-bs-toggle="tab">
-                        <span>
-                          <i class="fa fa-bed fa-bed-custom"></i>
-                        </span>
-                                    <span class="d-md-inline-flex st-text">Hotel</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link nav-custom" href="#resort" data-bs-toggle="tab">
-                        <span>
-                          <i class="fa fa-suitcase"></i>
-                        </span>
-                                    <span class="d-md-inline-flex st-text">Resort</span>
-                                </a>
-                            </li>
-
-
-                            <li class="nav-item">
-                                <a class="nav-link nav-custom " href="#hotel" data-bs-toggle="tab">
-                        <span>
-                          <i class="fa fa-bed fa-bed-custom"></i>
-                        </span>
-                                    <span class="d-md-inline-flex st-text">Hotel</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link nav-custom" href="#resort" data-bs-toggle="tab">
-                        <span>
-                          <i class="fa fa-suitcase"></i>
-                        </span>
-                                    <span class="d-md-inline-flex st-text">Resort</span>
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link nav-custom " href="#hotel" data-bs-toggle="tab">
-                        <span>
-                          <i class="fa fa-bed fa-bed-custom"></i>
-                        </span>
-                                    <span class="d-md-inline-flex st-text">Hotel</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link nav-custom" href="#resort" data-bs-toggle="tab">
-                        <span>
-                          <i class="fa fa-suitcase"></i>
-                        </span>
-                                    <span class="d-md-inline-flex st-text">Resort</span>
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link nav-custom " href="#hotel" data-bs-toggle="tab">
-                        <span>
-                          <i class="fa fa-bed fa-bed-custom"></i>
                         </span>
                                     <span class=" d-md-inline-flex st-text">Hotel</span>
                                 </a>
                             </li>
+
                             <li class="nav-item">
-                                <a class="nav-link nav-custom" href="#resort" data-bs-toggle="tab">
+                                <a class="nav-link nav-custom " href="#Transit" data-bs-toggle="tab">
                         <span>
-                          <i class="fa fa-suitcase"></i>
+                          <i class="fa fa-bed fa-bed-custom"></i>
                         </span>
-                                    <span class="d-md-inline-flex st-text">Resort</span>
+                                    <span class="d-md-inline-flex st-text">Transit</span>
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link nav-custom " href="#hotel" data-bs-toggle="tab">
+                                <a class="nav-link nav-custom " href="#Resorts" data-bs-toggle="tab">
                         <span>
                           <i class="fa fa-bed fa-bed-custom"></i>
                         </span>
-                                    <span class="d-md-inline-flex st-text">Hotel</span>
+                                    <span class="d-md-inline-flex st-text">Resorts</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link nav-custom" href="#resort" data-bs-toggle="tab">
+                                <a class="nav-link nav-custom " href="#Lodges" data-bs-toggle="tab">
                         <span>
-                          <i class="fa fa-suitcase"></i>
+                          <i class="fa fa-bed fa-bed-custom"></i>
                         </span>
-                                    <span class="d-md-inline-flex st-text">Resort</span>
+                                    <span class="d-md-inline-flex st-text">Lodges</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link nav-custom " href="#Guesthouses" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-bed fa-bed-custom"></i>
+                        </span>
+                                    <span class="d-md-inline-flex st-text">Guesthouses</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-custom " href="#Crisis" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-bed fa-bed-custom"></i>
+                        </span>
+                                    <span class="d-md-inline-flex st-text">Crisis</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link nav-custom" href="#Hotel" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-building"></i>
+                        </span>
+                                    <span class=" d-md-inline-flex st-text">Hotel</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link nav-custom " href="#Transit" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-bed fa-bed-custom"></i>
+                        </span>
+                                    <span class="d-md-inline-flex st-text">Transit</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link nav-custom " href="#Resorts" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-bed fa-bed-custom"></i>
+                        </span>
+                                    <span class="d-md-inline-flex st-text">Resorts</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-custom " href="#Lodges" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-bed fa-bed-custom"></i>
+                        </span>
+                                    <span class="d-md-inline-flex st-text">Lodges</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link nav-custom " href="#Guesthouses" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-bed fa-bed-custom"></i>
+                        </span>
+                                    <span class="d-md-inline-flex st-text">Guesthouses</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-custom " href="#Crisis" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-bed fa-bed-custom"></i>
+                        </span>
+                                    <span class="d-md-inline-flex st-text">Crisis</span>
                                 </a>
                             </li>
 
@@ -181,513 +157,11 @@
                 <div class="row">
                     <div class="col-12 col-md-12 col-lg-12 col-xl-12 content-side">
                         <div class="tab-content">
-                            <!-- Start: Appartment -->
-                            <div id="appartment" class="tab-pane in active">
-                                <div class="row">
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="hotel-room-details.html">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/1.jpg" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
-
-                                                <div class="wish-list-container">
-                                                    <div class="wish-list-btn">
-                                                        <a href="#">
-                                                            <div class="circle">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon removed">
-                                                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06
-                                              1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                                                                </svg>
-                                                                <span class="message">
-                                                <a href="/profile/saved" class="link" target="_blank"> Saved <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" class="icon-right-arrow">
-                                                    <path fill="#1C3C6B" d="M5.086 9.5a.5.5 0 0 0 .39-.186l2.414-3a.5.5 0 0 0-.006-.634l-2.5-3a.5.5 0 0
-                                                    0-.768.64l2.238 2.686-2.158 2.68a.5.5 0 0 0 .39.814z"></path>
-                                                  </svg>
-                                                </a>
-                                              </span>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div><!-- end h-grid-img -->
-
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title"><a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a></h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
-
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
-                                                </div>
-
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk.
-                                                            <span class="pkg">Night</span>
-                                                        </li>
-
-                                                        <li class="list-inline-item price">
-                                                            <span class="pkg"><del>2000 Tk.</del></span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div><!-- end h-grid-info -->
-
-                                        </div><!-- end h-grid-block -->
-                                    </div>
-
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="hotel-room-details.html">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/2.webp" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
-                                            </div><!-- end h-grid-img -->
-
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title"><a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a></h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
-
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
-                                                </div>
-
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk.
-                                                            <span class="pkg">Night</span>
-                                                        </li>
-
-                                                        <li class="list-inline-item price">
-                                                            <span class="pkg"><del>2000 Tk.</del></span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div><!-- end h-grid-info -->
-                                        </div><!-- end h-grid-block -->
-                                    </div>
-
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="#">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/3.jpg" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
-                                            </div><!-- end h-grid-img -->
-
-
-
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title"><a href="hotel-room-details.html">Cox Beach Resort, Cox's Bazar  </a></h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
-
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
-                                                </div>
-
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk.
-                                                            <span class="pkg">Night</span>
-                                                        </li>
-
-                                                        <li class="list-inline-item price">
-                                                            <span class="pkg"><del>2000 Tk.</del></span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div><!-- end h-grid-info -->
-                                        </div><!-- end h-grid-block -->
-                                    </div>
-
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="#">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/4.jpg" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
-                                            </div><!-- end h-grid-img -->
-
-
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title"><a href="hotel-room-details.html">Hotel Windy Terrace, Cox's Bazar </a></h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
-
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
-                                                </div>
-
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk.
-                                                            <span class="pkg">Night</span>
-                                                        </li>
-
-                                                        <li class="list-inline-item price">
-                                                            <span class="pkg"><del>2000 Tk.</del></span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div><!-- end h-grid-info -->
-
-
-                                        </div><!-- end h-grid-block -->
-                                    </div>
-
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="#">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/5.jpg" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
-                                            </div><!-- end h-grid-img -->
-
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title"><a href="hotel-room-details.html">Hotel Windy Terrace, Cox's Bazar </a></h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
-
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
-                                                </div>
-
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk.
-                                                            <span class="pkg">Night</span>
-                                                        </li>
-
-                                                        <li class="list-inline-item price">
-                                                            <span class="pkg"><del>2000 Tk.</del></span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div><!-- end h-grid-info -->
-
-                                        </div><!-- end h-grid-block -->
-                                    </div>
-
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="#">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/6.jpg" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
-                                            </div><!-- end h-grid-img -->
-
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title"><a href="hotel-room-details.html">Hotel Windy Terrace, Cox's Bazar </a></h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
-
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
-                                                </div>
-
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk.
-                                                            <span class="pkg">Night</span>
-                                                        </li>
-
-                                                        <li class="list-inline-item price">
-                                                            <span class="pkg"><del>2000 Tk.</del></span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div><!-- end h-grid-info -->
-                                        </div><!-- end h-grid-block -->
-                                    </div>
-
-
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="#">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/7.jpg" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
-                                            </div><!-- end h-grid-img -->
-
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title"><a href="hotel-room-details.html">Hotel Windy Terrace, Cox's Bazar </a></h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
-
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
-                                                </div>
-
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk.
-                                                            <span class="pkg">Night</span>
-                                                        </li>
-
-                                                        <li class="list-inline-item price">
-                                                            <span class="pkg"><del>2000 Tk.</del></span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div><!-- end h-grid-info -->
-                                        </div><!-- end h-grid-block -->
-                                    </div>
-
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="#">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/8.jpg" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
-                                            </div><!-- end h-grid-img -->
-
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title"><a href="hotel-room-details.html">Hotel Windy Terrace, Cox's Bazar </a></h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
-
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
-                                                </div>
-
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk.
-                                                            <span class="pkg">Night</span>
-                                                        </li>
-
-                                                        <li class="list-inline-item price">
-                                                            <span class="pkg"><del>2000 Tk.</del></span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div><!-- end h-grid-info -->
-                                        </div><!-- end h-grid-block -->
-                                    </div>
-
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="hotel-room-details.html">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/1.jpg" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
-
-                                                <div class="wish-list-container">
-                                                    <div class="wish-list-btn">
-                                                        <a href="#">
-                                                            <div class="circle">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon removed">
-                                                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06
-                                              1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                                                                </svg>
-                                                                <span class="message">
-                                                <a href="/profile/saved" class="link" target="_blank"> Saved <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" class="icon-right-arrow">
-                                                    <path fill="#1C3C6B" d="M5.086 9.5a.5.5 0 0 0 .39-.186l2.414-3a.5.5 0 0 0-.006-.634l-2.5-3a.5.5 0 0
-                                                    0-.768.64l2.238 2.686-2.158 2.68a.5.5 0 0 0 .39.814z"></path>
-                                                  </svg>
-                                                </a>
-                                              </span>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div><!-- end h-grid-img -->
-
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title"><a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a></h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
-
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
-                                                </div>
-
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk.
-                                                            <span class="pkg">Night</span>
-                                                        </li>
-
-                                                        <li class="list-inline-item price">
-                                                            <span class="pkg"><del>2000 Tk.</del></span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div><!-- end h-grid-info -->
-
-                                        </div><!-- end h-grid-block -->
-                                    </div>
-
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="hotel-room-details.html">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/2.webp" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
-                                            </div><!-- end h-grid-img -->
-
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title"><a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a></h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
-
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
-                                                </div>
-
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk.
-                                                            <span class="pkg">Night</span>
-                                                        </li>
-
-                                                        <li class="list-inline-item price">
-                                                            <span class="pkg"><del>2000 Tk.</del></span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div><!-- end h-grid-info -->
-                                        </div><!-- end h-grid-block -->
-                                    </div>
-
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="#">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/3.jpg" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
-                                            </div><!-- end h-grid-img -->
-
-
-
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title"><a href="hotel-room-details.html">Cox Beach Resort, Cox's Bazar  </a></h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
-
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
-                                                </div>
-
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk.
-                                                            <span class="pkg">Night</span>
-                                                        </li>
-
-                                                        <li class="list-inline-item price">
-                                                            <span class="pkg"><del>2000 Tk.</del></span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div><!-- end h-grid-info -->
-                                        </div><!-- end h-grid-block -->
-                                    </div>
-
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="#">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/4.jpg" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
-                                            </div><!-- end h-grid-img -->
-
-
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title"><a href="hotel-room-details.html">Hotel Windy Terrace, Cox's Bazar </a></h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
-
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
-                                                </div>
-
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk.
-                                                            <span class="pkg">Night</span>
-                                                        </li>
-
-                                                        <li class="list-inline-item price">
-                                                            <span class="pkg"><del>2000 Tk.</del></span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End:Appartment -->
 
                             <!-- Start:  Hotel -->
-                            <div id="hotel" class="tab-pane">
+                            <div id="Hotel" class="tab-pane in active">
                                 <div class="row">
+                                @foreach(\App\Models\Hotel:: where('property_type','Hotels')->get() as $hotel)
                                     <div class="col-md-6 col-lg-6 col-xl-3">
                                         <div class="grid-block main-block h-grid-block">
                                             <div class="main-img h-grid-img">
@@ -726,186 +200,14 @@
                                         </div>
                                         <!-- end h-grid-block -->
                                     </div>
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="#">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/3.jpg" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
-                                            </div>
-                                            <!-- end h-grid-img -->
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title">
-                                                    <a href="hotel-room-details.html">Cox Beach Resort, Cox's Bazar </a>
-                                                </h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
-                                                </div>
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
-                                                        </li>
-                                                        <li class="list-inline-item price">
-                                  <span class="pkg">
-                                    <del>2000 Tk.</del>
-                                  </span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <!-- end h-grid-info -->
-                                        </div>
-                                        <!-- end h-grid-block -->
-                                    </div>
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="hotel-room-details.html">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/1.jpg" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
-                                                <div class="wish-list-container">
-                                                    <div class="wish-list-btn">
-                                                        <a href="#">
-                                                            <div class="circle">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon removed">
-                                                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06
-                                                          1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                                                                </svg>
-                                                                <span class="message">
-                                      <a href="/profile/saved" class="link" target="_blank"> Saved <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" class="icon-right-arrow">
-                                          <path fill="#1C3C6B" d="M5.086 9.5a.5.5 0 0 0 .39-.186l2.414-3a.5.5 0 0 0-.006-.634l-2.5-3a.5.5 0 0
-                                                                0-.768.64l2.238 2.686-2.158 2.68a.5.5 0 0 0 .39.814z"></path>
-                                        </svg>
-                                      </a>
-                                    </span>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- end h-grid-img -->
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title">
-                                                    <a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a>
-                                                </h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
-                                                </div>
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
-                                                        </li>
-                                                        <li class="list-inline-item price">
-                                  <span class="pkg">
-                                    <del>2000 Tk.</del>
-                                  </span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <!-- end h-grid-info -->
-                                        </div>
-                                        <!-- end h-grid-block -->
-                                    </div>
-
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="#">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/4.jpg" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
-                                            </div>
-                                            <!-- end h-grid-img -->
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title">
-                                                    <a href="hotel-room-details.html">Hotel Windy Terrace, Cox's Bazar </a>
-                                                </h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
-                                                </div>
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
-                                                        </li>
-                                                        <li class="list-inline-item price">
-                                  <span class="pkg">
-                                    <del>2000 Tk.</del>
-                                  </span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <!-- end h-grid-info -->
-                                        </div>
-                                        <!-- end h-grid-block -->
-                                    </div>
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="#">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/5.jpg" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
-                                            </div>
-                                            <!-- end h-grid-img -->
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title">
-                                                    <a href="hotel-room-details.html">Hotel Windy Terrace, Cox's Bazar </a>
-                                                </h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
-                                                </div>
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
-                                                        </li>
-                                                        <li class="list-inline-item price">
-                                  <span class="pkg">
-                                    <del>2000 Tk.</del>
-                                  </span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <!-- end h-grid-info -->
-                                        </div>
-                                        <!-- end h-grid-block -->
-                                    </div>
-
+                                @endforeach
                                 </div>
                             </div>
                             <!-- End:  Hotel -->
 
-                            <!-- Start:  Resort -->
-                            <div id="resort" class="tab-pane">
+                            <div id="Transit" class="tab-pane">
                                 <div class="row">
+
                                     <div class="col-md-6 col-lg-6 col-xl-3">
                                         <div class="grid-block main-block h-grid-block">
                                             <div class="main-img h-grid-img">
@@ -915,215 +217,61 @@
                                                 <div class="guest-favourite">
                                                     <h3>Guest favourite</h3>
                                                 </div>
+
                                                 <div class="wish-list-container">
                                                     <div class="wish-list-btn">
                                                         <a href="#">
                                                             <div class="circle">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon removed">
                                                                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06
-                                                          1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                              1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                                                                 </svg>
                                                                 <span class="message">
-                                      <a href="/profile/saved" class="link" target="_blank"> Saved <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" class="icon-right-arrow">
-                                          <path fill="#1C3C6B" d="M5.086 9.5a.5.5 0 0 0 .39-.186l2.414-3a.5.5 0 0 0-.006-.634l-2.5-3a.5.5 0 0
-                                                                0-.768.64l2.238 2.686-2.158 2.68a.5.5 0 0 0 .39.814z"></path>
-                                        </svg>
-                                      </a>
-                                    </span>
+                                                <a href="/profile/saved" class="link" target="_blank"> Saved <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" class="icon-right-arrow">
+                                                    <path fill="#1C3C6B" d="M5.086 9.5a.5.5 0 0 0 .39-.186l2.414-3a.5.5 0 0 0-.006-.634l-2.5-3a.5.5 0 0
+                                                    0-.768.64l2.238 2.686-2.158 2.68a.5.5 0 0 0 .39.814z"></path>
+                                                  </svg>
+                                                </a>
+                                              </span>
                                                             </div>
                                                         </a>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <!-- end h-grid-img -->
+                                            </div><!-- end h-grid-img -->
+
                                             <div class="block-info h-grid-info">
-                                                <h3 class="block-title">
-                                                    <a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a>
-                                                </h3>
+                                                <h3 class="block-title"><a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a></h3>
                                                 <p class="block-minor">400 kilometers away</p>
                                                 <!-- <p class="block-minor"> May 1 – 6</p> -->
+
                                                 <div class="review-main">
                                                     <div class="review-cat-home">8.9</div>
                                                     <div class="review-cat">Fabulous</div>
                                                     <div class="review-cat spna">3,022 reviews</div>
                                                 </div>
+
                                                 <div class="main-mask">
                                                     <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
+                                                        <li class="list-inline-item price">5000 Tk.
+                                                            <span class="pkg">Night</span>
                                                         </li>
+
                                                         <li class="list-inline-item price">
-                                  <span class="pkg">
-                                    <del>2000 Tk.</del>
-                                  </span>
+                                                            <span class="pkg"><del>2000 Tk.</del></span>
                                                         </li>
                                                     </ul>
                                                 </div>
-                                            </div>
-                                            <!-- end h-grid-info -->
-                                        </div>
-                                        <!-- end h-grid-block -->
+                                            </div><!-- end h-grid-info -->
+
+                                        </div><!-- end h-grid-block -->
                                     </div>
 
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="#">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/4.jpg" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
-                                            </div>
-                                            <!-- end h-grid-img -->
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title">
-                                                    <a href="hotel-room-details.html">Hotel Windy Terrace, Cox's Bazar </a>
-                                                </h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
-                                                </div>
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
-                                                        </li>
-                                                        <li class="list-inline-item price">
-                                  <span class="pkg">
-                                    <del>2000 Tk.</del>
-                                  </span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <!-- end h-grid-info -->
-                                        </div>
-                                        <!-- end h-grid-block -->
-                                    </div>
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="hotel-room-details.html">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/2.webp" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
-                                            </div>
-                                            <!-- end h-grid-img -->
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title">
-                                                    <a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a>
-                                                </h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
-                                                </div>
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
-                                                        </li>
-                                                        <li class="list-inline-item price">
-                                  <span class="pkg">
-                                    <del>2000 Tk.</del>
-                                  </span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <!-- end h-grid-info -->
-                                        </div>
-                                        <!-- end h-grid-block -->
-                                    </div>
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="#">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/3.jpg" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
-                                            </div>
-                                            <!-- end h-grid-img -->
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title">
-                                                    <a href="hotel-room-details.html">Cox Beach Resort, Cox's Bazar </a>
-                                                </h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
-                                                </div>
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
-                                                        </li>
-                                                        <li class="list-inline-item price">
-                                  <span class="pkg">
-                                    <del>2000 Tk.</del>
-                                  </span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <!-- end h-grid-info -->
-                                        </div>
-                                        <!-- end h-grid-block -->
-                                    </div>
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="#">
-                                                    <img src={{ asset('frontend')}}/hotel/5.jpg" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
-                                            </div>
-                                            <!-- end h-grid-img -->
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title">
-                                                    <a href="hotel-room-details.html">Hotel Windy Terrace, Cox's Bazar </a>
-                                                </h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
-                                                </div>
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
-                                                        </li>
-                                                        <li class="list-inline-item price">
-                                  <span class="pkg">
-                                    <del>2000 Tk.</del>
-                                  </span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <!-- end h-grid-info -->
-                                        </div>
-                                        <!-- end h-grid-block -->
-                                    </div>
 
                                 </div>
                             </div>
-                            <!-- End:  Resort -->
-
-                            <!-- Start:  Others -->
-                            <div id="others" class="tab-pane">
+                            <div id="Resorts" class="tab-pane">
                                 <div class="row">
+
                                     <div class="col-md-6 col-lg-6 col-xl-3">
                                         <div class="grid-block main-block h-grid-block">
                                             <div class="main-img h-grid-img">
@@ -1133,213 +281,252 @@
                                                 <div class="guest-favourite">
                                                     <h3>Guest favourite</h3>
                                                 </div>
+
                                                 <div class="wish-list-container">
                                                     <div class="wish-list-btn">
                                                         <a href="#">
                                                             <div class="circle">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon removed">
                                                                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06
-                                                          1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                              1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                                                                 </svg>
                                                                 <span class="message">
-                                      <a href="/profile/saved" class="link" target="_blank"> Saved <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" class="icon-right-arrow">
-                                          <path fill="#1C3C6B" d="M5.086 9.5a.5.5 0 0 0 .39-.186l2.414-3a.5.5 0 0 0-.006-.634l-2.5-3a.5.5 0 0
-                                                                0-.768.64l2.238 2.686-2.158 2.68a.5.5 0 0 0 .39.814z"></path>
-                                        </svg>
-                                      </a>
-                                    </span>
+                                                <a href="/profile/saved" class="link" target="_blank"> Saved <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" class="icon-right-arrow">
+                                                    <path fill="#1C3C6B" d="M5.086 9.5a.5.5 0 0 0 .39-.186l2.414-3a.5.5 0 0 0-.006-.634l-2.5-3a.5.5 0 0
+                                                    0-.768.64l2.238 2.686-2.158 2.68a.5.5 0 0 0 .39.814z"></path>
+                                                  </svg>
+                                                </a>
+                                              </span>
                                                             </div>
                                                         </a>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <!-- end h-grid-img -->
+                                            </div><!-- end h-grid-img -->
+
                                             <div class="block-info h-grid-info">
-                                                <h3 class="block-title">
-                                                    <a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a>
-                                                </h3>
+                                                <h3 class="block-title"><a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a></h3>
                                                 <p class="block-minor">400 kilometers away</p>
                                                 <!-- <p class="block-minor"> May 1 – 6</p> -->
+
                                                 <div class="review-main">
                                                     <div class="review-cat-home">8.9</div>
                                                     <div class="review-cat">Fabulous</div>
                                                     <div class="review-cat spna">3,022 reviews</div>
                                                 </div>
+
                                                 <div class="main-mask">
                                                     <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
+                                                        <li class="list-inline-item price">5000 Tk.
+                                                            <span class="pkg">Night</span>
                                                         </li>
+
                                                         <li class="list-inline-item price">
-                                  <span class="pkg">
-                                    <del>2000 Tk.</del>
-                                  </span>
+                                                            <span class="pkg"><del>2000 Tk.</del></span>
                                                         </li>
                                                     </ul>
                                                 </div>
-                                            </div>
-                                            <!-- end h-grid-info -->
-                                        </div>
-                                        <!-- end h-grid-block -->
+                                            </div><!-- end h-grid-info -->
+
+                                        </div><!-- end h-grid-block -->
                                     </div>
 
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="#">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/4.jpg" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
-                                            </div>
-                                            <!-- end h-grid-img -->
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title">
-                                                    <a href="hotel-room-details.html">Hotel Windy Terrace, Cox's Bazar </a>
-                                                </h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
-                                                </div>
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
-                                                        </li>
-                                                        <li class="list-inline-item price">
-                                  <span class="pkg">
-                                    <del>2000 Tk.</del>
-                                  </span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <!-- end h-grid-info -->
-                                        </div>
-                                        <!-- end h-grid-block -->
-                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div id="Lodges" class="tab-pane">
+                                <div class="row">
+
                                     <div class="col-md-6 col-lg-6 col-xl-3">
                                         <div class="grid-block main-block h-grid-block">
                                             <div class="main-img h-grid-img">
                                                 <a href="hotel-room-details.html">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/2.webp" class="img-fluid" alt="hotel-img" />
+                                                    <img src="{{ asset('frontend')}}/images/hotel/1.jpg" class="img-fluid" alt="hotel-img" />
                                                 </a>
                                                 <div class="guest-favourite">
                                                     <h3>Guest favourite</h3>
                                                 </div>
-                                            </div>
-                                            <!-- end h-grid-img -->
+
+                                                <div class="wish-list-container">
+                                                    <div class="wish-list-btn">
+                                                        <a href="#">
+                                                            <div class="circle">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon removed">
+                                                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06
+                                              1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                                                </svg>
+                                                                <span class="message">
+                                                <a href="/profile/saved" class="link" target="_blank"> Saved <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" class="icon-right-arrow">
+                                                    <path fill="#1C3C6B" d="M5.086 9.5a.5.5 0 0 0 .39-.186l2.414-3a.5.5 0 0 0-.006-.634l-2.5-3a.5.5 0 0
+                                                    0-.768.64l2.238 2.686-2.158 2.68a.5.5 0 0 0 .39.814z"></path>
+                                                  </svg>
+                                                </a>
+                                              </span>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div><!-- end h-grid-img -->
+
                                             <div class="block-info h-grid-info">
-                                                <h3 class="block-title">
-                                                    <a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a>
-                                                </h3>
+                                                <h3 class="block-title"><a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a></h3>
                                                 <p class="block-minor">400 kilometers away</p>
                                                 <!-- <p class="block-minor"> May 1 – 6</p> -->
+
                                                 <div class="review-main">
                                                     <div class="review-cat-home">8.9</div>
                                                     <div class="review-cat">Fabulous</div>
                                                     <div class="review-cat spna">3,022 reviews</div>
                                                 </div>
+
                                                 <div class="main-mask">
                                                     <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
+                                                        <li class="list-inline-item price">5000 Tk.
+                                                            <span class="pkg">Night</span>
                                                         </li>
+
                                                         <li class="list-inline-item price">
-                                  <span class="pkg">
-                                    <del>2000 Tk.</del>
-                                  </span>
+                                                            <span class="pkg"><del>2000 Tk.</del></span>
                                                         </li>
                                                     </ul>
                                                 </div>
-                                            </div>
-                                            <!-- end h-grid-info -->
-                                        </div>
-                                        <!-- end h-grid-block -->
+                                            </div><!-- end h-grid-info -->
+
+                                        </div><!-- end h-grid-block -->
                                     </div>
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="#">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/3.jpg" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
-                                            </div>
-                                            <!-- end h-grid-img -->
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title">
-                                                    <a href="hotel-room-details.html">Cox Beach Resort, Cox's Bazar </a>
-                                                </h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
-                                                </div>
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
-                                                        </li>
-                                                        <li class="list-inline-item price">
-                                  <span class="pkg">
-                                    <del>2000 Tk.</del>
-                                  </span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <!-- end h-grid-info -->
-                                        </div>
-                                        <!-- end h-grid-block -->
-                                    </div>
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="#">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/5.jpg" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
-                                            </div>
-                                            <!-- end h-grid-img -->
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title">
-                                                    <a href="hotel-room-details.html">Hotel Windy Terrace, Cox's Bazar </a>
-                                                </h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
-                                                </div>
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
-                                                        </li>
-                                                        <li class="list-inline-item price">
-                                  <span class="pkg">
-                                    <del>2000 Tk.</del>
-                                  </span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <!-- end h-grid-info -->
-                                        </div>
-                                        <!-- end h-grid-block -->
-                                    </div>
+
 
                                 </div>
                             </div>
-                            <!-- End:  Resort -->
+
+                            <div id="Guesthouses" class="tab-pane">
+                                <div class="row">
+
+                                    <div class="col-md-6 col-lg-6 col-xl-3">
+                                        <div class="grid-block main-block h-grid-block">
+                                            <div class="main-img h-grid-img">
+                                                <a href="hotel-room-details.html">
+                                                    <img src="{{ asset('frontend')}}/images/hotel/1.jpg" class="img-fluid" alt="hotel-img" />
+                                                </a>
+                                                <div class="guest-favourite">
+                                                    <h3>Guest favourite</h3>
+                                                </div>
+
+                                                <div class="wish-list-container">
+                                                    <div class="wish-list-btn">
+                                                        <a href="#">
+                                                            <div class="circle">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon removed">
+                                                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06
+                                              1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                                                </svg>
+                                                                <span class="message">
+                                                <a href="/profile/saved" class="link" target="_blank"> Saved <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" class="icon-right-arrow">
+                                                    <path fill="#1C3C6B" d="M5.086 9.5a.5.5 0 0 0 .39-.186l2.414-3a.5.5 0 0 0-.006-.634l-2.5-3a.5.5 0 0
+                                                    0-.768.64l2.238 2.686-2.158 2.68a.5.5 0 0 0 .39.814z"></path>
+                                                  </svg>
+                                                </a>
+                                              </span>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div><!-- end h-grid-img -->
+
+                                            <div class="block-info h-grid-info">
+                                                <h3 class="block-title"><a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a></h3>
+                                                <p class="block-minor">400 kilometers away</p>
+                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
+
+                                                <div class="review-main">
+                                                    <div class="review-cat-home">8.9</div>
+                                                    <div class="review-cat">Fabulous</div>
+                                                    <div class="review-cat spna">3,022 reviews</div>
+                                                </div>
+
+                                                <div class="main-mask">
+                                                    <ul class="list-unstyled list-inline offer-price-1">
+                                                        <li class="list-inline-item price">5000 Tk.
+                                                            <span class="pkg">Night</span>
+                                                        </li>
+
+                                                        <li class="list-inline-item price">
+                                                            <span class="pkg"><del>2000 Tk.</del></span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div><!-- end h-grid-info -->
+
+                                        </div><!-- end h-grid-block -->
+                                    </div>
 
 
+                                </div>
+                            </div>
+                            <div id="Crisis" class="tab-pane">
+                                <div class="row">
+
+                                    <div class="col-md-6 col-lg-6 col-xl-3">
+                                        <div class="grid-block main-block h-grid-block">
+                                            <div class="main-img h-grid-img">
+                                                <a href="hotel-room-details.html">
+                                                    <img src="{{ asset('frontend')}}/images/hotel/1.jpg" class="img-fluid" alt="hotel-img" />
+                                                </a>
+                                                <div class="guest-favourite">
+                                                    <h3>Guest favourite</h3>
+                                                </div>
+
+                                                <div class="wish-list-container">
+                                                    <div class="wish-list-btn">
+                                                        <a href="#">
+                                                            <div class="circle">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon removed">
+                                                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06
+                                              1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                                                </svg>
+                                                                <span class="message">
+                                                <a href="/profile/saved" class="link" target="_blank"> Saved <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" class="icon-right-arrow">
+                                                    <path fill="#1C3C6B" d="M5.086 9.5a.5.5 0 0 0 .39-.186l2.414-3a.5.5 0 0 0-.006-.634l-2.5-3a.5.5 0 0
+                                                    0-.768.64l2.238 2.686-2.158 2.68a.5.5 0 0 0 .39.814z"></path>
+                                                  </svg>
+                                                </a>
+                                              </span>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div><!-- end h-grid-img -->
+
+                                            <div class="block-info h-grid-info">
+                                                <h3 class="block-title"><a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a></h3>
+                                                <p class="block-minor">400 kilometers away</p>
+                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
+
+                                                <div class="review-main">
+                                                    <div class="review-cat-home">8.9</div>
+                                                    <div class="review-cat">Fabulous</div>
+                                                    <div class="review-cat spna">3,022 reviews</div>
+                                                </div>
+
+                                                <div class="main-mask">
+                                                    <ul class="list-unstyled list-inline offer-price-1">
+                                                        <li class="list-inline-item price">5000 Tk.
+                                                            <span class="pkg">Night</span>
+                                                        </li>
+
+                                                        <li class="list-inline-item price">
+                                                            <span class="pkg"><del>2000 Tk.</del></span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div><!-- end h-grid-info -->
+
+                                        </div><!-- end h-grid-block -->
+                                    </div>
+
+
+                                </div>
+                            </div>
                             <!-- end row -->
                             <div class="pages">
                                 <ol class="pagination justify-content-center">
