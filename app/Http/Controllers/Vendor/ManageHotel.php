@@ -636,49 +636,30 @@ class ManageHotel extends Controller
             }
 
             // Handle new uploads
+
             if ($request->hasFile($field)) {
                 $files = is_array($request->file($field)) ? $request->file($field) : [$request->file($field)];
 
                 foreach ($files as $file) {
                     if ($file && $file->isValid()) {
-                        $path = $file->store('uploads/hotel_photos', 'public');
-                        $remainingPhotos[] = 'storage/' . $path;
+                        $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                        $destinationPath = public_path('uploads/hotel_photos');
+
+                        // Make sure the directory exists
+                        if (!file_exists($destinationPath)) {
+                            mkdir($destinationPath, 0755, true);
+                        }
+
+                        $file->move($destinationPath, $filename);
+                        $remainingPhotos[] = 'uploads/hotel_photos/' . $filename;
                     }
                 }
             }
 
+
             $data[$field] = json_encode($remainingPhotos);
         }
-//        foreach ($photoFields as $field) {
-//            $existingPhotos = json_decode($hotel->$field ?? '[]', true);
-//            $existingPhotos = is_array($existingPhotos) ? $existingPhotos : [];
-//
-//            // Remove selected photos
-//            foreach (array_filter(explode(',', $request->input('removed_' . $field, ''))) as $index) {
-//                if (isset($existingPhotos[$index])) {
-//                    $filePath = public_path($existingPhotos[$index]);
-//                    if (file_exists($filePath)) {
-//                        unlink($filePath);  // Delete directly from public folder
-//                    }
-//                    unset($existingPhotos[$index]);
-//                }
-//            }
-//
-//            // Add new uploads
-//            if ($request->hasFile($field)) {
-//                foreach ($request->file($field) as $file) {
-//                    if ($file->isValid()) {
-//                        $filename = time() . '_' . $file->getClientOriginalName();
-//                        $file->move(public_path('hotel_photos'), $filename);
-//                        $existingPhotos[] = 'hotel_photos/' . $filename;  // Save relative path
-//                    }
-//                }
-//            }
-//
-//            $data[$field] = json_encode(array_values($existingPhotos));
-//        }
 
-        // 8) Always keep vendor_id
         $data['vendor_id'] = $hotel->vendor_id;
 
         // 9) Update and redirect

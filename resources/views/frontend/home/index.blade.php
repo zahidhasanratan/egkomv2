@@ -135,6 +135,57 @@
                                     <span class="d-md-inline-flex st-text">Crisis</span>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-custom" href="#Hotel" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-building"></i>
+                        </span>
+                                    <span class=" d-md-inline-flex st-text">Hotel</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link nav-custom " href="#Transit" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-bed fa-bed-custom"></i>
+                        </span>
+                                    <span class="d-md-inline-flex st-text">Transit</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link nav-custom " href="#Resorts" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-bed fa-bed-custom"></i>
+                        </span>
+                                    <span class="d-md-inline-flex st-text">Resorts</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-custom " href="#Lodges" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-bed fa-bed-custom"></i>
+                        </span>
+                                    <span class="d-md-inline-flex st-text">Lodges</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link nav-custom " href="#Guesthouses" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-bed fa-bed-custom"></i>
+                        </span>
+                                    <span class="d-md-inline-flex st-text">Guesthouses</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-custom " href="#Crisis" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-bed fa-bed-custom"></i>
+                        </span>
+                                    <span class="d-md-inline-flex st-text">Crisis</span>
+                                </a>
+                            </li>
 
                         </ul>
 
@@ -165,8 +216,14 @@
                                     <div class="col-md-6 col-lg-6 col-xl-3">
                                         <div class="grid-block main-block h-grid-block">
                                             <div class="main-img h-grid-img">
-                                                <a href="hotel-room-details.html">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/2.webp" class="img-fluid" alt="hotel-img" />
+                                                <a href="{{ route('hotel.details',encrypt($hotel->id)) }}">
+                                                    @php
+                                                        $featuredPhotos = json_decode($hotel->featured_photo, true);
+                                                    @endphp
+
+                                                    @if (!empty($featuredPhotos[0]))
+                                                    <img style="height: 270px;width: 100%;" src="{{ asset($featuredPhotos[0]) }}" class="img-fluid" alt="{{ $hotel->description }}" />
+                                                    @endif
                                                 </a>
                                                 <div class="guest-favourite">
                                                     <h3>Guest favourite</h3>
@@ -175,9 +232,21 @@
                                             <!-- end h-grid-img -->
                                             <div class="block-info h-grid-info">
                                                 <h3 class="block-title">
-                                                    <a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a>
+                                                    <a href="{{ route('hotel.details',encrypt($hotel->id)) }}">{{ $hotel->description }}</a>
                                                 </h3>
-                                                <p class="block-minor">400 kilometers away</p>
+                                                <p class="block-minor">
+
+                                                    @php
+                                                        $nearbyAreas = is_string($hotel->custom_nearby_areas)
+                                                            ? json_decode($hotel->custom_nearby_areas, true)
+                                                            : $hotel->custom_nearby_areas;
+                                                    @endphp
+
+                                                    @if (!empty($nearbyAreas[0]))
+                                                        {{ $nearbyAreas[0] }}
+                                                    @endif
+
+                                                </p>
                                                 <!-- <p class="block-minor"> May 1 – 6</p> -->
                                                 <div class="review-main">
                                                     <div class="review-cat-home">8.9</div>
@@ -189,9 +258,9 @@
                                                         <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
                                                         </li>
                                                         <li class="list-inline-item price">
-                                  <span class="pkg">
-                                    <del>2000 Tk.</del>
-                                  </span>
+                                                          <span class="pkg">
+                                                            <del>2000 Tk.</del>
+                                                          </span>
                                                         </li>
                                                     </ul>
                                                 </div>

@@ -5,6 +5,26 @@
 
 // Header sticky
 
+$(document).ready(function() {
+        // Get the position of the top bar area
+        var stickyBar = $('#stickyBar');
+        var stickyOffset = stickyBar.offset().top;
+        // On scroll event
+        $(window).on('scroll', function() {
+          var scrollTop = $(this).scrollTop();
+          // Check if scrolled past the sticky point
+          if (scrollTop > stickyOffset) {
+            stickyBar.addClass('sticky'); // Make the bar sticky
+            $('#smallSearchBox').fadeIn(); // Show the small search box
+            $('#largeSearchBox').fadeOut(); // Hide the large search box
+          } else {
+            stickyBar.removeClass('sticky'); // Remove sticky behavior
+            $('#smallSearchBox').fadeOut(); // Hide the small search box
+            $('#largeSearchBox').fadeIn(); // Show the large search box
+          }
+        });
+      });
+
 
 
 
@@ -323,34 +343,65 @@
           }
         }
 
- // toggle sidebar
+      // toggle sidebar
 
-          document.addEventListener('DOMContentLoaded', function() {
-          const profileIconToggle = document.getElementById('profileIconToggle');
-          const userSubmenu = document.getElementById('userSubmenu');
-          // Toggle submenu visibility
-          profileIconToggle.addEventListener('click', function(event) {
-            event.preventDefault(); // Prevent default link behavior (if any)
-            // Toggle visibility of the submenu
-            if (userSubmenu.style.display === 'block') {
-              userSubmenu.style.display = 'none'; // Hide submenu if it's visible
-            } else {
-              userSubmenu.style.display = 'block'; // Show submenu if it's hidden
-            }
-          });
-          // Close the submenu if the user clicks outside of it
-          document.addEventListener('click', function(event) {
-            if (!profileIconToggle.contains(event.target) && !userSubmenu.contains(event.target)) {
-              userSubmenu.style.display = 'none'; // Hide submenu if clicked outside
-            }
-          });
-        });
+document.addEventListener('DOMContentLoaded', function () {
+    // Desktop Elements
+    const desktopIcon = document.getElementById('profileIconDesktop');
+    const desktopMenu = document.getElementById('userSubmenuDesktop');
+
+    // Mobile Elements
+    const mobileIcon = document.getElementById('profileIconMobile');
+    const mobileMenu = document.getElementById('userSubmenuMobile');
+
+    function toggleMenu(menu) {
+        menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+    }
+
+    // Toggle desktop menu
+    desktopIcon.addEventListener('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        toggleMenu(desktopMenu);
+    });
+
+    // Toggle mobile menu
+    mobileIcon.addEventListener('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        toggleMenu(mobileMenu);
+    });
+
+    // Hide menus when clicking outside
+    document.addEventListener('click', function (event) {
+        if (!desktopIcon.contains(event.target) && !desktopMenu.contains(event.target)) {
+            desktopMenu.style.display = 'none';
+        }
+        if (!mobileIcon.contains(event.target) && !mobileMenu.contains(event.target)) {
+            mobileMenu.style.display = 'none';
+        }
+    });
+
+    // Hide desktop menu on window resize
+    window.addEventListener('resize', function () {
+        if (window.innerWidth > 768) {
+            mobileMenu.style.display = 'none';
+        }
+        if (window.innerWidth <= 768) {
+            desktopMenu.style.display = 'none';
+        }
+    });
+});
+
+
+
+
 
 
 
       // Toggle the guest dropdown visibility Mobiole view
 
-// Toggle guest dropdown for mobile or desktop
+
 // Toggle guest dropdown for mobile or desktop
 function toggleGuestDropdown(view) {
   const guestSelector = document.querySelector(`#guest-selector-${view}`);
@@ -422,8 +473,66 @@ window.addEventListener('click', function (e) {
 
 
 
+// Mobile view Search Bar pop up
+        const searchBar = document.getElementById("searchBar");
+        const searchBtn = document.getElementById("searchBtn");
+        const overlay = document.getElementById("overlay");
+
+        // Show the expanded search bar when clicking the search button
+        searchBtn.addEventListener("click", function () {
+            searchBar.classList.add("fullscreen");
+            overlay.style.display = "block"; // Show overlay
+        });
+
+        // Hide search bar when clicking outside
+        overlay.addEventListener("click", function () {
+            searchBar.classList.remove("fullscreen");
+            overlay.style.display = "none"; // Hide overlay
+        });
+   
+
+        // Scrolll bottom to top Arrow Button
+        let scrollTopBtn = document.getElementById("scrollTopBtn");
+
+        window.onscroll = function() {
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                scrollTopBtn.style.display = "block";
+            } else {
+                scrollTopBtn.style.display = "none";
+            }
+        };
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
 
 
+
+        // Scrolll bottom to top  Search bar
+        document.addEventListener("DOMContentLoaded", function () {
+    let searchBtn = document.getElementById("searchBtn");
+    let lastScrollTop = 0;
+
+    window.addEventListener("scroll", function () {
+        let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (currentScroll > lastScrollTop) {
+            // Show button when scrolling down
+            searchBtn.style.display = "block";
+        } else if (currentScroll < 100) {
+            // Hide button when near the top
+            searchBtn.style.display = "none";
+        }
+
+        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+    });
+});
+
+
+
+
+        
+  
 
 
 //Hotel Tabbing Slider

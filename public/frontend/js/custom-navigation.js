@@ -152,22 +152,33 @@
 		// ***********Custom SideBar & SideNav************
 		
 			$(document).ready(function () {
-			    $("#sidebar").mCustomScrollbar({
-			        theme: "minimal"
-			    });
+				    $("#sidebar").mCustomScrollbar({
+				        theme: "minimal"
+				    });
 
-			    $('#dismiss, .overlay').on('click', function () {
-			        $('#sidebar').removeClass('active');
-			        $('.overlay').removeClass('active');
-			    });
+				    $('#dismiss, .overlay').on('click', function () {
+				        $('#sidebar').removeClass('active');
+				        $('.overlay').removeClass('active');
+				    });
 
-			    $('#sidebarCollapse').on('click', function () {
-			        $('#sidebar').addClass('active');
-			        $('.overlay').addClass('active');
-			        $('.collapse.in').toggleClass('in');
-			        $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-			    });
-			});
+				    $('#sidebarCollapse').on('click', function () {
+				        $('#sidebar').addClass('active');
+				        $('.overlay').addClass('active');
+				        $('.collapse.in').toggleClass('in');
+				        $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+				    });
+
+				    // Close sidebar when clicking outside (only for mobile view)
+				    $(document).on('click', function (event) {
+				        if ($(window).width() <= 768) { // Only for mobile view
+				            if (!$(event.target).closest("#sidebar, #sidebarCollapse").length) {
+				                $('#sidebar').removeClass('active');
+				                $('.overlay').removeClass('active');
+				            }
+				        }
+				    });
+				});
+
 
 
 
