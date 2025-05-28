@@ -505,6 +505,7 @@ class ManageHotel extends Controller
         $validated = $request->validate([
             'property_type'               => 'nullable|string',
             'address'               => 'nullable|string',
+            'details'               => 'nullable|string',
             'description'               => 'nullable|string',
             'pets_allowed'              => 'nullable|in:yes,no',
             'pets_details'              => 'nullable|string',

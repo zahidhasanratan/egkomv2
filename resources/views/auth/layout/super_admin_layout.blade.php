@@ -385,6 +385,14 @@
         <br> Investment Platform?</div>
 </a>
 
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('#hotel-description'))
+        .catch(error => {
+            console.error(error);
+        });
+</script>
 
 
 <script src="{{ asset('assets/super_admin') }}/assets/js/bundlee1e3.js?ver=3.2.4"></script>

@@ -56,16 +56,28 @@
                                                 <div class="col-md-12 col-lg-12 col-xxl-3">
                                                     <div class="form-group">
                                                         <label class="form-label" for="default-textarea">Hotel /
-                                                            Property Description</label>
+                                                            Property Name</label>
                                                         <div class="form-control-wrap">
-                                                            <textarea class="form-control no-resize"
+                                                            <input class="form-control no-resize"
                                                                       id="default-textarea"
-                                                                      name="description">{{ old('description', $hotel->description) }}</textarea>
+                                                                      name="description" value="{{ old('description', $hotel->description) }}"></input>
                                                             @error('description') <span
-                                                                class="text-danger">{{ $message }}</span> @enderror
+                                                                class="text-danger">{{ $description }}</span> @enderror
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="col-md-12 col-lg-12 col-xxl-3">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="hotel-description">Hotel / Property Description</label>
+                                                        <div class="form-control-wrap">
+                                                            <textarea class="form-control" id="hotel-description" name="details">{{ old('details', $hotel->details) }}</textarea>
+                                                            @error('details') <span class="text-danger">{{ $message }}</span> @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
                                                 <div class="col-md-12 col-lg-12 col-xxl-3">
                                                     <div class="form-group">
                                                         <label class="form-label" for="default-textarea">Address</label>

@@ -152,11 +152,6 @@
                                 @endforeach
 
 
-
-
-
-
-
                             </div>
                         </div>
                     </div>
@@ -218,6 +213,16 @@
                                 <div data-v-58caae98="" class="amenities">
                                     <h3 data-v-58caae98="" class="mst-pop-title"> Most Popular Facilities </h3>
                                     <div class="fea-list">
+{{--                                        @if (!empty($show->facilities) && is_array($show->facilities))--}}
+{{--                                            <ul>--}}
+{{--                                                @foreach ($show->facilities as $facility)--}}
+{{--                                                    <li>{{ $facility }}</li>--}}
+{{--                                                @endforeach--}}
+{{--                                            </ul>--}}
+{{--                                        @else--}}
+{{--                                            <p>No facilities listed.</p>--}}
+{{--                                        @endif--}}
+
 
                                         <div class="_19xnuo97">
                                             <div class="fea-list-all">
@@ -241,7 +246,6 @@
                                             </div>
                                         </div>
 
-
                                         <div class="_19xnuo97">
                                             <div class="fea-list-all">
                                                 <div class="i1fpqhzs atm_jb_1tcgj5g ihkmq0n atm_h0_exct8b atm_gz_idpfg4 dir dir-ltr">
@@ -252,7 +256,6 @@
                                                 <div class="dir dir-ltr">Dedicated workspace</div>
                                             </div>
                                         </div>
-
 
                                         <div class="_19xnuo97">
                                             <div class="fea-list-all">
@@ -276,7 +279,6 @@
                                             </div>
                                         </div>
 
-
                                         <div class="_19xnuo97">
                                             <div class="fea-list-all">
                                                 <div class="i1fpqhzs atm_jb_1tcgj5g ihkmq0n atm_h0_exct8b atm_gz_idpfg4 dir dir-ltr">
@@ -285,7 +287,6 @@
                                                 <div class="dir dir-ltr">TV</div>
                                             </div>
                                         </div>
-
 
                                         <div class="_19xnuo97">
                                             <div class="fea-list-all">
@@ -296,7 +297,6 @@
                                             </div>
                                         </div>
 
-
                                         <div class="_19xnuo97">
                                             <div class="fea-list-all">
                                                 <div class="i1fpqhzs atm_jb_1tcgj5g ihkmq0n atm_h0_exct8b atm_gz_idpfg4 dir dir-ltr">
@@ -305,7 +305,6 @@
                                                 <div class="dir dir-ltr">Exterior security cameras on property</div>
                                             </div>
                                         </div>
-
 
                                         <div class="_19xnuo97">
                                             <div class="fea-list-all">
@@ -325,7 +324,6 @@
                                             </div>
                                         </div>
 
-
                                         <div class="_19xnuo97">
                                             <div class="fea-list-all">
                                                 <div class="i1fpqhzs atm_jb_1tcgj5g ihkmq0n atm_h0_exct8b atm_gz_idpfg4 dir dir-ltr">
@@ -348,7 +346,6 @@
                                             </div>
                                         </div>
 
-
                                         <div class="_19xnuo97">
                                             <div class="fea-list-all">
                                                 <div class="i1fpqhzs atm_jb_1tcgj5g ihkmq0n atm_h0_exct8b atm_gz_idpfg4 dir dir-ltr">
@@ -359,7 +356,6 @@
                                                 <div class="dir dir-ltr">Dedicated workspace</div>
                                             </div>
                                         </div>
-
 
                                         <div class="_19xnuo97">
                                             <div class="fea-list-all">
@@ -383,7 +379,6 @@
                                             </div>
                                         </div>
 
-
                                         <div class="_19xnuo97">
                                             <div class="fea-list-all">
                                                 <div class="i1fpqhzs atm_jb_1tcgj5g ihkmq0n atm_h0_exct8b atm_gz_idpfg4 dir dir-ltr">
@@ -392,8 +387,6 @@
                                                 <div class="dir dir-ltr">TV</div>
                                             </div>
                                         </div>
-
-
 
 
 
@@ -414,15 +407,13 @@
                     <div data-v-58caae98="" class="col-md-12">
                         <div data-v-58caae98="" class="hotel-description-wrapper">
                             <h3 data-v-58caae98="" class="description-title"> Hotel Description </h3>
-                            <div data-v-58caae98="" class="hotel-meta">
-                                <span data-v-58caae98="" class="meta-info"> Number of Rooms: 493 </span>
-                                <span data-v-58caae98="" class="meta-info"> Number of Floors: 9 </span>
-                                <span data-v-58caae98="" class="meta-info"> Year of construction: 2015 </span>
-                            </div>
+{{--                            <div data-v-58caae98="" class="hotel-meta">--}}
+{{--                                <span data-v-58caae98="" class="meta-info"> Number of Rooms: 493 </span>--}}
+{{--                                <span data-v-58caae98="" class="meta-info"> Number of Floors: 9 </span>--}}
+{{--                                <span data-v-58caae98="" class="meta-info"> Year of construction: 2015 </span>--}}
+{{--                            </div>--}}
                             <div data-v-58caae98="" class="description-texts">
-                                <input data-v-58caae98="" id="expanded" type="checkbox">
-                                <p data-v-58caae98="">Urmee Guest House  &amp; Spa is located on Inani beach, Cox's Bazar with lush green hills rise from the east and endless sea stretching on the west, the resort offers panoramic visuals of Bay of Bengal. Nestled in the heart of nature along the world’s longest natural sandy beach, the resort is spread over 15 acres, located 40 minutes away from the hustle of the Cox's Bazar city with easy accessibility to all the major tourist. Apart from luxurious rooms &amp; suites and two swimming pools (one exclusively for ladies) the resort boasts of a plethora of indoor &amp; outdoor activities for both adults and kids which include an internationally acclaimed water park, tennis &amp; badminton courts, billiards, amphitheater, a luxurious spa and a well-appointed gym.</p>
-                                <label data-v-58caae98="" for="expanded" role="button"> See </label>
+                                {!! $show->details  !!}
                             </div>
                         </div>
                     </div>
@@ -437,7 +428,7 @@
                                 <div class="tab-content">
                                     <div id="hotels" class="tab-pane active">
 
-                                        <h2 class="meta-info-hotel">Urmee Guest House </h2>
+                                        <h2 class="meta-info-hotel">{{ $show->description }}</h2>
 
                                         <form>
                                             <div class="row">
@@ -2387,7 +2378,7 @@
                                             <div class="vendor-right-section">
 
                                                 <div class="vendor-top-information">
-                                                    <h5 class="Superhost-subtitle" >  Urmee Guest House is a Superhost</h5>
+                                                    <h5 class="Superhost-subtitle" > {{ $show->description }} is a Superhost</h5>
 
                                                     <div class="vendor-personal-info">
 
@@ -2476,7 +2467,7 @@
                                                             <img src="{{ asset('frontend')}}/images/urmee.png" class="img-fluid" alt="user-img">
                                                         </div>
                                                         <div class="vendor-title">
-                                                            <h3>Urmee Guest House</h3>
+                                                            <h3>{{ $show->description }}</h3>
                                                             <p>Super Host</p>
                                                         </div>
                                                     </div>
