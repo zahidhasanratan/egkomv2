@@ -311,11 +311,8 @@ class ManageHotel extends Controller
 
     public function editSuper(Hotel $hotel)
     {
-
         return view('auth.super_admin.hotel.edit', compact('hotel'));
     }
-
-
 
     public function update(Request $request, Hotel $hotel)
     {
@@ -507,6 +504,7 @@ class ManageHotel extends Controller
         // 1) Validate input
         $validated = $request->validate([
             'property_type'               => 'nullable|string',
+            'address'               => 'nullable|string',
             'description'               => 'nullable|string',
             'pets_allowed'              => 'nullable|in:yes,no',
             'pets_details'              => 'nullable|string',

@@ -10,6 +10,7 @@ use App\Models\Property;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use function App\Http\Controllers\Vendor;
 
@@ -269,8 +270,12 @@ class DashboardController extends Controller
 
         $logo = null;
         if ($request->hasFile('logo')) {
-            $logo = $request->file('logo')->store('hotel_logos', 'public');
+            $file = $request->file('logo');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('hotel_logos'), $filename);
+            $logo = 'hotel_logos/' . $filename;
         }
+
 
         $hotelPictures = [];
         if ($request->hasFile('hotel_pictures')) {
@@ -355,10 +360,14 @@ class DashboardController extends Controller
         }
 
         if ($request->hasFile('logo')) {
-            if ($vendor->logo) {
-                Storage::disk('public')->delete($vendor->logo);
+            if ($vendor->logo && File::exists(public_path($vendor->logo))) {
+                File::delete(public_path($vendor->logo));
             }
-            $validated['logo'] = $request->file('logo')->store('hotel_logos', 'public');
+
+            $file = $request->file('logo');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('hotel_logos'), $filename);
+            $validated['logo'] = 'hotel_logos/' . $filename;
         }
 
         if ($request->hasFile('hotel_pictures')) {

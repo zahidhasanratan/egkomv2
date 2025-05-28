@@ -277,128 +277,128 @@
                             <div id="Transit" class="tab-pane">
                                 <div class="row">
 
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="hotel-room-details.html">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/1.jpg" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
+                                    @foreach(\App\Models\Hotel:: where('property_type','Transit')->get() as $hotel)
+                                        <div class="col-md-6 col-lg-6 col-xl-3">
+                                            <div class="grid-block main-block h-grid-block">
+                                                <div class="main-img h-grid-img">
+                                                    <a href="{{ route('hotel.details',encrypt($hotel->id)) }}">
+                                                        @php
+                                                            $featuredPhotos = json_decode($hotel->featured_photo, true);
+                                                        @endphp
 
-                                                <div class="wish-list-container">
-                                                    <div class="wish-list-btn">
-                                                        <a href="#">
-                                                            <div class="circle">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon removed">
-                                                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06
-                                              1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                                                                </svg>
-                                                                <span class="message">
-                                                <a href="/profile/saved" class="link" target="_blank"> Saved <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" class="icon-right-arrow">
-                                                    <path fill="#1C3C6B" d="M5.086 9.5a.5.5 0 0 0 .39-.186l2.414-3a.5.5 0 0 0-.006-.634l-2.5-3a.5.5 0 0
-                                                    0-.768.64l2.238 2.686-2.158 2.68a.5.5 0 0 0 .39.814z"></path>
-                                                  </svg>
-                                                </a>
-                                              </span>
-                                                            </div>
-                                                        </a>
+                                                        @if (!empty($featuredPhotos[0]))
+                                                            <img style="height: 270px;width: 100%;" src="{{ asset($featuredPhotos[0]) }}" class="img-fluid" alt="{{ $hotel->description }}" />
+                                                        @endif
+                                                    </a>
+                                                    <div class="guest-favourite">
+                                                        <h3>Guest favourite</h3>
                                                     </div>
                                                 </div>
-                                            </div><!-- end h-grid-img -->
+                                                <!-- end h-grid-img -->
+                                                <div class="block-info h-grid-info">
+                                                    <h3 class="block-title">
+                                                        <a href="{{ route('hotel.details',encrypt($hotel->id)) }}">{{ $hotel->description }}</a>
+                                                    </h3>
+                                                    <p class="block-minor">
 
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title"><a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a></h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                                        @php
+                                                            $nearbyAreas = is_string($hotel->custom_nearby_areas)
+                                                                ? json_decode($hotel->custom_nearby_areas, true)
+                                                                : $hotel->custom_nearby_areas;
+                                                        @endphp
 
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
+                                                        @if (!empty($nearbyAreas[0]))
+                                                            {{ $nearbyAreas[0] }}
+                                                        @endif
+
+                                                    </p>
+                                                    <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                                    <div class="review-main">
+                                                        <div class="review-cat-home">8.9</div>
+                                                        <div class="review-cat">Fabulous</div>
+                                                        <div class="review-cat spna">3,022 reviews</div>
+                                                    </div>
+                                                    <div class="main-mask">
+                                                        <ul class="list-unstyled list-inline offer-price-1">
+                                                            <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
+                                                            </li>
+                                                            <li class="list-inline-item price">
+                                                          <span class="pkg">
+                                                            <del>2000 Tk.</del>
+                                                          </span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
                                                 </div>
-
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk.
-                                                            <span class="pkg">Night</span>
-                                                        </li>
-
-                                                        <li class="list-inline-item price">
-                                                            <span class="pkg"><del>2000 Tk.</del></span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div><!-- end h-grid-info -->
-
-                                        </div><!-- end h-grid-block -->
-                                    </div>
-
+                                                <!-- end h-grid-info -->
+                                            </div>
+                                            <!-- end h-grid-block -->
+                                        </div>
+                                    @endforeach
 
                                 </div>
                             </div>
                             <div id="Resorts" class="tab-pane">
                                 <div class="row">
 
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="hotel-room-details.html">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/1.jpg" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
+                                    @foreach(\App\Models\Hotel:: where('property_type','Resorts')->get() as $hotel)
+                                        <div class="col-md-6 col-lg-6 col-xl-3">
+                                            <div class="grid-block main-block h-grid-block">
+                                                <div class="main-img h-grid-img">
+                                                    <a href="{{ route('hotel.details',encrypt($hotel->id)) }}">
+                                                        @php
+                                                            $featuredPhotos = json_decode($hotel->featured_photo, true);
+                                                        @endphp
 
-                                                <div class="wish-list-container">
-                                                    <div class="wish-list-btn">
-                                                        <a href="#">
-                                                            <div class="circle">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon removed">
-                                                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06
-                                              1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                                                                </svg>
-                                                                <span class="message">
-                                                <a href="/profile/saved" class="link" target="_blank"> Saved <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" class="icon-right-arrow">
-                                                    <path fill="#1C3C6B" d="M5.086 9.5a.5.5 0 0 0 .39-.186l2.414-3a.5.5 0 0 0-.006-.634l-2.5-3a.5.5 0 0
-                                                    0-.768.64l2.238 2.686-2.158 2.68a.5.5 0 0 0 .39.814z"></path>
-                                                  </svg>
-                                                </a>
-                                              </span>
-                                                            </div>
-                                                        </a>
+                                                        @if (!empty($featuredPhotos[0]))
+                                                            <img style="height: 270px;width: 100%;" src="{{ asset($featuredPhotos[0]) }}" class="img-fluid" alt="{{ $hotel->description }}" />
+                                                        @endif
+                                                    </a>
+                                                    <div class="guest-favourite">
+                                                        <h3>Guest favourite</h3>
                                                     </div>
                                                 </div>
-                                            </div><!-- end h-grid-img -->
+                                                <!-- end h-grid-img -->
+                                                <div class="block-info h-grid-info">
+                                                    <h3 class="block-title">
+                                                        <a href="{{ route('hotel.details',encrypt($hotel->id)) }}">{{ $hotel->description }}</a>
+                                                    </h3>
+                                                    <p class="block-minor">
 
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title"><a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a></h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                                        @php
+                                                            $nearbyAreas = is_string($hotel->custom_nearby_areas)
+                                                                ? json_decode($hotel->custom_nearby_areas, true)
+                                                                : $hotel->custom_nearby_areas;
+                                                        @endphp
 
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
+                                                        @if (!empty($nearbyAreas[0]))
+                                                            {{ $nearbyAreas[0] }}
+                                                        @endif
+
+                                                    </p>
+                                                    <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                                    <div class="review-main">
+                                                        <div class="review-cat-home">8.9</div>
+                                                        <div class="review-cat">Fabulous</div>
+                                                        <div class="review-cat spna">3,022 reviews</div>
+                                                    </div>
+                                                    <div class="main-mask">
+                                                        <ul class="list-unstyled list-inline offer-price-1">
+                                                            <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
+                                                            </li>
+                                                            <li class="list-inline-item price">
+                                                          <span class="pkg">
+                                                            <del>2000 Tk.</del>
+                                                          </span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
                                                 </div>
-
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk.
-                                                            <span class="pkg">Night</span>
-                                                        </li>
-
-                                                        <li class="list-inline-item price">
-                                                            <span class="pkg"><del>2000 Tk.</del></span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div><!-- end h-grid-info -->
-
-                                        </div><!-- end h-grid-block -->
-                                    </div>
-
+                                                <!-- end h-grid-info -->
+                                            </div>
+                                            <!-- end h-grid-block -->
+                                        </div>
+                                    @endforeach
 
                                 </div>
                             </div>
@@ -406,64 +406,64 @@
                             <div id="Lodges" class="tab-pane">
                                 <div class="row">
 
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="hotel-room-details.html">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/1.jpg" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
+                                    @foreach(\App\Models\Hotel:: where('property_type','Lodges')->get() as $hotel)
+                                        <div class="col-md-6 col-lg-6 col-xl-3">
+                                            <div class="grid-block main-block h-grid-block">
+                                                <div class="main-img h-grid-img">
+                                                    <a href="{{ route('hotel.details',encrypt($hotel->id)) }}">
+                                                        @php
+                                                            $featuredPhotos = json_decode($hotel->featured_photo, true);
+                                                        @endphp
 
-                                                <div class="wish-list-container">
-                                                    <div class="wish-list-btn">
-                                                        <a href="#">
-                                                            <div class="circle">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon removed">
-                                                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06
-                                              1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                                                                </svg>
-                                                                <span class="message">
-                                                <a href="/profile/saved" class="link" target="_blank"> Saved <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" class="icon-right-arrow">
-                                                    <path fill="#1C3C6B" d="M5.086 9.5a.5.5 0 0 0 .39-.186l2.414-3a.5.5 0 0 0-.006-.634l-2.5-3a.5.5 0 0
-                                                    0-.768.64l2.238 2.686-2.158 2.68a.5.5 0 0 0 .39.814z"></path>
-                                                  </svg>
-                                                </a>
-                                              </span>
-                                                            </div>
-                                                        </a>
+                                                        @if (!empty($featuredPhotos[0]))
+                                                            <img style="height: 270px;width: 100%;" src="{{ asset($featuredPhotos[0]) }}" class="img-fluid" alt="{{ $hotel->description }}" />
+                                                        @endif
+                                                    </a>
+                                                    <div class="guest-favourite">
+                                                        <h3>Guest favourite</h3>
                                                     </div>
                                                 </div>
-                                            </div><!-- end h-grid-img -->
+                                                <!-- end h-grid-img -->
+                                                <div class="block-info h-grid-info">
+                                                    <h3 class="block-title">
+                                                        <a href="{{ route('hotel.details',encrypt($hotel->id)) }}">{{ $hotel->description }}</a>
+                                                    </h3>
+                                                    <p class="block-minor">
 
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title"><a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a></h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                                        @php
+                                                            $nearbyAreas = is_string($hotel->custom_nearby_areas)
+                                                                ? json_decode($hotel->custom_nearby_areas, true)
+                                                                : $hotel->custom_nearby_areas;
+                                                        @endphp
 
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
+                                                        @if (!empty($nearbyAreas[0]))
+                                                            {{ $nearbyAreas[0] }}
+                                                        @endif
+
+                                                    </p>
+                                                    <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                                    <div class="review-main">
+                                                        <div class="review-cat-home">8.9</div>
+                                                        <div class="review-cat">Fabulous</div>
+                                                        <div class="review-cat spna">3,022 reviews</div>
+                                                    </div>
+                                                    <div class="main-mask">
+                                                        <ul class="list-unstyled list-inline offer-price-1">
+                                                            <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
+                                                            </li>
+                                                            <li class="list-inline-item price">
+                                                          <span class="pkg">
+                                                            <del>2000 Tk.</del>
+                                                          </span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
                                                 </div>
-
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk.
-                                                            <span class="pkg">Night</span>
-                                                        </li>
-
-                                                        <li class="list-inline-item price">
-                                                            <span class="pkg"><del>2000 Tk.</del></span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div><!-- end h-grid-info -->
-
-                                        </div><!-- end h-grid-block -->
-                                    </div>
-
+                                                <!-- end h-grid-info -->
+                                            </div>
+                                            <!-- end h-grid-block -->
+                                        </div>
+                                    @endforeach
 
                                 </div>
                             </div>
@@ -471,63 +471,64 @@
                             <div id="Guesthouses" class="tab-pane">
                                 <div class="row">
 
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="hotel-room-details.html">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/1.jpg" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
+                                    @foreach(\App\Models\Hotel:: where('property_type','Guesthouses')->get() as $hotel)
+                                        <div class="col-md-6 col-lg-6 col-xl-3">
+                                            <div class="grid-block main-block h-grid-block">
+                                                <div class="main-img h-grid-img">
+                                                    <a href="{{ route('hotel.details',encrypt($hotel->id)) }}">
+                                                        @php
+                                                            $featuredPhotos = json_decode($hotel->featured_photo, true);
+                                                        @endphp
 
-                                                <div class="wish-list-container">
-                                                    <div class="wish-list-btn">
-                                                        <a href="#">
-                                                            <div class="circle">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon removed">
-                                                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06
-                                              1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                                                                </svg>
-                                                                <span class="message">
-                                                <a href="/profile/saved" class="link" target="_blank"> Saved <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" class="icon-right-arrow">
-                                                    <path fill="#1C3C6B" d="M5.086 9.5a.5.5 0 0 0 .39-.186l2.414-3a.5.5 0 0 0-.006-.634l-2.5-3a.5.5 0 0
-                                                    0-.768.64l2.238 2.686-2.158 2.68a.5.5 0 0 0 .39.814z"></path>
-                                                  </svg>
-                                                </a>
-                                              </span>
-                                                            </div>
-                                                        </a>
+                                                        @if (!empty($featuredPhotos[0]))
+                                                            <img style="height: 270px;width: 100%;" src="{{ asset($featuredPhotos[0]) }}" class="img-fluid" alt="{{ $hotel->description }}" />
+                                                        @endif
+                                                    </a>
+                                                    <div class="guest-favourite">
+                                                        <h3>Guest favourite</h3>
                                                     </div>
                                                 </div>
-                                            </div><!-- end h-grid-img -->
+                                                <!-- end h-grid-img -->
+                                                <div class="block-info h-grid-info">
+                                                    <h3 class="block-title">
+                                                        <a href="{{ route('hotel.details',encrypt($hotel->id)) }}">{{ $hotel->description }}</a>
+                                                    </h3>
+                                                    <p class="block-minor">
 
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title"><a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a></h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                                        @php
+                                                            $nearbyAreas = is_string($hotel->custom_nearby_areas)
+                                                                ? json_decode($hotel->custom_nearby_areas, true)
+                                                                : $hotel->custom_nearby_areas;
+                                                        @endphp
 
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
+                                                        @if (!empty($nearbyAreas[0]))
+                                                            {{ $nearbyAreas[0] }}
+                                                        @endif
+
+                                                    </p>
+                                                    <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                                    <div class="review-main">
+                                                        <div class="review-cat-home">8.9</div>
+                                                        <div class="review-cat">Fabulous</div>
+                                                        <div class="review-cat spna">3,022 reviews</div>
+                                                    </div>
+                                                    <div class="main-mask">
+                                                        <ul class="list-unstyled list-inline offer-price-1">
+                                                            <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
+                                                            </li>
+                                                            <li class="list-inline-item price">
+                                                          <span class="pkg">
+                                                            <del>2000 Tk.</del>
+                                                          </span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
                                                 </div>
-
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk.
-                                                            <span class="pkg">Night</span>
-                                                        </li>
-
-                                                        <li class="list-inline-item price">
-                                                            <span class="pkg"><del>2000 Tk.</del></span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div><!-- end h-grid-info -->
-
-                                        </div><!-- end h-grid-block -->
-                                    </div>
+                                                <!-- end h-grid-info -->
+                                            </div>
+                                            <!-- end h-grid-block -->
+                                        </div>
+                                    @endforeach
 
 
                                 </div>
@@ -535,63 +536,64 @@
                             <div id="Crisis" class="tab-pane">
                                 <div class="row">
 
-                                    <div class="col-md-6 col-lg-6 col-xl-3">
-                                        <div class="grid-block main-block h-grid-block">
-                                            <div class="main-img h-grid-img">
-                                                <a href="hotel-room-details.html">
-                                                    <img src="{{ asset('frontend')}}/images/hotel/1.jpg" class="img-fluid" alt="hotel-img" />
-                                                </a>
-                                                <div class="guest-favourite">
-                                                    <h3>Guest favourite</h3>
-                                                </div>
+                                    @foreach(\App\Models\Hotel:: where('property_type','Crisis')->get() as $hotel)
+                                        <div class="col-md-6 col-lg-6 col-xl-3">
+                                            <div class="grid-block main-block h-grid-block">
+                                                <div class="main-img h-grid-img">
+                                                    <a href="{{ route('hotel.details',encrypt($hotel->id)) }}">
+                                                        @php
+                                                            $featuredPhotos = json_decode($hotel->featured_photo, true);
+                                                        @endphp
 
-                                                <div class="wish-list-container">
-                                                    <div class="wish-list-btn">
-                                                        <a href="#">
-                                                            <div class="circle">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon removed">
-                                                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06
-                                              1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                                                                </svg>
-                                                                <span class="message">
-                                                <a href="/profile/saved" class="link" target="_blank"> Saved <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" class="icon-right-arrow">
-                                                    <path fill="#1C3C6B" d="M5.086 9.5a.5.5 0 0 0 .39-.186l2.414-3a.5.5 0 0 0-.006-.634l-2.5-3a.5.5 0 0
-                                                    0-.768.64l2.238 2.686-2.158 2.68a.5.5 0 0 0 .39.814z"></path>
-                                                  </svg>
-                                                </a>
-                                              </span>
-                                                            </div>
-                                                        </a>
+                                                        @if (!empty($featuredPhotos[0]))
+                                                            <img style="height: 270px;width: 100%;" src="{{ asset($featuredPhotos[0]) }}" class="img-fluid" alt="{{ $hotel->description }}" />
+                                                        @endif
+                                                    </a>
+                                                    <div class="guest-favourite">
+                                                        <h3>Guest favourite</h3>
                                                     </div>
                                                 </div>
-                                            </div><!-- end h-grid-img -->
+                                                <!-- end h-grid-img -->
+                                                <div class="block-info h-grid-info">
+                                                    <h3 class="block-title">
+                                                        <a href="{{ route('hotel.details',encrypt($hotel->id)) }}">{{ $hotel->description }}</a>
+                                                    </h3>
+                                                    <p class="block-minor">
 
-                                            <div class="block-info h-grid-info">
-                                                <h3 class="block-title"><a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a></h3>
-                                                <p class="block-minor">400 kilometers away</p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                                        @php
+                                                            $nearbyAreas = is_string($hotel->custom_nearby_areas)
+                                                                ? json_decode($hotel->custom_nearby_areas, true)
+                                                                : $hotel->custom_nearby_areas;
+                                                        @endphp
 
-                                                <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
+                                                        @if (!empty($nearbyAreas[0]))
+                                                            {{ $nearbyAreas[0] }}
+                                                        @endif
+
+                                                    </p>
+                                                    <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                                    <div class="review-main">
+                                                        <div class="review-cat-home">8.9</div>
+                                                        <div class="review-cat">Fabulous</div>
+                                                        <div class="review-cat spna">3,022 reviews</div>
+                                                    </div>
+                                                    <div class="main-mask">
+                                                        <ul class="list-unstyled list-inline offer-price-1">
+                                                            <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
+                                                            </li>
+                                                            <li class="list-inline-item price">
+                                                          <span class="pkg">
+                                                            <del>2000 Tk.</del>
+                                                          </span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
                                                 </div>
-
-                                                <div class="main-mask">
-                                                    <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk.
-                                                            <span class="pkg">Night</span>
-                                                        </li>
-
-                                                        <li class="list-inline-item price">
-                                                            <span class="pkg"><del>2000 Tk.</del></span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div><!-- end h-grid-info -->
-
-                                        </div><!-- end h-grid-block -->
-                                    </div>
+                                                <!-- end h-grid-info -->
+                                            </div>
+                                            <!-- end h-grid-block -->
+                                        </div>
+                                    @endforeach
 
 
                                 </div>

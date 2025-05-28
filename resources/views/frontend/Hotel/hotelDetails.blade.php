@@ -15,8 +15,10 @@
                                 <div class="info-preview-container">
                                     <div data-v-58caae98="" class="type-and-rating">
                                         <div class="hotel-title-sec">
-                                            <h2 data-v-58caae98="" class="hotel-title">Urmee Guest House </h2>
-                                            <img class="title-logo" src="{{ asset('frontend')}}/images/urmee.png">
+                                            <h2 data-v-58caae98="" class="hotel-title">{{ $show->description }}  </h2>
+
+                                            <img class="title-logo" src="{{ asset('/')}}{{ optional(\App\Models\Vendor::find($show->vendor_id))->logo }}
+                                                ">
                                         </div>
 
                                         <div data-v-58caae98="" class="d-flex align-items-start">
@@ -46,7 +48,7 @@
                                                     <svg data-v-58caae98="" width="12" height="14" viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <path data-v-58caae98="" fill-rule="evenodd" clip-rule="evenodd" d="M5.99984 7.66667C4.71317 7.66667 3.6665 6.62 3.6665 5.33333C3.6665 4.04667 4.71317 3 5.99984 3C7.2865 3 8.33317 4.04667 8.33317 5.33333C8.33317 6.62 7.2865 7.66667 5.99984 7.66667ZM5.99984 0.333332C3.05917 0.333332 0.666504 2.70267 0.666504 5.61533C0.666504 9.26467 5.36584 13.3347 5.56584 13.506C5.69117 13.6133 5.84517 13.6667 5.99984 13.6667C6.1545 13.6667 6.3085 13.6133 6.43384 13.506C6.63384 13.3347 11.3332 9.26467 11.3332 5.61533C11.3332 2.70267 8.9405 0.333332 5.99984 0.333332Z" fill="#546378"></path>
                                                     </svg>
-                                                    <span data-v-58caae98=""> Jaliapalong, Inani, Ukhia, Cox's Bazar, Bangladesh </span>
+                                                    <span data-v-58caae98=""> {{ $show->address }} </span>
                                                 </a>
                                             </div>
                                         </div>
@@ -92,18 +94,14 @@
                                         <div class="hotel-heading-name">
                                             <div data-v-58caae98="" class="nearby">
                                                 <div data-v-58caae98="" class="label"> What's Nearby </div>
-                                                <div data-v-58caae98="" class="landmark">
-                                                <span data-v-58caae98="">
-                                                <i data-v-58caae98="" class="icon icon-map-marker-grey location-pin"></i> 16.5 km from Himchori Waterfall </span>
-                                                </div>
-                                                <div data-v-58caae98="" class="landmark">
-                                                <span data-v-58caae98="">
-                                                <i data-v-58caae98="" class="icon icon-map-marker-grey location-pin"></i> 0.25 km from Navy Jetty, from where Saint Martin bound ship sails </span>
-                                                </div>
-                                                <div data-v-58caae98="" class="landmark">
-                                                <span data-v-58caae98="">
-                                                <i data-v-58caae98="" class="icon icon-map-marker-grey location-pin"></i> 3.2 km from Cox's Bazar Airport </span>
-                                                </div>
+                                                @foreach(json_decode($show->custom_nearby_areas) as $area)
+                                                    <div class="landmark">
+                                                        <span>
+                                                            <i class="icon icon-map-marker-grey location-pin"></i> {{ $area }}
+                                                        </span>
+                                                    </div>
+                                                @endforeach
+
                                             </div>
                                         </div>
                                     </div>
@@ -125,79 +123,41 @@
                             </div>
                             <div class="owl-carousel owl-theme owl-custom-arrow" id="owl-car-offers">
 
+                                @php
+                                    $photoFields = [
+                                        'kitchen_photos', 'washroom_photos', 'parking_lot_photos', 'entrance_gate_photos',
+                                        'lift_stairs_photos', 'spa_photos', 'bar_photos', 'transport_photos',
+                                        'rooftop_photos', 'gym_photos', 'security_photos', 'amenities_photos'
+                                    ];
+                                @endphp
 
-                                <div class="item">
-                                    <div class="main-block car-offer-block">
-                                        <div class="main-img room-main-image car-offer-img">
-                                            <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                <img src="{{ asset('frontend')}}/images/hotel/urmee/2.jpg" class="img-fluid" alt="hotel" />
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
+                                @foreach($photoFields as $field)
+                                    @php
+                                        $photos = is_string($show->$field) ? json_decode($show->$field, true) : [];
+                                    @endphp
 
-                                <div class="item">
-                                    <div class="main-block car-offer-block">
-                                        <div class="main-img room-main-image car-offer-img">
-                                            <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                <img src="{{ asset('frontend')}}/images/hotel/urmee/3.jpg" class="img-fluid" alt="car-img" />
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
+                                    @if(!empty($photos) && is_array($photos))
+                                        @foreach($photos as $bannerPhoto)
+                                            <div class="item">
+                                                <div class="main-block car-offer-block">
+                                                    <div class="main-img room-main-image car-offer-img">
+                                                        <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                            <img src="{{ asset('/') . $bannerPhoto }}" class="img-fluid" alt="hotel" />
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                @endforeach
 
 
-                                <div class="item">
-                                    <div class="main-block car-offer-block">
-                                        <div class="main-img room-main-image car-offer-img">
-                                            <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                <img src="{{ asset('frontend')}}/images/hotel/urmee/4.jpg" class="img-fluid" alt="car-img" />
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <div class="item">
-                                    <div class="main-block car-offer-block">
-                                        <div class="main-img  room-main-image car-offer-img">
-                                            <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                <img src="{{ asset('frontend')}}/images/hotel/urmee/5b.jpg" class="img-fluid" alt="car-img" />
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <div class="item">
-                                    <div class="main-block car-offer-block">
-                                        <div class="main-img  room-main-image car-offer-img">
-                                            <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                <img src="{{ asset('frontend')}}/images/hotel/urmee/3b.jpg" class="img-fluid" alt="car-img" />
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <div class="item">
-                                    <div class="main-block car-offer-block">
-                                        <div class="main-img  room-main-image car-offer-img">
-                                            <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                <img src="{{ asset('frontend')}}/images/hotel/urmee/4a.jpg" class="img-fluid" alt="car-img" />
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <div class="item">
-                                    <div class="main-block car-offer-block">
-                                        <div class="main-img  room-main-image car-offer-img">
-                                            <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                <img src="{{ asset('frontend')}}/images/hotel/urmee/4b.jpg" class="img-fluid" alt="car-img" />
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
 
-                            </div><!-- end owl-car-offers -->
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2571,5 +2531,68 @@
     </section>
     <!-- end innerpage-wrapper -->
 
+    <!-- Modal hotel rooms -->
+    <div class="modal fade modal-al-rooms" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">{{ $show->description }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body modal-body-all-rooms">
+                    <div class="hotel-pop-up-image">
+                        <div class="bd-example bd-example-tabs">
+                            <nav class="col-md-12">
+                                <div class="nav nav-tabs nav-tabbing-padding" id="nav-tab" role="tablist">
+
+                                    @foreach($photoFields as $key => $field)
+                                        @php
+                                            $photos = is_string($show->$field) ? json_decode($show->$field, true) : [];
+                                        @endphp
+
+                                        @if(!empty($photos))
+                                            <a class="nav-item nav-item-rooms nav-link text-black @if($key == 0) active @endif"
+                                               id="nav-{{ $field }}-tab"
+                                               data-bs-toggle="tab"
+                                               href="#{{ $field }}"
+                                               role="tab"
+                                               aria-controls="nav-{{ $field }}"
+                                               aria-selected="{{ $key == 0 ? 'true' : 'false' }}">
+                                                {{ ucwords(str_replace('_', ' ', $field)) }}
+                                            </a>
+                                        @endif
+                                    @endforeach
+
+                                </div>
+
+                            </nav>
+                            <div class="tab-content" id="nav-tabContent">
+                                @foreach($photoFields as $key => $field)
+                                    @php
+                                        $photos = is_string($show->$field) ? json_decode($show->$field, true) : [];
+                                    @endphp
+
+                                    @if(!empty($photos))
+                                        <div class="tab-pane fade show @if($key == 0) active @endif" id="{{ $field }}" role="tabpanel" aria-labelledby="nav-{{ $field }}-tab">
+                                            <div class="slider">
+                                                @foreach($photos as $photo)
+                                                    <div>
+                                                        <img src="{{ asset($photo) }}" class="img-fluid hotel-rom-gal" alt="{{ $field }}" />
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endforeach
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 @endsection

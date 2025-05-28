@@ -66,6 +66,18 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="col-md-12 col-lg-12 col-xxl-3">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="default-textarea">Address</label>
+                                                        <div class="form-control-wrap">
+                                                            <textarea class="form-control no-resize"
+                                                                      id="default-textarea"
+                                                                      name="address">{{ old('address', $hotel->address) }}</textarea>
+                                                            @error('address') <span
+                                                                class="text-danger">{{ $address }}</span> @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
 
                                             <!-- Property Policy And Rules -->

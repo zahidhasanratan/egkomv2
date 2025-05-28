@@ -165,7 +165,7 @@
                                                 <label class="form-label" for="logo">Hotel Logo</label>
                                                 <input type="file" class="form-control" id="logo" name="logo">
                                                 @if($vendor->logo)
-                                                    <small>Current: <a href="{{ Storage::url($vendor->logo) }}" target="_blank">View Image</a></small>
+                                                    <small>Current: <a href="{{ asset('/') }}{{ $vendor->logo }}" target="_blank">View Image</a></small>
                                                 @endif
                                             </div>
                                         </div>
