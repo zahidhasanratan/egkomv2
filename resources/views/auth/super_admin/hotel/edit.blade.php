@@ -1518,7 +1518,10 @@
             </div>
         </div>
     </div>
-
+    @php
+        // Decode if it's a JSON string
+        $hotelFacilitiesArray = is_string($hotelFacilities) ? json_decode($hotelFacilities, true) : $hotelFacilities;
+    @endphp
     <script type="text/javascript">
         document.getElementById('propertyCategory').addEventListener('change', function () {
             var propertyTypeContainer = document.getElementById('propertyTypeContainer');
@@ -2214,7 +2217,8 @@
         }
 
         // Now load existing hotel facilities if available
-        const hotelFacilitiesData = {!! json_encode($hotelFacilities ?? []) !!};
+        const hotelFacilitiesData = {!! json_encode($hotelFacilitiesArray ?? []) !!};
+
         hotelFacilitiesData.forEach(facility => {
             const categoryKey = facility.category; // example: general_services
             const name = facility.name;

@@ -1111,159 +1111,33 @@
                                     <div data-v-58caae98="" class="nearby-flex">
 
 
-                                        <div data-v-58caae98="" class="facilities-column">
-                                            <h3 data-v-58caae98="" class="place-title">
-                                                Title Name Here
-                                            </h3>
-                                            <ul data-v-58caae98="" class="place-facilities-list">
-                                                <li data-v-58caae98="">
-                                           <span>
-                                              <svg style="margin-top: -3px;
-                                                 margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
-                                              </svg>
-                                           </span>
-                                                    Nearby Facilities Name
-                                                </li>
+                                        @foreach($show->nearby_areas as $category => $data)
+                                            @php
+                                                // Format the category title nicely
+                                                $title = ucwords(str_replace('___', ' & ', str_replace('_', ' ', $category)));
+                                            @endphp
 
-                                                <li data-v-58caae98="">
-                                           <span>
-                                              <svg style="margin-top: -3px;
-                                                 margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
-                                              </svg>
-                                           </span>
-                                                    Nearby Facilities Name
-                                                </li>
-
-
-                                                <li data-v-58caae98="">
-                                           <span>
-                                              <svg style="margin-top: -3px;
-                                                 margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
-                                              </svg>
-                                           </span>
-                                                    Nearby Facilities Name
-                                                </li>
-                                            </ul>
-                                        </div>
+                                            <div class="facilities-column">
+                                                <h3 class="place-title">
+                                                    {{ $title }}
+                                                </h3>
+                                                <ul class="place-facilities-list">
+                                                    @foreach($data['name'] as $index => $name)
+                                                        <li>
+                    <span>
+                        <svg style="margin-top: -3px; margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                        </svg>
+                    </span>
+                                                            {{ $name }} - {{ $data['distance'][$index] ?? '' }}
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        @endforeach
 
 
 
-                                        <div data-v-58caae98="" class="facilities-column">
-                                            <h3 data-v-58caae98="" class="place-title">
-                                                Title Name Here
-                                            </h3>
-                                            <ul data-v-58caae98="" class="place-facilities-list">
-                                                <li data-v-58caae98="">
-                                           <span>
-                                              <svg style="margin-top: -3px;
-                                                 margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
-                                              </svg>
-                                           </span>
-                                                    Nearby Facilities Name
-                                                </li>
-
-                                                <li data-v-58caae98="">
-                                           <span>
-                                              <svg style="margin-top: -3px;
-                                                 margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
-                                              </svg>
-                                           </span>
-                                                    Nearby Facilities Name
-                                                </li>
-
-
-                                                <li data-v-58caae98="">
-                                           <span>
-                                              <svg style="margin-top: -3px;
-                                                 margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
-                                              </svg>
-                                           </span>
-                                                    Nearby Facilities Name
-                                                </li>
-                                            </ul>
-                                        </div>
-
-                                        <div data-v-58caae98="" class="facilities-column">
-                                            <h3 data-v-58caae98="" class="place-title">
-                                                Title Name Here
-                                            </h3>
-                                            <ul data-v-58caae98="" class="place-facilities-list">
-                                                <li data-v-58caae98="">
-                                           <span>
-                                              <svg style="margin-top: -3px;
-                                                 margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
-                                              </svg>
-                                           </span>
-                                                    Nearby Facilities Name
-                                                </li>
-
-                                                <li data-v-58caae98="">
-                                           <span>
-                                              <svg style="margin-top: -3px;
-                                                 margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
-                                              </svg>
-                                           </span>
-                                                    Nearby Facilities Name
-                                                </li>
-
-
-                                                <li data-v-58caae98="">
-                                           <span>
-                                              <svg style="margin-top: -3px;
-                                                 margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
-                                              </svg>
-                                           </span>
-                                                    Nearby Facilities Name
-                                                </li>
-                                            </ul>
-                                        </div>
-
-                                        <div data-v-58caae98="" class="facilities-column">
-                                            <h3 data-v-58caae98="" class="place-title">
-                                                Title Name Here
-                                            </h3>
-                                            <ul data-v-58caae98="" class="place-facilities-list">
-                                                <li data-v-58caae98="">
-                                           <span>
-                                              <svg style="margin-top: -3px;
-                                                 margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
-                                              </svg>
-                                           </span>
-                                                    Nearby Facilities Name
-                                                </li>
-
-                                                <li data-v-58caae98="">
-                                           <span>
-                                              <svg style="margin-top: -3px;
-                                                 margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
-                                              </svg>
-                                           </span>
-                                                    Nearby Facilities Name
-                                                </li>
-
-
-                                                <li data-v-58caae98="">
-                                           <span>
-                                              <svg style="margin-top: -3px;
-                                                 margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
-                                              </svg>
-                                           </span>
-                                                    Nearby Facilities Name
-                                                </li>
-                                            </ul>
-                                        </div>
                                     </div>
 
 

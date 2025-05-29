@@ -179,6 +179,7 @@ class ManageHotel extends Controller
         if ($hotel->vendor_id !== auth()->user()->id) {
             return redirect()->route('vendor-admin.hotel.index')->with('error', 'Unauthorized access.');
         }
+
         $hotelFacilities = json_decode($hotel->hotel_facilities, true);
         return view('auth.vendor.hotel.edit', compact('hotel','hotelFacilities'));
     }
@@ -311,11 +312,13 @@ class ManageHotel extends Controller
 
     public function editSuper(Hotel $hotel)
     {
-        return view('auth.super_admin.hotel.edit', compact('hotel'));
+        $hotelFacilities = json_decode($hotel->hotel_facilities, true);
+        return view('auth.super_admin.hotel.edit', compact('hotel','hotelFacilities'));
     }
 
     public function update(Request $request, Hotel $hotel)
     {
+
         // 1) Validate input
         $validated = $request->validate([
             'description'               => 'nullable|string',
@@ -673,169 +676,6 @@ class ManageHotel extends Controller
 
 
     }
-
-//    public function updateSuper(Request $request, Hotel $hotel)
-//    {
-//
-//
-//
-//
-//        // Validation rules
-//        $validated = $request->validate([
-//            'status' => 'required|in:draft,submitted',
-//            'description' => 'nullable|string',
-//            'pets_allowed' => 'nullable|in:yes,no',
-//            'pets_details' => 'nullable|string',
-//            'events_allowed' => 'nullable|in:yes,no',
-//            'events_details' => 'nullable|string',
-//            'smoking_allowed' => 'nullable|in:yes,no',
-//            'smoking_details' => 'nullable|string',
-//            'quiet_hours' => 'nullable|string',
-//            'photography_allowed' => 'nullable|in:yes,no',
-//            'photography_details' => 'nullable|string',
-//            'check_in_window' => 'nullable|string',
-//            'check_out_time' => 'nullable|string',
-//            'food_laundry' => 'nullable|in:yes,no',
-//            'check_in_rules' => 'nullable|array',
-//            'check_in_rules.*' => 'nullable|string',
-//            'custom_check_in_rules' => 'nullable|array',
-//            'custom_check_in_rules.*' => 'nullable|string',
-//            'property_info' => 'nullable|array',
-//            'property_info.*' => 'nullable|string',
-//            'custom_property_info' => 'nullable|array',
-//            'custom_property_info.*' => 'nullable|string',
-//            'age_restriction' => 'nullable|in:yes,no',
-//            'age_restriction_details' => 'nullable|string',
-//            'vlogging_allowed' => 'nullable|in:yes,no',
-//            'vlogging_details' => 'nullable|string',
-//            'child_policy' => 'nullable|string',
-//            'extra_bed_policy' => 'nullable|string',
-//            'cooking_policy' => 'nullable|string',
-//            'directions' => 'nullable|string',
-//            'additional_policy' => 'nullable|string',
-//            'check_in_methods' => 'nullable|array',
-//            'check_in_methods.*' => 'nullable|string',
-//            'custom_check_in_methods' => 'nullable|array',
-//            'custom_check_in_methods.*' => 'nullable|string',
-//            'cancellation_policies' => 'nullable|array',
-//            'cancellation_policies.*' => 'nullable|string',
-//            'facilities' => 'nullable|array',
-//            'facilities.*' => 'nullable|string',
-//            'facility_category' => 'nullable|string',
-//            'custom_facilities' => 'nullable|array',
-//            'custom_facilities.*' => 'nullable|string',
-//            'nearby_areas' => 'nullable|array',
-//            'nearby_areas.*' => 'nullable|string',
-//            'custom_nearby_areas' => 'nullable|array',
-//            'custom_nearby_areas.*' => 'nullable|string',
-//            'nearby_area_category' => 'nullable|string',
-//            'custom_nearby_area_details' => 'nullable|array',
-//            'custom_nearby_area_details.*' => 'nullable|string',
-//            'kitchen_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-//            'washroom_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-//            'parking_lot_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-//            'entrance_gate_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-//            'lift_stairs_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-//            'spa_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-//            'bar_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-//            'transport_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-//            'rooftop_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-//            'gym_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-//            'security_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-//            'amenities_photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-//            'removed_kitchen_photos' => 'nullable|string',
-//            'removed_washroom_photos' => 'nullable|string',
-//            'removed_parking_lot_photos' => 'nullable|string',
-//            'removed_entrance_gate_photos' => 'nullable|string',
-//            'removed_lift_stairs_photos' => 'nullable|string',
-//            'removed_spa_photos' => 'nullable|string',
-//            'removed_bar_photos' => 'nullable|string',
-//            'removed_transport_photos' => 'nullable|string',
-//            'removed_rooftop_photos' => 'nullable|string',
-//            'removed_gym_photos' => 'nullable|string',
-//            'removed_security_photos' => 'nullable|string',
-//            'removed_amenities_photos' => 'nullable|string',
-//        ]);
-//
-//        // Prepare data array with validated inputs
-//        $data = $validated;
-//
-//        // Filter out empty values from array fields
-//        $arrayFields = [
-//            'check_in_rules', 'custom_check_in_rules', 'property_info', 'custom_property_info',
-//            'check_in_methods', 'custom_check_in_methods', 'cancellation_policies', 'facilities',
-//            'custom_facilities', 'nearby_areas', 'custom_nearby_areas', 'custom_nearby_area_details',
-//        ];
-//        foreach ($arrayFields as $field) {
-//            if (isset($data[$field]) && is_array($data[$field])) {
-//                $data[$field] = array_filter($data[$field], function ($value) {
-//                    return !empty(trim($value));
-//                });
-//                $data[$field] = array_values($data[$field]); // Reindex array
-//            }
-//        }
-//
-//        // Define photo fields
-//        $photoFields = [
-//            'kitchen_photos', 'washroom_photos', 'parking_lot_photos', 'entrance_gate_photos',
-//            'lift_stairs_photos', 'spa_photos', 'bar_photos', 'transport_photos', 'rooftop_photos',
-//            'gym_photos', 'security_photos', 'amenities_photos',
-//        ];
-//
-//        // Handle photo updates
-//        foreach ($photoFields as $field) {
-//            // Ensure $existingPhotos is an array, decoding JSON if necessary
-//            $existingPhotos = $hotel->$field;
-//            if (is_string($existingPhotos)) {
-//                $existingPhotos = json_decode($existingPhotos, true) ?? [];
-//            } elseif (!is_array($existingPhotos)) {
-//                $existingPhotos = [];
-//            }
-//
-//            $removedKey = "removed_{$field}";
-//            $removedIndices = $request->input($removedKey) ? explode(',', $request->input($removedKey)) : [];
-//
-//            // Filter out removed photos from existing ones
-//            $updatedPhotos = array_filter($existingPhotos, function ($photo, $index) use ($removedIndices) {
-//                return !in_array((string)$index, $removedIndices);
-//            }, ARRAY_FILTER_USE_BOTH);
-//
-//            // Reindex the array after filtering
-//            $updatedPhotos = array_values($updatedPhotos);
-//
-//            // Handle new uploads
-//            if ($request->hasFile($field)) {
-//                $newPaths = [];
-//                foreach ($request->file($field) as $file) {
-//                    $path = $file->store('hotel_photos', 'public');
-//                    $newPaths[] = $path;
-//                }
-//                // Append new photos to existing ones instead of replacing
-//                $data[$field] = array_merge($updatedPhotos, $newPaths);
-//            } else {
-//                // Keep the filtered existing photos if no new uploads
-//                $data[$field] = $updatedPhotos;
-//            }
-//        }
-//
-//        try {
-//
-//            $data['approve'] = $request->has('approve') && $request->input('approve') == 1 ? 1 : 0;
-//
-//            // Update the hotel record
-//            $hotel->update($data);
-//
-//            // Redirect based on status
-//            if ($request->status === 'submitted') {
-//                return redirect()->route('super-admin.hotel.index')->with('success', 'Hotel updated successfully!');
-//            } else {
-//                return redirect()->route('super-admin.hotel.index')->with('success', 'Hotel draft updated!');
-//            }
-//        } catch (\Exception $e) {
-//            Log::error('Hotel update failed', ['error' => $e->getMessage()]);
-//            return redirect()->back()->with('error', 'An error occurred while updating the hotel.')->withInput();
-//        }
-//    }
 
 
     public function toggleApprove(Request $request, $id)
