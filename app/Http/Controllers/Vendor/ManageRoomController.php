@@ -177,6 +177,7 @@ class ManageRoomController extends Controller
             abort(404, 'Invalid or tampered room ID');
         }
     }
+
     public function editSuper($id)
     {
         try {
@@ -355,6 +356,7 @@ class ManageRoomController extends Controller
 
             // Handle photo uploads
             $photoCategories = [
+                'feature_photos' => 'feature',
                 'kitchen_photos' => 'kitchen',
                 'washroom_photos' => 'washroom',
                 'parking_photos' => 'parking',
@@ -374,10 +376,19 @@ class ManageRoomController extends Controller
                     foreach ($request->file($inputName) as $index => $photo) {
                         try {
                             if ($photo->isValid()) {
-                                $path = $photo->store('room_photos', 'public');
+                                $filename = time() . '_' . uniqid() . '.' . $photo->getClientOriginalExtension();
+                                $destinationPath = public_path('room_photos');
+
+                                // Ensure the directory exists
+                                if (!file_exists($destinationPath)) {
+                                    mkdir($destinationPath, 0775, true);
+                                }
+
+                                $photo->move($destinationPath, $filename);
+
                                 RoomPhoto::create([
                                     'room_id' => $room->id,
-                                    'photo_path' => $path,
+                                    'photo_path' => 'room_photos/' . $filename, // relative to public folder
                                     'category' => $category,
                                 ]);
                             }
@@ -390,6 +401,7 @@ class ManageRoomController extends Controller
                     }
                 }
             }
+
 
             return redirect()->route('super-admin.room.index', ['id' => Crypt::encrypt($request->hotel_id)])
                 ->with('success', 'Room updated successfully!');

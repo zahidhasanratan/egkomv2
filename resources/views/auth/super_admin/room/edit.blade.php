@@ -82,7 +82,7 @@
                                                 <div class="col-md-6 col-lg-4 col-xxl-3">
                                                     <div class="form-group">
                                                         <label class="form-label">Room Floor Number</label>
-                                                        <input type="number" class="form-control" name="floor_number" value="{{ old('floor_number', $room->floor_number) }}" placeholder="Room Floor Number" required>
+                                                        <input type="text" class="form-control" name="floor_number" value="{{ old('floor_number', $room->floor_number) }}" placeholder="Room Floor Number" required>
                                                         @error('floor_number')
                                                         <span class="text-danger">{{ $message }}</span>
                                                         @enderror
@@ -524,6 +524,7 @@
                                             <div class="row gy-4">
                                                 @php
                                                     $photo_categories = [
+                                                        'feature_photos' => 'Feature Photo',
                                                         'kitchen_photos' => 'Kitchen Photo',
                                                         'washroom_photos' => 'Washroom Photo',
                                                         'parking_photos' => 'Parking Lot Photos',
@@ -551,7 +552,7 @@
                                                                     @if (isset($room_photos[str_replace('_photos', '', $input_name)]))
                                                                         @foreach ($room_photos[str_replace('_photos', '', $input_name)] as $photo)
                                                                             <div class="multiple-thumbnail-item" data-photo-id="{{ $photo->id }}">
-                                                                                <img src="{{ asset('storage/' . $photo->photo_path) }}" style="max-width: 100px; max-height: 100px;">
+                                                                                <img src="{{ asset($photo->photo_path) }}" style="max-width: 100px; max-height: 100px;">
                                                                                 <button type="button" class="multiple-remove-btn" onclick="removePhoto({{ $photo->id }}, this)">×</button>
                                                                             </div>
                                                                         @endforeach
