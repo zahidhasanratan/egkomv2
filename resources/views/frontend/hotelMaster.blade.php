@@ -54,7 +54,7 @@
 
                 <div class="col-6">
                     <div class="mb-logo">
-                        <a href="index.html" class="">
+                        <a href="{{ asset('/') }}" class="">
                             <img src="{{ asset('frontend')}}/images/logo.png" alt="Ez booking">
                         </a>
                     </div>
@@ -363,7 +363,7 @@
             <div class="row">
                 <div class="col-lg-2">
                     <div class="egkom-logo">
-                        <a href="index.html" class="navbar-brand main-logo py-1 m-0">
+                        <a href="{{ asset('/') }}" class="navbar-brand main-logo py-1 m-0">
                             <img src="{{ asset('frontend')}}/images/logo.png" alt="Egkom">
                         </a>
                     </div>
@@ -1249,6 +1249,7 @@
 
 
 <!--======================= FOOTER =======================-->
+
 <section id="footer" class="ftr-heading-o ftr-heading-mgn-1">
     <div id="footer-top" class="banner-padding ftr-top-grey ftr-text-white">
         <div class="container">
@@ -1256,91 +1257,53 @@
                 <div class="col-6 col-md-3 col-lg-4 col-xl-3 footer-widget ftr-links">
                     <h3 class="footer-heading">Support</h3>
                     <ul class="list-unstyled">
-                        <li>
-                            <a href="#">Coronavirus (COVID-19) FAQs</a>
-                        </li>
-                        <li>
-                            <a href="#">Manage your trips</a>
-                        </li>
-                        <li>
-                            <a href="#">Contact Customer Service</a>
-                        </li>
-                        <li>
-                            <a href="#">Safety resource centre</a>
-                        </li>
-                        <li>
-                            <a href="#">Video</a>
-                        </li>
+                        @foreach(\App\Menu::where('footer1', 1)->get() as $main_menu)
+                            <li>
+                                <a href="{{ $main_menu->page_type == 'url' ? $main_menu->external_link : route('page.details', $main_menu->slug) }}">
+                                    {{ $main_menu->menu_name }}
+                                </a>
+                            </li>
+                        @endforeach
+
                     </ul>
                 </div>
                 <!-- end columns -->
                 <div class="col-6 col-md-3 col-lg-4 col-xl-3 footer-widget ftr-links">
                     <h3 class="footer-heading">Discover</h3>
                     <ul class="list-unstyled">
-                        <li>
-                            <a href="#">Title Name Here</a>
-                        </li>
-                        <li>
-                            <a href="#">Title Name Here</a>
-                        </li>
-                        <li>
-                            <a href="#">Title Name Here</a>
-                        </li>
-                        <li>
-                            <a href="#">Title Name Here</a>
-                        </li>
-                        <li>
-                            <a href="#">Title Name Here</a>
-                        </li>
-                        <li>
-                            <a href="#">Title Name Here</a>
-                        </li>
+                        @foreach(\App\Menu::where('footer2', 1)->get() as $main_menu)
+                            <li>
+                                <a href="{{ $main_menu->page_type == 'url' ? $main_menu->external_link : route('page.details', $main_menu->slug) }}">
+                                    {{ $main_menu->menu_name }}
+                                </a>
+                            </li>
+                        @endforeach
                     </ul>
                 </div>
                 <!-- end columns -->
                 <div class="col-6 col-md-3 col-lg-4 col-xl-3 footer-widget ftr-links">
                     <h3 class="footer-heading">Terms and settings</h3>
                     <ul class="list-unstyled">
-                        <li>
-                            <a href="#">Privacy & cookies</a>
-                        </li>
-                        <li>
-                            <a href="#">Terms and conditions</a>
-                        </li>
-                        <li>
-                            <a href="#">Partner dispute</a>
-                        </li>
-                        <li>
-                            <a href="#">Modern Slavery Statement</a>
-                        </li>
-                        <li>
-                            <a href="#">Human Rights Statement</a>
-                        </li>
+                        @foreach(\App\Menu::where('footer3', 1)->get() as $main_menu)
+                            <li>
+                                <a href="{{ $main_menu->page_type == 'url' ? $main_menu->external_link : route('page.details', $main_menu->slug) }}">
+                                    {{ $main_menu->menu_name }}
+                                </a>
+                            </li>
+                        @endforeach
                     </ul>
                 </div>
                 <!-- end columns -->
                 <div class="col-6 col-md-3 col-lg-4 col-xl-3 footer-widget ftr-links">
                     <h3 class="footer-heading">About</h3>
                     <ul class="list-unstyled">
-                        <li>
-                            <a href="common-page.html">About Eg Kom</a>
-                        </li>
-
-                        <li>
-                            <a href="contact-us.html">Contact Us</a>
-                        </li>
-                        <li>
-                            <a href="#">How we work</a>
-                        </li>
-                        <li>
-                            <a href="#">Sustainability</a>
-                        </li>
-                        <li>
-                            <a href="#">Press centre</a>
-                        </li>
-                        <li>
-                            <a href="#">Careers</a>
-                        </li>
+                        @foreach(\App\Menu::where('footer4', 1)->get() as $main_menu)
+                            <li>
+                                <a href="{{ $main_menu->page_type == 'url' ? $main_menu->external_link : route('page.details', $main_menu->slug) }}">
+                                    {{ $main_menu->menu_name }}
+                                </a>
+                            </li>
+                        @endforeach
                     </ul>
                 </div>
                 <!-- end columns -->
@@ -1354,7 +1317,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-12 col-md-6 col-lg-6 col-xl-6" id="copyright">
-                    <p>Copyright © 2025 Ez Booking. All Rights Reserved.</p>
+                    <p>Copyright © 2024 Egkom. All Rights Reserved.</p>
                 </div>
                 <!-- end columns -->
                 <div class="col-12 col-md-6 col-lg-6 col-xl-6" id="terms">
@@ -1373,38 +1336,7 @@
     </div>
     <!-- end footer-bottom -->
 </section>
-<!-- end footer -->
 
-<!-- end footer -->
-<!--  <div id="popup-ad" class="modal fade" role="dialog">
-   <div class="modal-dialog">
-       <div class="modal-content">
-
-           <div class="modal-body">
-               <button type="button" class="btn close" data-bs-dismiss="modal">&times;</button>
-
-               <div class="row">
-                   <div class="col-12 col-md-6">
-                       <div class="popup-ad-text">
-                           <h4>Get</h4>
-                           <h2><span>20%</span> off</h2>
-                           <h4>on all flights booking</h4>
-                           <p>Lorem ipsum dolor sit amet, ad duo fugit aeque fabulas, in lucilius prodesset pri.</p>
-                           <a href="#" class="btn btn-orange">Book Now</a>
-                       </div>
-                   </div>
-
-                   <div class="col-12 col-md-6">
-                       <div class="popup-ad-img">
-                           <img src="images/about-content-2.png" class="img-fluid" />
-                       </div>
-                   </div>
-               </div>
-
-           </div>
-       </div>
-   </div>
-   </div> -->
 <!-- end popup-ad -->
 </div>
 <!-- Page Scripts Starts -->

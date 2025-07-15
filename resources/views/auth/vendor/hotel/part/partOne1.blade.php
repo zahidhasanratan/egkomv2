@@ -33,8 +33,22 @@
                                             <div class="row gy-4">
                                                 <div class="col-md-12 col-lg-12 col-xxl-3">
                                                     <div class="form-group">
-                                                        <label class="form-label" for="default-textarea">Hotel /
-                                                            Property Description</label>
+                                                        <label for="property_type" class="form-label">Property Type</label>
+                                                        <select name="property_type" class="form-control">
+                                                            <option {{ $hotel->property_type == 'Hotels' ? 'selected' : '' }}>Hotels</option>
+                                                            <option {{ $hotel->property_type == 'Transit' ? 'selected' : '' }}>Transit</option>
+                                                            <option {{ $hotel->property_type == 'Resorts' ? 'selected' : '' }}>Resorts</option>
+                                                            <option {{ $hotel->property_type == 'Lodges' ? 'selected' : '' }}>Lodges</option>
+                                                            <option {{ $hotel->property_type == 'Guesthouses' ? 'selected' : '' }}>Guesthouses</option>
+                                                            <option {{ $hotel->property_type == 'Crisis' ? 'selected' : '' }}>Crisis</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row gy-4">
+                                                <div class="col-md-12 col-lg-12 col-xxl-3">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="default-textarea">Hotel / Property Name</label>
                                                         <div class="form-control-wrap">
                                                             <textarea class="form-control no-resize"
                                                                       id="default-textarea"
@@ -45,6 +59,62 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="row gy-4">
+                                                <div class="col-md-12 col-lg-12 col-xxl-3">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="hotel-description">Hotel / Property Description</label>
+                                                        <div class="form-control-wrap">
+                                                            <textarea class="form-control" id="hotel-description" name="details">{!!  old('details', $hotel->details)  !!}</textarea>
+                                                            @error('details') <span class="text-danger">{{ $details }}</span> @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row gy-4">
+                                                <div class="col-md-6 col-lg-6 col-xxl-3">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="hotel-description">Location Latitude</label>
+                                                        <div class="form-control-wrap">
+                                                            <input class="form-control" id="hotel-description" name="lati" placeholder="Enter Latitude" value="{{ $hotel->lati }}"></input>
+                                                            @error('lati') <span class="text-danger">{{ $lati }}</span> @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-lg-6 col-xxl-3">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="hotel-description">Location Longitude</label>
+                                                        <div class="form-control-wrap">
+                                                            <input class="form-control" id="hotel-description" name="longi" placeholder="Enter Longitude" value="{{ $hotel->longi }}"></input>
+                                                            @error('longi') <span class="text-danger">{{ $longi }}</span> @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
+
+                                                <div class="col-md-12 col-lg-12 col-xxl-3">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="default-textarea">Address</label>
+                                                        <div class="form-control-wrap">
+                                                            <textarea class="form-control no-resize"
+                                                                      id="default-textarea"
+                                                                      name="address">{{ old('address', $hotel->address) }}</textarea>
+                                                            @error('address') <span
+                                                                class="text-danger">{{ $address }}</span> @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <script>
+                                                ClassicEditor
+                                                    .create(document.querySelector('#hotel-description'))
+                                                    .catch(error => {
+                                                        console.error(error);
+                                                    });
+                                            </script>
 
                                             <!-- Property Policy And Rules -->
 

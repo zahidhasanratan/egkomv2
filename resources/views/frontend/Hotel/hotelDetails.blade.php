@@ -760,10 +760,20 @@
                             <div data-v-58caae98="" class="hotel-location-details">
                                 <div data-v-58caae98="" class="map-container">
                                     <div class="location-map">
-                                        <iframe
-                                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3719.4082342303864!2d92.04631907431155!3d21.215654481335008!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30addb98f90b08b7%3A0x6c678eda6bd69230!2sSea%20Pearl%20Beach%20Resort%20%26%20Spa%20Cox&#39;s%20Bazar!5e0!3m2!1sen!2sbd!4v1723541782494!5m2!1sen!2sbd"
-                                            width="100%" height="250" style="border:0;" allowfullscreen=""
-                                            loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+
+                                        <iframe id="dynamicMap" width="100%" height="250" style="border:0;" allowfullscreen loading="lazy"></iframe>
+
+                                        <script>
+                                            const lat = "{{ $show->lati ?? 0 }}";
+                                            const lng = "{{ $show->longi ?? 0 }}";
+                                            const mapUrl = `https://www.google.com/maps?q=${lat},${lng}&z=15&output=embed`;
+
+                                            document.getElementById('dynamicMap').src = mapUrl;
+                                        </script>
+
+
+
                                     </div>
                                 </div>
                                 <div data-v-58caae98="" class="nearby-places">
@@ -1462,7 +1472,7 @@
                             </div>
                             <div data-v-58caae98="" class="rule-detail">
                                 <div data-v-58caae98="" class="check-time">
-                                    14:00 - 20:00
+                                    {{ $show->check_in_window }}
                                 </div>
                             </div>
                         </div>
@@ -1473,7 +1483,7 @@
                             </div>
                             <div data-v-58caae98="" class="rule-detail">
                                 <div data-v-58caae98="" class="check-time">
-                                    11:00
+                                    {{ $show->check_out_time }}
                                 </div>
                             </div>
                         </div>
@@ -1487,20 +1497,11 @@
                                     <path data-v-58caae98="" fill="#fff"
                                           d="M3.5 8.1665h7v1.1667h-7V8.1665Zm0-3.5h7v1.1667h-7V4.6665Z"></path>
                                  </svg>
-                                 Instructions
+                                 Location Direction
                               </span>
                             </div>
                             <div data-v-58caae98="" class="rule-detail">
-                                <ul>
-                                    <li>Extra-person charges may apply and vary depending on property policy</li>
-                                    <li>Government-issued photo identification and a credit card, debit card, or cash
-                                        deposit may be required at check-in for incidental charges
-                                    </li>
-                                    <li>Special requests are subject to availability upon check-in and may incur
-                                        additional charges; special requests cannot be guaranteed
-                                    </li>
-                                    <li>This property accepts credit cards, debit cards, and cash</li>
-                                </ul>
+                                {!!  $show->directions  !!}
                             </div>
                         </div>
                         <div data-v-58caae98="" class="rule">
@@ -1509,7 +1510,8 @@
                               Special Instructions
                               </span>
                             </div>
-                            <div data-v-58caae98="" class="rule-detail">Front desk staff will greet guests on arrival.
+                            <div data-v-58caae98="" class="rule-detail">
+                                {!!  $show->extra_bed_policy  !!}
                             </div>
                         </div>
                         <!----> <!---->
@@ -1519,17 +1521,7 @@
                                 Child Policy
                             </div>
                             <div data-v-58caae98="" class="rule-detail">
-                                <p data-v-58caae98="">Allowed</p>
-                                <p data-v-58caae98="" class="preserver-and-wrap-whitespace">&gt; Children below 5 Years
-                                    can stay in the same room &amp; enjoy complimentary breakfast.
-                                    &gt;Children above 5 years to 10 years will be charged BDT 1000/- for buffet
-                                    breakfast, BDT 1200/- for buffet lunch &amp; BDT 1450/- for buffet dinner.
-                                    &gt;For an extra bed need to pay BDT 3,000/- and breakfast is included with this
-                                    price.
-                                    &gt;Children above 10 years are considered adults and an extra bed shall be
-                                    required.
-                                    &gt;Adult breakfast charge BDT 1,999/-
-                                </p>
+                                {!!  $show->child_policy  !!}
                             </div>
                         </div>
                         <div data-v-58caae98="" class="rule">
@@ -1537,44 +1529,18 @@
                                 Pet Policy
                             </div>
                             <div data-v-58caae98="" class="rule-detail">
-                                <p data-v-58caae98="">Not Allowed</p>
+                                <p data-v-58caae98="">@if($show->pets_allowed =='yes') Allowed @else Not Allowd @endif</p>
+                                @if($show->pets_allowed =='yes')
+                                <p data-v-58caae98="">{!!  $show->pets_details  !!}</p>
+                                @endif
                             </div>
                         </div>
                         <div data-v-58caae98="" class="rule">
                             <div data-v-58caae98="" class="key-point"><i data-v-58caae98=""
-                                                                         class="icon icon-info-dark"></i> House Rules
+                                                                         class="icon icon-info-dark"></i> Additional Policy
                             </div>
                             <div data-v-58caae98="" class="rule-detail">
-                                <p data-v-58caae98="" class="preserver-and-wrap-whitespace">*BREAKFAST AT APPAYAN*
-                                    Set menu breakfast from 6 years and above BDT 650 per person
-                                    *Complimentary Airport Shuttle Service*
-                                    &gt; Lounge Address: Kolatoli Road (On the right side towards the Beach from Dolphin
-                                    Circle, in front of “99 Convention Hall”), Cox’s Bazar City
-                                    &gt; Opening Time: 07:30 am to 06:00 pm
-                                    &gt; Lounge Cell Number: +8801844-016017
-                                    &gt; Seating Capacity of shuttle: 20 Person
-                                    &gt; For Airport pick-up, the vehicle will report 5 minutes prior to arrival time of
-                                    the Flights but the vehicle would leave each hour as scheduled above.
-                                    &gt; The paging will be done outside the Arrival Gate of the Airport.
-                                    &gt; Route: Resort-Lounge-Airport-Lounge-Resort
-                                    &gt; All guests’ departing by any airlines will be dropped at the departure gate
-                                    &gt; Facilities: Shuttle Services are complimentary as per availability;
-                                    Complimentary Wifi (Lounge);
-                                    &gt; Individual Service: 5000/- per way (Private Car/ Sedan), 6000/- per way (Hi
-                                    Ace) &amp; 12500/- per way (Individual Bus)
-                                    &gt;Food cost per person: Buffet Lunch @ BDT 2399/-, Buffet Dinner @ BDT 2899/-
-                                    &amp; Buffet Breakfast @ BDT 1999/-.
-                                    &gt;During Blackout/Long Holidays period Cancellation policy will not be applicable.
-                                    &gt;Each guest must present a copy of their valid NID/other identification documents
-                                    during check-in. Guests should carry their vaccination certificates during check-in.
-                                    &gt;Couples might have to show proof of marriage (marriage certificate/photographs)
-                                    on demand.
-                                    &gt;The extra bed with breakfast charge is BDT 3000/- for one additional adult.
-                                    &gt;Early check-in and late check-out are not guaranteed, it is subject to
-                                    availability and at the property's discretion. It might be chargeable, please
-                                    contact the hotel for further details during check-in.
-                                    &gt; Guests will get 15% discount on Sea pearl water park after check-in.
-                                </p>
+                                {!! $show->additional_policy !!}
                             </div>
                         </div>
                         <div data-v-58caae98="" class="rule centered">

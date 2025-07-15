@@ -71,10 +71,31 @@
                                                         <label class="form-label" for="hotel-description">Hotel / Property Description</label>
                                                         <div class="form-control-wrap">
                                                             <textarea class="form-control" id="hotel-description" name="details">{{ old('details', $hotel->details) }}</textarea>
-                                                            @error('details') <span class="text-danger">{{ $message }}</span> @enderror
+                                                            @error('details') <span class="text-danger">{{ $details }}</span> @enderror
                                                         </div>
                                                     </div>
                                                 </div>
+
+
+                                                <div class="col-md-6 col-lg-6 col-xxl-3">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="hotel-description">Location Latitude</label>
+                                                        <div class="form-control-wrap">
+                                                            <input class="form-control" id="hotel-description" name="lati" placeholder="Enter Latitude" value="{{ $hotel->lati }}"></input>
+                                                            @error('lati') <span class="text-danger">{{ $lati }}</span> @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-lg-6 col-xxl-3">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="hotel-description">Location Longitude</label>
+                                                        <div class="form-control-wrap">
+                                                            <input class="form-control" id="hotel-description" name="longi" placeholder="Enter Longitude" value="{{ $hotel->longi }}"></input>
+                                                            @error('longi') <span class="text-danger">{{ $longi }}</span> @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
+
 
 
 
@@ -119,7 +140,7 @@
                                                         <div
                                                             class="input-group {{ old('pets_allowed', $hotel->pets_allowed) == 'yes' ? '' : 'hidden' }}"
                                                             id="pets-input">
-                                                            <textarea class="form-control" name="pets_details"
+                                                            <textarea class="form-control" id="pets-details" name="pets_details"
                                                                       placeholder=""
                                                                       style="height: 50px;">{{ old('pets_details', $hotel->pets_details) }}</textarea>
                                                         </div>
@@ -225,55 +246,42 @@
                                                     <div class="form-group">
                                                         <label class="form-label" for="check-in-window">Check-in window
                                                             start and end time</label>
-                                                        <select class="form-select mb-3" name="check_in_window"
-                                                                id="check-in-window" aria-label="Large select example">
+                                                        <select class="form-select mb-3" name="check_in_window" id="check-in-window" aria-label="Large select example">
                                                             <option value="">Select Check-in Time</option>
-                                                            <option
-                                                                value="00:00-02:00" {{ old('check_in_window', $hotel->check_in_window) == '00:00-02:00' ? 'selected' : '' }}>
+                                                            <option value="12:00 AM (Midnight) - 2:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '12:00 AM (Midnight) - 2:00 AM' ? 'selected' : '' }}>
                                                                 12:00 AM (Midnight) - 2:00 AM
                                                             </option>
-                                                            <option
-                                                                value="02:00-04:00" {{ old('check_in_window', $hotel->check_in_window) == '02:00-04:00' ? 'selected' : '' }}>
+                                                            <option value="2:00 AM - 4:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '2:00 AM - 4:00 AM' ? 'selected' : '' }}>
                                                                 2:00 AM - 4:00 AM
                                                             </option>
-                                                            <option
-                                                                value="04:00-06:00" {{ old('check_in_window', $hotel->check_in_window) == '04:00-06:00' ? 'selected' : '' }}>
+                                                            <option value="4:00 AM - 6:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '4:00 AM - 6:00 AM' ? 'selected' : '' }}>
                                                                 4:00 AM - 6:00 AM
                                                             </option>
-                                                            <option
-                                                                value="06:00-08:00" {{ old('check_in_window', $hotel->check_in_window) == '06:00-08:00' ? 'selected' : '' }}>
+                                                            <option value="6:00 AM - 8:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '6:00 AM - 8:00 AM' ? 'selected' : '' }}>
                                                                 6:00 AM - 8:00 AM
                                                             </option>
-                                                            <option
-                                                                value="08:00-10:00" {{ old('check_in_window', $hotel->check_in_window) == '08:00-10:00' ? 'selected' : '' }}>
+                                                            <option value="8:00 AM - 10:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '8:00 AM - 10:00 AM' ? 'selected' : '' }}>
                                                                 8:00 AM - 10:00 AM
                                                             </option>
-                                                            <option
-                                                                value="10:00-12:00" {{ old('check_in_window', $hotel->check_in_window) == '10:00-12:00' ? 'selected' : '' }}>
+                                                            <option value="10:00 AM - 12:00 PM (Noon)" {{ old('check_in_window', $hotel->check_in_window) == '10:00 AM - 12:00 PM (Noon)' ? 'selected' : '' }}>
                                                                 10:00 AM - 12:00 PM (Noon)
                                                             </option>
-                                                            <option
-                                                                value="12:00-14:00" {{ old('check_in_window', $hotel->check_in_window) == '12:00-14:00' ? 'selected' : '' }}>
+                                                            <option value="12:00 PM (Noon) - 2:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '12:00 PM (Noon) - 2:00 PM' ? 'selected' : '' }}>
                                                                 12:00 PM (Noon) - 2:00 PM
                                                             </option>
-                                                            <option
-                                                                value="14:00-16:00" {{ old('check_in_window', $hotel->check_in_window) == '14:00-16:00' ? 'selected' : '' }}>
+                                                            <option value="2:00 PM - 4:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '2:00 PM - 4:00 PM' ? 'selected' : '' }}>
                                                                 2:00 PM - 4:00 PM
                                                             </option>
-                                                            <option
-                                                                value="16:00-18:00" {{ old('check_in_window', $hotel->check_in_window) == '16:00-18:00' ? 'selected' : '' }}>
+                                                            <option value="4:00 PM - 6:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '4:00 PM - 6:00 PM' ? 'selected' : '' }}>
                                                                 4:00 PM - 6:00 PM
                                                             </option>
-                                                            <option
-                                                                value="18:00-20:00" {{ old('check_in_window', $hotel->check_in_window) == '18:00-20:00' ? 'selected' : '' }}>
+                                                            <option value="6:00 PM - 8:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '6:00 PM - 8:00 PM' ? 'selected' : '' }}>
                                                                 6:00 PM - 8:00 PM
                                                             </option>
-                                                            <option
-                                                                value="20:00-22:00" {{ old('check_in_window', $hotel->check_in_window) == '20:00-22:00' ? 'selected' : '' }}>
+                                                            <option value="8:00 PM - 10:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '8:00 PM - 10:00 PM' ? 'selected' : '' }}>
                                                                 8:00 PM - 10:00 PM
                                                             </option>
-                                                            <option
-                                                                value="22:00-00:00" {{ old('check_in_window', $hotel->check_in_window) == '22:00-00:00' ? 'selected' : '' }}>
+                                                            <option value="10:00 PM - 12:00 AM (Midnight)" {{ old('check_in_window', $hotel->check_in_window) == '10:00 PM - 12:00 AM (Midnight)' ? 'selected' : '' }}>
                                                                 10:00 PM - 12:00 AM (Midnight)
                                                             </option>
                                                         </select>
@@ -730,19 +738,19 @@
                                                                 <label class="form-label" for="child-policy">Child
                                                                     Policy</label>
                                                                 <div class="form-control-wrap">
-                                                                    <textarea class="form-control no-resize"
+                                                                    <textarea class="form-control no-resize" id="ChildPolicy"
                                                                               name="child_policy">{{ old('child_policy', $hotel->child_policy) }}</textarea>
+
                                                                 </div>
                                                             </div>
                                                         </div>
 
                                                         <div class="col-md-6 col-lg-6 col-xxl-3">
                                                             <div class="form-group">
-                                                                <label class="form-label" for="extra-bed-policy">Extra
-                                                                    Bed Policy</label>
+                                                                <label class="form-label" for="extra-bed-policy">Special Instructions</label>
                                                                 <div class="form-control-wrap">
                                                                     <textarea class="form-control no-resize"
-                                                                              name="extra_bed_policy">{{ old('extra_bed_policy', $hotel->extra_bed_policy) }}</textarea>
+                                                                              name="extra_bed_policy" id="extra-bed-policy">{{ old('extra_bed_policy', $hotel->extra_bed_policy) }}</textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -764,7 +772,7 @@
                                                                     (Location Direction details)</label>
                                                                 <div class="form-control-wrap">
                                                                     <textarea class="form-control no-resize"
-                                                                              name="directions">{{ old('directions', $hotel->directions) }}</textarea>
+                                                                              name="directions" id="location-direction">{{ old('directions', $hotel->directions) }}</textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -775,7 +783,7 @@
                                                                     Policy</label>
                                                                 <div class="form-control-wrap">
                                                                     <textarea class="form-control no-resize"
-                                                                              name="additional_policy">{{ old('additional_policy', $hotel->additional_policy) }}</textarea>
+                                                                              name="additional_policy" id="additional-policy">{{ old('additional_policy', $hotel->additional_policy) }}</textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1518,10 +1526,13 @@
             </div>
         </div>
     </div>
+
     @php
         // Decode if it's a JSON string
         $hotelFacilitiesArray = is_string($hotelFacilities) ? json_decode($hotelFacilities, true) : $hotelFacilities;
     @endphp
+
+
     <script type="text/javascript">
         document.getElementById('propertyCategory').addEventListener('change', function () {
             var propertyTypeContainer = document.getElementById('propertyTypeContainer');

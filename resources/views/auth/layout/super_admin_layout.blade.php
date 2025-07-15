@@ -387,11 +387,24 @@
 
 <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
 <script>
-    ClassicEditor
-        .create(document.querySelector('#hotel-description'))
-        .catch(error => {
-            console.error(error);
-        });
+    // List of all CKEditor textarea IDs
+    const editorIds = [
+        'hotel-description',
+        'ChildPolicy',
+        'location-direction',
+        'additional-policy',
+        'pets-details',
+        'extra-bed-policy'
+    ];
+
+    // Initialize CKEditor for each ID
+    editorIds.forEach(id => {
+        ClassicEditor
+            .create(document.querySelector(`#${id}`))
+            .catch(error => {
+                console.error(`Failed to initialize CKEditor for #${id}:`, error);
+            });
+    });
 </script>
 
 

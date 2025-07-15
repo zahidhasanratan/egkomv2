@@ -230,19 +230,48 @@
                                                 <div class="card-body">
                                                     <div class="row gy-4">
                                                         <div class="col-md-12">
-                                                            <label class="form-label">Description</label>
+                                                            <label class="form-label">Property Type</label>
+                                                            <p class="form-control-static">{{ $hotel->property_type ?? 'Not provided' }}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row gy-4">
+                                                        <div class="col-md-12">
+                                                            <label class="form-label">Hotel / Property Name</label>
                                                             <p class="form-control-static">{{ $hotel->description ?? 'Not provided' }}</p>
                                                         </div>
                                                     </div>
+                                                    <div class="row gy-4">
+                                                        <div class="col-md-12">
+                                                            <label class="form-label">Hotel / Property Description</label>
+                                                            <p class="form-control-static">{!!  $hotel->details ?? 'Not provided'  !!}</p>
+                                                        </div>
+                                                    </div>
                                                 </div>
+
+                                                <div class="card-body">
+                                                    <div class="row gy-4">
+                                                        <div class="col-md-4">
+                                                            <label class="form-label">Location Latitude</label>
+                                                            <p class="form-control-static">{{ $hotel->lati }}</p>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label class="form-label">Location Longitude</label>
+                                                            <p class="form-control-static">{{ $hotel->longi }}</p>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label class="form-label">Adress</label>
+                                                            <p class="form-control-static">{{ $hotel->address }}</p>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
                                             </div>
 
                                             <!-- Property Policy And Rules -->
                                             <div class="card">
-
                                                 <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
                                                     <h3 class="section-title">Property Policy and Rules</h3>
-
                                                     <a href="{{ route('vendor-admin.hotel.editOne2', $hotel) }}" title="Edit">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
@@ -254,7 +283,7 @@
                                                             <p class="form-control-static">{{ $hotel->pets_allowed == 'yes' ? 'Yes' : 'No' }}</p>
                                                             @if($hotel->pets_allowed == 'yes')
                                                                 <label class="form-label">Pets Details</label>
-                                                                <p class="form-control-static">{{ $hotel->pets_details ?? 'Not provided' }}</p>
+                                                                <p class="form-control-static">{!!  $hotel->pets_details ?? 'Not provided'  !!}</p>
                                                             @endif
                                                         </div>
                                                         <div class="col-md-6 col-lg-4 col-xxl-3">
@@ -380,11 +409,11 @@
                                                         </div>
                                                         <div class="col-md-6 col-lg-6 col-xxl-3">
                                                             <label class="form-label">Child Policy</label>
-                                                            <p class="form-control-static">{{ $hotel->child_policy ?? 'Not provided' }}</p>
+                                                            <p class="form-control-static">{!!  $hotel->child_policy ?? 'Not provided'  !!}</p>
                                                         </div>
                                                         <div class="col-md-6 col-lg-6 col-xxl-3">
                                                             <label class="form-label">Extra Bed Policy</label>
-                                                            <p class="form-control-static">{{ $hotel->extra_bed_policy ?? 'Not provided' }}</p>
+                                                            <p class="form-control-static">{!! $hotel->extra_bed_policy ?? 'Not provided' !!}</p>
                                                         </div>
                                                         <div class="col-md-6 col-lg-6 col-xxl-3">
                                                             <label class="form-label">Cooking Policy</label>
@@ -392,11 +421,11 @@
                                                         </div>
                                                         <div class="col-md-6 col-lg-6 col-xxl-3">
                                                             <label class="form-label">Directions</label>
-                                                            <p class="form-control-static">{{ $hotel->directions ?? 'Not provided' }}</p>
+                                                            <p class="form-control-static">{!! $hotel->directions ?? 'Not provided' !!}</p>
                                                         </div>
                                                         <div class="col-md-12 col-lg-12 col-xxl-12">
                                                             <label class="form-label">Additional Policy</label>
-                                                            <p class="form-control-static">{{ $hotel->additional_policy ?? 'Not provided' }}</p>
+                                                            <p class="form-control-static">{!! $hotel->additional_policy ?? 'Not provided' !!}</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -951,11 +980,12 @@
                                                     <div class="row gy-4">
                                                         @php
                                                             $photoFields = [
-                                                                'kitchen_photos', 'washroom_photos', 'parking_lot_photos', 'entrance_gate_photos',
+                                                                'featured_photo','kitchen_photos', 'washroom_photos', 'parking_lot_photos', 'entrance_gate_photos',
                                                                 'lift_stairs_photos', 'spa_photos', 'bar_photos', 'transport_photos',
                                                                 'rooftop_photos', 'gym_photos', 'security_photos', 'amenities_photos'
                                                             ];
                                                             $labels = [
+                                                                'featured_photo' => 'Feature Photos',
                                                                 'kitchen_photos' => 'Kitchen Photos',
                                                                 'washroom_photos' => 'Washroom Photos',
                                                                 'parking_lot_photos' => 'Parking Lot Photos',

@@ -14,6 +14,69 @@
     <link rel="stylesheet" href="{{ asset('assets/super_admin') }}/assets/css/dashlitee1e3.css?ver=3.2.4">
     <link id="skin-default" rel="stylesheet" href="{{ asset('assets/super_admin') }}/assets/css/themee1e3.css?ver=3.2.4">
 
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+
+    <script>
+        // Wait for DOM to fully load
+        document.addEventListener('DOMContentLoaded', function () {
+            const editorIds = [
+                'hotel-description',
+                'ChildPolicy',
+                'location-direction',
+                'additional-policy',
+                'pets-details2',
+                'extra-bed-policy'
+            ];
+
+            // Store initialized editors to prevent re-initialization
+            const initializedEditors = {};
+
+            editorIds.forEach(id => {
+                const el = document.querySelector(`#${id}`);
+
+                // Check if element exists AND is visible
+                if (el && isVisible(el)) {
+                    initCKEditor(id, el);
+                }
+            });
+
+            // Function to initialize CKEditor
+            function initCKEditor(id, el) {
+                if (initializedEditors[id]) return; // prevent duplicate init
+
+                ClassicEditor
+                    .create(el)
+                    .then(editor => {
+                        initializedEditors[id] = editor;
+                    })
+                    .catch(error => {
+                        console.error(`Failed to initialize CKEditor for #${id}:`, error);
+                    });
+            }
+
+            // Function to check if element is visible
+            function isVisible(el) {
+                return !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length);
+            }
+
+            // Example: When user toggles the "pets_allowed" dropdown (you can change this part)
+            const petsAllowedField = document.querySelector('[name="pets_allowed"]');
+            if (petsAllowedField) {
+                petsAllowedField.addEventListener('change', function () {
+                    const petsInput = document.getElementById('pets-input');
+                    const petsTextarea = document.getElementById('pets-details2');
+
+                    if (this.value === 'yes') {
+                        petsInput.classList.remove('hidden');
+                        initCKEditor('pets-details2', petsTextarea);
+                    } else {
+                        petsInput.classList.add('hidden');
+                    }
+                });
+            }
+        });
+    </script>
+
 </head>
 
 <body class="nk-body bg-lighter npc-general has-sidebar ">

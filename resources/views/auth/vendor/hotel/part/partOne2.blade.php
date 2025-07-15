@@ -52,9 +52,9 @@
                                                         <div
                                                             class="input-group {{ old('pets_allowed', $hotel->pets_allowed) == 'yes' ? '' : 'hidden' }}"
                                                             id="pets-input">
-                                                            <textarea class="form-control" name="pets_details"
-                                                                      placeholder=""
-                                                                      style="height: 50px;">{{ old('pets_details', $hotel->pets_details) }}</textarea>
+    <textarea class="form-control" id="pets-details2" name="pets_details"
+              placeholder=""
+              style="height: 50px;">{{ old('pets_details', $hotel->pets_details) }}</textarea>
                                                         </div>
                                                         @error('pets_allowed') <span
                                                             class="text-danger">{{ $message }}</span> @enderror

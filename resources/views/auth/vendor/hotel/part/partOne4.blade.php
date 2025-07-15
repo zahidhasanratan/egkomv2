@@ -97,7 +97,7 @@
                                                                 <label class="form-label" for="child-policy">Child
                                                                     Policy</label>
                                                                 <div class="form-control-wrap">
-                                                                    <textarea class="form-control no-resize"
+                                                                    <textarea id="ChildPolicy" class="form-control no-resize"
                                                                               name="child_policy">{{ old('child_policy', $hotel->child_policy) }}</textarea>
                                                                 </div>
                                                             </div>
@@ -108,7 +108,7 @@
                                                                 <label class="form-label" for="extra-bed-policy">Extra
                                                                     Bed Policy</label>
                                                                 <div class="form-control-wrap">
-                                                                    <textarea class="form-control no-resize"
+                                                                    <textarea id="extra-bed-policy" class="form-control no-resize"
                                                                               name="extra_bed_policy">{{ old('extra_bed_policy', $hotel->extra_bed_policy) }}</textarea>
                                                                 </div>
                                                             </div>
@@ -130,7 +130,7 @@
                                                                 <label class="form-label" for="directions">Directions
                                                                     (Location Direction details)</label>
                                                                 <div class="form-control-wrap">
-                                                                    <textarea class="form-control no-resize"
+                                                                    <textarea id="location-direction" class="form-control no-resize"
                                                                               name="directions">{{ old('directions', $hotel->directions) }}</textarea>
                                                                 </div>
                                                             </div>
@@ -141,7 +141,7 @@
                                                                 <label class="form-label" for="additional-policy">Additional
                                                                     Policy</label>
                                                                 <div class="form-control-wrap">
-                                                                    <textarea class="form-control no-resize"
+                                                                    <textarea id="additional-policy" class="form-control no-resize"
                                                                               name="additional_policy">{{ old('additional_policy', $hotel->additional_policy) }}</textarea>
                                                                 </div>
                                                             </div>
