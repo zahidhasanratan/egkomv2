@@ -22,7 +22,11 @@
                                     </li>
 
                                 </ul>
-
+                                @if (session('success'))
+                                    <div class="alert alert-success mt-3">
+                                        {{ session('success') }}
+                                    </div>
+                                @endif
                                 <form method="POST" action="{{ route('vendor-admin.hotel.update', $hotel->id) }}"
                                       enctype="multipart/form-data">
                                     @csrf
@@ -30,11 +34,54 @@
                                     <div class="tab-content">
                                         <!-- Hotel Description -->
                                         <div class="tab-pane active" id="tabItem3">
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div class="mb-3">
+                                                    <label for="division" class="form-label">Select Property
+                                                        Category</label>
+                                                    <select class="form-select" id="division"
+                                                            name="property_category">
+                                                        <option value=""
+                                                                disabled {{ !$hotel || !$hotel->property_category ? 'selected' : '' }}>
+                                                            Choose Property Category
+                                                        </option>
+                                                        <option
+                                                            value="Hotels" {{ old('property_category', $hotel->property_category ?? '') === 'Hotels' ? 'selected' : '' }}>
+                                                            Hotels
+                                                        </option>
+                                                        <option
+                                                            value="Transit" {{ old('property_category', $hotel->property_category ?? '') === 'Transit' ? 'selected' : '' }}>
+                                                            Transit Hotels
+                                                        </option>
+                                                        <option
+                                                            value="Resorts" {{ old('property_category', $hotel->property_category ?? '') === 'Resorts' ? 'selected' : '' }}>
+                                                            Resorts, Eco, & Outdoor
+                                                        </option>
+                                                        <option
+                                                            value="Lodges" {{ old('property_category', $hotel->property_category ?? '') === 'Lodges' ? 'selected' : '' }}>
+                                                            Hostels & Lodges
+                                                        </option>
+                                                        <option
+                                                            value="Apartments" {{ old('property_category', $hotel->property_category ?? '') === 'Apartments' ? 'selected' : '' }}>
+                                                            Apartments & Homestays
+                                                        </option>
+                                                        <option
+                                                            value="Guesthouses" {{ old('property_category', $hotel->property_category ?? '') === 'Guesthouses' ? 'selected' : '' }}>
+                                                            Vacation Rentals & Guesthouses
+                                                        </option>
+                                                        <option
+                                                            value="Crisis" {{ old('property_category', $hotel->property_category ?? '') === 'Crisis' ? 'selected' : '' }}>
+                                                            Crisis & Shelter Accommodation
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
                                             <div class="row gy-4">
-                                                <div class="col-md-12 col-lg-12 col-xxl-3">
+                                                <div class="col-md-12 col-lg-12 col-xxl-3" id="districtContainer" style="display:none;">
                                                     <div class="form-group">
-                                                        <label for="property_type" class="form-label">Property Type</label>
-                                                        <select name="property_type" class="form-control">
+                                                        <label for="district" class="form-label">Property Type</label>
+                                                        <select name="property_type" id="district" class="form-control">
+                                                            <option value="" disabled selected>Choose Property Type</option>
                                                             <option {{ $hotel->property_type == 'Hotels' ? 'selected' : '' }}>Hotels</option>
                                                             <option {{ $hotel->property_type == 'Transit' ? 'selected' : '' }}>Transit</option>
                                                             <option {{ $hotel->property_type == 'Resorts' ? 'selected' : '' }}>Resorts</option>
@@ -45,13 +92,30 @@
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            <div class="col-md-6 col-lg-4 col-xxl-3" id="placeCheckboxList"
+                                                 style="display: none;">
+                                                <div class="form-group">
+                                                    <label class="form-label">Choose Room/Accommodation Type</label>
+                                                    <ul id="placeOptions" class="list-unstyled"
+                                                        style="max-height: 200px; overflow-y: auto;">
+                                                        <!-- Dynamic Checkboxes Will Appear Here -->
+                                                    </ul>
+                                                    @error('room_types')
+                                                    <span class="invalid-feedback"
+                                                          role="alert">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+
+
                                             <div class="row gy-4">
                                                 <div class="col-md-12 col-lg-12 col-xxl-3">
                                                     <div class="form-group">
                                                         <label class="form-label" for="default-textarea">Hotel / Property Name</label>
                                                         <div class="form-control-wrap">
                                                             <input class="form-control no-resize"
-                                                                      name="description" value="{{ old('description', $hotel->description) }}"></input>
+                                                                   name="description" value="{{ old('description', $hotel->description) }}"></input>
                                                             @error('description') <span
                                                                 class="text-danger">{{ $message }}</span> @enderror
                                                         </div>
@@ -69,6 +133,32 @@
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="building-age">Building
+                                                        Age/Founding Year</label>
+                                                    <input type="number" class="form-control" id="building-age"
+                                                           name="building_age" placeholder="ex: 2010"
+                                                           value="{{ old('building_age', $property->building_age ?? '') }}">
+                                                </div>
+                                            </div>
+
+
+
+
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="building-stories">Building
+                                                        Storied</label>
+                                                    <input type="number" class="form-control" id="building-stories"
+                                                           name="building_stories" placeholder="ex: 10 Story"
+                                                           value="{{ old('building_stories', $property->building_stories ?? '') }}">
+                                                </div>
+                                            </div>
+
+
+
                                             <div class="row gy-4">
                                                 <div class="col-md-6 col-lg-6 col-xxl-3">
                                                     <div class="form-group">
@@ -88,9 +178,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
-
-
 
                                                 <div class="col-md-12 col-lg-12 col-xxl-3">
                                                     <div class="form-group">
@@ -165,7 +252,6 @@
 
 
 
-
                                     </div>
                                 </form>
 
@@ -177,10 +263,169 @@
         </div>
     </div>
 
+    <!-- harmless placeholder so “propertyCategory” script never crashes if element is absent -->
+
+    <span id="propertyCategory" hidden></span>
+
     <script type="text/javascript">
-        document.getElementById('propertyCategory').addEventListener('change', function () {
+        document.addEventListener("DOMContentLoaded", function () {
+            const divisionSelect    = document.getElementById("division");   // property_category
+            const districtSelect    = document.getElementById("district");   // property_type
+            const districtContainer = document.getElementById("districtContainer");
+            const placeCheckboxList = document.getElementById("placeCheckboxList");
+            const placeOptions      = document.getElementById("placeOptions");
+
+            const data = {
+                Hotels: {
+                    districts: {
+                        "hotel": ["Single Room", "Double Room", "Twin Room", "Suite", "Family Room", "Penthouse Suite", "Accessible Room"],
+                        "Luxury Hotels": ["Single Room", "Double Room", "Twin Room", "Suite", "Family Room", "Penthouse Suite", "Accessible Room"],
+                        "Resort Hotels ": ["Single Room", "Double Room", "Twin Room", "Suite", "Family Room", "Penthouse Suite", "Accessible Room"],
+                        "Budget Hotels ": ["Single Room", "Double Room", "Twin Room", "Suite", "Family Room", "Penthouse Suite", "Accessible Room"],
+                        "Hotels 3 Star ": ["Single Room", "Double Room", "Twin Room", "Suite", "Family Room", "Penthouse Suite", "Accessible Room"],
+                        "Hotels 4 Star": ["Single Room", "Double Room", "Twin Room", "Suite", "Family Room", "Penthouse Suite", "Accessible Room"],
+                        "Hotels 5 Star ": ["Single Room", "Double Room", "Twin Room", "Suite", "Family Room", "Penthouse Suite", "Accessible Room"]
+                    }
+                },
+                Transit: {
+                    districts: {
+                        "Airport Hotels ": ["Single Room", "Double Room", "Family Unit", "Parking-Accessible Room"],
+                        "Station Hotels ": ["Single Room", "Double Room", "Family Unit", "Parking-Accessible Room"],
+                        "Bus Stop Hotels": ["Single Room", "Double Room", "Family Unit", "Parking-Accessible Room"],
+                        "Jetty Hotels ": ["Single Room", "Double Room", "Family Unit", "Parking-Accessible Room"],
+                        "Hospital & Visa Center Area hotels": ["Single Room", "Double Room", "Family Unit", "Parking-Accessible Room"],
+                    }
+                },
+                Resorts: {
+                    districts: {
+                        "Resorts ": ["Luxury Resort Suites","Oceanfront Villas","Private Pool Villas","Garden View Rooms","Eco Resorts & Hotels","Bamboo Cottages","Solar-Powered Cabins","Off-Grid Stays","Farm Stays","Rustic Farmhouses","Luxury Farm Villas","Campsites","Standard Camping Tent","Luxury Tent (Glamping)","RV/Caravan Parking","Glamping","Safari-Style Tents","Dome Pods","Airstream Trailers","Treehouses","Basic Tree Cabins","Luxury Tree Villas","Adventure Resorts","Zipline Resorts","Rock Climbing Camps","Water Sports Resorts","Wellness Retreats","Ayurveda Resorts","Yoga Retreats","Meditation Centers","Beach Resorts","Overwater Bungalows","Beach Huts","Mountain Resorts","Safari Lodges","Wildlife Observation Rooms","Riverside Safari Cottages"],
+                        "Eco Resorts ": ["Luxury Resort Suites","Oceanfront Villas","Private Pool Villas","Garden View Rooms","Eco Resorts & Hotels","Bamboo Cottages","Solar-Powered Cabins","Off-Grid Stays","Farm Stays","Rustic Farmhouses","Luxury Farm Villas","Campsites","Standard Camping Tent","Luxury Tent (Glamping)","RV/Caravan Parking","Glamping","Safari-Style Tents","Dome Pods","Airstream Trailers","Treehouses","Basic Tree Cabins","Luxury Tree Villas","Adventure Resorts","Zipline Resorts","Rock Climbing Camps","Water Sports Resorts","Wellness Retreats","Ayurveda Resorts","Yoga Retreats","Meditation Centers","Beach Resorts","Overwater Bungalows","Beach Huts","Mountain Resorts","Safari Lodges","Wildlife Observation Rooms","Riverside Safari Cottages"],
+                        "Eco Hotels ": ["Luxury Resort Suites","Oceanfront Villas","Private Pool Villas","Garden View Rooms","Eco Resorts & Hotels","Bamboo Cottages","Solar-Powered Cabins","Off-Grid Stays","Farm Stays","Rustic Farmhouses","Luxury Farm Villas","Campsites","Standard Camping Tent","Luxury Tent (Glamping)","RV/Caravan Parking","Glamping","Safari-Style Tents","Dome Pods","Airstream Trailers","Treehouses","Basic Tree Cabins","Luxury Tree Villas","Adventure Resorts","Zipline Resorts","Rock Climbing Camps","Water Sports Resorts","Wellness Retreats","Ayurveda Resorts","Yoga Retreats","Meditation Centers","Beach Resorts","Overwater Bungalows","Beach Huts","Mountain Resorts","Safari Lodges","Wildlife Observation Rooms","Riverside Safari Cottages"],
+                        "Farm Stays": ["Luxury Resort Suites","Oceanfront Villas","Private Pool Villas","Garden View Rooms","Eco Resorts & Hotels","Bamboo Cottages","Solar-Powered Cabins","Off-Grid Stays","Farm Stays","Rustic Farmhouses","Luxury Farm Villas","Campsites","Standard Camping Tent","Luxury Tent (Glamping)","RV/Caravan Parking","Glamping","Safari-Style Tents","Dome Pods","Airstream Trailers","Treehouses","Basic Tree Cabins","Luxury Tree Villas","Adventure Resorts","Zipline Resorts","Rock Climbing Camps","Water Sports Resorts","Wellness Retreats","Ayurveda Resorts","Yoga Retreats","Meditation Centers","Beach Resorts","Overwater Bungalows","Beach Huts","Mountain Resorts","Safari Lodges","Wildlife Observation Rooms","Riverside Safari Cottages"],
+                        "Campsites ": ["Luxury Resort Suites","Oceanfront Villas","Private Pool Villas","Garden View Rooms","Eco Resorts & Hotels","Bamboo Cottages","Solar-Powered Cabins","Off-Grid Stays","Farm Stays","Rustic Farmhouses","Luxury Farm Villas","Campsites","Standard Camping Tent","Luxury Tent (Glamping)","RV/Caravan Parking","Glamping","Safari-Style Tents","Dome Pods","Airstream Trailers","Treehouses","Basic Tree Cabins","Luxury Tree Villas","Adventure Resorts","Zipline Resorts","Rock Climbing Camps","Water Sports Resorts","Wellness Retreats","Ayurveda Resorts","Yoga Retreats","Meditation Centers","Beach Resorts","Overwater Bungalows","Beach Huts","Mountain Resorts","Safari Lodges","Wildlife Observation Rooms","Riverside Safari Cottages"],
+                        "Glamping ": ["Luxury Resort Suites","Oceanfront Villas","Private Pool Villas","Garden View Rooms","Eco Resorts & Hotels","Bamboo Cottages","Solar-Powered Cabins","Off-Grid Stays","Farm Stays","Rustic Farmhouses","Luxury Farm Villas","Campsites","Standard Camping Tent","Luxury Tent (Glamping)","RV/Caravan Parking","Glamping","Safari-Style Tents","Dome Pods","Airstream Trailers","Treehouses","Basic Tree Cabins","Luxury Tree Villas","Adventure Resorts","Zipline Resorts","Rock Climbing Camps","Water Sports Resorts","Wellness Retreats","Ayurveda Resorts","Yoga Retreats","Meditation Centers","Beach Resorts","Overwater Bungalows","Beach Huts","Mountain Resorts","Safari Lodges","Wildlife Observation Rooms","Riverside Safari Cottages"],
+                        "Treehouses ": ["Luxury Resort Suites","Oceanfront Villas","Private Pool Villas","Garden View Rooms","Eco Resorts & Hotels","Bamboo Cottages","Solar-Powered Cabins","Off-Grid Stays","Farm Stays","Rustic Farmhouses","Luxury Farm Villas","Campsites","Standard Camping Tent","Luxury Tent (Glamping)","RV/Caravan Parking","Glamping","Safari-Style Tents","Dome Pods","Airstream Trailers","Treehouses","Basic Tree Cabins","Luxury Tree Villas","Adventure Resorts","Zipline Resorts","Rock Climbing Camps","Water Sports Resorts","Wellness Retreats","Ayurveda Resorts","Yoga Retreats","Meditation Centers","Beach Resorts","Overwater Bungalows","Beach Huts","Mountain Resorts","Safari Lodges","Wildlife Observation Rooms","Riverside Safari Cottages"],
+                        "Adventure Resorts  ": ["Luxury Resort Suites","Oceanfront Villas","Private Pool Villas","Garden View Rooms","Eco Resorts & Hotels","Bamboo Cottages","Solar-Powered Cabins","Off-Grid Stays","Farm Stays","Rustic Farmhouses","Luxury Farm Villas","Campsites","Standard Camping Tent","Luxury Tent (Glamping)","RV/Caravan Parking","Glamping","Safari-Style Tents","Dome Pods","Airstream Trailers","Treehouses","Basic Tree Cabins","Luxury Tree Villas","Adventure Resorts","Zipline Resorts","Rock Climbing Camps","Water Sports Resorts","Wellness Retreats","Ayurveda Resorts","Yoga Retreats","Meditation Centers","Beach Resorts","Overwater Bungalows","Beach Huts","Mountain Resorts","Safari Lodges","Wildlife Observation Rooms","Riverside Safari Cottages"],
+                        "Wellness Retreats  ": ["Luxury Resort Suites","Oceanfront Villas","Private Pool Villas","Garden View Rooms","Eco Resorts & Hotels","Bamboo Cottages","Solar-Powered Cabins","Off-Grid Stays","Farm Stays","Rustic Farmhouses","Luxury Farm Villas","Campsites","Standard Camping Tent","Luxury Tent (Glamping)","RV/Caravan Parking","Glamping","Safari-Style Tents","Dome Pods","Airstream Trailers","Treehouses","Basic Tree Cabins","Luxury Tree Villas","Adventure Resorts","Zipline Resorts","Rock Climbing Camps","Water Sports Resorts","Wellness Retreats","Ayurveda Resorts","Yoga Retreats","Meditation Centers","Beach Resorts","Overwater Bungalows","Beach Huts","Mountain Resorts","Safari Lodges","Wildlife Observation Rooms","Riverside Safari Cottages"],
+                        "Beach Resorts ": ["Luxury Resort Suites","Oceanfront Villas","Private Pool Villas","Garden View Rooms","Eco Resorts & Hotels","Bamboo Cottages","Solar-Powered Cabins","Off-Grid Stays","Farm Stays","Rustic Farmhouses","Luxury Farm Villas","Campsites","Standard Camping Tent","Luxury Tent (Glamping)","RV/Caravan Parking","Glamping","Safari-Style Tents","Dome Pods","Airstream Trailers","Treehouses","Basic Tree Cabins","Luxury Tree Villas","Adventure Resorts","Zipline Resorts","Rock Climbing Camps","Water Sports Resorts","Wellness Retreats","Ayurveda Resorts","Yoga Retreats","Meditation Centers","Beach Resorts","Overwater Bungalows","Beach Huts","Mountain Resorts","Safari Lodges","Wildlife Observation Rooms","Riverside Safari Cottages"],
+                        "Mountain Resorts": ["Luxury Resort Suites","Oceanfront Villas","Private Pool Villas","Garden View Rooms","Eco Resorts & Hotels","Bamboo Cottages","Solar-Powered Cabins","Off-Grid Stays","Farm Stays","Rustic Farmhouses","Luxury Farm Villas","Campsites","Standard Camping Tent","Luxury Tent (Glamping)","RV/Caravan Parking","Glamping","Safari-Style Tents","Dome Pods","Airstream Trailers","Treehouses","Basic Tree Cabins","Luxury Tree Villas","Adventure Resorts","Zipline Resorts","Rock Climbing Camps","Water Sports Resorts","Wellness Retreats","Ayurveda Resorts","Yoga Retreats","Meditation Centers","Beach Resorts","Overwater Bungalows","Beach Huts","Mountain Resorts","Safari Lodges","Wildlife Observation Rooms","Riverside Safari Cottages"],
+                        "Safari Lodges": ["Luxury Resort Suites","Oceanfront Villas","Private Pool Villas","Garden View Rooms","Eco Resorts & Hotels","Bamboo Cottages","Solar-Powered Cabins","Off-Grid Stays","Farm Stays","Rustic Farmhouses","Luxury Farm Villas","Campsites","Standard Camping Tent","Luxury Tent (Glamping)","RV/Caravan Parking","Glamping","Safari-Style Tents","Dome Pods","Airstream Trailers","Treehouses","Basic Tree Cabins","Luxury Tree Villas","Adventure Resorts","Zipline Resorts","Rock Climbing Camps","Water Sports Resorts","Wellness Retreats","Ayurveda Resorts","Yoga Retreats","Meditation Centers","Beach Resorts","Overwater Bungalows","Beach Huts","Mountain Resorts","Safari Lodges","Wildlife Observation Rooms","Riverside Safari Cottages"],
+                    }
+                },
+                Lodges: {
+                    districts: {
+                        "Hostels ": ["Single Bed in Dormitory/Room/Apartment ","Oceanfront Villas","Private Room/Apartment","Female-Only Dormitory/Apartment/Room","Male-Only Dormitory/Apartment/Room","Mixed Dormitory: Shared Room (All Genders) ","Studio Apartment-Style Hostel"],
+                        "Motels ": ["Single Bed in Dormitory/Room/Apartment ","Oceanfront Villas","Private Room/Apartment","Female-Only Dormitory/Apartment/Room","Male-Only Dormitory/Apartment/Room","Mixed Dormitory: Shared Room (All Genders) ","Studio Apartment-Style Hostel"],
+                        "Lodges ": ["Single Bed in Dormitory/Room/Apartment ","Oceanfront Villas","Private Room/Apartment","Female-Only Dormitory/Apartment/Room","Male-Only Dormitory/Apartment/Room","Mixed Dormitory: Shared Room (All Genders) ","Studio Apartment-Style Hostel"],
+                        "Mountain Lodges ": ["Single Bed in Dormitory/Room/Apartment ","Oceanfront Villas","Private Room/Apartment","Female-Only Dormitory/Apartment/Room","Male-Only Dormitory/Apartment/Room","Mixed Dormitory: Shared Room (All Genders) ","Studio Apartment-Style Hostel"],
+                        "Fishing Lodges ": ["Single Bed in Dormitory/Room/Apartment ","Oceanfront Villas","Private Room/Apartment","Female-Only Dormitory/Apartment/Room","Male-Only Dormitory/Apartment/Room","Mixed Dormitory: Shared Room (All Genders) ","Studio Apartment-Style Hostel"],
+                        "Hunting Lodges ": ["Single Bed in Dormitory/Room/Apartment ","Oceanfront Villas","Private Room/Apartment","Female-Only Dormitory/Apartment/Room","Male-Only Dormitory/Apartment/Room","Mixed Dormitory: Shared Room (All Genders) ","Studio Apartment-Style Hostel"],
+                    }
+                },
+                Apartments: {
+                    districts: {
+                        "Apartments": ["Luxury Serviced Apartments","Budget Serviced Apartments","Furnished Apartments","Unfurnished Apartments","Studio Apartments","One-Bedroom Apartments","Two-Bedroom Apartments","Three-Bedroom Apartments","Penthouse Apartments","Shared Apartments"],
+                        "Serviced Apartments": ["Luxury Serviced Apartments","Budget Serviced Apartments","Furnished Apartments","Unfurnished Apartments","Studio Apartments","One-Bedroom Apartments","Two-Bedroom Apartments","Three-Bedroom Apartments","Penthouse Apartments","Shared Apartments"],
+                        "Homestays": ["Luxury Serviced Apartments","Budget Serviced Apartments","Furnished Apartments","Unfurnished Apartments","Studio Apartments","One-Bedroom Apartments","Two-Bedroom Apartments","Three-Bedroom Apartments","Penthouse Apartments","Shared Apartments"],
+                    }
+                },
+                Guesthouses: {
+                    districts: {
+                        "Vacation Rentals": ["Bed Only","Room with Shared Bathroom","Entire Place","Private Room","Entire House","Farmhouse Room","Tent/Glamping Tent","RV/Caravan: Mobile Accommodations"],
+                        "Condominiums": ["Bed Only","Room with Shared Bathroom","Entire Place","Private Room","Entire House","Farmhouse Room","Tent/Glamping Tent","RV/Caravan: Mobile Accommodations"],
+                        "Bed and Breakfasts (B&Bs)": ["Bed Only","Room with Shared Bathroom","Entire Place","Private Room","Entire House","Farmhouse Room","Tent/Glamping Tent","RV/Caravan: Mobile Accommodations"],
+                        "Guesthouses": ["Bed Only","Room with Shared Bathroom","Entire Place","Private Room","Entire House","Farmhouse Room","Tent/Glamping Tent","RV/Caravan: Mobile Accommodations"],
+                    }
+                },
+                Crisis: {
+                    districts: {
+                        "Old Age Homes": ["Old Age Homes","Orphanages","Rehabilitation Centers","Asylums"],
+                        "Orphanages": ["Old Age Homes","Orphanages","Rehabilitation Centers","Asylums"],
+                        "Rehabilitation Centers": ["Old Age Homes","Orphanages","Rehabilitation Centers","Asylums"],
+                        "Asylums": ["Old Age Homes","Orphanages","Rehabilitation Centers","Asylums"],
+                    }
+                },
+            };
+
+            // Use old(...) if available, else DB
+            const savedRoomTypes  = @json(old('room_types', json_decode($hotel->room_types ?? '[]', true)));
+            const initialDivision = @json(old('property_category', $hotel->property_category ?? ''));
+            const initialDistrict = @json(old('property_type',     $hotel->property_type     ?? ''));
+
+            function populateDistricts(division) {
+                districtSelect.innerHTML = '<option value="" disabled selected>Choose Property Type</option>';
+
+                if (data[division]) {
+                    districtContainer.style.display = "block";
+                    Object.keys(data[division].districts).forEach(district => {
+                        const option = document.createElement("option");
+                        option.value = district;
+                        option.textContent = district; // keep exact label
+                        districtSelect.appendChild(option);
+                    });
+                } else {
+                    districtContainer.style.display = "none";
+                    placeCheckboxList.style.display = "none";
+                    placeOptions.innerHTML = "";
+                }
+            }
+
+            function populateRoomTypes(division, district) {
+                placeOptions.innerHTML = "";
+
+                if (data[division] && data[division].districts[district]) {
+                    placeCheckboxList.style.display = "block";
+                    data[division].districts[district].forEach((place, index) => {
+                        const inputId   = `room_type_${index}`;
+                        const isChecked = Array.isArray(savedRoomTypes) && savedRoomTypes.includes(place);
+                        const li = document.createElement("li");
+                        li.innerHTML = `
+                    <div class="form-check">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="${inputId}"
+                               name="room_types[]"
+                               value="${place}"
+                               ${isChecked ? 'checked' : ''}>
+                        <label class="form-check-label" for="${inputId}">${place}</label>
+                    </div>
+                `;
+                        placeOptions.appendChild(li);
+                    });
+                } else {
+                    placeCheckboxList.style.display = "none";
+                }
+            }
+
+            // Listeners
+            divisionSelect?.addEventListener("change", function () {
+                populateDistricts(this.value);
+                placeOptions.innerHTML = "";
+                placeCheckboxList.style.display = "none";
+            });
+
+            districtSelect?.addEventListener("change", function () {
+                populateRoomTypes(divisionSelect.value, this.value);
+            });
+
+            // Initial render on load
+            if (initialDivision) {
+                if (divisionSelect) divisionSelect.value = initialDivision;
+                populateDistricts(initialDivision);
+                const hasDistrict = data[initialDivision] && data[initialDivision].districts[initialDistrict];
+                if (initialDistrict && hasDistrict) {
+                    districtSelect.value = initialDistrict;
+                    populateRoomTypes(initialDivision, initialDistrict);
+                }
+            }
+        });
+    </script>
+
+    <script type="text/javascript">
+        document.getElementById('propertyCategory')?.addEventListener('change', function () {
             var propertyTypeContainer = document.getElementById('propertyTypeContainer');
             var propertyType = document.getElementById('propertyType');
+            if (!propertyTypeContainer || !propertyType) return;
             propertyType.innerHTML = ''; // Clear previous options
 
             var options = {
@@ -207,17 +452,17 @@
                 options[selectedValue].forEach(function (option) {
                     var li = document.createElement('li');
                     li.innerHTML = `
-                      <div class class="form-check">
-                          <input
-                              class="form-check-input"
-                              type="checkbox"
-                              id="${option.id}"
-                              value="${option.value}">
-                          <label class="form-check-label" for="${option.id}">
-                              ${option.label}
-                          </label>
-                      </div>
-                  `;
+                  <div class class="form-check">
+                      <input
+                          class="form-check-input"
+                          type="checkbox"
+                          id="${option.id}"
+                          value="${option.value}">
+                      <label class="form-check-label" for="${option.id}">
+                          ${option.label}
+                      </label>
+                  </div>
+              `;
                     propertyType.appendChild(li);
                 });
                 propertyTypeContainer.style.display = 'block';
@@ -232,8 +477,9 @@
             const uploadedImages = {};
 
             function initializeMultipleUpload(container) {
-                const fileInput = container.querySelector('.multiple-file-input');
-                const thumbnailGallery = container.querySelector('.multiple-thumbnail-gallery');
+                const fileInput = container?.querySelector('.multiple-file-input');
+                const thumbnailGallery = container?.querySelector('.multiple-thumbnail-gallery');
+                if (!fileInput || !thumbnailGallery) return;
                 const containerId = container.id || `dynamic-${Date.now()}`; // Fallback ID for dynamic containers
 
                 uploadedImages[containerId] = [];
@@ -285,7 +531,7 @@
             const facilityContainer = document.getElementById('facility-container');
             const addMoreBtn = document.getElementById('add-more-btn');
 
-            addMoreBtn.addEventListener('click', function (event) {
+            addMoreBtn?.addEventListener('click', function (event) {
                 event.preventDefault();
                 console.log('Add More button clicked for custom facilities');
 
@@ -294,18 +540,18 @@
                 facilityField.style.gap = '10px';
                 const uniqueId = Date.now();
                 facilityField.innerHTML = `
-                    <div class="form-group flex-grow-1">
-                        <label for="custom_facility_${uniqueId}">Facility Name</label>
-                        <input class="form-control" type="text" name="custom_facilities[]" id="custom_facility_${uniqueId}" placeholder="Enter facility name" />
+                <div class="form-group flex-grow-1">
+                    <label for="custom_facility_${uniqueId}">Facility Name</label>
+                    <input class="form-control" type="text" name="custom_facilities[]" id="custom_facility_${uniqueId}" placeholder="Enter facility name" />
+                </div>
+                <div class="form-group">
+                    <label for="custom_facility_icon_${uniqueId}">Facility Icon</label>
+                    <div class="multiple-upload-container" id="upload-container-dynamic-${uniqueId}">
+                        <input class="form-control multiple-file-input" type="file" name="custom_facilities_icon[]" id="custom_facility_icon_${uniqueId}" accept="image/*" />
+                        <label class="upload-label">Browse Image</label>
+                        <div class="multiple-thumbnail-gallery"></div>
                     </div>
-                    <div class="form-group">
-                        <label for="custom_facility_icon_${uniqueId}">Facility Icon</label>
-                        <div class="multiple-upload-container" id="upload-container-dynamic-${uniqueId}">
-                            <input class="form-control multiple-file-input" type="file" name="custom_facilities_icon[]" id="custom_facility_icon_${uniqueId}" accept="image/*" />
-                            <label class="upload-label">Browse Image</label>
-                            <div class="multiple-thumbnail-gallery"></div>
-                        </div>
-                        @error('custom_facilities_icon.*') <span class="text-danger">{{ $message }}</span> @enderror
+                    @error('custom_facilities_icon.*') <span class="text-danger">{{ $message }}</span> @enderror
                 </div>
                 <button type="button" class="btn btn-danger btn-sm delete-btn">Delete</button>
 `;
@@ -321,7 +567,7 @@
                     facilityField.remove();
                 });
 
-                facilityContainer.appendChild(facilityField);
+                facilityContainer?.appendChild(facilityField);
                 console.log('New facility field added to container');
             });
         });
@@ -354,12 +600,14 @@
     <script>
         function showLabel(text) {
             const labelDiv = document.getElementById('labelText');
+            if (!labelDiv) return;
             labelDiv.textContent = text;
             labelDiv.style.display = 'block';
         }
 
         function hideLabel() {
             const labelDiv = document.getElementById('labelText');
+            if (!labelDiv) return;
             labelDiv.style.display = 'none';
         }
     </script>
@@ -368,6 +616,7 @@
         document.getElementById('apartment-count')?.addEventListener('change', function () {
             const count = parseInt(this.value);
             const dynamicFormsContainer = document.getElementById('dynamic-forms');
+            if (!dynamicFormsContainer) return;
             dynamicFormsContainer.innerHTML = '';
 
             if (count > 0) {
@@ -416,7 +665,7 @@
     </script>
 
     <script>
-        document.querySelector('form').addEventListener('submit', function (event) {
+        document.querySelector('form')?.addEventListener('submit', function (event) {
             console.log('Form is submitting with data:', new FormData(this));
         });
     </script>
@@ -428,9 +677,9 @@
         radioButtons.forEach(radio => {
             radio.addEventListener('change', function () {
                 if (this.value === 'yes') {
-                    additionalFields.style.display = 'block';
+                    additionalFields?.style.setProperty('display', 'block');
                 } else {
-                    additionalFields.style.display = 'none';
+                    additionalFields?.style.setProperty('display', 'none');
                 }
             });
         });
@@ -466,10 +715,10 @@
             barRadioButtons.forEach(radio => {
                 radio.addEventListener('change', function () {
                     if (this.value === 'yes') {
-                        barSelectContainer.style.display = 'block';
+                        barSelectContainer?.style.setProperty('display', 'block');
                     } else {
-                        barSelectContainer.style.display = 'none';
-                        barNumberSelect.value = '';
+                        barSelectContainer?.style.setProperty('display', 'none');
+                        if (barNumberSelect) barNumberSelect.value = '';
                     }
                 });
             });
@@ -502,7 +751,7 @@
                             selectContainer.style.display = 'block';
                         } else {
                             selectContainer.style.display = 'none';
-                            numberSelect.value = '';
+                            if (numberSelect) numberSelect.value = '';
                         }
                     });
                 });
@@ -529,35 +778,35 @@
             addNewKidsZone(containerId, zoneNumber) {
                 const container = document.getElementById(containerId);
                 const newSection = `
-                    <div class="col-md-6 col-lg-4 col-xxl-3">
-                        <div class="form-group">
-                            <label class="form-label">Kids Zone ${zoneNumber}</label>
-                            <div class="radio-group" data-kids-zone="${zoneNumber}">
-                                <div>
-                                    <label>
-                                        <input type="radio" name="kidsZone${zoneNumber}" value="yes" class="radio-yes"> Yes
-                                    </label>
-                                </div>
-                                <div>
-                                    <label>
-                                        <input type="radio" name="kidsZone${zoneNumber}" value="no" class="radio-no"> No
-                                    </label>
-                                </div>
-                                <div class="select-container" style="display: none;">
-                                    <label>Select number of kids:</label>
-                                    <select class="form-select number-select">
-                                        <option value="">Select number</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                    </select>
-                                </div>
+                <div class="col-md-6 col-lg-4 col-xxl-3">
+                    <div class="form-group">
+                        <label class="form-label">Kids Zone ${zoneNumber}</label>
+                        <div class="radio-group" data-kids-zone="${zoneNumber}">
+                            <div>
+                                <label>
+                                    <input type="radio" name="kidsZone${zoneNumber}" value="yes" class="radio-yes"> Yes
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                    <input type="radio" name="kidsZone${zoneNumber}" value="no" class="radio-no"> No
+                                </label>
+                            </div>
+                            <div class="select-container" style="display: none;">
+                                <label>Select number of kids:</label>
+                                <select class="form-select number-select">
+                                    <option value="">Select number</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
                             </div>
                         </div>
                     </div>
-                `;
+                </div>
+            `;
 
                 container.insertAdjacentHTML('beforeend', newSection);
                 this.initializeSingleKidsZone(container.lastElementChild.querySelector('[data-kids-zone]'));
@@ -576,15 +825,15 @@
 
             yesOption?.addEventListener("change", function () {
                 if (this.checked) {
-                    yesFields.classList.remove("hidden");
-                    noFields.classList.add("hidden");
+                    yesFields?.classList.remove("hidden");
+                    noFields?.classList.add("hidden");
                 }
             });
 
             noOption?.addEventListener("change", function () {
                 if (this.checked) {
-                    noFields.classList.remove("hidden");
-                    yesFields.classList.add("hidden");
+                    noFields?.classList.remove("hidden");
+                    yesFields?.classList.add("hidden");
                 }
             });
         });
@@ -592,89 +841,7 @@
 
     <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", function () {
-            divisionSelect = document.getElementById("division");
-            districtSelect = document.getElementById("district");
-            districtContainer = document.getElementById("districtContainer");
-            placeCheckboxList = document.getElementById("placeCheckboxList");
-            placeOptions = document.getElementById("placeOptions");
-
-            const data = {
-                Hotels: {
-                    districts: {
-                        "hotel": ["Single Room", "Double Room", "Twin Room", "Suite", "Family Room", "Penthouse Suite", "Accessible Room"],
-                        "Luxury Hotels": ["Single Room", "Double Room", "Twin Room", "Suite", "Family Room", "Penthouse Suite", "Accessible Room"],
-                        "farmgate": ["Single Room", "Double Room", "Twin Room", "Suite", "Family Room", "Penthouse Suite", "Accessible Room"]
-                    }
-                },
-                chittagong: {
-                    districts: {
-                        agrabad: ["Area 1", "Area 2", "Area 3"],
-                        halishahar: ["Location X", "Location Y", "Location Z"],
-                        patenga: ["Site P", "Site Q", "Site R"]
-                    }
-                },
-                khulna: {
-                    districts: {
-                        khalishpur: ["Zone 1", "Zone 2", "Zone 3"],
-                        sonadanga: ["Point A", "Point B", "Point C"],
-                        rupsha: ["Spot X", "Spot Y", "Spot Z"]
-                    }
-                }
-            };
-
-            divisionSelect?.addEventListener("change", function () {
-                const division = this.value;
-                districtSelect.innerHTML = '<option value="" disabled selected>Choose Property Type</option>';
-                placeOptions.innerHTML = "";
-                placeCheckboxList.style.display = "none";
-
-                if (data[division]) {
-                    districtContainer.style.display = "block";
-                    Object.keys(data[division].districts).forEach(district => {
-                        const option = document.createElement("option");
-                        option.value = district;
-                        option.textContent = district.charAt(0).toUpperCase() + district.slice(1);
-                        districtSelect.appendChild(option);
-                    });
-                }
-            });
-
-            districtSelect?.addEventListener("change", function () {
-                const division = divisionSelect.value;
-                const district = this.value;
-                placeOptions.innerHTML = "";
-
-                if (data[division] && data[division].districts[district]) {
-                    placeCheckboxList.style.display = "block";
-                    data[division].districts[district].forEach((place, index) => {
-                        const listItem = document.createElement("li");
-                        const checkboxContainer = document.createElement("div");
-                        checkboxContainer.classList.add("form-check");
-
-                        const checkbox = document.createElement("input");
-                        checkbox.type = "checkbox";
-                        checkbox.classList.add("form-check-input");
-                        checkbox.id = `checkbox${index}`;
-                        checkbox.value = place;
-
-                        const label = document.createElement("label");
-                        label.classList.add("form-check-label");
-                        label.htmlFor = `checkbox${index}`;
-                        label.textContent = place;
-
-                        checkboxContainer.appendChild(checkbox);
-                        checkboxContainer.appendChild(label);
-                        listItem.appendChild(checkboxContainer);
-                        placeOptions.appendChild(listItem);
-                    });
-                }
-            });
-        });
-    </script>
-
-    <script type="text/javascript">
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelector("#facilities-all").addEventListener("change", function () {
+            document.querySelector("#facilities-all")?.addEventListener("change", function () {
                 console.log("Facilities Select All toggled");
                 const facilitiesCheckboxes = document.querySelectorAll(".checkbox-item-facility");
                 facilitiesCheckboxes.forEach(function (checkbox) {
@@ -686,7 +853,7 @@
     </script>
 
     <script type="text/javascript">
-        document.getElementById("check-in-all").addEventListener("change", function () {
+        document.getElementById("check-in-all")?.addEventListener("change", function () {
             let checkinCheckboxes = document.querySelectorAll(".checkbox-item-checkin");
             checkinCheckboxes.forEach(function (checkbox) {
                 checkbox.checked = document.getElementById("check-in-all").checked;
@@ -695,17 +862,18 @@
     </script>
 
     <script>
-        document.getElementById('addRuleBtn').addEventListener('click', function (event) {
+        document.getElementById('addRuleBtn')?.addEventListener('click', function (event) {
             event.preventDefault();
             const formContainer = document.getElementById('formContainer');
+            if (!formContainer) return;
             const newField = document.createElement('div');
             newField.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3');
             newField.innerHTML = `
-                <div class="form-group">
-                    <input type="text" class="form-control" name="custom_check_in_methods[]" placeholder="" required>
-                    <button class="delete-btn">Delete</button>
-                </div>
-            `;
+            <div class="form-group">
+                <input type="text" class="form-control" name="custom_check_in_methods[]" placeholder="" required>
+                <button class="delete-btn">Delete</button>
+            </div>
+        `;
             formContainer.appendChild(newField);
             const deleteBtn = newField.querySelector('.delete-btn');
             deleteBtn.addEventListener('click', function () {
@@ -733,7 +901,7 @@
     </script>
 
     <script type="text/javascript">
-        document.querySelector("#property-all").addEventListener("change", function () {
+        document.querySelector("#property-all")?.addEventListener("change", function () {
             const propertyCheckboxes = document.querySelectorAll(".checkbox-item-property");
             propertyCheckboxes.forEach(function (checkbox) {
                 checkbox.checked = document.querySelector("#property-all").checked;
@@ -813,7 +981,7 @@
 
         function createHotelFieldGroup(category, value = '') {
             const labels = hotelFacilitiesLabelsMap[category];
-            if (!labels) return;
+            if (!labels || !hotelFormContainer) return;
 
             const categoryKey = category.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
             const uniqueId = `hotel-facility-${categoryKey}-${Date.now()}`;
@@ -822,12 +990,12 @@
             newFieldGroup.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3', 'mb-3');
             newFieldGroup.setAttribute('id', uniqueId);
             newFieldGroup.innerHTML = `
-            <div class="form-group">
-                <label for="input-${uniqueId}">${labels[0]}</label>
-                <input type="text" class="form-control" id="input-${uniqueId}" name="hotel_facilities[${categoryKey}][]" placeholder="Enter ${labels[0]}" value="${value}" required>
-            </div>
-            <button type="button" class="btn btn-danger btn-sm mt-2 delete-hotel-btn">Delete</button>
-        `;
+        <div class="form-group">
+            <label for="input-${uniqueId}">${labels[0]}</label>
+            <input type="text" class="form-control" id="input-${uniqueId}" name="hotel_facilities[${categoryKey}][]" placeholder="Enter ${labels[0]}" value="${value}" required>
+        </div>
+        <button type="button" class="btn btn-danger btn-sm mt-2 delete-hotel-btn">Delete</button>
+    `;
 
             let categoryWrapper = document.getElementById(`wrapper-${categoryKey}`);
             if (!categoryWrapper) {
@@ -885,8 +1053,6 @@
         });
     </script>
 
-
-
     <script>
         const sectionLabelsMap = {
             'Restaurant & Cafe': ['Restaurant & Cafe Name', 'Distance'],
@@ -909,22 +1075,22 @@
             newFieldGroup.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3', 'mb-3');
             newFieldGroup.setAttribute('id', uniqueId);
             newFieldGroup.innerHTML = `
-            <div class="form-group">
-                <label for="input-name-${uniqueId}">${labels[0]}</label>
-                <input type="text" class="form-control" id="input-name-${uniqueId}"
-                    name="nearby_areas[${categoryKey}][name][]"
-                    placeholder="Enter ${labels[0]}"
-                    value="${nameValue}" required>
-            </div>
-            <div class="form-group">
-                <label for="input-distance-${uniqueId}">${labels[1]}</label>
-                <input type="text" class="form-control" id="input-distance-${uniqueId}"
-                    name="nearby_areas[${categoryKey}][distance][]"
-                    placeholder="Enter ${labels[1]}"
-                    value="${distanceValue}" required>
-            </div>
-            <button type="button" class="btn btn-danger btn-sm mt-3 delete-nearby-btn">Delete</button>
-        `;
+        <div class="form-group">
+            <label for="input-name-${uniqueId}">${labels[0]}</label>
+            <input type="text" class="form-control" id="input-name-${uniqueId}"
+                name="nearby_areas[${categoryKey}][name][]"
+                placeholder="Enter ${labels[0]}"
+                value="${nameValue}" required>
+        </div>
+        <div class="form-group">
+            <label for="input-distance-${uniqueId}">${labels[1]}</label>
+            <input type="text" class="form-control" id="input-distance-${uniqueId}"
+                name="nearby_areas[${categoryKey}][distance][]"
+                placeholder="Enter ${labels[1]}"
+                value="${distanceValue}" required>
+        </div>
+        <button type="button" class="btn btn-danger btn-sm mt-3 delete-nearby-btn">Delete</button>
+    `;
 
             let categoryWrapper = document.getElementById(`wrapper-${categoryKey}`);
             if (!categoryWrapper) {
@@ -1004,15 +1170,13 @@
         });
     </script>
 
-
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const wrapper = document.getElementById('custom-checkin-wrapper');
             const addBtn = document.getElementById('add-checkin-rule');
 
             // Add new custom field
-            addBtn.addEventListener('click', () => {
+            addBtn?.addEventListener('click', () => {
                 const group = document.createElement('div');
                 group.className = 'form-group mb-2 d-flex align-items-center';
 
@@ -1030,11 +1194,11 @@
 
                 group.appendChild(input);
                 group.appendChild(removeBtn);
-                wrapper.appendCArrival Guideshild(group);
+                wrapper?.appendChild(group); /* fixed */
             });
 
             // Delegate delete clicks
-            wrapper.addEventListener('click', e => {
+            wrapper?.addEventListener('click', e => {
                 if (e.target.classList.contains('remove-checkin')) {
                     e.target.closest('.form-group').remove();
                 }

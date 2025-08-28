@@ -39,6 +39,7 @@
                                         <div class="tab-pane active" id="tabItem3">
                                             <div class="row gy-4">
                                                 <div class="col-md-12 col-lg-12 col-xxl-3">
+
                                                     <div class="col-md-6 col-lg-4 col-xxl-3">
                                                         <div class="form-group">
                                                             <label for="property_type" class="form-label">Property Type</label>

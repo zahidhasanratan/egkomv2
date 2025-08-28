@@ -318,61 +318,75 @@ class ManageHotel extends Controller
 
     public function update(Request $request, Hotel $hotel)
     {
-
         // 1) Validate input
         $validated = $request->validate([
             'property_type'               => 'nullable|string',
-            'description'               => 'nullable|string',
-            'details'               => 'nullable|string',
-            'lati'               => 'nullable|string',
-            'longi'               => 'nullable|string',
-            'address'               => 'nullable|string',
-            'pets_allowed'              => 'nullable|in:yes,no',
-            'pets_details'              => 'nullable|string',
-            'events_allowed'            => 'nullable|in:yes,no',
-            'events_details'            => 'nullable|string',
-            'smoking_allowed'           => 'nullable|in:yes,no',
-            'smoking_details'           => 'nullable|string',
-            'quiet_hours'               => 'nullable|string',
-            'photography_allowed'       => 'nullable|in:yes,no',
-            'photography_details'       => 'nullable|string',
-            'check_in_window'           => 'nullable|string',
-            'check_out_time'            => 'nullable|string',
-            'food_laundry'              => 'nullable|in:yes,no',
-            'check_in_rules'            => 'nullable|array',
-            'custom_check_in_rules'     => 'nullable|array',
-            'property_info'             => 'nullable|array',
-            'custom_property_info'      => 'nullable|array',
-            'age_restriction'           => 'nullable|in:yes,no',
-            'age_restriction_details'   => 'nullable|string',
-            'vlogging_allowed'          => 'nullable|in:yes,no',
-            'vlogging_details'          => 'nullable|string',
-            'child_policy'              => 'nullable|string',
-            'extra_bed_policy'          => 'nullable|string',
-            'cooking_policy'            => 'nullable|string',
-            'directions'                => 'nullable|string',
-            'additional_policy'         => 'nullable|string',
-            'check_in_methods'          => 'nullable|array',
-            'custom_check_in_methods'   => 'nullable|array',
-            'cancellation_policies'     => 'nullable|array',
-            'facilities'                => 'nullable|array',
-            'custom_facilities'         => 'nullable|array',
-            'custom_facilities_icon.*'  => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'nearby_areas'              => 'nullable|array',
-            'custom_nearby_areas'       => 'nullable|array',
-            'status'                    => 'required|in:draft,submitted',
-            'kitchen_photos.*'          => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'washroom_photos.*'         => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'parking_lot_photos.*'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'entrance_gate_photos.*'    => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'lift_stairs_photos.*'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'spa_photos.*'              => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'bar_photos.*'              => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'transport_photos.*'        => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'rooftop_photos.*'          => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'gym_photos.*'              => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'security_photos.*'         => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'amenities_photos.*'        => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+
+            // 👇 room_types support
+            'room_types'                  => 'nullable|array',
+            'room_types.*'                => 'nullable|string',
+
+            'description'                 => 'nullable|string',
+            'property_category'           => 'nullable|string',
+            'details'                     => 'nullable|string',
+            'lati'                        => 'nullable|string',
+            'longi'                       => 'nullable|string',
+            'address'                     => 'nullable|string',
+            'pets_allowed'                => 'nullable|in:yes,no',
+            'pets_details'                => 'nullable|string',
+            'events_allowed'              => 'nullable|in:yes,no',
+            'events_details'              => 'nullable|string',
+            'smoking_allowed'             => 'nullable|in:yes,no',
+            'smoking_details'             => 'nullable|string',
+            'quiet_hours'                 => 'nullable|string',
+            'photography_allowed'         => 'nullable|in:yes,no',
+            'photography_details'         => 'nullable|string',
+            'check_in_window'             => 'nullable|string',
+            'check_out_time'              => 'nullable|string',
+            'food_laundry'                => 'nullable|in:yes,no',
+
+            'check_in_rules'              => 'nullable|array',
+            'custom_check_in_rules'       => 'nullable|array',
+
+            'property_info'               => 'nullable|array',
+            'custom_property_info'        => 'nullable|array',
+
+            'age_restriction'             => 'nullable|in:yes,no',
+            'age_restriction_details'     => 'nullable|string',
+            'vlogging_allowed'            => 'nullable|in:yes,no',
+            'vlogging_details'            => 'nullable|string',
+            'child_policy'                => 'nullable|string',
+            'extra_bed_policy'            => 'nullable|string',
+            'cooking_policy'              => 'nullable|string',
+            'directions'                  => 'nullable|string',
+            'additional_policy'           => 'nullable|string',
+
+            'check_in_methods'            => 'nullable|array',
+            'custom_check_in_methods'     => 'nullable|array',
+
+            'cancellation_policies'       => 'nullable|array',
+
+            'facilities'                  => 'nullable|array',
+            'custom_facilities'           => 'nullable|array',
+            'custom_facilities_icon.*'    => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+
+            'nearby_areas'                => 'nullable|array',
+            'custom_nearby_areas'         => 'nullable|array',
+
+            'status'                      => 'required|in:draft,submitted',
+
+            'kitchen_photos.*'            => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'washroom_photos.*'           => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'parking_lot_photos.*'        => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'entrance_gate_photos.*'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'lift_stairs_photos.*'        => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'spa_photos.*'                => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'bar_photos.*'                => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'transport_photos.*'          => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'rooftop_photos.*'            => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gym_photos.*'                => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'security_photos.*'           => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'amenities_photos.*'          => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         // 2) Filter out null/empty values
@@ -380,42 +394,69 @@ class ManageHotel extends Controller
             ->filter(fn($v) => !is_null($v) && $v !== '' && $v !== [])
             ->toArray();
 
-        // 3) Merge check-in rules
+        // ✅ Encode generic array fields so they persist as JSON (if your columns are TEXT/JSON)
+        $arrayFieldsToEncode = [
+            'room_types',
+            'check_in_methods',
+            'custom_check_in_methods',
+            'property_info',
+            'custom_property_info',
+            'cancellation_policies',
+            'facilities',
+            'custom_facilities',
+            'nearby_areas',
+        ];
+        foreach ($arrayFieldsToEncode as $field) {
+            if ($request->has($field)) {
+                $val = $request->input($field, []);
+                // Keep only non-empty strings for safety
+                if (is_array($val)) {
+                    $val = array_values(array_filter($val, fn($x) => is_array($x) || (is_string($x) && trim($x) !== '')));
+                }
+                $data[$field] = json_encode($val);
+            }
+        }
+
+        // 3) Merge check-in rules (built from defaults + custom), overrides any previous
         $mergedCheck = array_filter(array_merge(
             $request->input('check_in_rules', []),
-            array_filter($request->input('custom_check_in_rules', []), fn($v) => trim($v) !== '')
+            array_filter($request->input('custom_check_in_rules', []), fn($v) => is_string($v) && trim($v) !== '')
         ));
         if (!empty($mergedCheck)) {
             $data['check_in_rules'] = json_encode(array_values($mergedCheck));
         }
 
-        // 4) Flatten hotel facilities
+        // 4) Flatten hotel facilities (category+name pairs) -> JSON
         if ($request->filled('hotel_facilities')) {
             $flatFacilities = [];
             foreach ($request->hotel_facilities as $category => $names) {
                 foreach ($names as $name) {
-                    if (trim($name) !== '') {
+                    if (is_string($name) && trim($name) !== '') {
                         $flatFacilities[] = ['category' => $category, 'name' => $name];
                     }
                 }
             }
             if (!empty($flatFacilities)) {
-                $data['hotel_facilities'] = json_encode($flatFacilities);
+                $data['hotel_facilities'] = json_encode(array_values($flatFacilities));
             }
         }
 
-        // 5) Handle custom nearby areas
-        $customNearby = array_filter($request->input('custom_nearby_areas', []), fn($v) => trim($v) !== '');
+        // 5) Handle custom nearby areas (simple list) -> JSON
+        $customNearby = array_filter(
+            $request->input('custom_nearby_areas', []),
+            fn($v) => is_string($v) && trim($v) !== ''
+        );
         if (!empty($customNearby)) {
             $data['custom_nearby_areas'] = json_encode(array_values($customNearby));
         }
 
-        // 6) Handle custom facilities icons (remove + upload)
+        // 6) Handle custom facilities icons (remove + upload to storage/app/public)
         $existingIcons = json_decode($hotel->custom_facilities_icon ?? '[]', true);
         $existingIcons = is_array($existingIcons) ? $existingIcons : [];
 
         foreach (explode(',', $request->input('removed_custom_facilities_icon', '')) as $idx) {
-            if (isset($existingIcons[$idx])) {
+            $idx = trim($idx);
+            if ($idx !== '' && isset($existingIcons[$idx])) {
                 \Storage::disk('public')->delete($existingIcons[$idx]);
                 unset($existingIcons[$idx]);
             }
@@ -423,7 +464,7 @@ class ManageHotel extends Controller
 
         if ($request->hasFile('custom_facilities_icon')) {
             foreach ($request->file('custom_facilities_icon') as $file) {
-                if ($file->isValid()) {
+                if ($file && $file->isValid()) {
                     $existingIcons[] = $file->store('hotel_photos', 'public');
                 }
             }
@@ -431,9 +472,12 @@ class ManageHotel extends Controller
 
         if (!empty($existingIcons)) {
             $data['custom_facilities_icon'] = json_encode(array_values($existingIcons));
+        } else {
+            // If nothing remains, ensure we don't leave stale JSON
+            $data['custom_facilities_icon'] = json_encode([]);
         }
 
-        // 7) Handle multiple photo fields (remove + upload)
+        // 7) Handle multiple photo fields (remove + upload) using public_path (as in your current approach)
         $photoFields = [
             'kitchen_photos', 'washroom_photos', 'parking_lot_photos',
             'entrance_gate_photos', 'lift_stairs_photos', 'spa_photos',
@@ -441,39 +485,17 @@ class ManageHotel extends Controller
             'gym_photos', 'security_photos', 'amenities_photos'
         ];
 
-//        foreach ($photoFields as $field) {
-//            $existingPhotos = json_decode($hotel->$field ?? '[]', true);
-//            $existingPhotos = is_array($existingPhotos) ? $existingPhotos : [];
-//
-//            // Remove selected photos
-//            foreach (array_filter(explode(',', $request->input('removed_' . $field, ''))) as $index) {
-//                if (isset($existingPhotos[$index])) {
-//                    \Storage::disk('public')->delete($existingPhotos[$index]);
-//                    unset($existingPhotos[$index]);
-//                }
-//            }
-//
-//            // Add new uploads
-//            if ($request->hasFile($field)) {
-//                foreach ($request->file($field) as $file) {
-//                    if ($file->isValid()) {
-//                        $existingPhotos[] = $file->store('hotel_photos', 'public');
-//                    }
-//                }
-//            }
-//
-//            $data[$field] = json_encode(array_values($existingPhotos));
-//        }
         foreach ($photoFields as $field) {
             $existingPhotos = json_decode($hotel->$field ?? '[]', true);
             $existingPhotos = is_array($existingPhotos) ? $existingPhotos : [];
 
-            // Remove selected photos
-            foreach (array_filter(explode(',', $request->input('removed_' . $field, ''))) as $index) {
+            // Remove selected photos (expects comma-separated indexes in removed_{field})
+            $toRemove = array_filter(explode(',', $request->input('removed_' . $field, '')), fn($x) => $x !== '');
+            foreach ($toRemove as $index) {
                 if (isset($existingPhotos[$index])) {
                     $filePath = public_path($existingPhotos[$index]);
-                    if (file_exists($filePath)) {
-                        unlink($filePath);  // Delete directly from public folder
+                    if (is_string($filePath) && file_exists($filePath)) {
+                        @unlink($filePath);
                     }
                     unset($existingPhotos[$index]);
                 }
@@ -482,10 +504,10 @@ class ManageHotel extends Controller
             // Add new uploads
             if ($request->hasFile($field)) {
                 foreach ($request->file($field) as $file) {
-                    if ($file->isValid()) {
-                        $filename = time() . '_' . $file->getClientOriginalName();
+                    if ($file && $file->isValid()) {
+                        $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
                         $file->move(public_path('hotel_photos'), $filename);
-                        $existingPhotos[] = 'hotel_photos/' . $filename;  // Save relative path
+                        $existingPhotos[] = 'hotel_photos/' . $filename; // relative path
                     }
                 }
             }
@@ -493,19 +515,11 @@ class ManageHotel extends Controller
             $data[$field] = json_encode(array_values($existingPhotos));
         }
 
-        // 8) Always keep vendor_id
+        // 8) Always keep vendor_id unchanged
         $data['vendor_id'] = $hotel->vendor_id;
 
         // 9) Update and redirect
         $hotel->update($data);
-
-//        return redirect()
-//           ->route('vendor-admin.hotel.index')
-//            ->with('success', $request->status === 'draft'
-//                ? 'Hotel saved as draft successfully.'
-//                : 'Hotel updated successfully.'
-//            );
-
 
         return redirect()->back()
             ->with('success', $request->status === 'draft'
@@ -513,12 +527,15 @@ class ManageHotel extends Controller
                 : 'Info Updated successfully.'
             );
     }
+
+
     public function updateSuper(Request $request, Hotel $hotel)
     {
 
         // 1) Validate input
         $validated = $request->validate([
             'property_type'               => 'nullable|string',
+
             'address'               => 'nullable|string',
             'details'               => 'nullable|string',
             'lati'               => 'nullable|string',

@@ -10,7 +10,7 @@ class Hotel extends Model
     use HasFactory;
 
     protected $fillable = [
-        'vendor_id','property_type','details','address', 'status','lati','longi', 'approve', 'description', 'pets_allowed', 'pets_details',
+        'vendor_id','property_category','property_type','room_types','details','address', 'status','lati','longi', 'approve', 'description', 'pets_allowed', 'pets_details',
         'events_allowed', 'events_details', 'smoking_allowed', 'smoking_details',
         'quiet_hours', 'photography_allowed', 'photography_details', 'check_in_window',
         'check_out_time', 'food_laundry', 'check_in_rules', 'custom_check_in_rules',
