@@ -39,10 +39,25 @@
                                         <div class="tab-pane active" id="tabItem3">
                                             <div class="row gy-4">
                                                 <div class="col-md-12 col-lg-12 col-xxl-3">
-
                                                     <div class="col-md-6 col-lg-4 col-xxl-3">
                                                         <div class="form-group">
-                                                            <label for="property_type" class="form-label">Property Type</label>
+                                                            <label for="division" class="form-label">Select Property
+                                                                Category</label>
+                                                            <select name="property_category" class="form-control" id="division">
+                                                                <option value="">Select Property</option>
+                                                                <option value="Hotels">Hotels</option>
+                                                                <option value="Transit">Transit Hotels</option>
+                                                                <option value="Resorts">Resorts, Eco, & Outdoor</option>
+                                                                <option value="Apartments">Hostels & Lodges</option>
+                                                                <option value="Guesthouses">Apartments & Homestays</option>
+                                                                <option value="Guesthouses">Vacation Rentals & Guesthouses</option>
+                                                                <option value="Crisis">Crisis & Shelter Accommodation</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                        <div class="form-group">
+                                                            <label for="property_type" id="districtContainer" class="form-label">Property Type</label>
                                                             <select name="property_type" class="form-control">
                                                                 <option>Hotels</option>
                                                                 <option>Transit</option>
@@ -53,6 +68,21 @@
                                                             </select>
                                                         </div>
                                                     </div>
+                                                    <div class="col-md-6 col-lg-4 col-xxl-3" id="placeCheckboxList"
+                                                         style="display: none;">
+                                                        <div class="form-group">
+                                                            <label class="form-label">Choose Room/Accommodation Type</label>
+                                                            <ul id="placeOptions" class="list-unstyled"
+                                                                style="max-height: 200px; overflow-y: auto;">
+                                                                <!-- Dynamic Checkboxes Will Appear Here -->
+                                                            </ul>
+                                                            @error('room_types')
+                                                            <span class="invalid-feedback"
+                                                                  role="alert">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+
                                                     <div class="col-md-12 col-lg-12 col-xxl-3">
                                                         <div class="form-group">
                                                             <label class="form-label" for="default-textarea">Hotel /
@@ -1060,194 +1090,188 @@
     </div>
 
     <script type="text/javascript">
-        document.getElementById('propertyCategory').addEventListener('change', function() {
-            var propertyTypeContainer = document.getElementById('propertyTypeContainer');
-            var propertyType = document.getElementById('propertyType');
-            propertyType.innerHTML = ''; // Clear previous options
+        /* ---------------------- (A) Legacy "propertyCategory" script harden ----------------------
+           Your HTML doesn't have #propertyCategory / #propertyTypeContainer / #propertyType.
+           We guard it so it won't throw, but if you later add those IDs it will work.
+        -----------------------------------------------------------------------------------------*/
+        (() => {
+            const cat = document.getElementById('propertyCategory');
+            if (!cat) return;
 
-            var options = {
-                'Hotel': [
-                    { id: 'option1', value: 'Only Apartment', label: 'Only Apartment' },
-                    { id: 'option2', value: 'Only room', label: 'Only room' },
-                    { id: 'option3', value: 'Only Bed', label: 'Only Bed' }
-                ],
-                'House': [
-                    { id: 'option4', value: 'Kitchen', label: 'Kitchen' }
-                ],
-                'Resort': [
-                    { id: 'option6', value: 'Room', label: 'Room' }
-                ],
-                'Apartment': [
-                    { id: 'option7', value: 'Apartment', label: 'Apartment' },
-                    { id: 'option8', value: 'Only room', label: 'Only room' },
-                    { id: 'option9', value: 'Only Bed', label: 'Only Bed' }
-                ]
-            };
+            cat.addEventListener('change', function () {
+                const propertyTypeContainer = document.getElementById('propertyTypeContainer');
+                const propertyType = document.getElementById('propertyType');
+                if (!propertyTypeContainer || !propertyType) return;
 
-            var selectedValue = this.value;
-            if (options[selectedValue]) {
-                options[selectedValue].forEach(function(option) {
-                    var li = document.createElement('li');
-                    li.innerHTML = `
-                      <div class class="form-check">
-                          <input
-                              class="form-check-input"
-                              type="checkbox"
-                              id="${option.id}"
-                              value="${option.value}">
-                          <label class="form-check-label" for="${option.id}">
-                              ${option.label}
-                          </label>
-                      </div>
-                  `;
-                    propertyType.appendChild(li);
-                });
-                propertyTypeContainer.style.display = 'block';
-            } else {
-                propertyTypeContainer.style.display = 'none';
-            }
-        });
-    </script>
+                propertyType.innerHTML = ''; // Clear previous options
 
+                const options = {
+                    'Hotel': [
+                        { id: 'option1', value: 'Only Apartment', label: 'Only Apartment' },
+                        { id: 'option2', value: 'Only room', label: 'Only room' },
+                        { id: 'option3', value: 'Only Bed', label: 'Only Bed' }
+                    ],
+                    'House': [
+                        { id: 'option4', value: 'Kitchen', label: 'Kitchen' }
+                    ],
+                    'Resort': [
+                        { id: 'option6', value: 'Room', label: 'Room' }
+                    ],
+                    'Apartment': [
+                        { id: 'option7', value: 'Apartment', label: 'Apartment' },
+                        { id: 'option8', value: 'Only room', label: 'Only room' },
+                        { id: 'option9', value: 'Only Bed', label: 'Only Bed' }
+                    ]
+                };
 
-    <script type="text/javascript">
-        document.getElementById("site-off")?.addEventListener("change", function() {
-            let checkboxes = document.querySelectorAll(".checkbox-item");
-            checkboxes.forEach(function(checkbox) {
-                checkbox.checked = document.getElementById("site-off").checked;
+                const selectedValue = this.value;
+                if (options[selectedValue]) {
+                    options[selectedValue].forEach(function (option) {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="${option.id}" value="${option.value}">
+            <label class="form-check-label" for="${option.id}">${option.label}</label>
+          </div>`;
+                        propertyType.appendChild(li);
+                    });
+                    propertyTypeContainer.style.display = 'block';
+                } else {
+                    propertyTypeContainer.style.display = 'none';
+                }
             });
+        })();
+    </script>
+
+    <script type="text/javascript">
+        /* ---------------------- (B) Select/Deselect all (site-off) ---------------------- */
+        document.getElementById("site-off")?.addEventListener("change", function () {
+            const isChecked = this.checked;
+            document.querySelectorAll(".checkbox-item")?.forEach(cb => { cb.checked = isChecked; });
         });
     </script>
 
     <script type="text/javascript">
+        /* ---------------------- (C) Property ownership toggle ---------------------- */
         document.addEventListener("DOMContentLoaded", () => {
             const checkbox = document.getElementById("property-ownership");
             const options = document.getElementById("ownership-options");
+            if (!checkbox || !options) return;
 
-            checkbox?.addEventListener("change", () => {
-                if (checkbox.checked) {
-                    options.classList.remove("hidden");
-                } else {
-                    options.classList.add("hidden");
-                }
+            checkbox.addEventListener("change", () => {
+                options.classList.toggle("hidden", !checkbox.checked);
             });
         });
     </script>
 
     <script>
+        /* ---------------------- (D) Hover label helpers ---------------------- */
         function showLabel(text) {
             const labelDiv = document.getElementById('labelText');
+            if (!labelDiv) return;
             labelDiv.textContent = text;
             labelDiv.style.display = 'block';
         }
-
         function hideLabel() {
             const labelDiv = document.getElementById('labelText');
+            if (!labelDiv) return;
             labelDiv.style.display = 'none';
         }
     </script>
 
     <script>
-        document.getElementById('apartment-count')?.addEventListener('change', function() {
-            const count = parseInt(this.value);
+        /* ---------------------- (E) Dynamic apartment forms ---------------------- */
+        document.getElementById('apartment-count')?.addEventListener('change', function () {
+            const count = parseInt(this.value || '0', 10);
             const dynamicFormsContainer = document.getElementById('dynamic-forms');
-            dynamicFormsContainer.innerHTML = '';
+            if (!dynamicFormsContainer) return;
 
+            dynamicFormsContainer.innerHTML = '';
             if (count > 0) {
                 for (let i = 1; i <= count; i++) {
-                    const formGroup = document.createElement('div');
-                    formGroup.classList.add('apartment-form');
+                    const group = document.createElement('div');
+                    group.classList.add('apartment-form');
 
-                    const apartmentNumberLabel = document.createElement('label');
-                    apartmentNumberLabel.textContent = `Apartment ${i} Number:`;
-                    apartmentNumberLabel.setAttribute('for', `apartment-${i}-number`);
-                    const apartmentNumberInput = document.createElement('input');
-                    apartmentNumberInput.type = 'text';
-                    apartmentNumberInput.id = `apartment-${i}-number`;
-                    apartmentNumberInput.name = `apartments[${i}][number]`;
-                    apartmentNumberInput.classList.add('form-control');
+                    const fields = [
+                        { label: `Apartment/Rooms ${i} Name:`, id: `apartment-${i}-name`, name: `apartments[${i}][name]` },
+                        { label: `Apartment ${i} Number:`, id: `apartment-${i}-number`, name: `apartments[${i}][number]` },
+                        { label: `Apartment ${i} Floor Number:`, id: `apartment-${i}-floor`, name: `apartments[${i}][floor]` },
+                    ];
 
-                    const apartmentFloorLabel = document.createElement('label');
-                    apartmentFloorLabel.textContent = `Apartment ${i} Floor Number:`;
-                    apartmentFloorLabel.setAttribute('for', `apartment-${i}-floor`);
-                    const apartmentFloorInput = document.createElement('input');
-                    apartmentFloorInput.type = 'text';
-                    apartmentFloorInput.id = `apartment-${i}-floor`;
-                    apartmentFloorInput.name = `apartments[${i}][floor]`;
-                    apartmentFloorInput.classList.add('form-control');
+                    fields.forEach(f => {
+                        const lbl = document.createElement('label');
+                        lbl.setAttribute('for', f.id);
+                        lbl.textContent = f.label;
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        input.id = f.id;
+                        input.name = f.name;
+                        input.classList.add('form-control');
+                        group.appendChild(lbl);
+                        group.appendChild(input);
+                    });
 
-                    const apartmentNameLabel = document.createElement('label');
-                    apartmentNameLabel.textContent = `Apartment/Rooms ${i} Name:`;
-                    apartmentNameLabel.setAttribute('for', `apartment-${i}-name`);
-                    const apartmentNameInput = document.createElement('input');
-                    apartmentNameInput.type = 'text';
-                    apartmentNameInput.id = `apartment-${i}-name`;
-                    apartmentNameInput.name = `apartments[${i}][name]`;
-                    apartmentNameInput.classList.add('form-control');
-
-                    formGroup.appendChild(apartmentNameLabel);
-                    formGroup.appendChild(apartmentNameInput);
-                    formGroup.appendChild(apartmentNumberLabel);
-                    formGroup.appendChild(apartmentNumberInput);
-                    formGroup.appendChild(apartmentFloorLabel);
-                    formGroup.appendChild(apartmentFloorInput);
-
-                    dynamicFormsContainer.appendChild(formGroup);
+                    dynamicFormsContainer.appendChild(group);
                 }
             }
         });
     </script>
 
     <script>
-        document.querySelector('form').addEventListener('submit', function(event) {
-            console.log('Form is submitting with data:', new FormData(this));
+        /* ---------------------- (F) Form submit log (safe) ---------------------- */
+        document.querySelector('form')?.addEventListener('submit', function () {
+            try {
+                const fd = new FormData(this);
+                // Optional debug:
+                // for (const [k, v] of fd.entries()) console.log(k, v);
+            } catch {}
         });
     </script>
 
     <script>
-        const radioButtons = document.querySelectorAll('input[name="showFields"]');
-        const additionalFields = document.getElementById('additionalFields');
+        /* ---------------------- (G) Radio show/hide extra fields ---------------------- */
+        (() => {
+            const radios = document.querySelectorAll('input[name="showFields"]');
+            const additionalFields = document.getElementById('additionalFields');
+            if (!radios.length || !additionalFields) return;
 
-        radioButtons.forEach(radio => {
-            radio.addEventListener('change', function() {
-                if (this.value === 'yes') {
-                    additionalFields.style.display = 'block';
-                } else {
-                    additionalFields.style.display = 'none';
-                }
+            radios.forEach(radio => {
+                radio.addEventListener('change', function () {
+                    additionalFields.style.display = this.value === 'yes' ? 'block' : 'none';
+                });
             });
-        });
+        })();
     </script>
 
     <script>
-        $(document).ready(function() {
-            $('.js-select2').select2();
+        /* ---------------------- (H) jQuery select2 + ownership extra fields ---------------------- */
+        $(document).ready(function () {
+            $('.js-select2').select2?.();
 
-            $('#propertyOwnershipss')?.on('change', function() {
-                const selectedValue = $(this).val();
+            $('#propertyOwnershipss')?.on('change', function () {
+                const v = $(this).val();
                 const partnerFields = $('.partner-fields');
                 const leaseDates = $('.lease-dates');
 
                 partnerFields.slideUp();
                 leaseDates.slideUp();
 
-                if (selectedValue === 'Partnership') {
-                    partnerFields.slideDown();
-                } else if (selectedValue === 'Leased') {
-                    leaseDates.slideDown();
-                }
+                if (v === 'Partnership') partnerFields.slideDown();
+                else if (v === 'Leased') leaseDates.slideDown();
             });
         });
     </script>
 
     <script>
+        /* ---------------------- (I) Bar selection (yes/no) ---------------------- */
         function initializeBarSelection() {
-            const barRadioButtons = document.querySelectorAll('input[name="barOption"]');
+            const radios = document.querySelectorAll('input[name="barOption"]');
             const barSelectContainer = document.getElementById('barSelectContainer');
             const barNumberSelect = document.getElementById('barNumberSelect');
+            if (!radios.length || !barSelectContainer || !barNumberSelect) return;
 
-            barRadioButtons.forEach(radio => {
-                radio.addEventListener('change', function() {
+            radios.forEach(r => {
+                r.addEventListener('change', function () {
                     if (this.value === 'yes') {
                         barSelectContainer.style.display = 'block';
                     } else {
@@ -1257,29 +1281,23 @@
                 });
             });
         }
-
         document.addEventListener('DOMContentLoaded', initializeBarSelection);
     </script>
 
     <script>
+        /* ---------------------- (J) KidsZone Manager ---------------------- */
         class KidsZoneManager {
-            constructor() {
-                this.initializeAllKidsZones();
-            }
-
+            constructor() { this.initializeAllKidsZones(); }
             initializeAllKidsZones() {
-                const kidsZoneSections = document.querySelectorAll('[data-kids-zone]');
-                kidsZoneSections.forEach(section => {
-                    this.initializeSingleKidsZone(section);
-                });
+                document.querySelectorAll('[data-kids-zone]')?.forEach(sec => this.initializeSingleKidsZone(sec));
             }
-
             initializeSingleKidsZone(section) {
-                const radioButtons = section.querySelectorAll('input[type="radio"]');
+                const radios = section.querySelectorAll('input[type="radio"]');
                 const selectContainer = section.querySelector('.select-container');
                 const numberSelect = section.querySelector('.number-select');
+                if (!radios.length || !selectContainer || !numberSelect) return;
 
-                radioButtons.forEach(radio => {
+                radios.forEach(radio => {
                     radio.addEventListener('change', () => {
                         if (radio.value === 'yes') {
                             selectContainer.style.display = 'block';
@@ -1290,269 +1308,296 @@
                     });
                 });
             }
-
             getAllSelections() {
                 const selections = {};
-                const sections = document.querySelectorAll('[data-kids-zone]');
-
-                sections.forEach(section => {
+                document.querySelectorAll('[data-kids-zone]')?.forEach(section => {
                     const id = section.getAttribute('data-kids-zone');
                     const selectedRadio = section.querySelector('input[type="radio"]:checked');
                     const numberSelect = section.querySelector('.number-select');
-
                     selections[`kidsZone${id}`] = {
                         hasKidsZone: selectedRadio ? selectedRadio.value : null,
-                        numberOfKids: selectedRadio?.value === 'yes' ? numberSelect.value : null
+                        numberOfKids: selectedRadio?.value === 'yes' ? numberSelect?.value : null
                     };
                 });
-
                 return selections;
             }
-
             addNewKidsZone(containerId, zoneNumber) {
                 const container = document.getElementById(containerId);
-                const newSection = `
-                    <div class="col-md-6 col-lg-4 col-xxl-3">
-                        <div class="form-group">
-                            <label class="form-label">Kids Zone ${zoneNumber}</label>
-                            <div class="radio-group" data-kids-zone="${zoneNumber}">
-                                <div>
-                                    <label>
-                                        <input type="radio" name="kidsZone${zoneNumber}" value="yes" class="radio-yes"> Yes
-                                    </label>
-                                </div>
-                                <div>
-                                    <label>
-                                        <input type="radio" name="kidsZone${zoneNumber}" value="no" class="radio-no"> No
-                                    </label>
-                                </div>
-                                <div class="select-container" style="display: none;">
-                                    <label>Select number of kids:</label>
-                                    <select class="form-select number-select">
-                                        <option value="">Select number</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-
-                container.insertAdjacentHTML('beforeend', newSection);
+                if (!container) return;
+                const html = `
+      <div class="col-md-6 col-lg-4 col-xxl-3">
+        <div class="form-group">
+          <label class="form-label">Kids Zone ${zoneNumber}</label>
+          <div class="radio-group" data-kids-zone="${zoneNumber}">
+            <div><label><input type="radio" name="kidsZone${zoneNumber}" value="yes" class="radio-yes"> Yes</label></div>
+            <div><label><input type="radio" name="kidsZone${zoneNumber}" value="no" class="radio-no"> No</label></div>
+            <div class="select-container" style="display: none;">
+              <label>Select number of kids:</label>
+              <select class="form-select number-select">
+                <option value="">Select number</option>
+                <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                <option value="4">4</option><option value="5">5</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>`;
+                container.insertAdjacentHTML('beforeend', html);
                 this.initializeSingleKidsZone(container.lastElementChild.querySelector('[data-kids-zone]'));
             }
         }
-
         const kidsZoneManager = new KidsZoneManager();
     </script>
 
     <script>
+        /* ---------------------- (K) Yes/No fields toggle ---------------------- */
         document.addEventListener("DOMContentLoaded", function () {
             const yesOption = document.getElementById("yesOption");
             const noOption = document.getElementById("noOption");
             const yesFields = document.getElementById("yesFields");
             const noFields = document.getElementById("noFields");
+            if (!yesOption || !noOption || !yesFields || !noFields) return;
 
-            yesOption?.addEventListener("change", function () {
-                if (this.checked) {
-                    yesFields.classList.remove("hidden");
-                    noFields.classList.add("hidden");
-                }
+            yesOption.addEventListener("change", function () {
+                if (this.checked) { yesFields.classList.remove("hidden"); noFields.classList.add("hidden"); }
             });
-
-            noOption?.addEventListener("change", function () {
-                if (this.checked) {
-                    noFields.classList.remove("hidden");
-                    yesFields.classList.add("hidden");
-                }
+            noOption.addEventListener("change", function () {
+                if (this.checked) { noFields.classList.remove("hidden"); yesFields.classList.add("hidden"); }
             });
         });
     </script>
 
     <script type="text/javascript">
+        /* ---------------------- (L) Category → Type → Room (works with your HTML) ---------------------- */
         document.addEventListener("DOMContentLoaded", function () {
-            divisionSelect = document.getElementById("division");
-            districtSelect = document.getElementById("district");
-            districtContainer = document.getElementById("districtContainer");
-            placeCheckboxList = document.getElementById("placeCheckboxList");
-            placeOptions = document.getElementById("placeOptions");
+            // property_category select (has id="division")
+            const divisionSelect = document.getElementById("division");
+
+            // The label has id="districtContainer". We need its closest .form-group and the select inside.
+            const districtLabel   = document.getElementById("districtContainer");
+            const districtGroup   = districtLabel ? districtLabel.closest('.form-group') : null;
+            const districtSelect  = districtGroup ? districtGroup.querySelector('select[name="property_type"]') : null;
+
+            // Room types container/list
+            const placeCheckboxList = document.getElementById("placeCheckboxList");
+            const placeOptions      = document.getElementById("placeOptions");
+
+            if (!divisionSelect || !districtGroup || !districtSelect || !placeCheckboxList || !placeOptions) {
+                // Missing critical nodes — bail safely.
+                return;
+            }
+
+            // Start hidden
+            districtGroup.parentElement?.parentElement?.style?.setProperty('display',''); // keep original layout
+            districtGroup.style.display = "none";
+            placeCheckboxList.style.display = "none";
 
             const data = {
                 Hotels: {
                     districts: {
-                        "hotel": ["Single Room", "Double Room", "Twin Room", "Suite", "Family Room", "Penthouse Suite", "Accessible Room" ],
-                        "Luxury Hotels": ["Single Room", "Double Room", "Twin Room", "Suite", "Family Room", "Penthouse Suite", "Accessible Room"],
-                        "farmgate": ["Single Room", "Double Room", "Twin Room", "Suite", "Family Room", "Penthouse Suite", "Accessible Room"]
+                        "Hotel": ["Single Room","Double Room","Twin Room","Suite","Family Room","Penthouse Suite","Accessible Room"],
+                        "Luxury Hotels": ["Single Room","Double Room","Twin Room","Suite","Family Room","Penthouse Suite","Accessible Room"],
+                        "Budget Hotels": ["Single Room","Double Room","Family Room","Accessible Room"]
                     }
                 },
-                chittagong: {
+                Transit: {
                     districts: {
-                        agrabad: ["Area 1", "Area 2", "Area 3"],
-                        halishahar: ["Location X", "Location Y", "Location Z"],
-                        patenga: ["Site P", "Site Q", "Site R"]
+                        "Airport Hotels": ["Single Room","Double Room","Family Unit","Parking-Accessible Room"],
+                        "Station Hotels": ["Single Room","Double Room","Family Unit","Parking-Accessible Room"],
+                        "Hospital & Visa Center Area Hotels": ["Single Room","Double Room","Family Unit","Parking-Accessible Room"]
                     }
                 },
-                khulna: {
+                Resorts: {
                     districts: {
-                        khalishpur: ["Zone 1", "Zone 2", "Zone 3"],
-                        sonadanga: ["Point A", "Point B", "Point C"],
-                        rupsha: ["Spot X", "Spot Y", "Spot Z"]
+                        "Resorts": ["Luxury Resort Suites","Private Pool Villas","Garden View Rooms","Standard Camping Tent","Luxury Tent (Glamping)","Treehouses"],
+                        "Eco Resorts": ["Bamboo Cottages","Solar-Powered Cabins","Off-Grid Stays","Farm Stays"],
+                        "Beach Resorts": ["Overwater Bungalows","Beach Huts","Oceanfront Villas"],
+                        "Mountain Resorts": ["Cabins","Lodges","View Suites"]
+                    }
+                },
+                Lodges: {
+                    districts: {
+                        "Hostels": ["Single Bed in Dormitory","Private Room/Apartment","Female-Only Dormitory","Male-Only Dormitory","Mixed Dormitory","Studio Apartment-Style Hostel"],
+                        "Motels": ["Single Room","Double Room","Family Room"],
+                        "Lodges": ["Private Room","Shared Room"]
+                    }
+                },
+                Apartments: {
+                    districts: {
+                        "Apartments": ["Studio","One-Bedroom","Two-Bedroom","Three-Bedroom","Penthouse"],
+                        "Serviced Apartments": ["Luxury Serviced","Budget Serviced","Furnished","Unfurnished"],
+                        "Homestays": ["Entire Place","Private Room","Shared Room"]
+                    }
+                },
+                Guesthouses: {
+                    districts: {
+                        "Guesthouses": ["Bed Only","Room with Shared Bathroom","Private Room","Entire House"],
+                        "Vacation Rentals": ["Entire Place","Private Room","Tent/Glamping","RV/Caravan"],
+                        "Condominiums": ["Studio","1BR","2BR","3BR"],
+                        "B&B": ["Private Room","Family Room"]
+                    }
+                },
+                Crisis: {
+                    districts: {
+                        "Old Age Homes": ["Single Bed","Shared Room"],
+                        "Orphanages": ["Dormitory","Private Room"],
+                        "Rehabilitation Centers": ["Standard Room","Supervised Room"],
+                        "Asylums": ["Ward","Private Room"]
                     }
                 }
             };
 
-            divisionSelect?.addEventListener("change", function () {
-                const division = this.value;
+            function resetTypes() {
                 districtSelect.innerHTML = '<option value="" disabled selected>Choose Property Type</option>';
                 placeOptions.innerHTML = "";
                 placeCheckboxList.style.display = "none";
+            }
 
-                if (data[division]) {
-                    districtContainer.style.display = "block";
-                    Object.keys(data[division].districts).forEach(district => {
-                        const option = document.createElement("option");
-                        option.value = district;
-                        option.textContent = district.charAt(0).toUpperCase() + district.slice(1);
-                        districtSelect.appendChild(option);
+            function populateDistricts(category) {
+                resetTypes();
+                if (data[category]) {
+                    districtGroup.style.display = "block";
+                    Object.keys(data[category].districts).forEach(type => {
+                        const opt = document.createElement("option");
+                        opt.value = type;
+                        opt.textContent = type;
+                        districtSelect.appendChild(opt);
                     });
+                } else {
+                    districtGroup.style.display = "none";
                 }
-            });
+            }
 
-            districtSelect?.addEventListener("change", function () {
-                const division = divisionSelect.value;
-                const district = this.value;
+            function populateRoomTypes(category, type) {
                 placeOptions.innerHTML = "";
-
-                if (data[division] && data[division].districts[district]) {
-                    placeCheckboxList.style.display = "block";
-                    data[division].districts[district].forEach((place, index) => {
-                        const listItem = document.createElement("li");
-                        const checkboxContainer = document.createElement("div");
-                        checkboxContainer.classList.add("form-check");
-
-                        const checkbox = document.createElement("input");
-                        checkbox.type = "checkbox";
-                        checkbox.classList.add("form-check-input");
-                        checkbox.id = `checkbox${index}`;
-                        checkbox.value = place;
-
-                        const label = document.createElement("label");
-                        label.classList.add("form-check-label");
-                        label.htmlFor = `checkbox${index}`;
-                        label.textContent = place;
-
-                        checkboxContainer.appendChild(checkbox);
-                        checkboxContainer.appendChild(label);
-                        listItem.appendChild(checkboxContainer);
-                        placeOptions.appendChild(listItem);
-                    });
+                const list = data[category]?.districts?.[type] || null;
+                if (!list) {
+                    placeCheckboxList.style.display = "none";
+                    return;
                 }
-            });
-        });
-    </script>
-
-    <script type="text/javascript">
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelector("#facilities-all").addEventListener("change", function () {
-                console.log("Facilities Select All toggled");
-                const facilitiesCheckboxes = document.querySelectorAll(".checkbox-item-facility");
-                facilitiesCheckboxes.forEach(function (checkbox) {
-                    checkbox.checked = document.querySelector("#facilities-all").checked;
-                    console.log(`Checkbox ${checkbox.id} set to ${checkbox.checked}`);
+                placeCheckboxList.style.display = "block";
+                list.forEach((label, idx) => {
+                    const id = `room_type_${idx}`;
+                    const li = document.createElement("li");
+                    li.innerHTML = `
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="${id}" name="room_types[]" value="${label}">
+          <label class="form-check-label" for="${id}">${label}</label>
+        </div>`;
+                    placeOptions.appendChild(li);
                 });
+            }
+
+            divisionSelect.addEventListener("change", function () {
+                populateDistricts(this.value);
+            });
+
+            districtSelect.addEventListener("change", function () {
+                if (!divisionSelect.value) return;
+                populateRoomTypes(divisionSelect.value, this.value);
             });
         });
     </script>
 
     <script type="text/javascript">
-        document.getElementById("check-in-all").addEventListener("change", function () {
-            let checkinCheckboxes = document.querySelectorAll(".checkbox-item-checkin");
-            checkinCheckboxes.forEach(function (checkbox) {
-                checkbox.checked = document.getElementById("check-in-all").checked;
+        /* ---------------------- (M) Facilities select-all ---------------------- */
+        document.addEventListener("DOMContentLoaded", function () {
+            const master = document.querySelector("#facilities-all");
+            if (!master) return;
+            master.addEventListener("change", function () {
+                document.querySelectorAll(".checkbox-item-facility")?.forEach(cb => { cb.checked = master.checked; });
             });
+        });
+    </script>
+
+    <script type="text/javascript">
+        /* ---------------------- (N) Check-in select-all ---------------------- */
+        document.getElementById("check-in-all")?.addEventListener("change", function () {
+            const isChecked = this.checked;
+            document.querySelectorAll(".checkbox-item-checkin")?.forEach(cb => { cb.checked = isChecked; });
         });
     </script>
 
     <script>
-        document.getElementById('addRuleBtn').addEventListener('click', function (event) {
+        /* ---------------------- (O) Add/Delete custom check-in methods ---------------------- */
+        document.getElementById('addRuleBtn')?.addEventListener('click', function (event) {
             event.preventDefault();
             const formContainer = document.getElementById('formContainer');
+            if (!formContainer) return;
+
             const newField = document.createElement('div');
             newField.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3');
             newField.innerHTML = `
-                <div class="form-group">
-                    <input type="text" class="form-control" name="custom_check_in_methods[]" placeholder="" required>
-                    <button class="delete-btn">Delete</button>
-                </div>
-            `;
+    <div class="form-group">
+      <input type="text" class="form-control" name="custom_check_in_methods[]" placeholder="" required>
+      <button type="button" class="delete-btn btn btn-danger btn-sm mt-2">Delete</button>
+    </div>`;
             formContainer.appendChild(newField);
-            const deleteBtn = newField.querySelector('.delete-btn');
-            deleteBtn.addEventListener('click', function () {
+
+            newField.querySelector('.delete-btn')?.addEventListener('click', function () {
                 formContainer.removeChild(newField);
             });
         });
     </script>
 
     <script type="text/javascript">
+        /* ---------------------- (P) Radio-group data-target show/hide ---------------------- */
         document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll(".radio-group input[type='radio']").forEach(function (radio) {
+            document.querySelectorAll(".radio-group input[type='radio']")?.forEach(function (radio) {
                 radio.addEventListener("change", function () {
                     const targetId = this.getAttribute("data-target");
+                    if (!targetId) return;
                     const targetInput = document.getElementById(targetId);
-                    if (targetInput) {
-                        if (this.value === "yes") {
-                            targetInput.classList.remove("hidden");
-                        } else {
-                            targetInput.classList.add("hidden");
-                        }
-                    }
+                    if (!targetInput) return;
+                    if (this.value === "yes") targetInput.classList.remove("hidden");
+                    else targetInput.classList.add("hidden");
                 });
             });
         });
     </script>
 
     <script type="text/javascript">
-        document.querySelector("#property-all").addEventListener("change", function () {
-            const propertyCheckboxes = document.querySelectorAll(".checkbox-item-property");
-            propertyCheckboxes.forEach(function (checkbox) {
-                checkbox.checked = document.querySelector("#property-all").checked;
-            });
+        /* ---------------------- (Q) Property select-all ---------------------- */
+        document.querySelector("#property-all")?.addEventListener("change", function () {
+            const isChecked = this.checked;
+            document.querySelectorAll(".checkbox-item-property")?.forEach(cb => { cb.checked = isChecked; });
         });
     </script>
 
     <script>
+        /* ---------------------- (R) Add-more generic fields ---------------------- */
         document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll(".add-more").forEach((button) => {
+            document.querySelectorAll(".add-more")?.forEach((button) => {
                 button.addEventListener("click", function (event) {
                     event.preventDefault();
                     const inputContainer = this.previousElementSibling;
                     const newFormGroup = document.createElement("div");
                     newFormGroup.classList.add("form-group", "mb-1", "d-flex", "align-items-center");
                     newFormGroup.style.gap = "10px";
+
                     const inputField = document.createElement("input");
                     inputField.type = "text";
                     inputField.classList.add("form-control");
                     inputField.placeholder = "Enter something";
+
                     const deleteButton = document.createElement("button");
+                    deleteButton.type = "button";
                     deleteButton.innerText = "Delete";
-                    deleteButton.classList.add("delete-btn");
+                    deleteButton.classList.add("delete-btn", "btn", "btn-danger", "btn-sm");
                     deleteButton.addEventListener("click", function () {
                         newFormGroup.remove();
                     });
+
                     newFormGroup.appendChild(inputField);
                     newFormGroup.appendChild(deleteButton);
-                    inputContainer.parentNode.insertBefore(newFormGroup, this);
+                    (inputContainer?.parentNode || this.parentNode).insertBefore(newFormGroup, this);
                 });
             });
         });
     </script>
 
-
     <script>
+        /* ---------------------- (S) Hotel Facilities dynamic groups (safe) ---------------------- */
         const hotelFacilitiesLabelsMap = {
             'General Services': ['General Services Name'],
             'Activities & Entertainment': ['Activities & Entertainment Name'],
@@ -1572,99 +1617,86 @@
             'Languages Spoken': ['Language']
         };
 
-        const hotelFacilitySelector = document.getElementById('hotelFacilitySelector');
-        const hotelFormContainer = document.getElementById('dynamicFieldsContainerHotelFacility');
-        let currentFacilityValue = '';
+        (() => {
+            const hotelFacilitySelector = document.getElementById('hotelFacilitySelector');
+            const hotelFormContainer = document.getElementById('dynamicFieldsContainerHotelFacility');
+            if (!hotelFormContainer) return;
 
-        function ensureAddButton(categoryKey, category) {
-            const categoryWrapper = document.getElementById(`wrapper-${categoryKey}`);
-            const row = categoryWrapper.querySelector('.row');
+            let currentFacilityValue = '';
 
-            // If button already exists, return it
-            let addBtnCol = document.getElementById(`add-btn-${categoryKey}`);
-            if (addBtnCol) return addBtnCol;
+            function ensureAddButton(categoryKey, category) {
+                const categoryWrapper = document.getElementById(`wrapper-${categoryKey}`);
+                if (!categoryWrapper) return null;
+                const row = categoryWrapper.querySelector('.row');
+                if (!row) return null;
 
-            // Create the single "Add More +" button for this category
-            addBtnCol = document.createElement('div');
-            addBtnCol.className = 'col-md-3 mt-4';
-            addBtnCol.id = `add-btn-${categoryKey}`;
-            addBtnCol.innerHTML = `
+                let addBtnCol = document.getElementById(`add-btn-${categoryKey}`);
+                if (addBtnCol) return addBtnCol;
+
+                addBtnCol = document.createElement('div');
+                addBtnCol.className = 'col-md-3 mt-4';
+                addBtnCol.id = `add-btn-${categoryKey}`;
+                addBtnCol.innerHTML = `
       <div class="d-flex justify-content-end">
         <button type="button" class="btn btn-primary" id="addHotelFacility-${categoryKey}">Add More +</button>
-      </div>
-    `;
+      </div>`;
+                row.appendChild(addBtnCol);
 
-            row.appendChild(addBtnCol);
-
-            // Wire the click to add another field to THIS category
-            row.querySelector(`#addHotelFacility-${categoryKey}`).addEventListener('click', (e) => {
-                e.preventDefault();
-                createHotelFieldGroup(category);
-            });
-
-            return addBtnCol;
-        }
-
-        function createHotelFieldGroup(category) {
-            const labels = hotelFacilitiesLabelsMap[category];
-            const categoryKey = category.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
-            const uniqueId = `hotel-facility-${categoryKey}-${Date.now()}`;
-
-            // Create wrapper if needed
-            let categoryWrapper = document.getElementById(`wrapper-${categoryKey}`);
-            if (!categoryWrapper) {
-                categoryWrapper = document.createElement('div');
-                categoryWrapper.classList.add('col-12', 'mb-3');
-                categoryWrapper.id = `wrapper-${categoryKey}`;
-                categoryWrapper.innerHTML = `<h5>${category}</h5><div class="row"></div>`;
-                hotelFormContainer.appendChild(categoryWrapper);
+                row.querySelector(`#addHotelFacility-${categoryKey}`)?.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    createHotelFieldGroup(category);
+                });
+                return addBtnCol;
             }
 
-            const row = categoryWrapper.querySelector('.row');
+            function createHotelFieldGroup(category) {
+                const labels = hotelFacilitiesLabelsMap[category];
+                if (!labels) return;
 
-            // Make or get the single Add button column for this category
-            const addBtnCol = ensureAddButton(categoryKey, category);
+                const categoryKey = category.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+                const uniqueId = `hotel-facility-${categoryKey}-${Date.now()}`;
 
-            // Build one field group
-            const newFieldGroup = document.createElement('div');
-            newFieldGroup.classList.add('hotel-field-group', 'col-md-6', 'col-lg-4', 'col-xxl-3', 'mb-3');
-            newFieldGroup.id = uniqueId;
-            newFieldGroup.innerHTML = `
+                let categoryWrapper = document.getElementById(`wrapper-${categoryKey}`);
+                if (!categoryWrapper) {
+                    categoryWrapper = document.createElement('div');
+                    categoryWrapper.classList.add('col-12', 'mb-3');
+                    categoryWrapper.id = `wrapper-${categoryKey}`;
+                    categoryWrapper.innerHTML = `<h5>${category}</h5><div class="row"></div>`;
+                    hotelFormContainer.appendChild(categoryWrapper);
+                }
+                const row = categoryWrapper.querySelector('.row');
+
+                const addBtnCol = ensureAddButton(categoryKey, category);
+
+                const newFieldGroup = document.createElement('div');
+                newFieldGroup.classList.add('hotel-field-group', 'col-md-6', 'col-lg-4', 'col-xxl-3', 'mb-3');
+                newFieldGroup.id = uniqueId;
+                newFieldGroup.innerHTML = `
       <div class="form-group">
         <label for="input-${uniqueId}">${labels[0]}</label>
         <input type="text" class="form-control" id="input-${uniqueId}" name="hotel_facilities[${categoryKey}][]" placeholder="Enter ${labels[0]}" required>
       </div>
-      <button type="button" class="btn btn-danger btn-sm mt-2 delete-hotel-btn">Delete</button>
-    `;
+      <button type="button" class="btn btn-danger btn-sm mt-2 delete-hotel-btn">Delete</button>`;
 
-            // Insert the new field BEFORE the add button so the button stays last
-            row.insertBefore(newFieldGroup, addBtnCol);
+                // Insert before the add button column (if present) so button stays last
+                if (addBtnCol) row.insertBefore(newFieldGroup, addBtnCol);
+                else row.appendChild(newFieldGroup);
 
-            // Delete handler
-            newFieldGroup.querySelector('.delete-hotel-btn').addEventListener('click', function () {
-                row.removeChild(newFieldGroup);
+                newFieldGroup.querySelector('.delete-hotel-btn')?.addEventListener('click', function () {
+                    row.removeChild(newFieldGroup);
+                    const remaining = row.querySelectorAll('.hotel-field-group').length;
+                    if (remaining === 0) categoryWrapper.remove();
+                });
+            }
 
-                // If no more field groups remain for this category, remove the whole wrapper
-                const remainingFields = row.querySelectorAll('.hotel-field-group').length;
-                if (remainingFields === 0) {
-                    categoryWrapper.remove();
-                }
-            });
-        }
-
-        // When a category is selected from the dropdown, remember it and add the first field
-        if (hotelFacilitySelector) {
-            hotelFacilitySelector.addEventListener('change', function () {
+            hotelFacilitySelector?.addEventListener('change', function () {
                 currentFacilityValue = this.value;
                 if (!hotelFacilitiesLabelsMap[currentFacilityValue]) return;
                 createHotelFieldGroup(currentFacilityValue);
             });
-        }
 
-        // (Optional) If you still keep a single global button outside, wire it to the current category
-        const addHotelFacilityBtn = document.getElementById('addHotelFacility');
-        if (addHotelFacilityBtn) {
-            addHotelFacilityBtn.addEventListener('click', function (event) {
+            const addHotelFacilityBtn = document.getElementById('addHotelFacility');
+            addHotelFacilityBtn?.addEventListener('click', function (event) {
                 event.preventDefault();
                 if (!currentFacilityValue || !hotelFacilitiesLabelsMap[currentFacilityValue]) {
                     alert("Please select a valid facility category first.");
@@ -1672,77 +1704,72 @@
                 }
                 createHotelFieldGroup(currentFacilityValue);
             });
-        }
+        })();
     </script>
 
-
     <script>
-        const sectionLabelsMap = {
-            'Restaurant & Cafe': ['Restaurant & Cafe Name', 'Distance'],
-            'Entertainment & Attraction Point': ['Entertainment & Attraction Point', 'Distance'],
-            'Hospital & Police Station': ['Hospital & Police Station Name', 'Distance'],
-            'Transport & Airport': ['Transport & Airport Name', 'Distance'],
-            'Shopping & ATM': ['Shopping & ATM', 'Distance']
-        };
+        /* ---------------------- (T) Nearby Areas dynamic groups ---------------------- */
+        (() => {
+            const sectionLabelsMap = {
+                'Restaurant & Cafe': ['Restaurant & Cafe Name', 'Distance'],
+                'Entertainment & Attraction Point': ['Entertainment & Attraction Point', 'Distance'],
+                'Hospital & Police Station': ['Hospital & Police Station Name', 'Distance'],
+                'Transport & Airport': ['Transport & Airport Name', 'Distance'],
+                'Shopping & ATM': ['Shopping & ATM', 'Distance']
+            };
 
-        const areaSelector = document.getElementById('areaSelector');
-        const formContainer = document.getElementById('dynamicFieldsContainer');
-        let currentSelectedValue = '';
+            const areaSelector = document.getElementById('areaSelector');
+            const formContainer = document.getElementById('dynamicFieldsContainer');
+            if (!formContainer) return;
 
-        function createFieldGroup(category) {
-            const labels = sectionLabelsMap[category];
-            const uniqueId = `nearby-area-${category.replace(/[^a-zA-Z0-9]/g, '')}-${Date.now()}`;
-            const categoryKey = category.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+            let currentSelectedValue = '';
 
-            const newFieldGroup = document.createElement('div');
-            newFieldGroup.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3', 'mb-3');
-            newFieldGroup.setAttribute('id', uniqueId);
-            newFieldGroup.innerHTML = `
-        <div class="form-group">
-            <label for="input-name-${uniqueId}">${labels[0]}</label>
-            <input type="text" class="form-control" id="input-name-${uniqueId}" name="nearby_areas[${categoryKey}][name][]" placeholder="Enter ${labels[0]}" required>
-        </div>
-        <div class="form-group">
-            <label for="input-distance-${uniqueId}">${labels[1]}</label>
-            <input type="text" class="form-control" id="input-distance-${uniqueId}" name="nearby_areas[${categoryKey}][distance][]" placeholder="Enter ${labels[1]}" required>
-        </div>
-        <button type="button" class="btn btn-danger btn-sm mt-3 delete-nearby-btn">Delete</button>
-    `;
+            function createFieldGroup(category, nameValue = '', distanceValue = '') {
+                const labels = sectionLabelsMap[category];
+                if (!labels) return;
 
-            let categoryWrapper = document.getElementById(`wrapper-${categoryKey}`);
-            if (!categoryWrapper) {
-                categoryWrapper = document.createElement('div');
-                categoryWrapper.classList.add('col-12', 'mb-3');
-                categoryWrapper.id = `wrapper-${categoryKey}`;
-                categoryWrapper.innerHTML = `<h5>${category}</h5><div class="row"></div>`;
-                formContainer.appendChild(categoryWrapper);
+                const uniqueId = `nearby-area-${category.replace(/[^a-zA-Z0-9]/g, '')}-${Date.now()}`;
+                const categoryKey = category.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+
+                const newFieldGroup = document.createElement('div');
+                newFieldGroup.classList.add('col-md-6', 'col-lg-4', 'col-xxl-3', 'mb-3');
+                newFieldGroup.id = uniqueId;
+                newFieldGroup.innerHTML = `
+      <div class="form-group">
+        <label for="input-name-${uniqueId}">${labels[0]}</label>
+        <input type="text" class="form-control" id="input-name-${uniqueId}" name="nearby_areas[${categoryKey}][name][]" placeholder="Enter ${labels[0]}" value="${nameValue}" required>
+      </div>
+      <div class="form-group">
+        <label for="input-distance-${uniqueId}">${labels[1]}</label>
+        <input type="text" class="form-control" id="input-distance-${uniqueId}" name="nearby_areas[${categoryKey}][distance][]" placeholder="Enter ${labels[1]}" value="${distanceValue}" required>
+      </div>
+      <button type="button" class="btn btn-danger btn-sm mt-3 delete-nearby-btn">Delete</button>`;
+
+                let categoryWrapper = document.getElementById(`wrapper-${categoryKey}`);
+                if (!categoryWrapper) {
+                    categoryWrapper = document.createElement('div');
+                    categoryWrapper.classList.add('col-12', 'mb-3');
+                    categoryWrapper.id = `wrapper-${categoryKey}`;
+                    categoryWrapper.innerHTML = `<h5>${category}</h5><div class="row"></div>`;
+                    formContainer.appendChild(categoryWrapper);
+                }
+                const row = categoryWrapper.querySelector('.row');
+                row.appendChild(newFieldGroup);
+
+                newFieldGroup.querySelector('.delete-nearby-btn')?.addEventListener('click', function () {
+                    row.removeChild(newFieldGroup);
+                    if (!row.children.length) categoryWrapper.remove();
+                });
             }
 
-            const row = categoryWrapper.querySelector('.row');
-            row.appendChild(newFieldGroup);
-
-            // Add event listener to delete button after adding the field
-            newFieldGroup.querySelector('.delete-nearby-btn').addEventListener('click', function () {
-                row.removeChild(newFieldGroup);
-                if (row.children.length === 0) {
-                    formContainer.removeChild(categoryWrapper);
-                }
-            });
-        }
-
-        // Ensure areaSelector exists before adding event listener
-        if (areaSelector) {
-            areaSelector.addEventListener('change', function () {
+            areaSelector?.addEventListener('change', function () {
                 currentSelectedValue = this.value;
                 if (!sectionLabelsMap[currentSelectedValue]) return;
                 createFieldGroup(currentSelectedValue);
             });
-        }
 
-        // Ensure addNearbyAreaBtn exists before adding event listener
-        const addNearbyAreaBtn = document.getElementById('addNearbyAreaBtn');
-        if (addNearbyAreaBtn) {
-            addNearbyAreaBtn.addEventListener('click', function (event) {
+            const addNearbyAreaBtn = document.getElementById('addNearbyAreaBtn');
+            addNearbyAreaBtn?.addEventListener('click', function (event) {
                 event.preventDefault();
                 if (!currentSelectedValue || !sectionLabelsMap[currentSelectedValue]) {
                     alert("Please select a valid nearby area category first.");
@@ -1750,16 +1777,18 @@
                 }
                 createFieldGroup(currentSelectedValue);
             });
-        }
-
+        })();
     </script>
 
     <script>
+        /* ---------------------- (U) Custom check-in rules (another section) ---------------------- */
         document.addEventListener('DOMContentLoaded', function () {
             const wrapper = document.getElementById('custom-checkin-wrapper');
-            const addBtn = document.getElementById('add-checkin-rule');
+            const addBtn  = document.getElementById('add-checkin-rule');
+            if (!wrapper || !addBtn) return;
 
-            addBtn.addEventListener('click', function () {
+            addBtn.addEventListener('click', function (e) {
+                e.preventDefault();
                 const group = document.createElement('div');
                 group.className = 'form-group mb-2 d-flex align-items-center';
 
@@ -1773,7 +1802,6 @@
                 removeBtn.type = 'button';
                 removeBtn.className = 'btn btn-danger btn-sm ms-2 remove-checkin';
                 removeBtn.textContent = 'Delete';
-
                 removeBtn.addEventListener('click', () => group.remove());
 
                 group.appendChild(input);
@@ -1781,10 +1809,10 @@
                 wrapper.appendChild(group);
             });
 
-            // Attach delete buttons to existing (if any)
-            document.querySelectorAll('.remove-checkin').forEach(btn => {
+            // Attach to any pre-existing delete buttons
+            wrapper.querySelectorAll('.remove-checkin')?.forEach(btn => {
                 btn.addEventListener('click', function () {
-                    this.closest('.form-group').remove();
+                    this.closest('.form-group')?.remove();
                 });
             });
         });
