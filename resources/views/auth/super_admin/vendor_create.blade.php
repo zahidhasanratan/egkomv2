@@ -14,253 +14,574 @@
                         </div>
                     </div>
                     <div class="nk-block">
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
+                        @if (session('success'))
+                            <div class="alert alert-success">{{ session('success') }}</div>
                         @endif
-                        <form action="{{ route('super-admin.vendor.store') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <div class="card card-bordered">
-                                <div class="card-inner">
-                                    <div class="row gy-4">
-                                        <!-- Hotel Name -->
 
-                                        <div class="col-md-6 col-lg-4 col-xxl-3">
-                                            <div class="form-group">
-                                                <label for="property_type" class="form-label">Property Type</label>
-                                                <select name="property_type" class="form-control">
-                                                    <option>Hotels</option>
-                                                    <option>Transit</option>
-                                                    <option>Resorts</option>
-                                                    <option>Lodges</option>
-                                                    <option>Guesthouses</option>
-                                                    <option>Crisis</option>
-                                                </select>
+                        @if ($errors->has('error'))
+                            <div class="alert alert-danger">{{ $errors->first('error') }}</div>
+                        @endif
+
+                        @if ($errors->has('db_message'))
+                            <div class="alert alert-warning">{{ $errors->first('db_message') }}</div>
+                        @endif
+                            <form action="{{ route('super-admin.vendor.store') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <div class="card card-bordered">
+                                    <div class="card-inner">
+                                        <div class="row gy-4">
+                                            <!-- Property Name -->
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="property-name">Property Name</label>
+                                                    <input type="text" class="form-control" id="property-name" name="property_name" placeholder="ex: Prime 365" value="{{ old('property_name') }}">
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-6 col-lg-4 col-xxl-3">
-                                            <div class="form-group">
-                                                <label for="hotel_name" class="form-label">Hotel Name</label>
-                                                <input type="text" class="form-control" id="hotel_name" name="hotel_name" required>
+
+                                            <!-- Country -->
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="country-name">Country Name</label>
+                                                    <select class="form-select mb-3" id="country-name" name="country_name">
+                                                        <option value="Bangladesh" {{ old('country_name', 'Bangladesh') === 'Bangladesh' ? 'selected' : '' }}>Bangladesh</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <!-- Contact Person Name -->
-                                        <div class="col-md-6 col-lg-4 col-xxl-3">
-                                            <div class="form-group">
-                                                <label for="contact_person_name" class="form-label">Contact Person Name</label>
-                                                <input type="text" class="form-control" id="contact_person_name" name="contact_person_name" required>
+                                            <!-- District -->
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="district-name">District Name</label>
+                                                    <select class="form-select mb-3" id="district-name" name="district_name">
+                                                        <option value="">Select District Name</option>
+                                                        @foreach(['Bagerhat', 'Bandarban', 'Barguna', 'Barisal', 'Bhola', 'Bogra', 'Brahmanbaria', 'Chandpur', 'Chittagong', 'Chuadanga', 'Comilla', "Cox'sBazar", 'Dhaka', 'Dinajpur', 'Faridpur', 'Feni', 'Gaibandha', 'Gazipur', 'Gopalganj', 'Habiganj', 'Jaipurhat', 'Jamalpur', 'Jessore', 'Jhalokati', 'Jhenaidah', 'Khagrachari', 'Khulna', 'Kishoreganj', 'Kurigram', 'Kushtia', 'Lakshmipur', 'Lalmonirhat', 'Madaripur', 'Magura', 'Manikganj', 'Maulvibazar', 'Meherpur', 'Munshiganj', 'Mymensingh', 'Naogaon', 'Narail', 'Narayanganj', 'Narsingdi', 'Natore', 'Nawabganj', 'Netrokona', 'Nilphamari', 'Noakhali', 'Pabna', 'Panchagarh', 'Patuakhali', 'Pirojpur', 'Rajbari', 'Rajshahi', 'Rangamati', 'Rangpur', 'Satkhira', 'Shariatpur', 'Sherpur', 'Sirajganj', 'Sunamganj', 'Sylhet', 'Tangail', 'Thakurgaon'] as $district)
+                                                            <option value="{{ $district }}" {{ old('district_name') === $district ? 'selected' : '' }}>{{ $district }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <!-- Contact Person Date of Birth -->
-{{--                                        <div class="col-md-6 col-lg-4 col-xxl-3">--}}
-{{--                                            <div class="form-group">--}}
-{{--                                                <label for="contact_person_dob" class="form-label">Contact Person Date of Birth</label>--}}
-{{--                                                <input type="date" class="form-control" id="contact_person_dob" name="contact_person_dob">--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-
-                                        <!-- Contact Person Designation -->
-                                        <div class="col-md-6 col-lg-4 col-xxl-3">
-                                            <div class="form-group">
-                                                <label for="contact_person_designation" class="form-label">Contact Person Designation</label>
-                                                <input type="text" class="form-control" id="contact_person_designation" name="contact_person_designation">
+                                            <!-- City/Town/Village -->
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="city-town-village">City/Town/Village</label>
+                                                    <input type="text" class="form-control" id="city-town-village" name="city_town_village" placeholder="City/Town/Village" value="{{ old('city_town_village') }}">
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <!-- Phone -->
-                                        <div class="col-md-6 col-lg-4 col-xxl-3">
-                                            <div class="form-group">
-                                                <label for="phone" class="form-label">Phone</label>
-                                                <input type="text" class="form-control" id="phone" name="phone" required>
+                                            <!-- Postcode -->
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="postcode">Postcode</label>
+                                                    <input type="text" class="form-control" id="postcode" name="postcode" placeholder="Postcode" value="{{ old('postcode') }}">
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <!-- Email Address -->
-                                        <div class="col-md-6 col-lg-4 col-xxl-3">
-                                            <div class="form-group">
-                                                <label for="email" class="form-label">Email Address</label>
-                                                <input type="email" class="form-control" id="email" name="email" required>
+                                            <!-- House Number -->
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="house-number">House Number</label>
+                                                    <input type="text" class="form-control" id="house-number" name="house_number" placeholder="House Number" value="{{ old('house_number') }}">
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <!-- Address Fields -->
-                                        <div class="col-md-6 col-lg-4 col-xxl-3">
-                                            <div class="form-group">
-                                                <label for="address_house" class="form-label">Property/Hotel Address</label>
-                                                <input type="text" class="form-control" id="address_house" name="address_house">
+                                            <!-- Road Number/Name -->
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="road-number-name">Road Number/Name (If any)</label>
+                                                    <input type="text" class="form-control" id="road-number-name" name="road_number_name" placeholder="Road Number/Name (If any)" value="{{ old('road_number_name') }}">
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="col-md-6 col-lg-4 col-xxl-3">
-                                            <div class="form-group">
-                                                <label for="address_city" class="form-label">City</label>
-                                                <input type="text" class="form-control" id="address_city" name="address_city">
+                                            <!-- Company Logo -->
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div class="form-group mt-15">
+                                                    <label class="form-label">Logo Of Company</label>
+                                                    <div class="multiple-upload-container" id="upload-container-1">
+                                                        <input type="file" class="multiple-file-input" accept="image/*" name="company_logo">
+                                                        <label class="upload-label">Select Logo</label>
+                                                        <div class="multiple-thumbnail-gallery"></div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="col-md-6 col-lg-4 col-xxl-3">
-                                            <div class="form-group">
-                                                <label for="address_district" class="form-label">District</label>
-                                                <select class="form-control" id="address_district" name="address_district">
-                                                    <option value="">-- Select District --</option>
-                                                    <option value="Bagerhat">Bagerhat</option>
-                                                    <option value="Bandarban">Bandarban</option>
-                                                    <option value="Barguna">Barguna</option>
-                                                    <option value="Barisal">Barisal</option>
-                                                    <option value="Bhola">Bhola</option>
-                                                    <option value="Bogra">Bogra</option>
-                                                    <option value="Brahmanbaria">Brahmanbaria</option>
-                                                    <option value="Chandpur">Chandpur</option>
-                                                    <option value="Chapai Nawabganj">Chapai Nawabganj</option>
-                                                    <option value="Chattogram">Chattogram</option>
-                                                    <option value="Chuadanga">Chuadanga</option>
-                                                    <option value="Comilla">Comilla</option>
-                                                    <option value="Cox's Bazar">Cox's Bazar</option>
-                                                    <option value="Dhaka">Dhaka</option>
-                                                    <option value="Dinajpur">Dinajpur</option>
-                                                    <option value="Faridpur">Faridpur</option>
-                                                    <option value="Feni">Feni</option>
-                                                    <option value="Gaibandha">Gaibandha</option>
-                                                    <option value="Gazipur">Gazipur</option>
-                                                    <option value="Gopalganj">Gopalganj</option>
-                                                    <option value="Habiganj">Habiganj</option>
-                                                    <option value="Jamalpur">Jamalpur</option>
-                                                    <option value="Jashore">Jashore</option>
-                                                    <option value="Jhalokathi">Jhalokathi</option>
-                                                    <option value="Jhenaidah">Jhenaidah</option>
-                                                    <option value="Joypurhat">Joypurhat</option>
-                                                    <option value="Khagrachhari">Khagrachhari</option>
-                                                    <option value="Khulna">Khulna</option>
-                                                    <option value="Kishoreganj">Kishoreganj</option>
-                                                    <option value="Kurigram">Kurigram</option>
-                                                    <option value="Kushtia">Kushtia</option>
-                                                    <option value="Lakshmipur">Lakshmipur</option>
-                                                    <option value="Lalmonirhat">Lalmonirhat</option>
-                                                    <option value="Madaripur">Madaripur</option>
-                                                    <option value="Magura">Magura</option>
-                                                    <option value="Manikganj">Manikganj</option>
-                                                    <option value="Meherpur">Meherpur</option>
-                                                    <option value="Moulvibazar">Moulvibazar</option>
-                                                    <option value="Munshiganj">Munshiganj</option>
-                                                    <option value="Mymensingh">Mymensingh</option>
-                                                    <option value="Naogaon">Naogaon</option>
-                                                    <option value="Narail">Narail</option>
-                                                    <option value="Narayanganj">Narayanganj</option>
-                                                    <option value="Narsingdi">Narsingdi</option>
-                                                    <option value="Natore">Natore</option>
-                                                    <option value="Netrokona">Netrokona</option>
-                                                    <option value="Nilphamari">Nilphamari</option>
-                                                    <option value="Noakhali">Noakhali</option>
-                                                    <option value="Pabna">Pabna</option>
-                                                    <option value="Panchagarh">Panchagarh</option>
-                                                    <option value="Patuakhali">Patuakhali</option>
-                                                    <option value="Pirojpur">Pirojpur</option>
-                                                    <option value="Rajbari">Rajbari</option>
-                                                    <option value="Rajshahi">Rajshahi</option>
-                                                    <option value="Rangamati">Rangamati</option>
-                                                    <option value="Rangpur">Rangpur</option>
-                                                    <option value="Satkhira">Satkhira</option>
-                                                    <option value="Shariatpur">Shariatpur</option>
-                                                    <option value="Sherpur">Sherpur</option>
-                                                    <option value="Sirajganj">Sirajganj</option>
-                                                    <option value="Sunamganj">Sunamganj</option>
-                                                    <option value="Sylhet">Sylhet</option>
-                                                    <option value="Tangail">Tangail</option>
-                                                    <option value="Thakurgaon">Thakurgaon</option>
-                                                </select>
+                                            <!-- Total Capacity -->
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="total-capacity">Total Capacity Of the Hotel/Property</label>
+                                                    <input type="text" class="form-control" id="total-capacity" name="total_capacity" placeholder="Capacity" value="{{ old('total_capacity') }}">
+                                                </div>
                                             </div>
-                                        </div>
 
-
-{{--                                        <div class="col-md-6 col-lg-4 col-xxl-3">--}}
-{{--                                            <div class="form-group">--}}
-{{--                                                <label for="address_area" class="form-label">Area</label>--}}
-{{--                                                <input type="text" class="form-control" id="address_area" name="address_area">--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-
-                                        <div class="col-md-6 col-lg-4 col-xxl-3">
-                                            <div class="form-group">
-                                                <label for="address_landmark" class="form-label">Landmark</label>
-                                                <input type="text" class="form-control" id="address_landmark" name="address_landmark">
+                                            <!-- Total Car Parking -->
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="total-car-parking">Total Car Parking’s</label>
+                                                    <input type="text" class="form-control" id="total-car-parking" name="total_car_parking" placeholder="Total Car Parking’s" value="{{ old('total_car_parking') }}">
+                                                </div>
                                             </div>
-                                        </div>
 
-
-
-                                        <!-- File Uploads -->
-{{--                                        <div class="col-md-6 col-lg-4 col-xxl-3">--}}
-{{--                                            <div class="form-group">--}}
-{{--                                                <label class="form-label" for="profile-picture">Profile Picture</label>--}}
-{{--                                                <input type="file" class="form-control" id="profile-picture" name="profile_picture">--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-
-                                        <div class="col-md-6 col-lg-4 col-xxl-3">
-                                            <div class="form-group">
-                                                <label class="form-label" for="logo">Hotel Logo</label>
-                                                <input type="file" class="form-control" id="logo" name="logo">
+                                            <!-- Reception -->
+                                            <div class="col-md-6 col-lg-4 col-xxl-3 pets-section">
+                                                <div class="form-group">
+                                                    <label class="form-label">Reception (If any)</label>
+                                                    <div class="radio-group">
+                                                        <label>
+                                                            <input type="radio" name="reception" value="yes" class="bar-radio-yes" data-target="Reception-input" {{ old('reception') === 'yes' ? 'checked' : '' }}>
+                                                            Yes
+                                                        </label>
+                                                        <label>
+                                                            <input type="radio" name="reception" value="no" class="bar-radio-no" data-target="Reception-input" {{ old('reception','no') === 'no' ? 'checked' : '' }}>
+                                                            No
+                                                        </label>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
 
-{{--                                        <div class="col-md-6 col-lg-4 col-xxl-3">--}}
-{{--                                            <div class="form-group">--}}
-{{--                                                <label class="form-label" for="hotel-pictures">Hotel Pictures (Multiple Images)</label>--}}
-{{--                                                <input type="file" class="form-control" id="hotel-pictures" name="hotel_pictures[]" multiple>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-
-{{--                                        <div class="col-md-6 col-lg-4 col-xxl-3">--}}
-{{--                                            <div class="form-group">--}}
-{{--                                                <label class="form-label" for="bank-check-picture">Bank Check Picture</label>--}}
-{{--                                                <input type="file" class="form-control" id="bank-check-picture" name="bank_check_picture">--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-
-                                        <!-- Additional Information -->
-                                        <div class="col-md-6 col-lg-4 col-xxl-3">
-                                            <div class="form-group">
-                                                <label class="form-label" for="nid">NID</label>
-                                                <input type="text" class="form-control" id="nid" name="nid" placeholder="NID">
+                                            <!-- Total Lifts -->
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="total-lifts">Total Number of Lifts / Elevators</label>
+                                                    <select class="form-select mb-3" id="total-lifts" name="total_lifts">
+                                                        <option value="">Select Number of Lifts / Elevators</option>
+                                                        @for ($i = 1; $i <= 20; $i++)
+                                                            <option value="{{ $i }}" {{ old('total_lifts') == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                                        @endfor
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
 
-{{--                                        <div class="col-md-6 col-lg-4 col-xxl-3">--}}
-{{--                                            <div class="form-group">--}}
-{{--                                                <label class="form-label" for="trade_license_bin_tin">Trade License / BIN / TIN</label>--}}
-{{--                                                <input type="text" class="form-control" id="trade_license_bin_tin" name="trade_license_bin_tin" placeholder="Trade License / BIN / TIN">--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-
-{{--                                        <div class="col-md-6 col-lg-4 col-xxl-3">--}}
-{{--                                            <div class="form-group">--}}
-{{--                                                <label class="form-label" for="bank_details">Bank Details</label>--}}
-{{--                                                <input type="text" class="form-control" id="bank_details" name="bank_details" placeholder="Bank Details">--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-                                        <div class="col-md-6 col-lg-4 col-xxl-3">
-                                            <div class="form-group">
-                                                <label for="password" class="form-label">Password <span style="font-size: 11px;color:red">(Password must be 8 Characters Minimum)</span></label>
-                                                <input type="password" class="form-control" id="password" name="password" required placeholder="Password must be 8 Characters Minimum">
+                                            <!-- Total Generators -->
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="total-generators">Total Number of Generators</label>
+                                                    <select class="form-select mb-3" id="total-generators" name="total_generators">
+                                                        <option value="">Select Number of Generators</option>
+                                                        @for ($i = 1; $i <= 20; $i++)
+                                                            <option value="{{ $i }}" {{ old('total_generators') == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                                        @endfor
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="col-sm-12">
-                                            <div class="form-group">
-                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                            <!-- Total Fire Exits -->
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="total-fire-exits">Total Fire Exits</label>
+                                                    <select class="form-select mb-3" id="total-fire-exits" name="total_fire_exits">
+                                                        <option value="">Select Total Fire Exits</option>
+                                                        @for ($i = 1; $i <= 10; $i++)
+                                                            <option value="{{ $i }}" {{ old('total_fire_exits') == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                                        @endfor
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+
+                                            <!-- Wheelchair Access -->
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div class="form-group">
+                                                    <label class="form-label">Wheel Chair Access Gate (If Any)</label>
+                                                    <div class="radio-group" data-kids-zone="2">
+                                                        <div>
+                                                            <label>
+                                                                <input type="radio" name="wheelchair_access" value="yes" class="radio-yes" {{ old('wheelchair_access') === 'yes' ? 'checked' : '' }}>
+                                                                Yes
+                                                            </label>
+                                                        </div>
+                                                        <div>
+                                                            <label>
+                                                                <input type="radio" name="wheelchair_access" value="no" class="radio-no" {{ old('wheelchair_access','no') === 'no' ? 'checked' : '' }}>
+                                                                No
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Housekeeping counters -->
+                                            <div class="col-lg-8">
+                                                <label class="form-label">Total House Keeping & Cleaners</label>
+                                                <div class="counter-wrapper">
+                                                    <div class="counter-card">
+                                                        <div>
+                                                            <h4>Total Male</h4>
+                                                            <div class="counter">
+                                                                <button type="button" class="btn decrease-male">-</button>
+                                                                <span class="count male-count">{{ old('male_housekeeping', 0) }}</span>
+                                                                <input type="hidden" name="male_housekeeping" value="{{ old('male_housekeeping', 0) }}" class="male-input">
+                                                                <button type="button" class="btn increase-male">+</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="counter-card">
+                                                        <div>
+                                                            <h4>Total Female</h4>
+                                                            <div class="counter">
+                                                                <button type="button" class="btn decrease-female">-</button>
+                                                                <span class="count female-count">{{ old('female_housekeeping', 0) }}</span>
+                                                                <input type="hidden" name="female_housekeeping" value="{{ old('female_housekeeping', 0) }}" class="female-input">
+                                                                <button type="button" class="btn increase-female">+</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="total-box">
+                                                        Total House Keeping & Cleaners <br>
+                                                        <span class="total-count">
+                                {{ (old('male_housekeeping', 0)) + (old('female_housekeeping', 0)) }}
+                            </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Kids Zone -->
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div class="form-group">
+                                                    <label class="form-label">Kids Zone</label>
+                                                    <div class="radio-group" data-kids-zone="1">
+                                                        <div>
+                                                            <label>
+                                                                <input type="radio" name="kids_zone" value="yes" class="radio-yes" {{ old('kids_zone') === 'yes' ? 'checked' : '' }}>
+                                                                Yes
+                                                            </label>
+                                                        </div>
+                                                        <div>
+                                                            <label>
+                                                                <input type="radio" name="kids_zone" value="no" class="radio-no" {{ old('kids_zone','no') === 'no' ? 'checked' : '' }}>
+                                                                No
+                                                            </label>
+                                                        </div>
+                                                        <div class="select-container" style="display: {{ old('kids_zone') === 'yes' ? 'block' : 'none' }};">
+                                                            <label>Select number of kids:</label>
+                                                            <select class="form-select number-select" name="kids_zone_count">
+                                                                <option value="">Select number</option>
+                                                                @for ($i = 1; $i <= 5; $i++)
+                                                                    <option value="{{ $i }}" {{ old('kids_zone_count') == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                                                @endfor
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- View -->
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="view-from-hotel">View from Hotel / Property</label>
+                                                    <input type="text" class="form-control" id="view-from-hotel" name="view_from_hotel" placeholder="City View, Beach View, Hill View, etc." value="{{ old('view_from_hotel') }}">
+                                                </div>
+                                            </div>
+
+                                            <!-- Security Guards -->
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="security-guards">Number of Security Guards</label>
+                                                    <select class="form-select mb-3" id="security-guards" name="security_guards">
+                                                        <option value="">Select Number of Security Guards</option>
+                                                        @for ($i = 1; $i <= 20; $i++)
+                                                            <option value="{{ $i }}" {{ old('security_guards') == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                                        @endfor
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <!-- Cafe & Restaurants -->
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div id="customDynamicForm2024">
+                                                    <div class="mb-4">
+                                                        <label class="form-label">Cafe & Restaurants (If any)</label>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="cafe_restaurants" id="customRadioYes2024" value="yes" {{ old('cafe_restaurants') === 'yes' ? 'checked' : '' }}>
+                                                            <label class="form-check-label" for="customRadioYes2024">Yes</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="cafe_restaurants" id="customRadioNo2024" value="no" {{ old('cafe_restaurants','no') === 'no' ? 'checked' : '' }}>
+                                                            <label class="form-check-label" for="customRadioNo2024">No</label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div id="customSelectContainer2024" class="mb-4 {{ old('cafe_restaurants') === 'yes' ? '' : 'custom-form-hidden' }}">
+                                                        <label for="customOptionSelect2024" class="form-label">Select Total Number of Cafe & Restaurants</label>
+                                                        <select class="form-select" id="customOptionSelect2024" name="cafe_restaurants_count">
+                                                            <option value="">Select a value</option>
+                                                            @for ($i = 1; $i <= 10; $i++)
+                                                                <option value="{{ $i }}" {{ old('cafe_restaurants_count') == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                                            @endfor
+                                                        </select>
+                                                    </div>
+
+                                                    <div id="customInputContainer2024" class="custom-form-hidden">
+                                                        <!-- Dynamic Input Fields Will Be Generated Here -->
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Pool -->
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div class="form-group">
+                                                    <label class="form-label">Pool (If any)</label>
+                                                    <div class="radio-group" data-kids-zone="2">
+                                                        <div>
+                                                            <label><input type="radio" name="pool" value="yes" class="radio-yes" {{ old('pool') === 'yes' ? 'checked' : '' }}> Yes</label>
+                                                        </div>
+                                                        <div>
+                                                            <label><input type="radio" name="pool" value="no" class="radio-no" {{ old('pool','no') === 'no' ? 'checked' : '' }}> No</label>
+                                                        </div>
+                                                        <div class="select-container" style="display: {{ old('pool') === 'yes' ? 'block' : 'none' }};">
+                                                            <label>Select Pool Number</label>
+                                                            <select class="form-select number-select" name="pool_count">
+                                                                <option value="">Select number</option>
+                                                                @for ($i = 1; $i <= 5; $i++)
+                                                                    <option value="{{ $i }}" {{ old('pool_count') == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                                                @endfor
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Bar -->
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div class="form-group">
+                                                    <label class="form-label">Bar (If any)</label>
+                                                    <div class="radio-group" data-kids-zone="2">
+                                                        <div>
+                                                            <label><input type="radio" name="bar" value="yes" class="radio-yes" {{ old('bar') === 'yes' ? 'checked' : '' }}> Yes</label>
+                                                        </div>
+                                                        <div>
+                                                            <label><input type="radio" name="bar" value="no" class="radio-no" {{ old('bar','no') === 'no' ? 'checked' : '' }}> No</label>
+                                                        </div>
+                                                        <div class="select-container" style="display: {{ old('bar') === 'yes' ? 'block' : 'none' }};">
+                                                            <label>Select Total Number of Bar</label>
+                                                            <select class="form-select number-select" name="bar_count">
+                                                                <option value="">Select number</option>
+                                                                @for ($i = 1; $i <= 5; $i++)
+                                                                    <option value="{{ $i }}" {{ old('bar_count') == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                                                @endfor
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Gym -->
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div class="form-group">
+                                                    <label class="form-label">Gym (If any)</label>
+                                                    <div class="radio-group" data-kids-zone="2">
+                                                        <div>
+                                                            <label><input type="radio" name="gym" value="yes" class="radio-yes" {{ old('gym') === 'yes' ? 'checked' : '' }}> Yes</label>
+                                                        </div>
+                                                        <div>
+                                                            <label><input type="radio" name="gym" value="no" class="radio-no" {{ old('gym','no') === 'no' ? 'checked' : '' }}> No</label>
+                                                        </div>
+                                                        <div class="select-container" style="display: {{ old('gym') === 'yes' ? 'block' : 'none' }};">
+                                                            <label>Select Total Number of Gym</label>
+                                                            <select class="form-select number-select" name="gym_count">
+                                                                <option value="">Select number</option>
+                                                                @for ($i = 1; $i <= 5; $i++)
+                                                                    <option value="{{ $i }}" {{ old('gym_count') == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                                                @endfor
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Party Center -->
+                                            <div class="col-md-6 col-lg-4 col-xxl-3 pets-section">
+                                                <div class="form-group">
+                                                    <label class="form-label">Party Center (If any)</label>
+                                                    <div class="radio-group">
+                                                        <label>
+                                                            <input type="radio" name="party_center" value="yes" class="bar-radio-yes" data-target="Party-input" {{ old('party_center') === 'yes' ? 'checked' : '' }}>
+                                                            Yes
+                                                        </label>
+                                                        <label>
+                                                            <input type="radio" name="party_center" value="no" class="bar-radio-no" data-target="Party-input" {{ old('party_center','no') === 'no' ? 'checked' : '' }}>
+                                                            No
+                                                        </label>
+                                                    </div>
+                                                    <div class="input-group {{ old('party_center') === 'yes' ? '' : 'hidden' }}" id="Party-input">
+                                                        <textarea class="form-control" name="party_center_details" placeholder="Ex: 1500 SFT" style="height: 50px;">{{ old('party_center_details') }}</textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Conference Hall -->
+                                            <div class="col-md-6 col-lg-4 col-xxl-3 pets-section">
+                                                <div class="form-group">
+                                                    <label class="form-label">Conference Hall (If any)</label>
+                                                    <div class="radio-group">
+                                                        <label>
+                                                            <input type="radio" name="conference_hall" value="yes" class="bar-radio-yes" data-target="Conference-input" {{ old('conference_hall') === 'yes' ? 'checked' : '' }}>
+                                                            Yes
+                                                        </label>
+                                                        <label>
+                                                            <input type="radio" name="conference_hall" value="no" class="bar-radio-no" data-target="Conference-input" {{ old('conference_hall','no') === 'no' ? 'checked' : '' }}>
+                                                            No
+                                                        </label>
+                                                    </div>
+                                                    <div class="input-group {{ old('conference_hall') === 'yes' ? '' : 'hidden' }}" id="Conference-input">
+                                                        <textarea class="form-control" name="conference_hall_details" placeholder="Ex: 1500 SFT" style="height: 50px;">{{ old('conference_hall_details') }}</textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+
+                                            </div>
+                                            <!-- Password -->
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div class="form-group">
+                                                    <label for="email" class="form-label">
+                                                        Email <span style="font-size: 11px;color:red"></span>
+                                                    </label>
+                                                    <input type="email" class="form-control" id="email" name="email"
+                                                           placeholder="Enter Email" value="{{ old('email') }}" required>
+
+                                                </div>
+                                            </div>
+                                            <!-- Password -->
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div class="form-group">
+                                                    <label for="password" class="form-label">
+                                                        Password <span style="font-size: 11px;color:red">(Password must be 8 Characters Minimum)</span>
+                                                    </label>
+                                                    <input type="password" class="form-control" id="password" name="password" minlength="8" required placeholder="Password must be 8 Characters Minimum">
+                                                </div>
+                                            </div>
+
+
+                                            <!-- Submit -->
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                </div>
+                                            </div>
+
+                                        </div> <!-- /.row -->
+                                    </div> <!-- /.card-inner -->
+                                </div> <!-- /.card -->
+                            </form>
+
+                            <!-- ====== Minimal scripts (create-form only; no edit bindings) ====== -->
+                            <script>
+                                // Housekeeping counters
+                                const maleCountEl = document.querySelector(".male-count");
+                                const femaleCountEl = document.querySelector(".female-count");
+                                const totalCountEl = document.querySelector(".total-count");
+                                const maleInput = document.querySelector(".male-input");
+                                const femaleInput = document.querySelector(".female-input");
+
+                                let maleCount = parseInt(maleCountEl?.textContent || '0', 10);
+                                let femaleCount = parseInt(femaleCountEl?.textContent || '0', 10);
+
+                                function updateTotalCount() {
+                                    if (totalCountEl) totalCountEl.textContent = maleCount + femaleCount;
+                                    if (maleInput) maleInput.value = maleCount;
+                                    if (femaleInput) femaleInput.value = femaleCount;
+                                }
+                                document.querySelector(".increase-male")?.addEventListener("click", () => {
+                                    maleCount++; if (maleCountEl) maleCountEl.textContent = maleCount; updateTotalCount();
+                                });
+                                document.querySelector(".decrease-male")?.addEventListener("click", () => {
+                                    if (maleCount > 0) { maleCount--; if (maleCountEl) maleCountEl.textContent = maleCount; updateTotalCount(); }
+                                });
+                                document.querySelector(".increase-female")?.addEventListener("click", () => {
+                                    femaleCount++; if (femaleCountEl) femaleCountEl.textContent = femaleCount; updateTotalCount();
+                                });
+                                document.querySelector(".decrease-female")?.addEventListener("click", () => {
+                                    if (femaleCount > 0) { femaleCount--; if (femaleCountEl) femaleCountEl.textContent = femaleCount; updateTotalCount(); }
+                                });
+                            </script>
+
+                            <script>
+                                // Kids Zone / Pool / Bar / Gym toggle for number selects
+                                class KidsZoneManager {
+                                    constructor() { this.initializeAll(); }
+                                    initializeAll() {
+                                        document.querySelectorAll('[data-kids-zone]').forEach(section => this.bind(section));
+                                    }
+                                    bind(section) {
+                                        const radios = section.querySelectorAll('input[type="radio"]');
+                                        const selectContainer = section.querySelector('.select-container');
+                                        const numberSelect = section.querySelector('.number-select');
+                                        radios.forEach(r => {
+                                            r.addEventListener('change', () => {
+                                                if (!selectContainer || !numberSelect) return;
+                                                if (r.value === 'yes' && r.checked) {
+                                                    selectContainer.style.display = 'block';
+                                                } else if (r.value === 'no' && r.checked) {
+                                                    selectContainer.style.display = 'none';
+                                                    numberSelect.value = '';
+                                                }
+                                            });
+                                        });
+                                    }
+                                }
+                                new KidsZoneManager();
+                            </script>
+
+                            <script>
+                                // Show/hide Party/Conference details
+                                document.addEventListener("DOMContentLoaded", function () {
+                                    document.querySelectorAll(".radio-group input[type='radio']").forEach(function (radio) {
+                                        radio.addEventListener("change", function () {
+                                            const targetId = this.getAttribute("data-target");
+                                            if (!targetId) return;
+                                            const targetInput = document.getElementById(targetId);
+                                            if (targetInput) {
+                                                if (this.value === "yes" && this.checked) {
+                                                    targetInput.classList.remove("hidden");
+                                                } else if (this.value === "no" && this.checked) {
+                                                    targetInput.classList.add("hidden");
+                                                }
+                                            }
+                                        });
+                                    });
+                                });
+                            </script>
+
+                            <script>
+                                // Cafe & Restaurants dynamic fields
+                                const cafeRadios = document.querySelectorAll('input[name="cafe_restaurants"]');
+                                const cafeCountContainer = document.getElementById('customSelectContainer2024');
+                                const cafeCountSelect = document.getElementById('customOptionSelect2024');
+                                const cafeNamesContainer = document.getElementById('customInputContainer2024');
+
+                                cafeRadios.forEach(r => {
+                                    r.addEventListener('change', (e) => {
+                                        if (e.target.value === 'yes') {
+                                            cafeCountContainer?.classList.remove('custom-form-hidden');
+                                        } else {
+                                            cafeCountContainer?.classList.add('custom-form-hidden');
+                                            cafeNamesContainer?.classList.add('custom-form-hidden');
+                                            if (cafeCountSelect) cafeCountSelect.value = '';
+                                            if (cafeNamesContainer) cafeNamesContainer.innerHTML = '';
+                                        }
+                                    });
+                                });
+
+                                cafeCountSelect?.addEventListener('change', (e) => {
+                                    const count = parseInt(e.target.value || '0', 10);
+                                    if (!cafeNamesContainer) return;
+                                    cafeNamesContainer.innerHTML = '';
+                                    if (count > 0) {
+                                        for (let i = 1; i <= count; i++) {
+                                            const wrap = document.createElement('div');
+                                            wrap.className = 'mb-3';
+                                            wrap.innerHTML = `
+                    <label class="form-label" for="cafe_name_${i}"> Cafe & restaurants Name ${i}</label>
+                    <input type="text" class="form-control" id="cafe_name_${i}" name="cafe_names[]" placeholder="Enter Cafe & restaurants Name ${i}">
+                `;
+                                            cafeNamesContainer.appendChild(wrap);
+                                        }
+                                        cafeNamesContainer.classList.remove('custom-form-hidden');
+                                    } else {
+                                        cafeNamesContainer.classList.add('custom-form-hidden');
+                                    }
+                                });
+                            </script>
 
 
 

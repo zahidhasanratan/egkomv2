@@ -10,7 +10,10 @@ use App\Models\Property;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use function App\Http\Controllers\Vendor;
 
@@ -140,6 +143,216 @@ class DashboardController extends Controller
         return view('auth.super_admin.vendorInfo', compact('property'));
     }
 
+    public function vendor_store(Request $request)
+    {
+        Log::info('vendor_store() hit', ['url' => $request->fullUrl()]);
+
+        // 1) Validate what the form actually sends
+        $request->validate([
+            // Vendor
+            'property_name' => 'required|string|max:255',       // used as Vendor.hotel_name and Property.property_name
+            'email'         => 'required|email|max:255|unique:vendors,email',
+            'password'      => 'required|string|min:8',
+
+            // Property basics
+            'country_name'      => 'nullable|string|max:100',
+            'district_name'     => 'nullable|string|max:100',
+            'city_town_village' => 'nullable|string|max:255',
+            'postcode'          => 'nullable|string|max:50',
+            'house_number'      => 'nullable|string|max:100',
+            'road_number_name'  => 'nullable|string|max:255',
+
+            'company_logo'      => 'nullable|image|max:5120',
+
+            'total_capacity'     => 'nullable|integer|min:0',
+            'total_car_parking'  => 'nullable|integer|min:0',
+            'reception'          => 'nullable|in:yes,no',
+            'total_lifts'        => 'nullable|integer|min:0',
+            'total_generators'   => 'nullable|integer|min:0',
+            'total_fire_exits'   => 'nullable|integer|min:0',
+            'wheelchair_access'  => 'nullable|in:yes,no',
+
+            'male_housekeeping'   => 'nullable|integer|min:0',
+            'female_housekeeping' => 'nullable|integer|min:0',
+
+            'kids_zone'        => 'nullable|in:yes,no',
+            'kids_zone_count'  => 'nullable|integer|min:0',
+
+            'view_from_hotel'  => 'nullable|string|max:255',
+            'security_guards'  => 'nullable|integer|min:0',
+
+            'cafe_restaurants'        => 'nullable|in:yes,no',
+            'cafe_restaurants_count'  => 'nullable|integer|min:0',
+            'cafe_restaurant_names'   => 'nullable|array',
+            'cafe_restaurant_names.*' => 'nullable|string|max:255',
+            'cafe_names'              => 'nullable|array',
+            'cafe_names.*'            => 'nullable|string|max:255',
+
+            'pool'       => 'nullable|in:yes,no',
+            'pool_count' => 'nullable|integer|min:0',
+
+            'bar'        => 'nullable|in:yes,no',
+            'bar_count'  => 'nullable|integer|min:0',
+
+            'gym'        => 'nullable|in:yes,no',
+            'gym_count'  => 'nullable|integer|min:0',
+
+            'party_center'         => 'nullable|in:yes,no',
+            'party_center_details' => 'nullable|string|max:2000',
+
+            'conference_hall'         => 'nullable|in:yes,no',
+            'conference_hall_details' => 'nullable|string|max:2000',
+        ]);
+
+        // helpers
+        $toInt  = fn($v, $def = 0) => (is_numeric($v) && (int)$v >= 0) ? (int)$v : $def;
+        $asBool = fn($yesNo) => $yesNo === 'yes';
+        $str    = fn($v, $fallback = '') => ($v !== null ? (string)$v : $fallback);
+
+        // Accept either cafe_restaurant_names[] or cafe_names[]
+        $cafeNames = $request->has('cafe_restaurant_names')
+            ? (array)$request->input('cafe_restaurant_names', [])
+            : (array)$request->input('cafe_names', []);
+        $cafeNames = array_values(array_filter(array_map('trim', $cafeNames)));
+
+        // Optional logo upload
+        $logoPath = null;
+        if ($request->hasFile('company_logo') && $request->file('company_logo')->isValid()) {
+            $file     = $request->file('company_logo');
+            $fileName = time().'_'.preg_replace('/\s+/', '_', $file->getClientOriginalName());
+            $dest     = public_path('storage/logos');
+            if (!is_dir($dest)) { @mkdir($dest, 0777, true); }
+            $file->move($dest, $fileName);
+            $logoPath = 'storage/logos/'.$fileName;
+        }
+
+        DB::beginTransaction();
+        try {
+            // 2) Create Vendor
+            $vendor = new Vendor();
+            $vendor->hotel_name = $request->input('property_name');
+            $vendor->email      = $request->input('email');
+            $vendor->password   = bcrypt($request->input('password'));
+
+            // If your vendors table has other NOT NULL columns, set safe defaults
+            $maybeCols = [
+                'phone','contact_person_name','contact_person_designation',
+                'address_house','address_city','address_district','address_landmark',
+                'nid','profile_picture','logo','bank_check_picture'
+            ];
+            foreach ($maybeCols as $col) {
+                if (Schema::hasColumn('vendors', $col) && $vendor->{$col} === null) {
+                    $vendor->{$col} = ''; // empty string to satisfy NOT NULL
+                }
+            }
+
+            $vendor->save();
+            Log::info('Vendor inserted', ['vendor_id' => $vendor->id]);
+
+            // Optional readable code
+            if (Schema::hasColumn('vendors', 'vendorId')) {
+                $vendor->vendorId = 'Ven-'.$vendor->id;
+                $vendor->save();
+            }
+
+            // 3) Create Property tied to Vendor
+            $property = new Property();
+            $property->vendor_id             = $vendor->id;
+            $property->property_name         = $str($request->input('property_name'));
+            $property->property_category     = $str($request->input('property_category'), 'Hotels'); // safe default
+            $property->property_type         = $str($request->input('property_type'), '');
+
+            // arrays (your casts will JSON them)
+            $property->room_types            = [];
+            $property->apartments            = [];
+            $property->cafe_restaurant_names = $cafeNames;
+
+            $property->country_name          = $str($request->input('country_name'), '');
+            $property->district_name         = $str($request->input('district_name'), '');
+            $property->city_town_village     = $str($request->input('city_town_village'), '');
+            $property->postcode              = $str($request->input('postcode'), '');
+            $property->house_number          = $str($request->input('house_number'), '');
+            $property->road_number_name      = $str($request->input('road_number_name'), '');
+
+            $property->building_age          = $toInt($request->input('building_age'), 0);
+            $property->building_size         = $toInt($request->input('building_size'), 0);
+            $property->building_stories      = $toInt($request->input('building_stories'), 0);
+            $property->landmark_details      = $str($request->input('landmark_details'), '');
+            $property->google_map_link       = $str($request->input('google_map_link'), '');
+
+            $property->company_logo          = $logoPath ?: '';
+
+            $property->apartment_count       = $toInt($request->input('apartment_count'), 0);
+
+            $property->total_capacity        = $toInt($request->input('total_capacity'), 0);
+            $property->car_parking           = $toInt($request->input('total_car_parking'), 0);
+            $property->has_reception         = $asBool($request->input('reception', 'no'));
+            $property->elevators             = $toInt($request->input('total_lifts'), 0);
+            $property->generators            = $toInt($request->input('total_generators'), 0);
+            $property->fire_exits            = $toInt($request->input('total_fire_exits'), 0);
+            $property->wheelchair_access     = $asBool($request->input('wheelchair_access', 'no'));
+
+            $property->male_housekeeping     = $toInt($request->input('male_housekeeping'), 0);
+            $property->female_housekeeping   = $toInt($request->input('female_housekeeping'), 0);
+
+            $property->has_kids_zone         = $asBool($request->input('kids_zone', 'no'));
+            $property->kids_zone_count       = $toInt($request->input('kids_zone_count'), 0);
+
+            $property->view_type             = $str($request->input('view_from_hotel'), '');
+            $property->security_guards       = $toInt($request->input('security_guards'), 0);
+
+            $property->has_cafe_restaurant   = $asBool($request->input('cafe_restaurants', 'no'));
+            $property->cafe_restaurant_count = $toInt($request->input('cafe_restaurants_count'), 0);
+
+            $property->has_pool              = $asBool($request->input('pool', 'no'));
+            $property->pool_count            = $toInt($request->input('pool_count'), 0);
+
+            $property->has_bar               = $asBool($request->input('bar', 'no'));
+            $property->bar_count             = $toInt($request->input('bar_count'), 0);
+
+            $property->has_gym               = $asBool($request->input('gym', 'no'));
+            $property->gym_count             = $toInt($request->input('gym_count'), 0);
+
+            $property->has_party_center      = $asBool($request->input('party_center', 'no'));
+            $property->party_center_details  = $str($request->input('party_center_details'), '');
+
+            $property->has_conference_hall     = $asBool($request->input('conference_hall', 'no'));
+            $property->conference_hall_details = $str($request->input('conference_hall_details'), '');
+
+            $property->status                = 'submitted';
+
+            $property->save();
+            Log::info('Property inserted', ['property_id' => $property->id, 'vendor_id' => $vendor->id]);
+
+            DB::commit();
+            return back()->with('success', 'Vendor and property created successfully!');
+        } catch (QueryException $qe) {
+            DB::rollBack();
+            $dbMsg = $qe->errorInfo[2] ?? $qe->getMessage();
+            Log::error('DB error vendor_store', [
+                'driver_message' => $dbMsg,
+                'sql_state'      => $qe->errorInfo[0] ?? null,
+                'code'           => $qe->errorInfo[1] ?? null,
+            ]);
+            return back()
+                ->withErrors([
+                    'error'      => 'Failed to create vendor/property.',
+                    'db_message' => $dbMsg,
+                ])
+                ->withInput();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('PHP error vendor_store', [
+                'message' => $e->getMessage(),
+                'file'    => $e->getFile(),
+                'line'    => $e->getLine(),
+            ]);
+            return back()
+                ->withErrors(['error' => 'Failed to create vendor/property.'])
+                ->withInput();
+        }
+    }
+
     public function vendorInfoStore(Request $request)
     {
         $vendorId = $request->vendor_id;
@@ -237,85 +450,6 @@ class DashboardController extends Controller
 
 
 
-    public function vendor_store(Request $request)
-    {
-        $validated = $request->validate([
-            'hotel_name' => 'required|string|max:255',
-            'contact_person_name' => 'required|string|max:255',
-//            'contact_person_dob' => 'nullable|date',
-            'contact_person_designation' => 'nullable|string|max:255',
-            'phone' => 'required|string|max:15',
-            'email' => 'required|email|max:255|unique:vendors',
-            'address_house' => 'nullable|string|max:255',
-            'address_city' => 'nullable|string|max:255',
-            'address_district' => 'nullable|string|max:255',
-//            'address_area' => 'nullable|string|max:255',
-            'address_landmark' => 'nullable|string|max:255',
-            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-            'hotel_pictures' => 'nullable|array',
-            'hotel_pictures.*' => 'image|mimes:jpeg,png,jpg,gif',
-            'bank_check_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-            'nid' => 'nullable|string|max:255',
-//            'trade_license_bin_tin' => 'nullable|string|max:255',
-//            'bank_details' => 'nullable|string|max:255',
-            'password' => 'required|string|min:8', // Validate password
-        ]);
-
-        // Handle file uploads
-        $profilePicture = null;
-        if ($request->hasFile('profile_picture')) {
-            $profilePicture = $request->file('profile_picture')->store('profile_pictures', 'public');
-        }
-
-        $logo = null;
-        if ($request->hasFile('logo')) {
-            $file = $request->file('logo');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('hotel_logos'), $filename);
-            $logo = 'hotel_logos/' . $filename;
-        }
-
-
-        $hotelPictures = [];
-        if ($request->hasFile('hotel_pictures')) {
-            foreach ($request->file('hotel_pictures') as $file) {
-                $hotelPictures[] = $file->store('hotel_pictures', 'public');
-            }
-        }
-
-        $bankCheckPicture = null;
-        if ($request->hasFile('bank_check_picture')) {
-            $bankCheckPicture = $request->file('bank_check_picture')->store('bank_check_pictures', 'public');
-        }
-
-        // Create the vendor
-        $vendor = Vendor::create([
-            'hotel_name' => $validated['hotel_name'],
-            'contact_person_name' => $validated['contact_person_name'],
-//            'contact_person_dob' => $validated['contact_person_dob'],
-            'contact_person_designation' => $validated['contact_person_designation'],
-            'phone' => $validated['phone'],
-            'email' => $validated['email'],
-            'address_house' => $validated['address_house'],
-            'address_city' => $validated['address_city'],
-            'address_district' => $validated['address_district'],
-//            'address_area' => $validated['address_area'],
-            'address_landmark' => $validated['address_landmark'],
-            'profile_picture' => $profilePicture,
-            'logo' => $logo,
-            'hotel_pictures' => json_encode($hotelPictures), // Save hotel pictures as JSON
-            'bank_check_picture' => $bankCheckPicture,
-            'nid' => $validated['nid'],
-//            'trade_license_bin_tin' => $validated['trade_license_bin_tin'],
-//            'bank_details' => $validated['bank_details'],
-            'password' => bcrypt($validated['password']), // Hash the password
-        ]);
-        $vendor->vendorId = 'Ven-' . $vendor->id; // Create the vendorId
-        $vendor->save();
-        // Redirect to the vendor list page with a success message
-        return redirect()->route('super-admin.vendor.index')->with('success', 'Vendor created successfully!');
-    }
 
     public function vendor_edit($id)
     {

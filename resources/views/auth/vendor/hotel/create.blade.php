@@ -39,7 +39,7 @@
                                         <div class="tab-pane active" id="tabItem3">
                                             <div class="row gy-4">
                                                 <div class="col-md-12 col-lg-12 col-xxl-3">
-                                                    <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                    <div class="col-md-6 col-lg-4 col-xxl-12">
                                                         <div class="form-group">
                                                             <label for="division" class="form-label">Select Property
                                                                 Category</label>
@@ -55,7 +55,7 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                    <div class="col-md-6 col-lg-4 col-xxl-12">
                                                         <div class="form-group">
                                                             <label for="property_type" id="districtContainer" class="form-label">Property Type</label>
                                                             <select name="property_type" class="form-control">
@@ -68,7 +68,7 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6 col-lg-4 col-xxl-3" id="placeCheckboxList"
+                                                    <div class="col-md-6 col-lg-4 col-xxl-12" id="placeCheckboxList"
                                                          style="display: none;">
                                                         <div class="form-group">
                                                             <label class="form-label">Choose Room/Accommodation Type</label>
@@ -83,13 +83,14 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-12 col-lg-12 col-xxl-3">
+                                                    <div class="col-md-4 col-lg-4 col-xxl-12">
                                                         <div class="form-group">
                                                             <label class="form-label" for="default-textarea">Hotel /
                                                                 Property Name</label>
                                                             <div class="form-control-wrap">
                                                                 <input class="form-control no-resize"
-                                                                       name="description" ></input>
+                                                                       name="description" value="{{ \App\Models\Property::where('vendor_id', auth()->user()->id)->first()->property_name ?? '' }}
+                                                                    " readonly></input>
                                                                 @error('description') <span
                                                                     class="text-danger"></span> @enderror
                                                             </div>
@@ -103,6 +104,51 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            {{-- Select how many apartments/rooms --}}
+                                            <div class="col-md-4 col-lg-4 col-xxl-3">
+                                                <div class="form-group">
+                                                    <label for="apartment-count">Select Number of Apartments/Rooms</label>
+                                                    <select class="form-select" id="apartment-count" name="apartment_count">
+                                                        <option value="0" {{ old('apartment_count', 0) == 0 ? 'selected' : '' }}>
+                                                            Select Number of Apartments/Rooms
+                                                        </option>
+                                                        @for ($i = 1; $i <= 19; $i++)
+                                                            <option value="{{ $i }}" {{ old('apartment_count', 0) == $i ? 'selected' : '' }}>
+                                                                {{ $i }}
+                                                            </option>
+                                                        @endfor
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            {{-- Pre-render old apartments, if any --}}
+                                            <div id="dynamic-forms" class="dynamic-forms col-12">
+                                                @php $apartments = old('apartments', []); @endphp
+                                                @foreach($apartments as $index => $apartment)
+                                                    <div class="apartment-form">
+                                                        <label for="apartments-{{ $index }}-name">Apartment/Rooms {{ $index + 1 }} Name:</label>
+                                                        <input type="text"
+                                                               id="apartments-{{ $index }}-name"
+                                                               name="apartments[{{ $index }}][name]"
+                                                               class="form-control"
+                                                               value="{{ old("apartments.$index.name", $apartment['name'] ?? '') }}">
+
+                                                        <label for="apartments-{{ $index }}-number">Apartment {{ $index + 1 }} Number:</label>
+                                                        <input type="text"
+                                                               id="apartments-{{ $index }}-number"
+                                                               name="apartments[{{ $index }}][number]"
+                                                               class="form-control"
+                                                               value="{{ old("apartments.$index.number", $apartment['number'] ?? '') }}">
+
+                                                        <label for="apartments-{{ $index }}-floor">Apartment {{ $index + 1 }} Floor Number:</label>
+                                                        <input type="text"
+                                                               id="apartments-{{ $index }}-floor"
+                                                               name="apartments[{{ $index }}][floor]"
+                                                               class="form-control"
+                                                               value="{{ old("apartments.$index.floor", $apartment['floor'] ?? '') }}">
+                                                    </div>
+                                                @endforeach
                                             </div>
 
                                             <!-- Property Policy And Rules -->
@@ -1089,11 +1135,122 @@
         </div>
     </div>
 
+    <!-- ===== Apartments/Rooms Dynamic Rows (FINAL - CREATE PAGE) ===== -->
+    <script type="application/json" id="existing-apartments-json">
+        @json(old('apartments', []))
+    </script>
+
+    <script>
+        /* ---------------------- (E) Apartments/Rooms dynamic rows (FINAL) ----------------------
+           - Single source of truth for #apartment-count → #dynamic-forms
+           - 0-based array names: apartments[i][name|number|floor]
+           - Prefills from old('apartments') via JSON tag above
+           - Renders each apartment as one row (Name | Number | Floor)
+        --------------------------------------------------------------------------------------- */
+        (function () {
+            function parseExisting() {
+                try {
+                    const tag = document.getElementById('existing-apartments-json');
+                    return tag ? JSON.parse(tag.textContent || '[]') || [] : [];
+                } catch {
+                    return [];
+                }
+            }
+
+            function createRow(i, data) {
+                const row = document.createElement('div');
+                row.className = 'row g-3 align-items-end mb-3 apartment-form';
+
+                const col1 = document.createElement('div');
+                col1.className = 'col-md-3';
+                col1.innerHTML = `
+          <label for="apartments-${i}-name" class="form-label">Apartment/Rooms ${i + 1} Name:</label>
+          <input type="text" id="apartments-${i}-name" name="apartments[${i}][name]"
+                 value="${(data?.name ?? '').toString().replace(/"/g,'&quot;')}" class="form-control">
+        `;
+
+                const col2 = document.createElement('div');
+                col2.className = 'col-md-3';
+                col2.innerHTML = `
+          <label for="apartments-${i}-number" class="form-label">Apartment ${i + 1} Number:</label>
+          <input type="text" id="apartments-${i}-number" name="apartments[${i}][number]"
+                 value="${(data?.number ?? '').toString().replace(/"/g,'&quot;')}" class="form-control">
+        `;
+
+                const col3 = document.createElement('div');
+                col3.className = 'col-md-4';
+                col3.innerHTML = `
+          <label for="apartments-${i}-floor" class="form-label">Apartment ${i + 1} Floor Number:</label>
+          <input type="text" id="apartments-${i}-floor" name="apartments[${i}][floor]"
+                 value="${(data?.floor ?? '').toString().replace(/"/g,'&quot;')}" class="form-control">
+        `;
+
+                row.appendChild(col1);
+                row.appendChild(col2);
+                row.appendChild(col3);
+                return row;
+            }
+
+            function mount() {
+                const selectEl  = document.getElementById('apartment-count');
+                const container = document.getElementById('dynamic-forms');
+                if (!selectEl || !container) return;
+
+                const existingApartments = parseExisting();
+
+                function render(count) {
+                    const n = Number.isFinite(count) && count > 0 ? count : 0;
+                    container.innerHTML = '';
+
+                    for (let i = 0; i < n; i++) {
+                        container.appendChild(createRow(i, existingApartments[i]));
+                        if (i < n - 1) {
+                            const hr = document.createElement('div');
+                            hr.style.borderTop = '1px dashed #e1e5ee';
+                            hr.className = 'my-3';
+                            container.appendChild(hr);
+                        }
+                    }
+
+                    container.style.display = 'block';
+                    container.style.visibility = 'visible';
+                    container.classList.add('col-12');
+                }
+
+                // Initial state: use selected value OR old('apartments') length OR server prerendered count
+                const domInitialCount = container.querySelectorAll('.apartment-form').length;
+                let initial = parseInt(selectEl.value || '0', 10);
+
+                if (domInitialCount > 0) {
+                    initial = domInitialCount;
+                    selectEl.value = String(domInitialCount);
+                } else if ((!initial || isNaN(initial)) && existingApartments.length > 0) {
+                    initial = existingApartments.length;
+                    selectEl.value = String(initial);
+                }
+
+                render(isNaN(initial) ? 0 : initial);
+
+                const onChange = () => {
+                    const val = parseInt(selectEl.value || '0', 10);
+                    render(isNaN(val) ? 0 : val);
+                };
+                selectEl.addEventListener('change', onChange);
+                selectEl.addEventListener('input', onChange);
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', mount, { once: true });
+            } else {
+                mount();
+            }
+        })();
+    </script>
+
+    <!-- ================== The rest of your scripts (kept, deduped) ================== -->
+
     <script type="text/javascript">
-        /* ---------------------- (A) Legacy "propertyCategory" script harden ----------------------
-           Your HTML doesn't have #propertyCategory / #propertyTypeContainer / #propertyType.
-           We guard it so it won't throw, but if you later add those IDs it will work.
-        -----------------------------------------------------------------------------------------*/
+        /* ---------------------- (A) Legacy "propertyCategory" script harden ---------------------- */
         (() => {
             const cat = document.getElementById('propertyCategory');
             if (!cat) return;
@@ -1111,12 +1268,8 @@
                         { id: 'option2', value: 'Only room', label: 'Only room' },
                         { id: 'option3', value: 'Only Bed', label: 'Only Bed' }
                     ],
-                    'House': [
-                        { id: 'option4', value: 'Kitchen', label: 'Kitchen' }
-                    ],
-                    'Resort': [
-                        { id: 'option6', value: 'Room', label: 'Room' }
-                    ],
+                    'House': [{ id: 'option4', value: 'Kitchen', label: 'Kitchen' }],
+                    'Resort': [{ id: 'option6', value: 'Room', label: 'Room' }],
                     'Apartment': [
                         { id: 'option7', value: 'Apartment', label: 'Apartment' },
                         { id: 'option8', value: 'Only room', label: 'Only room' },
@@ -1129,10 +1282,10 @@
                     options[selectedValue].forEach(function (option) {
                         const li = document.createElement('li');
                         li.innerHTML = `
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="${option.id}" value="${option.value}">
-            <label class="form-check-label" for="${option.id}">${option.label}</label>
-          </div>`;
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="${option.id}" value="${option.value}">
+                    <label class="form-check-label" for="${option.id}">${option.label}</label>
+                  </div>`;
                         propertyType.appendChild(li);
                     });
                     propertyTypeContainer.style.display = 'block';
@@ -1180,49 +1333,10 @@
     </script>
 
     <script>
-        /* ---------------------- (E) Dynamic apartment forms ---------------------- */
-        document.getElementById('apartment-count')?.addEventListener('change', function () {
-            const count = parseInt(this.value || '0', 10);
-            const dynamicFormsContainer = document.getElementById('dynamic-forms');
-            if (!dynamicFormsContainer) return;
-
-            dynamicFormsContainer.innerHTML = '';
-            if (count > 0) {
-                for (let i = 1; i <= count; i++) {
-                    const group = document.createElement('div');
-                    group.classList.add('apartment-form');
-
-                    const fields = [
-                        { label: `Apartment/Rooms ${i} Name:`, id: `apartment-${i}-name`, name: `apartments[${i}][name]` },
-                        { label: `Apartment ${i} Number:`, id: `apartment-${i}-number`, name: `apartments[${i}][number]` },
-                        { label: `Apartment ${i} Floor Number:`, id: `apartment-${i}-floor`, name: `apartments[${i}][floor]` },
-                    ];
-
-                    fields.forEach(f => {
-                        const lbl = document.createElement('label');
-                        lbl.setAttribute('for', f.id);
-                        lbl.textContent = f.label;
-                        const input = document.createElement('input');
-                        input.type = 'text';
-                        input.id = f.id;
-                        input.name = f.name;
-                        input.classList.add('form-control');
-                        group.appendChild(lbl);
-                        group.appendChild(input);
-                    });
-
-                    dynamicFormsContainer.appendChild(group);
-                }
-            }
-        });
-    </script>
-
-    <script>
         /* ---------------------- (F) Form submit log (safe) ---------------------- */
         document.querySelector('form')?.addEventListener('submit', function () {
             try {
                 const fd = new FormData(this);
-                // Optional debug:
                 // for (const [k, v] of fd.entries()) console.log(k, v);
             } catch {}
         });
@@ -1370,81 +1484,60 @@
     <script type="text/javascript">
         /* ---------------------- (L) Category → Type → Room (works with your HTML) ---------------------- */
         document.addEventListener("DOMContentLoaded", function () {
-            // property_category select (has id="division")
             const divisionSelect = document.getElementById("division");
 
-            // The label has id="districtContainer". We need its closest .form-group and the select inside.
             const districtLabel   = document.getElementById("districtContainer");
             const districtGroup   = districtLabel ? districtLabel.closest('.form-group') : null;
             const districtSelect  = districtGroup ? districtGroup.querySelector('select[name="property_type"]') : null;
 
-            // Room types container/list
             const placeCheckboxList = document.getElementById("placeCheckboxList");
             const placeOptions      = document.getElementById("placeOptions");
 
-            if (!divisionSelect || !districtGroup || !districtSelect || !placeCheckboxList || !placeOptions) {
-                // Missing critical nodes — bail safely.
-                return;
-            }
+            if (!divisionSelect || !districtGroup || !districtSelect || !placeCheckboxList || !placeOptions) return;
 
-            // Start hidden
-            districtGroup.parentElement?.parentElement?.style?.setProperty('display',''); // keep original layout
+            districtGroup.parentElement?.parentElement?.style?.setProperty('display','');
             districtGroup.style.display = "none";
             placeCheckboxList.style.display = "none";
 
             const data = {
-                Hotels: {
-                    districts: {
+                Hotels: { districts: {
                         "Hotel": ["Single Room","Double Room","Twin Room","Suite","Family Room","Penthouse Suite","Accessible Room"],
                         "Luxury Hotels": ["Single Room","Double Room","Twin Room","Suite","Family Room","Penthouse Suite","Accessible Room"],
                         "Budget Hotels": ["Single Room","Double Room","Family Room","Accessible Room"]
-                    }
-                },
-                Transit: {
-                    districts: {
+                    }},
+                Transit: { districts: {
                         "Airport Hotels": ["Single Room","Double Room","Family Unit","Parking-Accessible Room"],
                         "Station Hotels": ["Single Room","Double Room","Family Unit","Parking-Accessible Room"],
                         "Hospital & Visa Center Area Hotels": ["Single Room","Double Room","Family Unit","Parking-Accessible Room"]
-                    }
-                },
-                Resorts: {
-                    districts: {
+                    }},
+                Resorts: { districts: {
                         "Resorts": ["Luxury Resort Suites","Private Pool Villas","Garden View Rooms","Standard Camping Tent","Luxury Tent (Glamping)","Treehouses"],
                         "Eco Resorts": ["Bamboo Cottages","Solar-Powered Cabins","Off-Grid Stays","Farm Stays"],
                         "Beach Resorts": ["Overwater Bungalows","Beach Huts","Oceanfront Villas"],
                         "Mountain Resorts": ["Cabins","Lodges","View Suites"]
-                    }
-                },
-                Lodges: {
-                    districts: {
+                    }},
+                Lodges: { districts: {
                         "Hostels": ["Single Bed in Dormitory","Private Room/Apartment","Female-Only Dormitory","Male-Only Dormitory","Mixed Dormitory","Studio Apartment-Style Hostel"],
                         "Motels": ["Single Room","Double Room","Family Room"],
                         "Lodges": ["Private Room","Shared Room"]
-                    }
-                },
-                Apartments: {
-                    districts: {
+                    }},
+                Apartments: { districts: {
                         "Apartments": ["Studio","One-Bedroom","Two-Bedroom","Three-Bedroom","Penthouse"],
                         "Serviced Apartments": ["Luxury Serviced","Budget Serviced","Furnished","Unfurnished"],
                         "Homestays": ["Entire Place","Private Room","Shared Room"]
-                    }
-                },
-                Guesthouses: {
-                    districts: {
+                    }},
+                Guesthouses: { districts: {
                         "Guesthouses": ["Bed Only","Room with Shared Bathroom","Private Room","Entire House"],
                         "Vacation Rentals": ["Entire Place","Private Room","Tent/Glamping","RV/Caravan"],
                         "Condominiums": ["Studio","1BR","2BR","3BR"],
                         "B&B": ["Private Room","Family Room"]
-                    }
-                },
-                Crisis: {
-                    districts: {
+                    }},
+                Crisis: { districts: {
                         "Old Age Homes": ["Single Bed","Shared Room"],
                         "Orphanages": ["Dormitory","Private Room"],
                         "Rehabilitation Centers": ["Standard Room","Supervised Room"],
                         "Asylums": ["Ward","Private Room"]
-                    }
-                }
+                    }}
             };
 
             function resetTypes() {
@@ -1480,10 +1573,10 @@
                     const id = `room_type_${idx}`;
                     const li = document.createElement("li");
                     li.innerHTML = `
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="${id}" name="room_types[]" value="${label}">
-          <label class="form-check-label" for="${id}">${label}</label>
-        </div>`;
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="${id}" name="room_types[]" value="${label}">
+                  <label class="form-check-label" for="${id}">${label}</label>
+                </div>`;
                     placeOptions.appendChild(li);
                 });
             }
@@ -1678,7 +1771,6 @@
       </div>
       <button type="button" class="btn btn-danger btn-sm mt-2 delete-hotel-btn">Delete</button>`;
 
-                // Insert before the add button column (if present) so button stays last
                 if (addBtnCol) row.insertBefore(newFieldGroup, addBtnCol);
                 else row.appendChild(newFieldGroup);
 

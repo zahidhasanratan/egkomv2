@@ -5,25 +5,25 @@ namespace App\Http\Controllers\Vendor;
 use App\Http\Controllers\Controller;
 use App\Models\Hotel;
 use App\Models\Owner;
+use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ManageHotel extends Controller
 {
-//    public function index(){
-//        $hotels = Hotel::where('vendor_id', auth()->user()->id)->get();
-//        return view('auth.vendor.hotel.index', compact('hotels'));
-//    }
+
     public function index()
     {
-        $hotels = Hotel::where('vendor_id', auth()->user()->id)->paginate(10); // Paginate 10 per page
+        $hotels = Hotel::where('vendor_id', auth()->user()->id)->paginate(10);
         return view('auth.vendor.hotel.index', compact('hotels'));
     }
+
     public function indexSuper()
     {
-        $hotels = Hotel::paginate(10); // Paginate 10 per page
+        $hotels = Hotel::paginate(10);
         return view('auth.super_admin.hotel.index', compact('hotels'));
     }
 
@@ -31,7 +31,6 @@ class ManageHotel extends Controller
     {
         return view('auth.vendor.hotel.create');
     }
-
 
     public function store(Request $request)
     {
@@ -74,12 +73,18 @@ class ManageHotel extends Controller
             'security_photos.*'        => 'nullable|image|max:5120',
             'amenities_photos.*'       => 'nullable|image|max:5120',
             'custom_facilities_icon.*' => 'nullable|image|max:5120',
+
+            // 👇 add validation for apartments block
+            'apartment_count'         => 'nullable|integer|min:0',
+            'apartments'              => 'nullable|array',
+            'apartments.*.name'       => 'nullable|string|max:255',
+            'apartments.*.number'     => 'nullable|string|max:255',
+            'apartments.*.floor'      => 'nullable|string|max:255',
         ]);
 
         // Start with safe copy (exclude token/method/status)
         $data = $request->except(['_token', '_method', 'status']);
 
-        // Log raw request (dev)
         Log::debug('Request data:', $request->all());
 
         // ✅ Normalize property category/type
@@ -89,115 +94,81 @@ class ManageHotel extends Controller
         // ✅ room_types[] → JSON
         $roomTypes = $request->input('room_types', []);
         if (is_array($roomTypes)) {
-            $roomTypes = array_values(
-                array_unique(
-                    array_filter(array_map('trim', $roomTypes), fn ($v) => $v !== '')
-                )
-            );
+            $roomTypes = array_values(array_unique(array_filter(array_map('trim', $roomTypes), fn ($v) => $v !== '')));
             $data['room_types'] = !empty($roomTypes) ? json_encode($roomTypes) : null;
         } else {
             $data['room_types'] = null;
         }
 
-        // ✅ nearby_areas (flatten to list of {category,name,distance})
+        // ✅ nearby_areas → flat JSON
         if ($request->has('nearby_areas') && is_array($request->nearby_areas)) {
             $flatNearbyAreas = [];
-
             foreach ($request->nearby_areas as $category => $categoryData) {
                 $names     = $categoryData['name'] ?? [];
                 $distances = $categoryData['distance'] ?? [];
-
-                foreach ($names as $index => $name) {
+                foreach ($names as $idx => $name) {
                     $name = trim((string)$name);
                     if ($name === '') continue;
-
                     $flatNearbyAreas[] = [
-                        'category' => $category, // e.g. "restaurant___cafe"
+                        'category' => $category,
                         'name'     => $name,
-                        'distance' => isset($distances[$index]) ? trim((string)$distances[$index]) : null,
+                        'distance' => isset($distances[$idx]) ? trim((string)$distances[$idx]) : null,
                     ];
                 }
             }
-
             $data['nearby_areas'] = !empty($flatNearbyAreas) ? json_encode($flatNearbyAreas) : null;
         }
 
-        // ✅ hotel_facilities (flatten to list of {category,name})
+        // ✅ hotel_facilities → flat JSON
         if ($request->has('hotel_facilities') && is_array($request->hotel_facilities)) {
             $flatHotelFacilities = [];
-            Log::debug('Processing hotel_facilities:', $request->hotel_facilities);
-
             foreach ($request->hotel_facilities as $category => $facilityNames) {
                 if (!is_array($facilityNames)) continue;
-
                 foreach ($facilityNames as $facility) {
                     $facility = trim((string)$facility);
                     if ($facility !== '') {
-                        $flatHotelFacilities[] = [
-                            'category' => $category,   // e.g. "general_services"
-                            'name'     => $facility,
-                        ];
+                        $flatHotelFacilities[] = ['category' => $category, 'name' => $facility];
                     }
                 }
             }
-
-            Log::debug('Processed hotel_facilities:', $flatHotelFacilities);
             $data['hotel_facilities'] = !empty($flatHotelFacilities) ? json_encode($flatHotelFacilities) : null;
         }
 
-        // (Optional) popular facilities[] (if present on your form)
+        // (Optional) popular facilities[]
         if ($request->has('facilities') && is_array($request->facilities)) {
-            $fac = array_values(
-                array_unique(
-                    array_filter(array_map('trim', $request->facilities), fn ($v) => $v !== '')
-                )
-            );
+            $fac = array_values(array_unique(array_filter(array_map('trim', $request->facilities), fn ($v) => $v !== '')));
             $data['facilities'] = !empty($fac) ? json_encode($fac) : null;
         }
 
-        // (Optional) custom_facilities[] text (if present on your form)
+        // (Optional) custom_facilities[] text
         if ($request->has('custom_facilities') && is_array($request->custom_facilities)) {
-            $cf = array_values(
-                array_filter(array_map('trim', $request->custom_facilities), fn ($v) => $v !== '')
-            );
+            $cf = array_values(array_filter(array_map('trim', $request->custom_facilities), fn ($v) => $v !== ''));
             $data['custom_facilities'] = !empty($cf) ? json_encode($cf) : null;
         }
 
-        // ✅ custom_nearby_areas[] (if used)
+        // ✅ custom_nearby_areas[]
         if ($request->has('custom_nearby_areas') && is_array($request->custom_nearby_areas)) {
-            $customAreas = array_values(
-                array_filter(array_map('trim', $request->custom_nearby_areas), fn ($v) => $v !== '')
-            );
+            $customAreas = array_values(array_filter(array_map('trim', $request->custom_nearby_areas), fn ($v) => $v !== ''));
             $data['custom_nearby_areas'] = !empty($customAreas) ? json_encode($customAreas) : null;
         }
 
         // ✅ Merge check_in_rules[] + custom_check_in_rules[]
         $checkInRules = is_array($request->check_in_rules) ? $request->check_in_rules : [];
         $customRules  = is_array($request->custom_check_in_rules) ? $request->custom_check_in_rules : [];
-
-        $customRules = array_values(
-            array_filter(array_map('trim', $customRules), fn ($v) => $v !== '')
-        );
-        $mergedCheckinRules = array_values(
-            array_filter(array_map('trim', array_merge($checkInRules, $customRules)), fn ($v) => $v !== '')
-        );
-
+        $customRules  = array_values(array_filter(array_map('trim', $customRules), fn ($v) => $v !== ''));
+        $mergedCheckinRules = array_values(array_filter(array_map('trim', array_merge($checkInRules, $customRules)), fn ($v) => $v !== ''));
         $data['check_in_rules'] = !empty($mergedCheckinRules) ? json_encode($mergedCheckinRules) : null;
 
-        // ✅ File uploads (move to /public/hotel_photos, store JSON array of paths)
+        // ✅ File uploads → /public/hotel_photos
         $photoFields = [
-            'kitchen_photos', 'washroom_photos', 'parking_lot_photos', 'entrance_gate_photos',
-            'lift_stairs_photos', 'spa_photos', 'bar_photos', 'transport_photos', 'rooftop_photos',
-            'gym_photos', 'security_photos', 'amenities_photos', 'custom_facilities_icon',
+            'kitchen_photos','washroom_photos','parking_lot_photos','entrance_gate_photos',
+            'lift_stairs_photos','spa_photos','bar_photos','transport_photos','rooftop_photos',
+            'gym_photos','security_photos','amenities_photos','custom_facilities_icon',
         ];
-
         $uploadDir = public_path('hotel_photos');
-        if (!is_dir($uploadDir)) {
-            @mkdir($uploadDir, 0755, true);
-        }
-
+        if (!is_dir($uploadDir)) { @mkdir($uploadDir, 0755, true); }
         foreach ($photoFields as $field) {
-            $data[$field] = null; // default
+            $data[$field] = null;
             if ($request->hasFile($field)) {
                 $paths = [];
                 foreach ((array)$request->file($field) as $file) {
@@ -213,13 +184,52 @@ class ManageHotel extends Controller
         // ✅ Vendor
         $data['vendor_id'] = auth()->id();
 
-        // Debug: final payload
-        Log::debug('Final data to be saved:', $data);
+        // 🔑 Keep form values for apartments/rooms
+        $apartmentCount = (int) $request->input('apartment_count', 0);
+        $apartments     = $request->input('apartments', []); // [ ['name'=>..,'number'=>..,'floor'=>..], ... ]
+
+        Log::debug('Final data (before transaction):', $data);
 
         try {
-            Hotel::create($data);
-        } catch (\Exception $e) {
-            Log::error('Error creating hotel record: ' . $e->getMessage(), ['data' => $data]);
+            DB::transaction(function () use ($data, $apartmentCount, $apartments, $request) {
+                // 1) Create the Hotel
+                /** @var \App\Models\Hotel $hotel */
+                $hotel = Hotel::create($data);
+
+                // 2) Build the Room rows based on dropdown count
+                $rows = [];
+                if ($apartmentCount > 0 && is_array($apartments)) {
+                    $slice = array_slice($apartments, 0, $apartmentCount);
+                    foreach ($slice as $row) {
+                        $name   = trim((string)($row['name']   ?? ''));
+                        $number = trim((string)($row['number'] ?? ''));
+                        $floor  = trim((string)($row['floor']  ?? ''));
+
+                        // skip completely empty rows
+                        if ($name === '' && $number === '' && $floor === '') {
+                            continue;
+                        }
+
+                        $rows[] = [
+                            'hotel_id'     => $hotel->id, // 👈 if your FK is property_id, change to 'property_id'
+                            'name'         => $name,
+                            'number'       => $number,
+                            'floor_number' => $floor,
+                            'created_at'   => now(),
+                            'updated_at'   => now(),
+                        ];
+                    }
+                }
+
+                // 3) Insert rooms (if any)
+                if (!empty($rows)) {
+                    Room::insert($rows);
+                }
+
+                Log::info('Hotel created with rooms', ['hotel_id' => $hotel->id, 'rooms_created' => count($rows)]);
+            });
+        } catch (\Throwable $e) {
+            Log::error('Error creating hotel/rooms: '.$e->getMessage(), ['trace' => $e->getTraceAsString()]);
             throw $e;
         }
 

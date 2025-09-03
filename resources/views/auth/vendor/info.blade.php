@@ -25,6 +25,10 @@
                                 <form method="POST" action="{{ route('vendor.info.store') }}" enctype="multipart/form-data">
                                 @csrf
 
+                                    <input type="hidden" class="form-control" id="property-name"
+                                           name="vendor_id"
+                                           value="{{ old('property_name', $property->vendor_id) }}">
+
                                 <!-- Property Info (Merged) -->
                                     <div class="row gy-4">
                                         <div class="col-md-12 col-lg-12 col-xxl-12">
@@ -489,6 +493,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
 
                                     <!-- Actions -->

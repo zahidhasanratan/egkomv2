@@ -38,19 +38,6 @@
                                             </div>
                                         </div>
 
-                                        <!-- Property Type (kept from previous form) -->
-                                        <div class="col-md-6 col-lg-4 col-xxl-3" id="districtContainer">
-                                            <div class="mb-3">
-                                                <label for="district" class="form-label">Select Property Type</label>
-                                                <select class="form-select" id="district" name="property_type">
-                                                    <option value="" disabled {{ old('property_type', $property->property_type ?? '') ? '' : 'selected' }}>
-                                                        Choose Property Type
-                                                    </option>
-                                                    <!-- Populate dynamically if needed -->
-                                                </select>
-                                            </div>
-                                        </div>
-
                                         <!-- Location -->
                                         <div class="col-md-6 col-lg-4 col-xxl-3">
                                             <div class="form-group">

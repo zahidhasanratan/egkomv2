@@ -115,7 +115,8 @@
                                                         <label class="form-label" for="default-textarea">Hotel / Property Name</label>
                                                         <div class="form-control-wrap">
                                                             <input class="form-control no-resize"
-                                                                   name="description" value="{{ old('description', $hotel->description) }}"></input>
+                                                                   name="description" value="{{ \App\Models\Property::where('vendor_id', auth()->user()->id)->first()->property_name ?? '' }}
+                                                                " readonly></input>
                                                             @error('description') <span
                                                                 class="text-danger">{{ $message }}</span> @enderror
                                                         </div>
