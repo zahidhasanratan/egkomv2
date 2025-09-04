@@ -138,7 +138,7 @@
                                                     <div class="multiple-thumbnail-gallery"></div>
                                                     @if(!empty($vendor->company_logo))
                                                         <div class="mt-2">
-                                                            <small>Current: <a href="{{ asset($vendor->company_logo) }}" target="_blank">View</a></small>
+                                                            <img style="height: auto;width: 120px" src="{{ asset($vendor->company_logo) }}">
                                                         </div>
                                                     @endif
                                                 </div>

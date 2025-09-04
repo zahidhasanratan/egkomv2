@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 01, 2025 at 08:41 AM
+-- Generation Time: Sep 04, 2025 at 08:58 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.23
 
@@ -288,7 +288,16 @@ INSERT INTO `activity_logs` (`id`, `browser`, `os`, `ip_address`, `activity_time
 (243, 'Chrome on Windows', 'Windows', '127.0.0.1', '09:06:19', 'Logged In', '2025-08-27 03:06:19', '2025-08-27 03:06:19'),
 (244, 'Chrome on Windows', 'Windows', '127.0.0.1', '05:58:50', 'Logged In', '2025-08-27 23:58:50', '2025-08-27 23:58:50'),
 (245, 'Chrome on Windows', 'Windows', '127.0.0.1', '06:05:23', 'Logged In', '2025-08-31 00:05:23', '2025-08-31 00:05:23'),
-(246, 'Chrome on Windows', 'Windows', '127.0.0.1', '03:51:31', 'Logged In', '2025-08-31 21:51:31', '2025-08-31 21:51:31');
+(246, 'Chrome on Windows', 'Windows', '127.0.0.1', '03:51:31', 'Logged In', '2025-08-31 21:51:31', '2025-08-31 21:51:31'),
+(247, 'Chrome on Windows', 'Windows', '127.0.0.1', '06:29:47', 'Logged In', '2025-09-02 00:29:47', '2025-09-02 00:29:47'),
+(248, 'Chrome on Windows', 'Windows', '127.0.0.1', '06:40:03', 'Logged In', '2025-09-02 00:40:03', '2025-09-02 00:40:03'),
+(249, 'Chrome on Windows', 'Windows', '127.0.0.1', '08:43:23', 'Logged In', '2025-09-02 02:43:23', '2025-09-02 02:43:23'),
+(250, 'Chrome on Windows', 'Windows', '127.0.0.1', '03:43:34', 'Logged In', '2025-09-02 21:43:34', '2025-09-02 21:43:34'),
+(251, 'Chrome on Windows', 'Windows', '127.0.0.1', '03:54:05', 'Logged In', '2025-09-02 21:54:05', '2025-09-02 21:54:05'),
+(252, 'Chrome on Windows', 'Windows', '127.0.0.1', '09:37:41', 'Logged In', '2025-09-03 03:37:41', '2025-09-03 03:37:41'),
+(253, 'Chrome on Windows', 'Windows', '127.0.0.1', '03:22:14', 'Logged In', '2025-09-03 21:22:14', '2025-09-03 21:22:14'),
+(254, 'Chrome on Windows', 'Windows', '127.0.0.1', '03:22:37', 'Logged In', '2025-09-03 21:22:37', '2025-09-03 21:22:37'),
+(255, 'Chrome on Windows', 'Windows', '127.0.0.1', '06:58:16', 'Logged In', '2025-09-04 00:58:16', '2025-09-04 00:58:16');
 
 -- --------------------------------------------------------
 
@@ -680,6 +689,7 @@ CREATE TABLE `properties` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `vendor_id` int(11) DEFAULT NULL,
   `property_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `total_car_parking` int(11) DEFAULT NULL,
   `property_category` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `property_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `room_types` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`room_types`)),
@@ -732,10 +742,10 @@ CREATE TABLE `properties` (
 -- Dumping data for table `properties`
 --
 
-INSERT INTO `properties` (`id`, `vendor_id`, `property_name`, `property_category`, `property_type`, `room_types`, `country_name`, `district_name`, `city_town_village`, `postcode`, `house_number`, `road_number_name`, `building_age`, `building_size`, `building_stories`, `landmark_details`, `google_map_link`, `company_logo`, `apartment_count`, `apartments`, `total_capacity`, `car_parking`, `has_reception`, `elevators`, `generators`, `fire_exits`, `wheelchair_access`, `male_housekeeping`, `female_housekeeping`, `has_kids_zone`, `kids_zone_count`, `view_type`, `security_guards`, `has_cafe_restaurant`, `cafe_restaurant_count`, `cafe_restaurant_names`, `has_pool`, `pool_count`, `has_bar`, `bar_count`, `has_gym`, `gym_count`, `has_party_center`, `party_center_details`, `has_conference_hall`, `conference_hall_details`, `status`, `created_at`, `updated_at`) VALUES
-(15, 7, 'Shopno Bilash Holiday Suites', 'Hotels', 'Luxury Hotels', '[\"Single Room\",\"Double Room\",\"Suite\",\"Family Room\"]', 'Bangladesh', 'Cox\'sBazar', 'Kolatoli R/A', '4700', '90-97', 'Saikatabas Road', 2008, 100000, 9, 'Opposite of Long Beach hotel end of Mohammodia Guest house Goli', 'https://maps.app.goo.gl/Z33jgoDoBNfYzMGg7', 'storage/logos/1756276401_logo-Cg7Lbk-T.png', 3, '[]', 140, 10, 1, 1, 1, 1, 1, 5, 4, 0, NULL, 'Hill View & City View', 2, 0, NULL, '[]', 0, 1, 0, 1, 0, 1, 0, 'asdf asdf', 0, 'wer wer', 'submitted', '2025-03-20 02:00:59', '2025-08-27 00:33:21'),
-(16, 1, 'test change', 'Hotels', NULL, '[]', 'Bangladesh', 'Gopalganj', 'Atque assumenda volu', 'Saepe qui incididunt', '712', 'Kalia Davenport', 2008, 18, 10, 'Voluptatem porro vol', 'Quos labore eum quas', NULL, 3, '[{\"name\":\"123123\",\"number\":\"123\",\"floor\":\"123\"},{\"name\":\"1233\",\"number\":\"123\",\"floor\":\"123\"},{\"name\":\"123\",\"number\":\"123\",\"floor\":\"123\"}]', 234, 234, 1, 4, 3, 1, 0, 1, 2, 0, NULL, 'sdf sadf', 4, 1, NULL, '[]', 1, 1, 1, 1, 1, 1, 1, 'asdf asdf', 1, 'wer wer', 'draft', '2025-05-06 22:53:14', '2025-05-06 22:53:14'),
-(17, NULL, 'test change', 'Hotels', NULL, '[]', 'Bangladesh', 'Gopalganj', 'Atque assumenda volu', 'Saepe qui incididunt', '712', 'Kalia Davenport', 2008, 18, 10, 'Voluptatem porro vol', 'Quos labore eum quas', NULL, 3, '[{\"name\":\"123123\",\"number\":\"123\",\"floor\":\"123\"},{\"name\":\"1233\",\"number\":\"123\",\"floor\":\"123\"},{\"name\":\"123\",\"number\":\"123\",\"floor\":\"123\"}]', 234, 234, 1, 4, 3, 1, 0, 1, 2, 0, NULL, 'sdf sadf', 4, 1, NULL, '[]', 1, 1, 1, 1, 1, 1, 1, 'asdf asdf', 1, 'wer wer', 'draft', '2025-05-06 22:53:59', '2025-05-06 22:53:59');
+INSERT INTO `properties` (`id`, `vendor_id`, `property_name`, `total_car_parking`, `property_category`, `property_type`, `room_types`, `country_name`, `district_name`, `city_town_village`, `postcode`, `house_number`, `road_number_name`, `building_age`, `building_size`, `building_stories`, `landmark_details`, `google_map_link`, `company_logo`, `apartment_count`, `apartments`, `total_capacity`, `car_parking`, `has_reception`, `elevators`, `generators`, `fire_exits`, `wheelchair_access`, `male_housekeeping`, `female_housekeeping`, `has_kids_zone`, `kids_zone_count`, `view_type`, `security_guards`, `has_cafe_restaurant`, `cafe_restaurant_count`, `cafe_restaurant_names`, `has_pool`, `pool_count`, `has_bar`, `bar_count`, `has_gym`, `gym_count`, `has_party_center`, `party_center_details`, `has_conference_hall`, `conference_hall_details`, `status`, `created_at`, `updated_at`) VALUES
+(15, 7, 'Shopno Bilash Holiday Suites', NULL, 'Hotels', 'Luxury Hotels', '[\"Single Room\",\"Double Room\",\"Suite\",\"Family Room\"]', 'Bangladesh', 'Cox\'sBazar', 'Kolatoli R/A', '4500', '90-97', 'Saikatabas Road', 2008, 100000, 9, 'Opposite of Long Beach hotel end of Mohammodia Guest house Goli', 'https://maps.app.goo.gl/Z33jgoDoBNfYzMGg7', 'storage/logos/1756880718_2-2025-05-25-6832e2d1b27cf.jpg', 3, '[]', 140, 10, 1, 1, 1, 1, 1, 5, 4, 0, NULL, 'Hill View & City View', 2, 0, NULL, '[]', 0, 1, 0, 1, 0, 1, 0, 'asdf asdf', 0, 'wer wer', 'submitted', '2025-03-20 02:00:59', '2025-09-03 00:25:18'),
+(18, 13, 'wqer', NULL, 'Hotels', '', '\"[]\"', 'Bangladesh', 'Bandarban', '234', '234', '234', '234', 0, 0, 0, '', '', 'storage/logos/1756890332_admin.png', 0, '\"[]\"', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '234', 0, 0, 0, '\"[]\"', 0, 0, 0, 0, 0, 0, 0, '', 0, '', 'submitted', '2025-09-03 03:05:32', '2025-09-03 03:05:32'),
+(20, 15, 'estt', 0, 'Hotels', '', '[]', 'Bangladesh', 'Bandarban', '234', '234', '234', '234', 0, 0, 0, '', '', 'storage/logos/1756891699_admin.png', 0, '[]', 234, 234, 0, 0, 0, 0, 0, 1, 1, 0, 0, '', 0, 0, 0, '[]', 0, 0, 0, 0, 0, 0, 0, '', 0, '', 'submitted', '2025-09-03 03:28:27', '2025-09-04 00:55:53');
 
 -- --------------------------------------------------------
 
@@ -931,7 +941,9 @@ INSERT INTO `vendors` (`id`, `vendorId`, `hotel_name`, `contact_person_name`, `c
 (7, 'Ven-7', 'Gray Guerreroo000', 'Indira Workmann000', '1995-11-20', 'Velit aliqua Accus000', 'profile_pictures/77GOcxVDowXLRxwWrFi53RFp16afsPmlA3z5oSrU.jpg', '015524455666', 'it@esoft.com.bd', 'hotel_logos/1748406076_slider-1-2025-05-15-682572cf1f554.jpg', '[\"hotel_pictures\\/UDhrvYP53YAnkHsqHLPQ7nrpp0JonKLkMhmlD96d.png\",\"hotel_pictures\\/U4e1zD6l7FbIylhec1ZfYPInCUYGNXgeC7GxKJJc.png\",\"hotel_pictures\\/XweFRVm0UNSsCYhXHmZvGLXFSeZRfqCCx0jBGIOy.png\"]', 'Totam sit illum tot00', 'Quod similique sit', 'Dhaka', 'Dolore aut elit non', 'Consectetur id maio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Quia debitis officia', 'Laudantium alias al', 'Tenetur error quasi', 'bank_check_pictures/xealVRnBQpdewMUQVhXxbgGJ25zcNQ5J1EvOuT2p.png', '$2y$10$t2ES1eQLFcGfM1KL5AVdZu9cvnKIFtf2q.w.D7qKQ5.Fvk1mir3iq', NULL, NULL, '2024-12-05 02:28:12', '2025-05-27 22:21:16'),
 (10, 'Ven-10', 'Kiara Olson', 'Xavier Simmons', '1987-04-12', 'Dolor nobis dolor il', 'profile_pictures/1eYXM2QXxoVZ0p7EsnyrnyNaaqevLiJ4sAbODeTi.jpg', '01552445566', 'jihune@mailinator.com', NULL, '[]', 'In sit velit obcaeca', 'Aliquam explicabo L', 'Dhaka', 'Vero quos sed ad nis', 'Molestiae aliquip Na', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Omnis dolor quis eaq', 'Necessitatibus in au', 'Nisi quam tempore i', NULL, '$2y$10$ENU5.b95ewDUpPgWhUsvkOIBtsnztrSmCF6JiL9y4ODXZOJCAn9c2', NULL, NULL, '2025-05-05 00:51:45', '2025-05-05 00:52:37'),
 (11, 'Ven-11', 'Garrett Garrett', 'Basil Joseph', NULL, 'Sit esse sit explic', NULL, '01225447788', 'fojenemow@mailinator.com', 'hotel_logos/NyuSIG4NhaL7ztxxLj3PFifRcXEr3TdKabIGH0hd.jpg', '[]', 'Commodo ullamco anim', 'Consequat Sequi sun', 'Faridpur', NULL, 'Nulla porro natus om', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Architecto maiores e', NULL, NULL, NULL, '$2y$10$POvKAMgmep/UN83pH38UFuRGmUqX3LfZMhuvkLSwDjCdQTgyNLaJu', NULL, NULL, '2025-05-14 22:05:56', '2025-05-14 22:05:56'),
-(12, 'Ven-12', 'Alvin Rojas', 'Mariko Serrano', NULL, 'Itaque fugiat minim', NULL, '01552447788', 'duhumykohe@mailinator.com', 'hotel_logos/1748405531_Gardening1--1- (1).jpg', '[]', 'Odit est repudianda', 'Culpa ut dignissimos', 'Jashore', NULL, 'Est nesciunt modi e', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Aut est et ea qui ve', NULL, NULL, NULL, '$2y$10$j5IR.AaIbQyxohr8uQXsuuLZQMOUH5g22OrkE5VjxWP7cx6nccrOC', NULL, NULL, '2025-05-27 22:12:11', '2025-05-27 22:12:13');
+(12, 'Ven-12', 'Alvin Rojas', 'Mariko Serrano', NULL, 'Itaque fugiat minim', NULL, '01552447788', 'duhumykohe@mailinator.com', 'hotel_logos/1748405531_Gardening1--1- (1).jpg', '[]', 'Odit est repudianda', 'Culpa ut dignissimos', 'Jashore', NULL, 'Est nesciunt modi e', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Aut est et ea qui ve', NULL, NULL, NULL, '$2y$10$j5IR.AaIbQyxohr8uQXsuuLZQMOUH5g22OrkE5VjxWP7cx6nccrOC', NULL, NULL, '2025-05-27 22:12:11', '2025-05-27 22:12:13'),
+(13, 'Ven-13', 'wqer', '', NULL, '', '', '', 'test@test.com', '', NULL, '', '', '', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', NULL, NULL, '', '$2y$10$4rb3n8K0z8qxIW9NEeZinOM4jg5pyzFfOd/QLUOjcpIbXwxUNDYnq', NULL, NULL, '2025-09-03 03:05:32', '2025-09-03 03:05:32'),
+(15, 'Ven-15', 'rrrr', '', NULL, '', '', '', 'tt@tt.com', '', NULL, '', '', '', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', NULL, NULL, '', '$2y$10$KTks6pAcxEDo5xKZAFJiSuYbL5PTYIhMHkWFkB8qpIdfGoNDOToSa', NULL, NULL, '2025-09-03 03:28:19', '2025-09-04 00:57:51');
 
 --
 -- Indexes for dumped tables
@@ -1074,7 +1086,7 @@ ALTER TABLE `vendors`
 -- AUTO_INCREMENT for table `activity_logs`
 --
 ALTER TABLE `activity_logs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=247;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=256;
 
 --
 -- AUTO_INCREMENT for table `bankings`
@@ -1146,7 +1158,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `properties`
 --
 ALTER TABLE `properties`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `rooms`
@@ -1182,7 +1194,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `vendors`
 --
 ALTER TABLE `vendors`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Constraints for dumped tables
