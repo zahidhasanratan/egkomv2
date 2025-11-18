@@ -111,20 +111,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-6 col-lg-4 col-xxl-3">
-                                            <div class="form-group mt-15">
-                                                <label class="form-label">Logo Of Company</label>
-                                                <div class="multiple-upload-container" id="upload-container-1">
-                                                    <input type="file" class="multiple-file-input" accept="image/*" name="company_logo">
-                                                    <label class="upload-label">Select Logo</label>
-                                                    <div class="multiple-thumbnail-gallery">
-                                                        @if($property && $property->company_logo)
-                                                            <img src="{{ asset($property->company_logo) }}" alt="Company Logo" style="max-width: 100px; max-height: 100px;">
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+
 
                                         <!-- Facilities (merged here) -->
                                         <div class="col-md-6 col-lg-4 col-xxl-3">
@@ -495,7 +482,20 @@
                                         </div>
 
                                     </div>
-
+                                    <div class="col-md-6 col-lg-4 col-xxl-3">
+                                        <div class="form-group mt-15">
+                                            <label class="form-label">Logo Of Company</label>
+                                            <div class="multiple-upload-container" id="upload-container-1">
+                                                <input type="file" class="multiple-file-input" accept="image/*" name="company_logo">
+                                                <label class="upload-label">Select Logo</label>
+                                                <div class="multiple-thumbnail-gallery">
+                                                    @if($property && $property->company_logo)
+                                                        <img src="{{ asset($property->company_logo) }}" alt="Company Logo" style="max-width: 100px; max-height: 100px;">
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <!-- Actions -->
                                     <div class="row">
                                         <div class="col-sm-2 col-md-2 mt-15">

@@ -212,7 +212,7 @@
                             <!-- Start:  Hotel -->
                             <div id="Hotel" class="tab-pane in active">
                                 <div class="row">
-                                @foreach(\App\Models\Hotel:: where('property_type','Hotels')->get() as $hotel)
+                                @foreach(\App\Models\Hotel:: where('property_type','Hotels')->where('approve',1)->get() as $hotel)
                                     <div class="col-md-6 col-lg-6 col-xl-3">
                                         <div class="grid-block main-block h-grid-block">
                                             <div class="main-img h-grid-img">

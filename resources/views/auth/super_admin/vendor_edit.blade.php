@@ -127,24 +127,6 @@
                                                        value="{{ $oldOr('road_number_name') }}">
                                             </div>
                                         </div>
-
-                                        <!-- Company Logo -->
-                                        <div class="col-md-6 col-lg-4 col-xxl-3">
-                                            <div class="form-group mt-15">
-                                                <label class="form-label">Logo Of Company</label>
-                                                <div class="multiple-upload-container" id="upload-container-1">
-                                                    <input type="file" class="multiple-file-input" accept="image/*" name="company_logo">
-                                                    <label class="upload-label">Select Logo</label>
-                                                    <div class="multiple-thumbnail-gallery"></div>
-                                                    @if(!empty($vendor->company_logo))
-                                                        <div class="mt-2">
-                                                            <img style="height: auto;width: 120px" src="{{ asset($vendor->company_logo) }}">
-                                                        </div>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-
                                         <!-- Total Capacity -->
                                         <div class="col-md-6 col-lg-4 col-xxl-3">
                                             <div class="form-group">
@@ -154,6 +136,8 @@
                                                        value="{{ $oldOr('total_capacity') }}">
                                             </div>
                                         </div>
+
+
 
                                         <!-- Total Car Parking -->
                                         <div class="col-md-6 col-lg-4 col-xxl-3">
@@ -491,6 +475,22 @@
                                                 </div>
                                                 <div class="input-group {{ $oldOr('conference_hall') === 'yes' ? '' : 'hidden' }}" id="Conference-input">
                                                     <textarea class="form-control" name="conference_hall_details" placeholder="Ex: 1500 SFT" style="height: 50px;">{{ $oldOr('conference_hall_details') }}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Company Logo -->
+                                        <div class="col-md-6 col-lg-4 col-xxl-3">
+                                            <div class="form-group mt-15">
+                                                <label class="form-label">Logo Of Company</label>
+                                                <div class="multiple-upload-container" id="upload-container-1">
+                                                    <input type="file" class="multiple-file-input" accept="image/*" name="company_logo">
+                                                    <label class="upload-label">Select Logo</label>
+                                                    <div class="multiple-thumbnail-gallery"></div>
+                                                    @if(!empty($vendor->company_logo))
+                                                        <div class="mt-2">
+                                                            <img style="height: auto;width: 120px" src="{{ asset($vendor->company_logo) }}">
+                                                        </div>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>

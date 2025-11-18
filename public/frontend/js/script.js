@@ -393,6 +393,45 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+// Toggle user profile dropdown menu
+document.addEventListener('DOMContentLoaded', function () {
+    const profileIconToggle = document.getElementById('profileIconToggle');
+    const userSubmenu = document.getElementById('userSubmenu');
+    
+    if (profileIconToggle && userSubmenu) {
+        // Use event delegation on the document to catch all clicks
+        profileIconToggle.onclick = function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            // Toggle the dropdown
+            if (userSubmenu.style.display === 'block' || userSubmenu.classList.contains('show')) {
+                userSubmenu.style.display = 'none';
+                userSubmenu.classList.remove('show');
+            } else {
+                userSubmenu.style.display = 'block';
+                userSubmenu.classList.add('show');
+            }
+            return false;
+        };
+        
+        // Close the submenu if the user clicks outside of it
+        document.addEventListener('click', function (event) {
+            if (profileIconToggle && userSubmenu) {
+                const clickedInsideToggle = profileIconToggle.contains(event.target);
+                const clickedInsideMenu = userSubmenu.contains(event.target);
+                
+                if (!clickedInsideToggle && !clickedInsideMenu) {
+                    if (userSubmenu.style.display === 'block' || userSubmenu.classList.contains('show')) {
+                        userSubmenu.style.display = 'none';
+                        userSubmenu.classList.remove('show');
+                    }
+                }
+            }
+        });
+    }
+});
+
 
 
 

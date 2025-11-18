@@ -50,6 +50,11 @@ return [
             'driver' => 'session',
             'provider' => 'vendors',
         ],
+
+        'guest' => [
+            'driver' => 'session',
+            'provider' => 'guests',
+        ],
     ],
 
     /*
@@ -83,6 +88,11 @@ return [
         'vendors' => [ // This should match the provider name used in 'guards'
             'driver' => 'eloquent',
             'model' => App\Models\Vendor::class, // Replace with your actual model
+        ],
+
+        'guests' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Guest::class,
         ],
 
         // Example for database driver (commented out)

@@ -92,19 +92,6 @@
                                                     <input type="text" class="form-control" id="road-number-name" name="road_number_name" placeholder="Road Number/Name (If any)" value="{{ old('road_number_name') }}">
                                                 </div>
                                             </div>
-
-                                            <!-- Company Logo -->
-                                            <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                <div class="form-group mt-15">
-                                                    <label class="form-label">Logo Of Company</label>
-                                                    <div class="multiple-upload-container" id="upload-container-1">
-                                                        <input type="file" class="multiple-file-input" accept="image/*" name="company_logo">
-                                                        <label class="upload-label">Select Logo</label>
-                                                        <div class="multiple-thumbnail-gallery"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
                                             <!-- Total Capacity -->
                                             <div class="col-md-6 col-lg-4 col-xxl-3">
                                                 <div class="form-group">
@@ -112,6 +99,8 @@
                                                     <input type="text" class="form-control" id="total-capacity" name="total_capacity" placeholder="Capacity" value="{{ old('total_capacity') }}">
                                                 </div>
                                             </div>
+
+
 
                                             <!-- Total Car Parking -->
                                             <div class="col-md-6 col-lg-4 col-xxl-3">
@@ -427,9 +416,18 @@
                                                 </div>
                                             </div>
 
+                                            <!-- Company Logo -->
                                             <div class="col-md-6 col-lg-4 col-xxl-3">
-
+                                                <div class="form-group mt-15">
+                                                    <label class="form-label">Logo Of Company</label>
+                                                    <div class="multiple-upload-container" id="upload-container-1">
+                                                        <input type="file" class="multiple-file-input" accept="image/*" name="company_logo">
+                                                        <label class="upload-label">Select Logo</label>
+                                                        <div class="multiple-thumbnail-gallery"></div>
+                                                    </div>
+                                                </div>
                                             </div>
+
                                             <!-- Password -->
                                             <div class="col-md-6 col-lg-4 col-xxl-3">
                                                 <div class="form-group">

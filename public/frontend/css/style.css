@@ -13255,9 +13255,18 @@ h2.wishlist-title {
 			background-color: white;
 			border: 1px solid #ddd;
 			box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-			border-radius: 5px;
+			border-radius: 8px;
+			border-top-left-radius: 8px;
+			border-top-right-radius: 8px;
+			border-bottom-left-radius: 12px;
+			border-bottom-right-radius: 12px;
 			width: 180px;
-			z-index: 10;
+			z-index: 99999;
+			padding: 8px 0;
+		}
+		
+		.user-submenu.show {
+			display: block !important;
 		}
 
         /* Submenu list styling */
@@ -13268,26 +13277,49 @@ h2.wishlist-title {
         }
 
         .user-submenu ul li {
-          padding: 5px 10px;
+          padding: 0;
+          margin: 0;
+        }
+        
+        .user-submenu ul li a,
+        .user-submenu ul li form {
+          padding: 10px 15px;
+          display: block;
+          text-decoration: none;
+          color: #333;
+          font-size: 14px;
+          transition: background-color 0.2s ease, color 0.2s ease;
+          margin: 0;
+        }
+        
+        .user-submenu ul li form {
+          padding: 0;
+        }
+        
+        .user-submenu ul li form a {
+          padding: 10px 15px;
+          display: block;
         }
 
         .user-submenu ul li:hover {
 			background-color: #f1f1f1;
-			padding: 5px 10px;
         }
-
-        .user-submenu ul li a {
-          text-decoration: none;
-          color: #333;
-          display: block;
+        
+        .user-submenu ul li:last-child:hover {
+          border-bottom-left-radius: 12px;
+          border-bottom-right-radius: 12px;
         }
 
         .user-submenu ul li a:hover {
-         
+          color: #000;
         }
 
         /* Arrow for the profile icon (optional) */
         .user-login-button {
+          position: relative;
+        }
+        
+        .user-section {
           position: relative;
         }
 

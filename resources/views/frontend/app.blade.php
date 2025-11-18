@@ -438,8 +438,9 @@
                 <div class="col-lg-2">
                     <div class="user-bendor">
                         <div class="bendor-section">
-                            <a href="#">Egkom you Home</a>
+                            <a href="#">Egkom you Home </a>
                         </div>
+                        
                         <div class="user-section">
                             <div class="user-login-button">
                                 <a href="#" id="profileIconToggle">
@@ -460,23 +461,40 @@
                             <!-- Submenu -->
                             <div class="user-submenu" id="userSubmenu">
                                 <ul>
-                                    <li>
-                                        <a href="login.html" id="loginMenu">Login</a>
+                                    
+                                    
+                                   
+                                    
+                                   
+                                    <li style="display: none;">
+                                        <a href="{{ route('guest.login') }}" id="loginMenu">Login</a>
+                                    </li>
+                                    
+                                    @if(auth()->guard('guest')->check())
+ 
+    <li>
+                                        <a href="{{ route('guest.profile') }}">Profile</a>
                                     </li>
                                     <li>
-                                        <a href="sign-up.html">Signup</a>
+                                        <a href="{{ route('guest.settings') }}">Settings</a>
                                     </li>
                                     <li>
-                                        <a href="profile.html">Profile</a>
+                                        <form method="POST" action="{{ route('guest.logout') }}" style="display: inline;">
+                                            @csrf
+                                            <a href="#" onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
+                                        </form>
+                                    </li>
+@else
+<li>
+                                        <a href="{{ route('guest.login') }}" id="loginMenu">Login</a>
                                     </li>
                                     <li>
-                                        <a href="#">Settings</a>
+                                        <a href="{{ route('guest.signup') }}">Signup</a>
                                     </li>
-                                    <li>
-                                        <a href="#">Logout</a>
-                                    </li>
+@endif
                                 </ul>
                             </div>
+                            
                             <!-- Login Modal -->
                             <div id="loginModal" class="modal">
                                 <div class="modal-content">

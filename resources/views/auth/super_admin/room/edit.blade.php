@@ -179,7 +179,7 @@
 
                                                 <div class="col-md-6 col-lg-4 col-xxl-3">
                                                     <div class="form-group">
-                                                        <label class="form-label">Room Size</label>
+                                                        <label class="form-label">Room Size (sq. ft / sq. m)</label>
                                                         <input type="number" class="form-control" name="size" value="{{ old('size', $room->size) }}" placeholder="Ex: 1200 SFT" required>
                                                         @error('size')
                                                         <span class="text-danger">{{ $message }}</span>
