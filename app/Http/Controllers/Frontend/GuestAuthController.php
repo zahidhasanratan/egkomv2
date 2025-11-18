@@ -308,4 +308,53 @@ class GuestAuthController extends Controller
         return redirect()->route('guest.login')
             ->with('success', 'Your password has been reset successfully. You can now log in with your new password.');
     }
+
+    /**
+     * Show the guest dashboard
+     */
+    public function dashboard()
+    {
+        $guest = Auth::guard('guest')->user();
+        return view('frontend.guest.dashboard', compact('guest'));
+    }
+
+    /**
+     * Show guest bookings
+     */
+    public function bookings()
+    {
+        return view('frontend.guest.bookings');
+    }
+
+    /**
+     * Show guest wishlist
+     */
+    public function wishlist()
+    {
+        return view('frontend.guest.wishlist');
+    }
+
+    /**
+     * Show payment history
+     */
+    public function paymentHistory()
+    {
+        return view('frontend.guest.payment-history');
+    }
+
+    /**
+     * Show guest reviews
+     */
+    public function reviews()
+    {
+        return view('frontend.guest.reviews');
+    }
+
+    /**
+     * Show notifications
+     */
+    public function notifications()
+    {
+        return view('frontend.guest.notifications');
+    }
 }

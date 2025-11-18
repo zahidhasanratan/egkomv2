@@ -438,7 +438,11 @@
                 <div class="col-lg-2">
                     <div class="user-bendor">
                         <div class="bendor-section">
-                            <a href="#">Egkom you Home </a>
+                            @if(auth()->guard('guest')->check())
+                                <a href="#">{{ auth()->guard('guest')->user()->name }}</a>
+                            @else
+                                <a href="#">Egkom your Home </a>
+                            @endif
                         </div>
                         
                         <div class="user-section">
@@ -473,6 +477,9 @@
                                     @if(auth()->guard('guest')->check())
  
     <li>
+                                        <a href="{{ route('guest.dashboard') }}">Dashboard</a>
+                                    </li>
+                                    <li>
                                         <a href="{{ route('guest.profile') }}">Profile</a>
                                     </li>
                                     <li>

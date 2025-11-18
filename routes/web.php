@@ -37,6 +37,12 @@ Route::prefix('guest')->name('guest.')->group(function () {
     
     // Protected routes (require authentication)
     Route::middleware('auth:guest')->group(function () {
+        Route::get('/dashboard', [App\Http\Controllers\Frontend\GuestAuthController::class, 'dashboard'])->name('dashboard');
+        Route::get('/bookings', [App\Http\Controllers\Frontend\GuestAuthController::class, 'bookings'])->name('bookings');
+        Route::get('/wishlist', [App\Http\Controllers\Frontend\GuestAuthController::class, 'wishlist'])->name('wishlist');
+        Route::get('/payment-history', [App\Http\Controllers\Frontend\GuestAuthController::class, 'paymentHistory'])->name('payment-history');
+        Route::get('/reviews', [App\Http\Controllers\Frontend\GuestAuthController::class, 'reviews'])->name('reviews');
+        Route::get('/notifications', [App\Http\Controllers\Frontend\GuestAuthController::class, 'notifications'])->name('notifications');
         Route::get('/profile', [App\Http\Controllers\Frontend\GuestAuthController::class, 'showProfile'])->name('profile');
         Route::put('/profile', [App\Http\Controllers\Frontend\GuestAuthController::class, 'updateProfile'])->name('profile.update');
         Route::get('/settings', [App\Http\Controllers\Frontend\GuestAuthController::class, 'showSettings'])->name('settings');
