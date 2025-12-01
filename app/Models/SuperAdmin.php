@@ -11,7 +11,7 @@ class SuperAdmin extends Authenticatable  // Extend Authenticatable
 
     // Optional: if you need custom attributes like 'role', define them
     protected $fillable = [
-        'name', 'email', 'password', 'role'
+        'name', 'email', 'password', 'role', 'password_reset_token', 'password_reset_expires_at'
     ];
 
     // Optional: If you want to protect sensitive attributes, e.g., password, use 'hidden'

@@ -3,10 +3,15 @@
 namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
+use App\Models\Vendor;
+use App\Mail\VendorPasswordResetMail;
 use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 use Jenssegers\Agent\Agent;
 
 class VendorAdminLoginController extends Controller
@@ -119,5 +124,94 @@ class VendorAdminLoginController extends Controller
 //        return redirect()->url('vendor.login');
         return redirect(url('/login'));
 
+    }
+
+    /**
+     * Show the forgot password form
+     */
+    public function showForgotPasswordForm()
+    {
+        return view('auth.vendor.forgot-password');
+    }
+
+    /**
+     * Send password reset email
+     */
+    public function sendPasswordResetEmail(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:vendors,email',
+        ], [
+            'email.exists' => 'We could not find a vendor with that email address.',
+        ]);
+
+        $vendor = Vendor::where('email', $request->email)->first();
+
+        if ($vendor) {
+            // Generate reset token
+            $token = Str::random(64);
+            $vendor->password_reset_token = $token;
+            $vendor->password_reset_expires_at = Carbon::now()->addHours(1);
+            $vendor->save();
+
+            // Send email
+            try {
+                Mail::to($vendor->email)->send(new VendorPasswordResetMail($token, $vendor->contact_person_name ?? $vendor->hotel_name));
+            } catch (\Exception $e) {
+                return back()->withErrors(['email' => 'Failed to send email. Please try again later.'])->withInput();
+            }
+        }
+
+        return back()->with('success', 'If that email address exists in our system, we have sent a password reset link to it.');
+    }
+
+    /**
+     * Show the reset password form
+     */
+    public function showResetPasswordForm($token)
+    {
+        $vendor = Vendor::where('password_reset_token', $token)
+            ->where('password_reset_expires_at', '>', Carbon::now())
+            ->first();
+
+        if (!$vendor) {
+            return redirect()->route('vendor-admin.password.request')
+                ->withErrors(['token' => 'This password reset token is invalid or has expired.']);
+        }
+
+        return view('auth.vendor.reset-password', [
+            'token' => $token,
+            'email' => $vendor->email,
+        ]);
+    }
+
+    /**
+     * Reset the password
+     */
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email|exists:vendors,email',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $vendor = Vendor::where('email', $request->email)
+            ->where('password_reset_token', $request->token)
+            ->where('password_reset_expires_at', '>', Carbon::now())
+            ->first();
+
+        if (!$vendor) {
+            return back()->withErrors(['token' => 'This password reset token is invalid or has expired.'])->withInput();
+        }
+
+        // Update password and clear reset token
+        $vendor->password = Hash::make($request->password);
+        $vendor->password_reset_token = null;
+        $vendor->password_reset_expires_at = null;
+        $vendor->save();
+
+        return redirect()->route('vendor-admin.login')
+            ->with('success', 'Your password has been reset successfully. You can now log in with your new password.');
     }
 }

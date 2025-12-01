@@ -264,7 +264,7 @@
 
                     <!-- Forgot password link -->
                     <div class="pass-link">
-                        <a href="{{ route('password.request') }}">Forgot Password</a>
+                        <a href="#" id="forgot-password-link">Forgot Password</a>
                     </div>
 
                     <!-- Submit button -->
@@ -288,20 +288,26 @@
     // Add event listener for the select element change
     userTypeSelect.addEventListener('change', function() {
         const selectedValue = this.value;
+        const forgotPasswordLink = document.getElementById('forgot-password-link');
 
         // Update form action based on selected option
         if (selectedValue === 'super-admin') {
             form.action = "{{ route('super-admin.login.submit') }}"; // Super Admin
+            forgotPasswordLink.href = "{{ route('super-admin.password.request') }}";
         } else if (selectedValue === 'hotel-vendor') {
-            form.action = "{{ route('vendor-admin.login.submit') }}"; // User Login
-        }  else if (selectedValue === 'user') {
+            form.action = "{{ route('vendor-admin.login.submit') }}"; // Vendor
+            forgotPasswordLink.href = "{{ route('vendor-admin.password.request') }}";
+        } else if (selectedValue === 'user') {
             form.action = "{{ route('login') }}"; // User Login
-        }
-
-        else {
-            form.action = '#'; // You can later define logic for Hotel/Vendor
+            forgotPasswordLink.href = "{{ route('password.request') }}";
+        } else {
+            form.action = '#';
+            forgotPasswordLink.href = '#';
         }
     });
+    
+    // Set initial forgot password link
+    document.getElementById('forgot-password-link').href = "{{ route('super-admin.password.request') }}";
 </script>
 <script src="script.js"></script>
 </body>

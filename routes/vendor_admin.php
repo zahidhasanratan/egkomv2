@@ -20,6 +20,12 @@ use App\Http\Controllers\Superadmin\SettingsController;
 Route::prefix('vendor-admin')->group(function () {
     Route::get('login', [VendorAdminLoginController::class, 'showLoginForm'])->name('vendor-admin.login');
     Route::post('login', [VendorAdminLoginController::class, 'login'])->name('vendor-admin.login.submit');
+    
+    // Password reset routes
+    Route::get('password/forgot', [VendorAdminLoginController::class, 'showForgotPasswordForm'])->name('vendor-admin.password.request');
+    Route::post('password/email', [VendorAdminLoginController::class, 'sendPasswordResetEmail'])->name('vendor-admin.password.email');
+    Route::get('password/reset/{token}', [VendorAdminLoginController::class, 'showResetPasswordForm'])->name('vendor-admin.password.reset');
+    Route::post('password/reset', [VendorAdminLoginController::class, 'resetPassword'])->name('vendor-admin.password.update');
 
 
 

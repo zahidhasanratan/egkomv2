@@ -3,9 +3,14 @@
 namespace App\Http\Controllers\Superadmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\SuperAdmin;
+use App\Mail\SuperAdminPasswordResetMail;
 use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 use Jenssegers\Agent\Agent; // Import the Agent package
 use Illuminate\Support\Facades\DB; // For database operations
 
@@ -118,5 +123,92 @@ class SuperAdminLoginController extends Controller
 
         // Redirect the user to the login page
         return redirect()->route('super-admin.login');
+    }
+
+    /**
+     * Show the forgot password form
+     */
+    public function showForgotPasswordForm()
+    {
+        return view('auth.super_admin.forgot-password');
+    }
+
+    /**
+     * Send password reset email
+     */
+    public function sendPasswordResetEmail(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $user = SuperAdmin::where('email', $request->email)->first();
+
+        if ($user) {
+            // Generate reset token
+            $token = Str::random(64);
+            $user->password_reset_token = $token;
+            $user->password_reset_expires_at = Carbon::now()->addHours(1);
+            $user->save();
+
+            // Send email
+            try {
+                Mail::to($user->email)->send(new SuperAdminPasswordResetMail($token, $user->name));
+            } catch (\Exception $e) {
+                return back()->withErrors(['email' => 'Failed to send email. Please try again later.'])->withInput();
+            }
+        }
+
+        return back()->with('success', 'If that email address exists in our system, we have sent a password reset link to it.');
+    }
+
+    /**
+     * Show the reset password form
+     */
+    public function showResetPasswordForm($token)
+    {
+        $user = SuperAdmin::where('password_reset_token', $token)
+            ->where('password_reset_expires_at', '>', Carbon::now())
+            ->first();
+
+        if (!$user) {
+            return redirect()->route('super-admin.password.request')
+                ->withErrors(['token' => 'This password reset token is invalid or has expired.']);
+        }
+
+        return view('auth.super_admin.reset-password', [
+            'token' => $token,
+            'email' => $user->email,
+        ]);
+    }
+
+    /**
+     * Reset the password
+     */
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = SuperAdmin::where('email', $request->email)
+            ->where('password_reset_token', $request->token)
+            ->where('password_reset_expires_at', '>', Carbon::now())
+            ->first();
+
+        if (!$user) {
+            return back()->withErrors(['token' => 'This password reset token is invalid or has expired.'])->withInput();
+        }
+
+        // Update password and clear reset token
+        $user->password = Hash::make($request->password);
+        $user->password_reset_token = null;
+        $user->password_reset_expires_at = null;
+        $user->save();
+
+        return redirect()->route('super-admin.login')
+            ->with('success', 'Your password has been reset successfully. You can now log in with your new password.');
     }
 }

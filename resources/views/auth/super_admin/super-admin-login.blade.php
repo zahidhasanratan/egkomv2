@@ -220,7 +220,7 @@
                     <input type="password" name="password" placeholder="Password" required>
                 </div>
                 <div class="pass-link">
-                    <a href="{{ route('password.request') }}">Forgot Password</a>
+                    <a href="{{ route('super-admin.password.request') }}">Forgot Password</a>
                 </div>
                 <div class="field">
                     <input type="submit" value="Login">

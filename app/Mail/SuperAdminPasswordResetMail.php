@@ -1,0 +1,44 @@
+<?php
+
+namespace App\Mail;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Mail\Mailable;
+use Illuminate\Queue\SerializesModels;
+
+class SuperAdminPasswordResetMail extends Mailable
+{
+    use Queueable, SerializesModels;
+
+    public $token;
+    public $name;
+
+    /**
+     * Create a new message instance.
+     *
+     * @return void
+     */
+    public function __construct($token, $name)
+    {
+        $this->token = $token;
+        $this->name = $name;
+    }
+
+    /**
+     * Build the message.
+     *
+     * @return $this
+     */
+    public function build()
+    {
+        $resetUrl = url('/super-admin/password/reset/' . $this->token);
+        
+        return $this->subject('Reset Your Password - EGKom')
+                    ->view('emails.superadmin-password-reset')
+                    ->with([
+                        'name' => $this->name,
+                        'resetUrl' => $resetUrl,
+                    ]);
+    }
+}

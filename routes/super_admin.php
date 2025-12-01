@@ -19,6 +19,12 @@ use App\Http\Controllers\Vendor\BankingController;
 Route::prefix('super-admin')->group(function () {
     Route::get('login', [SuperAdminLoginController::class, 'showLoginForm'])->name('super-admin.login');
     Route::post('login', [SuperAdminLoginController::class, 'login'])->name('super-admin.login.submit');
+    
+    // Password reset routes
+    Route::get('password/forgot', [SuperAdminLoginController::class, 'showForgotPasswordForm'])->name('super-admin.password.request');
+    Route::post('password/email', [SuperAdminLoginController::class, 'sendPasswordResetEmail'])->name('super-admin.password.email');
+    Route::get('password/reset/{token}', [SuperAdminLoginController::class, 'showResetPasswordForm'])->name('super-admin.password.reset');
+    Route::post('password/reset', [SuperAdminLoginController::class, 'resetPassword'])->name('super-admin.password.update');
 
 
     Route::middleware('auth:super-admin')->group(function () {

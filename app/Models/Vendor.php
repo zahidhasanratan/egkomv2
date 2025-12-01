@@ -31,6 +31,8 @@ class Vendor extends Authenticatable // Extend Authenticatable
         'bank_details',
         'password',
         'vendorId',
+        'password_reset_token',
+        'password_reset_expires_at',
     ];
 
     protected $hidden = ['password', 'remember_token'];
