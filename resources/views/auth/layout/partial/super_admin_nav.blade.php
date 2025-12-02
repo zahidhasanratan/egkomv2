@@ -42,6 +42,15 @@
                 </li>
 
                 <li class="nk-menu-item">
+                    <a href="{{ route('super-admin.bookings.index') }}" class="nk-menu-link">
+                        <span class="nk-menu-icon">
+                            <em class="icon ni ni-calendar-booking"></em>
+                        </span>
+                        <span class="nk-menu-text">All Bookings</span>
+                    </a>
+                </li>
+
+                <li class="nk-menu-item">
                     <a href="{{ route('admin.dashboard') }}" class="nk-menu-link">
         <span class="nk-menu-icon">
             <em class="icon ni ni-dashboard"></em> <!-- Updated icon -->

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 18, 2025 at 06:56 AM
+-- Generation Time: Dec 02, 2025 at 09:25 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.23
 
@@ -309,7 +309,11 @@ INSERT INTO `activity_logs` (`id`, `browser`, `os`, `ip_address`, `activity_time
 (264, 'Chrome on Windows', 'Windows', '127.0.0.1', '03:11:28', 'Logged In', '2025-11-17 21:11:28', '2025-11-17 21:11:28'),
 (265, 'Chrome on Windows', 'Windows', '127.0.0.1', '03:11:58', 'Logged In', '2025-11-17 21:11:58', '2025-11-17 21:11:58'),
 (266, 'Chrome on Windows', 'Windows', '127.0.0.1', '05:55:41', 'Logged In', '2025-11-17 23:55:41', '2025-11-17 23:55:41'),
-(267, 'Chrome on Windows', 'Windows', '127.0.0.1', '05:56:06', 'Logged Out', '2025-11-17 23:56:06', '2025-11-17 23:56:06');
+(267, 'Chrome on Windows', 'Windows', '127.0.0.1', '05:56:06', 'Logged Out', '2025-11-17 23:56:06', '2025-11-17 23:56:06'),
+(268, 'Chrome on Windows', 'Windows', '127.0.0.1', '10:55:40', 'Logged In', '2025-12-01 04:55:40', '2025-12-01 04:55:40'),
+(269, 'Chrome on Windows', 'Windows', '127.0.0.1', '10:58:12', 'Logged In', '2025-12-01 04:58:12', '2025-12-01 04:58:12'),
+(270, 'Chrome on Windows', 'Windows', '127.0.0.1', '05:54:19', 'Logged In', '2025-12-01 23:54:19', '2025-12-01 23:54:19'),
+(271, 'Chrome on Windows', 'Windows', '127.0.0.1', '05:57:44', 'Logged In', '2025-12-01 23:57:44', '2025-12-01 23:57:44');
 
 -- --------------------------------------------------------
 
@@ -366,6 +370,57 @@ INSERT INTO `big_advertises` (`id`, `title`, `url`, `image`, `created_at`, `upda
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `bookings`
+--
+
+CREATE TABLE `bookings` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `invoice_number` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `booking_status` enum('pending','confirmed','cancelled','completed') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'confirmed',
+  `guest_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `guest_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `guest_email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `guest_phone` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `rooms_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`rooms_data`)),
+  `checkin_date` date NOT NULL,
+  `checkout_date` date NOT NULL,
+  `total_nights` int(11) NOT NULL,
+  `total_male` int(11) NOT NULL DEFAULT 0,
+  `total_female` int(11) NOT NULL DEFAULT 0,
+  `total_kids` int(11) NOT NULL DEFAULT 0,
+  `total_persons` int(11) NOT NULL DEFAULT 0,
+  `other_guests` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`other_guests`)),
+  `home_address` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `organization` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `organization_address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `relationship` enum('family','husband','friends','colleagues','onlyMe') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'onlyMe',
+  `additional_requests` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`additional_requests`)),
+  `bed_type` enum('large_bed','twin_beds') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `room_preference` enum('non_smoking','smoking') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'non_smoking',
+  `room_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `room_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `arrival_time` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `property_note` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `citizenship` enum('bangladesh','international') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nid_front` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nid_back` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `passport` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `visa` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `subtotal` decimal(10,2) NOT NULL,
+  `discount` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `tax` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `grand_total` decimal(10,2) NOT NULL,
+  `coupon_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `payment_status` enum('unpaid','partial','paid') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'unpaid',
+  `paid_amount` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `failed_jobs`
 --
 
@@ -406,7 +461,8 @@ CREATE TABLE `guests` (
 --
 
 INSERT INTO `guests` (`id`, `name`, `mobile`, `country_code`, `address`, `email`, `photo`, `password`, `remember_token`, `password_reset_token`, `password_reset_expires_at`, `created_at`, `updated_at`) VALUES
-(1, 'Grant Petty', '+1 (899) 383-3467', '+880', 'Sint quo ex et assu', 'arohinondi@gmail.com', 'uploads/guests/photos/1763441415_691bfb07013f9.png', '$2y$10$ppbzalhDiyVRe/PWfFE1AeP8Z7vqlr8YtR67Ww8nnfTEtBQ4f4UAm', NULL, NULL, NULL, '2025-11-17 21:36:35', '2025-11-17 22:50:15');
+(1, 'Grant Petty', '+1 (899) 383-3467', '+880', 'Sint quo ex et assu', 'arohinondi@gmail.com', 'uploads/guests/photos/1763441415_691bfb07013f9.png', '$2y$10$ppbzalhDiyVRe/PWfFE1AeP8Z7vqlr8YtR67Ww8nnfTEtBQ4f4UAm', NULL, NULL, NULL, '2025-11-17 21:36:35', '2025-11-17 22:50:15'),
+(2, 'Mollika', '01552441122', '+880', 'sadf', 'mollika@mollika.com', NULL, '$2y$10$XtSIoFB/WJj6AojS25zrluvV6G9eXV2CNkIjT.Hs/WEnYwVkCU9mO', NULL, NULL, NULL, '2025-12-02 02:00:29', '2025-12-02 02:00:29');
 
 -- --------------------------------------------------------
 
@@ -604,7 +660,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (40, '2025_11_18_045137_add_password_reset_to_guests_table', 18),
 (41, '2025_11_18_054052_add_password_reset_to_vendors_table', 19),
 (42, '2025_11_18_054115_add_password_reset_to_users_table', 19),
-(43, '2025_11_18_055419_add_password_reset_to_super_admins_table', 20);
+(43, '2025_11_18_055419_add_password_reset_to_super_admins_table', 20),
+(44, '2025_12_02_061848_add_discount_and_status_columns_to_rooms_table', 21),
+(45, '2025_12_02_080841_create_bookings_table', 22);
 
 -- --------------------------------------------------------
 
@@ -803,6 +861,8 @@ CREATE TABLE `rooms` (
   `weekend_price` decimal(10,2) DEFAULT NULL,
   `holiday_price` decimal(10,2) DEFAULT NULL,
   `discount_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `discount_amount` decimal(10,2) DEFAULT NULL,
+  `discount_percentage` decimal(10,2) DEFAULT NULL,
   `discount_value` decimal(10,2) DEFAULT NULL,
   `total_persons` int(11) DEFAULT NULL,
   `description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -825,10 +885,11 @@ CREATE TABLE `rooms` (
 -- Dumping data for table `rooms`
 --
 
-INSERT INTO `rooms` (`id`, `hotel_id`, `name`, `feature_photos`, `number`, `floor_number`, `price_per_night`, `weekend_price`, `holiday_price`, `discount_type`, `discount_value`, `total_persons`, `description`, `size`, `total_rooms`, `total_washrooms`, `total_beds`, `wifi_details`, `appliances`, `furniture`, `amenities`, `cancellation_policy`, `is_active`, `status`, `created_at`, `updated_at`) VALUES
-(28, 46, 'Twin Room', NULL, 'Twin 1002', '1', '5000.00', '5500.00', '6000.00', NULL, NULL, 2, 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 10, 3, 1, 1, '5555', '\"[\\\"AC\\\",\\\"TV\\\",\\\"Fridge\\\",\\\"Microwave\\\",\\\"Fan\\\",\\\"Lamp\\\",\\\"Light\\\",\\\"Water heater\\\\\\/Geyser\\\",\\\"WiFi Router\\\",\\\"Crockeries\\\",\\\"Gas Stove\\\",\\\"Electric Kettle\\\",\\\"Room Heater\\\",\\\"Hair Dryer\\\"]\"', '\"[\\\"Bed\\\",\\\"Dining Table with Chair\\\",\\\"Sofa\\\\\\/Couch\\\",\\\"Tea Table\\\",\\\"Bedside Table\\\",\\\"Shoe Rack\\\",\\\"Clothing Cabinet\\\",\\\"Clothes Drying Hanger\\\",\\\"Iron Stand\\\",\\\"Locker\\\\\\/Safe\\\",\\\"123\\\"]\"', '\"[\\\"Toothbrush\\\",\\\"Towel\\\",\\\"Water bottle\\\"]\"', '[\"flexible\",\"non_refundable\"]', 1, 'draft', '2025-05-05 03:27:12', '2025-11-17 21:17:16'),
-(31, 72, 'test1', NULL, '1', '101', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-09-01 00:34:43', '2025-09-01 00:34:43'),
-(32, 72, 'test2', NULL, '2', '201', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-09-01 00:34:43', '2025-09-01 00:34:43');
+INSERT INTO `rooms` (`id`, `hotel_id`, `name`, `feature_photos`, `number`, `floor_number`, `price_per_night`, `weekend_price`, `holiday_price`, `discount_type`, `discount_amount`, `discount_percentage`, `discount_value`, `total_persons`, `description`, `size`, `total_rooms`, `total_washrooms`, `total_beds`, `wifi_details`, `appliances`, `furniture`, `amenities`, `cancellation_policy`, `is_active`, `status`, `created_at`, `updated_at`) VALUES
+(28, 46, 'Twin Room', NULL, 'Twin 1002', '1', '5000.00', '5500.00', '6000.00', NULL, NULL, NULL, NULL, 2, 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 10, 3, 1, 1, '5555', '\"[]\"', '\"[\\\"Bed\\\",\\\"Dining Table with Chair\\\",\\\"Sofa\\\\\\/Couch\\\",\\\"Tea Table\\\",\\\"Bedside Table\\\",\\\"Shoe Rack\\\",\\\"Clothing Cabinet\\\",\\\"Clothes Drying Hanger\\\",\\\"Iron Stand\\\",\\\"Locker\\\\\\/Safe\\\",\\\"123\\\"]\"', '\"[\\\"Toothbrush\\\",\\\"Towel\\\",\\\"Water bottle\\\"]\"', '[\"flexible\",\"non_refundable\"]', 1, 'published', '2025-05-05 03:27:12', '2025-12-02 00:24:02'),
+(31, 72, 'test1', NULL, '1', '101', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-09-01 00:34:43', '2025-09-01 00:34:43'),
+(32, 72, 'test2', NULL, '2', '201', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-09-01 00:34:43', '2025-09-01 00:34:43'),
+(33, 46, 'Abraham Neal', NULL, '61', '976', '724.00', '654.00', '320.00', 'percentage', NULL, '22.00', NULL, 1, 'Fuga Commodo et ea', 56, 1, 1, 2, 'Qui in eveniet dese', '\"[\\\"Fridge\\\",\\\"Light\\\",\\\"Gas Stove\\\",\\\"Room Heater\\\",\\\"Hair Dryer\\\"]\"', '\"[\\\"Bed\\\",\\\"Dining Table with Chair\\\",\\\"Tea Table\\\",\\\"Bedside Table\\\",\\\"Shoe Rack\\\",\\\"Clothing Cabinet\\\",\\\"Clothes Drying Hanger\\\"]\"', '\"[\\\"Soap\\\",\\\"Toothbrush\\\",\\\"Towel\\\",\\\"Air freshener\\\",\\\"Fruit basket\\\",\\\"Complimentary drinks\\\",\\\"Buffet breakfast\\\",\\\"Add\\\\\\/type Manually\\\"]\"', '[]', 1, 'published', '2025-12-02 00:37:26', '2025-12-02 00:41:49');
 
 -- --------------------------------------------------------
 
@@ -857,7 +918,11 @@ INSERT INTO `room_photos` (`id`, `room_id`, `category`, `photo_path`, `created_a
 (62, 28, 'feature', 'room_photos/1748772802_683c27c2b8624.png', '2025-06-01 04:13:22', '2025-06-01 04:13:22'),
 (63, 28, 'kitchen', 'room_photos/1748773456_683c2a50cfc9e.png', '2025-06-01 04:24:16', '2025-06-01 04:24:16'),
 (64, 28, 'kitchen', 'room_photos/1748773456_683c2a50d8bc0.jpg', '2025-06-01 04:24:16', '2025-06-01 04:24:16'),
-(65, 28, 'kitchen', 'room_photos/1748773456_683c2a50e0cbe.jpg', '2025-06-01 04:24:16', '2025-06-01 04:24:16');
+(65, 28, 'kitchen', 'room_photos/1748773456_683c2a50e0cbe.jpg', '2025-06-01 04:24:16', '2025-06-01 04:24:16'),
+(66, 33, 'feature', 'room_photos/1764657446_692e8926ba9c6.png', '2025-12-02 00:37:26', '2025-12-02 00:37:26'),
+(67, 33, 'kitchen', 'room_photos/1764657446_692e8926ce60b.png', '2025-12-02 00:37:26', '2025-12-02 00:37:26'),
+(68, 33, 'kitchen', 'room_photos/1764657446_692e8926d7e04.png', '2025-12-02 00:37:26', '2025-12-02 00:37:26'),
+(69, 33, 'kitchen', 'room_photos/1764657446_692e8926eda5c.png', '2025-12-02 00:37:26', '2025-12-02 00:37:26');
 
 -- --------------------------------------------------------
 
@@ -1011,6 +1076,14 @@ ALTER TABLE `big_advertises`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `bookings`
+--
+ALTER TABLE `bookings`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `bookings_invoice_number_unique` (`invoice_number`),
+  ADD KEY `bookings_guest_id_foreign` (`guest_id`);
+
+--
 -- Indexes for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
@@ -1136,7 +1209,7 @@ ALTER TABLE `vendors`
 -- AUTO_INCREMENT for table `activity_logs`
 --
 ALTER TABLE `activity_logs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=268;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=272;
 
 --
 -- AUTO_INCREMENT for table `bankings`
@@ -1151,6 +1224,12 @@ ALTER TABLE `big_advertises`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `bookings`
+--
+ALTER TABLE `bookings`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
@@ -1160,7 +1239,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `guests`
 --
 ALTER TABLE `guests`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `hotels`
@@ -1184,7 +1263,7 @@ ALTER TABLE `menus`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `nearby_areas`
@@ -1220,13 +1299,13 @@ ALTER TABLE `properties`
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `room_photos`
 --
 ALTER TABLE `room_photos`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT for table `small_advertises`
@@ -1255,6 +1334,12 @@ ALTER TABLE `vendors`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `bookings`
+--
+ALTER TABLE `bookings`
+  ADD CONSTRAINT `bookings_guest_id_foreign` FOREIGN KEY (`guest_id`) REFERENCES `guests` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `hotels`

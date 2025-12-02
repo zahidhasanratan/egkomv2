@@ -323,7 +323,10 @@ class GuestAuthController extends Controller
      */
     public function bookings()
     {
-        return view('frontend.guest.bookings');
+        $bookings = \App\Models\Booking::where('guest_id', auth('guest')->id())
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+        return view('frontend.guest.bookings', compact('bookings'));
     }
 
     /**

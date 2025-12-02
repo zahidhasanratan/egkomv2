@@ -34,6 +34,8 @@
     <link rel="stylesheet" href="{{ asset('frontend')}}/css/responsive.css">
     <!-- Swiper slider -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
 
 <body id="main-homepage">
@@ -633,7 +635,46 @@
  @yield('main')
 
 
-    <!-- Hotel details Modal -->
+    <!-- Global Booking Cart Drawer -->
+<div id="globalBookingCartDrawer" class="booking-cart-drawer">
+    <div class="cart-drawer-overlay" onclick="toggleCartDrawer()"></div>
+    <div class="cart-drawer-content">
+        <div class="cart-header">
+            <h2>Pricing Summary</h2>
+            <button class="cart-drawer-close" onclick="toggleCartDrawer()">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+        <div class="rooms-selection-container">
+            <div class="rooms">
+                <p class="text-center text-primary">Added Rooms</p>
+                <div id="globalCartItemsList">
+                    <!-- Cart items will be added here dynamically -->
+                </div>
+            </div>
+            <div class="action">
+                <div class="total-amount">
+                    <span class="amount" id="globalCartTotal">Total = BDT 0.00</span>
+                    <p class="tax-tag">Fee or Tax Will show at the check out page (if any)</p>
+                </div>
+                <a href="javascript:void(0)" onclick="proceedToCheckout()">
+                    <button type="button" class="btn btn-secondary total-con btn-block">CONTINUE</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Global Floating Booking Cart Button -->
+<div class="global-floating-cart-btn" onclick="toggleCartDrawer()">
+    <div class="cart-icon-wrapper">
+        <i class="fa fa-shopping-cart"></i>
+        <span class="cart-count-badge" id="globalCartCountBadge">0</span>
+    </div>
+    <span class="cart-text">Booking Cart</span>
+</div>
+
+<!-- Hotel details Modal -->
     <div class="modal fade right" id="rightSidebarModalDetails" tabindex="-1" aria-labelledby="rightSidebarModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -1097,18 +1138,21 @@
         font-size: 14px;
     }
     .rooms-selection-container .delete-button {
-        width: 24px;
-        height: 24px;
+        width: 26px;
+        height: 26px;
         border-radius: 50%;
         background: #3b82f6;
         cursor: pointer;
         position: relative;
         transition: all 0.3s;
         flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     .rooms-selection-container .delete-button:hover {
         background: #2563eb;
-        transform: scale(1.1);
+        transform: scale(1.15);
     }
     .rooms-selection-container .delete-button::before,
     .rooms-selection-container .delete-button::after {
@@ -1116,15 +1160,22 @@
         position: absolute;
         top: 50%;
         left: 50%;
-        width: 12px;
-        height: 2px;
+        width: 14px;
+        height: 2.5px;
         background: white;
+        border-radius: 2px;
     }
     .rooms-selection-container .delete-button::before {
         transform: translate(-50%, -50%) rotate(45deg);
     }
     .rooms-selection-container .delete-button::after {
         transform: translate(-50%, -50%) rotate(-45deg);
+    }
+    .empty-cart-message {
+        text-align: center;
+        color: #999;
+        padding: 40px 20px;
+        font-style: italic;
     }
     .rooms-selection-container .action {
         margin-top: 20px;
@@ -1165,54 +1216,176 @@
         box-shadow: 0 4px 12px rgba(145, 39, 143, 0.4);
     }
 
-    /* Floating Booking Cart Button */
-    .floating-cart-btn {
+    /* Global Floating Booking Cart Button - Image 2 Design */
+    .global-floating-cart-btn {
         position: fixed;
         bottom: 30px;
         right: 30px;
-        background: linear-gradient(135deg, #91278f 0%, #6b1f6e 100%);
-        color: white;
+        background: white;
+        border: 3px solid #91278f;
         border-radius: 50%;
-        width: 80px;
-        height: 80px;
-        display: flex;
+        width: 90px;
+        height: 90px;
+        display: none; /* Hidden by default */
         flex-direction: column;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        box-shadow: 0 4px 20px rgba(145, 39, 143, 0.4);
+        box-shadow: 0 4px 20px rgba(145, 39, 143, 0.3);
         transition: all 0.3s;
-        z-index: 999;
+        z-index: 9999;
     }
-    .floating-cart-btn:hover {
-        transform: scale(1.1);
-        box-shadow: 0 6px 25px rgba(145, 39, 143, 0.6);
+    .global-floating-cart-btn.visible {
+        display: flex; /* Show when cart has items */
+    }
+    .global-floating-cart-btn:hover {
+        transform: scale(1.08);
+        box-shadow: 0 6px 25px rgba(145, 39, 143, 0.5);
+        border-width: 4px;
     }
     .cart-icon-wrapper {
         position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     .cart-icon-wrapper i {
-        font-size: 24px;
+        font-size: 28px;
+        color: #91278f;
     }
     .cart-count-badge {
         position: absolute;
-        top: -8px;
-        right: -8px;
-        background: #e53e3e;
+        top: -10px;
+        right: -10px;
+        background: #91278f;
         color: white;
         border-radius: 50%;
-        width: 22px;
-        height: 22px;
-        display: none;
+        width: 26px;
+        height: 26px;
+        display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 12px;
+        font-size: 13px;
         font-weight: 700;
+        opacity: 0;
+        transform: scale(0);
+        transition: all 0.3s ease;
+        border: 2px solid white;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .cart-count-badge.visible {
+        opacity: 1;
+        transform: scale(1);
     }
     .cart-text {
-        font-size: 11px;
+        font-size: 12px;
         font-weight: 600;
-        margin-top: 4px;
+        margin-top: 2px;
+        color: #91278f;
+        text-align: center;
+        line-height: 1.2;
+    }
+
+    /* Booking Cart Drawer */
+    .booking-cart-drawer {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 400px;
+        z-index: 10000;
+        pointer-events: none;
+        transition: all 0.3s ease;
+    }
+    .booking-cart-drawer.active {
+        pointer-events: all;
+    }
+    .cart-drawer-overlay {
+        position: absolute;
+        top: 0;
+        left: -100vw;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+    .booking-cart-drawer.active .cart-drawer-overlay {
+        opacity: 1;
+        pointer-events: all;
+    }
+    .cart-drawer-content {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 400px;
+        background: white;
+        box-shadow: -4px 0 20px rgba(0, 0, 0, 0.2);
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        overflow-y: auto;
+    }
+    .booking-cart-drawer.active .cart-drawer-content {
+        transform: translateX(0);
+    }
+    .cart-drawer-close {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        padding: 5px;
+        line-height: 1;
+        transition: all 0.3s;
+    }
+    .cart-drawer-close:hover {
+        transform: translateY(-50%) scale(1.2);
+    }
+
+    /* Responsive */
+    @media (max-width: 991px) {
+        .pricing-summary-sidebar {
+            display: none !important;
+        }
+        .booking-cart-drawer,
+        .cart-drawer-content {
+            width: 100%;
+            max-width: 400px;
+        }
+        .col-lg-9 {
+            max-width: 100% !important;
+        }
+    }
+    @media (max-width: 576px) {
+        .global-floating-cart-btn {
+            width: 75px;
+            height: 75px;
+            bottom: 20px;
+            right: 20px;
+            border-width: 2px;
+        }
+        .global-floating-cart-btn:hover {
+            border-width: 2px;
+        }
+        .cart-icon-wrapper i {
+            font-size: 24px;
+        }
+        .cart-text {
+            font-size: 11px;
+        }
+        .cart-count-badge {
+            width: 24px;
+            height: 24px;
+            font-size: 12px;
+            top: -8px;
+            right: -8px;
+        }
     }
 
     /* Responsive */
@@ -1450,6 +1623,8 @@
 <script src="{{ asset('frontend')}}/js/script.js"></script>
 <script src="{{ asset('frontend')}}/https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="{{ asset('frontend')}}/js/jquery-ui.min.js"></script>
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 
@@ -1639,6 +1814,210 @@
     });
 </script>
 
+<!-- Global Booking Cart JavaScript -->
+<script>
+    // Global Shopping Cart Management
+    let globalBookingCart = JSON.parse(localStorage.getItem('bookingCart')) || [];
+
+    function addToGlobalCart(roomId, roomName, price, maxQuantity, quantity = 1) {
+        // Check if room already in cart
+        const existingItem = globalBookingCart.find(item => item.roomId === roomId);
+        
+        if (existingItem) {
+            // Update quantity if not exceeding max
+            if (existingItem.quantity + quantity <= maxQuantity) {
+                existingItem.quantity += quantity;
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Maximum Reached',
+                    text: `Maximum ${maxQuantity} rooms available for this type.`,
+                    confirmButtonColor: '#91278f',
+                    timer: 3000
+                });
+                return false;
+            }
+        } else {
+            // Add new item
+            globalBookingCart.push({
+                roomId: roomId,
+                roomName: roomName,
+                price: price,
+                quantity: quantity,
+                maxQuantity: maxQuantity
+            });
+        }
+        
+        // Save to localStorage
+        localStorage.setItem('bookingCart', JSON.stringify(globalBookingCart));
+        
+        // Force immediate update
+        updateGlobalCartDisplay();
+        
+        // Force badge update
+        setTimeout(() => {
+            updateGlobalCartDisplay();
+        }, 10);
+        
+        return true;
+    }
+
+    function removeFromGlobalCart(roomId) {
+        const item = globalBookingCart.find(i => i.roomId === roomId);
+        if (!item) return;
+        
+        Swal.fire({
+            title: 'Remove from Cart?',
+            text: `Remove ${item.roomName} from your booking cart?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#e53e3e',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Yes, Remove',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                globalBookingCart = globalBookingCart.filter(i => i.roomId !== roomId);
+                localStorage.setItem('bookingCart', JSON.stringify(globalBookingCart));
+                updateGlobalCartDisplay();
+                
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Removed!',
+                    text: 'Room has been removed from cart.',
+                    confirmButtonColor: '#91278f',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            }
+        });
+    }
+
+    function updateGlobalCartDisplay() {
+        // Update drawer cart
+        const drawerCartList = document.getElementById('globalCartItemsList');
+        const drawerCartTotal = document.getElementById('globalCartTotal');
+        
+        // Update sidebar cart (if on hotel details page)
+        const sidebarCartList = document.getElementById('cartItemsList');
+        const sidebarCartTotal = document.getElementById('cartTotal');
+        
+        // Update floating button badge and visibility
+        const globalBadge = document.getElementById('globalCartCountBadge');
+        const localBadge = document.getElementById('cartCountBadge');
+        const floatingButton = document.querySelector('.global-floating-cart-btn');
+        
+        if (globalBookingCart.length === 0) {
+            const emptyMessage = '<p class="empty-cart-message" style="text-align: center; color: #999; padding: 20px;">No rooms added yet</p>';
+            if (drawerCartList) drawerCartList.innerHTML = emptyMessage;
+            if (sidebarCartList) sidebarCartList.innerHTML = emptyMessage;
+            
+            if (drawerCartTotal) drawerCartTotal.textContent = 'Total = BDT 0.00';
+            if (sidebarCartTotal) sidebarCartTotal.textContent = 'BDT 0.00';
+            
+            if (globalBadge) {
+                globalBadge.textContent = '0';
+                globalBadge.style.display = 'none';
+            }
+            if (localBadge) {
+                localBadge.textContent = '0';
+                localBadge.style.display = 'none';
+            }
+            
+            // Hide floating button when cart is empty
+            if (floatingButton) {
+                floatingButton.classList.remove('visible');
+            }
+            return;
+        }
+        
+        // Show floating button when cart has items
+        if (floatingButton) {
+            floatingButton.classList.add('visible');
+        }
+        
+        let total = 0;
+        let itemsHtml = '';
+        
+        globalBookingCart.forEach(item => {
+            const itemTotal = item.price * item.quantity;
+            total += itemTotal;
+            
+            itemsHtml += `
+                <div class="room">
+                    <div class="room-content">
+                        <div class="room-name">${item.roomName}</div>
+                        <div class="pax-and-fare">
+                            ${item.quantity > 1 ? `<span class="pax">Qty: ${item.quantity} × </span>` : ''}
+                            <span class="fare">BDT ${itemTotal.toFixed(2)}</span>
+                        </div>
+                    </div>
+                    <div class="delete-button" onclick="removeFromGlobalCart(${item.roomId})"></div>
+                </div>
+            `;
+        });
+        
+        // Update drawer
+        if (drawerCartList) drawerCartList.innerHTML = itemsHtml;
+        if (drawerCartTotal) drawerCartTotal.textContent = `Total = BDT ${total.toFixed(2)}`;
+        
+        // Update sidebar
+        if (sidebarCartList) sidebarCartList.innerHTML = itemsHtml;
+        if (sidebarCartTotal) sidebarCartTotal.textContent = `BDT ${total.toFixed(2)}`;
+        
+        // Update badges with animation
+        const count = globalBookingCart.length;
+        if (globalBadge) {
+            globalBadge.textContent = count;
+            if (count > 0) {
+                globalBadge.classList.add('visible');
+            } else {
+                globalBadge.classList.remove('visible');
+            }
+        }
+        if (localBadge) {
+            localBadge.textContent = count;
+            if (count > 0) {
+                localBadge.style.display = 'block';
+            } else {
+                localBadge.style.display = 'none';
+            }
+        }
+        
+        // Ensure floating button is visible when cart has items
+        if (floatingButton && count > 0) {
+            floatingButton.classList.add('visible');
+        }
+    }
+
+    function toggleCartDrawer() {
+        const drawer = document.getElementById('globalBookingCartDrawer');
+        if (drawer) {
+            drawer.classList.toggle('active');
+        }
+    }
+
+    function proceedToCheckout() {
+        if (globalBookingCart.length === 0) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Cart is Empty',
+                text: 'Please add at least one room to continue.',
+                confirmButtonColor: '#91278f'
+            });
+            return;
+        }
+        
+        // Redirect to checkout page
+        window.location.href = '/booking/checkout';
+    }
+
+    // Initialize cart on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        updateGlobalCartDisplay();
+    });
+</script>
 
 </body>
+
 </html>

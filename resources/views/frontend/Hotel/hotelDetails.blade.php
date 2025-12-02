@@ -758,116 +758,32 @@
                 </div>
                 <!-- Room Deatails -->
 
-                <!-- Floating Booking Cart Button -->
-                <div class="floating-cart-btn" onclick="scrollToRoomDetails()">
-                    <div class="cart-icon-wrapper">
-                        <i class="fa fa-shopping-cart"></i>
-                        <span class="cart-count-badge" id="cartCountBadge">0</span>
-                    </div>
-                    <span class="cart-text">Booking Cart</span>
-                </div>
-
                 <!-- Room Data for Modal -->
                 <script>
-                    // Shopping Cart Management
-                    let bookingCart = [];
-
+                    // Use global cart functions
                     function addToCart(roomId, roomName, price, maxQuantity) {
                         const qtyInput = document.getElementById('qty-' + roomId);
                         const quantity = qtyInput ? parseInt(qtyInput.value) : 1;
                         
-                        // Check if room already in cart
-                        const existingItem = bookingCart.find(item => item.roomId === roomId);
-                        
-                        if (existingItem) {
-                            // Update quantity if not exceeding max
-                            if (existingItem.quantity + quantity <= maxQuantity) {
-                                existingItem.quantity += quantity;
-                            } else {
-                                alert(`Maximum ${maxQuantity} rooms available for this type.`);
-                                return;
-                            }
-                        } else {
-                            // Add new item
-                            bookingCart.push({
-                                roomId: roomId,
-                                roomName: roomName,
-                                price: price,
-                                quantity: quantity,
-                                maxQuantity: maxQuantity
+                        if (addToGlobalCart(roomId, roomName, price, maxQuantity, quantity)) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Added to Cart!',
+                                text: `${roomName} (Qty: ${quantity}) has been added to your booking cart.`,
+                                confirmButtonColor: '#91278f',
+                                timer: 2000,
+                                showConfirmButton: true,
+                                confirmButtonText: 'View Cart'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    toggleCartDrawer();
+                                }
                             });
                         }
-                        
-                        updateCartDisplay();
-                        
-                        // Show success message
-                        alert('Room added to booking cart!');
                     }
 
                     function removeFromCart(roomId) {
-                        bookingCart = bookingCart.filter(item => item.roomId !== roomId);
-                        updateCartDisplay();
-                    }
-
-                    function updateCartDisplay() {
-                        const cartList = document.getElementById('cartItemsList');
-                        const cartTotal = document.getElementById('cartTotal');
-                        const cartBadge = document.getElementById('cartCountBadge');
-                        
-                        if (bookingCart.length === 0) {
-                            cartList.innerHTML = '';
-                            cartTotal.textContent = 'Total = BDT 0.00';
-                            if (cartBadge) {
-                                cartBadge.textContent = '0';
-                                cartBadge.style.display = 'none';
-                            }
-                            return;
-                        }
-                        
-                        let total = 0;
-                        let itemsHtml = '';
-                        
-                        bookingCart.forEach(item => {
-                            const itemTotal = item.price * item.quantity;
-                            total += itemTotal;
-                            
-                            itemsHtml += `
-                                <div class="room">
-                                    <div class="room-content">
-                                        <div class="room-name">${item.roomName}</div>
-                                        <div class="pax-and-fare">
-                                            ${item.quantity > 1 ? `<span class="pax">Qty: ${item.quantity} × </span>` : ''}
-                                            <span class="fare">BDT ${itemTotal.toFixed(2)}</span>
-                                        </div>
-                                    </div>
-                                    <div class="delete-button" onclick="removeFromCart(${item.roomId})"></div>
-                                </div>
-                            `;
-                        });
-                        
-                        cartList.innerHTML = itemsHtml;
-                        cartTotal.textContent = `Total = BDT ${total.toFixed(2)}`;
-                        
-                        if (cartBadge) {
-                            cartBadge.textContent = bookingCart.length;
-                            cartBadge.style.display = 'block';
-                        }
-                    }
-
-                    function proceedToCheckout() {
-                        if (bookingCart.length === 0) {
-                            alert('Please add at least one room to continue.');
-                            return;
-                        }
-                        
-                        // Here you can redirect to checkout page or submit the cart
-                        console.log('Proceeding to checkout with:', bookingCart);
-                        alert('Proceeding to checkout... (This will redirect to booking page)');
-                        // window.location.href = '/booking/checkout';
-                    }
-
-                    function scrollToRoomDetails() {
-                        document.getElementById('Room_Details').scrollIntoView({ behavior: 'smooth' });
+                        removeFromGlobalCart(roomId);
                     }
 
                     const roomsData = {!! json_encode(\App\Models\Room::where('hotel_id', $show->id)->with('photos')->get()->map(function($room) {
@@ -954,33 +870,28 @@
                                 const modalQty = document.querySelector('#rightSidebarModalDetails #qty');
                                 const quantity = modalQty ? parseInt(modalQty.value) : 1;
                                 
-                                // Temporarily store quantity in cart item
-                                const existingItem = bookingCart.find(item => item.roomId === room.id);
-                                if (existingItem) {
-                                    if (existingItem.quantity + quantity <= room.total_rooms) {
-                                        existingItem.quantity += quantity;
-                                    } else {
-                                        alert(`Maximum ${room.total_rooms} rooms available for this type.`);
-                                        return;
+                                if (addToGlobalCart(room.id, room.name, discountedPrice, room.total_rooms || 1, quantity)) {
+                                    // Close modal first
+                                    const modalElement = document.getElementById('rightSidebarModalDetails');
+                                    if (modalElement) {
+                                        const modal = bootstrap.Modal.getInstance(modalElement);
+                                        if (modal) modal.hide();
                                     }
-                                } else {
-                                    bookingCart.push({
-                                        roomId: room.id,
-                                        roomName: room.name,
-                                        price: discountedPrice,
-                                        quantity: quantity,
-                                        maxQuantity: room.total_rooms || 1
+                                    
+                                    // Then show success message
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Added to Cart!',
+                                        text: `${room.name} (Qty: ${quantity}) has been added to your booking cart.`,
+                                        confirmButtonColor: '#91278f',
+                                        timer: 2000,
+                                        showConfirmButton: true,
+                                        confirmButtonText: 'View Cart'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            toggleCartDrawer();
+                                        }
                                     });
-                                }
-                                
-                                updateCartDisplay();
-                                alert('Room added to booking cart!');
-                                
-                                // Close modal after adding
-                                const modalElement = document.getElementById('rightSidebarModalDetails');
-                                if (modalElement) {
-                                    const modal = bootstrap.Modal.getInstance(modalElement);
-                                    if (modal) modal.hide();
                                 }
                             };
                         }

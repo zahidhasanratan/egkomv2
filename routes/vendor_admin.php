@@ -88,6 +88,11 @@ Route::prefix('vendor-admin')->group(function () {
         Route::get('/room/{room}/edit', [ManageRoomController::class, 'edit'])->name('vendor-admin.room.edit');
         Route::put('/room/{room}', [ManageRoomController::class, 'update'])->name('vendor-admin.room.update');
         Route::post('vendor-admin/room/delete-photo', [ManageRoomController::class, 'deletePhoto'])->name('vendor-admin.room.delete-photo');
+        
+        // Booking Management
+        Route::get('/bookings', [\App\Http\Controllers\Vendor\VendorBookingController::class, 'index'])->name('vendor.bookings.index');
+        Route::get('/bookings/{id}', [\App\Http\Controllers\Vendor\VendorBookingController::class, 'show'])->name('vendor.bookings.show');
+        Route::put('/bookings/{id}/status', [\App\Http\Controllers\Vendor\VendorBookingController::class, 'updateStatus'])->name('vendor.bookings.updateStatus');
     });
     /*Admin Panel Ended */
 

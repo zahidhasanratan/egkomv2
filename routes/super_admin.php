@@ -85,6 +85,11 @@ Route::prefix('super-admin')->group(function () {
         Route::get('/pagedetails/{slug}', [PageController::class, 'details'])->name('page.details');
         Route::get('/ajaxsearch', [MenuController::class, 'searchajax'])->name('menu.ajaxsearch');
 
+        // Booking Management
+        Route::get('/bookings', [\App\Http\Controllers\Admin\BookingManagementController::class, 'index'])->name('super-admin.bookings.index');
+        Route::get('/bookings/{id}', [\App\Http\Controllers\Admin\BookingManagementController::class, 'show'])->name('super-admin.bookings.show');
+        Route::put('/bookings/{id}/status', [\App\Http\Controllers\Admin\BookingManagementController::class, 'updateStatus'])->name('super-admin.bookings.updateStatus');
+        Route::delete('/bookings/{id}', [\App\Http\Controllers\Admin\BookingManagementController::class, 'destroy'])->name('super-admin.bookings.destroy');
 
     });
     /*Admin Panel Ended */
