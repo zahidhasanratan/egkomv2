@@ -46,6 +46,19 @@ class BookingController extends Controller
             foreach ($roomsData as $cartItem) {
                 $room = Room::with('hotel')->find($cartItem['roomId']);
                 if ($room && $room->hotel) {
+                    // Get hotel photo - extract first image from featured_photo JSON array
+                    $hotelPhoto = null;
+                    if (isset($room->hotel->photo) && $room->hotel->photo) {
+                        $hotelPhoto = $room->hotel->photo;
+                    } elseif (isset($room->hotel->featured_photo) && $room->hotel->featured_photo) {
+                        $featuredPhotos = is_string($room->hotel->featured_photo) 
+                            ? json_decode($room->hotel->featured_photo, true) 
+                            : $room->hotel->featured_photo;
+                        if (!empty($featuredPhotos) && is_array($featuredPhotos) && isset($featuredPhotos[0])) {
+                            $hotelPhoto = $featuredPhotos[0];
+                        }
+                    }
+                    
                     $enrichedRoomsData[] = [
                         'roomId' => $room->id,
                         'roomName' => $room->name ?? 'Room',
@@ -56,7 +69,7 @@ class BookingController extends Controller
                         'hotelAddress' => $room->hotel->address ?? 'Address not available',
                         'hotelEmail' => $room->hotel->email ?? null,
                         'hotelPhone' => $room->hotel->phone ?? null,
-                        'hotelPhoto' => $room->hotel->photo ?? $room->hotel->featured_photo ?? null,
+                        'hotelPhoto' => $hotelPhoto,
                     ];
                 }
             }

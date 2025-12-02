@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 02, 2025 at 09:57 AM
+-- Generation Time: Dec 02, 2025 at 10:27 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.23
 
@@ -591,6 +591,27 @@ INSERT INTO `hotel_settings` (`id`, `hotel_name`, `hotel_logo`, `hotel_address`,
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `hotel_wishlists`
+--
+
+CREATE TABLE `hotel_wishlists` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `guest_id` bigint(20) UNSIGNED NOT NULL,
+  `hotel_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `hotel_wishlists`
+--
+
+INSERT INTO `hotel_wishlists` (`id`, `guest_id`, `hotel_id`, `created_at`, `updated_at`) VALUES
+(1, 2, 46, '2025-12-02 03:26:20', '2025-12-02 03:26:20');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `menus`
 --
 
@@ -669,7 +690,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (42, '2025_11_18_054115_add_password_reset_to_users_table', 19),
 (43, '2025_11_18_055419_add_password_reset_to_super_admins_table', 20),
 (44, '2025_12_02_061848_add_discount_and_status_columns_to_rooms_table', 21),
-(45, '2025_12_02_080841_create_bookings_table', 22);
+(45, '2025_12_02_080841_create_bookings_table', 22),
+(46, '2025_12_02_090616_create_wishlists_table', 23),
+(47, '2025_12_02_091802_create_hotel_wishlists_table', 24);
 
 -- --------------------------------------------------------
 
@@ -1060,6 +1083,27 @@ INSERT INTO `vendors` (`id`, `vendorId`, `hotel_name`, `contact_person_name`, `c
 (13, 'Ven-13', 'wqer', '', NULL, '', '', '', 'test@test.com', '', NULL, '', '', '', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', NULL, NULL, '', '$2y$10$4rb3n8K0z8qxIW9NEeZinOM4jg5pyzFfOd/QLUOjcpIbXwxUNDYnq', NULL, NULL, NULL, NULL, '2025-09-03 03:05:32', '2025-09-03 03:05:32'),
 (15, 'Ven-15', 'rrrr', '', NULL, '', '', '', 'tt@tt.com', '', NULL, '', '', '', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', NULL, NULL, '', '$2y$10$KTks6pAcxEDo5xKZAFJiSuYbL5PTYIhMHkWFkB8qpIdfGoNDOToSa', NULL, NULL, NULL, NULL, '2025-09-03 03:28:19', '2025-09-04 00:57:51');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wishlists`
+--
+
+CREATE TABLE `wishlists` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `guest_id` bigint(20) UNSIGNED NOT NULL,
+  `room_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `wishlists`
+--
+
+INSERT INTO `wishlists` (`id`, `guest_id`, `room_id`, `created_at`, `updated_at`) VALUES
+(1, 2, 28, '2025-12-02 03:16:35', '2025-12-02 03:16:35');
+
 --
 -- Indexes for dumped tables
 --
@@ -1116,6 +1160,14 @@ ALTER TABLE `hotels`
 --
 ALTER TABLE `hotel_settings`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `hotel_wishlists`
+--
+ALTER TABLE `hotel_wishlists`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `hotel_wishlists_guest_id_hotel_id_unique` (`guest_id`,`hotel_id`),
+  ADD KEY `hotel_wishlists_hotel_id_foreign` (`hotel_id`);
 
 --
 -- Indexes for table `menus`
@@ -1209,6 +1261,14 @@ ALTER TABLE `vendors`
   ADD UNIQUE KEY `vendors_email_unique` (`email`);
 
 --
+-- Indexes for table `wishlists`
+--
+ALTER TABLE `wishlists`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `wishlists_guest_id_room_id_unique` (`guest_id`,`room_id`),
+  ADD KEY `wishlists_room_id_foreign` (`room_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -1261,6 +1321,12 @@ ALTER TABLE `hotel_settings`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `hotel_wishlists`
+--
+ALTER TABLE `hotel_wishlists`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `menus`
 --
 ALTER TABLE `menus`
@@ -1270,7 +1336,7 @@ ALTER TABLE `menus`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `nearby_areas`
@@ -1339,6 +1405,12 @@ ALTER TABLE `vendors`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
+-- AUTO_INCREMENT for table `wishlists`
+--
+ALTER TABLE `wishlists`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- Constraints for dumped tables
 --
 
@@ -1355,6 +1427,13 @@ ALTER TABLE `hotels`
   ADD CONSTRAINT `hotels_vendor_id_foreign` FOREIGN KEY (`vendor_id`) REFERENCES `vendors` (`id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `hotel_wishlists`
+--
+ALTER TABLE `hotel_wishlists`
+  ADD CONSTRAINT `hotel_wishlists_guest_id_foreign` FOREIGN KEY (`guest_id`) REFERENCES `guests` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `hotel_wishlists_hotel_id_foreign` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `rooms`
 --
 ALTER TABLE `rooms`
@@ -1365,6 +1444,13 @@ ALTER TABLE `rooms`
 --
 ALTER TABLE `room_photos`
   ADD CONSTRAINT `room_photos_room_id_foreign` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `wishlists`
+--
+ALTER TABLE `wishlists`
+  ADD CONSTRAINT `wishlists_guest_id_foreign` FOREIGN KEY (`guest_id`) REFERENCES `guests` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `wishlists_room_id_foreign` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

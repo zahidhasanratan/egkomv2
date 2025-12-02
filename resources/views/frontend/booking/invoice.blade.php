@@ -568,14 +568,28 @@
                 @php
                     $hotelPhoto = null;
                     if ($hotel) {
-                        $hotelPhoto = $hotel->photo ?? $hotel->featured_photo ?? null;
-                    } elseif ($firstRoom && isset($firstRoom['hotelPhoto'])) {
+                        // Check if hotel has a direct photo field
+                        if (isset($hotel->photo) && $hotel->photo) {
+                            $hotelPhoto = $hotel->photo;
+                        }
+                        // If not, try to get from featured_photo (which is JSON array)
+                        elseif (isset($hotel->featured_photo) && $hotel->featured_photo) {
+                            $featuredPhotos = is_string($hotel->featured_photo) 
+                                ? json_decode($hotel->featured_photo, true) 
+                                : $hotel->featured_photo;
+                            if (!empty($featuredPhotos) && is_array($featuredPhotos) && isset($featuredPhotos[0])) {
+                                $hotelPhoto = $featuredPhotos[0];
+                            }
+                        }
+                    } 
+                    // Fallback to room's hotel photo if available
+                    elseif ($firstRoom && isset($firstRoom['hotelPhoto'])) {
                         $hotelPhoto = $firstRoom['hotelPhoto'];
                     }
                 @endphp
                 
                 @if($hotelPhoto)
-                    <img src="{{ asset('uploads/hotels/' . $hotelPhoto) }}" alt="Hotel">
+                    <img src="{{ asset($hotelPhoto) }}" alt="Hotel" style="max-height: 80px; width: auto; object-fit: contain;">
                 @else
                     <div style="width: 150px; height: 60px; background: linear-gradient(135deg, #90278e 0%, #b84ab5 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px;">
                         HOTEL
