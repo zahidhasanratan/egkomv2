@@ -228,6 +228,12 @@
                                                 <div class="guest-favourite">
                                                     <h3>Guest favourite</h3>
                                                 </div>
+                                                {{-- Hotel Wishlist Heart Icon --}}
+                                                <div class="wishlist-heart-icon hotel-wishlist-icon" 
+                                                     data-hotel-id="{{ $hotel->id }}"
+                                                     onclick="toggleHotelWishlist({{ $hotel->id }})">
+                                                    <i class="fa fa-heart-o"></i>
+                                                </div>
                                             </div>
                                             <!-- end h-grid-img -->
                                             <div class="block-info h-grid-info">
@@ -293,6 +299,12 @@
                                                     <div class="guest-favourite">
                                                         <h3>Guest favourite</h3>
                                                     </div>
+                                                    {{-- Hotel Wishlist Heart Icon --}}
+                                                    <div class="wishlist-heart-icon hotel-wishlist-icon" 
+                                                         data-hotel-id="{{ $hotel->id }}"
+                                                         onclick="toggleHotelWishlist({{ $hotel->id }})">
+                                                        <i class="fa fa-heart-o"></i>
+                                                    </div>
                                                 </div>
                                                 <!-- end h-grid-img -->
                                                 <div class="block-info h-grid-info">
@@ -356,6 +368,12 @@
                                                     </a>
                                                     <div class="guest-favourite">
                                                         <h3>Guest favourite</h3>
+                                                    </div>
+                                                    {{-- Hotel Wishlist Heart Icon --}}
+                                                    <div class="wishlist-heart-icon hotel-wishlist-icon" 
+                                                         data-hotel-id="{{ $hotel->id }}"
+                                                         onclick="toggleHotelWishlist({{ $hotel->id }})">
+                                                        <i class="fa fa-heart-o"></i>
                                                     </div>
                                                 </div>
                                                 <!-- end h-grid-img -->
@@ -422,6 +440,12 @@
                                                     <div class="guest-favourite">
                                                         <h3>Guest favourite</h3>
                                                     </div>
+                                                    {{-- Hotel Wishlist Heart Icon --}}
+                                                    <div class="wishlist-heart-icon hotel-wishlist-icon" 
+                                                         data-hotel-id="{{ $hotel->id }}"
+                                                         onclick="toggleHotelWishlist({{ $hotel->id }})">
+                                                        <i class="fa fa-heart-o"></i>
+                                                    </div>
                                                 </div>
                                                 <!-- end h-grid-img -->
                                                 <div class="block-info h-grid-info">
@@ -487,6 +511,12 @@
                                                     <div class="guest-favourite">
                                                         <h3>Guest favourite</h3>
                                                     </div>
+                                                    {{-- Hotel Wishlist Heart Icon --}}
+                                                    <div class="wishlist-heart-icon hotel-wishlist-icon" 
+                                                         data-hotel-id="{{ $hotel->id }}"
+                                                         onclick="toggleHotelWishlist({{ $hotel->id }})">
+                                                        <i class="fa fa-heart-o"></i>
+                                                    </div>
                                                 </div>
                                                 <!-- end h-grid-img -->
                                                 <div class="block-info h-grid-info">
@@ -551,6 +581,12 @@
                                                     </a>
                                                     <div class="guest-favourite">
                                                         <h3>Guest favourite</h3>
+                                                    </div>
+                                                    {{-- Hotel Wishlist Heart Icon --}}
+                                                    <div class="wishlist-heart-icon hotel-wishlist-icon" 
+                                                         data-hotel-id="{{ $hotel->id }}"
+                                                         onclick="toggleHotelWishlist({{ $hotel->id }})">
+                                                        <i class="fa fa-heart-o"></i>
                                                     </div>
                                                 </div>
                                                 <!-- end h-grid-img -->
@@ -1070,5 +1106,147 @@
     <!-- Destination -->
 
 
+
+
+<style>
+    /* Hotel Wishlist Heart Icon Styles */
+    .wishlist-heart-icon {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 40px;
+        height: 40px;
+        background: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 10;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        transition: all 0.3s ease;
+    }
+    
+    .wishlist-heart-icon:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
+    
+    .wishlist-heart-icon i {
+        font-size: 20px;
+        color: #90278e;
+        transition: all 0.3s ease;
+    }
+    
+    .wishlist-heart-icon.active i,
+    .wishlist-heart-icon.wishlisted i {
+        color: #e91e63;
+    }
+    
+    .wishlist-heart-icon.active i:before,
+    .wishlist-heart-icon.wishlisted i:before {
+        content: "\f004"; /* Font Awesome filled heart */
+    }
+    
+    .h-grid-img {
+        position: relative;
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    // Hotel Wishlist Functions
+    function toggleHotelWishlist(hotelId) {
+        fetch('{{ route("hotel.wishlist.toggle") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ hotel_id: hotelId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.action === 'login_required') {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Login Required',
+                    text: 'Please login to add hotels to your wishlist',
+                    confirmButtonColor: '#91278f',
+                    showCancelButton: true,
+                    confirmButtonText: 'Login',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '{{ route("guest.login") }}';
+                    }
+                });
+                return;
+            }
+            
+            const heartIcon = document.querySelector(`.hotel-wishlist-icon[data-hotel-id="${hotelId}"]`);
+            if (heartIcon) {
+                if (data.is_wishlisted) {
+                    heartIcon.classList.add('active', 'wishlisted');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Added to Wishlist!',
+                        text: data.message,
+                        confirmButtonColor: '#91278f',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                } else {
+                    heartIcon.classList.remove('active', 'wishlisted');
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Removed from Wishlist',
+                        text: data.message,
+                        confirmButtonColor: '#91278f',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Something went wrong. Please try again.',
+                confirmButtonColor: '#91278f'
+            });
+        });
+    }
+    
+    // Check hotel wishlist status on page load
+    function checkHotelWishlistStatus() {
+        const heartIcons = document.querySelectorAll('.hotel-wishlist-icon');
+        heartIcons.forEach(icon => {
+            const hotelId = icon.getAttribute('data-hotel-id');
+            fetch(`{{ route("hotel.wishlist.check") }}?hotel_id=${hotelId}`, {
+                method: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.is_wishlisted) {
+                    icon.classList.add('active', 'wishlisted');
+                }
+            })
+            .catch(error => {
+                console.error('Error checking hotel wishlist:', error);
+            });
+        });
+    }
+    
+    // Check wishlist status when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        checkHotelWishlistStatus();
+    });
+</script>
 
 @endsection

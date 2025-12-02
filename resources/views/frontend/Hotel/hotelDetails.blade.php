@@ -439,6 +439,49 @@
                 </script>
 
                 <style>
+                    /* Wishlist Heart Icon Styles */
+                    .wishlist-heart-icon {
+                        position: absolute;
+                        top: 15px;
+                        right: 15px;
+                        width: 40px;
+                        height: 40px;
+                        background: white;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        z-index: 10;
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                        transition: all 0.3s ease;
+                    }
+                    
+                    .wishlist-heart-icon:hover {
+                        transform: scale(1.1);
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+                    }
+                    
+                    .wishlist-heart-icon i {
+                        font-size: 20px;
+                        color: #90278e;
+                        transition: all 0.3s ease;
+                    }
+                    
+                    .wishlist-heart-icon.active i,
+                    .wishlist-heart-icon.wishlisted i {
+                        color: #e91e63;
+                    }
+                    
+                    .wishlist-heart-icon.active i:before,
+                    .wishlist-heart-icon.wishlisted i:before {
+                        content: "\f004"; /* Font Awesome filled heart */
+                    }
+                    
+                    .image-gallery {
+                        position: relative;
+                    }
+                    
                     .uitk-pill-container {
                         display: flex;
                         flex-wrap: nowrap;
@@ -576,6 +619,12 @@
                                                              data-bs-target="#rightSidebarModalDetails"
                                                              data-room-id="{{ $roomList->id }}"
                                                              onclick="loadRoomDetails({{ $roomList->id }})">
+                                                            {{-- Wishlist Heart Icon --}}
+                                                            <div class="wishlist-heart-icon" 
+                                                                 data-room-id="{{ $roomList->id }}"
+                                                                 onclick="event.stopPropagation(); toggleWishlist({{ $roomList->id }})">
+                                                                <i class="fa fa-heart-o"></i>
+                                                            </div>
                                                             {{--                                                    {{ $roomList->id }}--}}
                                                             @php
                                                                 $photos = \App\Models\RoomPhoto::where('room_id', $roomList->id)->where('category', 'feature')->get();
@@ -1046,7 +1095,98 @@
                         `;
                     }
 
+                    // Wishlist Functions
+                    function toggleWishlist(roomId) {
+                        fetch('{{ route("wishlist.toggle") }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({ room_id: roomId })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.action === 'login_required') {
+                                Swal.fire({
+                                    icon: 'info',
+                                    title: 'Login Required',
+                                    text: 'Please login to add items to your wishlist',
+                                    confirmButtonColor: '#91278f',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Login',
+                                    cancelButtonText: 'Cancel'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.href = '{{ route("guest.login") }}';
+                                    }
+                                });
+                                return;
+                            }
+                            
+                            const heartIcon = document.querySelector(`.wishlist-heart-icon[data-room-id="${roomId}"]`);
+                            if (heartIcon) {
+                                if (data.is_wishlisted) {
+                                    heartIcon.classList.add('active', 'wishlisted');
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Added to Wishlist!',
+                                        text: data.message,
+                                        confirmButtonColor: '#91278f',
+                                        timer: 2000,
+                                        showConfirmButton: false
+                                    });
+                                } else {
+                                    heartIcon.classList.remove('active', 'wishlisted');
+                                    Swal.fire({
+                                        icon: 'info',
+                                        title: 'Removed from Wishlist',
+                                        text: data.message,
+                                        confirmButtonColor: '#91278f',
+                                        timer: 2000,
+                                        showConfirmButton: false
+                                    });
+                                }
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Something went wrong. Please try again.',
+                                confirmButtonColor: '#91278f'
+                            });
+                        });
+                    }
+                    
+                    // Check wishlist status on page load
+                    function checkWishlistStatus() {
+                        const heartIcons = document.querySelectorAll('.wishlist-heart-icon');
+                        heartIcons.forEach(icon => {
+                            const roomId = icon.getAttribute('data-room-id');
+                            fetch(`{{ route("wishlist.check") }}?room_id=${roomId}`, {
+                                method: 'GET',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.is_wishlisted) {
+                                    icon.classList.add('active', 'wishlisted');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error checking wishlist:', error);
+                            });
+                        });
+                    }
+                    
                     document.addEventListener('DOMContentLoaded', function () {
+                        // Check wishlist status for all rooms
+                        checkWishlistStatus();
+                        
                         // Add click event listener to each delete button
                         const deleteButtons = document.querySelectorAll('.delete-button');
 

@@ -561,12 +561,21 @@
         <header class="invoice-header">
             @php
                 $firstRoom = $booking->rooms_data[0] ?? null;
-                $hotel = $firstRoom ? \App\Models\Hotel::find($firstRoom['hotelId']) : null;
+                $hotel = $booking->getPrimaryHotel();
             @endphp
             
             <div class="vendor-logo">
-                @if($hotel && $hotel->photo)
-                    <img src="{{ asset('uploads/hotels/' . $hotel->photo) }}" alt="{{ $hotel->name ?? 'Hotel' }}">
+                @php
+                    $hotelPhoto = null;
+                    if ($hotel) {
+                        $hotelPhoto = $hotel->photo ?? $hotel->featured_photo ?? null;
+                    } elseif ($firstRoom && isset($firstRoom['hotelPhoto'])) {
+                        $hotelPhoto = $firstRoom['hotelPhoto'];
+                    }
+                @endphp
+                
+                @if($hotelPhoto)
+                    <img src="{{ asset('uploads/hotels/' . $hotelPhoto) }}" alt="Hotel">
                 @else
                     <div style="width: 150px; height: 60px; background: linear-gradient(135deg, #90278e 0%, #b84ab5 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px;">
                         HOTEL
@@ -575,11 +584,22 @@
             </div>
             
             <div class="vendor-info">
-                <h1>{{ $hotel->name ?? 'Hotel Booking' }}</h1>
-                <p>{{ $hotel->address ?? 'N/A' }}</p>
+                <h1>{{ $booking->getHotelName() }}</h1>
+                <p>{{ $hotel->address ?? ($firstRoom['hotelAddress'] ?? 'Address not available') }}</p>
                 @if($hotel)
-                    <p>Email: {{ $hotel->email ?? 'info@hotel.com' }}</p>
-                    <p>Phone: {{ $hotel->phone ?? 'N/A' }}</p>
+                    @if(isset($hotel->email))
+                    <p>Email: {{ $hotel->email }}</p>
+                    @endif
+                    @if(isset($hotel->phone))
+                    <p>Phone: {{ $hotel->phone }}</p>
+                    @endif
+                @elseif($firstRoom)
+                    @if(isset($firstRoom['hotelEmail']))
+                    <p>Email: {{ $firstRoom['hotelEmail'] }}</p>
+                    @endif
+                    @if(isset($firstRoom['hotelPhone']))
+                    <p>Phone: {{ $firstRoom['hotelPhone'] }}</p>
+                    @endif
                 @endif
             </div>
             

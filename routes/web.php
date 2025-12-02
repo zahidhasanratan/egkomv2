@@ -19,6 +19,14 @@ Route::get('/booking/checkout', [App\Http\Controllers\Frontend\BookingController
 Route::post('/booking/store', [App\Http\Controllers\Frontend\BookingController::class, 'store'])->name('booking.store');
 Route::get('/booking/invoice/{id}', [App\Http\Controllers\Frontend\BookingController::class, 'invoice'])->name('booking.invoice');
 
+// Wishlist routes (public API routes)
+Route::post('/wishlist/toggle', [App\Http\Controllers\Frontend\WishlistController::class, 'toggle'])->name('wishlist.toggle');
+Route::get('/wishlist/check', [App\Http\Controllers\Frontend\WishlistController::class, 'check'])->name('wishlist.check');
+
+// Hotel Wishlist routes (public API routes)
+Route::post('/hotel-wishlist/toggle', [App\Http\Controllers\Frontend\HotelWishlistController::class, 'toggle'])->name('hotel.wishlist.toggle');
+Route::get('/hotel-wishlist/check', [App\Http\Controllers\Frontend\HotelWishlistController::class, 'check'])->name('hotel.wishlist.check');
+
 
 Auth::routes();
 
@@ -42,7 +50,8 @@ Route::prefix('guest')->name('guest.')->group(function () {
     Route::middleware('auth:guest')->group(function () {
         Route::get('/dashboard', [App\Http\Controllers\Frontend\GuestAuthController::class, 'dashboard'])->name('dashboard');
         Route::get('/bookings', [App\Http\Controllers\Frontend\GuestAuthController::class, 'bookings'])->name('bookings');
-        Route::get('/wishlist', [App\Http\Controllers\Frontend\GuestAuthController::class, 'wishlist'])->name('wishlist');
+        Route::get('/wishlist', [App\Http\Controllers\Frontend\WishlistController::class, 'index'])->name('wishlist');
+        Route::get('/hotel-wishlist', [App\Http\Controllers\Frontend\HotelWishlistController::class, 'index'])->name('hotel.wishlist');
         Route::get('/payment-history', [App\Http\Controllers\Frontend\GuestAuthController::class, 'paymentHistory'])->name('payment-history');
         Route::get('/reviews', [App\Http\Controllers\Frontend\GuestAuthController::class, 'reviews'])->name('reviews');
         Route::get('/notifications', [App\Http\Controllers\Frontend\GuestAuthController::class, 'notifications'])->name('notifications');

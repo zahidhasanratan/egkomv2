@@ -1,5 +1,5 @@
 @extends('frontend.app')
-@section('title','My Wishlist - EGKom')
+@section('title','My Hotel Wishlist - EGKom')
 @section('main')
 
 @include('frontend.guest.dashboard-styles')
@@ -81,24 +81,43 @@
     }
     
     .wishlist-hotel-name {
-        font-size: 16px;
-        font-weight: 600;
-        color: #1a1a1a;
-        margin-bottom: 8px;
+        font-size: 20px;
+        font-weight: 700;
+        color: #91278f;
+        margin-bottom: 10px;
         display: -webkit-box;
-        -webkit-line-clamp: 1;
+        -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
     
-    .wishlist-room-name {
-        font-size: 18px;
-        font-weight: 700;
+    .wishlist-property-type {
+        display: inline-block;
+        padding: 4px 12px;
+        background: #f0e6f6;
         color: #91278f;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
         margin-bottom: 10px;
     }
     
-    .wishlist-room-details {
+    .wishlist-hotel-location {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .wishlist-hotel-location i {
+        color: #91278f;
+        font-size: 16px;
+        margin-top: 2px;
+    }
+    
+    .wishlist-hotel-details {
         display: flex;
         flex-wrap: wrap;
         gap: 15px;
@@ -107,40 +126,15 @@
         font-size: 14px;
     }
     
-    .wishlist-room-detail-item {
+    .wishlist-hotel-detail-item {
         display: flex;
         align-items: center;
         gap: 5px;
     }
     
-    .wishlist-room-detail-item i {
+    .wishlist-hotel-detail-item i {
         color: #91278f;
         font-size: 16px;
-    }
-    
-    .wishlist-price {
-        display: flex;
-        align-items: baseline;
-        gap: 10px;
-        margin-bottom: 15px;
-    }
-    
-    .wishlist-price-current {
-        font-size: 24px;
-        font-weight: 700;
-        color: #91278f;
-    }
-    
-    .wishlist-price-label {
-        font-size: 12px;
-        color: #999;
-        text-transform: uppercase;
-    }
-    
-    .wishlist-price-original {
-        font-size: 16px;
-        color: #999;
-        text-decoration: line-through;
     }
     
     .wishlist-card-actions {
@@ -254,91 +248,72 @@
         
         <div class="dashboard-content">
             <div class="dashboard-header">
-                <h1 class="dashboard-title">My Wishlist</h1>
-                <p class="dashboard-subtitle">Your favorite rooms saved for later</p>
+                <h1 class="dashboard-title">My Hotel Wishlist</h1>
+                <p class="dashboard-subtitle">Your favorite hotels saved for later</p>
             </div>
             
             @if($wishlists->count() > 0)
                 <div class="wishlist-grid">
                     @foreach($wishlists as $wishlist)
                     @php
-                        $room = $wishlist->room;
-                        $hotel = $room->hotel ?? null;
-                        $featurePhoto = $room->photos->where('category', 'feature')->first();
-                        
-                        $originalPrice = $room->price_per_night;
-                        $discountedPrice = $originalPrice;
-                        $discountPercentage = 0;
-                        
-                        if ($room->discount_type == 'percentage' && $room->discount_percentage) {
-                            $discountPercentage = $room->discount_percentage;
-                            $discountedPrice = $originalPrice - ($originalPrice * $discountPercentage / 100);
-                        } elseif ($room->discount_type == 'amount' && $room->discount_amount) {
-                            $discountedPrice = $originalPrice - $room->discount_amount;
-                            $discountPercentage = (($originalPrice - $discountedPrice) / $originalPrice) * 100;
-                        }
+                        $hotel = $wishlist->hotel;
+                        $featuredPhotos = is_string($hotel->featured_photo) ? json_decode($hotel->featured_photo, true) : [];
+                        $nearbyAreas = is_string($hotel->custom_nearby_areas) ? json_decode($hotel->custom_nearby_areas, true) : [];
+                        $totalRooms = $hotel->rooms->count();
                     @endphp
                     <div class="wishlist-card">
                         <div class="wishlist-card-image">
-                            @if($featurePhoto)
-                                <img src="{{ asset($featurePhoto->photo_path) }}" alt="{{ $room->name }}">
+                            @if (!empty($featuredPhotos[0]))
+                                <img src="{{ asset($featuredPhotos[0]) }}" alt="{{ $hotel->description ?? $hotel->property_category }}">
                             @else
                                 <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #999;">
                                     <i class="fa fa-image" style="font-size: 48px;"></i>
                                 </div>
                             @endif
                             <div class="wishlist-heart-icon-card" 
-                                 data-room-id="{{ $room->id }}"
-                                 onclick="toggleWishlist({{ $room->id }})">
+                                 data-hotel-id="{{ $hotel->id }}"
+                                 onclick="toggleHotelWishlist({{ $hotel->id }})">
                                 <i class="fa fa-heart"></i>
                             </div>
                         </div>
                         
                         <div class="wishlist-card-body">
-                            @if($hotel)
-                            <div class="wishlist-hotel-name">{{ $hotel->description ?? $hotel->property_category ?? 'Hotel' }}</div>
+                            @if($hotel->property_type)
+                            <span class="wishlist-property-type">{{ $hotel->property_type }}</span>
                             @endif
                             
-                            <div class="wishlist-room-name">{{ $room->name }}</div>
+                            <div class="wishlist-hotel-name">{{ $hotel->description ?? $hotel->property_category ?? 'Hotel' }}</div>
                             
-                            <div class="wishlist-room-details">
-                                @if($room->total_persons)
-                                <div class="wishlist-room-detail-item">
-                                    <i class="fa fa-users"></i>
-                                    <span>{{ $room->total_persons }} Guest{{ $room->total_persons > 1 ? 's' : '' }}</span>
-                                </div>
-                                @endif
-                                
-                                @if($room->total_beds)
-                                <div class="wishlist-room-detail-item">
-                                    <i class="fa fa-bed"></i>
-                                    <span>{{ $room->total_beds }} Bed{{ $room->total_beds > 1 ? 's' : '' }}</span>
-                                </div>
-                                @endif
-                                
-                                @if($room->size)
-                                <div class="wishlist-room-detail-item">
-                                    <i class="fa fa-arrows-alt"></i>
-                                    <span>{{ $room->size }} sq ft</span>
-                                </div>
-                                @endif
+                            @if(!empty($nearbyAreas[0]) || $hotel->address)
+                            <div class="wishlist-hotel-location">
+                                <i class="fa fa-map-marker"></i>
+                                <span>{{ $hotel->address ?? (!empty($nearbyAreas[0]) ? $nearbyAreas[0] : 'Location not specified') }}</span>
                             </div>
+                            @endif
                             
-                            <div class="wishlist-price">
-                                <span class="wishlist-price-current">BDT {{ number_format($discountedPrice, 2) }}</span>
-                                <span class="wishlist-price-label">per night</span>
-                                @if($discountPercentage > 0)
-                                <span class="wishlist-price-original">BDT {{ number_format($originalPrice, 2) }}</span>
+                            <div class="wishlist-hotel-details">
+                                @if($totalRooms > 0)
+                                <div class="wishlist-hotel-detail-item">
+                                    <i class="fa fa-bed"></i>
+                                    <span>{{ $totalRooms }} Room{{ $totalRooms > 1 ? 's' : '' }}</span>
+                                </div>
+                                @endif
+                                
+                                @if($hotel->property_category)
+                                <div class="wishlist-hotel-detail-item">
+                                    <i class="fa fa-building"></i>
+                                    <span>{{ $hotel->property_category }}</span>
+                                </div>
                                 @endif
                             </div>
                             
                             <div class="wishlist-card-actions">
-                                <a href="{{ route('hotel.details', encrypt($hotel->id ?? 0)) }}" class="btn-view-details">
+                                <a href="{{ route('hotel.details', encrypt($hotel->id)) }}" class="btn-view-details">
                                     View Details
                                 </a>
                                 <button type="button" 
                                         class="btn-remove-wishlist" 
-                                        onclick="toggleWishlist({{ $room->id }})">
+                                        onclick="toggleHotelWishlist({{ $hotel->id }})">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </div>
@@ -355,8 +330,8 @@
                     <div class="empty-state-icon">
                         <i class="fa fa-heart-o"></i>
                     </div>
-                    <h4 class="empty-state-title">Your wishlist is empty</h4>
-                    <p class="empty-state-text">Start exploring and save your favorite rooms!</p>
+                    <h4 class="empty-state-title">Your hotel wishlist is empty</h4>
+                    <p class="empty-state-text">Start exploring and save your favorite hotels!</p>
                     <a href="{{ route('welcome') }}" class="btn-browse-hotels">Browse Hotels</a>
                 </div>
             @endif
@@ -366,14 +341,14 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    function toggleWishlist(roomId) {
-        fetch('{{ route("wishlist.toggle") }}', {
+    function toggleHotelWishlist(hotelId) {
+        fetch('{{ route("hotel.wishlist.toggle") }}', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
-            body: JSON.stringify({ room_id: roomId })
+            body: JSON.stringify({ hotel_id: hotelId })
         })
         .then(response => response.json())
         .then(data => {
@@ -430,3 +405,4 @@
 </script>
 
 @endsection
+

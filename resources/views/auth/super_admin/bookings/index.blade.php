@@ -123,9 +123,11 @@
                                 <td>
                                     @php
                                         $firstRoom = $booking->rooms_data[0] ?? null;
+                                        $hotel = $firstRoom ? \App\Models\Hotel::find($firstRoom['hotelId'] ?? null) : null;
+                                        $hotelName = $firstRoom['hotelName'] ?? ($hotel ? ($hotel->description ?? $hotel->property_category ?? 'Hotel') : 'Hotel');
                                     @endphp
                                     <div style="max-width: 200px;">
-                                        <strong>{{ $firstRoom['hotelName'] ?? 'N/A' }}</strong><br>
+                                        <strong>{{ $hotelName }}</strong><br>
                                         <small class="text-muted">
                                             {{ count($booking->rooms_data) }} Room{{ count($booking->rooms_data) > 1 ? 's' : '' }}
                                         </small>

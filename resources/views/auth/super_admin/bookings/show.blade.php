@@ -56,8 +56,12 @@
                             </thead>
                             <tbody>
                                 @foreach($booking->rooms_data as $room)
+                                @php
+                                    $hotel = \App\Models\Hotel::find($room['hotelId'] ?? null);
+                                    $hotelName = $room['hotelName'] ?? ($hotel->description ?? $hotel->property_category ?? 'Hotel');
+                                @endphp
                                 <tr>
-                                    <td>{{ $room['hotelName'] ?? 'N/A' }}</td>
+                                    <td>{{ $hotelName }}</td>
                                     <td>{{ $room['roomName'] }}</td>
                                     <td>{{ $room['quantity'] }}</td>
                                     <td>BDT {{ number_format($room['price'], 2) }}</td>

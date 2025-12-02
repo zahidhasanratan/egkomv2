@@ -85,4 +85,30 @@ class Booking extends Model
         }
         return $hotelIds;
     }
+    
+    // Get primary hotel (first hotel in booking)
+    public function getPrimaryHotel()
+    {
+        $firstRoom = $this->rooms_data[0] ?? null;
+        if ($firstRoom && isset($firstRoom['hotelId'])) {
+            return Hotel::find($firstRoom['hotelId']);
+        }
+        return null;
+    }
+    
+    // Get hotel name from rooms data or database
+    public function getHotelName()
+    {
+        $firstRoom = $this->rooms_data[0] ?? null;
+        if ($firstRoom) {
+            if (isset($firstRoom['hotelName']) && $firstRoom['hotelName'] !== 'N/A') {
+                return $firstRoom['hotelName'];
+            }
+            $hotel = Hotel::find($firstRoom['hotelId'] ?? null);
+            if ($hotel) {
+                return $hotel->description ?? $hotel->property_category ?? 'Hotel';
+            }
+        }
+        return 'Hotel';
+    }
 }

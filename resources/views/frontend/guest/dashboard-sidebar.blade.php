@@ -19,7 +19,13 @@
         <li>
             <a href="{{ route('guest.wishlist') }}" class="{{ request()->routeIs('guest.wishlist') ? 'active' : '' }}">
                 <i class="fa fa-heart"></i>
-                <span>My Wishlist</span>
+                <span>Room Wishlist</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('guest.hotel.wishlist') }}" class="{{ request()->routeIs('guest.hotel.wishlist') ? 'active' : '' }}">
+                <i class="fa fa-heart"></i>
+                <span>Hotel Wishlist</span>
             </a>
         </li>
         <li>

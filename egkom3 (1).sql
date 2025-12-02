@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 02, 2025 at 09:25 AM
+-- Generation Time: Dec 02, 2025 at 09:57 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.23
 
@@ -417,6 +417,13 @@ CREATE TABLE `bookings` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `bookings`
+--
+
+INSERT INTO `bookings` (`id`, `invoice_number`, `booking_status`, `guest_id`, `guest_name`, `guest_email`, `guest_phone`, `rooms_data`, `checkin_date`, `checkout_date`, `total_nights`, `total_male`, `total_female`, `total_kids`, `total_persons`, `other_guests`, `home_address`, `organization`, `organization_address`, `relationship`, `additional_requests`, `bed_type`, `room_preference`, `room_type`, `room_number`, `arrival_time`, `property_note`, `citizenship`, `nid_front`, `nid_back`, `passport`, `visa`, `subtotal`, `discount`, `tax`, `grand_total`, `coupon_code`, `payment_status`, `paid_amount`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'INV-2025-000001', 'confirmed', 2, 'Regan Malone', 'mollika@mollika.com', '+1 (685) 647-8622', '[{\"roomId\":33,\"roomName\":\"Abraham Neal\",\"quantity\":1,\"price\":564.72,\"hotelId\":46,\"hotelName\":\"N\\/A\",\"hotelAddress\":\"Jaliapalong, Inani, Ukhia, Cox\'s Bazar, Bangladesh\"}]', '1978-02-21', '2017-04-11', 14294, 5, 2, 8, 1, '[\"Est eveniet archit\"]', 'Dolor aspernatur sim', 'Manning and Gentry Plc', 'Laudantium et deser', 'colleagues', '[\"Room On Higher Floor\",\"Decorations in Room\"]', 'large_bed', 'smoking', 'Ut expedita ullam id', '837', '11', 'Laudantium et in vo', 'international', NULL, NULL, NULL, NULL, '8072107.68', '0.00', '1210816.15', '9282923.83', NULL, 'unpaid', '0.00', '2025-12-02 02:37:26', '2025-12-02 02:37:26', NULL);
 
 -- --------------------------------------------------------
 
@@ -1227,7 +1234,7 @@ ALTER TABLE `big_advertises`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`

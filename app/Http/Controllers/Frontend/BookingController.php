@@ -45,15 +45,18 @@ class BookingController extends Controller
             $enrichedRoomsData = [];
             foreach ($roomsData as $cartItem) {
                 $room = Room::with('hotel')->find($cartItem['roomId']);
-                if ($room) {
+                if ($room && $room->hotel) {
                     $enrichedRoomsData[] = [
                         'roomId' => $room->id,
-                        'roomName' => $room->name,
+                        'roomName' => $room->name ?? 'Room',
                         'quantity' => $cartItem['quantity'],
                         'price' => $cartItem['price'],
                         'hotelId' => $room->hotel_id,
-                        'hotelName' => $room->hotel->name ?? 'N/A',
-                        'hotelAddress' => $room->hotel->address ?? 'N/A',
+                        'hotelName' => $room->hotel->description ?? $room->hotel->property_category ?? 'Hotel',
+                        'hotelAddress' => $room->hotel->address ?? 'Address not available',
+                        'hotelEmail' => $room->hotel->email ?? null,
+                        'hotelPhone' => $room->hotel->phone ?? null,
+                        'hotelPhoto' => $room->hotel->photo ?? $room->hotel->featured_photo ?? null,
                     ];
                 }
             }

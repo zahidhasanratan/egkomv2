@@ -62,4 +62,9 @@ class Hotel extends Model
     {
         return $this->hasMany(Room::class);
     }
+
+    public function wishlists()
+    {
+        return $this->hasMany(HotelWishlist::class);
+    }
 }

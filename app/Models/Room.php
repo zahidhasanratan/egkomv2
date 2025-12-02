@@ -25,6 +25,11 @@ class Room extends Model
         return $this->belongsTo(Hotel::class);
     }
 
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
     public function photos()
     {
         return $this->hasMany(RoomPhoto::class);
