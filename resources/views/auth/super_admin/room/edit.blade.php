@@ -652,7 +652,7 @@
                                             <div class="row gy-4">
                                                 @php
                                                     $photo_categories = [
-                                                        'feature_photos' => 'Feature Photo',
+                                                        'feature_photos' => 'Featured Room Photos (Main Display)',
                                                         'kitchen_photos' => 'Kitchen Photo',
                                                         'washroom_photos' => 'Washroom Photo',
                                                         'parking_photos' => 'Parking Lot Photos',

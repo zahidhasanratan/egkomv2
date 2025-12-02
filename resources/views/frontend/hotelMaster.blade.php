@@ -689,7 +689,7 @@
                                     </div>
 
                                     <div class="book_btn_2" style="margin-bottom: 7px; margin-top: 0px;">
-                                        <a href="">Add to<span> Book</span></a>
+                                        <a href="javascript:void(0)" id="modalAddToBookBtn">Add to<span> Book</span></a>
                                     </div>
                                 </div>
                             </div>
@@ -983,129 +983,9 @@
                         </div>
                         <div class="tab-pane fade" id="others" role="tabpanel" aria-labelledby="nav-contact-tab">
                             <div class="room-details-modal">
-
+                                <!-- Dynamic room details will be loaded here -->
                                 <div class="room-details-des">
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                                </div>
-                                <div data-v-58caae98="" class="facilities-flex">
-                                    <div data-v-58caae98="" class="facilities-column">
-                                        <h3 data-v-58caae98="" class="general-title">
-                                            <span class="faci-icon-awe"><i class="fa fa-bed fa-bed-custom"></i> Appliance Information                                </h3>
-                                        <ul data-v-58caae98="" class="general-facilities-list">
-                                            <li data-v-58caae98="">
-                                       <span>
-                                          <svg style="color: #91278f;
-                                             margin-top: -3px;
-                                             margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
-                                          </svg>
-                                       </span>
-                                                AC
-                                            </li>
-                                            <li data-v-58caae98="">
-                                       <span>
-                                          <svg style="color: #91278f;
-                                             margin-top: -3px;
-                                             margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
-                                          </svg>
-                                       </span>
-                                                TV
-                                            </li>
-
-                                            <li data-v-58caae98="">
-                                       <span>
-                                          <svg style="color: #91278f;
-                                             margin-top: -3px;
-                                             margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
-                                          </svg>
-                                       </span>
-                                                Fridge
-                                            </li>
-
-                                            <li data-v-58caae98="">
-                                       <span>
-                                          <svg style="color: #91278f;
-                                             margin-top: -3px;
-                                             margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
-                                          </svg>
-                                       </span>
-                                                TV
-                                            </li>
-                                        </ul>
-                                    </div>
-
-
-                                    <div data-v-58caae98="" class="facilities-column">
-                                        <h3 data-v-58caae98="" class="general-title">
-                                  <span class="faci-icon-awe"><i class="fa fa-bed fa-bed-custom"></i> Furniture Information
-                                        </h3>
-
-                                        <ul data-v-58caae98="" class="general-facilities-list">
-                                            <li data-v-58caae98="">
-                                       <span>
-                                          <svg style="color: #91278f;
-                                             margin-top: -3px;
-                                             margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
-                                          </svg>
-                                       </span>
-                                                Swimming Pool
-                                            </li>
-                                            <li data-v-58caae98="">
-                                       <span>
-                                          <svg style="color: #91278f;
-                                             margin-top: -3px;
-                                             margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
-                                          </svg>
-                                       </span>
-                                                Heated Swimming Pool
-                                            </li>
-
-                                            <li data-v-58caae98="">
-                                       <span>
-                                          <svg style="color: #91278f;
-                                             margin-top: -3px;
-                                             margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
-                                          </svg>
-                                       </span>
-                                                Gym
-                                            </li>
-                                            <li data-v-58caae98="">
-                                       <span>
-                                          <svg style="color: #91278f;
-                                             margin-top: -3px;
-                                             margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
-                                          </svg>
-                                       </span>
-                                                Hair Dressing Salon
-                                            </li>
-
-                                            <li data-v-58caae98="">
-                                       <span>
-                                          <svg style="color: #91278f;
-                                             margin-top: -3px;
-                                             margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
-                                          </svg>
-                                       </span>
-                                                Massage
-                                            </li>
-                                        </ul>
-                                    </div>
-
-
-
+                                    <p>Loading room details...</p>
                                 </div>
                             </div>
                         </div>
@@ -1132,6 +1012,216 @@
         z-index: 1000;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         transition: transform 0.3s ease-in-out;
+    }
+    .room-details-des {
+        padding: 15px 0;
+        margin-bottom: 20px;
+    }
+    .room-details-des p {
+        line-height: 1.6;
+        color: #333;
+    }
+
+    /* Pricing Summary Sidebar - Following Reference Design */
+    .mb-hide-cart {
+        padding-left: 0 !important;
+    }
+    #cart-bar {
+        position: sticky;
+        top: 120px;
+    }
+    #cart-bar .backdrop {
+        display: none;
+    }
+    #cart-bar .cart-wrapper {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    #cart-bar .cart-header {
+        background: #4a5568;
+        color: white;
+        padding: 15px 20px;
+        text-align: center;
+    }
+    #cart-bar .cart-header h2 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+        color: white;
+    }
+    .rooms-selection-container {
+        padding: 20px;
+    }
+    .rooms-selection-container .rooms {
+        margin-bottom: 0;
+    }
+    .rooms-selection-container .text-primary {
+        color: #91278f !important;
+        font-weight: 600;
+        font-size: 16px;
+        margin-bottom: 15px;
+    }
+    .rooms-selection-container .room {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px;
+        margin-bottom: 10px;
+        background: #f8f9fa;
+        border-radius: 6px;
+        border-left: 3px solid #91278f;
+    }
+    .rooms-selection-container .room-content {
+        flex: 1;
+    }
+    .rooms-selection-container .room-name {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 6px;
+        font-size: 14px;
+    }
+    .rooms-selection-container .pax-and-fare {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .rooms-selection-container .pax {
+        font-size: 12px;
+        color: #666;
+    }
+    .rooms-selection-container .fare {
+        font-weight: 600;
+        color: #91278f;
+        font-size: 14px;
+    }
+    .rooms-selection-container .delete-button {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: #3b82f6;
+        cursor: pointer;
+        position: relative;
+        transition: all 0.3s;
+        flex-shrink: 0;
+    }
+    .rooms-selection-container .delete-button:hover {
+        background: #2563eb;
+        transform: scale(1.1);
+    }
+    .rooms-selection-container .delete-button::before,
+    .rooms-selection-container .delete-button::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 12px;
+        height: 2px;
+        background: white;
+    }
+    .rooms-selection-container .delete-button::before {
+        transform: translate(-50%, -50%) rotate(45deg);
+    }
+    .rooms-selection-container .delete-button::after {
+        transform: translate(-50%, -50%) rotate(-45deg);
+    }
+    .rooms-selection-container .action {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 2px solid #e2e8f0;
+    }
+    .rooms-selection-container .total-amount {
+        margin-bottom: 15px;
+    }
+    .rooms-selection-container .total-amount .amount {
+        display: block;
+        font-size: 20px;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 8px;
+    }
+    .rooms-selection-container .tax-tag {
+        font-size: 12px;
+        color: #666;
+        margin: 0;
+        line-height: 1.4;
+    }
+    .rooms-selection-container .btn-secondary.total-con {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #91278f 0%, #6b1f6e 100%);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    .rooms-selection-container .btn-secondary.total-con:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(145, 39, 143, 0.4);
+    }
+
+    /* Floating Booking Cart Button */
+    .floating-cart-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: linear-gradient(135deg, #91278f 0%, #6b1f6e 100%);
+        color: white;
+        border-radius: 50%;
+        width: 80px;
+        height: 80px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 4px 20px rgba(145, 39, 143, 0.4);
+        transition: all 0.3s;
+        z-index: 999;
+    }
+    .floating-cart-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 25px rgba(145, 39, 143, 0.6);
+    }
+    .cart-icon-wrapper {
+        position: relative;
+    }
+    .cart-icon-wrapper i {
+        font-size: 24px;
+    }
+    .cart-count-badge {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: #e53e3e;
+        color: white;
+        border-radius: 50%;
+        width: 22px;
+        height: 22px;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+    }
+    .cart-text {
+        font-size: 11px;
+        font-weight: 600;
+        margin-top: 4px;
+    }
+
+    /* Responsive */
+    @media (max-width: 991px) {
+        .pricing-summary-sidebar {
+            position: relative;
+            top: 0;
+            margin-top: 30px;
+        }
     }
 
     .sticky-top-search {

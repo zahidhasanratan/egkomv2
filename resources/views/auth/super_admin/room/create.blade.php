@@ -1,4 +1,4 @@
-@extends('auth.layout.vendor_admin_layout')
+@extends('auth.layout.super_admin_layout')
 
 @section('mainbody')
     <div class="nk-content">
@@ -27,7 +27,7 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                     </div>
                                 @endif
-                                <form action="{{ route('vendor-admin.room.store') }}" method="POST" enctype="multipart/form-data">
+                                <form action="{{ route('super-admin.room.store') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <input name="hotel_id" value="{{ $hotel }}" type="hidden">
                                     <ul class="nav nav-tabs">

@@ -573,7 +573,9 @@
 
                                                         </div>
                                                         <div class="image-gallery multiple-row" data-bs-toggle="modal"
-                                                             data-bs-target="#rightSidebarModalDetails">
+                                                             data-bs-target="#rightSidebarModalDetails"
+                                                             data-room-id="{{ $roomList->id }}"
+                                                             onclick="loadRoomDetails({{ $roomList->id }})">
                                                             {{--                                                    {{ $roomList->id }}--}}
                                                             @php
                                                                 $photos = \App\Models\RoomPhoto::where('room_id', $roomList->id)->where('category', 'feature')->get();
@@ -613,50 +615,26 @@
                                                         <div class="features fea-grid">
                                                             <small class="d-block">
                                                                 <i style="color: #91278f; font-size: 18px;"
-                                                                   class="fa fa-home"></i>Room Capacity: <b> 5 Adults
+                                                                   class="fa fa-home"></i>Room Capacity: <b> {{ $roomList->total_persons ?? 'N/A' }} {{ $roomList->total_persons > 1 ? 'Adults' : 'Adult' }}
                                                                     Maximum </b> </small>
 
 
                                                             <small class="d-block">
                                                                 <i style="color: #91278f; font-size: 18px;"
-                                                                   class="fa fa-bed"></i>Bed: <b> 2 Beds </b> </small>
+                                                                   class="fa fa-bed"></i>Bed: <b> {{ $roomList->total_beds ?? 'N/A' }} {{ $roomList->total_beds > 1 ? 'Beds' : 'Bed' }} </b> </small>
                                                             <!---->
 
                                                         </div>
                                                         <div class="show-amenities-modal mt-1 mb-2">
-                                                            <span role="button" tabindex="0"><a href=""
+                                                            <span role="button" tabindex="0"><a href="javascript:void(0)"
                                                                                                 data-bs-toggle="modal"
-                                                                                                data-bs-target="#rightSidebarModalDetails">  View Room Details</a> </span>
+                                                                                                data-bs-target="#rightSidebarModalDetails"
+                                                                                                onclick="loadRoomDetails({{ $roomList->id }})">  View Room Details</a> </span>
                                                         </div>
 
                                                     </div>
 
 
-                                                    <script>
-
-                                                        document.addEventListener('DOMContentLoaded', function () {
-                                                            const qtyInput = document.getElementById('qty');
-                                                            const qtyMinusButton = document.querySelector('.qtyminus');
-                                                            const qtyPlusButton = document.querySelector('.qtyplus');
-
-                                                            // Decrease quantity by 1
-                                                            qtyMinusButton.addEventListener('click', function () {
-                                                                let currentValue = parseInt(qtyInput.value);
-                                                                if (currentValue > qtyInput.min) {
-                                                                    qtyInput.value = currentValue - 1;
-                                                                }
-                                                            });
-
-                                                            // Increase quantity by 1
-                                                            qtyPlusButton.addEventListener('click', function () {
-                                                                let currentValue = parseInt(qtyInput.value);
-                                                                if (currentValue < qtyInput.max) {
-                                                                    qtyInput.value = currentValue + 1;
-                                                                }
-                                                            });
-                                                        });
-
-                                                    </script>
 
                                                     <!-- Room  Price Deatils -->
                                                     <div class="room-options">
@@ -671,17 +649,34 @@
                                                                     <div class="review-cat-home">8.9</div>
 
                                                                 </div>
+                                                                @php
+                                                                    $originalPrice = $roomList->price_per_night;
+                                                                    $discountedPrice = $originalPrice;
+                                                                    $discountPercentage = 0;
+                                                                    
+                                                                    if ($roomList->discount_type == 'percentage' && $roomList->discount_percentage) {
+                                                                        $discountPercentage = $roomList->discount_percentage;
+                                                                        $discountedPrice = $originalPrice - ($originalPrice * $discountPercentage / 100);
+                                                                    } elseif ($roomList->discount_type == 'amount' && $roomList->discount_amount) {
+                                                                        $discountedPrice = $originalPrice - $roomList->discount_amount;
+                                                                        $discountPercentage = (($originalPrice - $discountedPrice) / $originalPrice) * 100;
+                                                                    }
+                                                                @endphp
+
+                                                                @if($discountPercentage > 0)
                                                                 <div data-v-b6728cd0=""
                                                                      class="discount-percentage mt-per-50">
-                                                                    <span data-v-b6728cd0="" class="discount-tag"> 69% off </span>
-
+                                                                    <span data-v-b6728cd0="" class="discount-tag"> {{ number_format($discountPercentage, 0) }}% off </span>
                                                                 </div>
+                                                                @endif
                                                                 <!---->
                                                                 <div data-v-b6728cd0="" class="price-amount">
+                                                                    @if($discountPercentage > 0)
                                                                     <span data-v-b6728cd0=""
-                                                                          class="price-before-discount"> BDT {{ $roomList->price_per_night }} </span>
-                                                                    <span class="amount">Total = BDT {{ $roomList->price_per_night }} </span>
-                                                                    <p class="tax-tag"> Fee or Tax Will show ate the
+                                                                          class="price-before-discount"> <del>BDT {{ number_format($originalPrice, 2) }}</del> </span>
+                                                                    @endif
+                                                                    <span class="amount">Total = BDT {{ number_format($discountedPrice, 2) }} </span>
+                                                                    <p class="tax-tag"> Fee or Tax Will show at the
                                                                         check out page (if any) </p>
                                                                 </div>
 
@@ -692,22 +687,25 @@
                                                                 <div class="quantity-btn">
                                                                     <form action="">
                                                                         <p class="qty qty-room">
-                                                                            <button type="button" class="qtyminus"
+                                                                            <button type="button" class="qtyminus" data-room-id="{{ $roomList->id }}"
                                                                                     aria-hidden="true">&minus;
                                                                             </button>
-                                                                            <input type="number" name="qty" id="qty"
-                                                                                   min="1" max="10" step="1" value="1">
-                                                                            <button type="button" class="qtyplus"
+                                                                            <input type="number" name="qty" id="qty-{{ $roomList->id }}"
+                                                                                   min="1" max="{{ $roomList->total_rooms ?? 10 }}" step="1" value="1">
+                                                                            <button type="button" class="qtyplus" data-room-id="{{ $roomList->id }}"
                                                                                     aria-hidden="true">&plus;
                                                                             </button>
                                                                             <label style="padding-left: 15px;"
-                                                                                   for="qty">Quantity</label>
+                                                                                   for="qty-{{ $roomList->id }}">Quantity</label>
                                                                         </p>
                                                                     </form>
                                                                 </div>
 
                                                                 <div class="book_btn_2">
-                                                                    <a href="">Add to<span> Book</span></a>
+                                                                    <a href="javascript:void(0)" 
+                                                                       onclick="addToCart({{ $roomList->id }}, '{{ $roomList->name }}', {{ $discountedPrice }}, {{ $roomList->total_rooms ?? 1 }})">
+                                                                        Add to<span> Book</span>
+                                                                    </a>
                                                                 </div>
 
                                                                 <!---->
@@ -725,13 +723,418 @@
                                     </div>
                                 </div>
 
+                                <!-- Pricing Summary Sidebar -->
+                                <div data-v-58caae98="" class="col-lg-3 pl-lg-0 mb-hide-cart">
+                                    <div data-v-58caae98="" id="cart-bar" class="cart-visible" style="z-index: 1;">
+                                        <div class="backdrop"></div>
+                                        <div class="cart-wrapper">
+                                            <div class="cart-header">
+                                                <h2>Pricing Summary</h2>
+                                            </div>
+                                            <div class="rooms-selection-container">
+                                                <div class="rooms">
+                                                    <p class="text-center text-primary">Added Rooms</p>
+                                                    <div id="cartItemsList">
+                                                        <!-- Cart items will be added here dynamically -->
+                                                    </div>
+                                                </div>
+                                                <div class="action">
+                                                    <div class="total-amount">
+                                                        <span class="amount" id="cartTotal">Total = BDT 0.00</span>
+                                                        <p class="tax-tag">Fee or Tax Will show at the check out page (if any)</p>
+                                                    </div>
+                                                    <a href="javascript:void(0)" onclick="proceedToCheckout()">
+                                                        <button type="button" class="btn btn-secondary total-con btn-block">CONTINUE</button>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- Room Deatails -->
 
+                <!-- Floating Booking Cart Button -->
+                <div class="floating-cart-btn" onclick="scrollToRoomDetails()">
+                    <div class="cart-icon-wrapper">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span class="cart-count-badge" id="cartCountBadge">0</span>
+                    </div>
+                    <span class="cart-text">Booking Cart</span>
+                </div>
+
+                <!-- Room Data for Modal -->
                 <script>
+                    // Shopping Cart Management
+                    let bookingCart = [];
+
+                    function addToCart(roomId, roomName, price, maxQuantity) {
+                        const qtyInput = document.getElementById('qty-' + roomId);
+                        const quantity = qtyInput ? parseInt(qtyInput.value) : 1;
+                        
+                        // Check if room already in cart
+                        const existingItem = bookingCart.find(item => item.roomId === roomId);
+                        
+                        if (existingItem) {
+                            // Update quantity if not exceeding max
+                            if (existingItem.quantity + quantity <= maxQuantity) {
+                                existingItem.quantity += quantity;
+                            } else {
+                                alert(`Maximum ${maxQuantity} rooms available for this type.`);
+                                return;
+                            }
+                        } else {
+                            // Add new item
+                            bookingCart.push({
+                                roomId: roomId,
+                                roomName: roomName,
+                                price: price,
+                                quantity: quantity,
+                                maxQuantity: maxQuantity
+                            });
+                        }
+                        
+                        updateCartDisplay();
+                        
+                        // Show success message
+                        alert('Room added to booking cart!');
+                    }
+
+                    function removeFromCart(roomId) {
+                        bookingCart = bookingCart.filter(item => item.roomId !== roomId);
+                        updateCartDisplay();
+                    }
+
+                    function updateCartDisplay() {
+                        const cartList = document.getElementById('cartItemsList');
+                        const cartTotal = document.getElementById('cartTotal');
+                        const cartBadge = document.getElementById('cartCountBadge');
+                        
+                        if (bookingCart.length === 0) {
+                            cartList.innerHTML = '';
+                            cartTotal.textContent = 'Total = BDT 0.00';
+                            if (cartBadge) {
+                                cartBadge.textContent = '0';
+                                cartBadge.style.display = 'none';
+                            }
+                            return;
+                        }
+                        
+                        let total = 0;
+                        let itemsHtml = '';
+                        
+                        bookingCart.forEach(item => {
+                            const itemTotal = item.price * item.quantity;
+                            total += itemTotal;
+                            
+                            itemsHtml += `
+                                <div class="room">
+                                    <div class="room-content">
+                                        <div class="room-name">${item.roomName}</div>
+                                        <div class="pax-and-fare">
+                                            ${item.quantity > 1 ? `<span class="pax">Qty: ${item.quantity} × </span>` : ''}
+                                            <span class="fare">BDT ${itemTotal.toFixed(2)}</span>
+                                        </div>
+                                    </div>
+                                    <div class="delete-button" onclick="removeFromCart(${item.roomId})"></div>
+                                </div>
+                            `;
+                        });
+                        
+                        cartList.innerHTML = itemsHtml;
+                        cartTotal.textContent = `Total = BDT ${total.toFixed(2)}`;
+                        
+                        if (cartBadge) {
+                            cartBadge.textContent = bookingCart.length;
+                            cartBadge.style.display = 'block';
+                        }
+                    }
+
+                    function proceedToCheckout() {
+                        if (bookingCart.length === 0) {
+                            alert('Please add at least one room to continue.');
+                            return;
+                        }
+                        
+                        // Here you can redirect to checkout page or submit the cart
+                        console.log('Proceeding to checkout with:', bookingCart);
+                        alert('Proceeding to checkout... (This will redirect to booking page)');
+                        // window.location.href = '/booking/checkout';
+                    }
+
+                    function scrollToRoomDetails() {
+                        document.getElementById('Room_Details').scrollIntoView({ behavior: 'smooth' });
+                    }
+
+                    const roomsData = {!! json_encode(\App\Models\Room::where('hotel_id', $show->id)->with('photos')->get()->map(function($room) {
+                        return [
+                            'id' => $room->id,
+                            'name' => $room->name,
+                            'number' => $room->number,
+                            'floor_number' => $room->floor_number,
+                            'price_per_night' => $room->price_per_night,
+                            'weekend_price' => $room->weekend_price,
+                            'holiday_price' => $room->holiday_price,
+                            'discount_type' => $room->discount_type,
+                            'discount_amount' => $room->discount_amount,
+                            'discount_percentage' => $room->discount_percentage,
+                            'total_persons' => $room->total_persons,
+                            'total_rooms' => $room->total_rooms,
+                            'total_washrooms' => $room->total_washrooms,
+                            'total_beds' => $room->total_beds,
+                            'size' => $room->size,
+                            'description' => $room->description,
+                            'wifi_details' => $room->wifi_details,
+                            'appliances' => json_decode($room->appliances, true) ?? [],
+                            'furniture' => json_decode($room->furniture, true) ?? [],
+                            'amenities' => json_decode($room->amenities, true) ?? [],
+                            'cancellation_policy' => json_decode($room->cancellation_policy, true) ?? [],
+                            'photos' => $room->photos->groupBy('category')->map(function($photos) {
+                                return $photos->map(function($photo) {
+                                    return $photo->photo_path;
+                                });
+                            })
+                        ];
+                    })) !!};
+
+                    // Store current room for modal "Add to Book" button
+                    let currentModalRoom = null;
+
+                    function loadRoomDetails(roomId) {
+                        const room = roomsData.find(r => r.id === roomId);
+                        if (!room) return;
+
+                        // Store for modal add to book button
+                        currentModalRoom = room;
+
+                        // Calculate discount
+                        const originalPrice = parseFloat(room.price_per_night);
+                        let discountedPrice = originalPrice;
+                        let discountPercentage = 0;
+
+                        if (room.discount_type === 'percentage' && room.discount_percentage) {
+                            discountPercentage = parseFloat(room.discount_percentage);
+                            discountedPrice = originalPrice - (originalPrice * discountPercentage / 100);
+                        } else if (room.discount_type === 'amount' && room.discount_amount) {
+                            discountedPrice = originalPrice - parseFloat(room.discount_amount);
+                            discountPercentage = ((originalPrice - discountedPrice) / originalPrice) * 100;
+                        }
+
+                        // Store calculated price for modal button
+                        room.calculatedPrice = discountedPrice;
+
+                        // Update modal header
+                        document.querySelector('.room-title-modal').textContent = room.name;
+                        document.querySelector('.room-numbers').innerHTML = `Room # ${room.number}<br> <span style="padding-left:0px" class="floor-numbers">${room.floor_number || ''}</span>`;
+
+                        // Update pricing
+                        if (discountPercentage > 0) {
+                            document.querySelector('.discount-tag-modal').style.display = 'block';
+                            document.querySelector('.discount-tag-modal .discount-tag').textContent = Math.round(discountPercentage) + '% off';
+                            document.querySelector('.price-before-discount-modal').innerHTML = `<del>BDT ${originalPrice.toFixed(2)}</del>`;
+                            document.querySelector('.discount-price-modal').textContent = `BDT ${discountedPrice.toFixed(2)}`;
+                        } else {
+                            document.querySelector('.discount-tag-modal').style.display = 'none';
+                            document.querySelector('.price-before-discount-modal').textContent = '';
+                            document.querySelector('.discount-price-modal').textContent = `BDT ${originalPrice.toFixed(2)}`;
+                        }
+
+                        // Update quantity max value
+                        document.querySelector('#rightSidebarModalDetails #qty').setAttribute('max', room.total_rooms || 10);
+
+                        // Update modal "Add to Book" button
+                        const modalAddBtn = document.getElementById('modalAddToBookBtn');
+                        if (modalAddBtn) {
+                            modalAddBtn.onclick = function(e) {
+                                e.preventDefault();
+                                const modalQty = document.querySelector('#rightSidebarModalDetails #qty');
+                                const quantity = modalQty ? parseInt(modalQty.value) : 1;
+                                
+                                // Temporarily store quantity in cart item
+                                const existingItem = bookingCart.find(item => item.roomId === room.id);
+                                if (existingItem) {
+                                    if (existingItem.quantity + quantity <= room.total_rooms) {
+                                        existingItem.quantity += quantity;
+                                    } else {
+                                        alert(`Maximum ${room.total_rooms} rooms available for this type.`);
+                                        return;
+                                    }
+                                } else {
+                                    bookingCart.push({
+                                        roomId: room.id,
+                                        roomName: room.name,
+                                        price: discountedPrice,
+                                        quantity: quantity,
+                                        maxQuantity: room.total_rooms || 1
+                                    });
+                                }
+                                
+                                updateCartDisplay();
+                                alert('Room added to booking cart!');
+                                
+                                // Close modal after adding
+                                const modalElement = document.getElementById('rightSidebarModalDetails');
+                                if (modalElement) {
+                                    const modal = bootstrap.Modal.getInstance(modalElement);
+                                    if (modal) modal.hide();
+                                }
+                            };
+                        }
+
+                        // Update Room Photos
+                        updateRoomPhotos(room.photos);
+
+                        // Update Facilities
+                        updateRoomFacilities(room);
+
+                        // Update Room Details
+                        updateRoomDetailsTab(room);
+                    }
+
+                    function updateRoomPhotos(photos) {
+                        const photoContainer = document.querySelector('#hotel-room .all-rooms-details .row');
+                        photoContainer.innerHTML = '';
+
+                        // Display all photo categories
+                        const categories = ['feature', 'kitchen', 'washroom', 'parking', 'entrance', 'accessibility', 'spa', 'bar', 'transport', 'rooftop', 'recreation', 'safety', 'amenity'];
+                        
+                        categories.forEach(category => {
+                            if (photos[category]) {
+                                photos[category].forEach(photoPath => {
+                                    const div = document.createElement('div');
+                                    div.className = 'col-6 col-md-6 luxury-room-block';
+                                    div.innerHTML = `<img class="img-fluid" src="/${photoPath}" alt="${category}-photo">`;
+                                    photoContainer.appendChild(div);
+                                });
+                            }
+                        });
+
+                        if (photoContainer.innerHTML === '') {
+                            photoContainer.innerHTML = '<div class="col-12"><p class="text-center">No photos available</p></div>';
+                        }
+                    }
+
+                    function updateRoomFacilities(room) {
+                        const facilitiesContainer = document.querySelector('#facility .facilities-flex');
+                        facilitiesContainer.innerHTML = '';
+
+                        // Appliances
+                        if (room.appliances && room.appliances.length > 0) {
+                            facilitiesContainer.innerHTML += generateFacilityColumn('Appliances Information', room.appliances, 'fa-bed fa-bed-custom');
+                        }
+
+                        // Furniture
+                        if (room.furniture && room.furniture.length > 0) {
+                            facilitiesContainer.innerHTML += generateFacilityColumn('Furniture Information', room.furniture, 'fa-bed fa-bed-custom');
+                        }
+
+                        // Amenities
+                        if (room.amenities && room.amenities.length > 0) {
+                            facilitiesContainer.innerHTML += generateFacilityColumn('Room Amenities', room.amenities, 'fa-bed fa-bed-custom');
+                        }
+                    }
+
+                    function generateFacilityColumn(title, items, icon) {
+                        let html = `<div data-v-58caae98="" class="facilities-column">
+                            <h3 data-v-58caae98="" class="general-title">
+                                <span class="faci-icon-awe"><i class="fa ${icon}"></i></span> ${title}
+                            </h3>
+                            <ul data-v-58caae98="" class="general-facilities-list">`;
+                        
+                        items.forEach(item => {
+                            html += `<li data-v-58caae98="">
+                                <span>
+                                    <svg style="color: #91278f; margin-top: -3px; margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+                                    </svg>
+                                </span>
+                                ${item}
+                            </li>`;
+                        });
+                        
+                        html += `</ul></div>`;
+                        return html;
+                    }
+
+                    function updateRoomDetailsTab(room) {
+                        const detailsModal = document.querySelector('#others .room-details-modal');
+                        
+                        // Description section
+                        const description = room.description || 'This room offers a comfortable and relaxing stay with modern amenities and excellent service.';
+                        
+                        // Room Information (Left column) - Room specifications
+                        const roomInfo = [];
+                        if (room.size) roomInfo.push(`Room Size: ${room.size} sq ft`);
+                        if (room.total_persons) roomInfo.push(`Capacity: ${room.total_persons} Adults Maximum`);
+                        if (room.total_beds) roomInfo.push(`Beds: ${room.total_beds}`);
+                        if (room.total_washrooms) roomInfo.push(`Washrooms: ${room.total_washrooms}`);
+                        if (room.total_rooms) roomInfo.push(`Available Rooms: ${room.total_rooms}`);
+                        if (room.wifi_details) roomInfo.push(`WiFi: ${room.wifi_details}`);
+                        
+                        // Add appliances to Room Information
+                        if (room.appliances && room.appliances.length > 0) {
+                            roomInfo.push(...room.appliances);
+                        }
+                        
+                        // Additional Room Information (Right column) - Furniture, Amenities, Policies
+                        const additionalInfo = [];
+                        
+                        // Add furniture
+                        if (room.furniture && room.furniture.length > 0) {
+                            additionalInfo.push(...room.furniture);
+                        }
+                        
+                        // Add amenities
+                        if (room.amenities && room.amenities.length > 0) {
+                            additionalInfo.push(...room.amenities);
+                        }
+                        
+                        // Add cancellation policy
+                        if (room.cancellation_policy && room.cancellation_policy.length > 0) {
+                            additionalInfo.push(...room.cancellation_policy.map(policy => `Policy: ${policy}`));
+                        }
+                        
+                        detailsModal.innerHTML = `
+                            <div class="room-details-des">
+                                <p>${description}</p>
+                            </div>
+                            <div data-v-58caae98="" class="facilities-flex">
+                                ${generateDetailsColumn('Room Information', roomInfo, 'fa-bed fa-bed-custom')}
+                                ${generateDetailsColumn('Additional Room Information', additionalInfo, 'fa-bed fa-bed-custom')}
+                            </div>
+                        `;
+                    }
+                    
+                    function generateDetailsColumn(title, items, icon) {
+                        if (!items || items.length === 0) return '';
+                        
+                        return `
+                            <div data-v-58caae98="" class="facilities-column">
+                                <h3 data-v-58caae98="" class="general-title">
+                                    <span class="faci-icon-awe"><i class="fa ${icon}"></i></span> ${title}
+                                </h3>
+                                <ul data-v-58caae98="" class="general-facilities-list">
+                                    ${items.map(item => `
+                                        <li data-v-58caae98="">
+                                            <span>
+                                                <svg style="color: #91278f; margin-top: -3px; margin-right: 10px;" 
+                                                     xmlns="http://www.w3.org/2000/svg" width="14" height="14" 
+                                                     fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+                                                </svg>
+                                            </span>
+                                            ${item}
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        `;
+                    }
+
                     document.addEventListener('DOMContentLoaded', function () {
                         // Add click event listener to each delete button
                         const deleteButtons = document.querySelectorAll('.delete-button');
@@ -744,6 +1147,36 @@
                                 // Remove the room item from the DOM
                                 if (roomItem) {
                                     roomItem.remove();
+                                }
+                            });
+                        });
+
+                        // Handle quantity selectors for all rooms
+                        const qtyMinusButtons = document.querySelectorAll('.qtyminus');
+                        const qtyPlusButtons = document.querySelectorAll('.qtyplus');
+
+                        qtyMinusButtons.forEach(function (button) {
+                            button.addEventListener('click', function () {
+                                const roomId = button.getAttribute('data-room-id');
+                                const qtyInput = document.getElementById('qty-' + roomId);
+                                let currentValue = parseInt(qtyInput.value);
+                                const minValue = parseInt(qtyInput.getAttribute('min'));
+                                
+                                if (currentValue > minValue) {
+                                    qtyInput.value = currentValue - 1;
+                                }
+                            });
+                        });
+
+                        qtyPlusButtons.forEach(function (button) {
+                            button.addEventListener('click', function () {
+                                const roomId = button.getAttribute('data-room-id');
+                                const qtyInput = document.getElementById('qty-' + roomId);
+                                let currentValue = parseInt(qtyInput.value);
+                                const maxValue = parseInt(qtyInput.getAttribute('max'));
+                                
+                                if (currentValue < maxValue) {
+                                    qtyInput.value = currentValue + 1;
                                 }
                             });
                         });

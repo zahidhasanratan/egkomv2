@@ -68,9 +68,12 @@ Route::prefix('super-admin')->group(function () {
 //      Mange Room
 
         Route::get('/super-admin/room/{id}', [ManageRoomController::class, 'indexSuper'])->name('super-admin.room.index');
+        Route::get('/super-admin/room-create/{id}', [ManageRoomController::class, 'createSuper'])->name('super-admin.room.create');
+        Route::post('/super-admin/room/store', [ManageRoomController::class, 'storeSuper'])->name('super-admin.room.store');
+        Route::delete('/super-admin/room/{hotel}', [ManageRoomController::class, 'destroySuper'])->name('super-admin.room.destroy');
         Route::get('/room/{room}/edit', [ManageRoomController::class, 'editSuper'])->name('super-admin.room.edit');
         Route::put('/room/{room}', [ManageRoomController::class, 'updateSuper'])->name('super-admin.room.update');
-        Route::post('super-admin/room/delete-photo', [ManageRoomController::class, 'deletePhoto'])->name('super-admin.room.delete-photo');
+        Route::post('super-admin/room/delete-photo', [ManageRoomController::class, 'deletePhotoSuper'])->name('super-admin.room.delete-photo');
         /*Admin Panel Started */
 
         Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
