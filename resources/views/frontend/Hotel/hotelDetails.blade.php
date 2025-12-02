@@ -365,33 +365,36 @@
 
                                         <h2 class="meta-info-hotel">{{ $show->description }}</h2>
 
-                                        <form>
+                                        <form id="searchForm">
                                             <div class="row">
 
 
                                                 <div class="col-12 col-md-3">
                                                     <div class="form-group left-icon">
-                                                        <input type="date" class="form-control dpd1" id="checkInDate"
-                                                               placeholder="Check In">
+                                                        <input type="date" class="form-control dpd1" id="checkInDate" name="checkin"
+                                                               placeholder="Check In" required>
                                                         <i class="fa fa-calendar"></i>
                                                     </div>
                                                 </div><!-- end columns -->
 
                                                 <div class="col-12 col-md-3">
                                                     <div class="form-group left-icon">
-                                                        <input type="date" class="form-control dpd1" id="checkoutDate"
-                                                               placeholder="Check In">
+                                                        <input type="date" class="form-control dpd1" id="checkoutDate" name="checkout"
+                                                               placeholder="Check Out" required>
                                                         <i class="fa fa-calendar"></i>
                                                     </div>
                                                 </div><!-- end columns -->
 
                                                 <div class="col-6 col-md-6 col-lg-2">
                                                     <div class="form-group right-icon">
-                                                        <select class="form-control">
-                                                            <option selected="">Add Guests</option>
-                                                            <option>1</option>
-                                                            <option>2</option>
-                                                            <option>3</option>
+                                                        <select class="form-control" id="guestsSelect" name="guests">
+                                                            <option value="0" selected>Add Guests</option>
+                                                            <option value="1">1 Guest</option>
+                                                            <option value="2">2 Guests</option>
+                                                            <option value="3">3 Guests</option>
+                                                            <option value="4">4 Guests</option>
+                                                            <option value="5">5 Guests</option>
+                                                            <option value="6">6+ Guests</option>
                                                         </select>
                                                         <i class="fa fa-angle-down"></i>
                                                     </div>
@@ -400,18 +403,21 @@
 
                                                 <div class="col-6 col-md-6 col-lg-2">
                                                     <div class="form-group right-icon">
-                                                        <select class="form-control">
-                                                            <option selected="">Add Children</option>
-                                                            <option>1</option>
-                                                            <option>2</option>
-                                                            <option>3</option>
+                                                        <select class="form-control" id="childrenSelect" name="children">
+                                                            <option value="0" selected>Add Children</option>
+                                                            <option value="1">1 Child</option>
+                                                            <option value="2">2 Children</option>
+                                                            <option value="3">3 Children</option>
+                                                            <option value="4">4+ Children</option>
                                                         </select>
                                                         <i class="fa fa-angle-down"></i>
                                                     </div>
                                                 </div>
 
                                                 <div class="col-12 col-md-12 col-lg-12 col-xl-2">
-                                                    <button class="btn btn-orange">Modify Search</button>
+                                                    <button type="button" onclick="modifySearch()" class="btn btn-orange" style="background: #91278f; border: none; width: 100%; padding: 12px; font-weight: 600; text-transform: uppercase; color: white;">
+                                                        Modify Search
+                                                    </button>
                                                 </div>
 
 
@@ -553,32 +559,45 @@
 
                 <div class="uitk-pill-container">
                     <div class="uitk-pill">
-                        <input id="ALLROOMS" aria-checked="true" type="checkbox"
-                               class="uitk-pill-standard is-visually-hidden" value="true" checked=""/>
+                        <input id="ALLROOMS" aria-checked="true" type="radio" name="bedFilter"
+                               class="uitk-pill-standard is-visually-hidden" value="all" checked="" onchange="filterRoomsByBeds()"/>
                         <label class="uitk-pill-content" for="ALLROOMS" aria-label="All rooms"><span
                                 class="uitk-pill-text">All rooms</span></label>
                     </div>
                     <div class="uitk-pill">
-                        <input id="1BED" aria-checked="false" type="checkbox"
-                               class="uitk-pill-standard is-visually-hidden" value="false"/><label
+                        <input id="1BED" aria-checked="false" type="radio" name="bedFilter"
+                               class="uitk-pill-standard is-visually-hidden" value="1" onchange="filterRoomsByBeds()"/><label
                             class="uitk-pill-content" for="1BED" aria-label="1 bed"><span
                                 class="uitk-pill-text">1 bed</span></label>
                     </div>
                     <div class="uitk-pill">
-                        <input id="2BEDS" aria-checked="false" type="checkbox"
-                               class="uitk-pill-standard is-visually-hidden" value="false"/><label
+                        <input id="2BEDS" aria-checked="false" type="radio" name="bedFilter"
+                               class="uitk-pill-standard is-visually-hidden" value="2" onchange="filterRoomsByBeds()"/><label
                             class="uitk-pill-content" for="2BEDS" aria-label="2 beds"><span class="uitk-pill-text">2 beds</span></label>
                     </div>
                     <div class="uitk-pill">
-                        <input id="3PLUSBEDS" aria-checked="false" type="checkbox"
-                               class="uitk-pill-standard is-visually-hidden" value="false"/>
+                        <input id="3PLUSBEDS" aria-checked="false" type="radio" name="bedFilter"
+                               class="uitk-pill-standard is-visually-hidden" value="3" onchange="filterRoomsByBeds()"/>
                         <label class="uitk-pill-content" for="3PLUSBEDS" aria-label="3 or more beds"><span
                                 class="uitk-pill-text">3+ beds</span></label>
                     </div>
                     <div class="uitk-pill">
-                        <a class="reset-btn" href="">Clear Filter</a>
+                        <a class="reset-btn" href="javascript:void(0)" onclick="clearAllFilters()">Clear Filter</a>
                     </div>
 
+                </div>
+                
+                <!-- Search Summary Bar -->
+                <div class="search-summary-bar" style="display: flex; justify-content: space-between; align-items: center; background: #f8f9fa; padding: 15px 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #91278f;">
+                    <div style="flex: 1;">
+                        <strong style="color: #333;">Room Details</strong>
+                    </div>
+                    <div id="searchSummary" style="flex: 1; text-align: center; color: #666; font-size: 14px;">
+                        Select dates and guests to see pricing
+                    </div>
+                    <div style="flex: 1; text-align: right;">
+                        <strong style="color: #91278f;">Pricing Summary</strong>
+                    </div>
                 </div>
 
                 <style type="text/css">
@@ -606,7 +625,10 @@
 
                                             @foreach(\App\Models\Room::where('hotel_id', $show->id)->get() as $roomList)
 
-                                                <div class="hotel-all-card">
+                                                <div class="hotel-all-card" 
+                                                     data-room-id="{{ $roomList->id }}"
+                                                     data-beds="{{ $roomList->total_beds ?? 1 }}" 
+                                                     data-capacity="{{ $roomList->total_persons ?? 2 }}">
                                                     <div class="room-info">
                                                         <div class="room-feature-head">
                                                             <h3 class="room-title">{{ $roomList->name }}</h3>
@@ -2289,5 +2311,231 @@
             </div>
         </div>
     </div>
+
+
+<script>
+    // Search and Filter State
+    let searchState = {
+        checkin: null,
+        checkout: null,
+        guests: 0,
+        children: 0,
+        nights: 0,
+        bedFilter: 'all'
+    };
+
+    // Modify Search Function
+    function modifySearch() {
+        const checkin = document.getElementById('checkInDate').value;
+        const checkout = document.getElementById('checkoutDate').value;
+        const guests = parseInt(document.getElementById('guestsSelect').value) || 0;
+        const children = parseInt(document.getElementById('childrenSelect').value) || 0;
+
+        if (!checkin || !checkout) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Missing Dates',
+                text: 'Please select both check-in and check-out dates',
+                confirmButtonColor: '#91278f'
+            });
+            return;
+        }
+
+        const checkinDate = new Date(checkin);
+        const checkoutDate = new Date(checkout);
+        
+        if (checkoutDate <= checkinDate) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid Dates',
+                text: 'Check-out date must be after check-in date',
+                confirmButtonColor: '#91278f'
+            });
+            return;
+        }
+
+        // Calculate nights
+        const nights = Math.ceil((checkoutDate - checkinDate) / (1000 * 60 * 60 * 24));
+        
+        // Update search state
+        searchState = {
+            checkin: checkin,
+            checkout: checkout,
+            guests: guests,
+            children: children,
+            nights: nights,
+            bedFilter: searchState.bedFilter
+        };
+
+        // Update summary text
+        updateSearchSummary();
+        
+        // Filter rooms
+        filterRooms();
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Search Updated!',
+            text: `Showing available rooms for ${nights} night${nights > 1 ? 's' : ''}`,
+            confirmButtonColor: '#91278f',
+            timer: 2000,
+            showConfirmButton: false
+        });
+    }
+
+    // Update Search Summary
+    function updateSearchSummary() {
+        const summaryDiv = document.getElementById('searchSummary');
+        if (!searchState.checkin || !searchState.checkout) {
+            summaryDiv.textContent = 'Select dates and guests to see pricing';
+            return;
+        }
+
+        const totalPersons = searchState.guests + searchState.children;
+        let text = `For ${totalPersons} ${totalPersons === 1 ? 'Person' : 'Persons'}`;
+        
+        if (searchState.guests > 0 && searchState.children > 0) {
+            text = `For ${searchState.guests} Adult${searchState.guests > 1 ? 's' : ''} & ${searchState.children} Child${searchState.children > 1 ? 'ren' : ''}`;
+        } else if (searchState.guests > 0) {
+            text = `For ${searchState.guests} Adult${searchState.guests > 1 ? 's' : ''}`;
+        } else if (searchState.children > 0) {
+            text = `For ${searchState.children} Child${searchState.children > 1 ? 'ren' : ''}`;
+        }
+        
+        text += `, for ${searchState.nights} Night${searchState.nights > 1 ? 's' : ''}`;
+        summaryDiv.textContent = text;
+    }
+
+    // Filter Rooms by Beds
+    function filterRoomsByBeds() {
+        const selectedBed = document.querySelector('input[name="bedFilter"]:checked').value;
+        searchState.bedFilter = selectedBed;
+        filterRooms();
+    }
+
+    // Main Filter Function
+    function filterRooms() {
+        const rooms = document.querySelectorAll('.hotel-all-card');
+        let visibleCount = 0;
+
+        rooms.forEach(room => {
+            let show = true;
+
+            // Get room data
+            const totalBeds = parseInt(room.getAttribute('data-beds')) || 0;
+            const capacity = parseInt(room.getAttribute('data-capacity')) || 0;
+
+            // Filter by beds
+            if (searchState.bedFilter !== 'all') {
+                const bedFilterNum = parseInt(searchState.bedFilter);
+                if (bedFilterNum === 3) {
+                    show = totalBeds >= 3;
+                } else {
+                    show = totalBeds === bedFilterNum;
+                }
+            }
+
+            // Filter by capacity (guests + children)
+            if (show && (searchState.guests > 0 || searchState.children > 0)) {
+                const totalPersons = searchState.guests + searchState.children;
+                show = capacity >= totalPersons;
+            }
+
+            // Show/hide room
+            if (show) {
+                room.style.display = '';
+                visibleCount++;
+            } else {
+                room.style.display = 'none';
+            }
+        });
+
+        // Show message if no rooms found
+        if (visibleCount === 0) {
+            showNoRoomsMessage();
+        } else {
+            hideNoRoomsMessage();
+        }
+    }
+
+    // Clear All Filters
+    function clearAllFilters() {
+        // Reset form
+        document.getElementById('searchForm').reset();
+        document.getElementById('ALLROOMS').checked = true;
+        
+        // Reset state
+        searchState = {
+            checkin: null,
+            checkout: null,
+            guests: 0,
+            children: 0,
+            nights: 0,
+            bedFilter: 'all'
+        };
+
+        // Set check-in to today
+        const today = new Date();
+        document.getElementById('checkInDate').value = today.toISOString().substr(0, 10);
+        
+        // Reset summary
+        document.getElementById('searchSummary').textContent = 'Select dates and guests to see pricing';
+        
+        // Show all rooms
+        const rooms = document.querySelectorAll('.hotel-all-card');
+        rooms.forEach(room => {
+            room.style.display = '';
+        });
+        
+        hideNoRoomsMessage();
+    }
+
+    // Show No Rooms Message
+    function showNoRoomsMessage() {
+        let noRoomsDiv = document.getElementById('noRoomsMessage');
+        if (!noRoomsDiv) {
+            noRoomsDiv = document.createElement('div');
+            noRoomsDiv.id = 'noRoomsMessage';
+            noRoomsDiv.style.cssText = 'text-align: center; padding: 40px; background: #f8f9fa; border-radius: 8px; margin: 20px 0;';
+            noRoomsDiv.innerHTML = `
+                <i class="fa fa-bed" style="font-size: 48px; color: #ddd; margin-bottom: 15px;"></i>
+                <h3 style="color: #666; margin-bottom: 10px;">No rooms match your criteria</h3>
+                <p style="color: #999; margin-bottom: 20px;">Try adjusting your search filters or guest count</p>
+                <button onclick="clearAllFilters()" style="background: #91278f; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
+                    Clear Filters
+                </button>
+            `;
+            
+            const hotelRoom = document.querySelector('.hotel-room');
+            if (hotelRoom) {
+                hotelRoom.appendChild(noRoomsDiv);
+            }
+        }
+        noRoomsDiv.style.display = 'block';
+    }
+
+    // Hide No Rooms Message
+    function hideNoRoomsMessage() {
+        const noRoomsDiv = document.getElementById('noRoomsMessage');
+        if (noRoomsDiv) {
+            noRoomsDiv.style.display = 'none';
+        }
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set min date for check-in (today)
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('checkInDate').setAttribute('min', today);
+        document.getElementById('checkoutDate').setAttribute('min', today);
+        
+        // Update checkout min date when checkin changes
+        document.getElementById('checkInDate').addEventListener('change', function() {
+            const checkinDate = new Date(this.value);
+            checkinDate.setDate(checkinDate.getDate() + 1);
+            document.getElementById('checkoutDate').setAttribute('min', checkinDate.toISOString().split('T')[0]);
+        });
+    });
+</script>
 
 @endsection
