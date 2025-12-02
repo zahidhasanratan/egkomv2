@@ -8,6 +8,7 @@ use App\Http\Controllers\Vendor\OwnerController;
 use App\Http\Controllers\Vendor\BankingController;
 use App\Http\Controllers\Vendor\ManageHotel;
 use App\Http\Controllers\Vendor\ManageRoomController;
+use App\Http\Controllers\Vendor\CoHostController;
 use App\Http\Controllers\Superadmin\DashboardController;
 use App\Http\Controllers\admin\AdminDashboardController;
 use App\Http\Controllers\admin\MenuController;
@@ -82,6 +83,14 @@ Route::prefix('vendor-admin')->group(function () {
 
 
         Route::get('/vendor-admin/room/{id}', [ManageRoomController::class, 'index'])->name('vendor-admin.room.index');
+        
+        // Co-Host Management Routes
+        Route::get('/hotel/{hotelId}/co-hosts', [CoHostController::class, 'index'])->name('vendor.co-hosts.index');
+        Route::get('/hotel/{hotelId}/co-hosts/create', [CoHostController::class, 'create'])->name('vendor.co-hosts.create');
+        Route::post('/hotel/{hotelId}/co-hosts', [CoHostController::class, 'store'])->name('vendor.co-hosts.store');
+        Route::get('/hotel/{hotelId}/co-hosts/{id}/edit', [CoHostController::class, 'edit'])->name('vendor.co-hosts.edit');
+        Route::put('/hotel/{hotelId}/co-hosts/{id}', [CoHostController::class, 'update'])->name('vendor.co-hosts.update');
+        Route::delete('/hotel/{hotelId}/co-hosts/{id}', [CoHostController::class, 'destroy'])->name('vendor.co-hosts.destroy');
         Route::get('/room-create/{id}', [ManageRoomController::class, 'create'])->name('vendor-admin.room.create');
         Route::post('/vendor-admin/room/store', [ManageRoomController::class, 'store'])->name('vendor-admin.room.store');
         Route::delete('/room/{hotel}', [ManageRoomController::class, 'destroy'])->name('vendor-admin.room.destroy');

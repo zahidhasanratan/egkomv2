@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 02, 2025 at 10:27 AM
+-- Generation Time: Dec 02, 2025 at 11:41 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.23
 
@@ -423,7 +423,41 @@ CREATE TABLE `bookings` (
 --
 
 INSERT INTO `bookings` (`id`, `invoice_number`, `booking_status`, `guest_id`, `guest_name`, `guest_email`, `guest_phone`, `rooms_data`, `checkin_date`, `checkout_date`, `total_nights`, `total_male`, `total_female`, `total_kids`, `total_persons`, `other_guests`, `home_address`, `organization`, `organization_address`, `relationship`, `additional_requests`, `bed_type`, `room_preference`, `room_type`, `room_number`, `arrival_time`, `property_note`, `citizenship`, `nid_front`, `nid_back`, `passport`, `visa`, `subtotal`, `discount`, `tax`, `grand_total`, `coupon_code`, `payment_status`, `paid_amount`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'INV-2025-000001', 'confirmed', 2, 'Regan Malone', 'mollika@mollika.com', '+1 (685) 647-8622', '[{\"roomId\":33,\"roomName\":\"Abraham Neal\",\"quantity\":1,\"price\":564.72,\"hotelId\":46,\"hotelName\":\"N\\/A\",\"hotelAddress\":\"Jaliapalong, Inani, Ukhia, Cox\'s Bazar, Bangladesh\"}]', '1978-02-21', '2017-04-11', 14294, 5, 2, 8, 1, '[\"Est eveniet archit\"]', 'Dolor aspernatur sim', 'Manning and Gentry Plc', 'Laudantium et deser', 'colleagues', '[\"Room On Higher Floor\",\"Decorations in Room\"]', 'large_bed', 'smoking', 'Ut expedita ullam id', '837', '11', 'Laudantium et in vo', 'international', NULL, NULL, NULL, NULL, '8072107.68', '0.00', '1210816.15', '9282923.83', NULL, 'unpaid', '0.00', '2025-12-02 02:37:26', '2025-12-02 02:37:26', NULL);
+(2, 'INV-2025-000001', 'confirmed', 2, 'Rama Ferguson', 'mollika@mollika.com', '+1 (363) 801-5441', '[{\"roomId\":28,\"roomName\":\"Twin Room\",\"quantity\":1,\"price\":5000,\"hotelId\":46,\"hotelName\":\"Shopno Bilash Holiday Suites\",\"hotelAddress\":\"Jaliapalong, Inani, Ukhia, Cox\'s Bazar, Bangladesh\",\"hotelEmail\":null,\"hotelPhone\":null,\"hotelPhoto\":\"[\\\"uploads\\\\\\/hotel_photos\\\\\\/1748318283_6835384bb346a.jpg\\\"]\"},{\"roomId\":33,\"roomName\":\"Abraham Neal\",\"quantity\":1,\"price\":564.72,\"hotelId\":46,\"hotelName\":\"Shopno Bilash Holiday Suites\",\"hotelAddress\":\"Jaliapalong, Inani, Ukhia, Cox\'s Bazar, Bangladesh\",\"hotelEmail\":null,\"hotelPhone\":null,\"hotelPhoto\":\"[\\\"uploads\\\\\\/hotel_photos\\\\\\/1748318283_6835384bb346a.jpg\\\"]\"}]', '2025-12-03', '2025-12-05', 2, 2, 8, 8, 1, '[\"Aliqua Nulla sequi\"]', 'Autem quia est prov', 'Byers Leach Inc', 'Accusantium libero e', 'onlyMe', '[\"Airport Transfer\",\"Extra Bed\"]', 'twin_beds', 'smoking', 'Tempore libero mini', '521', '14', 'Vel aliquid aut volu', 'international', NULL, NULL, NULL, NULL, '11129.44', '0.00', '1669.42', '12798.86', NULL, 'unpaid', '0.00', '2025-12-02 03:29:58', '2025-12-02 03:29:58', NULL),
+(3, 'INV-2025-000002', 'confirmed', 2, 'Colin Stanton', 'mollika@mollika.com', '+1 (659) 838-4071', '[{\"roomId\":28,\"roomName\":\"Twin Room\",\"quantity\":1,\"price\":5000,\"hotelId\":46,\"hotelName\":\"Shopno Bilash Holiday Suites\",\"hotelAddress\":\"Jaliapalong, Inani, Ukhia, Cox\'s Bazar, Bangladesh\",\"hotelEmail\":null,\"hotelPhone\":null,\"hotelPhoto\":\"uploads\\/hotel_photos\\/1748318283_6835384bb346a.jpg\"}]', '2025-12-03', '2025-12-04', 1, 4, 10, 5, 1, '[\"Ipsam sunt aut ullam\"]', 'Cumque voluptatem au', 'Harper Dawson LLC', 'Voluptate quae sint', 'colleagues', '[\"Airport Transfer\",\"Extra Bed\",\"Room On Higher Floor\",\"Decorations in Room\"]', 'large_bed', 'non_smoking', 'Aut maiores nesciunt', '496', '24', 'Qui dolor amet odit', 'international', NULL, NULL, NULL, NULL, '5000.00', '0.00', '750.00', '5750.00', NULL, 'unpaid', '0.00', '2025-12-02 04:08:17', '2025-12-02 04:08:17', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `co_hosts`
+--
+
+CREATE TABLE `co_hosts` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `hotel_id` bigint(20) UNSIGNED NOT NULL,
+  `vendor_id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `photo` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `bio` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `language` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'English',
+  `response_rate` int(11) NOT NULL DEFAULT 100,
+  `response_time` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'within an hour',
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `co_hosts`
+--
+
+INSERT INTO `co_hosts` (`id`, `hotel_id`, `vendor_id`, `name`, `email`, `phone`, `photo`, `password`, `bio`, `language`, `response_rate`, `response_time`, `is_active`, `email_verified_at`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 46, 7, 'Hope Pittman', 'cohost@cohost.com', '+1 (841) 363-4465', 'uploads/co-hosts/1764671215_692ebeefa95f5.png', '$2y$10$t543j7tojya7ZVNkdZ4kTe4fhH0NcQhObs/f/NGFFXLapc2wARwR2', 'Officia ullamco irur', 'Deserunt sint rem e', 100, 'within a day', 1, NULL, NULL, '2025-12-02 04:10:49', '2025-12-02 04:26:55');
 
 -- --------------------------------------------------------
 
@@ -607,7 +641,7 @@ CREATE TABLE `hotel_wishlists` (
 --
 
 INSERT INTO `hotel_wishlists` (`id`, `guest_id`, `hotel_id`, `created_at`, `updated_at`) VALUES
-(1, 2, 46, '2025-12-02 03:26:20', '2025-12-02 03:26:20');
+(2, 2, 46, '2025-12-02 04:07:06', '2025-12-02 04:07:06');
 
 -- --------------------------------------------------------
 
@@ -692,7 +726,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (44, '2025_12_02_061848_add_discount_and_status_columns_to_rooms_table', 21),
 (45, '2025_12_02_080841_create_bookings_table', 22),
 (46, '2025_12_02_090616_create_wishlists_table', 23),
-(47, '2025_12_02_091802_create_hotel_wishlists_table', 24);
+(47, '2025_12_02_091802_create_hotel_wishlists_table', 24),
+(48, '2025_12_02_094543_create_co_hosts_table', 25);
 
 -- --------------------------------------------------------
 
@@ -1135,6 +1170,15 @@ ALTER TABLE `bookings`
   ADD KEY `bookings_guest_id_foreign` (`guest_id`);
 
 --
+-- Indexes for table `co_hosts`
+--
+ALTER TABLE `co_hosts`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `co_hosts_email_unique` (`email`),
+  ADD KEY `co_hosts_hotel_id_foreign` (`hotel_id`),
+  ADD KEY `co_hosts_vendor_id_foreign` (`vendor_id`);
+
+--
 -- Indexes for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
@@ -1294,6 +1338,12 @@ ALTER TABLE `big_advertises`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `co_hosts`
+--
+ALTER TABLE `co_hosts`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
@@ -1324,7 +1374,7 @@ ALTER TABLE `hotel_settings`
 -- AUTO_INCREMENT for table `hotel_wishlists`
 --
 ALTER TABLE `hotel_wishlists`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `menus`
@@ -1336,7 +1386,7 @@ ALTER TABLE `menus`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `nearby_areas`
@@ -1419,6 +1469,13 @@ ALTER TABLE `wishlists`
 --
 ALTER TABLE `bookings`
   ADD CONSTRAINT `bookings_guest_id_foreign` FOREIGN KEY (`guest_id`) REFERENCES `guests` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `co_hosts`
+--
+ALTER TABLE `co_hosts`
+  ADD CONSTRAINT `co_hosts_hotel_id_foreign` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `co_hosts_vendor_id_foreign` FOREIGN KEY (`vendor_id`) REFERENCES `vendors` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `hotels`

@@ -249,6 +249,7 @@
                             <option value="super-admin">EGKOM/Super Admin</option>
                             <option value="user">User</option>
                             <option value="hotel-vendor">Hotel/Vendor</option>
+                            <option value="co-host">Co-Host</option>
                         </select>
                     </div>
 
@@ -297,6 +298,9 @@
         } else if (selectedValue === 'hotel-vendor') {
             form.action = "{{ route('vendor-admin.login.submit') }}"; // Vendor
             forgotPasswordLink.href = "{{ route('vendor-admin.password.request') }}";
+        } else if (selectedValue === 'co-host') {
+            form.action = "{{ route('co-host.login.submit') }}"; // Co-Host
+            forgotPasswordLink.href = "#"; // No password reset for co-hosts yet
         } else if (selectedValue === 'user') {
             form.action = "{{ route('login') }}"; // User Login
             forgotPasswordLink.href = "{{ route('password.request') }}";

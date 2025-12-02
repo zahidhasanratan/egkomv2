@@ -55,6 +55,11 @@ return [
             'driver' => 'session',
             'provider' => 'guests',
         ],
+
+        'cohost' => [
+            'driver' => 'session',
+            'provider' => 'co_hosts',
+        ],
     ],
 
     /*
@@ -93,6 +98,11 @@ return [
         'guests' => [
             'driver' => 'eloquent',
             'model' => App\Models\Guest::class,
+        ],
+
+        'co_hosts' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\CoHost::class,
         ],
 
         // Example for database driver (commented out)

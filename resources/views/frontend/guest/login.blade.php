@@ -236,6 +236,20 @@
         <div class="switch-auth">
             Don't have an account? <a href="{{ route('guest.signup') }}">Sign up</a>
         </div>
+        
+        <div style="text-align: center; margin: 25px 0; position: relative;">
+            <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: #e0e0e0;"></div>
+            <span style="background: white; padding: 0 15px; position: relative; color: #999; font-size: 14px;">Or login as</span>
+        </div>
+        
+        <div style="display: flex; gap: 10px; justify-content: center;">
+            <a href="{{ route('vendor-admin.login') }}" style="flex: 1; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; text-align: center; color: #666; text-decoration: none; font-weight: 500; transition: all 0.3s;">
+                <i class="fas fa-store"></i> Vendor
+            </a>
+            <a href="{{ route('co-host.login') }}" style="flex: 1; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; text-align: center; color: #666; text-decoration: none; font-weight: 500; transition: all 0.3s;">
+                <i class="fas fa-user-tie"></i> Co-Host
+            </a>
+        </div>
     </div>
 </div>
 

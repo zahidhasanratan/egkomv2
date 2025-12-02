@@ -14,10 +14,27 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [App\Http\Controllers\Frontend\HomeController::class, 'index'])->name('welcome');
+Route::get('/login-selection', function() {
+    return view('frontend.login-selection');
+})->name('login.selection');
 Route::get('/hotel-details/{id}', [App\Http\Controllers\HomeController::class, 'hotelDetails'])->name('hotel.details');
 Route::get('/booking/checkout', [App\Http\Controllers\Frontend\BookingController::class, 'checkout'])->name('booking.checkout');
 Route::post('/booking/store', [App\Http\Controllers\Frontend\BookingController::class, 'store'])->name('booking.store');
 Route::get('/booking/invoice/{id}', [App\Http\Controllers\Frontend\BookingController::class, 'invoice'])->name('booking.invoice');
+
+// Co-Host Authentication Routes
+Route::prefix('co-host')->name('co-host.')->group(function () {
+    Route::get('/login', [App\Http\Controllers\Frontend\CoHostAuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [App\Http\Controllers\Frontend\CoHostAuthController::class, 'login'])->name('login.submit');
+    Route::post('/logout', [App\Http\Controllers\Frontend\CoHostAuthController::class, 'logout'])->name('logout');
+    
+    Route::middleware('auth:cohost')->group(function () {
+        Route::get('/dashboard', [App\Http\Controllers\Frontend\CoHostAuthController::class, 'dashboard'])->name('dashboard');
+        Route::get('/bookings', [App\Http\Controllers\Frontend\CoHostAuthController::class, 'bookings'])->name('bookings');
+        Route::get('/bookings/{id}', [App\Http\Controllers\Frontend\CoHostAuthController::class, 'bookingShow'])->name('bookings.show');
+        Route::put('/bookings/{id}/status', [App\Http\Controllers\Frontend\CoHostAuthController::class, 'updateBookingStatus'])->name('bookings.updateStatus');
+    });
+});
 
 // Wishlist routes (public API routes)
 Route::post('/wishlist/toggle', [App\Http\Controllers\Frontend\WishlistController::class, 'toggle'])->name('wishlist.toggle');

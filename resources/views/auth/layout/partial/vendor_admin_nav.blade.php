@@ -31,6 +31,24 @@
                     </ul>
                 </li>
 
+                <li class="nk-menu-item has-sub">
+                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                        <span class="nk-menu-icon">
+                            <em class="icon ni ni-users"></em>
+                        </span>
+                        <span class="nk-menu-text">Manage Co-Hosts</span>
+                    </a>
+                    <ul class="nk-menu-sub">
+                        @foreach(\App\Models\Hotel::where('vendor_id', Auth::guard('vendor')->id())->where('approve','1')->where('status','submitted')->get() as $hotel)
+                        <li class="nk-menu-item">
+                            <a href="{{ route('vendor.co-hosts.index', $hotel->id) }}" class="nk-menu-link">
+                                <span class="nk-menu-text">{{ $hotel->description }} - Co-Hosts</span>
+                            </a>
+                        </li>
+                        @endforeach
+                    </ul>
+                </li>
+
                 <li class="nk-menu-item">
                     <a href="{{ route('vendor.bookings.index') }}" class="nk-menu-link">
                         <span class="nk-menu-icon">

@@ -2091,75 +2091,49 @@
 
                                                     </div>
 
+                                                    @php
+                                                        $coHosts = \App\Models\CoHost::where('hotel_id', $show->id)->where('is_active', true)->get();
+                                                    @endphp
+                                                    
+                                                    @if($coHosts->count() > 0)
                                                     <div class="co-host-card">
                                                         <h5 class="Superhost-subtitle"> Co-hosts</h5>
 
                                                         <div class="co-host-list">
-
+                                                            @foreach($coHosts as $coHost)
                                                             <div class="co-host-profile">
                                                                 <div class="co-host-pic">
-                                                                    <a href="#"><img
-                                                                            src="{{ asset('frontend')}}/images/reviewer-1.jpg"></a>
+                                                                    <a href="#">
+                                                                        @if($coHost->photo)
+                                                                            <img src="{{ asset($coHost->photo) }}" alt="{{ $coHost->name }}">
+                                                                        @else
+                                                                            <img src="{{ asset('frontend/images/reviewer-1.jpg') }}" alt="{{ $coHost->name }}">
+                                                                        @endif
+                                                                    </a>
                                                                 </div>
                                                                 <div class="co-host-name">
-                                                                    <h4>Sharon</h4>
+                                                                    <h4>{{ $coHost->name }}</h4>
                                                                 </div>
                                                             </div>
-
-                                                            <div class="co-host-profile">
-                                                                <div class="co-host-pic">
-                                                                    <a href="#"><img
-                                                                            src="{{ asset('frontend')}}/images/reviewer-1.jpg"></a>
-                                                                </div>
-                                                                <div class="co-host-name">
-                                                                    <h4>Sharon</h4>
-                                                                </div>
-                                                            </div>
-
-
-                                                            <div class="co-host-profile">
-                                                                <div class="co-host-pic">
-                                                                    <a href="#"><img
-                                                                            src="{{ asset('frontend')}}/images/reviewer-1.jpg"></a>
-                                                                </div>
-                                                                <div class="co-host-name">
-                                                                    <h4>Sharon</h4>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="co-host-profile">
-                                                                <div class="co-host-pic">
-                                                                    <a href="#"><img
-                                                                            src="{{ asset('frontend')}}/images/reviewer-1.jpg"></a>
-                                                                </div>
-                                                                <div class="co-host-name">
-                                                                    <h4>Sharon</h4>
-                                                                </div>
-                                                            </div>
-
+                                                            @endforeach
                                                         </div>
-
                                                     </div>
+                                                    @endif
 
 
+                                                    @php
+                                                        $vendor = \App\Models\Vendor::find($show->vendor_id);
+                                                        $avgResponseRate = $coHosts->count() > 0 ? $coHosts->avg('response_rate') : ($vendor ? 100 : 100);
+                                                        $avgResponseTime = $coHosts->count() > 0 ? $coHosts->first()->response_time ?? 'within an hour' : 'within an hour';
+                                                    @endphp
+                                                    
                                                     <div class="co-host-card">
                                                         <h5 class="Superhost-subtitle">Host details</h5>
                                                         <div class="co-host-profile">
-
                                                             <div class="co-host-name">
-                                                                <h4>Response rate: 100%</h4>
-                                                                <h4>Responds within an hour</h4>
+                                                                <h4>Response rate: {{ number_format($avgResponseRate) }}%</h4>
+                                                                <h4>Responds {{ $avgResponseTime }}</h4>
                                                             </div>
-                                                        </div>
-
-                                                        <div data-v-798d4468="" class="action"
-                                                             style="margin: 15px 0px;">
-                                                            <button data-v-798d4468=""
-                                                                    style="text-transform: capitalize; padding: 10px; font-size: 16px;"
-                                                                    type="button"
-                                                                    class="btn room-option-btn btn-secondary btn-sm btn100">
-                                                                Message Host
-                                                            </button>
                                                         </div>
                                                     </div>
 
@@ -2172,11 +2146,22 @@
 
                                         <div class="col-lg-3 order-1 order-lg-2">
                                             <div class="vendor-left-section">
+                                                @php
+                                                    $vendor = \App\Models\Vendor::find($show->vendor_id);
+                                                    $vendorLogo = $vendor ? ($vendor->logo ?? $vendor->profile_picture ?? null) : null;
+                                                    $yearsHosting = $vendor && $vendor->created_at ? \Carbon\Carbon::now()->diffInYears($vendor->created_at) : 0;
+                                                @endphp
+                                                
                                                 <div class="vendor-profile">
                                                     <div class="vendor-profile-left">
                                                         <div class="vendor-pic">
-                                                            <img src="{{ asset('frontend')}}/images/urmee.png"
-                                                                 class="img-fluid" alt="user-img">
+                                                            @if($vendorLogo)
+                                                                <img src="{{ asset($vendorLogo) }}" class="img-fluid" alt="{{ $show->description }}">
+                                                            @else
+                                                                <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #90278e 0%, #b84ab5 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 24px;">
+                                                                    {{ strtoupper(substr($show->description ?? 'H', 0, 1)) }}
+                                                                </div>
+                                                            @endif
                                                         </div>
                                                         <div class="vendor-title">
                                                             <h3>{{ $show->description }}</h3>
@@ -2195,7 +2180,7 @@
                                                         </div>
 
                                                         <div class="vendor-all-info">
-                                                            <h3>6</h3>
+                                                            <h3>{{ $yearsHosting }}</h3>
                                                             <p>Years hosting</p>
                                                         </div>
                                                     </div>
@@ -2204,13 +2189,18 @@
                                                 <div class="vendor-profile-footer">
 
 
+                                                    @php
+                                                        $vendor = \App\Models\Vendor::find($show->vendor_id);
+                                                    @endphp
+                                                    
+                                                    @if($vendor)
                                                     <div class="vendor-info-list">
                                                         <span><svg xmlns="http://www.w3.org/2000/svg"
                                                                    viewBox="0 0 32 32" aria-hidden="true"
                                                                    role="presentation" focusable="false"
                                                                    style="display: block; height: 24px; width: 24px; fill: var(--linaria-theme_palette-hof);"><path
                                                                     d="M26 2a5 5 0 0 1 5 4.78V21a5 5 0 0 1-4.78 5h-6.06L16 31.08 11.84 26H6a5 5 0 0 1-4.98-4.56L1 21.22 1 21V7a5 5 0 0 1 4.78-5H26zm0 2H6a3 3 0 0 0-3 2.82V21a3 3 0 0 0 2.82 3H12.8l3.2 3.92L19.2 24H26a3 3 0 0 0 3-2.82V7a3 3 0 0 0-2.82-3H26zM16 6a8.02 8.02 0 0 1 8 8.03A8 8 0 0 1 16.23 22h-.25A8 8 0 0 1 8 14.24v-.25A8 8 0 0 1 16 6zm1.68 9h-3.37c.11 1.45.43 2.76.79 3.68l.09.22.13.3c.23.45.45.74.62.8H16c.33 0 .85-.94 1.23-2.34l.11-.44c.16-.67.29-1.42.34-2.22zm4.24 0h-2.23c-.1 1.6-.42 3.12-.92 4.32a6 6 0 0 0 3.1-4.07l.05-.25zm-9.61 0h-2.23a6 6 0 0 0 3.14 4.32c-.5-1.2-.82-2.71-.91-4.32zm.92-6.32-.13.07A6 6 0 0 0 10.08 13h2.23c.1-1.61.42-3.12.91-4.32zM16 8h-.05c-.27.08-.64.7-.97 1.65l-.13.4a13.99 13.99 0 0 0-.54 2.95h3.37c-.19-2.66-1.1-4.85-1.63-5H16zm2.78.69.02.05c.48 1.19.8 2.68.9 4.26h2.21A6.02 6.02 0 0 0 19 8.8l-.22-.12z"></path></svg></span>Speaks
-                                                        English
+                                                        {{ $vendor->language ?? 'English' }}
                                                     </div>
 
                                                     <div class="vendor-info-list" style="padding-top: 15px;">
@@ -2219,13 +2209,15 @@
                                                                    role="presentation" focusable="false"
                                                                    style="display: block; height: 24px; width: 24px; fill: var(--linaria-theme_palette-hof);"><path
                                                                     d="m5.7 1.3 3 3-.66.72a12 12 0 0 0 16.95 16.94l.72-.67 3 3-1.42 1.42-1.67-1.68A13.94 13.94 0 0 1 18 26.96V29h3v2h-8v-2h3v-2.04a13.95 13.95 0 0 1-8.92-4.08 14 14 0 0 1-1.11-18.5L4.29 2.71zm18.18 4.44.21.21.21.22a10 10 0 1 1-.64-.63zm-9.34 11.13-2.45 2.45a8 8 0 0 0 8.04 1.05 16.7 16.7 0 0 1-5.59-3.5zm4.91-4.91-3.5 3.5c2.85 2.54 6.08 3.82 6.7 3.2.63-.61-.66-3.85-3.2-6.7zm-9.81-2.1-.08.19a8 8 0 0 0 1.12 7.86l2.45-2.45a16.68 16.68 0 0 1-3.5-5.6zM23.32 8.1l-2.45 2.44a16.73 16.73 0 0 1 3.5 5.6 8 8 0 0 0-1.05-8.05zm-11.98-.76c-.62.62.66 3.86 3.2 6.7l3.5-3.5c-2.85-2.54-6.07-3.82-6.7-3.2zm2.54-1.7c1.75.59 3.75 1.83 5.58 3.49l2.44-2.45a8.03 8.03 0 0 0-8.02-1.04z"></path></svg></span>Lives
-                                                        in Cox's Bazar, Chittagong
+                                                        in {{ $vendor->address_city ?? 'N/A' }}, {{ $vendor->address_district ?? 'N/A' }}
                                                     </div>
 
-                                                    <h4 class="vendor-names">Hi, I am KK. I am glad to help every guest
-                                                        to stay and have fun in Bangkok. Belong everywhere!</h4>
-
-                                                    <a href="vendor.html" class="show-more-btn-vendor">Show More</a>
+                                                    @if(isset($vendor->bio) && $vendor->bio)
+                                                    <h4 class="vendor-names">{{ $vendor->bio }}</h4>
+                                                    @else
+                                                    <h4 class="vendor-names">Hi, I am {{ $vendor->contact_person_name ?? 'the host' }}. I am glad to help every guest to stay and have fun. Welcome!</h4>
+                                                    @endif
+                                                    @endif
                                                 </div>
 
 
@@ -2539,3 +2531,4 @@
 </script>
 
 @endsection
+

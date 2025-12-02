@@ -67,4 +67,14 @@ class Hotel extends Model
     {
         return $this->hasMany(HotelWishlist::class);
     }
+
+    public function coHosts()
+    {
+        return $this->hasMany(CoHost::class)->where('is_active', true);
+    }
+
+    public function vendor()
+    {
+        return $this->belongsTo(Vendor::class, 'vendor_id');
+    }
 }
