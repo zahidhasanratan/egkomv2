@@ -17,6 +17,7 @@ class Room extends Model
         'appliances' => 'array',
         'furniture' => 'array',
         'amenities' => 'array',
+        'cancellation_policy' => 'array',
         'is_active' => 'boolean',
     ];
 

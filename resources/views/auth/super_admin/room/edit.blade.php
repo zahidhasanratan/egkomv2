@@ -263,12 +263,12 @@
 
                                             <div class="row mt-15">
                                                 <div class="checkbox-section">
-                                                    <h3 class="can-tittle">Appliances Information</h3>
+                                                    <h3 class="can-tittle">Room Information</h3>
                                                     <div class="chk-all-sec">
                                                         <div class="form-group">
                                                             <div class="custom-control custom-switch checked">
-                                                                <input type="checkbox" class="custom-control-input" name="appliances-all" id="appliances-all">
-                                                                <label class="custom-control-label" for="appliances-all">Select All</label>
+                                                                <input type="checkbox" class="custom-control-input" name="room-info-all" id="room-info-all">
+                                                                <label class="custom-control-label" for="room-info-all">Select All</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -279,89 +279,60 @@
                                                             $appliances = [];
                                                         }
                                                     @endphp
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances" value="AC" {{ in_array('AC', $appliances) ? 'checked' : '' }}> AC</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances" value="TV" {{ in_array('TV', $appliances) ? 'checked' : '' }}> TV</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances" value="Fridge" {{ in_array('Fridge', $appliances) ? 'checked' : '' }}> Fridge</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances" value="Microwave" {{ in_array('Microwave', $appliances) ? 'checked' : '' }}> Microwave</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances" value="Fan" {{ in_array('Fan', $appliances) ? 'checked' : '' }}> Fan</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances" value="Lamp" {{ in_array('Lamp', $appliances) ? 'checked' : '' }}> Lamp</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances" value="Light" {{ in_array('Light', $appliances) ? 'checked' : '' }}> Light</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances" value="Water heater/Geyser" {{ in_array('Water heater/Geyser', $appliances) ? 'checked' : '' }}> Water heater/Geyser</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances" value="WiFi Router" {{ in_array('WiFi Router', $appliances) ? 'checked' : '' }}> WiFi Router</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances" value="Crockeries" {{ in_array('Crockeries', $appliances) ? 'checked' : '' }}> Crockeries</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances" value="Gas Stove" {{ in_array('Gas Stove', $appliances) ? 'checked' : '' }}> Gas Stove</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances" value="Electric Kettle" {{ in_array('Electric Kettle', $appliances) ? 'checked' : '' }}> Electric Kettle</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances" value="Room Heater" {{ in_array('Room Heater', $appliances) ? 'checked' : '' }}> Room Heater</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances" value="Hair Dryer" {{ in_array('Hair Dryer', $appliances) ? 'checked' : '' }}> Hair Dryer</label><br>
 
-                                                    <div class="row">
-                                                        <div class="col-md-5">
-                                                            <div class="section appliances-section">
-                                                                <div class="input-container" style="display: none;">
-                                                                    <div class="form-group mb-3 d-flex align-items-center">
-                                                                        <input type="text" class="form-control" placeholder="Enter custom appliance">
-                                                                        <button type="button" class="btn btn-danger btn-sm ms-2">Delete</button>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="custom-inputs">
-                                                                    @foreach (array_diff($appliances, ['AC', 'TV', 'Fridge', 'Microwave', 'Fan', 'Lamp', 'Light', 'Water heater/Geyser', 'WiFi Router', 'Crockeries', 'Gas Stove', 'Electric Kettle', 'Room Heater', 'Hair Dryer']) as $appliance)
-                                                                        <div class="input-container" style="display: block;">
-                                                                            <div class="form-group mb-3 d-flex align-items-center">
-                                                                                <input type="text" class="form-control" name="custom_appliances[]" value="{{ $appliance }}" placeholder="Enter custom appliance">
-                                                                                <button type="button" class="btn btn-danger btn-sm ms-2">Delete</button>
-                                                                            </div>
-                                                                        </div>
-                                                                    @endforeach
-                                                                </div>
-                                                                <button type="button" class="add-more add-rule-btn btn add-button">Add More</button>
-                                                                @error('custom_appliances.*')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                                @enderror
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="AC" {{ in_array('AC', $appliances) ? 'checked' : '' }}> AC</label><br>
+                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="TV" {{ in_array('TV', $appliances) ? 'checked' : '' }}> TV</label><br>
+                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Fridge" {{ in_array('Fridge', $appliances) ? 'checked' : '' }}> Fridge</label><br>
+                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Microwave" {{ in_array('Microwave', $appliances) ? 'checked' : '' }}> Microwave</label><br>
+                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Fan" {{ in_array('Fan', $appliances) ? 'checked' : '' }}> Fan</label><br>
+                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Lamp" {{ in_array('Lamp', $appliances) ? 'checked' : '' }}> Lamp</label><br>
+                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Light" {{ in_array('Light', $appliances) ? 'checked' : '' }}> Light</label><br>
+                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Water heater/Geyser" {{ in_array('Water heater/Geyser', $appliances) ? 'checked' : '' }}> Water heater/Geyser</label><br>
+                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="WiFi Router" {{ in_array('WiFi Router', $appliances) ? 'checked' : '' }}> WiFi Router</label><br>
+                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Crockeries" {{ in_array('Crockeries', $appliances) ? 'checked' : '' }}> Crockeries</label><br>
+                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Gas Stove" {{ in_array('Gas Stove', $appliances) ? 'checked' : '' }}> Gas Stove</label><br>
+                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Electric Kettle" {{ in_array('Electric Kettle', $appliances) ? 'checked' : '' }}> Electric Kettle</label><br>
+                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Room Heater" {{ in_array('Room Heater', $appliances) ? 'checked' : '' }}> Room Heater</label><br>
+                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Hair Dryer" {{ in_array('Hair Dryer', $appliances) ? 'checked' : '' }}> Hair Dryer</label><br>
                                                 </div>
                                             </div>
                                             <script>
-                                                (function initAppliancesSelectAll() {
-                                                    const container = document.querySelector('.checkbox-section');
+                                                (function initRoomInfoSelectAll() {
+                                                    const containers = document.querySelectorAll('.checkbox-section');
+                                                    const container = containers[containers.length - 2] || containers[0];
                                                     if (!container) return;
 
-                                                    const selectAll = container.querySelector('#appliances-all');
+                                                    const selectAll = container.querySelector('#room-info-all');
                                                     if (!selectAll) return;
 
-                                                    // Use event delegation so it works even if items are added later
                                                     container.addEventListener('change', function (e) {
-                                                        // If "Select All" changed -> toggle all items
                                                         if (e.target === selectAll) {
-                                                            const items = container.querySelectorAll('.checkbox-item-appliances');
+                                                            const items = container.querySelectorAll('.checkbox-item-room-info');
                                                             items.forEach(chk => { chk.checked = selectAll.checked; });
                                                             return;
                                                         }
 
-                                                        // If an individual appliance changed -> sync "Select All"
-                                                        if (e.target.classList.contains('checkbox-item-appliances')) {
-                                                            const items = container.querySelectorAll('.checkbox-item-appliances');
-                                                            const checkedCount = container.querySelectorAll('.checkbox-item-appliances:checked').length;
+                                                        if (e.target.classList.contains('checkbox-item-room-info')) {
+                                                            const items = container.querySelectorAll('.checkbox-item-room-info');
+                                                            const checkedCount = container.querySelectorAll('.checkbox-item-room-info:checked').length;
                                                             selectAll.checked = (checkedCount === items.length && items.length > 0);
                                                         }
                                                     });
 
-                                                    // Initialize "Select All" state on load/render
-                                                    const items = container.querySelectorAll('.checkbox-item-appliances');
-                                                    const checkedCount = container.querySelectorAll('.checkbox-item-appliances:checked').length;
+                                                    const items = container.querySelectorAll('.checkbox-item-room-info');
+                                                    const checkedCount = container.querySelectorAll('.checkbox-item-room-info:checked').length;
                                                     selectAll.checked = (checkedCount === items.length && items.length > 0);
                                                 })();
                                             </script>
 
                                             <div class="row mt-15">
                                                 <div class="checkbox-section">
-                                                    <h3 class="can-tittle">Furniture Information</h3>
+                                                    <h3 class="can-tittle">Additional Room Information</h3>
                                                     <div class="chk-all-sec">
                                                         <div class="form-group">
                                                             <div class="custom-control custom-switch checked">
-                                                                <input type="checkbox" class="custom-control-input" name="furniture-all" id="furniture-all">
-                                                                <label class="custom-control-label" for="furniture-all">Select All</label>
+                                                                <input type="checkbox" class="custom-control-input" name="additional-info-all" id="additional-info-all">
+                                                                <label class="custom-control-label" for="additional-info-all">Select All</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -371,79 +342,62 @@
                                                         if (!is_array($furniture)) {
                                                             $furniture = [];
                                                         }
+                                                        $amenities = old('amenities', is_string($room->amenities) ? (json_decode($room->amenities, true) ?? []) : ($room->amenities ?? []));
+                                                        if (!is_array($amenities)) {
+                                                            $amenities = [];
+                                                        }
                                                     @endphp
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture" value="Bed" {{ in_array('Bed', $furniture) ? 'checked' : '' }}> Bed</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture" value="Dining Table with Chair" {{ in_array('Dining Table with Chair', $furniture) ? 'checked' : '' }}> Dining Table with Chair</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture" value="Sofa/Couch" {{ in_array('Sofa/Couch', $furniture) ? 'checked' : '' }}> Sofa/Couch</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture" value="Tea Table" {{ in_array('Tea Table', $furniture) ? 'checked' : '' }}> Tea Table</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture" value="Bedside Table" {{ in_array('Bedside Table', $furniture) ? 'checked' : '' }}> Bedside Table</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture" value="Shoe Rack" {{ in_array('Shoe Rack', $furniture) ? 'checked' : '' }}> Shoe Rack</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture" value="Clothing Cabinet" {{ in_array('Clothing Cabinet', $furniture) ? 'checked' : '' }}> Clothing Cabinet</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture" value="Clothes Drying Hanger" {{ in_array('Clothes Drying Hanger', $furniture) ? 'checked' : '' }}> Clothes Drying Hanger</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture" value="Iron Stand" {{ in_array('Iron Stand', $furniture) ? 'checked' : '' }}> Iron Stand</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture" value="Locker/Safe" {{ in_array('Locker/Safe', $furniture) ? 'checked' : '' }}> Locker/Safe</label><br>
 
-                                                    <div class="row">
-                                                        <div class="col-md-5">
-                                                            <div class="section furniture-section">
-                                                                <div class="input-container" style="display: none;">
-                                                                    <div class="form-group mb-3 d-flex align-items-center">
-                                                                        <input type="text" class="form-control" placeholder="Enter custom furniture">
-                                                                        <button type="button" class="btn btn-danger btn-sm ms-2">Delete</button>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="custom-inputs">
-                                                                    @foreach (array_diff($furniture, ['Bed', 'Dining Table with Chair', 'Sofa/Couch', 'Tea Table', 'Bedside Table', 'Shoe Rack', 'Clothing Cabinet', 'Clothes Drying Hanger', 'Iron Stand', 'Locker/Safe']) as $item)
-                                                                        <div class="input-container" style="display: block;">
-                                                                            <div class="form-group mb-3 d-flex align-items-center">
-                                                                                <input type="text" class="form-control" name="custom_furniture[]" value="{{ $item }}" placeholder="Enter custom furniture">
-                                                                                <button type="button" class="btn btn-danger btn-sm ms-2">Delete</button>
-                                                                            </div>
-                                                                        </div>
-                                                                    @endforeach
-                                                                </div>
-                                                                <button type="button" class="add-more add-rule-btn btn add-button">Add More</button>
-                                                                @error('custom_furniture.*')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                                @enderror
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Bed" {{ in_array('Bed', $furniture) ? 'checked' : '' }}> Bed</label><br>
+                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Dining Table with Chair" {{ in_array('Dining Table with Chair', $furniture) ? 'checked' : '' }}> Dining Table with Chair</label><br>
+                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Sofa/Couch" {{ in_array('Sofa/Couch', $furniture) ? 'checked' : '' }}> Sofa/Couch</label><br>
+                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Tea Table" {{ in_array('Tea Table', $furniture) ? 'checked' : '' }}> Tea Table</label><br>
+                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Bedside Table" {{ in_array('Bedside Table', $furniture) ? 'checked' : '' }}> Bedside Table</label><br>
+                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Shoe Rack" {{ in_array('Shoe Rack', $furniture) ? 'checked' : '' }}> Shoe Rack</label><br>
+                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Clothing Cabinet" {{ in_array('Clothing Cabinet', $furniture) ? 'checked' : '' }}> Clothing Cabinet</label><br>
+                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Clothes Drying Hanger" {{ in_array('Clothes Drying Hanger', $furniture) ? 'checked' : '' }}> Clothes Drying Hanger</label><br>
+                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Iron Stand" {{ in_array('Iron Stand', $furniture) ? 'checked' : '' }}> Iron Stand</label><br>
+                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Locker/Safe" {{ in_array('Locker/Safe', $furniture) ? 'checked' : '' }}> Locker/Safe</label><br>
+                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Soap" {{ in_array('Soap', $amenities) ? 'checked' : '' }}> Soap</label><br>
+                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Tissue" {{ in_array('Tissue', $amenities) ? 'checked' : '' }}> Tissue</label><br>
+                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Shampoo" {{ in_array('Shampoo', $amenities) ? 'checked' : '' }}> Shampoo</label><br>
+                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Toothbrush" {{ in_array('Toothbrush', $amenities) ? 'checked' : '' }}> Toothbrush</label><br>
+                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Towel" {{ in_array('Towel', $amenities) ? 'checked' : '' }}> Towel</label><br>
+                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Water bottle" {{ in_array('Water bottle', $amenities) ? 'checked' : '' }}> Water bottle</label><br>
+                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Free laundry" {{ in_array('Free laundry', $amenities) ? 'checked' : '' }}> Free laundry</label><br>
+                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Air freshener" {{ in_array('Air freshener', $amenities) ? 'checked' : '' }}> Air freshener</label><br>
+                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Fruit basket" {{ in_array('Fruit basket', $amenities) ? 'checked' : '' }}> Fruit basket</label><br>
+                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Complimentary drinks" {{ in_array('Complimentary drinks', $amenities) ? 'checked' : '' }}> Complimentary drinks</label><br>
+                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Buffet breakfast" {{ in_array('Buffet breakfast', $amenities) ? 'checked' : '' }}> Buffet breakfast</label><br>
                                                 </div>
                                             </div>
                                             <script>
-                                                (function initSelectAll(masterSelector, itemSelector) {
-                                                    const master = document.querySelector(masterSelector);
-                                                    if (!master) return;
-
-                                                    // Find the nearest section that contains this group
-                                                    const container = master.closest('.checkbox-section') || document;
+                                                (function initAdditionalInfoSelectAll() {
+                                                    const containers = document.querySelectorAll('.checkbox-section');
+                                                    const container = containers[containers.length - 1];
                                                     if (!container) return;
 
-                                                    // Delegate changes inside this container
+                                                    const selectAll = container.querySelector('#additional-info-all');
+                                                    if (!selectAll) return;
+
                                                     container.addEventListener('change', function (e) {
-                                                        // If "Select All" changed -> toggle all items
-                                                        if (e.target === master) {
-                                                            const items = container.querySelectorAll(itemSelector);
-                                                            items.forEach(chk => { chk.checked = master.checked; });
+                                                        if (e.target === selectAll) {
+                                                            const items = container.querySelectorAll('.checkbox-item-additional');
+                                                            items.forEach(chk => { chk.checked = selectAll.checked; });
                                                             return;
                                                         }
 
-                                                        // If an individual item changed -> sync "Select All"
-                                                        if (e.target.matches(itemSelector)) {
-                                                            const items = container.querySelectorAll(itemSelector);
-                                                            const checkedCount = container.querySelectorAll(itemSelector + ':checked').length;
-                                                            master.checked = (items.length > 0 && checkedCount === items.length);
+                                                        if (e.target.classList.contains('checkbox-item-additional')) {
+                                                            const items = container.querySelectorAll('.checkbox-item-additional');
+                                                            const checkedCount = container.querySelectorAll('.checkbox-item-additional:checked').length;
+                                                            selectAll.checked = (checkedCount === items.length && items.length > 0);
                                                         }
                                                     });
 
-                                                    // Initialize "Select All" state on render
-                                                    (function initState() {
-                                                        const items = container.querySelectorAll(itemSelector);
-                                                        const checkedCount = container.querySelectorAll(itemSelector + ':checked').length;
-                                                        master.checked = (items.length > 0 && checkedCount === items.length);
+                                                    const items = container.querySelectorAll('.checkbox-item-additional');
+                                                    const checkedCount = container.querySelectorAll('.checkbox-item-additional:checked').length;
+                                                    selectAll.checked = (checkedCount === items.length && items.length > 0);
                                                     })();
-                                                })('#furniture-all', '.checkbox-item-furniture');
                                             </script>
 
                                             <div class="row mt-15 js-limit-two"> {{-- scoped container --}}
@@ -574,62 +528,56 @@
 
                                         <div class="tab-pane" id="tabItem4">
                                             <div class="row mt-15">
+                                                <div class="col-12">
+                                                    <p class="text-muted"><i class="fa fa-info-circle"></i> These sections are synced with Room Details Tab. Changes made here will reflect there and vice versa.</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mt-15">
+                                                <div class="checkbox-section">
+                                                    <h3 class="can-tittle">Appliances Information</h3>
+                                                    <div class="chk-all-sec">
+                                                        <div class="form-group">
+                                                            <div class="custom-control custom-switch checked">
+                                                                <input type="checkbox" class="custom-control-input sync-checkbox-master" data-target=".checkbox-item-appliances" id="appliances-all-facilities">
+                                                                <label class="custom-control-label" for="appliances-all-facilities">Select All</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="appliances-list-facilities"></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mt-15">
+                                                <div class="checkbox-section">
+                                                    <h3 class="can-tittle">Furniture Information</h3>
+                                                    <div class="chk-all-sec">
+                                                        <div class="form-group">
+                                                            <div class="custom-control custom-switch checked">
+                                                                <input type="checkbox" class="custom-control-input sync-checkbox-master" data-target=".checkbox-item-furniture" id="furniture-all-facilities">
+                                                                <label class="custom-control-label" for="furniture-all-facilities">Select All</label>
+                                                                    </div>
+                                                                </div>
+                                                                            </div>
+                                                    
+                                                    <div class="furniture-list-facilities"></div>
+                                                                        </div>
+                                                                </div>
+
+                                            <div class="row mt-15">
                                                 <div class="checkbox-section">
                                                     <h3 class="label-chk">Room Amenities</h3>
                                                     <div class="chk-all-sec">
                                                         <div class="form-group">
                                                             <div class="custom-control custom-switch checked">
-                                                                <input type="checkbox" class="custom-control-input" name="reg-public" id="site-off">
-                                                                <label class="custom-control-label" for="site-off">Check All</label>
+                                                                <input type="checkbox" class="custom-control-input sync-checkbox-master" data-target=".checkbox-item-amenities" id="amenities-all-facilities">
+                                                                <label class="custom-control-label" for="amenities-all-facilities">Check All</label>
                                                             </div>
                                                         </div>
                                                     </div>
-
-                                                    @php
-                                                        $amenities = old('amenities', is_string($room->amenities) ? (json_decode($room->amenities, true) ?? []) : ($room->amenities ?? []));
-                                                        if (!is_array($amenities)) {
-                                                            $amenities = [];
-                                                        }
-                                                    @endphp
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item" value="Soap" {{ in_array('Soap', $amenities) ? 'checked' : '' }}> Soap</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item" value="Tissue" {{ in_array('Tissue', $amenities) ? 'checked' : '' }}> Tissue</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item" value="Shampoo" {{ in_array('Shampoo', $amenities) ? 'checked' : '' }}> Shampoo</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item" value="Toothbrush" {{ in_array('Toothbrush', $amenities) ? 'checked' : '' }}> Toothbrush</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item" value="Towel" {{ in_array('Towel', $amenities) ? 'checked' : '' }}> Towel</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item" value="Water bottle" {{ in_array('Water bottle', $amenities) ? 'checked' : '' }}> Water bottle</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item" value="Free laundry" {{ in_array('Free laundry', $amenities) ? 'checked' : '' }}> Free laundry</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item" value="Air freshener" {{ in_array('Air freshener', $amenities) ? 'checked' : '' }}> Air freshener</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item" value="Fruit basket" {{ in_array('Fruit basket', $amenities) ? 'checked' : '' }}> Fruit basket</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item" value="Complimentary drinks" {{ in_array('Complimentary drinks', $amenities) ? 'checked' : '' }}> Complimentary drinks</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item" value="Buffet breakfast" {{ in_array('Buffet breakfast', $amenities) ? 'checked' : '' }}> Buffet breakfast</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item" value="Add/type Manually" {{ in_array('Add/type Manually', $amenities) ? 'checked' : '' }}> Add/type Manually</label><br>
-
-                                                    <div class="row">
-                                                        <div class="col-md-5">
-                                                            <div class="section amenities-section">
-                                                                <div class="input-container" style="display: none;">
-                                                                    <div class="form-group mb-3 d-flex align-items-center">
-                                                                        <input type="text" class="form-control" placeholder="Enter custom amenity">
-                                                                        <button type="button" class="btn btn-danger btn-sm ms-2">Delete</button>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="custom-inputs">
-                                                                    @foreach (array_diff($amenities, ['Soap', 'Tissue', 'Shampoo', 'Toothbrush', 'Towel', 'Water bottle', 'Free laundry', 'Air freshener', 'Fruit basket', 'Complimentary drinks', 'Buffet breakfast', 'Add/type Manually']) as $amenity)
-                                                                        <div class="input-container" style="display: block;">
-                                                                            <div class="form-group mb-3 d-flex align-items-center">
-                                                                                <input type="text" class="form-control" name="custom_amenities[]" value="{{ $amenity }}" placeholder="Enter custom amenity">
-                                                                                <button type="button" class="btn btn-danger btn-sm ms-2">Delete</button>
-                                                                            </div>
-                                                                        </div>
-                                                                    @endforeach
-                                                                </div>
-                                                                <button type="button" class="add-more add-rule-btn btn add-button">Add More</button>
-                                                                @error('custom_amenities.*')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                                @enderror
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    
+                                                    <div class="amenities-list-facilities"></div>
                                                 </div>
                                             </div>
 
@@ -645,6 +593,89 @@
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            <script>
+                                                // Sync checkboxes between Room Details and Room Facilities tabs
+                                                document.addEventListener('DOMContentLoaded', function() {
+                                                    // Clone checkbox lists to Room Facilities tab
+                                                    function syncCheckboxLists() {
+                                                        // Appliances
+                                                        const appliancesLabels = document.querySelectorAll('#tabItem3 input[name="appliances[]"]');
+                                                        const appliancesTarget = document.querySelector('.appliances-list-facilities');
+                                                        appliancesTarget.innerHTML = '';
+                                                        appliancesLabels.forEach(input => {
+                                                            const label = input.closest('label');
+                                                            if (label) {
+                                                                const clone = label.cloneNode(true);
+                                                                const checkbox = clone.querySelector('input');
+                                                                checkbox.addEventListener('change', function() {
+                                                                    const original = document.querySelector(`#tabItem3 input[name="appliances[]"][value="${this.value}"]`);
+                                                                    if (original) original.checked = this.checked;
+                                                                });
+                                                                appliancesTarget.appendChild(clone);
+                                                                appliancesTarget.appendChild(document.createElement('br'));
+                                                            }
+                                                        });
+
+                                                        // Furniture
+                                                        const furnitureLabels = document.querySelectorAll('#tabItem3 input[name="furniture[]"]');
+                                                        const furnitureTarget = document.querySelector('.furniture-list-facilities');
+                                                        furnitureTarget.innerHTML = '';
+                                                        furnitureLabels.forEach(input => {
+                                                            const label = input.closest('label');
+                                                            if (label) {
+                                                                const clone = label.cloneNode(true);
+                                                                const checkbox = clone.querySelector('input');
+                                                                checkbox.addEventListener('change', function() {
+                                                                    const original = document.querySelector(`#tabItem3 input[name="furniture[]"][value="${this.value}"]`);
+                                                                    if (original) original.checked = this.checked;
+                                                                });
+                                                                furnitureTarget.appendChild(clone);
+                                                                furnitureTarget.appendChild(document.createElement('br'));
+                                                            }
+                                                        });
+
+                                                        // Amenities
+                                                        const amenitiesLabels = document.querySelectorAll('#tabItem3 input[name="amenities[]"]');
+                                                        const amenitiesTarget = document.querySelector('.amenities-list-facilities');
+                                                        amenitiesTarget.innerHTML = '';
+                                                        amenitiesLabels.forEach(input => {
+                                                            const label = input.closest('label');
+                                                            if (label) {
+                                                                const clone = label.cloneNode(true);
+                                                                const checkbox = clone.querySelector('input');
+                                                                checkbox.addEventListener('change', function() {
+                                                                    const original = document.querySelector(`#tabItem3 input[name="amenities[]"][value="${this.value}"]`);
+                                                                    if (original) original.checked = this.checked;
+                                                                });
+                                                                amenitiesTarget.appendChild(clone);
+                                                                amenitiesTarget.appendChild(document.createElement('br'));
+                                                            }
+                                                        });
+                                                    }
+
+                                                    // Initial sync
+                                                    setTimeout(syncCheckboxLists, 100);
+
+                                                    // Listen for changes in Room Details tab and sync to Facilities
+                                                    document.querySelector('#tabItem3').addEventListener('change', function(e) {
+                                                        if (e.target.name === 'appliances[]' || e.target.name === 'furniture[]' || e.target.name === 'amenities[]') {
+                                                            const facilitiesCheckbox = document.querySelector(`#tabItem4 input[name="${e.target.name}"][value="${e.target.value}"]`);
+                                                            if (facilitiesCheckbox) facilitiesCheckbox.checked = e.target.checked;
+                                                        }
+                                                    });
+
+                                                    // Handle "Select All" in facilities tab
+                                                    document.querySelectorAll('.sync-checkbox-master').forEach(master => {
+                                                        master.addEventListener('change', function() {
+                                                            const targetClass = this.getAttribute('data-target');
+                                                            document.querySelectorAll(targetClass).forEach(checkbox => {
+                                                                checkbox.checked = this.checked;
+                                                            });
+                                                        });
+                                                    });
+                                                });
+                                            </script>
                                         </div>
 
                                         <!-- Photos Tab -->

@@ -876,10 +876,10 @@
                             'size' => $room->size,
                             'description' => $room->description,
                             'wifi_details' => $room->wifi_details,
-                            'appliances' => json_decode($room->appliances, true) ?? [],
-                            'furniture' => json_decode($room->furniture, true) ?? [],
-                            'amenities' => json_decode($room->amenities, true) ?? [],
-                            'cancellation_policy' => json_decode($room->cancellation_policy, true) ?? [],
+                            'appliances' => $room->appliances ?? [],
+                            'furniture' => $room->furniture ?? [],
+                            'amenities' => $room->amenities ?? [],
+                            'cancellation_policy' => $room->cancellation_policy ?? [],
                             'photos' => $room->photos->groupBy('category')->map(function($photos) {
                                 return $photos->map(function($photo) {
                                     return $photo->photo_path;
@@ -1048,7 +1048,7 @@
                         // Description section
                         const description = room.description || 'This room offers a comfortable and relaxing stay with modern amenities and excellent service.';
                         
-                        // Room Information (Left column) - Room specifications
+                        // Room Information (Left column) - Room specifications + Appliances
                         const roomInfo = [];
                         if (room.size) roomInfo.push(`Room Size: ${room.size} sq ft`);
                         if (room.total_persons) roomInfo.push(`Capacity: ${room.total_persons} Adults Maximum`);
@@ -1062,7 +1062,7 @@
                             roomInfo.push(...room.appliances);
                         }
                         
-                        // Additional Room Information (Right column) - Furniture, Amenities, Policies
+                        // Additional Room Information (Right column) - Furniture + Amenities + Policies
                         const additionalInfo = [];
                         
                         // Add furniture
