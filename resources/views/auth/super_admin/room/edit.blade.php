@@ -31,15 +31,16 @@
                                     @csrf
                                     @method('PUT')
                                     <input name="hotel_id" value="{{ $hotel }}" type="hidden">
+                                    <input name="active_tab" id="active_tab" value="{{ old('active_tab', 'tabItem3') }}" type="hidden">
                                     <ul class="nav nav-tabs">
                                         <li class="nav-item">
-                                            <a class="nav-link active" data-bs-toggle="tab" href="#tabItem3">Room Details</a>
+                                            <a class="nav-link {{ old('active_tab', 'tabItem3') === 'tabItem3' ? 'active' : '' }}" data-bs-toggle="tab" href="#tabItem3" data-tab="tabItem3">Room Details</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-bs-toggle="tab" href="#tabItem4">Room Facilities</a>
+                                            <a class="nav-link {{ old('active_tab', 'tabItem3') === 'tabItem4' ? 'active' : '' }}" data-bs-toggle="tab" href="#tabItem4" data-tab="tabItem4">Room Facilities</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-bs-toggle="tab" href="#Photos">Room Photos</a>
+                                            <a class="nav-link {{ old('active_tab', 'tabItem3') === 'Photos' ? 'active' : '' }}" data-bs-toggle="tab" href="#Photos" data-tab="Photos">Room Photos</a>
                                         </li>
                                     </ul>
 
@@ -57,7 +58,7 @@
                                         </div>
 
                                         <!-- Room Description -->
-                                        <div class="tab-pane active" id="tabItem3">
+                                        <div class="tab-pane {{ old('active_tab', 'tabItem3') === 'tabItem3' ? 'active' : '' }}" id="tabItem3">
                                             <div class="row gy-4">
                                                 <div class="col-md-6 col-lg-4 col-xxl-3">
                                                     <div class="form-group">
@@ -526,7 +527,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="tab-pane" id="tabItem4">
+                                        <div class="tab-pane {{ old('active_tab', 'tabItem3') === 'tabItem4' ? 'active' : '' }}" id="tabItem4">
                                             <div class="row mt-15">
                                                 <div class="col-12">
                                                     <p class="text-muted"><i class="fa fa-info-circle"></i> These sections are synced with Room Details Tab. Changes made here will reflect there and vice versa.</p>
@@ -679,7 +680,7 @@
                                         </div>
 
                                         <!-- Photos Tab -->
-                                        <div class="tab-pane" id="Photos">
+                                        <div class="tab-pane {{ old('active_tab', 'tabItem3') === 'Photos' ? 'active' : '' }}" id="Photos">
                                             <div class="row gy-4">
                                                 @php
                                                     $photo_categories = [
@@ -990,6 +991,43 @@
                 const uploadContainers = document.querySelectorAll('.multiple-upload-container');
                 uploadContainers.forEach(container => {
                     initializeMultipleUpload(container);
+                });
+            });
+
+            // Track active tab and update hidden input
+            document.addEventListener('DOMContentLoaded', function() {
+                const activeTabInput = document.getElementById('active_tab');
+                const savedTab = activeTabInput ? activeTabInput.value : 'tabItem3';
+                
+                // Activate the saved tab on page load
+                if (savedTab) {
+                    const tabLink = document.querySelector(`a[data-tab="${savedTab}"]`);
+                    const tabPane = document.getElementById(savedTab);
+                    
+                    if (tabLink && tabPane) {
+                        // Remove active class from all tabs and panes
+                        document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+                        document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+                        
+                        // Add active class to the saved tab
+                        tabLink.classList.add('active');
+                        tabPane.classList.add('active');
+                        
+                        // Trigger Bootstrap tab show event
+                        const tab = new bootstrap.Tab(tabLink);
+                        tab.show();
+                    }
+                }
+                
+                // Track tab changes and update hidden input
+                const tabLinks = document.querySelectorAll('a[data-bs-toggle="tab"][data-tab]');
+                tabLinks.forEach(link => {
+                    link.addEventListener('shown.bs.tab', function(e) {
+                        const tabName = e.target.getAttribute('data-tab');
+                        if (activeTabInput) {
+                            activeTabInput.value = tabName;
+                        }
+                    });
                 });
             });
         </script>

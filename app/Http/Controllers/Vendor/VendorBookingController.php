@@ -66,13 +66,71 @@ class VendorBookingController extends Controller
     {
         $booking = Booking::findOrFail($id);
         
+        // Verify vendor owns at least one hotel in this booking
+        $vendorId = Auth::user()->id;
+        $hotelIds = Hotel::where('vendor_id', $vendorId)->pluck('id')->toArray();
+        
+        $hasAccess = false;
+        foreach ($booking->rooms_data as $room) {
+            if (in_array($room['hotelId'] ?? null, $hotelIds)) {
+                $hasAccess = true;
+                break;
+            }
+        }
+        
+        if (!$hasAccess) {
+            abort(403, 'Unauthorized access to this booking');
+        }
+        
         $request->validate([
             'booking_status' => 'required|in:pending,confirmed,cancelled,completed',
+            'cancellation_comment' => 'nullable|string|max:1000',
         ]);
         
         $booking->booking_status = $request->booking_status;
+        
+        // Only save cancellation comment if status is cancelled
+        if ($request->booking_status === 'cancelled') {
+            $booking->cancellation_comment = $request->cancellation_comment;
+        } else {
+            $booking->cancellation_comment = null;
+        }
+        
         $booking->save();
         
         return redirect()->back()->with('success', 'Booking status updated successfully');
+    }
+
+    /**
+     * Update currently staying status
+     */
+    public function updateCurrentlyStaying(Request $request, $id)
+    {
+        $booking = Booking::findOrFail($id);
+        
+        // Verify vendor owns at least one hotel in this booking
+        $vendorId = Auth::user()->id;
+        $hotelIds = Hotel::where('vendor_id', $vendorId)->pluck('id')->toArray();
+        
+        $hasAccess = false;
+        foreach ($booking->rooms_data as $room) {
+            if (in_array($room['hotelId'] ?? null, $hotelIds)) {
+                $hasAccess = true;
+                break;
+            }
+        }
+        
+        if (!$hasAccess) {
+            abort(403, 'Unauthorized access to this booking');
+        }
+        
+        $request->validate([
+            'currently_staying' => 'required|in:yes,no',
+        ]);
+        
+        $booking->currently_staying = $request->currently_staying;
+        $booking->save();
+        
+        return redirect()->back()->with('success', 'Currently staying status updated successfully');
     }
 }

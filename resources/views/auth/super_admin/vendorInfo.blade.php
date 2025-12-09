@@ -22,7 +22,7 @@
 
                         <div class="card card-bordered">
                             <div class="card-inner">
-                                <form method="POST" action="{{ route('super.info.Store') }}" enctype="multipart/form-data">
+                                <form method="POST" action="{{ route('super.info.Store') }}" enctype="multipart/form-data" id="vendor-info-form">
                                     @csrf
                                     <input type="hidden" id="vendor-id" name="vendor_id"
                                            value="{{ old('vendor_id', $property->vendor_id ?? '') }}">
@@ -511,12 +511,12 @@
                                     <!-- Actions -->
                                     <div class="row">
                                         <div class="col-sm-2 col-md-2 mt-15">
-                                            <button type="submit" class="btn btn-primary btn-submit" name="action" value="save_draft">
+                                            <button type="submit" class="btn btn-primary btn-submit confirm-submit" name="action" value="save_draft" data-message="Are you sure you want to save as draft?">
                                                 Save & Drafts
                                             </button>
                                         </div>
                                         <div class="col-sm-2 col-md-2 mt-15">
-                                            <button type="submit" class="btn btn-primary" name="action" value="submit">
+                                            <button type="submit" class="btn btn-primary confirm-submit" name="action" value="submit" data-message="Are you sure you want to submit the property info?">
                                                 Submit
                                             </button>
                                         </div>
@@ -649,6 +649,51 @@
             } else {
                 cafeNamesContainer.classList.add('custom-form-hidden');
             }
+        });
+    </script>
+
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('vendor-info-form');
+            const submitButtons = form.querySelectorAll('.confirm-submit');
+            
+            submitButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const message = this.getAttribute('data-message') || 'Are you sure you want to submit?';
+                    const actionValue = this.value;
+                    
+                    Swal.fire({
+                        title: 'Confirm Submission',
+                        text: message,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, Submit',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Create hidden input for action if needed
+                            if (actionValue) {
+                                let actionInput = form.querySelector('input[name="action"]');
+                                if (!actionInput) {
+                                    actionInput = document.createElement('input');
+                                    actionInput.type = 'hidden';
+                                    actionInput.name = 'action';
+                                    form.appendChild(actionInput);
+                                }
+                                actionInput.value = actionValue;
+                            }
+                            form.submit();
+                        }
+                    });
+                });
+            });
         });
     </script>
 @endsection

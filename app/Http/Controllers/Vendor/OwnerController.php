@@ -175,4 +175,21 @@ class OwnerController extends Controller
         return view('auth.super_admin.owner.bankInfo', compact('banking'));
     }
 
+    public function ownerInfoShow($id)
+    {
+        $vendorId = $id;
+        $property = Owner::where('vendor_id', $vendorId)->first();
+        return view('auth.super_admin.owner.ownerInfo_show', compact('property'));
+    }
+
+    public function bankInfoShow($id)
+    {
+        $vendorId = $id;
+        if (!$vendorId) {
+            return redirect()->route('login');
+        }
+        $banking = Banking::where('vendor_id', $vendorId)->first();
+        return view('auth.super_admin.owner.bankInfo_show', compact('banking'));
+    }
+
 }

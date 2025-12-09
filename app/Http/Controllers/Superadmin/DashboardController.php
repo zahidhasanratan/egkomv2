@@ -144,6 +144,12 @@ class DashboardController extends Controller
         return view('auth.super_admin.vendorInfo', compact('property'));
     }
 
+    public function vendorInfoShow($id)
+    {
+        $property = Property::where('vendor_id', $id)->first();
+        return view('auth.super_admin.vendorInfo_show', compact('property'));
+    }
+
     public function vendor_store(Request $request)
     {
         Log::info('vendor_store() hit', ['url' => $request->fullUrl()]);
@@ -452,6 +458,12 @@ class DashboardController extends Controller
 
 
 
+
+    public function vendor_show($id)
+    {
+        $vendor = Property::where('vendor_id', $id)->firstOrFail();
+        return view('auth.super_admin.vendor_show', compact('vendor'));
+    }
 
     public function vendor_edit($id)
     {

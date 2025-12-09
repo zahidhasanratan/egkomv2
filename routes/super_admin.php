@@ -43,20 +43,24 @@ Route::prefix('super-admin')->group(function () {
         Route::get('vendor/create', [DashboardController::class, 'vendor_create'])->name('super-admin.vendor.create');
         Route::post('vendor/store', [DashboardController::class, 'vendor_store'])->name('super-admin.vendor.store');
         Route::get('vendor/allList', [DashboardController::class, 'allVendorList'])->name('super-admin.vendor.index');
+        Route::get('vendor/{id}/show', [DashboardController::class, 'vendor_show'])->name('super-admin.vendor.show');
         Route::get('vendor/{id}/edit', [DashboardController::class, 'vendor_edit'])->name('super-admin.vendor.edit');
         Route::put('vendor/{id}', [DashboardController::class, 'vendor_update'])->name('super-admin.vendor.update');
 
         Route::get('/vendor-info/{id}', [DashboardController::class, 'vendorInfoCreate'])->name('super.vendor.infoCreate');
+        Route::get('/vendor-info/{id}/show', [DashboardController::class, 'vendorInfoShow'])->name('super.vendor.infoShow');
         Route::post('/Super-vendor-info', [DashboardController::class, 'vendorInfoStore'])->name('super.info.Store');
 
         Route::get('/Super-vendor-owner-info', [OwnerController::class, 'createSuper'])->name('super-admin.owner.create');
 
         Route::get('vendor/details/{id}', [DashboardController::class, 'vendor_index'])->name('super-admin.vendor.details');
         Route::get('/owner-info/{id}', [OwnerController::class, 'createSuper'])->name('super.vendor-admin.owner.details');
+        Route::get('/owner-info/{id}/show', [OwnerController::class, 'ownerInfoShow'])->name('super.vendor-admin.owner.show');
         Route::post('/vendor-info', [VendorController::class, 'storeSuper'])->name('super.vendor.info.store');
         Route::post('/owners', [OwnerController::class, 'storeSuper'])->name('super.owners.store');
         Route::post('/owners-banking', [BankingController::class, 'storeSuper'])->name('super.bankings.store');
         Route::get('/owners-bankInfo/{id}', [OwnerController::class, 'bankInfoSuper'])->name('super.owners.bankInfo');
+        Route::get('/owners-bankInfo/{id}/show', [OwnerController::class, 'bankInfoShow'])->name('super.owners.bankInfo.show');
 
 //        ManageHotel
         Route::get('/super-admin/hotel', [ManageHotel::class, 'indexSuper'])->name('super-admin.hotel.index');
@@ -89,6 +93,7 @@ Route::prefix('super-admin')->group(function () {
         Route::get('/bookings', [\App\Http\Controllers\Admin\BookingManagementController::class, 'index'])->name('super-admin.bookings.index');
         Route::get('/bookings/{id}', [\App\Http\Controllers\Admin\BookingManagementController::class, 'show'])->name('super-admin.bookings.show');
         Route::put('/bookings/{id}/status', [\App\Http\Controllers\Admin\BookingManagementController::class, 'updateStatus'])->name('super-admin.bookings.updateStatus');
+        Route::put('/bookings/{id}/currently-staying', [\App\Http\Controllers\Admin\BookingManagementController::class, 'updateCurrentlyStaying'])->name('super-admin.bookings.updateCurrentlyStaying');
         Route::delete('/bookings/{id}', [\App\Http\Controllers\Admin\BookingManagementController::class, 'destroy'])->name('super-admin.bookings.destroy');
 
     });

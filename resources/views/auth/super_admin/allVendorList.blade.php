@@ -63,7 +63,7 @@
                                                     <td><span class="text-primary">{{ $vendorList->vendorId }}</span>
                                                     </td>
                                                     <td>
-                                                        <a href="#">
+                                                        <a href="{{ route('super-admin.vendor.show', $vendorList->id) }}">
                                                             <div class="user-card">
                                                                 <div class="user-avatar bg-primary">
                                                                     <span>{{ implode('', array_map(function($word) {
@@ -99,22 +99,22 @@
                                                                         <ul class="link-list-opt no-bdr">
 
                                                                             <li>
-                                                                                <a href="{{ route('super-admin.vendor.edit',$vendorList->id) }}"><em
-                                                                                        class="icon ni ni-edit-fill"></em><span>Edit</span></a>
+                                                                                <a href="{{ route('super-admin.vendor.show',$vendorList->id) }}"><em
+                                                                                        class="icon ni ni-eye"></em><span>Preview</span></a>
                                                                             </li>
                                                                             <li>
-                                                                                <a href="{{ route('super.vendor.infoCreate', $vendorList->id) }}">
+                                                                                <a href="{{ route('super.vendor.infoShow', $vendorList->id) }}">
                                                                                     <em class="icon ni ni-user"></em>
                                                                                     <span>Vendor Info</span>
                                                                                 </a>
                                                                             </li>
 
                                                                             <li>
-                                                                                <a href="{{ route('super.vendor-admin.owner.details',$vendorList->id) }}"><em
+                                                                                <a href="{{ route('super.vendor-admin.owner.show',$vendorList->id) }}"><em
                                                                                         class="icon ni ni-building"></em><span>Owner Details</span></a>
                                                                             </li>
                                                                             <li>
-                                                                                <a href="{{ route('super.owners.bankInfo',$vendorList->id) }}"><em
+                                                                                <a href="{{ route('super.owners.bankInfo.show',$vendorList->id) }}"><em
                                                                                         class="icon ni ni ni-bag"></em><span>Owner Banking Info</span></a>
                                                                             </li>
 

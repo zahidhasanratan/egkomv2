@@ -13,6 +13,8 @@ class Booking extends Model
     protected $fillable = [
         'invoice_number',
         'booking_status',
+        'currently_staying',
+        'cancellation_comment',
         'guest_id',
         'guest_name',
         'guest_email',

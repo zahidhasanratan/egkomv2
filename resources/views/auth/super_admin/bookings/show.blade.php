@@ -238,19 +238,79 @@
                     <h3 class="card-title">Booking Status</h3>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('super-admin.bookings.updateStatus', $booking->id) }}" method="POST">
+                    <form action="{{ route('super-admin.bookings.updateStatus', $booking->id) }}" method="POST" id="statusUpdateForm">
                         @csrf
                         @method('PUT')
                         <div class="form-group">
                             <label>Update Status</label>
-                            <select name="booking_status" class="form-control">
+                            <select name="booking_status" id="booking_status" class="form-control">
                                 <option value="pending" {{ $booking->booking_status == 'pending' ? 'selected' : '' }}>Pending</option>
                                 <option value="confirmed" {{ $booking->booking_status == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
                                 <option value="completed" {{ $booking->booking_status == 'completed' ? 'selected' : '' }}>Completed</option>
                                 <option value="cancelled" {{ $booking->booking_status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                             </select>
                         </div>
+                        <div class="form-group" id="cancellation_comment_group" style="display: {{ $booking->booking_status == 'cancelled' ? 'block' : 'none' }};">
+                            <label>Reason for Cancellation <span class="text-danger">*</span></label>
+                            <textarea name="cancellation_comment" id="cancellation_comment" class="form-control" rows="4" placeholder="Please provide a reason for cancellation...">{{ old('cancellation_comment', $booking->cancellation_comment) }}</textarea>
+                            @error('cancellation_comment')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
                         <button type="submit" class="btn btn-primary btn-block">Update Status</button>
+                    </form>
+                </div>
+                
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const statusSelect = document.getElementById('booking_status');
+                        const commentGroup = document.getElementById('cancellation_comment_group');
+                        const commentTextarea = document.getElementById('cancellation_comment');
+                        const form = document.getElementById('statusUpdateForm');
+                        
+                        function toggleCommentField() {
+                            if (statusSelect.value === 'cancelled') {
+                                commentGroup.style.display = 'block';
+                                commentTextarea.setAttribute('required', 'required');
+                            } else {
+                                commentGroup.style.display = 'none';
+                                commentTextarea.removeAttribute('required');
+                                commentTextarea.value = '';
+                            }
+                        }
+                        
+                        statusSelect.addEventListener('change', toggleCommentField);
+                        
+                        // Validate form submission
+                        form.addEventListener('submit', function(e) {
+                            if (statusSelect.value === 'cancelled' && !commentTextarea.value.trim()) {
+                                e.preventDefault();
+                                alert('Please provide a reason for cancellation.');
+                                commentTextarea.focus();
+                                return false;
+                            }
+                        });
+                    });
+                </script>
+            </div>
+
+            <!-- Currently Staying Card -->
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-header" style="background: #90278e; color: white;">
+                    <h3 class="card-title">Currently Staying</h3>
+                </div>
+                <div class="card-body">
+                    <form action="{{ route('super-admin.bookings.updateCurrentlyStaying', $booking->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <div class="form-group">
+                            <label>Currently Staying</label>
+                            <select name="currently_staying" class="form-control">
+                                <option value="no" {{ ($booking->currently_staying ?? 'no') == 'no' ? 'selected' : '' }}>No</option>
+                                <option value="yes" {{ ($booking->currently_staying ?? 'no') == 'yes' ? 'selected' : '' }}>Yes</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Update Currently Staying</button>
                     </form>
                 </div>
             </div>

@@ -668,16 +668,23 @@
                                                 <div class="card-body">
 
                                                     @php
-                                                        $hotelFacilities = old('hotel_facilities', $hotel->hotel_facilities ?? []);
-                                                        $hotelFacilities = is_array($hotelFacilities)
-                                                            ? $hotelFacilities
-                                                            : (is_string($hotelFacilities) && !empty($hotelFacilities)
-                                                                ? json_decode($hotelFacilities, true)
-                                                                : []);
+                                                        // Use the hotelFacilities variable from controller, or fallback to hotel->hotel_facilities
+                                                        $hotelFacilitiesData = $hotelFacilities ?? $hotel->hotel_facilities ?? [];
+                                                        
+                                                        // Ensure it's an array
+                                                        if (is_string($hotelFacilitiesData)) {
+                                                            $hotelFacilitiesData = json_decode($hotelFacilitiesData, true);
+                                                        }
+                                                        
+                                                        if (!is_array($hotelFacilitiesData)) {
+                                                            $hotelFacilitiesData = [];
+                                                        }
 
                                                         $groupedFacilities = [];
-                                                        foreach ($hotelFacilities as $facility) {
-                                                            $groupedFacilities[$facility['category']][] = $facility['name'];
+                                                        foreach ($hotelFacilitiesData as $facility) {
+                                                            if (is_array($facility) && isset($facility['category']) && isset($facility['name'])) {
+                                                                $groupedFacilities[$facility['category']][] = $facility['name'];
+                                                            }
                                                         }
                                                     @endphp
 
@@ -869,22 +876,36 @@
                                                 <div class="card-body">
                                                     @php
                                                         $nearbyAreas = old('nearby_areas', $hotel->nearby_areas ?? []);
-                                                        $nearbyAreas = is_array($nearbyAreas) ? $nearbyAreas : (is_string($nearbyAreas) && !empty($nearbyAreas) ? json_decode($nearbyAreas, true) : []);
+                                                        
+                                                        // Ensure it's always an array
+                                                        if (is_string($nearbyAreas)) {
+                                                            $decoded = json_decode($nearbyAreas, true);
+                                                            $nearbyAreas = is_array($decoded) ? $decoded : [];
+                                                        } elseif (!is_array($nearbyAreas)) {
+                                                            $nearbyAreas = [];
+                                                        }
                                                     @endphp
 
-                                                    @if(!empty($nearbyAreas))
+                                                    @if(!empty($nearbyAreas) && is_array($nearbyAreas))
                                                         @foreach($nearbyAreas as $categoryKey => $values)
                                                             @php
                                                                 // Format category name (transport___airport => Transport & Airport)
                                                                 $formattedCategory = ucwords(str_replace(['___', '_'], [' & ', ' '], $categoryKey));
+                                                                
+                                                                // Ensure values is an array
+                                                                if (!is_array($values)) {
+                                                                    continue;
+                                                                }
                                                             @endphp
 
-                                                            @foreach($values['name'] ?? [] as $index => $name)
-                                                                <div class="mb-2">
-                                                                    <strong>{{ $formattedCategory }} Name:</strong> {{ $name }}<br>
-                                                                    <strong>{{ $formattedCategory }} Distance:</strong> {{ $values['distance'][$index] ?? '' }}
-                                                                </div>
-                                                            @endforeach
+                                                            @if(isset($values['name']) && is_array($values['name']))
+                                                                @foreach($values['name'] as $index => $name)
+                                                                    <div class="mb-2">
+                                                                        <strong>{{ $formattedCategory }} Name:</strong> {{ $name }}<br>
+                                                                        <strong>{{ $formattedCategory }} Distance:</strong> {{ $values['distance'][$index] ?? '' }}
+                                                                    </div>
+                                                                @endforeach
+                                                            @endif
 
                                                         @endforeach
                                                     @else

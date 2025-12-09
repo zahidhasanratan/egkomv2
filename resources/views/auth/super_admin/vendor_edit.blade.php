@@ -28,7 +28,7 @@
                             </div>
                         @endif
 
-                        <form action="{{ route('super-admin.vendor.update', $vendor->vendor_id) }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('super-admin.vendor.update', $vendor->vendor_id) }}" method="POST" enctype="multipart/form-data" id="vendor-edit-form">
                             @csrf
                             @method('PUT')
 
@@ -521,7 +521,7 @@
                                         <!-- Submit -->
                                         <div class="col-sm-12">
                                             <div class="form-group">
-                                                <button type="submit" class="btn btn-primary">Update</button>
+                                                <button type="submit" class="btn btn-primary confirm-submit" data-message="Are you sure you want to update this vendor?">Update</button>
                                             </div>
                                         </div>
 
@@ -656,4 +656,37 @@
             </div>
         </div>
     </div>
+
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('vendor-edit-form');
+            const submitButton = form.querySelector('.confirm-submit');
+            
+            if (submitButton) {
+                submitButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const message = this.getAttribute('data-message') || 'Are you sure you want to update?';
+                    
+                    Swal.fire({
+                        title: 'Confirm Update',
+                        text: message,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, Update',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            }
+        });
+    </script>
 @endsection

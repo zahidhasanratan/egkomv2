@@ -437,8 +437,16 @@ class ManageRoomController extends Controller
                 }
             }
 
-            return redirect()->route('vendor-admin.room.index', ['id' => Crypt::encrypt($room->hotel_id)])
-                ->with('success', 'Room updated successfully!');
+            // If save_draft is set, redirect to room list, otherwise stay on edit page
+            if ($request->has('save_draft') && $request->save_draft == '1') {
+                return redirect()->route('vendor-admin.room.index', ['id' => Crypt::encrypt($room->hotel_id)])
+                    ->with('success', 'Room saved as draft successfully!');
+            }
+
+            // Preserve the active tab when redirecting back
+            return redirect()->route('vendor-admin.room.edit', $room->id)
+                ->with('success', 'Room updated successfully!')
+                ->withInput($request->only('active_tab'));
 
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             Log::error("Room not found for ID: $id", ['error' => $e->getMessage()]);
@@ -560,9 +568,16 @@ class ManageRoomController extends Controller
                 }
             }
 
+            // If save_draft is set, redirect to room list, otherwise stay on edit page
+            if ($request->has('save_draft') && $request->save_draft == '1') {
+                return redirect()->route('super-admin.room.index', ['id' => Crypt::encrypt($room->hotel_id)])
+                    ->with('success', 'Room saved as draft successfully!');
+            }
 
-            return redirect()->route('super-admin.room.index', ['id' => Crypt::encrypt($room->hotel_id)])
-                ->with('success', 'Room updated successfully!');
+            // Preserve the active tab when redirecting back
+            return redirect()->route('super-admin.room.edit', $room->id)
+                ->with('success', 'Room updated successfully!')
+                ->withInput($request->only('active_tab'));
 
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             Log::error("Room not found for ID: $id", ['error' => $e->getMessage()]);

@@ -375,6 +375,10 @@ class ManageHotel extends Controller
             return redirect()->route('vendor-admin.hotel.index')->with('error', 'Unauthorized access.');
         }
         $hotelFacilities = json_decode($hotel->hotel_facilities, true);
+        // Ensure it's always an array
+        if (!is_array($hotelFacilities)) {
+            $hotelFacilities = [];
+        }
         return view('auth.vendor.hotel.show', compact('hotel','hotelFacilities'));
     }
 
@@ -766,12 +770,17 @@ class ManageHotel extends Controller
         // 9) Update and redirect
         $hotel->update($data);
 
+        // If status is draft, redirect to hotel list, otherwise stay on edit page
+        if ($request->status === 'draft') {
+            return redirect()
+                ->route('super-admin.hotel.index')
+                ->with('success', 'Hotel saved as draft successfully.');
+        }
+
+        // For submitted status, stay on the same edit page
         return redirect()
-            ->route('super-admin.hotel.index')
-            ->with('success', $request->status === 'draft'
-                ? 'Hotel saved as draft successfully.'
-                : 'Hotel updated successfully.'
-            );
+            ->route('super-admin.hotel.edit', $hotel->id)
+            ->with('success', 'Hotel updated successfully.');
 
 
     }

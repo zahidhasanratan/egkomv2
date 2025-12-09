@@ -102,6 +102,7 @@ Route::prefix('vendor-admin')->group(function () {
         Route::get('/bookings', [\App\Http\Controllers\Vendor\VendorBookingController::class, 'index'])->name('vendor.bookings.index');
         Route::get('/bookings/{id}', [\App\Http\Controllers\Vendor\VendorBookingController::class, 'show'])->name('vendor.bookings.show');
         Route::put('/bookings/{id}/status', [\App\Http\Controllers\Vendor\VendorBookingController::class, 'updateStatus'])->name('vendor.bookings.updateStatus');
+        Route::put('/bookings/{id}/currently-staying', [\App\Http\Controllers\Vendor\VendorBookingController::class, 'updateCurrentlyStaying'])->name('vendor.bookings.updateCurrentlyStaying');
     });
     /*Admin Panel Ended */
 

@@ -21,7 +21,7 @@
                         @endif
                         <div class="card card-bordered">
                             <div class="card-inner">
-                                <form method="POST" action="{{ route('super.owners.store') }}" enctype="multipart/form-data">
+                                <form method="POST" action="{{ route('super.owners.store') }}" enctype="multipart/form-data" id="owner-info-form">
                                     @csrf
                                     <input type="hidden" name="vendor_id" class="form-control" id="vendor_id" placeholder="Name" required value="{{ old('vendor_id', $property->vendor_id ?? '') }}">
 
@@ -283,13 +283,13 @@
 
                                         <div class="col-sm-2 col-md-2 mt-15">
                                             <div class="form-group">
-                                                <button type="submit" name="action" value="submitted" class="btn btn-primary btn-submit">Submit</button>
+                                                <button type="submit" name="action" value="submitted" class="btn btn-primary btn-submit confirm-submit" data-message="Are you sure you want to submit the owner details?">Submit</button>
                                             </div>
                                         </div>
 
                                         <div class="col-sm-2 col-md-2 mt-15">
                                             <div class="form-group">
-                                                <button type="submit" name="action" value="draft" class="btn btn-primary">Save & Drafts</button>
+                                                <button type="submit" name="action" value="draft" class="btn btn-primary confirm-submit" data-message="Are you sure you want to save as draft?">Save & Drafts</button>
                                             </div>
                                         </div>
                                     </div>
@@ -380,6 +380,51 @@
                 } else if (selectedValue === 'Leased') {
                     leaseDates.slideDown();
                 }
+            });
+        });
+    </script>
+
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('owner-info-form');
+            const submitButtons = form.querySelectorAll('.confirm-submit');
+            
+            submitButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const message = this.getAttribute('data-message') || 'Are you sure you want to submit?';
+                    const actionValue = this.value;
+                    
+                    Swal.fire({
+                        title: 'Confirm Submission',
+                        text: message,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, Submit',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Create hidden input for action if needed
+                            if (actionValue) {
+                                let actionInput = form.querySelector('input[name="action"]');
+                                if (!actionInput) {
+                                    actionInput = document.createElement('input');
+                                    actionInput.type = 'hidden';
+                                    actionInput.name = 'action';
+                                    form.appendChild(actionInput);
+                                }
+                                actionInput.value = actionValue;
+                            }
+                            form.submit();
+                        }
+                    });
+                });
             });
         });
     </script>
