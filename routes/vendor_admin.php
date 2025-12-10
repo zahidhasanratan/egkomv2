@@ -103,6 +103,11 @@ Route::prefix('vendor-admin')->group(function () {
         Route::get('/bookings/{id}', [\App\Http\Controllers\Vendor\VendorBookingController::class, 'show'])->name('vendor.bookings.show');
         Route::put('/bookings/{id}/status', [\App\Http\Controllers\Vendor\VendorBookingController::class, 'updateStatus'])->name('vendor.bookings.updateStatus');
         Route::put('/bookings/{id}/currently-staying', [\App\Http\Controllers\Vendor\VendorBookingController::class, 'updateCurrentlyStaying'])->name('vendor.bookings.updateCurrentlyStaying');
+        
+        // Manual Order
+        Route::get('/bookings/manual/create', [\App\Http\Controllers\Vendor\VendorBookingController::class, 'createManualOrder'])->name('vendor.bookings.manual.create');
+        Route::post('/bookings/manual/store', [\App\Http\Controllers\Vendor\VendorBookingController::class, 'storeManualOrder'])->name('vendor.bookings.manual.store');
+        Route::get('/bookings/manual/rooms/{hotelId}', [\App\Http\Controllers\Vendor\VendorBookingController::class, 'getRooms'])->name('vendor.bookings.manual.rooms');
     });
     /*Admin Panel Ended */
 

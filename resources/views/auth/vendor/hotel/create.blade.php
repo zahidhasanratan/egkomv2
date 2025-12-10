@@ -89,8 +89,8 @@
                                                                 Property Name</label>
                                                             <div class="form-control-wrap">
                                                                 <input class="form-control no-resize"
-                                                                       name="description" value="{{ \App\Models\Property::where('vendor_id', auth()->user()->id)->first()->property_name ?? '' }}
-                                                                    " readonly></input>
+                                                                       name="description" value="{{ old('description', '') }}"
+                                                                       placeholder="Enter Hotel / Property Name"></input>
                                                                 @error('description') <span
                                                                     class="text-danger"></span> @enderror
                                                             </div>
@@ -108,47 +108,20 @@
                                             {{-- Select how many apartments/rooms --}}
                                             <div class="col-md-4 col-lg-4 col-xxl-3">
                                                 <div class="form-group">
-                                                    <label for="apartment-count">Select Number of Apartments/Rooms</label>
-                                                    <select class="form-select" id="apartment-count" name="apartment_count">
-                                                        <option value="0" {{ old('apartment_count', 0) == 0 ? 'selected' : '' }}>
-                                                            Select Number of Apartments/Rooms
-                                                        </option>
-                                                        @for ($i = 1; $i <= 19; $i++)
-                                                            <option value="{{ $i }}" {{ old('apartment_count', 0) == $i ? 'selected' : '' }}>
-                                                                {{ $i }}
-                                                            </option>
-                                                        @endfor
-                                                    </select>
+                                                    <label for="apartment-count">Enter Number of Apartments/Rooms</label>
+                                                    <input type="number" 
+                                                           class="form-control" 
+                                                           id="apartment-count" 
+                                                           name="apartment_count" 
+                                                           min="0" 
+                                                           value="{{ old('apartment_count', 0) }}" 
+                                                           placeholder="Enter number of rooms">
                                                 </div>
                                             </div>
 
-                                            {{-- Pre-render old apartments, if any --}}
-                                            <div id="dynamic-forms" class="dynamic-forms col-12">
-                                                @php $apartments = old('apartments', []); @endphp
-                                                @foreach($apartments as $index => $apartment)
-                                                    <div class="apartment-form">
-                                                        <label for="apartments-{{ $index }}-name">Apartment/Rooms {{ $index + 1 }} Name:</label>
-                                                        <input type="text"
-                                                               id="apartments-{{ $index }}-name"
-                                                               name="apartments[{{ $index }}][name]"
-                                                               class="form-control"
-                                                               value="{{ old("apartments.$index.name", $apartment['name'] ?? '') }}">
-
-                                                        <label for="apartments-{{ $index }}-number">Apartment {{ $index + 1 }} Number:</label>
-                                                        <input type="text"
-                                                               id="apartments-{{ $index }}-number"
-                                                               name="apartments[{{ $index }}][number]"
-                                                               class="form-control"
-                                                               value="{{ old("apartments.$index.number", $apartment['number'] ?? '') }}">
-
-                                                        <label for="apartments-{{ $index }}-floor">Apartment {{ $index + 1 }} Floor Number:</label>
-                                                        <input type="text"
-                                                               id="apartments-{{ $index }}-floor"
-                                                               name="apartments[{{ $index }}][floor]"
-                                                               class="form-control"
-                                                               value="{{ old("apartments.$index.floor", $apartment['floor'] ?? '') }}">
-                                                    </div>
-                                                @endforeach
+                                            {{-- Dynamic forms removed - rooms will be created on room list page --}}
+                                            <div id="dynamic-forms" class="dynamic-forms col-12" style="display: none;">
+                                                {{-- Rooms will be created as blank entries on the room list page based on apartment_count --}}
                                             </div>
 
                                             <!-- Property Policy And Rules -->
@@ -1136,107 +1109,28 @@
     </div>
 
     <!-- ===== Apartments/Rooms Dynamic Rows (FINAL - CREATE PAGE) ===== -->
-    <script type="application/json" id="existing-apartments-json">
-        @json(old('apartments', []))
-    </script>
+    {{-- Removed existing-apartments-json - rooms will be created on room list page --}}
 
     <script>
-        /* ---------------------- (E) Apartments/Rooms dynamic rows (FINAL) ----------------------
-           - Single source of truth for #apartment-count → #dynamic-forms
-           - 0-based array names: apartments[i][name|number|floor]
-           - Prefills from old('apartments') via JSON tag above
-           - Renders each apartment as one row (Name | Number | Floor)
+        /* ---------------------- (E) Apartments/Rooms dynamic rows - DISABLED ----------------------
+           - Dynamic rows are now disabled
+           - apartment_count will be saved and used to create blank rooms on the room list page
         --------------------------------------------------------------------------------------- */
         (function () {
-            function parseExisting() {
-                try {
-                    const tag = document.getElementById('existing-apartments-json');
-                    return tag ? JSON.parse(tag.textContent || '[]') || [] : [];
-                } catch {
-                    return [];
-                }
-            }
-
-            function createRow(i, data) {
-                const row = document.createElement('div');
-                row.className = 'row g-3 align-items-end mb-3 apartment-form';
-
-                const col1 = document.createElement('div');
-                col1.className = 'col-md-3';
-                col1.innerHTML = `
-          <label for="apartments-${i}-name" class="form-label">Apartment/Rooms ${i + 1} Name:</label>
-          <input type="text" id="apartments-${i}-name" name="apartments[${i}][name]"
-                 value="${(data?.name ?? '').toString().replace(/"/g,'&quot;')}" class="form-control">
-        `;
-
-                const col2 = document.createElement('div');
-                col2.className = 'col-md-3';
-                col2.innerHTML = `
-          <label for="apartments-${i}-number" class="form-label">Apartment ${i + 1} Number:</label>
-          <input type="text" id="apartments-${i}-number" name="apartments[${i}][number]"
-                 value="${(data?.number ?? '').toString().replace(/"/g,'&quot;')}" class="form-control">
-        `;
-
-                const col3 = document.createElement('div');
-                col3.className = 'col-md-4';
-                col3.innerHTML = `
-          <label for="apartments-${i}-floor" class="form-label">Apartment ${i + 1} Floor Number:</label>
-          <input type="text" id="apartments-${i}-floor" name="apartments[${i}][floor]"
-                 value="${(data?.floor ?? '').toString().replace(/"/g,'&quot;')}" class="form-control">
-        `;
-
-                row.appendChild(col1);
-                row.appendChild(col2);
-                row.appendChild(col3);
-                return row;
-            }
-
-            function mount() {
-                const selectEl  = document.getElementById('apartment-count');
-                const container = document.getElementById('dynamic-forms');
-                if (!selectEl || !container) return;
-
-                const existingApartments = parseExisting();
-
-                function render(count) {
-                    const n = Number.isFinite(count) && count > 0 ? count : 0;
-                    container.innerHTML = '';
-
-                    for (let i = 0; i < n; i++) {
-                        container.appendChild(createRow(i, existingApartments[i]));
-                        if (i < n - 1) {
-                            const hr = document.createElement('div');
-                            hr.style.borderTop = '1px dashed #e1e5ee';
-                            hr.className = 'my-3';
-                            container.appendChild(hr);
-                        }
+            // Disabled - rooms will be created on the room list page instead
+            // Just keep the input field functional for saving the count
+            const inputEl = document.getElementById('apartment-count');
+            if (inputEl) {
+                // Ensure the input accepts only positive numbers
+                inputEl.addEventListener('input', function() {
+                    const val = parseInt(this.value || '0', 10);
+                    if (val < 0) {
+                        this.value = '0';
                     }
-
-                    container.style.display = 'block';
-                    container.style.visibility = 'visible';
-                    container.classList.add('col-12');
-                }
-
-                // Initial state: use selected value OR old('apartments') length OR server prerendered count
-                const domInitialCount = container.querySelectorAll('.apartment-form').length;
-                let initial = parseInt(selectEl.value || '0', 10);
-
-                if (domInitialCount > 0) {
-                    initial = domInitialCount;
-                    selectEl.value = String(domInitialCount);
-                } else if ((!initial || isNaN(initial)) && existingApartments.length > 0) {
-                    initial = existingApartments.length;
-                    selectEl.value = String(initial);
-                }
-
-                render(isNaN(initial) ? 0 : initial);
-
-                const onChange = () => {
-                    const val = parseInt(selectEl.value || '0', 10);
-                    render(isNaN(val) ? 0 : val);
-                };
-                selectEl.addEventListener('change', onChange);
-                selectEl.addEventListener('input', onChange);
+                });
+            }
+                inputEl.addEventListener('change', onChange);
+                inputEl.addEventListener('input', onChange);
             }
 
             if (document.readyState === 'loading') {

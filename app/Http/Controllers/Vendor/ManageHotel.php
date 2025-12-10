@@ -184,49 +184,19 @@ class ManageHotel extends Controller
         // ✅ Vendor
         $data['vendor_id'] = auth()->id();
 
-        // 🔑 Keep form values for apartments/rooms
-        $apartmentCount = (int) $request->input('apartment_count', 0);
-        $apartments     = $request->input('apartments', []); // [ ['name'=>..,'number'=>..,'floor'=>..], ... ]
+        // 🔑 Save apartment_count - rooms will be created as blank entries on the room list page
+        $data['apartment_count'] = (int) $request->input('apartment_count', 0);
 
         Log::debug('Final data (before transaction):', $data);
 
         try {
-            DB::transaction(function () use ($data, $apartmentCount, $apartments, $request) {
+            DB::transaction(function () use ($data, $request) {
                 // 1) Create the Hotel
                 /** @var \App\Models\Hotel $hotel */
                 $hotel = Hotel::create($data);
 
-                // 2) Build the Room rows based on dropdown count
-                $rows = [];
-                if ($apartmentCount > 0 && is_array($apartments)) {
-                    $slice = array_slice($apartments, 0, $apartmentCount);
-                    foreach ($slice as $row) {
-                        $name   = trim((string)($row['name']   ?? ''));
-                        $number = trim((string)($row['number'] ?? ''));
-                        $floor  = trim((string)($row['floor']  ?? ''));
-
-                        // skip completely empty rows
-                        if ($name === '' && $number === '' && $floor === '') {
-                            continue;
-                        }
-
-                        $rows[] = [
-                            'hotel_id'     => $hotel->id, // 👈 if your FK is property_id, change to 'property_id'
-                            'name'         => $name,
-                            'number'       => $number,
-                            'floor_number' => $floor,
-                            'created_at'   => now(),
-                            'updated_at'   => now(),
-                        ];
-                    }
-                }
-
-                // 3) Insert rooms (if any)
-                if (!empty($rows)) {
-                    Room::insert($rows);
-                }
-
-                Log::info('Hotel created with rooms', ['hotel_id' => $hotel->id, 'rooms_created' => count($rows)]);
+                // Rooms will be created as blank entries when the room list page is first accessed
+                Log::info('Hotel created', ['hotel_id' => $hotel->id, 'apartment_count' => $hotel->apartment_count]);
             });
         } catch (\Throwable $e) {
             Log::error('Error creating hotel/rooms: '.$e->getMessage(), ['trace' => $e->getTraceAsString()]);

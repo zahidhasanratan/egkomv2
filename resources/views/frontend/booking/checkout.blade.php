@@ -774,26 +774,7 @@
                     <div data-v-30094f07="" class="fare-breakdown">
                         <div data-v-30094f07="" class="fare-content">
                             <div data-v-30094f07="" class="fare-info-content">
-                                <div data-v-30094f07="" class="fare-item">
-                                    <span data-v-30094f07="" class="fare">Rack Rate</span>
-                                    <span data-v-30094f07="" class="fare-price">
-                                        <span data-v-30094f07="" class="sm-text">BDT</span>
-                                        <span data-v-30094f07="" class="lg-text"> ${rackRate.toFixed(0)} </span>
-                                    </span>
-                                </div>
-                                <div data-v-30094f07="" class="fare-item">
-                                    <span data-v-30094f07="" class="fare">
-                                        <span data-v-30094f07="">Hotel Offer</span>
-                                        <span data-v-30094f07="" class="promo-code">${discountPercentage}%</span>
-                                    </span>
-                                    <span data-v-30094f07="" class="fare-price discount">
-                                        <span data-v-30094f07="" class="material-icons">
-                                            <i data-v-30094f07="" class="fa fa-minus-circle"></i>
-                                        </span>
-                                        <span data-v-30094f07="" class="sm-text">BDT</span>
-                                        <span data-v-30094f07="" class="lg-text"> ${discount.toFixed(0)} </span>
-                                    </span>
-                                </div>
+                                
                                 <div data-v-30094f07="" class="fare-item">
                                     <span data-v-30094f07="" class="fare">Room Rate</span>
                                     <span data-v-30094f07="" class="fare-price">
@@ -801,16 +782,7 @@
                                         <span data-v-30094f07="" class="lg-text"> ${subTotal.toFixed(0)} </span>
                                     </span>
                                 </div>
-                                <div data-v-30094f07="" class="fare-item">
-                                    <span data-v-30094f07="" class="fare"> Taxes &amp; Fees <i data-v-30094f07="" class="icon icon-info-light"></i></span>
-                                    <span data-v-30094f07="" class="fare-price">
-                                        <span data-v-30094f07="" class="material-icons">
-                                            <i data-v-30094f07="" class="fa fa-plus-circle"></i>
-                                        </span>
-                                        <span data-v-30094f07="" class="sm-text">BDT</span>
-                                        <span data-v-30094f07="" class="lg-text"> ${taxesAndFees.toFixed(0)} </span>
-                                    </span>
-                                </div>
+                               
                                 <div data-v-67f096c7="" class="aggregated-discount">
                                     <p data-v-67f096c7="" class="redeem-info">
                                         <span data-v-67f096c7="" id="coupon-toggle" class="coupon-text">Have a coupon?</span>
@@ -831,7 +803,7 @@
                         </div>
                         <span data-v-30094f07="" class="text-blue text-white">
                             <span data-v-30094f07="" class="sm-text">BDT</span>
-                            <span data-v-30094f07="" class="lg-text"> ${total.toFixed(0)} </span>
+                            <span data-v-30094f07="" class="lg-text"> ${subTotal.toFixed(0)} </span>
                         </span>
                     </div>
                 </div>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 02, 2025 at 11:41 AM
+-- Generation Time: Dec 09, 2025 at 09:48 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.23
 
@@ -313,7 +313,18 @@ INSERT INTO `activity_logs` (`id`, `browser`, `os`, `ip_address`, `activity_time
 (268, 'Chrome on Windows', 'Windows', '127.0.0.1', '10:55:40', 'Logged In', '2025-12-01 04:55:40', '2025-12-01 04:55:40'),
 (269, 'Chrome on Windows', 'Windows', '127.0.0.1', '10:58:12', 'Logged In', '2025-12-01 04:58:12', '2025-12-01 04:58:12'),
 (270, 'Chrome on Windows', 'Windows', '127.0.0.1', '05:54:19', 'Logged In', '2025-12-01 23:54:19', '2025-12-01 23:54:19'),
-(271, 'Chrome on Windows', 'Windows', '127.0.0.1', '05:57:44', 'Logged In', '2025-12-01 23:57:44', '2025-12-01 23:57:44');
+(271, 'Chrome on Windows', 'Windows', '127.0.0.1', '05:57:44', 'Logged In', '2025-12-01 23:57:44', '2025-12-01 23:57:44'),
+(272, 'Chrome on Windows', 'Windows', '127.0.0.1', '06:20:41', 'Logged In', '2025-12-04 00:20:41', '2025-12-04 00:20:41'),
+(273, 'Chrome on Windows', 'Windows', '127.0.0.1', '06:27:55', 'Logged In', '2025-12-04 00:27:55', '2025-12-04 00:27:55'),
+(274, 'Chrome on Windows', 'Windows', '127.0.0.1', '04:18:15', 'Logged In', '2025-12-06 22:18:15', '2025-12-06 22:18:15'),
+(275, 'Chrome on Windows', 'Windows', '127.0.0.1', '04:20:29', 'Logged In', '2025-12-06 22:20:29', '2025-12-06 22:20:29'),
+(276, 'Chrome on Windows', 'Windows', '127.0.0.1', '05:09:12', 'Logged Out', '2025-12-06 23:09:12', '2025-12-06 23:09:12'),
+(277, 'Chrome on Windows', 'Windows', '127.0.0.1', '05:09:35', 'Logged In', '2025-12-06 23:09:35', '2025-12-06 23:09:35'),
+(278, 'Chrome on Windows', 'Windows', '127.0.0.1', '09:11:59', 'Logged In', '2025-12-07 03:11:59', '2025-12-07 03:11:59'),
+(279, 'Chrome on Windows', 'Windows', '127.0.0.1', '05:40:41', 'Logged In', '2025-12-08 23:40:41', '2025-12-08 23:40:41'),
+(280, 'Chrome on Windows', 'Windows', '127.0.0.1', '06:15:08', 'Logged In', '2025-12-09 00:15:08', '2025-12-09 00:15:08'),
+(281, 'Chrome on Windows', 'Windows', '127.0.0.1', '06:59:53', 'Logged Out', '2025-12-09 00:59:53', '2025-12-09 00:59:53'),
+(282, 'Chrome on Windows', 'Windows', '127.0.0.1', '07:00:09', 'Logged In', '2025-12-09 01:00:09', '2025-12-09 01:00:09');
 
 -- --------------------------------------------------------
 
@@ -377,6 +388,9 @@ CREATE TABLE `bookings` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `invoice_number` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `booking_status` enum('pending','confirmed','cancelled','completed') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'confirmed',
+  `currently_staying` enum('yes','no') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'no',
+  `cancellation_comment` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_manual` tinyint(1) NOT NULL DEFAULT 0,
   `guest_id` bigint(20) UNSIGNED DEFAULT NULL,
   `guest_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `guest_email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -422,9 +436,12 @@ CREATE TABLE `bookings` (
 -- Dumping data for table `bookings`
 --
 
-INSERT INTO `bookings` (`id`, `invoice_number`, `booking_status`, `guest_id`, `guest_name`, `guest_email`, `guest_phone`, `rooms_data`, `checkin_date`, `checkout_date`, `total_nights`, `total_male`, `total_female`, `total_kids`, `total_persons`, `other_guests`, `home_address`, `organization`, `organization_address`, `relationship`, `additional_requests`, `bed_type`, `room_preference`, `room_type`, `room_number`, `arrival_time`, `property_note`, `citizenship`, `nid_front`, `nid_back`, `passport`, `visa`, `subtotal`, `discount`, `tax`, `grand_total`, `coupon_code`, `payment_status`, `paid_amount`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(2, 'INV-2025-000001', 'confirmed', 2, 'Rama Ferguson', 'mollika@mollika.com', '+1 (363) 801-5441', '[{\"roomId\":28,\"roomName\":\"Twin Room\",\"quantity\":1,\"price\":5000,\"hotelId\":46,\"hotelName\":\"Shopno Bilash Holiday Suites\",\"hotelAddress\":\"Jaliapalong, Inani, Ukhia, Cox\'s Bazar, Bangladesh\",\"hotelEmail\":null,\"hotelPhone\":null,\"hotelPhoto\":\"[\\\"uploads\\\\\\/hotel_photos\\\\\\/1748318283_6835384bb346a.jpg\\\"]\"},{\"roomId\":33,\"roomName\":\"Abraham Neal\",\"quantity\":1,\"price\":564.72,\"hotelId\":46,\"hotelName\":\"Shopno Bilash Holiday Suites\",\"hotelAddress\":\"Jaliapalong, Inani, Ukhia, Cox\'s Bazar, Bangladesh\",\"hotelEmail\":null,\"hotelPhone\":null,\"hotelPhoto\":\"[\\\"uploads\\\\\\/hotel_photos\\\\\\/1748318283_6835384bb346a.jpg\\\"]\"}]', '2025-12-03', '2025-12-05', 2, 2, 8, 8, 1, '[\"Aliqua Nulla sequi\"]', 'Autem quia est prov', 'Byers Leach Inc', 'Accusantium libero e', 'onlyMe', '[\"Airport Transfer\",\"Extra Bed\"]', 'twin_beds', 'smoking', 'Tempore libero mini', '521', '14', 'Vel aliquid aut volu', 'international', NULL, NULL, NULL, NULL, '11129.44', '0.00', '1669.42', '12798.86', NULL, 'unpaid', '0.00', '2025-12-02 03:29:58', '2025-12-02 03:29:58', NULL),
-(3, 'INV-2025-000002', 'confirmed', 2, 'Colin Stanton', 'mollika@mollika.com', '+1 (659) 838-4071', '[{\"roomId\":28,\"roomName\":\"Twin Room\",\"quantity\":1,\"price\":5000,\"hotelId\":46,\"hotelName\":\"Shopno Bilash Holiday Suites\",\"hotelAddress\":\"Jaliapalong, Inani, Ukhia, Cox\'s Bazar, Bangladesh\",\"hotelEmail\":null,\"hotelPhone\":null,\"hotelPhoto\":\"uploads\\/hotel_photos\\/1748318283_6835384bb346a.jpg\"}]', '2025-12-03', '2025-12-04', 1, 4, 10, 5, 1, '[\"Ipsam sunt aut ullam\"]', 'Cumque voluptatem au', 'Harper Dawson LLC', 'Voluptate quae sint', 'colleagues', '[\"Airport Transfer\",\"Extra Bed\",\"Room On Higher Floor\",\"Decorations in Room\"]', 'large_bed', 'non_smoking', 'Aut maiores nesciunt', '496', '24', 'Qui dolor amet odit', 'international', NULL, NULL, NULL, NULL, '5000.00', '0.00', '750.00', '5750.00', NULL, 'unpaid', '0.00', '2025-12-02 04:08:17', '2025-12-02 04:08:17', NULL);
+INSERT INTO `bookings` (`id`, `invoice_number`, `booking_status`, `currently_staying`, `cancellation_comment`, `is_manual`, `guest_id`, `guest_name`, `guest_email`, `guest_phone`, `rooms_data`, `checkin_date`, `checkout_date`, `total_nights`, `total_male`, `total_female`, `total_kids`, `total_persons`, `other_guests`, `home_address`, `organization`, `organization_address`, `relationship`, `additional_requests`, `bed_type`, `room_preference`, `room_type`, `room_number`, `arrival_time`, `property_note`, `citizenship`, `nid_front`, `nid_back`, `passport`, `visa`, `subtotal`, `discount`, `tax`, `grand_total`, `coupon_code`, `payment_status`, `paid_amount`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(2, 'INV-2025-000001', 'confirmed', 'no', NULL, 0, 2, 'Rama Ferguson', 'mollika@mollika.com', '+1 (363) 801-5441', '[{\"roomId\":28,\"roomName\":\"Twin Room\",\"quantity\":1,\"price\":5000,\"hotelId\":46,\"hotelName\":\"Shopno Bilash Holiday Suites\",\"hotelAddress\":\"Jaliapalong, Inani, Ukhia, Cox\'s Bazar, Bangladesh\",\"hotelEmail\":null,\"hotelPhone\":null,\"hotelPhoto\":\"[\\\"uploads\\\\\\/hotel_photos\\\\\\/1748318283_6835384bb346a.jpg\\\"]\"},{\"roomId\":33,\"roomName\":\"Abraham Neal\",\"quantity\":1,\"price\":564.72,\"hotelId\":46,\"hotelName\":\"Shopno Bilash Holiday Suites\",\"hotelAddress\":\"Jaliapalong, Inani, Ukhia, Cox\'s Bazar, Bangladesh\",\"hotelEmail\":null,\"hotelPhone\":null,\"hotelPhoto\":\"[\\\"uploads\\\\\\/hotel_photos\\\\\\/1748318283_6835384bb346a.jpg\\\"]\"}]', '2025-12-03', '2025-12-05', 2, 2, 8, 8, 1, '[\"Aliqua Nulla sequi\"]', 'Autem quia est prov', 'Byers Leach Inc', 'Accusantium libero e', 'onlyMe', '[\"Airport Transfer\",\"Extra Bed\"]', 'twin_beds', 'smoking', 'Tempore libero mini', '521', '14', 'Vel aliquid aut volu', 'international', NULL, NULL, NULL, NULL, '11129.44', '0.00', '1669.42', '12798.86', NULL, 'unpaid', '0.00', '2025-12-02 03:29:58', '2025-12-02 03:29:58', NULL),
+(3, 'INV-2025-000002', 'confirmed', 'no', NULL, 0, 2, 'Colin Stanton', 'mollika@mollika.com', '+1 (659) 838-4071', '[{\"roomId\":28,\"roomName\":\"Twin Room\",\"quantity\":1,\"price\":5000,\"hotelId\":46,\"hotelName\":\"Shopno Bilash Holiday Suites\",\"hotelAddress\":\"Jaliapalong, Inani, Ukhia, Cox\'s Bazar, Bangladesh\",\"hotelEmail\":null,\"hotelPhone\":null,\"hotelPhoto\":\"uploads\\/hotel_photos\\/1748318283_6835384bb346a.jpg\"}]', '2025-12-03', '2025-12-04', 1, 4, 10, 5, 1, '[\"Ipsam sunt aut ullam\"]', 'Cumque voluptatem au', 'Harper Dawson LLC', 'Voluptate quae sint', 'colleagues', '[\"Airport Transfer\",\"Extra Bed\",\"Room On Higher Floor\",\"Decorations in Room\"]', 'large_bed', 'non_smoking', 'Aut maiores nesciunt', '496', '24', 'Qui dolor amet odit', 'international', NULL, NULL, NULL, NULL, '5000.00', '0.00', '750.00', '5750.00', NULL, 'unpaid', '0.00', '2025-12-02 04:08:17', '2025-12-02 04:08:17', NULL),
+(4, 'INV-2025-000003', 'cancelled', 'no', 'sfsdf', 0, NULL, 'asdf', NULL, '01552114455', '[{\"roomId\":28,\"roomName\":\"Twin Room\",\"quantity\":1,\"price\":5000,\"hotelId\":46,\"hotelName\":\"Shopno Bilash Holiday Suites\",\"hotelAddress\":\"Jaliapalong, Inani, Ukhia, Cox\'s Bazar, Bangladesh\",\"hotelEmail\":null,\"hotelPhone\":null,\"hotelPhoto\":\"uploads\\/hotel_photos\\/1748318283_6835384bb346a.jpg\"}]', '2025-12-07', '2025-12-09', 2, 1, 0, 0, 1, '[\"asf\"]', 'asf', 'sfd', 'sdf', 'husband', '[]', NULL, 'non_smoking', 'sdf', 'sadf', '12', 'sfsfd', 'bangladesh', 'assets/documents/nid/1765100022_693549f6ba3f2.png', 'assets/documents/nid/1765100022_693549f6babe2.png', NULL, NULL, '10000.00', '0.00', '1500.00', '11500.00', NULL, 'unpaid', '0.00', '2025-12-07 03:33:42', '2025-12-09 01:23:10', NULL),
+(5, 'INV-2025-000004', 'confirmed', 'no', NULL, 0, NULL, 'Zahid', 'zhdhsn6@gmail.com', '01225222222', '[{\"roomId\":28,\"roomName\":\"Twin Room\",\"quantity\":\"1\",\"price\":\"5000.00\",\"hotelId\":46,\"hotelName\":\"Shopno Bilash Holiday Suites\",\"hotelAddress\":\"Jaliapalong, Inani, Ukhia, Cox\'s Bazar, Bangladesh\",\"hotelEmail\":null,\"hotelPhone\":null,\"hotelPhoto\":\"uploads\\/hotel_photos\\/1748318283_6835384bb346a.jpg\"}]', '2025-12-09', '2025-12-11', 2, 0, 0, 0, 1, '[]', 'sadf asd', NULL, NULL, 'onlyMe', '[]', NULL, 'non_smoking', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '10000.00', '0.00', '1500.00', '11500.00', NULL, 'unpaid', '0.00', '2025-12-09 01:54:15', '2025-12-09 01:54:15', NULL),
+(6, 'INV-2025-000005', 'confirmed', 'no', NULL, 1, NULL, 'asdsdaf', 'zhdhsn6@gmail.com', '01225222222', '[{\"roomId\":28,\"roomName\":\"Twin Room\",\"quantity\":\"1\",\"price\":\"5000.00\",\"hotelId\":46,\"hotelName\":\"Shopno Bilash Holiday Suites\",\"hotelAddress\":\"Jaliapalong, Inani, Ukhia, Cox\'s Bazar, Bangladesh\",\"hotelEmail\":null,\"hotelPhone\":null,\"hotelPhoto\":\"uploads\\/hotel_photos\\/1748318283_6835384bb346a.jpg\"}]', '2025-12-09', '2025-12-10', 1, 0, 0, 0, 1, '[]', 'fgdsfg', NULL, NULL, 'onlyMe', '[]', NULL, 'non_smoking', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '5000.00', '0.00', '750.00', '5750.00', NULL, 'unpaid', '0.00', '2025-12-09 02:06:14', '2025-12-09 02:06:14', NULL);
 
 -- --------------------------------------------------------
 
@@ -457,7 +474,7 @@ CREATE TABLE `co_hosts` (
 --
 
 INSERT INTO `co_hosts` (`id`, `hotel_id`, `vendor_id`, `name`, `email`, `phone`, `photo`, `password`, `bio`, `language`, `response_rate`, `response_time`, `is_active`, `email_verified_at`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 46, 7, 'Hope Pittman', 'cohost@cohost.com', '+1 (841) 363-4465', 'uploads/co-hosts/1764671215_692ebeefa95f5.png', '$2y$10$t543j7tojya7ZVNkdZ4kTe4fhH0NcQhObs/f/NGFFXLapc2wARwR2', 'Officia ullamco irur', 'Deserunt sint rem e', 100, 'within a day', 1, NULL, NULL, '2025-12-02 04:10:49', '2025-12-02 04:26:55');
+(1, 46, 7, 'Hope Pittman', 'cohost@cohost.com', '+1 (841) 363-4465', 'uploads/co-hosts/1764671215_692ebeefa95f5.png', '$2y$10$t543j7tojya7ZVNkdZ4kTe4fhH0NcQhObs/f/NGFFXLapc2wARwR2', 'Officia ullamco irur', 'Deserunt sint rem e', 100, 'within a day', 1, NULL, NULL, '2025-12-02 04:10:49', '2025-12-02 05:46:28');
 
 -- --------------------------------------------------------
 
@@ -595,7 +612,9 @@ INSERT INTO `hotels` (`id`, `vendor_id`, `property_category`, `property_type`, `
 (58, 7, NULL, 'Hotels', NULL, NULL, NULL, '<p><strong>Shopno Bilash Holiday Suites – The Ideal Getaway for Friends &amp; Family in Cox’s Bazar</strong></p><p>Welcome to <strong>Shopno Bilash Holiday Suites</strong>, one of Cox’s Bazar’s most trusted choices for families and groups of friends. Perfectly located between <strong>Sugondha</strong> and <strong>Laboni Beach</strong>, our suites offer easy access to both, making it a great spot for beach lovers.</p><p>Our spacious <strong>family-friendly suites</strong> with <strong>connecting flats</strong> are ideal for large families or groups of friends. Each unit includes a <strong>fully equipped kitchen</strong>, giving you the comfort and freedom to enjoy your stay just the way you like.</p><p>Whether you\'re planning a short break or a longer holiday, Shopno Bilash offers a <strong>comfortable, clean, and secure environment</strong>, with everything you need to feel at home.</p>', NULL, 'Shopno Bilash Holiday Suites', 'no', NULL, 'no', NULL, 'no', NULL, '12AM to 9AM', 'yes', NULL, '10:00-12:00', '11:00 AM', 'no', '\"[\\\"Security money for keys\\\"]\"', '[null]', NULL, '[null]', 'no', NULL, 'no', NULL, NULL, NULL, NULL, NULL, NULL, '[\"Building staff\",\"Housekeeping\"]', NULL, '[\"Flexible\",\"Long-term\\/Monthly staying policy\"]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '[null]', NULL, NULL, '[]', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', NULL, NULL, 'submitted', 1, '2025-07-27 04:52:44', '2025-11-17 04:37:40'),
 (59, 7, NULL, 'Hotels', NULL, 'Opposit of Hotel Long Beach, KFC Road', NULL, '<p>&lt;p&gt;&lt;strong&gt;Shopno Bilash Holiday Suites – The Ideal Getaway for Friends &amp; Family in Cox’s Bazar&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Welcome to &lt;strong&gt;Shopno Bilash Holiday Suites&lt;/strong&gt;, one of Cox’s Bazar’s most trusted choices for families and groups of friends. Perfectly located between &lt;strong&gt;Sugondha&lt;/strong&gt; and &lt;strong&gt;Laboni Beach&lt;/strong&gt;, our suites offer easy access to both, making it a great spot for beach lovers.&lt;/p&gt;&lt;p&gt;Our spacious &lt;strong&gt;family-friendly suites&lt;/strong&gt; with &lt;strong&gt;connecting flats&lt;/strong&gt; are ideal for large families or groups of friends. Each unit includes a &lt;strong&gt;fully equipped kitchen&lt;/strong&gt;, giving you the comfort and freedom to enjoy your stay just the way you like.&lt;/p&gt;&lt;p&gt;Whether you\'re planning a short break or a longer holiday, Shopno Bilash offers a &lt;strong&gt;comfortable, clean, and secure environment&lt;/strong&gt;, with everything you need to feel at home.&lt;/p&gt;</p>', 'Block #A, Plot# 28, Kolatoli R/A, Cox\'s Bazar', 'Shopno Bilash Holiday Suites', 'no', NULL, 'no', NULL, 'no', NULL, '12 AM to 9 AM', 'no', NULL, '10:00-12:00', '11:00 AM', 'no', '\"[\\\"Pay in advance\\\",\\\"Security money for keys\\\"]\"', '[null]', NULL, '[null]', 'no', NULL, 'no', NULL, NULL, NULL, NULL, NULL, NULL, '[\"Building staff\",\"Housekeeping\"]', NULL, '[\"Flexible\",\"Partially refundable\",\"Long-term\\/Monthly staying policy\"]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', NULL, NULL, 'submitted', 0, '2025-07-27 04:56:55', '2025-07-27 05:21:06'),
 (61, 7, NULL, 'Hotels', NULL, NULL, NULL, '<p>detailsdetails detailsdetailsdetails detailsdetailsdetails detailsdetailsdetails detailsdetailsdetails detailsdetailsdetails detailsdetailsdetails detailsdetailsdetails detailsdetailsdetails detailsdetailsdetails detailsdetailsdetails detailsdetailsdetails detailsdetailsdetails detailsdetailsdetails details</p>', NULL, 'Propertyname 1', NULL, NULL, NULL, NULL, NULL, NULL, 'sadf', NULL, NULL, NULL, NULL, NULL, NULL, '[null]', NULL, '[null]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'submitted', 0, '2025-08-20 00:10:22', '2025-08-20 00:10:22'),
-(72, 7, 'Hotels', 'Hotels', '[\"Single Room\",\"Double Room\"]', NULL, NULL, 'new hotel', NULL, 'another hotel', 'no', NULL, 'no', NULL, 'no', NULL, '324', NULL, NULL, NULL, NULL, NULL, NULL, '[null]', NULL, '[null]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '\"[]\"', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', NULL, '[{\"name\":\"test1\",\"number\":\"1\",\"floor\":\"101\"},{\"name\":\"test2\",\"number\":\"2\",\"floor\":\"201\"}]', 'submitted', 1, '2025-09-01 00:34:42', '2025-09-01 00:41:07');
+(72, 7, 'Hotels', 'Hotels', '[\"Single Room\",\"Double Room\"]', NULL, NULL, 'new hotel', NULL, 'another hotel', 'no', NULL, 'no', NULL, 'no', NULL, '324', NULL, NULL, NULL, NULL, NULL, NULL, '[null]', NULL, '[null]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '\"[]\"', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', NULL, '[{\"name\":\"test1\",\"number\":\"1\",\"floor\":\"101\"},{\"name\":\"test2\",\"number\":\"2\",\"floor\":\"201\"}]', 'submitted', 1, '2025-09-01 00:34:42', '2025-09-01 00:41:07'),
+(74, 7, 'Hotels', 'Hotel', NULL, NULL, NULL, '<p>sf sdf&nbsp;</p>', NULL, 'Shopno Bilash Holiday Suites', 'yes', 'Est adipisicing cor', 'no', 'Eius enim id ullamc', 'yes', 'Esse dolorem facilis', 'Ex commodi dolor eni', 'no', NULL, '08:00-10:00', '12:00 PM', 'no', '\"[\\\"Pay in advance\\\",\\\"Security money for keys\\\",\\\"Exercitationem ducim\\\"]\"', '[\"Exercitationem ducim\"]', '[\"No lift\\/Elevator\",\"Pet(s) live on the property\"]', '[\"Qui at cumque totam\"]', 'no', 'Et voluptatem quibu', 'yes', 'Sint ex Nam eos opt', NULL, NULL, 'Dolore voluptas cons', NULL, 'Reprehenderit neque', '[\"Building staff\",\"In-person\\/Self check-in\",\"Keypad\"]', NULL, '[\"Non-refundable\",\"Partially refundable\"]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '[{\"name\":\"123\",\"number\":\"123\",\"floor\":\"123\"},{\"name\":\"123\",\"number\":\"123\",\"floor\":\"123\"}]', 'draft', 0, '2025-12-06 22:52:22', '2025-12-06 22:52:22'),
+(75, 15, 'Hotels', 'Hotels', '[\"Single Room\",\"Double Room\"]', NULL, NULL, '<p>132</p>', NULL, 'estt', NULL, NULL, NULL, NULL, NULL, NULL, '123', NULL, NULL, NULL, NULL, NULL, NULL, '[null]', '[\"Guests must climb stairs\",\"No lift\\/Elevator\"]', '[null]', NULL, NULL, NULL, NULL, '<p>132</p>', '<p>231</p>', '231', '<p>123</p>', '<p>132</p>', NULL, NULL, '[\"Flexible\"]', '[\"Free Wi-Fi\",\"Hill View Or Sea View\"]', '\"[]\"', NULL, NULL, NULL, '\"[{\\\"category\\\":\\\"restaurant___cafe\\\",\\\"name\\\":\\\"132\\\",\\\"distance\\\":\\\"123\\\"}]\"', NULL, '\"[\\\"123\\\",\\\"123\\\"]\"', NULL, NULL, '[]', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', NULL, '[{\"name\":\"a\",\"number\":\"a1\",\"floor\":\"111\"},{\"name\":\"b\",\"number\":\"b1\",\"floor\":\"222\"},{\"name\":\"c\",\"number\":\"c1\",\"floor\":\"333\"}]', 'draft', 1, '2025-12-06 23:19:06', '2025-12-09 00:59:15');
 
 -- --------------------------------------------------------
 
@@ -727,7 +746,12 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (45, '2025_12_02_080841_create_bookings_table', 22),
 (46, '2025_12_02_090616_create_wishlists_table', 23),
 (47, '2025_12_02_091802_create_hotel_wishlists_table', 24),
-(48, '2025_12_02_094543_create_co_hosts_table', 25);
+(48, '2025_12_02_094543_create_co_hosts_table', 25),
+(49, '2025_12_04_083849_add_display_options_to_rooms_table', 26),
+(50, '2025_12_04_092626_fix_rooms_json_columns', 27),
+(51, '2025_12_09_070538_add_currently_staying_to_bookings_table', 28),
+(52, '2025_12_09_071827_add_cancellation_comment_to_bookings_table', 29),
+(53, '2025_12_09_075614_add_is_manual_to_bookings_table', 30);
 
 -- --------------------------------------------------------
 
@@ -905,7 +929,7 @@ CREATE TABLE `properties` (
 --
 
 INSERT INTO `properties` (`id`, `vendor_id`, `property_name`, `total_car_parking`, `property_category`, `property_type`, `room_types`, `country_name`, `district_name`, `city_town_village`, `postcode`, `house_number`, `road_number_name`, `building_age`, `building_size`, `building_stories`, `landmark_details`, `google_map_link`, `company_logo`, `apartment_count`, `apartments`, `total_capacity`, `car_parking`, `has_reception`, `elevators`, `generators`, `fire_exits`, `wheelchair_access`, `male_housekeeping`, `female_housekeeping`, `has_kids_zone`, `kids_zone_count`, `view_type`, `security_guards`, `has_cafe_restaurant`, `cafe_restaurant_count`, `cafe_restaurant_names`, `has_pool`, `pool_count`, `has_bar`, `bar_count`, `has_gym`, `gym_count`, `has_party_center`, `party_center_details`, `has_conference_hall`, `conference_hall_details`, `status`, `created_at`, `updated_at`) VALUES
-(15, 7, 'Shopno Bilash Holiday Suites', NULL, 'Hotels', 'Luxury Hotels', '[\"Single Room\",\"Double Room\",\"Suite\",\"Family Room\"]', 'Bangladesh', 'Cox\'sBazar', 'Kolatoli R/A', '4500', '90-97', 'Saikatabas Road', 2008, 100000, 9, 'Opposite of Long Beach hotel end of Mohammodia Guest house Goli', 'https://maps.app.goo.gl/Z33jgoDoBNfYzMGg7', 'storage/logos/1756880718_2-2025-05-25-6832e2d1b27cf.jpg', 3, '[]', 140, 10, 1, 1, 1, 1, 1, 5, 4, 0, NULL, 'Hill View & City View', 2, 0, NULL, '[]', 0, 1, 0, 1, 0, 1, 0, 'asdf asdf', 0, 'wer wer', 'submitted', '2025-03-20 02:00:59', '2025-09-03 00:25:18'),
+(15, 7, 'Shopno Bilash Holiday Suites', 0, 'Hotels', 'Luxury Hotels', '[\"Single Room\",\"Double Room\",\"Suite\",\"Family Room\"]', 'Bangladesh', 'Cox\'sBazar', 'Kolatoli R/A', '4500', '90-97', 'Saikatabas Road', 2008, 100000, 9, 'Opposite of Long Beach hotel end of Mohammodia Guest house Goli', 'https://maps.app.goo.gl/Z33jgoDoBNfYzMGg7', 'storage/logos/1756880718_2-2025-05-25-6832e2d1b27cf.jpg', 3, '[]', 140, 10, 0, 0, 0, 0, 0, 5, 4, 0, 0, '', 2, 0, 0, '[]', 0, 1, 0, 1, 0, 1, 0, 'asdf asdf', 0, 'wer wer', 'submitted', '2025-03-20 02:00:59', '2025-12-09 00:10:21'),
 (18, 13, 'wqer', NULL, 'Hotels', '', '\"[]\"', 'Bangladesh', 'Bandarban', '234', '234', '234', '234', 0, 0, 0, '', '', 'storage/logos/1756890332_admin.png', 0, '\"[]\"', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '234', 0, 0, 0, '\"[]\"', 0, 0, 0, 0, 0, 0, 0, '', 0, '', 'submitted', '2025-09-03 03:05:32', '2025-09-03 03:05:32'),
 (20, 15, 'estt', 0, 'Hotels', '', '[]', 'Bangladesh', 'Bandarban', '234', '234', '234', '234', 0, 0, 0, '', '', 'storage/logos/1756891699_admin.png', 0, '[]', 234, 234, 0, 0, 0, 0, 0, 1, 1, 0, 0, '', 0, 0, 0, '[]', 0, 0, 0, 0, 0, 0, 0, '', 0, '', 'submitted', '2025-09-03 03:28:27', '2025-09-04 00:55:53');
 
@@ -939,7 +963,8 @@ CREATE TABLE `rooms` (
   `appliances` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`appliances`)),
   `furniture` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`furniture`)),
   `amenities` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`amenities`)),
-  `cancellation_policy` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cancellation_policy` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '(DC2Type:json)' CHECK (json_valid(`cancellation_policy`)),
+  `display_options` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`display_options`)),
   `is_active` tinyint(1) DEFAULT 1,
   `status` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -950,11 +975,16 @@ CREATE TABLE `rooms` (
 -- Dumping data for table `rooms`
 --
 
-INSERT INTO `rooms` (`id`, `hotel_id`, `name`, `feature_photos`, `number`, `floor_number`, `price_per_night`, `weekend_price`, `holiday_price`, `discount_type`, `discount_amount`, `discount_percentage`, `discount_value`, `total_persons`, `description`, `size`, `total_rooms`, `total_washrooms`, `total_beds`, `wifi_details`, `appliances`, `furniture`, `amenities`, `cancellation_policy`, `is_active`, `status`, `created_at`, `updated_at`) VALUES
-(28, 46, 'Twin Room', NULL, 'Twin 1002', '1', '5000.00', '5500.00', '6000.00', NULL, NULL, NULL, NULL, 2, 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 10, 3, 1, 1, '5555', '\"[]\"', '\"[\\\"Bed\\\",\\\"Dining Table with Chair\\\",\\\"Sofa\\\\\\/Couch\\\",\\\"Tea Table\\\",\\\"Bedside Table\\\",\\\"Shoe Rack\\\",\\\"Clothing Cabinet\\\",\\\"Clothes Drying Hanger\\\",\\\"Iron Stand\\\",\\\"Locker\\\\\\/Safe\\\",\\\"123\\\"]\"', '\"[\\\"Toothbrush\\\",\\\"Towel\\\",\\\"Water bottle\\\"]\"', '[\"flexible\",\"non_refundable\"]', 1, 'published', '2025-05-05 03:27:12', '2025-12-02 00:24:02'),
-(31, 72, 'test1', NULL, '1', '101', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-09-01 00:34:43', '2025-09-01 00:34:43'),
-(32, 72, 'test2', NULL, '2', '201', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-09-01 00:34:43', '2025-09-01 00:34:43'),
-(33, 46, 'Abraham Neal', NULL, '61', '976', '724.00', '654.00', '320.00', 'percentage', NULL, '22.00', NULL, 1, 'Fuga Commodo et ea', 56, 1, 1, 2, 'Qui in eveniet dese', '\"[\\\"Fridge\\\",\\\"Light\\\",\\\"Gas Stove\\\",\\\"Room Heater\\\",\\\"Hair Dryer\\\"]\"', '\"[\\\"Bed\\\",\\\"Dining Table with Chair\\\",\\\"Tea Table\\\",\\\"Bedside Table\\\",\\\"Shoe Rack\\\",\\\"Clothing Cabinet\\\",\\\"Clothes Drying Hanger\\\"]\"', '\"[\\\"Soap\\\",\\\"Toothbrush\\\",\\\"Towel\\\",\\\"Air freshener\\\",\\\"Fruit basket\\\",\\\"Complimentary drinks\\\",\\\"Buffet breakfast\\\",\\\"Add\\\\\\/type Manually\\\"]\"', '[]', 1, 'published', '2025-12-02 00:37:26', '2025-12-02 00:41:49');
+INSERT INTO `rooms` (`id`, `hotel_id`, `name`, `feature_photos`, `number`, `floor_number`, `price_per_night`, `weekend_price`, `holiday_price`, `discount_type`, `discount_amount`, `discount_percentage`, `discount_value`, `total_persons`, `description`, `size`, `total_rooms`, `total_washrooms`, `total_beds`, `wifi_details`, `appliances`, `furniture`, `amenities`, `cancellation_policy`, `display_options`, `is_active`, `status`, `created_at`, `updated_at`) VALUES
+(28, 46, 'Twin Room', NULL, 'Twin 1002', '1', '5000.00', '5500.00', '6000.00', NULL, NULL, NULL, NULL, 2, 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 10, 3, 1, 1, '5555', '[\"AC\",\"TV\"]', '[\"Bed\"]', '[\"Soap\",\"Tissue\"]', '[\"flexible\"]', '\"[\\\"show_size\\\",\\\"show_capacity\\\",\\\"show_beds\\\",\\\"show_washrooms\\\",\\\"show_rooms\\\",\\\"show_wifi\\\",\\\"show_appliances\\\",\\\"show_furniture\\\",\\\"show_amenities\\\",\\\"show_policy\\\"]\"', 1, 'draft', '2025-05-05 03:27:12', '2025-12-09 00:28:40'),
+(31, 72, 'test1', NULL, '1', '101', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-09-01 00:34:43', '2025-09-01 00:34:43'),
+(32, 72, 'test2', NULL, '2', '201', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-09-01 00:34:43', '2025-09-01 00:34:43'),
+(33, 46, 'Abraham Neal', NULL, '61', '976', '724.00', '654.00', '320.00', 'percentage', NULL, '22.00', NULL, 1, 'Fuga Commodo et ea', 56, 1, 1, 2, 'Qui in eveniet dese', '[\"Fridge\",\"Light\",\"Gas Stove\",\"Room Heater\",\"Hair Dryer\"]', '[\"Bed\",\"Dining Table with Chair\",\"Tea Table\",\"Bedside Table\",\"Shoe Rack\",\"Clothing Cabinet\",\"Clothes Drying Hanger\"]', '[\"Soap\",\"Toothbrush\",\"Towel\",\"Air freshener\",\"Fruit basket\",\"Complimentary drinks\",\"Buffet breakfast\",\"Add\\/type Manually\"]', '[]', NULL, 1, 'published', '2025-12-02 00:37:26', '2025-12-02 00:41:49'),
+(36, 74, '123', NULL, '123', '123', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-12-06 22:52:24', '2025-12-06 22:52:24'),
+(37, 74, '123', NULL, '123', '123', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-12-06 22:52:24', '2025-12-06 22:52:24'),
+(38, 75, 'a', NULL, 'a1', '111', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-12-06 23:19:06', '2025-12-06 23:19:06'),
+(39, 75, 'b', NULL, 'b1', '222', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-12-06 23:19:06', '2025-12-06 23:19:06'),
+(40, 75, 'c', NULL, 'c1', '333', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2025-12-06 23:19:06', '2025-12-06 23:19:06');
 
 -- --------------------------------------------------------
 
@@ -1111,12 +1141,12 @@ CREATE TABLE `vendors` (
 --
 
 INSERT INTO `vendors` (`id`, `vendorId`, `hotel_name`, `contact_person_name`, `contact_person_dob`, `contact_person_designation`, `profile_picture`, `phone`, `email`, `logo`, `hotel_pictures`, `address_house`, `address_city`, `address_district`, `address_area`, `address_landmark`, `address_post_code`, `property_type`, `hotel_category`, `about_hotel`, `total_rooms`, `room_types`, `legal_property_name`, `nid`, `trade_license_bin_tin`, `bank_details`, `bank_check_picture`, `password`, `password_reset_token`, `password_reset_expires_at`, `email_verified_at`, `remember_token`, `created_at`, `updated_at`) VALUES
-(7, 'Ven-7', 'Gray Guerreroo000', 'Indira Workmann000', '1995-11-20', 'Velit aliqua Accus000', 'profile_pictures/77GOcxVDowXLRxwWrFi53RFp16afsPmlA3z5oSrU.jpg', '015524455666', 'it@esoft.com.bd', 'hotel_logos/1748406076_slider-1-2025-05-15-682572cf1f554.jpg', '[\"hotel_pictures\\/UDhrvYP53YAnkHsqHLPQ7nrpp0JonKLkMhmlD96d.png\",\"hotel_pictures\\/U4e1zD6l7FbIylhec1ZfYPInCUYGNXgeC7GxKJJc.png\",\"hotel_pictures\\/XweFRVm0UNSsCYhXHmZvGLXFSeZRfqCCx0jBGIOy.png\"]', 'Totam sit illum tot00', 'Quod similique sit', 'Dhaka', 'Dolore aut elit non', 'Consectetur id maio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Quia debitis officia', 'Laudantium alias al', 'Tenetur error quasi', 'bank_check_pictures/xealVRnBQpdewMUQVhXxbgGJ25zcNQ5J1EvOuT2p.png', '$2y$10$t2ES1eQLFcGfM1KL5AVdZu9cvnKIFtf2q.w.D7qKQ5.Fvk1mir3iq', NULL, NULL, NULL, NULL, '2024-12-05 02:28:12', '2025-05-27 22:21:16'),
+(7, 'Ven-7', 'Gray Guerreroo000', 'Indira Workmann000', '1995-11-20', 'Velit aliqua Accus000', 'profile_pictures/77GOcxVDowXLRxwWrFi53RFp16afsPmlA3z5oSrU.jpg', '015524455666', 'it@esoft.com.bd', 'hotel_logos/1748406076_slider-1-2025-05-15-682572cf1f554.jpg', '[\"hotel_pictures\\/UDhrvYP53YAnkHsqHLPQ7nrpp0JonKLkMhmlD96d.png\",\"hotel_pictures\\/U4e1zD6l7FbIylhec1ZfYPInCUYGNXgeC7GxKJJc.png\",\"hotel_pictures\\/XweFRVm0UNSsCYhXHmZvGLXFSeZRfqCCx0jBGIOy.png\"]', 'Totam sit illum tot00', 'Quod similique sit', 'Dhaka', 'Dolore aut elit non', 'Consectetur id maio', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Quia debitis officia', 'Laudantium alias al', 'Tenetur error quasi', 'bank_check_pictures/xealVRnBQpdewMUQVhXxbgGJ25zcNQ5J1EvOuT2p.png', '$2y$10$JCfXb/dO0M1jfXPDTwg.sua4vkysOBRzTraTJ/TWAhR8jXEiQGOZS', NULL, NULL, NULL, NULL, '2024-12-05 02:28:12', '2025-12-09 00:10:21'),
 (10, 'Ven-10', 'Kiara Olson', 'Xavier Simmons', '1987-04-12', 'Dolor nobis dolor il', 'profile_pictures/1eYXM2QXxoVZ0p7EsnyrnyNaaqevLiJ4sAbODeTi.jpg', '01552445566', 'jihune@mailinator.com', NULL, '[]', 'In sit velit obcaeca', 'Aliquam explicabo L', 'Dhaka', 'Vero quos sed ad nis', 'Molestiae aliquip Na', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Omnis dolor quis eaq', 'Necessitatibus in au', 'Nisi quam tempore i', NULL, '$2y$10$ENU5.b95ewDUpPgWhUsvkOIBtsnztrSmCF6JiL9y4ODXZOJCAn9c2', NULL, NULL, NULL, NULL, '2025-05-05 00:51:45', '2025-05-05 00:52:37'),
 (11, 'Ven-11', 'Garrett Garrett', 'Basil Joseph', NULL, 'Sit esse sit explic', NULL, '01225447788', 'fojenemow@mailinator.com', 'hotel_logos/NyuSIG4NhaL7ztxxLj3PFifRcXEr3TdKabIGH0hd.jpg', '[]', 'Commodo ullamco anim', 'Consequat Sequi sun', 'Faridpur', NULL, 'Nulla porro natus om', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Architecto maiores e', NULL, NULL, NULL, '$2y$10$POvKAMgmep/UN83pH38UFuRGmUqX3LfZMhuvkLSwDjCdQTgyNLaJu', NULL, NULL, NULL, NULL, '2025-05-14 22:05:56', '2025-05-14 22:05:56'),
 (12, 'Ven-12', 'Alvin Rojas', 'Mariko Serrano', NULL, 'Itaque fugiat minim', NULL, '01552447788', 'duhumykohe@mailinator.com', 'hotel_logos/1748405531_Gardening1--1- (1).jpg', '[]', 'Odit est repudianda', 'Culpa ut dignissimos', 'Jashore', NULL, 'Est nesciunt modi e', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Aut est et ea qui ve', NULL, NULL, NULL, '$2y$10$j5IR.AaIbQyxohr8uQXsuuLZQMOUH5g22OrkE5VjxWP7cx6nccrOC', NULL, NULL, NULL, NULL, '2025-05-27 22:12:11', '2025-05-27 22:12:13'),
 (13, 'Ven-13', 'wqer', '', NULL, '', '', '', 'test@test.com', '', NULL, '', '', '', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', NULL, NULL, '', '$2y$10$4rb3n8K0z8qxIW9NEeZinOM4jg5pyzFfOd/QLUOjcpIbXwxUNDYnq', NULL, NULL, NULL, NULL, '2025-09-03 03:05:32', '2025-09-03 03:05:32'),
-(15, 'Ven-15', 'rrrr', '', NULL, '', '', '', 'tt@tt.com', '', NULL, '', '', '', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', NULL, NULL, '', '$2y$10$KTks6pAcxEDo5xKZAFJiSuYbL5PTYIhMHkWFkB8qpIdfGoNDOToSa', NULL, NULL, NULL, NULL, '2025-09-03 03:28:19', '2025-09-04 00:57:51');
+(15, 'Ven-15', 'rrrr', '', NULL, '', '', '', 'tt@tt.com', '', NULL, '', '', '', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', NULL, NULL, '', '$2y$10$m4ugQmaAQwJF2gg24rKv0uZdyEQp0MPRHr2A/tn5LFNOEgKfn40Ne', NULL, NULL, NULL, NULL, '2025-09-03 03:28:19', '2025-12-06 23:09:31');
 
 -- --------------------------------------------------------
 
@@ -1320,7 +1350,7 @@ ALTER TABLE `wishlists`
 -- AUTO_INCREMENT for table `activity_logs`
 --
 ALTER TABLE `activity_logs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=272;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=283;
 
 --
 -- AUTO_INCREMENT for table `bankings`
@@ -1338,7 +1368,7 @@ ALTER TABLE `big_advertises`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `co_hosts`
@@ -1362,7 +1392,7 @@ ALTER TABLE `guests`
 -- AUTO_INCREMENT for table `hotels`
 --
 ALTER TABLE `hotels`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 
 --
 -- AUTO_INCREMENT for table `hotel_settings`
@@ -1386,7 +1416,7 @@ ALTER TABLE `menus`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `nearby_areas`
@@ -1422,7 +1452,7 @@ ALTER TABLE `properties`
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `room_photos`

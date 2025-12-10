@@ -721,13 +721,19 @@
         </section>
 
         <!-- Additional Requests Section -->
-        @if(!empty($booking->additional_requests))
+        @php
+            $additionalRequests = is_array($booking->additional_requests) ? $booking->additional_requests : [];
+            $hasAdditionalRequests = !empty($additionalRequests) && count(array_filter($additionalRequests)) > 0;
+        @endphp
+        @if($hasAdditionalRequests)
         <section class="invoice-section">
             <h2 class="section-title">Additional Requests</h2>
             <div class="section-content">
                 <div class="requests-list">
-                    @foreach($booking->additional_requests as $request)
-                        <span class="request-pill">{{ $request }}</span>
+                    @foreach($additionalRequests as $request)
+                        @if(!empty($request))
+                            <span class="request-pill">{{ $request }}</span>
+                        @endif
                     @endforeach
                 </div>
             </div>
@@ -744,40 +750,18 @@
         </section>
         @endif
 
-        <!-- Primary Contact Person & Relationship - Side by Side -->
-        <div class="sections-row">
-            <section class="invoice-section">
-                <h2 class="section-title">Contact Details</h2>
-                <div class="section-content">
-                    <div class="contact-details">
-                        <div class="detail-item">
-                            <div class="detail-label">Hotel Name</div>
-                            <div class="detail-value">{{ $hotel->name ?? 'N/A' }}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Contact Person</div>
-                            <div class="detail-value">{{ $booking->guest_name }}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Mobile Number</div>
-                            <div class="detail-value">{{ $booking->guest_phone }}</div>
-                        </div>
-                    </div>
+        <!-- Relationship With Guest -->
+        <section class="invoice-section">
+            <h2 class="section-title">Relationship With Guest</h2>
+            <div class="section-content">
+                <div class="relationship-info">
+                    <span class="relationship-value">{{ ucfirst($booking->relationship) }}</span>
+                    @if(!empty($booking->other_guests))
+                        <span class="other-guests">({{ implode(', ', $booking->other_guests) }})</span>
+                    @endif
                 </div>
-            </section>
-
-            <section class="invoice-section">
-                <h2 class="section-title">Relationship With Guest</h2>
-                <div class="section-content">
-                    <div class="relationship-info">
-                        <span class="relationship-value">{{ ucfirst($booking->relationship) }}</span>
-                        @if(!empty($booking->other_guests))
-                            <span class="other-guests">({{ implode(', ', $booking->other_guests) }})</span>
-                        @endif
-                    </div>
-                </div>
-            </section>
-        </div>
+            </div>
+        </section>
 
         <!-- Booking Information & Arrival Time - Side by Side -->
         <div class="sections-row">

@@ -95,6 +95,11 @@ Route::prefix('super-admin')->group(function () {
         Route::put('/bookings/{id}/status', [\App\Http\Controllers\Admin\BookingManagementController::class, 'updateStatus'])->name('super-admin.bookings.updateStatus');
         Route::put('/bookings/{id}/currently-staying', [\App\Http\Controllers\Admin\BookingManagementController::class, 'updateCurrentlyStaying'])->name('super-admin.bookings.updateCurrentlyStaying');
         Route::delete('/bookings/{id}', [\App\Http\Controllers\Admin\BookingManagementController::class, 'destroy'])->name('super-admin.bookings.destroy');
+        
+        // Manual Order
+        Route::get('/bookings/manual/create', [\App\Http\Controllers\Admin\BookingManagementController::class, 'createManualOrder'])->name('super-admin.bookings.manual.create');
+        Route::post('/bookings/manual/store', [\App\Http\Controllers\Admin\BookingManagementController::class, 'storeManualOrder'])->name('super-admin.bookings.manual.store');
+        Route::get('/bookings/manual/rooms/{hotelId}', [\App\Http\Controllers\Admin\BookingManagementController::class, 'getRooms'])->name('super-admin.bookings.manual.rooms');
 
     });
     /*Admin Panel Ended */

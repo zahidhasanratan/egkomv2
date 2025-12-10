@@ -82,7 +82,10 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">All Bookings</h3>
-                    <div class="card-tools">
+                    <div class="card-tools" style="display: flex; gap: 10px; align-items: center;">
+                        <a href="{{ route('super-admin.bookings.manual.create') }}" class="btn btn-primary btn-sm" style="background: white; color: #90278e; border: 1px solid white;">
+                            <em class="icon ni ni-plus"></em> Create Manual Order
+                        </a>
                         <div class="input-group input-group-sm" style="width: 250px;">
                             <input type="text" id="searchInput" class="form-control float-right" placeholder="Search by invoice, name, phone...">
                             <div class="input-group-append">
@@ -99,6 +102,7 @@
                         <thead>
                             <tr>
                                 <th>Invoice #</th>
+                                <th>Type</th>
                                 <th>Guest Name</th>
                                 <th>Phone</th>
                                 <th>Hotel/Rooms</th>
@@ -117,6 +121,17 @@
                             <tr>
                                 <td>
                                     <strong style="color: #90278e;">{{ $booking->invoice_number }}</strong>
+                                </td>
+                                <td>
+                                    @if($booking->is_manual)
+                                        <span class="badge badge-warning" style="background: #f59e0b; color: white;">
+                                            <i class="fas fa-user-edit"></i> Manual
+                                        </span>
+                                    @else
+                                        <span class="badge badge-info" style="background: #3b82f6; color: white;">
+                                            <i class="fas fa-globe"></i> Website
+                                        </span>
+                                    @endif
                                 </td>
                                 <td>{{ $booking->guest_name }}</td>
                                 <td>{{ $booking->guest_phone }}</td>

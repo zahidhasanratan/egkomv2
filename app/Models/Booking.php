@@ -15,6 +15,7 @@ class Booking extends Model
         'booking_status',
         'currently_staying',
         'cancellation_comment',
+        'is_manual',
         'guest_id',
         'guest_name',
         'guest_email',

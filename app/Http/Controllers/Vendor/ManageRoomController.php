@@ -23,6 +23,42 @@ class ManageRoomController extends Controller
             abort(404, 'Invalid hotel ID');
         }
 
+        // Check if rooms exist, if not and apartment_count is set, create blank rooms
+        $existingRoomsCount = Room::where('hotel_id', $hotel->id)->count();
+        
+        if ($existingRoomsCount == 0 && $hotel->apartment_count > 0) {
+            // Create blank room entries based on apartment_count
+            $blankRooms = [];
+            for ($i = 1; $i <= $hotel->apartment_count; $i++) {
+                $blankRooms[] = [
+                    'hotel_id' => $hotel->id,
+                    'name' => '', // Blank - user will fill this when editing
+                    'number' => '', // Blank - user will fill this when editing
+                    'floor_number' => '', // Blank - user will fill this when editing
+                    'price_per_night' => 0,
+                    'weekend_price' => 0,
+                    'holiday_price' => 0,
+                    'total_persons' => 0,
+                    'size' => 0,
+                    'total_rooms' => 0,
+                    'total_washrooms' => 0,
+                    'total_beds' => 0,
+                    'is_active' => 0,
+                    'status' => 'draft',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+            
+            if (!empty($blankRooms)) {
+                Room::insert($blankRooms);
+                Log::info('Created blank rooms for hotel', [
+                    'hotel_id' => $hotel->id,
+                    'rooms_created' => count($blankRooms)
+                ]);
+            }
+        }
+
         // Fetch rooms with pagination (e.g., 10 rooms per page)
         $roomList = Room::where('hotel_id', $hotel->id)->paginate(10);
 
@@ -39,6 +75,42 @@ class ManageRoomController extends Controller
             $hotel = Hotel::where('id', $hotelId)->firstOrFail(); // Throws 404 if not found
         } catch (DecryptException $e) {
             abort(404, 'Invalid hotel ID');
+        }
+
+        // Check if rooms exist, if not and apartment_count is set, create blank rooms
+        $existingRoomsCount = Room::where('hotel_id', $hotel->id)->count();
+        
+        if ($existingRoomsCount == 0 && $hotel->apartment_count > 0) {
+            // Create blank room entries based on apartment_count
+            $blankRooms = [];
+            for ($i = 1; $i <= $hotel->apartment_count; $i++) {
+                $blankRooms[] = [
+                    'hotel_id' => $hotel->id,
+                    'name' => '', // Blank - user will fill this when editing
+                    'number' => '', // Blank - user will fill this when editing
+                    'floor_number' => '', // Blank - user will fill this when editing
+                    'price_per_night' => 0,
+                    'weekend_price' => 0,
+                    'holiday_price' => 0,
+                    'total_persons' => 0,
+                    'size' => 0,
+                    'total_rooms' => 0,
+                    'total_washrooms' => 0,
+                    'total_beds' => 0,
+                    'is_active' => 0,
+                    'status' => 'draft',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+            
+            if (!empty($blankRooms)) {
+                Room::insert($blankRooms);
+                Log::info('Created blank rooms for hotel (Super Admin)', [
+                    'hotel_id' => $hotel->id,
+                    'rooms_created' => count($blankRooms)
+                ]);
+            }
         }
 
         // Fetch rooms with pagination (e.g., 10 rooms per page)
