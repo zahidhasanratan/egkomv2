@@ -272,34 +272,184 @@
                                                         </div>
                                                     </div>
 
+                                                    <!-- Room Facilities & Amenities -->
+                                                    <h5 class="mt-3 mb-2"><strong>Room Facilities & Amenities</strong></h5>
                                                     <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="AC" {{ in_array('AC', old('appliances', [])) ? 'checked' : '' }}> AC</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="TV" {{ in_array('TV', old('appliances', [])) ? 'checked' : '' }}> TV</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Fridge" {{ in_array('Fridge', old('appliances', [])) ? 'checked' : '' }}> Fridge</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Microwave" {{ in_array('Microwave', old('appliances', [])) ? 'checked' : '' }}> Microwave</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Fan" {{ in_array('Fan', old('appliances', [])) ? 'checked' : '' }}> Fan</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Lamp" {{ in_array('Lamp', old('appliances', [])) ? 'checked' : '' }}> Lamp</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Light" {{ in_array('Light', old('appliances', [])) ? 'checked' : '' }}> Light</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Water heater/Geyser" {{ in_array('Water heater/Geyser', old('appliances', [])) ? 'checked' : '' }}> Water heater/Geyser</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="WiFi Router" {{ in_array('WiFi Router', old('appliances', [])) ? 'checked' : '' }}> WiFi Router</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Crockeries" {{ in_array('Crockeries', old('appliances', [])) ? 'checked' : '' }}> Crockeries</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Gas Stove" {{ in_array('Gas Stove', old('appliances', [])) ? 'checked' : '' }}> Gas Stove</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Electric Kettle" {{ in_array('Electric Kettle', old('appliances', [])) ? 'checked' : '' }}> Electric Kettle</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Room Heater" {{ in_array('Room Heater', old('appliances', [])) ? 'checked' : '' }}> Room Heater</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Hair Dryer" {{ in_array('Hair Dryer', old('appliances', [])) ? 'checked' : '' }}> Hair Dryer</label><br>
+                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Smart TV" {{ in_array('Smart TV', old('appliances', [])) ? 'checked' : '' }}> Smart TV</label><br>
+                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Wi-Fi" {{ in_array('Wi-Fi', old('appliances', [])) ? 'checked' : '' }}> Wi-Fi</label><br>
+                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Minibar" {{ in_array('Minibar', old('appliances', [])) ? 'checked' : '' }}> Minibar</label><br>
+                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Safe" {{ in_array('Safe', old('appliances', [])) ? 'checked' : '' }}> Safe</label><br>
+                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Desk" {{ in_array('Desk', old('appliances', [])) ? 'checked' : '' }}> Desk</label><br>
+                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Wardrobe" {{ in_array('Wardrobe', old('appliances', [])) ? 'checked' : '' }}> Wardrobe</label><br>
                                                     
-                                                    <!-- Custom Appliances Container -->
+                                                    <!-- Custom Facilities Container -->
                                                     <div class="custom-appliances-container mt-3" data-section="appliances"></div>
                                                     
-                                                    <!-- Add More Appliances -->
+                                                    <!-- Add More Facilities -->
                                                     <div class="add-more-section mt-3">
                                                         <div class="input-group" style="max-width: 400px;">
-                                                            <input type="text" class="form-control" id="custom-appliance-input" placeholder="Enter custom appliance name">
+                                                            <input type="text" class="form-control" id="custom-appliance-input" placeholder="Enter custom facility/amenity name">
                                                             <button type="button" class="btn btn-primary btn-sm" id="add-appliance-btn">Add</button>
                                                         </div>
+                                                    </div>
+
+                                                    <!-- Bed Details -->
+                                                    <h5 class="mt-4 mb-2"><strong>Bed Details</strong></h5>
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <label class="form-label">Bed Type</label>
+                                                            <select class="form-control" name="room_info[bed_type]">
+                                                                <option value="">Select Bed Type</option>
+                                                                <option value="King" {{ old('room_info.bed_type') == 'King' ? 'selected' : '' }}>King</option>
+                                                                <option value="Queen" {{ old('room_info.bed_type') == 'Queen' ? 'selected' : '' }}>Queen</option>
+                                                                <option value="Twin" {{ old('room_info.bed_type') == 'Twin' ? 'selected' : '' }}>Twin</option>
+                                                                <option value="Single" {{ old('room_info.bed_type') == 'Single' ? 'selected' : '' }}>Single</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label class="form-label">Number of Beds</label>
+                                                            <input type="number" class="form-control" name="room_info[number_of_beds]" value="{{ old('room_info.number_of_beds', '') }}" placeholder="0" min="0">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label class="form-label">Custom Bed Type</label>
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control" id="custom-bed-type-input" placeholder="Enter custom bed type">
+                                                                <button type="button" class="btn btn-primary btn-sm" id="add-bed-type-btn">Add</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div id="custom-bed-types-container" class="mt-2"></div>
+
+                                                    <!-- Maximum Occupancy -->
+                                                    <h5 class="mt-4 mb-2"><strong>Maximum Occupancy</strong></h5>
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <label class="form-label">Adults</label>
+                                                            <input type="number" class="form-control" name="room_info[max_adults]" value="{{ old('room_info.max_adults', '') }}" placeholder="0" min="0">
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <label class="form-label">Children</label>
+                                                            <input type="number" class="form-control" name="room_info[max_children]" value="{{ old('room_info.max_children', '') }}" placeholder="0" min="0">
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Layout Details -->
+                                                    <h5 class="mt-4 mb-2"><strong>Layout Details</strong></h5>
+                                                    <label><input type="checkbox" name="room_info[layout][]" class="checkbox-item-room-info" value="Apartment Style" {{ in_array('Apartment Style', old('room_info.layout', [])) ? 'checked' : '' }}> Apartment Style</label><br>
+                                                    <label><input type="checkbox" name="room_info[layout][]" class="checkbox-item-room-info" value="Suite" {{ in_array('Suite', old('room_info.layout', [])) ? 'checked' : '' }}> Suite</label><br>
+                                                    <label><input type="checkbox" name="room_info[layout][]" class="checkbox-item-room-info" value="Studio" {{ in_array('Studio', old('room_info.layout', [])) ? 'checked' : '' }}> Studio</label><br>
+                                                    <label><input type="checkbox" name="room_info[layout][]" class="checkbox-item-room-info" value="Duplex" {{ in_array('Duplex', old('room_info.layout', [])) ? 'checked' : '' }}> Duplex</label><br>
+                                                    
+                                                    <!-- Custom Layout Container -->
+                                                    <div class="custom-layout-container mt-3"></div>
+                                                    
+                                                    <!-- Add More Layout -->
+                                                    <div class="add-more-section mt-3">
+                                                        <div class="input-group" style="max-width: 400px;">
+                                                            <input type="text" class="form-control" id="custom-layout-input" placeholder="Enter custom layout type">
+                                                            <button type="button" class="btn btn-primary btn-sm" id="add-layout-btn">Add</button>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- View from the Room -->
+                                                    <h5 class="mt-4 mb-2"><strong>View from the Room</strong></h5>
+                                                    <label><input type="checkbox" name="room_info[view][]" class="checkbox-item-room-info" value="Sea View" {{ in_array('Sea View', old('room_info.view', [])) ? 'checked' : '' }}> Sea View</label><br>
+                                                    <label><input type="checkbox" name="room_info[view][]" class="checkbox-item-room-info" value="City View" {{ in_array('City View', old('room_info.view', [])) ? 'checked' : '' }}> City View</label><br>
+                                                    <label><input type="checkbox" name="room_info[view][]" class="checkbox-item-room-info" value="Garden View" {{ in_array('Garden View', old('room_info.view', [])) ? 'checked' : '' }}> Garden View</label><br>
+                                                    <label><input type="checkbox" name="room_info[view][]" class="checkbox-item-room-info" value="Partial View" {{ in_array('Partial View', old('room_info.view', [])) ? 'checked' : '' }}> Partial View</label><br>
+                                                    <label><input type="checkbox" name="room_info[view][]" class="checkbox-item-room-info" value="No View" {{ in_array('No View', old('room_info.view', [])) ? 'checked' : '' }}> No View</label><br>
+                                                    
+                                                    <!-- Custom View Container -->
+                                                    <div class="custom-view-container mt-3"></div>
+                                                    
+                                                    <!-- Add More View -->
+                                                    <div class="add-more-section mt-3">
+                                                        <div class="input-group" style="max-width: 400px;">
+                                                            <input type="text" class="form-control" id="custom-view-input" placeholder="Enter custom view type">
+                                                            <button type="button" class="btn btn-primary btn-sm" id="add-view-btn">Add</button>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Bathroom Details -->
+                                                    <h5 class="mt-4 mb-2"><strong>Bathroom Details</strong></h5>
+                                                    <label><input type="checkbox" name="room_info[bathroom][]" class="checkbox-item-room-info" value="Attached" {{ in_array('Attached', old('room_info.bathroom', [])) ? 'checked' : '' }}> Attached</label><br>
+                                                    <label><input type="checkbox" name="room_info[bathroom][]" class="checkbox-item-room-info" value="Private" {{ in_array('Private', old('room_info.bathroom', [])) ? 'checked' : '' }}> Private</label><br>
+                                                    <label><input type="checkbox" name="room_info[bathroom][]" class="checkbox-item-room-info" value="Shower" {{ in_array('Shower', old('room_info.bathroom', [])) ? 'checked' : '' }}> Shower</label><br>
+                                                    <label><input type="checkbox" name="room_info[bathroom][]" class="checkbox-item-room-info" value="Bathtub" {{ in_array('Bathtub', old('room_info.bathroom', [])) ? 'checked' : '' }}> Bathtub</label><br>
+                                                    <label><input type="checkbox" name="room_info[bathroom][]" class="checkbox-item-room-info" value="Toiletries" {{ in_array('Toiletries', old('room_info.bathroom', [])) ? 'checked' : '' }}> Toiletries</label><br>
+                                                    <label><input type="checkbox" name="room_info[bathroom][]" class="checkbox-item-room-info" value="Hot Water" {{ in_array('Hot Water', old('room_info.bathroom', [])) ? 'checked' : '' }}> Hot Water</label><br>
+                                                    
+                                                    <!-- Custom Bathroom Container -->
+                                                    <div class="custom-bathroom-container mt-3"></div>
+                                                    
+                                                    <!-- Add More Bathroom -->
+                                                    <div class="add-more-section mt-3">
+                                                        <div class="input-group" style="max-width: 400px;">
+                                                            <input type="text" class="form-control" id="custom-bathroom-input" placeholder="Enter custom bathroom feature">
+                                                            <button type="button" class="btn btn-primary btn-sm" id="add-bathroom-btn">Add</button>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Kitchen Facilities -->
+                                                    <h5 class="mt-4 mb-2"><strong>Kitchen Facilities</strong></h5>
+                                                    <label><input type="checkbox" name="room_info[kitchen_facilities][]" class="checkbox-item-room-info" value="Fully Equipped" {{ in_array('Fully Equipped', old('room_info.kitchen_facilities', [])) ? 'checked' : '' }}> Fully Equipped</label><br>
+                                                    <label><input type="checkbox" name="room_info[kitchen_facilities][]" class="checkbox-item-room-info" value="Partial" {{ in_array('Partial', old('room_info.kitchen_facilities', [])) ? 'checked' : '' }}> Partial</label><br>
+                                                    <label><input type="checkbox" name="room_info[kitchen_facilities][]" class="checkbox-item-room-info" value="None" {{ in_array('None', old('room_info.kitchen_facilities', [])) ? 'checked' : '' }}> None</label><br>
+                                                    <label><input type="checkbox" name="room_info[kitchen_facilities][]" class="checkbox-item-room-info" value="Fridge" {{ in_array('Fridge', old('room_info.kitchen_facilities', [])) ? 'checked' : '' }}> Fridge</label><br>
+                                                    <label><input type="checkbox" name="room_info[kitchen_facilities][]" class="checkbox-item-room-info" value="Stove" {{ in_array('Stove', old('room_info.kitchen_facilities', [])) ? 'checked' : '' }}> Stove</label><br>
+                                                    <label><input type="checkbox" name="room_info[kitchen_facilities][]" class="checkbox-item-room-info" value="Microwave" {{ in_array('Microwave', old('room_info.kitchen_facilities', [])) ? 'checked' : '' }}> Microwave</label><br>
+                                                    <label><input type="checkbox" name="room_info[kitchen_facilities][]" class="checkbox-item-room-info" value="Utensils" {{ in_array('Utensils', old('room_info.kitchen_facilities', [])) ? 'checked' : '' }}> Utensils</label><br>
+                                                    
+                                                    <!-- Custom Kitchen Container -->
+                                                    <div class="custom-kitchen-container mt-3"></div>
+                                                    
+                                                    <!-- Add More Kitchen -->
+                                                    <div class="add-more-section mt-3">
+                                                        <div class="input-group" style="max-width: 400px;">
+                                                            <input type="text" class="form-control" id="custom-kitchen-input" placeholder="Enter custom kitchen facility">
+                                                            <button type="button" class="btn btn-primary btn-sm" id="add-kitchen-btn">Add</button>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Balcony / Terrace Availability -->
+                                                    <h5 class="mt-4 mb-2"><strong>Balcony / Terrace Availability</strong></h5>
+                                                    <div class="col-md-4">
+                                                        <select class="form-control" name="room_info[balcony]">
+                                                            <option value="">Select Option</option>
+                                                            <option value="Yes" {{ old('room_info.balcony') == 'Yes' ? 'selected' : '' }}>Yes</option>
+                                                            <option value="No" {{ old('room_info.balcony') == 'No' ? 'selected' : '' }}>No</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <!-- Accessibility Features -->
+                                                    <h5 class="mt-4 mb-2"><strong>Accessibility Features</strong></h5>
+                                                    <label><input type="checkbox" name="room_info[accessibility][]" class="checkbox-item-room-info" value="Wheelchair Friendly" {{ in_array('Wheelchair Friendly', old('room_info.accessibility', [])) ? 'checked' : '' }}> Wheelchair Friendly</label><br>
+                                                    <label><input type="checkbox" name="room_info[accessibility][]" class="checkbox-item-room-info" value="Elevator Access" {{ in_array('Elevator Access', old('room_info.accessibility', [])) ? 'checked' : '' }}> Elevator Access</label><br>
+                                                    
+                                                    <!-- Custom Accessibility Container -->
+                                                    <div class="custom-accessibility-container mt-3"></div>
+                                                    
+                                                    <!-- Add More Accessibility -->
+                                                    <div class="add-more-section mt-3">
+                                                        <div class="input-group" style="max-width: 400px;">
+                                                            <input type="text" class="form-control" id="custom-accessibility-input" placeholder="Enter custom accessibility feature">
+                                                            <button type="button" class="btn btn-primary btn-sm" id="add-accessibility-btn">Add</button>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Smoking Policy -->
+                                                    <h5 class="mt-4 mb-2"><strong>Smoking Policy</strong></h5>
+                                                    <div class="col-md-4">
+                                                        <select class="form-control" name="room_info[smoking_policy]">
+                                                            <option value="">Select Policy</option>
+                                                            <option value="Smoking Allowed" {{ old('room_info.smoking_policy') == 'Smoking Allowed' ? 'selected' : '' }}>Smoking Allowed</option>
+                                                            <option value="Non-Smoking" {{ old('room_info.smoking_policy') == 'Non-Smoking' ? 'selected' : '' }}>Non-Smoking</option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                             </div>
                                             <script>
+                                                // Select All functionality
                                                 (function initRoomInfoSelectAll() {
                                                     const containers = document.querySelectorAll('.checkbox-section');
                                                     const container = containers[containers.length - 2] || containers[0];
@@ -326,73 +476,401 @@
                                                     const checkedCount = container.querySelectorAll('.checkbox-item-room-info:checked').length;
                                                     selectAll.checked = (checkedCount === items.length && items.length > 0);
                                                 })();
+
+                                                // Add More functionality for all categories
+                                                function addCustomItem(category, inputId, containerClass, namePrefix) {
+                                                    const input = document.getElementById(inputId);
+                                                    const value = input.value.trim();
+                                                    if (!value) {
+                                                        alert('Please enter a value');
+                                                        return;
+                                                    }
+
+                                                    const container = document.querySelector(containerClass);
+                                                    if (!container) return;
+
+                                                    // Check if already exists
+                                                    const existing = container.querySelector(`input[value="${value}"]`);
+                                                    if (existing) {
+                                                        alert('This item already exists!');
+                                                        input.value = '';
+                                                        return;
+                                                    }
+
+                                                    const label = document.createElement('label');
+                                                    const checkbox = document.createElement('input');
+                                                    checkbox.type = 'checkbox';
+                                                    checkbox.name = namePrefix;
+                                                    checkbox.value = value;
+                                                    checkbox.className = 'checkbox-item-room-info';
+                                                    checkbox.checked = true;
+
+                                                    const textNode = document.createTextNode(value);
+                                                    label.appendChild(checkbox);
+                                                    label.appendChild(textNode);
+                                                    label.appendChild(document.createElement('br'));
+
+                                                    container.appendChild(label);
+                                                    input.value = '';
+                                                }
+
+                                                // Event listeners for Add More buttons
+                                                document.getElementById('add-layout-btn')?.addEventListener('click', function() {
+                                                    addCustomItem('layout', 'custom-layout-input', '.custom-layout-container', 'room_info[layout][]');
+                                                });
+
+                                                document.getElementById('add-view-btn')?.addEventListener('click', function() {
+                                                    addCustomItem('view', 'custom-view-input', '.custom-view-container', 'room_info[view][]');
+                                                });
+
+                                                document.getElementById('add-bathroom-btn')?.addEventListener('click', function() {
+                                                    addCustomItem('bathroom', 'custom-bathroom-input', '.custom-bathroom-container', 'room_info[bathroom][]');
+                                                });
+
+                                                document.getElementById('add-kitchen-btn')?.addEventListener('click', function() {
+                                                    addCustomItem('kitchen', 'custom-kitchen-input', '.custom-kitchen-container', 'room_info[kitchen_facilities][]');
+                                                });
+
+                                                document.getElementById('add-accessibility-btn')?.addEventListener('click', function() {
+                                                    addCustomItem('accessibility', 'custom-accessibility-input', '.custom-accessibility-container', 'room_info[accessibility][]');
+                                                });
+
+                                                // Bed Type Add More
+                                                document.getElementById('add-bed-type-btn')?.addEventListener('click', function() {
+                                                    const input = document.getElementById('custom-bed-type-input');
+                                                    const value = input.value.trim();
+                                                    if (!value) {
+                                                        alert('Please enter a bed type');
+                                                        return;
+                                                    }
+
+                                                    const container = document.getElementById('custom-bed-types-container');
+                                                    const existing = container.querySelector(`input[value="${value}"]`);
+                                                    if (existing) {
+                                                        alert('This bed type already exists!');
+                                                        input.value = '';
+                                                        return;
+                                                    }
+
+                                                    const label = document.createElement('label');
+                                                    const checkbox = document.createElement('input');
+                                                    checkbox.type = 'checkbox';
+                                                    checkbox.name = 'room_info[custom_bed_types][]';
+                                                    checkbox.value = value;
+                                                    checkbox.className = 'checkbox-item-room-info';
+                                                    checkbox.checked = true;
+
+                                                    const textNode = document.createTextNode(value);
+                                                    label.appendChild(checkbox);
+                                                    label.appendChild(textNode);
+                                                    label.appendChild(document.createElement('br'));
+
+                                                    container.appendChild(label);
+                                                    input.value = '';
+                                                });
+
+                                                // Enter key support
+                                                ['custom-layout-input', 'custom-view-input', 'custom-bathroom-input', 'custom-kitchen-input', 'custom-accessibility-input', 'custom-bed-type-input'].forEach(id => {
+                                                    document.getElementById(id)?.addEventListener('keypress', function(e) {
+                                                        if (e.key === 'Enter') {
+                                                            e.preventDefault();
+                                                            const btnId = id.replace('-input', '-btn');
+                                                            document.getElementById(btnId)?.click();
+                                                        }
+                                                    });
+                                                });
                                             </script>
 
                                             <div class="row mt-15">
-                                                <div class="checkbox-section">
+                                                <div class="col-md-12">
                                                     <h3 class="can-tittle">Additional Room Information</h3>
-                                                    <div class="chk-all-sec">
-                                                        <div class="form-group">
-                                                            <div class="custom-control custom-switch checked">
-                                                                <input type="checkbox" class="custom-control-input" name="additional-info-all" id="additional-info-all">
-                                                                <label class="custom-control-label" for="additional-info-all">Select All</label>
+                                                </div>
+                                            </div>
+
+                                            <!-- Additional Bed Policy & Fee -->
+                                            <div class="row mt-3">
+                                                <div class="col-md-12">
+                                                    <h5 class="mb-3"><strong>Additional Bed Policy & Fee</strong></h5>
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Fee Amount</label>
+                                                                <input type="number" class="form-control" name="additional_info[bed_fee_amount]" value="{{ old('additional_info.bed_fee_amount', '') }}" placeholder="e.g., 1000" min="0" step="0.01">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Currency</label>
+                                                                <input type="text" class="form-control" name="additional_info[bed_fee_currency]" value="{{ old('additional_info.bed_fee_currency', 'BDT') }}" placeholder="e.g., BDT">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Per Unit</label>
+                                                                <input type="text" class="form-control" name="additional_info[bed_fee_unit]" value="{{ old('additional_info.bed_fee_unit', 'Per Bed') }}" placeholder="e.g., Per Bed">
                                                             </div>
                                                         </div>
                                                     </div>
-
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Bed" {{ in_array('Bed', old('furniture', [])) ? 'checked' : '' }}> Bed</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Dining Table with Chair" {{ in_array('Dining Table with Chair', old('furniture', [])) ? 'checked' : '' }}> Dining Table with Chair</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Sofa/Couch" {{ in_array('Sofa/Couch', old('furniture', [])) ? 'checked' : '' }}> Sofa/Couch</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Tea Table" {{ in_array('Tea Table', old('furniture', [])) ? 'checked' : '' }}> Tea Table</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Bedside Table" {{ in_array('Bedside Table', old('furniture', [])) ? 'checked' : '' }}> Bedside Table</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Shoe Rack" {{ in_array('Shoe Rack', old('furniture', [])) ? 'checked' : '' }}> Shoe Rack</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Clothing Cabinet" {{ in_array('Clothing Cabinet', old('furniture', [])) ? 'checked' : '' }}> Clothing Cabinet</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Clothes Drying Hanger" {{ in_array('Clothes Drying Hanger', old('furniture', [])) ? 'checked' : '' }}> Clothes Drying Hanger</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Iron Stand" {{ in_array('Iron Stand', old('furniture', [])) ? 'checked' : '' }}> Iron Stand</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Locker/Safe" {{ in_array('Locker/Safe', old('furniture', [])) ? 'checked' : '' }}> Locker/Safe</label><br>
-                                                    
-                                                    <!-- Custom Furniture Container -->
-                                                    <div class="custom-furniture-container mt-3" data-section="furniture"></div>
-                                                    
-                                                    <!-- Add More Furniture -->
-                                                    <div class="add-more-section mt-3">
-                                                        <div class="input-group" style="max-width: 400px;">
-                                                            <input type="text" class="form-control" id="custom-furniture-input" placeholder="Enter custom furniture name">
-                                                            <button type="button" class="btn btn-primary btn-sm" id="add-furniture-btn">Add Furniture</button>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                  
                                                 </div>
                                             </div>
-                                            <script>
-                                                (function initAdditionalInfoSelectAll() {
-                                                    const containers = document.querySelectorAll('.checkbox-section');
-                                                    const container = containers[containers.length - 1];
-                                                    if (!container) return;
 
-                                                    const selectAll = container.querySelector('#additional-info-all');
-                                                    if (!selectAll) return;
+                                            <!-- Children & Extra Guest Policy -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <h5 class="mb-3"><strong>Children & Extra Guest Policy</strong></h5>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Children Free Age Limit</label>
+                                                                <input type="text" class="form-control" name="additional_info[children_free_age]" value="{{ old('additional_info.children_free_age', '') }}" placeholder="e.g., Under 5 years">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Extra Adult Charge</label>
+                                                                <input type="text" class="form-control" name="additional_info[extra_adult_charge]" value="{{ old('additional_info.extra_adult_charge', '') }}" placeholder="e.g., 500 BDT per adult">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                                    container.addEventListener('change', function (e) {
-                                                        if (e.target === selectAll) {
-                                                            const items = container.querySelectorAll('.checkbox-item-additional');
-                                                            items.forEach(chk => { chk.checked = selectAll.checked; });
-                                                            return;
-                                                        }
+                                            <!-- Laundry Service Fee -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <h5 class="mb-3"><strong>Laundry Service Fee</strong></h5>
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Fee Amount</label>
+                                                                <input type="number" class="form-control" name="additional_info[laundry_fee_amount]" value="{{ old('additional_info.laundry_fee_amount', '') }}" placeholder="e.g., 500" min="0" step="0.01">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Currency</label>
+                                                                <input type="text" class="form-control" name="additional_info[laundry_fee_currency]" value="{{ old('additional_info.laundry_fee_currency', 'BDT') }}" placeholder="e.g., BDT">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Per Unit</label>
+                                                                <input type="text" class="form-control" name="additional_info[laundry_fee_unit]" value="{{ old('additional_info.laundry_fee_unit', 'Per Person') }}" placeholder="e.g., Per Person">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                                        if (e.target.classList.contains('checkbox-item-additional')) {
-                                                            const items = container.querySelectorAll('.checkbox-item-additional');
-                                                            const checkedCount = container.querySelectorAll('.checkbox-item-additional:checked').length;
-                                                            selectAll.checked = (checkedCount === items.length && items.length > 0);
-                                                        }
-                                                    });
+                                            <!-- Housekeeping & Cleaning Policy -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <h5 class="mb-3"><strong>Housekeeping & Cleaning Policy</strong></h5>
+                                                    <div class="form-group">
+                                                        <label class="form-label">Policy Type</label>
+                                                        <select class="form-control" name="additional_info[housekeeping_type]">
+                                                            <option value="">Select Option</option>
+                                                            <option value="Daily" {{ old('additional_info.housekeeping_type') == 'Daily' ? 'selected' : '' }}>Daily</option>
+                                                            <option value="Weekly" {{ old('additional_info.housekeeping_type') == 'Weekly' ? 'selected' : '' }}>Weekly</option>
+                                                            <option value="On Request" {{ old('additional_info.housekeeping_type') == 'On Request' ? 'selected' : '' }}>On Request</option>
+                                                            <option value="Paid" {{ old('additional_info.housekeeping_type') == 'Paid' ? 'selected' : '' }}>Paid</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                                    const items = container.querySelectorAll('.checkbox-item-additional');
-                                                    const checkedCount = container.querySelectorAll('.checkbox-item-additional:checked').length;
-                                                    selectAll.checked = (checkedCount === items.length && items.length > 0);
-                                                })();
-                                            </script>
+                                            <!-- Check-in & Check-out Policy -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <h5 class="mb-3"><strong>Check-in & Check-out Policy</strong></h5>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Standard Check-in Time</label>
+                                                                <input type="text" class="form-control" name="additional_info[checkin_time]" value="{{ old('additional_info.checkin_time', '') }}" placeholder="e.g., 2:00 PM">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Standard Check-out Time</label>
+                                                                <input type="text" class="form-control" name="additional_info[checkout_time]" value="{{ old('additional_info.checkout_time', '') }}" placeholder="e.g., 12:00 PM">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Late Check-out Fee</label>
+                                                                <input type="text" class="form-control" name="additional_info[late_checkout_fee]" value="{{ old('additional_info.late_checkout_fee', '') }}" placeholder="e.g., 500 BDT per hour">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Early Check-in Fee</label>
+                                                                <input type="text" class="form-control" name="additional_info[early_checkin_fee]" value="{{ old('additional_info.early_checkin_fee', '') }}" placeholder="e.g., 500 BDT per hour">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Security Deposit Requirement -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <h5 class="mb-3"><strong>Security Deposit Requirement</strong></h5>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Deposit Amount</label>
+                                                                <input type="text" class="form-control" name="additional_info[security_deposit_amount]" value="{{ old('additional_info.security_deposit_amount', '') }}" placeholder="e.g., 5000 BDT">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Refundable Terms</label>
+                                                                <input type="text" class="form-control" name="additional_info[security_deposit_refundable]" value="{{ old('additional_info.security_deposit_refundable', '') }}" placeholder="e.g., Fully refundable after check-out">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Parking Availability & Charges -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <h5 class="mb-3"><strong>Parking Availability & Charges</strong></h5>
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Availability</label>
+                                                                <select class="form-control" name="additional_info[parking_availability]">
+                                                                    <option value="">Select Option</option>
+                                                                    <option value="Free" {{ old('additional_info.parking_availability') == 'Free' ? 'selected' : '' }}>Free</option>
+                                                                    <option value="Paid" {{ old('additional_info.parking_availability') == 'Paid' ? 'selected' : '' }}>Paid</option>
+                                                                    <option value="Not Available" {{ old('additional_info.parking_availability') == 'Not Available' ? 'selected' : '' }}>Not Available</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Charge Amount</label>
+                                                                <input type="number" class="form-control" name="additional_info[parking_fee_amount]" value="{{ old('additional_info.parking_fee_amount', '') }}" placeholder="e.g., 500" min="0" step="0.01">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Per Unit</label>
+                                                                <input type="text" class="form-control" name="additional_info[parking_fee_unit]" value="{{ old('additional_info.parking_fee_unit', 'Per Day Per Car') }}" placeholder="e.g., Per Day Per Car">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Pet Policy -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <h5 class="mb-3"><strong>Pet Policy</strong></h5>
+                                                    <div class="form-group">
+                                                        <label class="form-label">Policy</label>
+                                                        <select class="form-control" name="additional_info[pet_policy]">
+                                                            <option value="">Select Policy</option>
+                                                            <option value="Allowed" {{ old('additional_info.pet_policy') == 'Allowed' ? 'selected' : '' }}>Allowed</option>
+                                                            <option value="Not Allowed" {{ old('additional_info.pet_policy') == 'Not Allowed' ? 'selected' : '' }}>Not Allowed</option>
+                                                            <option value="Extra Charge" {{ old('additional_info.pet_policy') == 'Extra Charge' ? 'selected' : '' }}>Extra Charge</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group mt-2">
+                                                        <label class="form-label">Pet Fee (if Extra Charge)</label>
+                                                        <input type="text" class="form-control" name="additional_info[pet_fee]" value="{{ old('additional_info.pet_fee', '') }}" placeholder="e.g., 500 BDT per pet per day">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Meal Options -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <h5 class="mb-3"><strong>Meal Options</strong></h5>
+                                                    <div class="form-group">
+                                                        <label class="form-label">Meal Type</label>
+                                                        <select class="form-control" name="additional_info[meal_options]">
+                                                            <option value="">Select Option</option>
+                                                            <option value="Buffet" {{ old('additional_info.meal_options') == 'Buffet' ? 'selected' : '' }}>Buffet</option>
+                                                            <option value="Regular Breakfast Included" {{ old('additional_info.meal_options') == 'Regular Breakfast Included' ? 'selected' : '' }}>Regular Breakfast Included</option>
+                                                            <option value="On Request" {{ old('additional_info.meal_options') == 'On Request' ? 'selected' : '' }}>On Request</option>
+                                                            <option value="Paid Separately" {{ old('additional_info.meal_options') == 'Paid Separately' ? 'selected' : '' }}>Paid Separately</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group mt-2">
+                                                        <label class="form-label">Meal Fee (if Paid Separately)</label>
+                                                        <input type="text" class="form-control" name="additional_info[meal_fee]" value="{{ old('additional_info.meal_fee', '') }}" placeholder="e.g., 300 BDT per person">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Transportation Services -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <h5 class="mb-3"><strong>Transportation Services</strong></h5>
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Airport Pickup</label>
+                                                                <select class="form-control" name="additional_info[airport_pickup]">
+                                                                    <option value="">Select Option</option>
+                                                                    <option value="Free" {{ old('additional_info.airport_pickup') == 'Free' ? 'selected' : '' }}>Free</option>
+                                                                    <option value="Paid" {{ old('additional_info.airport_pickup') == 'Paid' ? 'selected' : '' }}>Paid</option>
+                                                                    <option value="Not Available" {{ old('additional_info.airport_pickup') == 'Not Available' ? 'selected' : '' }}>Not Available</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group mt-2">
+                                                                <label class="form-label">Airport Pickup Fee</label>
+                                                                <input type="text" class="form-control" name="additional_info[airport_pickup_fee]" value="{{ old('additional_info.airport_pickup_fee', '') }}" placeholder="e.g., 1000 BDT">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Shuttle Service</label>
+                                                                <select class="form-control" name="additional_info[shuttle_service]">
+                                                                    <option value="">Select Option</option>
+                                                                    <option value="Free" {{ old('additional_info.shuttle_service') == 'Free' ? 'selected' : '' }}>Free</option>
+                                                                    <option value="Paid" {{ old('additional_info.shuttle_service') == 'Paid' ? 'selected' : '' }}>Paid</option>
+                                                                    <option value="Not Available" {{ old('additional_info.shuttle_service') == 'Not Available' ? 'selected' : '' }}>Not Available</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group mt-2">
+                                                                <label class="form-label">Shuttle Service Fee</label>
+                                                                <input type="text" class="form-control" name="additional_info[shuttle_service_fee]" value="{{ old('additional_info.shuttle_service_fee', '') }}" placeholder="e.g., 500 BDT">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Car Rental</label>
+                                                                <select class="form-control" name="additional_info[car_rental]">
+                                                                    <option value="">Select Option</option>
+                                                                    <option value="Available" {{ old('additional_info.car_rental') == 'Available' ? 'selected' : '' }}>Available</option>
+                                                                    <option value="Not Available" {{ old('additional_info.car_rental') == 'Not Available' ? 'selected' : '' }}>Not Available</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group mt-2">
+                                                                <label class="form-label">Car Rental Fee</label>
+                                                                <input type="text" class="form-control" name="additional_info[car_rental_fee]" value="{{ old('additional_info.car_rental_fee', '') }}" placeholder="e.g., 2000 BDT per day">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Other Charges/Policies -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <h5 class="mb-3"><strong>Other Charges/Policies (If Any)</strong></h5>
+                                                    <div class="form-group">
+                                                        <label class="form-label">Additional Information</label>
+                                                        <textarea class="form-control" name="additional_info[other_charges]" rows="3" placeholder="Enter any other charges or policies">{{ old('additional_info.other_charges', '') }}</textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
 
                                             <div class="row mt-15">
                                                 <div class="col-md-12">
@@ -549,7 +1027,18 @@
                                                         </div>
                                                     </div>
                                                     
-                                                    <div class="furniture-list-facilities"></div>
+                                                    <div class="furniture-list-facilities">
+                                                        <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Bed" {{ in_array('Bed', old('furniture', [])) ? 'checked' : '' }}> Bed</label><br>
+                                                        <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Dining Table with Chair" {{ in_array('Dining Table with Chair', old('furniture', [])) ? 'checked' : '' }}> Dining Table with Chair</label><br>
+                                                        <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Sofa/Couch" {{ in_array('Sofa/Couch', old('furniture', [])) ? 'checked' : '' }}> Sofa/Couch</label><br>
+                                                        <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Tea Table" {{ in_array('Tea Table', old('furniture', [])) ? 'checked' : '' }}> Tea Table</label><br>
+                                                        <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Bedside Table" {{ in_array('Bedside Table', old('furniture', [])) ? 'checked' : '' }}> Bedside Table</label><br>
+                                                        <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Shoe Rack" {{ in_array('Shoe Rack', old('furniture', [])) ? 'checked' : '' }}> Shoe Rack</label><br>
+                                                        <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Clothing Cabinet" {{ in_array('Clothing Cabinet', old('furniture', [])) ? 'checked' : '' }}> Clothing Cabinet</label><br>
+                                                        <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Clothes Drying Hanger" {{ in_array('Clothes Drying Hanger', old('furniture', [])) ? 'checked' : '' }}> Clothes Drying Hanger</label><br>
+                                                        <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Iron Stand" {{ in_array('Iron Stand', old('furniture', [])) ? 'checked' : '' }}> Iron Stand</label><br>
+                                                        <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Locker/Safe" {{ in_array('Locker/Safe', old('furniture', [])) ? 'checked' : '' }}> Locker/Safe</label><br>
+                                                    </div>
                                                     
                                                     <!-- Custom Furniture Container for Facilities Tab -->
                                                     <div class="custom-furniture-container-facilities mt-3" data-section="furniture"></div>
@@ -639,26 +1128,9 @@
                                                             }
                                                         });
 
-                                                        // Furniture (only fixed, exclude custom)
-                                                        const furnitureLabels = document.querySelectorAll('#tabItem3 input[name="furniture[]"]');
-                                                        const furnitureTarget = document.querySelector('.furniture-list-facilities');
-                                                        furnitureTarget.innerHTML = '';
-                                                        furnitureLabels.forEach(input => {
-                                                            // Skip if it's in a custom container
-                                                            if (input.closest('.custom-furniture-container')) return;
-                                                            
-                                                            const label = input.closest('label');
-                                                            if (label) {
-                                                                const clone = label.cloneNode(true);
-                                                                const checkbox = clone.querySelector('input');
-                                                                checkbox.addEventListener('change', function() {
-                                                                    const original = document.querySelector(`#tabItem3 input[name="${this.name}"][value="${this.value}"]`);
-                                                                    if (original) original.checked = this.checked;
-                                                                });
-                                                                furnitureTarget.appendChild(clone);
-                                                                furnitureTarget.appendChild(document.createElement('br'));
-                                                            }
-                                                        });
+                                                        // Furniture - Only in Facilities tab, not in Room Details tab
+                                                        // So we don't need to sync furniture from Room Details
+                                                        // The furniture items are already in the Facilities tab
 
                                                         // Amenities - NOT in Room Details tab, only in Facilities tab
                                                         // So we don't sync amenities from Room Details

@@ -147,6 +147,73 @@ class ManageRoomController extends Controller
         $amenities = array_unique(array_filter(array_merge($request->amenities ?? [], $request->custom_amenities ?? [])));
         $cancellation_policy = array_unique(array_filter((array)$request->input('cancellation_policy', [])));
 
+        // Process room information
+        $roomInfo = [];
+        if ($request->has('room_info')) {
+            $roomInfoData = $request->input('room_info', []);
+            
+            // Store all room info fields
+            $roomInfo = [
+                'bedrooms' => $roomInfoData['bedrooms'] ?? null,
+                'living' => $roomInfoData['living'] ?? null,
+                'dining' => $roomInfoData['dining'] ?? null,
+                'kitchen' => $roomInfoData['kitchen'] ?? null,
+                'bathrooms' => $roomInfoData['bathrooms'] ?? null,
+                'bed_type' => $roomInfoData['bed_type'] ?? null,
+                'number_of_beds' => $roomInfoData['number_of_beds'] ?? null,
+                'custom_bed_types' => array_filter($roomInfoData['custom_bed_types'] ?? []),
+                'max_adults' => $roomInfoData['max_adults'] ?? null,
+                'max_children' => $roomInfoData['max_children'] ?? null,
+                'layout' => array_filter($roomInfoData['layout'] ?? []),
+                'view' => array_filter($roomInfoData['view'] ?? []),
+                'bathroom' => array_filter($roomInfoData['bathroom'] ?? []),
+                'kitchen_facilities' => array_filter($roomInfoData['kitchen_facilities'] ?? []),
+                'balcony' => $roomInfoData['balcony'] ?? null,
+                'accessibility' => array_filter($roomInfoData['accessibility'] ?? []),
+                'smoking_policy' => $roomInfoData['smoking_policy'] ?? null,
+            ];
+        }
+
+        // Process additional room information
+        $additionalInfo = [];
+        if ($request->has('additional_info')) {
+            $additionalInfoData = $request->input('additional_info', []);
+            $additionalInfo = [
+                'bed_fee_amount' => $additionalInfoData['bed_fee_amount'] ?? null,
+                'bed_fee_currency' => $additionalInfoData['bed_fee_currency'] ?? null,
+                'bed_fee_unit' => $additionalInfoData['bed_fee_unit'] ?? null,
+                'children_free_age' => $additionalInfoData['children_free_age'] ?? null,
+                'extra_adult_charge' => $additionalInfoData['extra_adult_charge'] ?? null,
+                'laundry_fee_amount' => $additionalInfoData['laundry_fee_amount'] ?? null,
+                'laundry_fee_currency' => $additionalInfoData['laundry_fee_currency'] ?? null,
+                'laundry_fee_unit' => $additionalInfoData['laundry_fee_unit'] ?? null,
+                'housekeeping_type' => $additionalInfoData['housekeeping_type'] ?? null,
+                'checkin_time' => $additionalInfoData['checkin_time'] ?? null,
+                'checkout_time' => $additionalInfoData['checkout_time'] ?? null,
+                'late_checkout_fee' => $additionalInfoData['late_checkout_fee'] ?? null,
+                'early_checkin_fee' => $additionalInfoData['early_checkin_fee'] ?? null,
+                'security_deposit_amount' => $additionalInfoData['security_deposit_amount'] ?? null,
+                'security_deposit_refundable' => $additionalInfoData['security_deposit_refundable'] ?? null,
+                'parking_availability' => $additionalInfoData['parking_availability'] ?? null,
+                'parking_fee_amount' => $additionalInfoData['parking_fee_amount'] ?? null,
+                'parking_fee_unit' => $additionalInfoData['parking_fee_unit'] ?? null,
+                'pet_policy' => $additionalInfoData['pet_policy'] ?? null,
+                'pet_fee' => $additionalInfoData['pet_fee'] ?? null,
+                'meal_options' => $additionalInfoData['meal_options'] ?? null,
+                'meal_fee' => $additionalInfoData['meal_fee'] ?? null,
+                'airport_pickup' => $additionalInfoData['airport_pickup'] ?? null,
+                'airport_pickup_fee' => $additionalInfoData['airport_pickup_fee'] ?? null,
+                'shuttle_service' => $additionalInfoData['shuttle_service'] ?? null,
+                'shuttle_service_fee' => $additionalInfoData['shuttle_service_fee'] ?? null,
+                'car_rental' => $additionalInfoData['car_rental'] ?? null,
+                'car_rental_fee' => $additionalInfoData['car_rental_fee'] ?? null,
+                'other_charges' => $additionalInfoData['other_charges'] ?? null,
+            ];
+        }
+
+        // Merge room info and additional info into display_options
+        $displayOptions = array_merge($roomInfo, ['additional_info' => $additionalInfo]);
+
         // Determine status based on save_draft
         $status = $request->has('save_draft') && $request->save_draft == '1' ? 'draft' : 'published';
 
@@ -173,6 +240,7 @@ class ManageRoomController extends Controller
             'furniture' => $furniture,
             'amenities' => $amenities,
             'cancellation_policy' => $cancellation_policy,
+            'display_options' => $displayOptions, // Store room information and additional info in display_options
             'is_active' => $request->boolean('is_active', false),
             'status' => $status,
         ]);
@@ -250,6 +318,73 @@ class ManageRoomController extends Controller
         $amenities = array_unique(array_filter(array_merge($request->amenities ?? [], $request->custom_amenities ?? [])));
         $cancellation_policy = array_unique(array_filter((array)$request->input('cancellation_policy', [])));
 
+        // Process room information
+        $roomInfo = [];
+        if ($request->has('room_info')) {
+            $roomInfoData = $request->input('room_info', []);
+            
+            // Store all room info fields
+            $roomInfo = [
+                'bedrooms' => $roomInfoData['bedrooms'] ?? null,
+                'living' => $roomInfoData['living'] ?? null,
+                'dining' => $roomInfoData['dining'] ?? null,
+                'kitchen' => $roomInfoData['kitchen'] ?? null,
+                'bathrooms' => $roomInfoData['bathrooms'] ?? null,
+                'bed_type' => $roomInfoData['bed_type'] ?? null,
+                'number_of_beds' => $roomInfoData['number_of_beds'] ?? null,
+                'custom_bed_types' => array_filter($roomInfoData['custom_bed_types'] ?? []),
+                'max_adults' => $roomInfoData['max_adults'] ?? null,
+                'max_children' => $roomInfoData['max_children'] ?? null,
+                'layout' => array_filter($roomInfoData['layout'] ?? []),
+                'view' => array_filter($roomInfoData['view'] ?? []),
+                'bathroom' => array_filter($roomInfoData['bathroom'] ?? []),
+                'kitchen_facilities' => array_filter($roomInfoData['kitchen_facilities'] ?? []),
+                'balcony' => $roomInfoData['balcony'] ?? null,
+                'accessibility' => array_filter($roomInfoData['accessibility'] ?? []),
+                'smoking_policy' => $roomInfoData['smoking_policy'] ?? null,
+            ];
+        }
+
+        // Process additional room information
+        $additionalInfo = [];
+        if ($request->has('additional_info')) {
+            $additionalInfoData = $request->input('additional_info', []);
+            $additionalInfo = [
+                'bed_fee_amount' => $additionalInfoData['bed_fee_amount'] ?? null,
+                'bed_fee_currency' => $additionalInfoData['bed_fee_currency'] ?? null,
+                'bed_fee_unit' => $additionalInfoData['bed_fee_unit'] ?? null,
+                'children_free_age' => $additionalInfoData['children_free_age'] ?? null,
+                'extra_adult_charge' => $additionalInfoData['extra_adult_charge'] ?? null,
+                'laundry_fee_amount' => $additionalInfoData['laundry_fee_amount'] ?? null,
+                'laundry_fee_currency' => $additionalInfoData['laundry_fee_currency'] ?? null,
+                'laundry_fee_unit' => $additionalInfoData['laundry_fee_unit'] ?? null,
+                'housekeeping_type' => $additionalInfoData['housekeeping_type'] ?? null,
+                'checkin_time' => $additionalInfoData['checkin_time'] ?? null,
+                'checkout_time' => $additionalInfoData['checkout_time'] ?? null,
+                'late_checkout_fee' => $additionalInfoData['late_checkout_fee'] ?? null,
+                'early_checkin_fee' => $additionalInfoData['early_checkin_fee'] ?? null,
+                'security_deposit_amount' => $additionalInfoData['security_deposit_amount'] ?? null,
+                'security_deposit_refundable' => $additionalInfoData['security_deposit_refundable'] ?? null,
+                'parking_availability' => $additionalInfoData['parking_availability'] ?? null,
+                'parking_fee_amount' => $additionalInfoData['parking_fee_amount'] ?? null,
+                'parking_fee_unit' => $additionalInfoData['parking_fee_unit'] ?? null,
+                'pet_policy' => $additionalInfoData['pet_policy'] ?? null,
+                'pet_fee' => $additionalInfoData['pet_fee'] ?? null,
+                'meal_options' => $additionalInfoData['meal_options'] ?? null,
+                'meal_fee' => $additionalInfoData['meal_fee'] ?? null,
+                'airport_pickup' => $additionalInfoData['airport_pickup'] ?? null,
+                'airport_pickup_fee' => $additionalInfoData['airport_pickup_fee'] ?? null,
+                'shuttle_service' => $additionalInfoData['shuttle_service'] ?? null,
+                'shuttle_service_fee' => $additionalInfoData['shuttle_service_fee'] ?? null,
+                'car_rental' => $additionalInfoData['car_rental'] ?? null,
+                'car_rental_fee' => $additionalInfoData['car_rental_fee'] ?? null,
+                'other_charges' => $additionalInfoData['other_charges'] ?? null,
+            ];
+        }
+
+        // Merge room info and additional info into display_options
+        $displayOptions = array_merge($roomInfo, ['additional_info' => $additionalInfo]);
+
         // Determine status based on save_draft
         $status = $request->has('save_draft') && $request->save_draft == '1' ? 'draft' : 'published';
 
@@ -276,6 +411,7 @@ class ManageRoomController extends Controller
             'furniture' => $furniture,
             'amenities' => $amenities,
             'cancellation_policy' => $cancellation_policy,
+            'display_options' => $displayOptions, // Store room information and additional info in display_options
             'is_active' => $request->boolean('is_active', false),
             'status' => $status,
         ]);
@@ -420,6 +556,61 @@ class ManageRoomController extends Controller
             $amenities = array_unique(array_filter(array_merge($request->amenities ?? [], $request->custom_amenities ?? [])));
             $cancellation_policy = array_unique(array_filter((array)$request->input('cancellation_policy', [])));
 
+            // Process room information
+            $roomInfo = [];
+            if ($request->has('room_info')) {
+                $roomInfoData = $request->input('room_info', []);
+                
+                // Store all room info fields
+                $roomInfo = [
+                    'bedrooms' => $roomInfoData['bedrooms'] ?? null,
+                    'living' => $roomInfoData['living'] ?? null,
+                    'dining' => $roomInfoData['dining'] ?? null,
+                    'kitchen' => $roomInfoData['kitchen'] ?? null,
+                    'bathrooms' => $roomInfoData['bathrooms'] ?? null,
+                    'bed_type' => $roomInfoData['bed_type'] ?? null,
+                    'number_of_beds' => $roomInfoData['number_of_beds'] ?? null,
+                    'custom_bed_types' => array_filter($roomInfoData['custom_bed_types'] ?? []),
+                    'max_adults' => $roomInfoData['max_adults'] ?? null,
+                    'max_children' => $roomInfoData['max_children'] ?? null,
+                    'layout' => array_filter($roomInfoData['layout'] ?? []),
+                    'view' => array_filter($roomInfoData['view'] ?? []),
+                    'bathroom' => array_filter($roomInfoData['bathroom'] ?? []),
+                    'kitchen_facilities' => array_filter($roomInfoData['kitchen_facilities'] ?? []),
+                    'balcony' => $roomInfoData['balcony'] ?? null,
+                    'accessibility' => array_filter($roomInfoData['accessibility'] ?? []),
+                    'smoking_policy' => $roomInfoData['smoking_policy'] ?? null,
+                ];
+            }
+
+            // Process additional room information
+            $additionalInfo = [];
+            if ($request->has('additional_info')) {
+                $additionalInfoData = $request->input('additional_info', []);
+                $additionalInfo = [
+                    'bed_policy' => $additionalInfoData['bed_policy'] ?? null,
+                    'children_guest_policy' => $additionalInfoData['children_guest_policy'] ?? null,
+                    'laundry_service' => $additionalInfoData['laundry_service'] ?? null,
+                    'housekeeping_type' => $additionalInfoData['housekeeping_type'] ?? null,
+                    'housekeeping_details' => $additionalInfoData['housekeeping_details'] ?? null,
+                    'checkin_time' => $additionalInfoData['checkin_time'] ?? null,
+                    'checkout_time' => $additionalInfoData['checkout_time'] ?? null,
+                    'checkin_checkout_charges' => $additionalInfoData['checkin_checkout_charges'] ?? null,
+                    'security_deposit_amount' => $additionalInfoData['security_deposit_amount'] ?? null,
+                    'security_deposit_refundable' => $additionalInfoData['security_deposit_refundable'] ?? null,
+                    'parking_charges' => $additionalInfoData['parking_charges'] ?? null,
+                    'pet_policy' => $additionalInfoData['pet_policy'] ?? null,
+                    'pet_policy_details' => $additionalInfoData['pet_policy_details'] ?? null,
+                    'meal_options' => $additionalInfoData['meal_options'] ?? null,
+                    'meal_details' => $additionalInfoData['meal_details'] ?? null,
+                    'transportation_services' => $additionalInfoData['transportation_services'] ?? null,
+                    'other_charges' => $additionalInfoData['other_charges'] ?? null,
+                ];
+            }
+
+            // Merge room info and additional info into display_options
+            $displayOptions = array_merge($roomInfo, ['additional_info' => $additionalInfo]);
+
             // Determine status based on save_draft
             $status = $request->has('save_draft') && $request->save_draft == '1' ? 'draft' : 'published';
 
@@ -446,6 +637,7 @@ class ManageRoomController extends Controller
                 'furniture' => $furniture,
                 'amenities' => $amenities,
                 'cancellation_policy' => $cancellation_policy,
+                'display_options' => $displayOptions, // Store room information and additional info in display_options
                 'is_active' => $request->boolean('is_active', false),
                 'status' => $status,
             ];
@@ -551,6 +743,61 @@ class ManageRoomController extends Controller
             $amenities = array_unique(array_filter(array_merge($request->amenities ?? [], $request->custom_amenities ?? [])));
             $cancellation_policy = array_unique(array_filter((array)$request->input('cancellation_policy', [])));
 
+            // Process room information
+            $roomInfo = [];
+            if ($request->has('room_info')) {
+                $roomInfoData = $request->input('room_info', []);
+                
+                // Store all room info fields
+                $roomInfo = [
+                    'bedrooms' => $roomInfoData['bedrooms'] ?? null,
+                    'living' => $roomInfoData['living'] ?? null,
+                    'dining' => $roomInfoData['dining'] ?? null,
+                    'kitchen' => $roomInfoData['kitchen'] ?? null,
+                    'bathrooms' => $roomInfoData['bathrooms'] ?? null,
+                    'bed_type' => $roomInfoData['bed_type'] ?? null,
+                    'number_of_beds' => $roomInfoData['number_of_beds'] ?? null,
+                    'custom_bed_types' => array_filter($roomInfoData['custom_bed_types'] ?? []),
+                    'max_adults' => $roomInfoData['max_adults'] ?? null,
+                    'max_children' => $roomInfoData['max_children'] ?? null,
+                    'layout' => array_filter($roomInfoData['layout'] ?? []),
+                    'view' => array_filter($roomInfoData['view'] ?? []),
+                    'bathroom' => array_filter($roomInfoData['bathroom'] ?? []),
+                    'kitchen_facilities' => array_filter($roomInfoData['kitchen_facilities'] ?? []),
+                    'balcony' => $roomInfoData['balcony'] ?? null,
+                    'accessibility' => array_filter($roomInfoData['accessibility'] ?? []),
+                    'smoking_policy' => $roomInfoData['smoking_policy'] ?? null,
+                ];
+            }
+
+            // Process additional room information
+            $additionalInfo = [];
+            if ($request->has('additional_info')) {
+                $additionalInfoData = $request->input('additional_info', []);
+                $additionalInfo = [
+                    'bed_policy' => $additionalInfoData['bed_policy'] ?? null,
+                    'children_guest_policy' => $additionalInfoData['children_guest_policy'] ?? null,
+                    'laundry_service' => $additionalInfoData['laundry_service'] ?? null,
+                    'housekeeping_type' => $additionalInfoData['housekeeping_type'] ?? null,
+                    'housekeeping_details' => $additionalInfoData['housekeeping_details'] ?? null,
+                    'checkin_time' => $additionalInfoData['checkin_time'] ?? null,
+                    'checkout_time' => $additionalInfoData['checkout_time'] ?? null,
+                    'checkin_checkout_charges' => $additionalInfoData['checkin_checkout_charges'] ?? null,
+                    'security_deposit_amount' => $additionalInfoData['security_deposit_amount'] ?? null,
+                    'security_deposit_refundable' => $additionalInfoData['security_deposit_refundable'] ?? null,
+                    'parking_charges' => $additionalInfoData['parking_charges'] ?? null,
+                    'pet_policy' => $additionalInfoData['pet_policy'] ?? null,
+                    'pet_policy_details' => $additionalInfoData['pet_policy_details'] ?? null,
+                    'meal_options' => $additionalInfoData['meal_options'] ?? null,
+                    'meal_details' => $additionalInfoData['meal_details'] ?? null,
+                    'transportation_services' => $additionalInfoData['transportation_services'] ?? null,
+                    'other_charges' => $additionalInfoData['other_charges'] ?? null,
+                ];
+            }
+
+            // Merge room info and additional info into display_options
+            $displayOptions = array_merge($roomInfo, ['additional_info' => $additionalInfo]);
+
             // Determine status based on save_draft
             $status = $request->has('save_draft') && $request->save_draft == '1' ? 'draft' : 'published';
 
@@ -577,6 +824,7 @@ class ManageRoomController extends Controller
                 'furniture' => $furniture,
                 'amenities' => $amenities,
                 'cancellation_policy' => $cancellation_policy,
+                'display_options' => $displayOptions, // Store room information and additional info in display_options
                 'is_active' => $request->boolean('is_active', false),
                 'status' => $status,
             ];

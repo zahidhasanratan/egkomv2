@@ -111,7 +111,7 @@
                                         <div class="hotel-heading-name">
                                             <div data-v-58caae98="" class="nearby">
                                                 <div data-v-58caae98="" class="label"> What's Nearby</div>
-                                                @foreach(json_decode($show->custom_nearby_areas) as $area)
+                                                @foreach(json_decode($show->custom_nearby_areas ?? '[]', true) ?? [] as $area)
                                                     <div class="landmark">
                                                         <span>
                                                             <i class="icon icon-map-marker-grey location-pin"></i> {{ $area }}
@@ -232,7 +232,7 @@
                                     <h3 data-v-58caae98="" class="mst-pop-title"> Most Popular Facilities </h3>
                                     <div class="fea-list">
 
-                                        @foreach($show->facilities as $facility)
+                                        @foreach(($show->facilities ?? []) as $facility)
                                             <div class="_19xnuo97">
                                                 <div class="fea-list-all">
                                                     <div
@@ -880,6 +880,7 @@
                             'furniture' => $room->furniture ?? [],
                             'amenities' => $room->amenities ?? [],
                             'cancellation_policy' => $room->cancellation_policy ?? [],
+                            'display_options' => $room->display_options ?? [],
                             'photos' => $room->photos->groupBy('category')->map(function($photos) {
                                 return $photos->map(function($photo) {
                                     return $photo->photo_path;
@@ -1048,36 +1049,215 @@
                         // Description section
                         const description = room.description || 'This room offers a comfortable and relaxing stay with modern amenities and excellent service.';
                         
-                        // Room Information (Left column) - Room specifications + Appliances
-                        const roomInfo = [];
-                        if (room.size) roomInfo.push(`Room Size: ${room.size} sq ft`);
-                        if (room.total_persons) roomInfo.push(`Capacity: ${room.total_persons} Adults Maximum`);
-                        if (room.total_beds) roomInfo.push(`Beds: ${room.total_beds}`);
-                        if (room.total_washrooms) roomInfo.push(`Washrooms: ${room.total_washrooms}`);
-                        if (room.total_rooms) roomInfo.push(`Available Rooms: ${room.total_rooms}`);
-                        if (room.wifi_details) roomInfo.push(`WiFi: ${room.wifi_details}`);
+                        // Get display_options data
+                        const displayOptions = room.display_options || {};
+                        const roomInfo = displayOptions.room_info || {};
+                        const additionalInfo = displayOptions.additional_info || {};
                         
-                        // Add appliances to Room Information
+                        // Room Information (Left column)
+                        const roomInfoList = [];
+                        
+                        // Basic room specifications
+                        if (room.size) roomInfoList.push(`Room Size: ${room.size} sq ft`);
+                        if (room.wifi_details) roomInfoList.push(`WiFi: ${room.wifi_details}`);
+                        
+                        // Room Facilities & Amenities (stored in appliances field)
+                        if (room.appliances && Array.isArray(room.appliances) && room.appliances.length > 0) {
+                            roomInfoList.push(...room.appliances);
+                        }
+                        
+                        // Bed Details
+                        if (roomInfo.bed_type) {
+                            let bedInfo = `Bed Type: ${roomInfo.bed_type}`;
+                            if (roomInfo.number_of_beds) {
+                                bedInfo += ` (${roomInfo.number_of_beds} bed${roomInfo.number_of_beds > 1 ? 's' : ''})`;
+                            }
+                            roomInfoList.push(bedInfo);
+                        }
+                        if (roomInfo.custom_bed_types && Array.isArray(roomInfo.custom_bed_types) && roomInfo.custom_bed_types.length > 0) {
+                            roomInfo.custom_bed_types.forEach(bedType => {
+                                if (bedType) roomInfoList.push(bedType);
+                            });
+                        }
+                        
+                        // Maximum Occupancy
+                        if (roomInfo.max_adults || roomInfo.max_children) {
+                            let occupancy = 'Maximum Occupancy: ';
+                            if (roomInfo.max_adults) occupancy += `${roomInfo.max_adults} Adult${roomInfo.max_adults > 1 ? 's' : ''}`;
+                            if (roomInfo.max_adults && roomInfo.max_children) occupancy += ', ';
+                            if (roomInfo.max_children) occupancy += `${roomInfo.max_children} Child${roomInfo.max_children > 1 ? 'ren' : ''}`;
+                            roomInfoList.push(occupancy);
+                        }
+                        
+                        // Layout Details
+                        if (roomInfo.layout && Array.isArray(roomInfo.layout) && roomInfo.layout.length > 0) {
+                            roomInfoList.push(...roomInfo.layout);
+                        }
+                        
+                        // View from the Room
+                        if (roomInfo.view && Array.isArray(roomInfo.view) && roomInfo.view.length > 0) {
+                            roomInfoList.push(...roomInfo.view);
+                        }
+                        
+                        // Bathroom Details
+                        if (roomInfo.bathroom && Array.isArray(roomInfo.bathroom) && roomInfo.bathroom.length > 0) {
+                            roomInfoList.push(...roomInfo.bathroom);
+                        }
+                        
+                        // Kitchen Facilities
+                        if (roomInfo.kitchen_facilities && Array.isArray(roomInfo.kitchen_facilities) && roomInfo.kitchen_facilities.length > 0) {
+                            roomInfoList.push(...roomInfo.kitchen_facilities);
+                        }
+                        
+                        // Balcony / Terrace
+                        if (roomInfo.balcony) {
+                            roomInfoList.push(`Balcony / Terrace: ${roomInfo.balcony}`);
+                        }
+                        
+                        // Accessibility Features
+                        if (roomInfo.accessibility && Array.isArray(roomInfo.accessibility) && roomInfo.accessibility.length > 0) {
+                            roomInfoList.push(...roomInfo.accessibility);
+                        }
+                        
+                        // Smoking Policy
+                        if (roomInfo.smoking_policy) {
+                            roomInfoList.push(`Smoking Policy: ${roomInfo.smoking_policy}`);
+                        }
+                        
+                        // Fallback to old structure if display_options is not available
+                        if (roomInfoList.length === 0) {
+                            if (room.size) roomInfoList.push(`Room Size: ${room.size} sq ft`);
+                            if (room.wifi_details) roomInfoList.push(`WiFi: ${room.wifi_details}`);
                         if (room.appliances && room.appliances.length > 0) {
-                            roomInfo.push(...room.appliances);
+                                roomInfoList.push(...room.appliances);
+                            }
                         }
                         
-                        // Additional Room Information (Right column) - Furniture + Amenities + Policies
-                        const additionalInfo = [];
+                        // Additional Room Information (Right column)
+                        const additionalInfoList = [];
                         
-                        // Add furniture
-                        if (room.furniture && room.furniture.length > 0) {
-                            additionalInfo.push(...room.furniture);
+                        // Additional Bed Policy & Fee
+                        if (additionalInfo.bed_fee_amount || additionalInfo.bed_policy_amount) {
+                            const amount = additionalInfo.bed_fee_amount || additionalInfo.bed_policy_amount;
+                            const currency = additionalInfo.bed_fee_currency || additionalInfo.bed_policy_currency || 'BDT';
+                            const unit = additionalInfo.bed_fee_unit || additionalInfo.bed_policy_unit || 'Per Bed';
+                            additionalInfoList.push(`Additional Bed: ${amount} ${currency} ${unit}`);
                         }
                         
-                        // Add amenities
-                        if (room.amenities && room.amenities.length > 0) {
-                            additionalInfo.push(...room.amenities);
+                        // Children & Extra Guest Policy
+                        if (additionalInfo.children_free_age) {
+                            additionalInfoList.push(`Children under ${additionalInfo.children_free_age} stay free`);
+                        }
+                        if (additionalInfo.extra_adult_charge) {
+                            additionalInfoList.push(`Extra Adult Charge: ${additionalInfo.extra_adult_charge}`);
                         }
                         
-                        // Add cancellation policy
+                        // Laundry Service Fee
+                        if (additionalInfo.laundry_fee_amount) {
+                            const currency = additionalInfo.laundry_fee_currency || 'BDT';
+                            const unit = additionalInfo.laundry_fee_unit || 'Per Person';
+                            additionalInfoList.push(`Laundry Service: ${additionalInfo.laundry_fee_amount} ${currency} ${unit}`);
+                        }
+                        
+                        // Housekeeping & Cleaning Policy
+                        if (additionalInfo.housekeeping_type) {
+                            additionalInfoList.push(`Housekeeping: ${additionalInfo.housekeeping_type}`);
+                        }
+                        
+                        // Check-in & Check-out Policy
+                        if (additionalInfo.checkin_time || additionalInfo.checkout_time) {
+                            let checkinout = 'Check-in/out: ';
+                            if (additionalInfo.checkin_time) checkinout += `Check-in ${additionalInfo.checkin_time}`;
+                            if (additionalInfo.checkin_time && additionalInfo.checkout_time) checkinout += ', ';
+                            if (additionalInfo.checkout_time) checkinout += `Check-out ${additionalInfo.checkout_time}`;
+                            additionalInfoList.push(checkinout);
+                        }
+                        if (additionalInfo.late_checkout_fee) {
+                            additionalInfoList.push(`Late Check-out Fee: ${additionalInfo.late_checkout_fee}`);
+                        }
+                        if (additionalInfo.early_checkin_fee) {
+                            additionalInfoList.push(`Early Check-in Fee: ${additionalInfo.early_checkin_fee}`);
+                        }
+                        
+                        // Security Deposit Requirement
+                        if (additionalInfo.security_deposit_amount) {
+                            let deposit = `Security Deposit: ${additionalInfo.security_deposit_amount}`;
+                            if (additionalInfo.security_deposit_refundable !== null) {
+                                deposit += ` (${additionalInfo.security_deposit_refundable ? 'Refundable' : 'Non-refundable'})`;
+                            }
+                            additionalInfoList.push(deposit);
+                        }
+                        
+                        // Parking Availability & Charges
+                        if (additionalInfo.parking_availability) {
+                            let parking = `Parking: ${additionalInfo.parking_availability}`;
+                            if (additionalInfo.parking_fee_amount || additionalInfo.parking_charge_amount) {
+                                const amount = additionalInfo.parking_fee_amount || additionalInfo.parking_charge_amount;
+                                parking += ` (${amount} ${additionalInfo.parking_fee_unit || additionalInfo.parking_charge_unit || 'Per Day'})`;
+                            }
+                            additionalInfoList.push(parking);
+                        }
+                        
+                        // Pet Policy
+                        if (additionalInfo.pet_policy_type) {
+                            let pet = `Pet Policy: ${additionalInfo.pet_policy_type}`;
+                            if (additionalInfo.pet_fee) {
+                                pet += ` (Fee: ${additionalInfo.pet_fee})`;
+                            }
+                            additionalInfoList.push(pet);
+                        }
+                        
+                        // Meal Options
+                        if (additionalInfo.meal_type) {
+                            let meal = `Meal: ${additionalInfo.meal_type}`;
+                            if (additionalInfo.meal_fee) {
+                                meal += ` (Fee: ${additionalInfo.meal_fee})`;
+                            }
+                            additionalInfoList.push(meal);
+                        }
+                        
+                        // Transportation Services
+                        if (additionalInfo.airport_pickup || additionalInfo.airport_pickup_status) {
+                            const status = additionalInfo.airport_pickup || additionalInfo.airport_pickup_status;
+                            let transport = `Airport Pickup: ${status}`;
+                            if (additionalInfo.airport_pickup_fee) {
+                                transport += ` (${additionalInfo.airport_pickup_fee})`;
+                            }
+                            additionalInfoList.push(transport);
+                        }
+                        if (additionalInfo.shuttle_service || additionalInfo.shuttle_service_status) {
+                            const status = additionalInfo.shuttle_service || additionalInfo.shuttle_service_status;
+                            let transport = `Shuttle Service: ${status}`;
+                            if (additionalInfo.shuttle_service_fee) {
+                                transport += ` (${additionalInfo.shuttle_service_fee})`;
+                            }
+                            additionalInfoList.push(transport);
+                        }
+                        if (additionalInfo.car_rental || additionalInfo.car_rental_status) {
+                            const status = additionalInfo.car_rental || additionalInfo.car_rental_status;
+                            let transport = `Car Rental: ${status}`;
+                            if (additionalInfo.car_rental_fee) {
+                                transport += ` (${additionalInfo.car_rental_fee})`;
+                            }
+                            additionalInfoList.push(transport);
+                        }
+                        
+                        // Other Charges/Policies
+                        if (additionalInfo.other_charges) {
+                            additionalInfoList.push(`Other: ${additionalInfo.other_charges}`);
+                        }
+                        
+                        // Fallback to old structure if display_options is not available
+                        if (additionalInfoList.length === 0) {
+                            if (room.furniture && room.furniture.length > 0) {
+                                additionalInfoList.push(...room.furniture);
+                            }
+                            if (room.amenities && room.amenities.length > 0) {
+                                additionalInfoList.push(...room.amenities);
+                            }
                         if (room.cancellation_policy && room.cancellation_policy.length > 0) {
-                            additionalInfo.push(...room.cancellation_policy.map(policy => `Policy: ${policy}`));
+                                additionalInfoList.push(...room.cancellation_policy.map(policy => `Policy: ${policy}`));
+                            }
                         }
                         
                         detailsModal.innerHTML = `
@@ -1085,8 +1265,8 @@
                                 <p>${description}</p>
                             </div>
                             <div data-v-58caae98="" class="facilities-flex">
-                                ${generateDetailsColumn('Room Information', roomInfo, 'fa-bed fa-bed-custom')}
-                                ${generateDetailsColumn('Additional Room Information', additionalInfo, 'fa-bed fa-bed-custom')}
+                                ${generateDetailsColumn('Room Information', roomInfoList, 'fa-bed fa-bed-custom')}
+                                ${generateDetailsColumn('Additional Room Information', additionalInfoList, 'fa-bed fa-bed-custom')}
                             </div>
                         `;
                     }
@@ -1286,7 +1466,7 @@
                                     <div data-v-58caae98="" class="nearby-flex">
 
 
-                                        @foreach($show->nearby_areas as $category => $data)
+                                        @foreach(($show->nearby_areas ?? []) as $category => $data)
                                             @php
                                                 // Format the category title nicely
                                                 $title = ucwords(str_replace('___', ' & ', str_replace('_', ' ', $category)));
@@ -1297,7 +1477,7 @@
                                                     {{ $title }}
                                                 </h3>
                                                 <ul class="place-facilities-list">
-                                                    @foreach($data['name'] as $index => $name)
+                                                    @foreach(($data['name'] ?? []) as $index => $name)
                                                         <li>
                     <span>
                         <svg style="margin-top: -3px; margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="14"
@@ -1372,7 +1552,7 @@
                             <div data-v-58caae98="" class="facilities-flex">
 
                                 @php
-                                    $facilities = json_decode($show->hotel_facilities, true);
+                                    $facilities = json_decode($show->hotel_facilities ?? '[]', true) ?? [];
 
                                     // Group facilities by category
                                     $groupedFacilities = collect($facilities)->groupBy('category');
@@ -1384,7 +1564,7 @@
                                             {{ ucwords(str_replace(['___', '_'], [' & ', ' '], $category)) }}
                                         </h3>
                                         <ul data-v-58caae98="" class="general-facilities-list">
-                                            @foreach($items as $facility)
+                                            @foreach(($items ?? []) as $facility)
                                                 <li data-v-58caae98="">
                     <span>
                         <svg style="color: #91278f; margin-top: -3px; margin-right: 10px;"

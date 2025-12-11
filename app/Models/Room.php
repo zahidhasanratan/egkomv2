@@ -10,7 +10,7 @@ class Room extends Model
         'hotel_id','feature_photos', 'name', 'number', 'floor_number', 'price_per_night', 'weekend_price',
         'holiday_price', 'discount_type', 'discount_value', 'discount_amount', 'discount_percentage',
         'total_persons', 'total_rooms', 'total_washrooms', 'total_beds', 'size', 'wifi_details', 
-        'description', 'appliances', 'furniture', 'amenities', 'cancellation_policy', 'is_active', 'status',
+        'description', 'appliances', 'furniture', 'amenities', 'cancellation_policy', 'display_options', 'is_active', 'status',
     ];
 
     protected $casts = [
@@ -18,6 +18,7 @@ class Room extends Model
         'furniture' => 'array',
         'amenities' => 'array',
         'cancellation_policy' => 'array',
+        'display_options' => 'array',
         'is_active' => 'boolean',
     ];
 
