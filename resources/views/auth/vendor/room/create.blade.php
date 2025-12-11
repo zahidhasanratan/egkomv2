@@ -27,7 +27,7 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                     </div>
                                 @endif
-                                <form action="{{ route('vendor-admin.room.store') }}" method="POST" enctype="multipart/form-data">
+                                <form action="{{ route('vendor-admin.room.store') }}" method="POST" enctype="multipart/form-data" id="room-create-form">
                                     @csrf
                                     <input name="hotel_id" value="{{ $hotel }}" type="hidden">
                                     <ul class="nav nav-tabs">
@@ -286,6 +286,17 @@
                                                     <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Electric Kettle" {{ in_array('Electric Kettle', old('appliances', [])) ? 'checked' : '' }}> Electric Kettle</label><br>
                                                     <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Room Heater" {{ in_array('Room Heater', old('appliances', [])) ? 'checked' : '' }}> Room Heater</label><br>
                                                     <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Hair Dryer" {{ in_array('Hair Dryer', old('appliances', [])) ? 'checked' : '' }}> Hair Dryer</label><br>
+                                                    
+                                                    <!-- Custom Appliances Container -->
+                                                    <div class="custom-appliances-container mt-3" data-section="appliances"></div>
+                                                    
+                                                    <!-- Add More Appliances -->
+                                                    <div class="add-more-section mt-3">
+                                                        <div class="input-group" style="max-width: 400px;">
+                                                            <input type="text" class="form-control" id="custom-appliance-input" placeholder="Enter custom appliance name">
+                                                            <button type="button" class="btn btn-primary btn-sm" id="add-appliance-btn">Add</button>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <script>
@@ -339,17 +350,19 @@
                                                     <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Clothes Drying Hanger" {{ in_array('Clothes Drying Hanger', old('furniture', [])) ? 'checked' : '' }}> Clothes Drying Hanger</label><br>
                                                     <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Iron Stand" {{ in_array('Iron Stand', old('furniture', [])) ? 'checked' : '' }}> Iron Stand</label><br>
                                                     <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Locker/Safe" {{ in_array('Locker/Safe', old('furniture', [])) ? 'checked' : '' }}> Locker/Safe</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Soap" {{ in_array('Soap', old('amenities', [])) ? 'checked' : '' }}> Soap</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Tissue" {{ in_array('Tissue', old('amenities', [])) ? 'checked' : '' }}> Tissue</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Shampoo" {{ in_array('Shampoo', old('amenities', [])) ? 'checked' : '' }}> Shampoo</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Toothbrush" {{ in_array('Toothbrush', old('amenities', [])) ? 'checked' : '' }}> Toothbrush</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Towel" {{ in_array('Towel', old('amenities', [])) ? 'checked' : '' }}> Towel</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Water bottle" {{ in_array('Water bottle', old('amenities', [])) ? 'checked' : '' }}> Water bottle</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Free laundry" {{ in_array('Free laundry', old('amenities', [])) ? 'checked' : '' }}> Free laundry</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Air freshener" {{ in_array('Air freshener', old('amenities', [])) ? 'checked' : '' }}> Air freshener</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Fruit basket" {{ in_array('Fruit basket', old('amenities', [])) ? 'checked' : '' }}> Fruit basket</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Complimentary drinks" {{ in_array('Complimentary drinks', old('amenities', [])) ? 'checked' : '' }}> Complimentary drinks</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Buffet breakfast" {{ in_array('Buffet breakfast', old('amenities', [])) ? 'checked' : '' }}> Buffet breakfast</label><br>
+                                                    
+                                                    <!-- Custom Furniture Container -->
+                                                    <div class="custom-furniture-container mt-3" data-section="furniture"></div>
+                                                    
+                                                    <!-- Add More Furniture -->
+                                                    <div class="add-more-section mt-3">
+                                                        <div class="input-group" style="max-width: 400px;">
+                                                            <input type="text" class="form-control" id="custom-furniture-input" placeholder="Enter custom furniture name">
+                                                            <button type="button" class="btn btn-primary btn-sm" id="add-furniture-btn">Add Furniture</button>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                  
                                                 </div>
                                             </div>
                                             <script>
@@ -510,6 +523,17 @@
                                                     </div>
                                                     
                                                     <div class="appliances-list-facilities"></div>
+                                                    
+                                                    <!-- Custom Appliances Container for Facilities Tab -->
+                                                    <div class="custom-appliances-container-facilities mt-3" data-section="appliances"></div>
+                                                    
+                                                    <!-- Add More Appliances in Facilities Tab -->
+                                                    <div class="add-more-section mt-3">
+                                                        <div class="input-group" style="max-width: 400px;">
+                                                            <input type="text" class="form-control" id="custom-appliance-input-facilities" placeholder="Enter custom appliance name">
+                                                            <button type="button" class="btn btn-primary btn-sm" id="add-appliance-btn-facilities">Add</button>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -526,6 +550,17 @@
                                                     </div>
                                                     
                                                     <div class="furniture-list-facilities"></div>
+                                                    
+                                                    <!-- Custom Furniture Container for Facilities Tab -->
+                                                    <div class="custom-furniture-container-facilities mt-3" data-section="furniture"></div>
+                                                    
+                                                    <!-- Add More Furniture in Facilities Tab -->
+                                                    <div class="add-more-section mt-3">
+                                                        <div class="input-group" style="max-width: 400px;">
+                                                            <input type="text" class="form-control" id="custom-furniture-input-facilities" placeholder="Enter custom furniture name">
+                                                            <button type="button" class="btn btn-primary btn-sm" id="add-furniture-btn-facilities">Add</button>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -540,8 +575,28 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Soap" {{ in_array('Soap', old('amenities', [])) ? 'checked' : '' }}> Soap</label><br>
+                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Tissue" {{ in_array('Tissue', old('amenities', [])) ? 'checked' : '' }}> Tissue</label><br>
+                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Shampoo" {{ in_array('Shampoo', old('amenities', [])) ? 'checked' : '' }}> Shampoo</label><br>
+                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Toothbrush" {{ in_array('Toothbrush', old('amenities', [])) ? 'checked' : '' }}> Toothbrush</label><br>
+                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Towel" {{ in_array('Towel', old('amenities', [])) ? 'checked' : '' }}> Towel</label><br>
+                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Water bottle" {{ in_array('Water bottle', old('amenities', [])) ? 'checked' : '' }}> Water bottle</label><br>
+                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Free laundry" {{ in_array('Free laundry', old('amenities', [])) ? 'checked' : '' }}> Free laundry</label><br>
+                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Air freshener" {{ in_array('Air freshener', old('amenities', [])) ? 'checked' : '' }}> Air freshener</label><br>
+                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Fruit basket" {{ in_array('Fruit basket', old('amenities', [])) ? 'checked' : '' }}> Fruit basket</label><br>
+                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Complimentary drinks" {{ in_array('Complimentary drinks', old('amenities', [])) ? 'checked' : '' }}> Complimentary drinks</label><br>
+                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Buffet breakfast" {{ in_array('Buffet breakfast', old('amenities', [])) ? 'checked' : '' }}> Buffet breakfast</label><br>
                                                     
-                                                    <div class="amenities-list-facilities"></div>
+                                                    <!-- Custom Amenities Container for Facilities Tab -->
+                                                    <div class="custom-amenities-container-facilities mt-3" data-section="amenities"></div>
+                                                    
+                                                    <!-- Add More Amenities in Facilities Tab -->
+                                                    <div class="add-more-section mt-3">
+                                                        <div class="input-group" style="max-width: 400px;">
+                                                            <input type="text" class="form-control" id="custom-amenity-input-facilities" placeholder="Enter custom amenity name">
+                                                            <button type="button" class="btn btn-primary btn-sm" id="add-amenity-btn-facilities">Add</button>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -561,19 +616,22 @@
                                             <script>
                                                 // Sync checkboxes between Room Details and Room Facilities tabs
                                                 document.addEventListener('DOMContentLoaded', function() {
-                                                    // Clone checkbox lists to Room Facilities tab
+                                                    // Clone checkbox lists to Room Facilities tab (only fixed checkboxes, not custom ones)
                                                     function syncCheckboxLists() {
-                                                        // Appliances
+                                                        // Appliances (only fixed, exclude custom)
                                                         const appliancesLabels = document.querySelectorAll('#tabItem3 input[name="appliances[]"]');
                                                         const appliancesTarget = document.querySelector('.appliances-list-facilities');
                                                         appliancesTarget.innerHTML = '';
                                                         appliancesLabels.forEach(input => {
+                                                            // Skip if it's in a custom container
+                                                            if (input.closest('.custom-appliances-container')) return;
+                                                            
                                                             const label = input.closest('label');
                                                             if (label) {
                                                                 const clone = label.cloneNode(true);
                                                                 const checkbox = clone.querySelector('input');
                                                                 checkbox.addEventListener('change', function() {
-                                                                    const original = document.querySelector(`#tabItem3 input[name="appliances[]"][value="${this.value}"]`);
+                                                                    const original = document.querySelector(`#tabItem3 input[name="${this.name}"][value="${this.value}"]`);
                                                                     if (original) original.checked = this.checked;
                                                                 });
                                                                 appliancesTarget.appendChild(clone);
@@ -581,17 +639,20 @@
                                                             }
                                                         });
 
-                                                        // Furniture
+                                                        // Furniture (only fixed, exclude custom)
                                                         const furnitureLabels = document.querySelectorAll('#tabItem3 input[name="furniture[]"]');
                                                         const furnitureTarget = document.querySelector('.furniture-list-facilities');
                                                         furnitureTarget.innerHTML = '';
                                                         furnitureLabels.forEach(input => {
+                                                            // Skip if it's in a custom container
+                                                            if (input.closest('.custom-furniture-container')) return;
+                                                            
                                                             const label = input.closest('label');
                                                             if (label) {
                                                                 const clone = label.cloneNode(true);
                                                                 const checkbox = clone.querySelector('input');
                                                                 checkbox.addEventListener('change', function() {
-                                                                    const original = document.querySelector(`#tabItem3 input[name="furniture[]"][value="${this.value}"]`);
+                                                                    const original = document.querySelector(`#tabItem3 input[name="${this.name}"][value="${this.value}"]`);
                                                                     if (original) original.checked = this.checked;
                                                                 });
                                                                 furnitureTarget.appendChild(clone);
@@ -599,23 +660,8 @@
                                                             }
                                                         });
 
-                                                        // Amenities
-                                                        const amenitiesLabels = document.querySelectorAll('#tabItem3 input[name="amenities[]"]');
-                                                        const amenitiesTarget = document.querySelector('.amenities-list-facilities');
-                                                        amenitiesTarget.innerHTML = '';
-                                                        amenitiesLabels.forEach(input => {
-                                                            const label = input.closest('label');
-                                                            if (label) {
-                                                                const clone = label.cloneNode(true);
-                                                                const checkbox = clone.querySelector('input');
-                                                                checkbox.addEventListener('change', function() {
-                                                                    const original = document.querySelector(`#tabItem3 input[name="amenities[]"][value="${this.value}"]`);
-                                                                    if (original) original.checked = this.checked;
-                                                                });
-                                                                amenitiesTarget.appendChild(clone);
-                                                                amenitiesTarget.appendChild(document.createElement('br'));
-                                                            }
-                                                        });
+                                                        // Amenities - NOT in Room Details tab, only in Facilities tab
+                                                        // So we don't sync amenities from Room Details
                                                     }
 
                                                     // Initial sync
@@ -623,7 +669,8 @@
 
                                                     // Listen for changes in Room Details tab and sync to Facilities
                                                     document.querySelector('#tabItem3').addEventListener('change', function(e) {
-                                                        if (e.target.name === 'appliances[]' || e.target.name === 'furniture[]' || e.target.name === 'amenities[]') {
+                                                        if (e.target.name === 'appliances[]' || e.target.name === 'custom_appliances[]' || 
+                                                            e.target.name === 'furniture[]' || e.target.name === 'custom_furniture[]') {
                                                             const facilitiesCheckbox = document.querySelector(`#tabItem4 input[name="${e.target.name}"][value="${e.target.value}"]`);
                                                             if (facilitiesCheckbox) facilitiesCheckbox.checked = e.target.checked;
                                                         }
@@ -638,6 +685,168 @@
                                                             });
                                                         });
                                                     });
+
+                                                    // Function to create a checkbox element
+                                                    function createCheckbox(name, value, classes, container, isCustom = false) {
+                                                        const label = document.createElement('label');
+                                                        const checkbox = document.createElement('input');
+                                                        checkbox.type = 'checkbox';
+                                                        checkbox.name = isCustom ? `custom_${name}[]` : `${name}[]`;
+                                                        checkbox.value = value;
+                                                        checkbox.className = classes;
+                                                        checkbox.checked = true; // Check by default so it gets saved
+                                                        
+                                                        const textNode = document.createTextNode(value);
+                                                        label.appendChild(checkbox);
+                                                        label.appendChild(textNode);
+                                                        label.appendChild(document.createElement('br'));
+                                                        
+                                                        container.appendChild(label);
+                                                        
+                                                        // Add sync functionality if it's in Room Details tab
+                                                        if (container.closest('#tabItem3')) {
+                                                            checkbox.addEventListener('change', function() {
+                                                                const facilitiesCheckbox = document.querySelector(`#tabItem4 input[name="${checkbox.name}"][value="${value}"]`);
+                                                                if (facilitiesCheckbox) facilitiesCheckbox.checked = this.checked;
+                                                            });
+                                                        }
+                                                        
+                                                        // Add sync functionality if it's in Facilities tab
+                                                        if (container.closest('#tabItem4')) {
+                                                            checkbox.addEventListener('change', function() {
+                                                                const detailsCheckbox = document.querySelector(`#tabItem3 input[name="${checkbox.name}"][value="${value}"]`);
+                                                                if (detailsCheckbox) detailsCheckbox.checked = this.checked;
+                                                            });
+                                                        }
+                                                        
+                                                        return checkbox;
+                                                    }
+
+                                                    // Function to add custom appliance
+                                                    function addCustomAppliance(value, sourceTab = 'details') {
+                                                        if (!value || value.trim() === '') return;
+                                                        
+                                                        const trimmedValue = value.trim();
+                                                        
+                                                        // Check if already exists in the current tab
+                                                        const currentTab = sourceTab === 'details' ? '#tabItem3' : '#tabItem4';
+                                                        const existing = document.querySelector(`${currentTab} input[name="custom_appliances[]"][value="${trimmedValue}"]`);
+                                                        if (existing) {
+                                                            alert('This appliance already exists!');
+                                                            return;
+                                                        }
+                                                        
+                                                        if (sourceTab === 'details') {
+                                                            // Add only to Room Details tab
+                                                            const container = document.querySelector('#tabItem3 .custom-appliances-container');
+                                                            createCheckbox('appliances', trimmedValue, 'checkbox-item-appliances checkbox-item-room-info', container, true);
+                                                        } else {
+                                                            // Add only to Facilities tab
+                                                            const facilitiesContainer = document.querySelector('#tabItem4 .custom-appliances-container-facilities');
+                                                            createCheckbox('appliances', trimmedValue, 'checkbox-item-appliances', facilitiesContainer, true);
+                                                        }
+                                                    }
+
+                                                    // Function to add custom furniture
+                                                    function addCustomFurniture(value, sourceTab = 'details') {
+                                                        if (!value || value.trim() === '') return;
+                                                        
+                                                        const trimmedValue = value.trim();
+                                                        
+                                                        // Check if already exists in the current tab
+                                                        const currentTab = sourceTab === 'details' ? '#tabItem3' : '#tabItem4';
+                                                        const existing = document.querySelector(`${currentTab} input[name="custom_furniture[]"][value="${trimmedValue}"]`);
+                                                        if (existing) {
+                                                            alert('This furniture already exists!');
+                                                            return;
+                                                        }
+                                                        
+                                                        if (sourceTab === 'details') {
+                                                            // Add only to Room Details tab
+                                                            const container = document.querySelector('#tabItem3 .custom-furniture-container');
+                                                            createCheckbox('furniture', trimmedValue, 'checkbox-item-furniture checkbox-item-additional', container, true);
+                                                        } else {
+                                                            // Add only to Facilities tab
+                                                            const facilitiesContainer = document.querySelector('#tabItem4 .custom-furniture-container-facilities');
+                                                            createCheckbox('furniture', trimmedValue, 'checkbox-item-furniture', facilitiesContainer, true);
+                                                        }
+                                                    }
+
+                                                    // Function to add custom amenity (only in Facilities tab, not in Room Details)
+                                                    function addCustomAmenity(value, sourceTab = 'facilities') {
+                                                        if (!value || value.trim() === '') return;
+                                                        
+                                                        const trimmedValue = value.trim();
+                                                        
+                                                        // Check if already exists in Facilities tab
+                                                        const existing = document.querySelector(`#tabItem4 input[name="custom_amenities[]"][value="${trimmedValue}"]`);
+                                                        if (existing) {
+                                                            alert('This amenity already exists!');
+                                                            return;
+                                                        }
+                                                        
+                                                        // Add only to Facilities tab (amenities don't exist in Room Details tab)
+                                                        const facilitiesContainer = document.querySelector('#tabItem4 .custom-amenities-container-facilities');
+                                                        createCheckbox('amenities', trimmedValue, 'checkbox-item-amenities', facilitiesContainer, true);
+                                                    }
+
+                                                    // Add event listeners for "Add" buttons in Room Details tab
+                                                    document.getElementById('add-appliance-btn')?.addEventListener('click', function() {
+                                                        const input = document.getElementById('custom-appliance-input');
+                                                        addCustomAppliance(input.value, 'details');
+                                                        input.value = '';
+                                                    });
+
+                                                    document.getElementById('add-furniture-btn')?.addEventListener('click', function() {
+                                                        const input = document.getElementById('custom-furniture-input');
+                                                        addCustomFurniture(input.value, 'details');
+                                                        input.value = '';
+                                                    });
+
+                                                    // Add event listeners for "Add" buttons in Facilities tab
+                                                    document.getElementById('add-appliance-btn-facilities')?.addEventListener('click', function() {
+                                                        const input = document.getElementById('custom-appliance-input-facilities');
+                                                        addCustomAppliance(input.value, 'facilities');
+                                                        input.value = '';
+                                                    });
+
+                                                    document.getElementById('add-furniture-btn-facilities')?.addEventListener('click', function() {
+                                                        const input = document.getElementById('custom-furniture-input-facilities');
+                                                        addCustomFurniture(input.value, 'facilities');
+                                                        input.value = '';
+                                                    });
+
+                                                    document.getElementById('add-amenity-btn-facilities')?.addEventListener('click', function() {
+                                                        const input = document.getElementById('custom-amenity-input-facilities');
+                                                        addCustomAmenity(input.value, 'facilities');
+                                                        input.value = '';
+                                                    });
+
+                                                    // Allow Enter key to trigger add
+                                                    ['custom-appliance-input', 'custom-furniture-input',
+                                                     'custom-appliance-input-facilities', 'custom-furniture-input-facilities', 'custom-amenity-input-facilities'].forEach(id => {
+                                                        document.getElementById(id)?.addEventListener('keypress', function(e) {
+                                                            if (e.key === 'Enter') {
+                                                                e.preventDefault();
+                                                                const btnId = id.replace('-input', '-btn').replace('-input-facilities', '-btn-facilities');
+                                                                document.getElementById(btnId)?.click();
+                                                            }
+                                                        });
+                                                    });
+                                                    
+                                                    // Debug: Log form data before submission to verify custom items are included
+                                                    const form = document.querySelector('form[action*="room.store"]');
+                                                    if (form) {
+                                                        form.addEventListener('submit', function(e) {
+                                                            const formData = new FormData(this);
+                                                            const customAppliances = formData.getAll('custom_appliances[]');
+                                                            const customFurniture = formData.getAll('custom_furniture[]');
+                                                            const customAmenities = formData.getAll('custom_amenities[]');
+                                                            console.log('Custom Appliances being submitted:', customAppliances);
+                                                            console.log('Custom Furniture being submitted:', customFurniture);
+                                                            console.log('Custom Amenities being submitted:', customAmenities);
+                                                        });
+                                                    }
                                                 });
                                             </script>
                                         </div>
