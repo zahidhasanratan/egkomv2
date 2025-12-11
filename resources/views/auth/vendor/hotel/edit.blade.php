@@ -1349,24 +1349,24 @@
                                         <!-- Photos -->
                                         <div class="tab-pane" id="Photos">
                                             @php
+                                                // Updated hotel photo categories
                                                 $photoFields = [
-                                                    'kitchen_photos', 'washroom_photos', 'parking_lot_photos', 'entrance_gate_photos',
-                                                    'lift_stairs_photos', 'spa_photos', 'bar_photos', 'transport_photos',
-                                                    'rooftop_photos', 'gym_photos', 'security_photos', 'amenities_photos'
+                                                    'featured_photo',           // single
+                                                    'entrance_gate_photos',
+                                                    'lift_stairs_photos',
+                                                    'rooftop_photos',
+                                                    'spa_photos',
+                                                    'gym_photos',
+                                                    'amenities_photos',
                                                 ];
                                                 $labels = [
-                                                    'kitchen_photos' => 'Kitchen Photo',
-                                                    'washroom_photos' => 'Washroom Photo',
-                                                    'parking_lot_photos' => 'Parking Lot Photos',
-                                                    'entrance_gate_photos' => 'Entrance Gate/Main Gate Photos',
-                                                    'lift_stairs_photos' => 'Lift, Stairs, Wheelchair Area Photos',
-                                                    'spa_photos' => 'Spa and Massage Center Photos',
-                                                    'bar_photos' => 'Bar Photos',
-                                                    'transport_photos' => 'Hotel Car and Bus Photos',
-                                                    'rooftop_photos' => 'Rooftop, Garden, Sitting Area Photos',
-                                                    'gym_photos' => 'Gym, Game Room, and Kids Zone Photos',
-                                                    'security_photos' => 'CCTV, Fire Extinguisher, and Surveillance Photos',
-                                                    'amenities_photos' => 'Hotel/Property Amenities Photos'
+                                                    'featured_photo' => 'Featured Photo / Thumbnail (Dynamically Selected)',
+                                                    'entrance_gate_photos' => 'Hotel Exterior (Building, Signboard, Entrance Gate/Main Gate)',
+                                                    'lift_stairs_photos' => 'Common Areas (Reception, Lobby, Public Area, Lift, Stairs, Wheelchair Area, Parking Lot, Sitting Area, Garden Area)',
+                                                    'rooftop_photos' => 'Facilities (Restaurants, Conference Hall, Swimming Pool, Rooftop, Souvenir Shop)',
+                                                    'spa_photos' => 'Leisure & Wellness (Gym, Game Room, Kids Zone, Spa & Massage Center, Bar)',
+                                                    'gym_photos' => 'Guest Rooms (All room types in the hotel/property)',
+                                                    'amenities_photos' => 'Amenities & Services (Car, Bus, CCTV, Fire Extinguisher, Surveillance, Room Amenities)',
                                                 ];
                                             @endphp
 
@@ -1394,7 +1394,7 @@
                                                                 @if(!empty($photos))
                                                                     @foreach($photos as $photoIndex => $photo)
                                                                         <div class="multiple-thumbnail-item">
-                                                                            <img src="{{ asset('storage/' . $photo) }}"
+                                                                            <img src="{{ asset($photo) }}"
                                                                                  alt="{{ $labels[$field] }} {{ $photoIndex }}"
                                                                                  class="img-thumbnail"
                                                                                  style="height: 100px; width: auto;">
@@ -1407,10 +1407,15 @@
                                                                     @endforeach
                                                                 @endif
 
-                                                                <input type="file" class="multiple-file-input"
-                                                                       name="{{ $field }}[]" accept="image/*" multiple>
-                                                                <label class="upload-label">Select Multiple
-                                                                    Images</label>
+                                                                @if($field === 'featured_photo')
+                                                                    <input type="file" class="multiple-file-input"
+                                                                           name="{{ $field }}" accept="image/*">
+                                                                    <label class="upload-label">Select Single Image</label>
+                                                                @else
+                                                                    <input type="file" class="multiple-file-input"
+                                                                           name="{{ $field }}[]" accept="image/*" multiple>
+                                                                    <label class="upload-label">Select Multiple Images</label>
+                                                                @endif
                                                                 <div class="multiple-thumbnail-gallery"></div>
                                                             </div>
                                                             <input type="hidden" name="removed_{{ $field }}"

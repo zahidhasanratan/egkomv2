@@ -141,10 +141,15 @@
                             <div class="owl-carousel owl-theme owl-custom-arrow" id="owl-car-offers">
 
                                 @php
+                                    // Updated hotel photo categories (hotel-level gallery)
                                     $photoFields = [
-                                        'kitchen_photos', 'washroom_photos', 'parking_lot_photos', 'entrance_gate_photos',
-                                        'lift_stairs_photos', 'spa_photos', 'bar_photos', 'transport_photos',
-                                        'rooftop_photos', 'gym_photos', 'security_photos', 'amenities_photos'
+                                        'featured_photo',
+                                        'entrance_gate_photos',   // Hotel Exterior
+                                        'lift_stairs_photos',     // Common Areas
+                                        'rooftop_photos',         // Facilities
+                                        'spa_photos',             // Leisure & Wellness
+                                        'gym_photos',             // Guest Rooms
+                                        'amenities_photos',       // Amenities & Services
                                     ];
                                 @endphp
 
@@ -623,7 +628,7 @@
 
                                         <div class="hotel-room">
 
-                                            @foreach(\App\Models\Room::where('hotel_id', $show->id)->get() as $roomList)
+                                            @foreach(\App\Models\Room::where('hotel_id', $show->id)->where('is_active', true)->get() as $roomList)
 
                                                 <div class="hotel-all-card" 
                                                      data-room-id="{{ $roomList->id }}"
@@ -649,12 +654,31 @@
                                                             </div>
                                                             {{--                                                    {{ $roomList->id }}--}}
                                                             @php
-                                                                $photos = \App\Models\RoomPhoto::where('room_id', $roomList->id)->where('category', 'feature')->get();
+                                                                // Prioritize main feature photo, then other categories in order
+                                                                $photoOrder = [
+                                                                    'feature_main',
+                                                                    'bedroom',
+                                                                    'bedroom2',
+                                                                    'bedroom3',
+                                                                    'living_dining',
+                                                                    'washroom',
+                                                                    'washroom2',
+                                                                    'washroom3',
+                                                                    'balcony',
+                                                                    'furniture',
+                                                                    'appliances',
+                                                                    'kitchen',
+                                                                    'amenity',
+                                                                ];
+                                                                $photosGrouped = $roomList->photos()->whereIn('category', $photoOrder)->get()->groupBy('category');
+                                                                $orderedPhotos = collect($photoOrder)->flatMap(function($cat) use ($photosGrouped) {
+                                                                    return $photosGrouped->get($cat, collect());
+                                                                })->values();
                                                             @endphp
 
-                                                            @foreach($photos as $key => $feature)
+                                                            @foreach($orderedPhotos as $key => $feature)
                                                                 @if($key == 0)
-                                                                    {{-- Featured image --}}
+                                                                    {{-- Featured image (Main Feature Photo if available, otherwise next in order) --}}
                                                                     <div class="featured">
                                                                         <picture>
                                                                             <img src="{{ asset($feature->photo_path) }}" alt="Room" class="image-box">
@@ -671,7 +695,7 @@
                                                                     {{-- Overlay with remaining count --}}
                                                                     <div class="thumb-image">
                                                                         <div class="overlay">
-                                                                            <span> +{{ $photos->count() - 3 }} <i class="fas fa-images"></i></span>
+                                                                            <span> +{{ $orderedPhotos->count() - 3 }} <i class="fas fa-images"></i></span>
                                                                         </div>
                                                                         <picture>
                                                                             <img src="{{ asset($feature->photo_path) }}" alt="Room" class="image-box">
@@ -857,7 +881,7 @@
                         removeFromGlobalCart(roomId);
                     }
 
-                    const roomsData = {!! json_encode(\App\Models\Room::where('hotel_id', $show->id)->with('photos')->get()->map(function($room) {
+                    const roomsData = {!! json_encode(\App\Models\Room::where('hotel_id', $show->id)->where('is_active', true)->with('photos')->get()->map(function($room) {
                         return [
                             'id' => $room->id,
                             'name' => $room->name,
@@ -982,21 +1006,50 @@
                         const photoContainer = document.querySelector('#hotel-room .all-rooms-details .row');
                         photoContainer.innerHTML = '';
 
-                        // Display all photo categories
-                        const categories = ['feature', 'kitchen', 'washroom', 'parking', 'entrance', 'accessibility', 'spa', 'bar', 'transport', 'rooftop', 'recreation', 'safety', 'amenity'];
-                        
-                        categories.forEach(category => {
+                        // New photo categories including the Main Feature Photo
+                        const categories = [
+                            'feature_main',
+                            'bedroom',
+                            'washroom',
+                            'balcony',
+                            'living_dining',
+                            'furniture',
+                            'appliances',
+                            'kitchen',
+                            'amenity',
+                            'bedroom2',
+                            'bedroom3',
+                            'washroom2',
+                            'washroom3',
+                        ];
+
+                        let hasPhotos = false;
+
+                        // Show main feature photo first (if any)
+                        if (photos['feature_main'] && photos['feature_main'].length > 0) {
+                            photos['feature_main'].forEach(photoPath => {
+                                const div = document.createElement('div');
+                                div.className = 'col-12 luxury-room-block';
+                                div.innerHTML = `<img class="img-fluid" src="/${photoPath}" alt="main-feature-photo">`;
+                                photoContainer.appendChild(div);
+                                hasPhotos = true;
+                            });
+                        }
+
+                        // Show remaining categories
+                        categories.filter(cat => cat !== 'feature_main').forEach(category => {
                             if (photos[category]) {
                                 photos[category].forEach(photoPath => {
                                     const div = document.createElement('div');
                                     div.className = 'col-6 col-md-6 luxury-room-block';
                                     div.innerHTML = `<img class="img-fluid" src="/${photoPath}" alt="${category}-photo">`;
                                     photoContainer.appendChild(div);
+                                    hasPhotos = true;
                                 });
                             }
                         });
 
-                        if (photoContainer.innerHTML === '') {
+                        if (!hasPhotos) {
                             photoContainer.innerHTML = '<div class="col-12"><p class="text-center">No photos available</p></div>';
                         }
                     }

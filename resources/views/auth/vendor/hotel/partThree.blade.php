@@ -218,24 +218,24 @@
                                         <!-- Photos -->
                                         <div class="tab-pane active" id="Photos">
                                             @php
+                                                // Updated hotel photo categories
                                                 $photoFields = [
-                                                    'kitchen_photos', 'washroom_photos', 'parking_lot_photos', 'entrance_gate_photos',
-                                                    'lift_stairs_photos', 'spa_photos', 'bar_photos', 'transport_photos',
-                                                    'rooftop_photos', 'gym_photos', 'security_photos', 'amenities_photos'
+                                                    'featured_photo',           // single
+                                                    'entrance_gate_photos',
+                                                    'lift_stairs_photos',
+                                                    'rooftop_photos',
+                                                    'spa_photos',
+                                                    'gym_photos',
+                                                    'amenities_photos',
                                                 ];
                                                 $labels = [
-                                                    'kitchen_photos' => 'Kitchen Photo',
-                                                    'washroom_photos' => 'Washroom Photo',
-                                                    'parking_lot_photos' => 'Parking Lot Photos',
-                                                    'entrance_gate_photos' => 'Entrance Gate/Main Gate Photos',
-                                                    'lift_stairs_photos' => 'Lift, Stairs, Wheelchair Area Photos',
-                                                    'spa_photos' => 'Spa and Massage Center Photos',
-                                                    'bar_photos' => 'Bar Photos',
-                                                    'transport_photos' => 'Hotel Car and Bus Photos',
-                                                    'rooftop_photos' => 'Rooftop, Garden, Sitting Area Photos',
-                                                    'gym_photos' => 'Gym, Game Room, and Kids Zone Photos',
-                                                    'security_photos' => 'CCTV, Fire Extinguisher, and Surveillance Photos',
-                                                    'amenities_photos' => 'Hotel/Property Amenities Photos'
+                                                    'featured_photo' => 'Featured Photo / Thumbnail (Dynamically Selected)',
+                                                    'entrance_gate_photos' => 'Hotel Exterior (Building, Signboard, Entrance Gate/Main Gate)',
+                                                    'lift_stairs_photos' => 'Common Areas (Reception, Lobby, Public Area, Lift, Stairs, Wheelchair Area, Parking Lot, Sitting Area, Garden Area)',
+                                                    'rooftop_photos' => 'Facilities (Restaurants, Conference Hall, Swimming Pool, Rooftop, Souvenir Shop)',
+                                                    'spa_photos' => 'Leisure & Wellness (Gym, Game Room, Kids Zone, Spa & Massage Center, Bar)',
+                                                    'gym_photos' => 'Guest Rooms (All room types in the hotel/property)',
+                                                    'amenities_photos' => 'Amenities & Services (Car, Bus, CCTV, Fire Extinguisher, Surveillance, Room Amenities)',
                                                 ];
                                             @endphp
 
@@ -248,15 +248,22 @@
                                                             <div class="multiple-upload-container"
                                                                  id="upload-container-{{ $index + 1 }}">
                                                                 @php
-                                                                    // Decode the field and handle extra backslashes
-                                                                    $photos = json_decode($hotel->$field, true);
-                                                                    // Check if the decoded photos are an array
+                                                                    // Handle the field - it might be a string (JSON) or already an array
+                                                                    $fieldValue = $hotel->$field ?? null;
+                                                                    if (is_string($fieldValue)) {
+                                                                        $photos = json_decode($fieldValue, true) ?: [];
+                                                                    } elseif (is_array($fieldValue)) {
+                                                                        $photos = $fieldValue;
+                                                                    } else {
+                                                                        $photos = [];
+                                                                    }
+                                                                    // Remove extra backslashes from photo paths
                                                                     if (is_array($photos)) {
                                                                         $photos = array_map(function ($photo) {
-                                                                            return str_replace("\\", "/", $photo); // Remove extra backslashes
+                                                                            return str_replace("\\", "/", $photo);
                                                                         }, $photos);
                                                                     } else {
-                                                                        $photos = []; // If not an array, set to an empty array
+                                                                        $photos = [];
                                                                     }
                                                                 @endphp
 
@@ -276,10 +283,17 @@
                                                                     @endforeach
                                                                 @endif
 
-                                                                <input type="file" class="multiple-file-input multyImageUp"
-                                                                       name="{{ $field }}[]" accept="image/*" multiple>
-                                                                <label class="upload-label">Select Multiple
-                                                                    Images</label>
+                                                                @if($field === 'featured_photo')
+                                                                    <input type="file" class="multiple-file-input multyImageUp" 
+                                                                           id="file-input-{{ $field }}" 
+                                                                           name="{{ $field }}" accept="image/*">
+                                                                    <label class="upload-label" for="file-input-{{ $field }}">+ Select Single Image</label>
+                                                                @else
+                                                                    <input type="file" class="multiple-file-input multyImageUp"
+                                                                           id="file-input-{{ $field }}" 
+                                                                           name="{{ $field }}[]" accept="image/*" multiple>
+                                                                    <label class="upload-label" for="file-input-{{ $field }}">+ Add More Images</label>
+                                                                @endif
                                                                 <div class="multiple-thumbnail-gallery"></div>
                                                             </div>
                                                             <input type="hidden" name="removed_{{ $field }}"
@@ -399,40 +413,55 @@
                 const thumbnailGallery = container.querySelector('.multiple-thumbnail-gallery');
                 const containerId = container.id || `dynamic-${Date.now()}`; // Fallback ID for dynamic containers
 
-                uploadedImages[containerId] = [];
+                if (!uploadedImages[containerId]) {
+                    uploadedImages[containerId] = [];
+                }
 
                 fileInput.addEventListener('change', function (event) {
                     console.log(`File input changed in container: ${containerId}`);
                     const files = event.target.files;
-                    for (let file of files) {
-                        if (!file.type.startsWith('image/')) {
-                            console.warn(`File ${file.name} is not an image`);
-                            continue;
+                    if (files && files.length > 0) {
+                        for (let file of files) {
+                            if (!file.type.startsWith('image/')) {
+                                console.warn(`File ${file.name} is not an image`);
+                                continue;
+                            }
+                            const reader = new FileReader();
+                            reader.onload = function (e) {
+                                const thumbnailItem = document.createElement('div');
+                                thumbnailItem.classList.add('multiple-thumbnail-item');
+                                const img = document.createElement('img');
+                                img.src = e.target.result;
+                                img.style.maxWidth = '100px';
+                                img.style.maxHeight = '100px';
+                                img.style.display = 'block';
+                                img.style.borderRadius = '4px';
+                                const removeBtn = document.createElement('button');
+                                removeBtn.innerHTML = '×';
+                                removeBtn.classList.add('multiple-remove-btn');
+                                removeBtn.type = 'button';
+                                removeBtn.addEventListener('click', (e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    thumbnailItem.remove();
+                                    const index = uploadedImages[containerId].indexOf(file);
+                                    if (index > -1) {
+                                        uploadedImages[containerId].splice(index, 1);
+                                    }
+                                    // Clear file input if it's a single file input (featured_photo)
+                                    if (!fileInput.hasAttribute('multiple')) {
+                                        fileInput.value = '';
+                                    }
+                                });
+                                thumbnailItem.appendChild(img);
+                                thumbnailItem.appendChild(removeBtn);
+                                thumbnailGallery.appendChild(thumbnailItem);
+                                uploadedImages[containerId].push(file);
+                                console.log(`Added thumbnail for file ${file.name} in container ${containerId}`);
+                            };
+                            reader.readAsDataURL(file);
                         }
-                        const reader = new FileReader();
-                        reader.onload = function (e) {
-                            const thumbnailItem = document.createElement('div');
-                            thumbnailItem.classList.add('multiple-thumbnail-item');
-                            const img = document.createElement('img');
-                            img.src = e.target.result;
-                            const removeBtn = document.createElement('button');
-                            removeBtn.innerHTML = '×';
-                            removeBtn.classList.add('multiple-remove-btn');
-                            removeBtn.addEventListener('click', () => {
-                                thumbnailItem.remove();
-                                const index = uploadedImages[containerId].indexOf(file);
-                                if (index > -1) {
-                                    uploadedImages[containerId].splice(index, 1);
-                                    console.log(`Removed file ${file.name} from container ${containerId}`);
-                                }
-                            });
-                            thumbnailItem.appendChild(img);
-                            thumbnailItem.appendChild(removeBtn);
-                            thumbnailGallery.appendChild(thumbnailItem);
-                            uploadedImages[containerId].push(file);
-                            console.log(`Added thumbnail for file ${file.name} in container ${containerId}`);
-                        };
-                        reader.readAsDataURL(file);
+                        // Don't reset file input value - let it submit with the form
                     }
                 });
             }

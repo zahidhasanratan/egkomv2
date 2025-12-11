@@ -160,10 +160,16 @@ class ManageHotel extends Controller
         $data['check_in_rules'] = !empty($mergedCheckinRules) ? json_encode($mergedCheckinRules) : null;
 
         // ✅ File uploads → /public/hotel_photos
+        // Updated hotel photo categories (plus custom facility icons)
         $photoFields = [
-            'kitchen_photos','washroom_photos','parking_lot_photos','entrance_gate_photos',
-            'lift_stairs_photos','spa_photos','bar_photos','transport_photos','rooftop_photos',
-            'gym_photos','security_photos','amenities_photos','custom_facilities_icon',
+            'featured_photo', // single, stored as JSON array for consistency
+            'entrance_gate_photos',  // Hotel Exterior
+            'lift_stairs_photos',    // Common Areas
+            'rooftop_photos',        // Facilities
+            'spa_photos',            // Leisure & Wellness
+            'gym_photos',            // Guest Rooms
+            'amenities_photos',      // Amenities & Services
+            'custom_facilities_icon',
         ];
         $uploadDir = public_path('hotel_photos');
         if (!is_dir($uploadDir)) { @mkdir($uploadDir, 0755, true); }
@@ -520,11 +526,16 @@ class ManageHotel extends Controller
         }
 
         // 7) Handle multiple photo fields (remove + upload) using public_path (as in your current approach)
+        // Updated hotel photo categories (plus custom facility icons)
         $photoFields = [
-            'kitchen_photos', 'washroom_photos', 'parking_lot_photos',
-            'entrance_gate_photos', 'lift_stairs_photos', 'spa_photos',
-            'bar_photos', 'transport_photos', 'rooftop_photos',
-            'gym_photos', 'security_photos', 'amenities_photos'
+            'featured_photo', // single, stored as JSON array for consistency
+            'entrance_gate_photos',  // Hotel Exterior
+            'lift_stairs_photos',    // Common Areas
+            'rooftop_photos',        // Facilities
+            'spa_photos',            // Leisure & Wellness
+            'gym_photos',            // Guest Rooms
+            'amenities_photos',      // Amenities & Services
+            'custom_facilities_icon',
         ];
 
         foreach ($photoFields as $field) {
@@ -545,11 +556,22 @@ class ManageHotel extends Controller
 
             // Add new uploads
             if ($request->hasFile($field)) {
-                foreach ($request->file($field) as $file) {
+                // Handle featured_photo as single file, others as array
+                if ($field === 'featured_photo') {
+                    $file = $request->file($field);
                     if ($file && $file->isValid()) {
                         $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
                         $file->move(public_path('hotel_photos'), $filename);
-                        $existingPhotos[] = 'hotel_photos/' . $filename; // relative path
+                        // Replace existing featured photo (only one allowed)
+                        $existingPhotos = ['hotel_photos/' . $filename];
+                    }
+                } else {
+                    foreach ($request->file($field) as $file) {
+                        if ($file && $file->isValid()) {
+                            $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+                            $file->move(public_path('hotel_photos'), $filename);
+                            $existingPhotos[] = 'hotel_photos/' . $filename; // relative path
+                        }
                     }
                 }
             }
