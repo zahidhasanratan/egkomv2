@@ -27,6 +27,19 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                     </div>
                                 @endif
+                                
+                                
+                                <style>
+                                    .is-invalid {
+                                        border-color: #dc3545 !important;
+                                        background-color: #fff5f5 !important;
+                                    }
+                                    .is-invalid:focus {
+                                        border-color: #dc3545 !important;
+                                        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+                                    }
+                                </style>
+                                
                                 <form action="{{ route('super-admin.room.update', $room->id) }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
@@ -700,8 +713,8 @@
                                                             <div class="form-group">
                                                                 <label class="form-label">Fee Amount</label>
                                                                 <input type="number" class="form-control" name="additional_info[bed_fee_amount]" value="{{ old('additional_info.bed_fee_amount', $additionalInfo['bed_fee_amount'] ?? '') }}" placeholder="e.g., 1000" min="0" step="0.01">
-                                                            </div>
-                                                        </div>
+                                                </div>
+                                            </div>
                                                         <div class="col-md-4">
                                                             <div class="form-group">
                                                                 <label class="form-label">Currency</label>
@@ -1144,9 +1157,9 @@
                                                             <div class="custom-control custom-switch checked">
                                                                 <input type="checkbox" class="custom-control-input sync-checkbox-master" data-target=".checkbox-item-furniture" id="furniture-all-facilities">
                                                                 <label class="custom-control-label" for="furniture-all-facilities">Select All</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                                    </div>
+                                                                </div>
+                                                                            </div>
                                                     
                                                     <div class="furniture-list-facilities">
                                                         @php
@@ -1309,19 +1322,19 @@
                                                         if (facilitiesFurnitureContainer) {
                                                             facilitiesFurnitureContainer.innerHTML = '';
                                                             customFurniture.forEach(input => {
-                                                                const label = input.closest('label');
-                                                                if (label) {
-                                                                    const clone = label.cloneNode(true);
-                                                                    const checkbox = clone.querySelector('input');
+                                                            const label = input.closest('label');
+                                                            if (label) {
+                                                                const clone = label.cloneNode(true);
+                                                                const checkbox = clone.querySelector('input');
                                                                     checkbox.className = 'checkbox-item-furniture';
-                                                                    checkbox.addEventListener('change', function() {
+                                                                checkbox.addEventListener('change', function() {
                                                                         const original = document.querySelector(`#tabItem3 input[name="custom_furniture[]"][value="${this.value}"]`);
-                                                                        if (original) original.checked = this.checked;
-                                                                    });
+                                                                    if (original) original.checked = this.checked;
+                                                                });
                                                                     facilitiesFurnitureContainer.appendChild(clone);
                                                                     facilitiesFurnitureContainer.appendChild(document.createElement('br'));
-                                                                }
-                                                            });
+                                                            }
+                                                        });
                                                         }
                                                         
                                                         // Amenities are NOT in Room Details tab, so no need to sync custom amenities from there
@@ -1535,7 +1548,8 @@
                                                         'safety_photos' => 'CCTV, Fire Extinguisher & Surveillance Photos',
                                                         'amenity_photos' => 'Hotel/Property Amenities Photos'
                                                     ];
-                                                    $room_photos = $room->photos()->get()->groupBy('category');
+                                                    // Use already eager-loaded photos (ordered desc)
+                                                    $room_photos = $room->photos->groupBy('category');
                                                 @endphp
 
                                                 @foreach ($photo_categories as $input_name => $label)
@@ -1543,13 +1557,13 @@
                                                         <div class="form-group mt-15">
                                                             <label class="form-label">{{ $label }}</label>
                                                             <div class="multiple-upload-container" id="upload-container-{{ str_replace('_photos', '', $input_name) }}">
-                                                                <input type="file" class="multiple-file-input" name="{{ $input_name }}[]" accept="image/*" multiple>
-                                                                <label class="upload-label">Select Multiple Images</label>
+                                                                <input type="file" class="multiple-file-input" id="file-input-{{ str_replace('_photos', '', $input_name) }}" name="{{ $input_name }}[]" accept="image/*" multiple>
+                                                                <label class="upload-label" for="file-input-{{ str_replace('_photos', '', $input_name) }}">+ Add More Images</label>
                                                                 <div class="multiple-thumbnail-gallery">
                                                                     @if (isset($room_photos[str_replace('_photos', '', $input_name)]))
                                                                         @foreach ($room_photos[str_replace('_photos', '', $input_name)] as $photo)
                                                                             <div class="multiple-thumbnail-item" data-photo-id="{{ $photo->id }}">
-                                                                                <img src="{{ asset($photo->photo_path) }}" style="max-width: 100px; max-height: 100px;">
+                                                                                <img src="{{ asset($photo->photo_path) }}" style="max-width: 100px; max-height: 100px;" onerror="this.onerror=null; this.style.display='none';">
                                                                                 <button type="button" class="multiple-remove-btn" onclick="removePhoto({{ $photo->id }}, this)">×</button>
                                                                             </div>
                                                                         @endforeach
@@ -1588,10 +1602,91 @@
 
         <style>
             .hidden { display: none; }
-            .multiple-thumbnail-item { position: relative; display: inline-block; margin: 5px; }
+            .multiple-upload-container {
+                position: relative;
+                padding: 15px;
+                border: 2px dashed #d0d0d0;
+                border-radius: 8px;
+                background: #fafafa;
+                transition: all 0.3s ease;
+            }
+            .multiple-upload-container:hover {
+                border-color: #90278e;
+                background: #fff;
+            }
+            .multiple-file-input {
+                display: none;
+            }
+            .upload-label {
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: #90278e;
+                color: white;
+                cursor: pointer;
+                border-radius: 5px;
+                font-weight: 500;
+                transition: all 0.3s ease;
+                margin-bottom: 15px;
+            }
+            .upload-label:hover {
+                background-color: #7a1f78;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(144, 39, 142, 0.3);
+            }
+            .multiple-thumbnail-gallery {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                margin-top: 15px;
+            }
+            .multiple-thumbnail-item {
+                position: relative;
+                display: inline-block;
+                margin: 0;
+                border: 2px solid #e0e0e0;
+                border-radius: 8px;
+                padding: 5px;
+                background: #fff;
+                transition: all 0.3s ease;
+            }
+            .multiple-thumbnail-item:hover {
+                border-color: #90278e;
+                box-shadow: 0 2px 8px rgba(144, 39, 142, 0.2);
+            }
+            .multiple-thumbnail-item:hover .multiple-remove-btn {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+            .multiple-thumbnail-item img {
+                display: block;
+                border-radius: 4px;
+            }
             .multiple-remove-btn {
-                position: absolute; top: -10px; right: -10px; background: red; color: white;
-                border: none; border-radius: 50%; width: 20px; height: 20px; line-height: 20px; cursor: pointer;
+                position: absolute;
+                top: -8px;
+                right: -8px;
+                background: #dc3545;
+                color: white;
+                border: 2px solid white;
+                border-radius: 50%;
+                width: 28px;
+                height: 28px;
+                line-height: 24px;
+                cursor: pointer;
+                font-size: 18px;
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0.9;
+                transition: all 0.3s ease;
+                z-index: 10;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            }
+            .multiple-remove-btn:hover {
+                background: #c82333;
+                transform: scale(1.15);
+                opacity: 1;
             }
         </style>
 
@@ -1761,7 +1856,32 @@
             });
 
             function removePhoto(photoId, button) {
+                // Check if SweetAlert is available
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'Do you want to delete this photo?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#dc3545',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Yes, delete it!',
+                        cancelButtonText: 'Cancel',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            deletePhotoRequest(photoId, button);
+                        }
+                    });
+                } else {
+                    // Fallback to regular confirm if SweetAlert is not available
                 if (confirm('Are you sure you want to delete this photo?')) {
+                        deletePhotoRequest(photoId, button);
+                    }
+                }
+            }
+            
+            function deletePhotoRequest(photoId, button) {
                     fetch('{{ route("super-admin.room.delete-photo") }}', {
                         method: 'POST',
                         headers: {
@@ -1773,16 +1893,40 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
+                            if (typeof Swal !== 'undefined') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Deleted!',
+                                    text: 'Photo has been deleted successfully.',
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                });
+                            }
                                 button.closest('.multiple-thumbnail-item').remove();
+                        } else {
+                            if (typeof Swal !== 'undefined') {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: data.message || 'Failed to delete photo'
+                                });
                             } else {
                                 alert('Failed to delete photo: ' + (data.message || 'Unknown error'));
+                            }
                             }
                         })
                         .catch(error => {
                             console.error('Error:', error);
+                        if (typeof Swal !== 'undefined') {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'An error occurred while deleting the photo.'
+                            });
+                        } else {
                             alert('An error occurred while deleting the photo.');
+                        }
                         });
-                }
             }
 
             document.addEventListener('DOMContentLoaded', () => {
@@ -1791,9 +1935,13 @@
                     const fileInput = container.querySelector('.multiple-file-input');
                     const thumbnailGallery = container.querySelector('.multiple-thumbnail-gallery');
                     const containerId = container.id;
+                    if (!uploadedImages[containerId]) {
                     uploadedImages[containerId] = [];
+                    }
+                    
                     fileInput.addEventListener('change', function(event) {
                         const files = event.target.files;
+                        if (files && files.length > 0) {
                         for (let file of files) {
                             if (!file.type.startsWith('image/')) continue;
                             const reader = new FileReader();
@@ -1804,6 +1952,8 @@
                                 img.src = e.target.result;
                                 img.style.maxWidth = '100px';
                                 img.style.maxHeight = '100px';
+                                    img.style.display = 'block';
+                                    img.style.borderRadius = '4px';
                                 const removeBtn = document.createElement('button');
                                 removeBtn.innerHTML = '×';
                                 removeBtn.classList.add('multiple-remove-btn');
@@ -1822,6 +1972,7 @@
                                 uploadedImages[containerId].push(file);
                             };
                             reader.readAsDataURL(file);
+                            }
                         }
                     });
                 }
@@ -1866,6 +2017,166 @@
                         }
                     });
                 });
+                
+                // Show success message if photos were uploaded
+                @if (session('success') && str_contains(session('success'), 'Photos'))
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: '{{ session('success') }}',
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    }
+                @endif
+            });
+        </script>
+        
+        <!-- SweetAlert2 -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            // Show validation errors using SweetAlert - Must run immediately, not in DOMContentLoaded
+            @if ($errors->any())
+                (function() {
+                    let errorList = '';
+                    @foreach ($errors->all() as $error)
+                        errorList += '<li style="text-align: left; margin: 5px 0;">{{ addslashes($error) }}</li>';
+                    @endforeach
+                    
+                    // Wait for SweetAlert to be available
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Validation Error',
+                            html: '<div style="text-align: left;"><strong>Please fix the following errors:</strong><ul style="margin-top: 10px; padding-left: 20px;">' + errorList + '</ul></div>',
+                            confirmButtonColor: '#90278e',
+                            confirmButtonText: 'OK',
+                            width: '600px',
+                            allowOutsideClick: false
+                        }).then(() => {
+                            setTimeout(function() {
+                                const firstErrorField = document.querySelector('input.is-invalid, select.is-invalid, textarea.is-invalid') || 
+                                                       document.querySelector('[class*="text-danger"]')?.closest('.form-group')?.querySelector('input, select, textarea');
+                                if (firstErrorField) {
+                                    firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                    firstErrorField.focus();
+                                }
+                            }, 100);
+                        });
+                    } else {
+                        window.addEventListener('load', function() {
+                            if (typeof Swal !== 'undefined') {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Validation Error',
+                                    html: '<div style="text-align: left;"><strong>Please fix the following errors:</strong><ul style="margin-top: 10px; padding-left: 20px;">' + errorList + '</ul></div>',
+                                    confirmButtonColor: '#90278e',
+                                    confirmButtonText: 'OK',
+                                    width: '600px',
+                                    allowOutsideClick: false
+                                }).then(() => {
+                                    setTimeout(function() {
+                                        const firstErrorField = document.querySelector('input.is-invalid, select.is-invalid, textarea.is-invalid') || 
+                                                               document.querySelector('[class*="text-danger"]')?.closest('.form-group')?.querySelector('input, select, textarea');
+                                        if (firstErrorField) {
+                                            firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                            firstErrorField.focus();
+                                        }
+                                    }, 100);
+                                });
+                            }
+                        });
+                    }
+                })();
+            @endif
+            
+            // Intercept form submission to show validation errors
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.querySelector('form[action*="room.update"]');
+                if (form) {
+                    form.addEventListener('submit', function(e) {
+                        e.preventDefault(); // Always prevent default first
+                        
+                        // Clear previous validation
+                        form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+                        
+                        let hasErrors = false;
+                        let errorMessages = [];
+                        
+                        // Check required fields
+                        const requiredFields = form.querySelectorAll('[required]');
+                        requiredFields.forEach(field => {
+                            if (!field.value || !field.value.toString().trim()) {
+                                hasErrors = true;
+                                field.classList.add('is-invalid');
+                                const label = form.querySelector(`label[for="${field.id}"]`) || 
+                                            field.closest('.form-group')?.querySelector('label') ||
+                                            field.closest('.form-group')?.querySelector('.form-label');
+                                const fieldName = label ? label.textContent.trim().replace('*', '').replace(':', '') : field.name.replace('_', ' ');
+                                errorMessages.push(`${fieldName} is required`);
+                            }
+                        });
+                        
+                        // Check numeric fields
+                        const numericFields = form.querySelectorAll('input[type="number"]');
+                        numericFields.forEach(field => {
+                            if (field.value && field.value.toString().trim() && isNaN(field.value)) {
+                                hasErrors = true;
+                                field.classList.add('is-invalid');
+                                const label = form.querySelector(`label[for="${field.id}"]`) || 
+                                            field.closest('.form-group')?.querySelector('label') ||
+                                            field.closest('.form-group')?.querySelector('.form-label');
+                                const fieldName = label ? label.textContent.trim().replace('*', '').replace(':', '') : field.name.replace('_', ' ');
+                                errorMessages.push(`${fieldName} must be a valid number`);
+                            }
+                            if (field.hasAttribute('min') && field.value && parseFloat(field.value) < parseFloat(field.getAttribute('min'))) {
+                                hasErrors = true;
+                                field.classList.add('is-invalid');
+                                const label = form.querySelector(`label[for="${field.id}"]`) || 
+                                            field.closest('.form-group')?.querySelector('label') ||
+                                            field.closest('.form-group')?.querySelector('.form-label');
+                                const fieldName = label ? label.textContent.trim().replace('*', '').replace(':', '') : field.name.replace('_', ' ');
+                                errorMessages.push(`${fieldName} must be at least ${field.getAttribute('min')}`);
+                            }
+                        });
+                        
+                        if (hasErrors) {
+                            let errorList = '';
+                            errorMessages.forEach(msg => {
+                                errorList += '<li style="text-align: left; margin: 5px 0;">' + msg + '</li>';
+                            });
+                            
+                            if (typeof Swal !== 'undefined') {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Validation Error',
+                                    html: '<div style="text-align: left;"><strong>Please fix the following errors:</strong><ul style="margin-top: 10px; padding-left: 20px;">' + errorList + '</ul></div>',
+                                    confirmButtonColor: '#90278e',
+                                    confirmButtonText: 'OK',
+                                    width: '600px',
+                                    allowOutsideClick: false
+                                }).then(() => {
+                                    const firstErrorField = form.querySelector('.is-invalid');
+                                    if (firstErrorField) {
+                                        firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                        setTimeout(() => firstErrorField.focus(), 300);
+                                    }
+                                });
+                            } else {
+                                alert('Validation Error:\n\n' + errorMessages.join('\n'));
+                                const firstErrorField = form.querySelector('.is-invalid');
+                                if (firstErrorField) {
+                                    firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                    setTimeout(() => firstErrorField.focus(), 300);
+                                }
+                            }
+                        } else {
+                            // No errors, submit the form
+                            form.submit();
+                        }
+                    });
+                }
             });
         </script>
 @endsection

@@ -84,7 +84,7 @@
                     <h3 class="card-title">All Bookings</h3>
                     <div class="card-tools" style="display: flex; gap: 10px; align-items: center;">
                         <a href="{{ route('super-admin.bookings.manual.create') }}" class="btn btn-primary btn-sm" style="background: white; color: #90278e; border: 1px solid white;">
-                            <em class="icon ni ni-plus"></em> Create Manual Order
+                            <em class="icon ni ni-plus"></em> Create Manual Booking
                         </a>
                         <div class="input-group input-group-sm" style="width: 250px;">
                             <input type="text" id="searchInput" class="form-control float-right" placeholder="Search by invoice, name, phone...">

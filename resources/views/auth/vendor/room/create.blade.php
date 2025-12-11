@@ -27,6 +27,19 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                     </div>
                                 @endif
+                                
+                                
+                                <style>
+                                    .is-invalid {
+                                        border-color: #dc3545 !important;
+                                        background-color: #fff5f5 !important;
+                                    }
+                                    .is-invalid:focus {
+                                        border-color: #dc3545 !important;
+                                        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+                                    }
+                                </style>
+                                
                                 <form action="{{ route('vendor-admin.room.store') }}" method="POST" enctype="multipart/form-data" id="room-create-form">
                                     @csrf
                                     <input name="hotel_id" value="{{ $hotel }}" type="hidden">
@@ -1601,6 +1614,157 @@
                 uploadContainers.forEach(container => {
                     initializeMultipleUpload(container);
                 });
+                
+            });
+        </script>
+        
+        <!-- SweetAlert2 -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            // Show validation errors using SweetAlert - Must run immediately, not in DOMContentLoaded
+            @if ($errors->any())
+                (function() {
+                    let errorList = '';
+                    @foreach ($errors->all() as $error)
+                        errorList += '<li style="text-align: left; margin: 5px 0;">{{ addslashes($error) }}</li>';
+                    @endforeach
+                    
+                    // Wait for SweetAlert to be available
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Validation Error',
+                            html: '<div style="text-align: left;"><strong>Please fix the following errors:</strong><ul style="margin-top: 10px; padding-left: 20px;">' + errorList + '</ul></div>',
+                            confirmButtonColor: '#90278e',
+                            confirmButtonText: 'OK',
+                            width: '600px',
+                            allowOutsideClick: false
+                        }).then(() => {
+                            // Scroll to first error field
+                            setTimeout(function() {
+                                const firstErrorField = document.querySelector('input.is-invalid, select.is-invalid, textarea.is-invalid') || 
+                                                       document.querySelector('[class*="text-danger"]')?.closest('.form-group')?.querySelector('input, select, textarea');
+                                if (firstErrorField) {
+                                    firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                    firstErrorField.focus();
+                                }
+                            }, 100);
+                        });
+                    } else {
+                        // If SweetAlert not loaded yet, wait for it
+                        window.addEventListener('load', function() {
+                            if (typeof Swal !== 'undefined') {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Validation Error',
+                                    html: '<div style="text-align: left;"><strong>Please fix the following errors:</strong><ul style="margin-top: 10px; padding-left: 20px;">' + errorList + '</ul></div>',
+                                    confirmButtonColor: '#90278e',
+                                    confirmButtonText: 'OK',
+                                    width: '600px',
+                                    allowOutsideClick: false
+                                }).then(() => {
+                                    setTimeout(function() {
+                                        const firstErrorField = document.querySelector('input.is-invalid, select.is-invalid, textarea.is-invalid') || 
+                                                               document.querySelector('[class*="text-danger"]')?.closest('.form-group')?.querySelector('input, select, textarea');
+                                        if (firstErrorField) {
+                                            firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                            firstErrorField.focus();
+                                        }
+                                    }, 100);
+                                });
+                            }
+                        });
+                    }
+                })();
+            @endif
+            
+            // Intercept form submission to show validation errors
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.getElementById('room-create-form');
+                if (form) {
+                    form.addEventListener('submit', function(e) {
+                        e.preventDefault(); // Always prevent default first
+                        
+                        // Clear previous validation
+                        form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+                        
+                        let hasErrors = false;
+                        let errorMessages = [];
+                        
+                        // Check required fields
+                        const requiredFields = form.querySelectorAll('[required]');
+                        requiredFields.forEach(field => {
+                            if (!field.value || !field.value.toString().trim()) {
+                                hasErrors = true;
+                                field.classList.add('is-invalid');
+                                const label = form.querySelector(`label[for="${field.id}"]`) || 
+                                            field.closest('.form-group')?.querySelector('label') ||
+                                            field.closest('.form-group')?.querySelector('.form-label');
+                                const fieldName = label ? label.textContent.trim().replace('*', '').replace(':', '') : field.name.replace('_', ' ');
+                                errorMessages.push(`${fieldName} is required`);
+                            }
+                        });
+                        
+                        // Check numeric fields
+                        const numericFields = form.querySelectorAll('input[type="number"]');
+                        numericFields.forEach(field => {
+                            if (field.value && field.value.toString().trim() && isNaN(field.value)) {
+                                hasErrors = true;
+                                field.classList.add('is-invalid');
+                                const label = form.querySelector(`label[for="${field.id}"]`) || 
+                                            field.closest('.form-group')?.querySelector('label') ||
+                                            field.closest('.form-group')?.querySelector('.form-label');
+                                const fieldName = label ? label.textContent.trim().replace('*', '').replace(':', '') : field.name.replace('_', ' ');
+                                errorMessages.push(`${fieldName} must be a valid number`);
+                            }
+                            if (field.hasAttribute('min') && field.value && parseFloat(field.value) < parseFloat(field.getAttribute('min'))) {
+                                hasErrors = true;
+                                field.classList.add('is-invalid');
+                                const label = form.querySelector(`label[for="${field.id}"]`) || 
+                                            field.closest('.form-group')?.querySelector('label') ||
+                                            field.closest('.form-group')?.querySelector('.form-label');
+                                const fieldName = label ? label.textContent.trim().replace('*', '').replace(':', '') : field.name.replace('_', ' ');
+                                errorMessages.push(`${fieldName} must be at least ${field.getAttribute('min')}`);
+                            }
+                        });
+                        
+                        if (hasErrors) {
+                            let errorList = '';
+                            errorMessages.forEach(msg => {
+                                errorList += '<li style="text-align: left; margin: 5px 0;">' + msg + '</li>';
+                            });
+                            
+                            if (typeof Swal !== 'undefined') {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Validation Error',
+                                    html: '<div style="text-align: left;"><strong>Please fix the following errors:</strong><ul style="margin-top: 10px; padding-left: 20px;">' + errorList + '</ul></div>',
+                                    confirmButtonColor: '#90278e',
+                                    confirmButtonText: 'OK',
+                                    width: '600px',
+                                    allowOutsideClick: false
+                                }).then(() => {
+                                    // Scroll to first error field
+                                    const firstErrorField = form.querySelector('.is-invalid');
+                                    if (firstErrorField) {
+                                        firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                        setTimeout(() => firstErrorField.focus(), 300);
+                                    }
+                                });
+                            } else {
+                                alert('Validation Error:\n\n' + errorMessages.join('\n'));
+                                const firstErrorField = form.querySelector('.is-invalid');
+                                if (firstErrorField) {
+                                    firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                    setTimeout(() => firstErrorField.focus(), 300);
+                                }
+                            }
+                        } else {
+                            // No errors, submit the form
+                            form.submit();
+                        }
+                    });
+                }
             });
         </script>
 @endsection

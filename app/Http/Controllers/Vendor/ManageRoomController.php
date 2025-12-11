@@ -136,6 +136,69 @@ class ManageRoomController extends Controller
 
     public function store(Request $request)
     {
+        // Validate the request
+        $validated = $request->validate([
+            'hotel_id' => 'required|exists:hotels,id',
+            'name' => 'required|string|max:255',
+            'number' => 'required|string|max:255',
+            'floor_number' => 'required|string|max:255',
+            'price_per_night' => 'required|numeric|min:0',
+            'weekend_price' => 'nullable|numeric|min:0',
+            'holiday_price' => 'nullable|numeric|min:0',
+            'discount_type' => 'nullable|in:amount,percentage',
+            'discount_value' => 'nullable|numeric|min:0',
+            'total_persons' => 'required|integer|min:1',
+            'size' => 'required|numeric|min:0',
+            'total_rooms' => 'required|integer|min:1',
+            'total_washrooms' => 'required|integer|min:0',
+            'total_beds' => 'required|integer|min:0',
+            'description' => 'nullable|string',
+            'wifi_details' => 'nullable|string|max:255',
+            'appliances' => 'nullable|array',
+            'appliances.*' => 'nullable|string|max:255',
+            'furniture' => 'nullable|array',
+            'furniture.*' => 'nullable|string|max:255',
+            'amenities' => 'nullable|array',
+            'amenities.*' => 'nullable|string|max:255',
+            'cancellation_policy' => 'nullable|array',
+            'cancellation_policy.*' => 'nullable|string',
+            'is_active' => 'nullable|in:0,1,true,false,on,off',
+        ], [
+            'hotel_id.required' => 'Hotel ID is required.',
+            'hotel_id.exists' => 'Selected hotel does not exist.',
+            'name.required' => 'Room name is required.',
+            'name.max' => 'Room name must not exceed 255 characters.',
+            'number.required' => 'Room number is required.',
+            'number.max' => 'Room number must not exceed 255 characters.',
+            'floor_number.required' => 'Floor number is required.',
+            'floor_number.max' => 'Floor number must not exceed 255 characters.',
+            'price_per_night.required' => 'Price per night is required.',
+            'price_per_night.numeric' => 'Price per night must be a number.',
+            'price_per_night.min' => 'Price per night must be at least 0.',
+            'weekend_price.numeric' => 'Weekend price must be a number.',
+            'weekend_price.min' => 'Weekend price must be at least 0.',
+            'holiday_price.numeric' => 'Holiday price must be a number.',
+            'holiday_price.min' => 'Holiday price must be at least 0.',
+            'discount_type.in' => 'Discount type must be either amount or percentage.',
+            'discount_value.numeric' => 'Discount value must be a number.',
+            'discount_value.min' => 'Discount value must be at least 0.',
+            'total_persons.required' => 'Total persons is required.',
+            'total_persons.integer' => 'Total persons must be a whole number.',
+            'total_persons.min' => 'Total persons must be at least 1.',
+            'size.required' => 'Room size is required.',
+            'size.numeric' => 'Room size must be a number.',
+            'size.min' => 'Room size must be at least 0.',
+            'total_rooms.required' => 'Total rooms is required.',
+            'total_rooms.integer' => 'Total rooms must be a whole number.',
+            'total_rooms.min' => 'Total rooms must be at least 1.',
+            'total_washrooms.required' => 'Total washrooms is required.',
+            'total_washrooms.integer' => 'Total washrooms must be a whole number.',
+            'total_washrooms.min' => 'Total washrooms must be at least 0.',
+            'total_beds.required' => 'Total beds is required.',
+            'total_beds.integer' => 'Total beds must be a whole number.',
+            'total_beds.min' => 'Total beds must be at least 0.',
+        ]);
+
         Log::info('Received store request', [
             'raw_input' => $request->all(),
             'cancellation_policy' => $request->input('cancellation_policy', []),
@@ -276,7 +339,7 @@ class ManageRoomController extends Controller
                     try {
                         if ($photo->isValid()) {
                             $filename = time() . '_' . uniqid() . '.' . $photo->getClientOriginalExtension();
-                            $destinationPath = public_path('room_photos');
+                            $destinationPath = public_path('assets/room_photos');
 
                             // Ensure the directory exists
                             if (!file_exists($destinationPath)) {
@@ -287,7 +350,7 @@ class ManageRoomController extends Controller
 
                             RoomPhoto::create([
                                 'room_id' => $room->id,
-                                'photo_path' => 'room_photos/' . $filename,
+                                'photo_path' => 'assets/room_photos/' . $filename,
                                 'category' => $category,
                             ]);
                         }
@@ -307,6 +370,69 @@ class ManageRoomController extends Controller
 
     public function storeSuper(Request $request)
     {
+        // Validate the request
+        $validated = $request->validate([
+            'hotel_id' => 'required|exists:hotels,id',
+            'name' => 'required|string|max:255',
+            'number' => 'required|string|max:255',
+            'floor_number' => 'required|string|max:255',
+            'price_per_night' => 'required|numeric|min:0',
+            'weekend_price' => 'nullable|numeric|min:0',
+            'holiday_price' => 'nullable|numeric|min:0',
+            'discount_type' => 'nullable|in:amount,percentage',
+            'discount_value' => 'nullable|numeric|min:0',
+            'total_persons' => 'required|integer|min:1',
+            'size' => 'required|numeric|min:0',
+            'total_rooms' => 'required|integer|min:1',
+            'total_washrooms' => 'required|integer|min:0',
+            'total_beds' => 'required|integer|min:0',
+            'description' => 'nullable|string',
+            'wifi_details' => 'nullable|string|max:255',
+            'appliances' => 'nullable|array',
+            'appliances.*' => 'nullable|string|max:255',
+            'furniture' => 'nullable|array',
+            'furniture.*' => 'nullable|string|max:255',
+            'amenities' => 'nullable|array',
+            'amenities.*' => 'nullable|string|max:255',
+            'cancellation_policy' => 'nullable|array',
+            'cancellation_policy.*' => 'nullable|string',
+            'is_active' => 'nullable|in:0,1,true,false,on,off',
+        ], [
+            'hotel_id.required' => 'Hotel ID is required.',
+            'hotel_id.exists' => 'Selected hotel does not exist.',
+            'name.required' => 'Room name is required.',
+            'name.max' => 'Room name must not exceed 255 characters.',
+            'number.required' => 'Room number is required.',
+            'number.max' => 'Room number must not exceed 255 characters.',
+            'floor_number.required' => 'Floor number is required.',
+            'floor_number.max' => 'Floor number must not exceed 255 characters.',
+            'price_per_night.required' => 'Price per night is required.',
+            'price_per_night.numeric' => 'Price per night must be a number.',
+            'price_per_night.min' => 'Price per night must be at least 0.',
+            'weekend_price.numeric' => 'Weekend price must be a number.',
+            'weekend_price.min' => 'Weekend price must be at least 0.',
+            'holiday_price.numeric' => 'Holiday price must be a number.',
+            'holiday_price.min' => 'Holiday price must be at least 0.',
+            'discount_type.in' => 'Discount type must be either amount or percentage.',
+            'discount_value.numeric' => 'Discount value must be a number.',
+            'discount_value.min' => 'Discount value must be at least 0.',
+            'total_persons.required' => 'Total persons is required.',
+            'total_persons.integer' => 'Total persons must be a whole number.',
+            'total_persons.min' => 'Total persons must be at least 1.',
+            'size.required' => 'Room size is required.',
+            'size.numeric' => 'Room size must be a number.',
+            'size.min' => 'Room size must be at least 0.',
+            'total_rooms.required' => 'Total rooms is required.',
+            'total_rooms.integer' => 'Total rooms must be a whole number.',
+            'total_rooms.min' => 'Total rooms must be at least 1.',
+            'total_washrooms.required' => 'Total washrooms is required.',
+            'total_washrooms.integer' => 'Total washrooms must be a whole number.',
+            'total_washrooms.min' => 'Total washrooms must be at least 0.',
+            'total_beds.required' => 'Total beds is required.',
+            'total_beds.integer' => 'Total beds must be a whole number.',
+            'total_beds.min' => 'Total beds must be at least 0.',
+        ]);
+
         Log::info('Received store request from super admin', [
             'raw_input' => $request->all(),
             'cancellation_policy' => $request->input('cancellation_policy', []),
@@ -447,7 +573,7 @@ class ManageRoomController extends Controller
                     try {
                         if ($photo->isValid()) {
                             $filename = time() . '_' . uniqid() . '.' . $photo->getClientOriginalExtension();
-                            $destinationPath = public_path('room_photos');
+                            $destinationPath = public_path('assets/room_photos');
 
                             // Ensure the directory exists
                             if (!file_exists($destinationPath)) {
@@ -458,7 +584,7 @@ class ManageRoomController extends Controller
 
                             RoomPhoto::create([
                                 'room_id' => $room->id,
-                                'photo_path' => 'room_photos/' . $filename,
+                                'photo_path' => 'assets/room_photos/' . $filename,
                                 'category' => $category,
                             ]);
                         }
@@ -514,7 +640,10 @@ class ManageRoomController extends Controller
     {
         try {
             $roomId = $id;
-            $room = Room::findOrFail($roomId);
+            // Eager load photos so the edit view always sees the latest uploads
+            $room = Room::with(['photos' => function ($q) {
+                $q->orderBy('created_at', 'desc');
+            }])->findOrFail($roomId);
             $hotelId = $room->hotel_id;
             return view('auth.vendor.room.edit', ['room' => $room, 'hotel' => $hotelId]);
         } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
@@ -528,7 +657,10 @@ class ManageRoomController extends Controller
     {
         try {
             $roomId = $id;
-            $room = Room::findOrFail($roomId);
+            // Eager load photos so the edit view always sees the latest uploads
+            $room = Room::with(['photos' => function ($q) {
+                $q->orderBy('created_at', 'desc');
+            }])->findOrFail($roomId);
             $hotelId = $room->hotel_id;
             return view('auth.super_admin.room.edit', ['room' => $room, 'hotel' => $hotelId]);
         } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
@@ -541,6 +673,69 @@ class ManageRoomController extends Controller
 
     public function update(Request $request, $id)
     {
+        // Validate the request
+        $validated = $request->validate([
+            'hotel_id' => 'required|exists:hotels,id',
+            'name' => 'required|string|max:255',
+            'number' => 'required|string|max:255',
+            'floor_number' => 'required|string|max:255',
+            'price_per_night' => 'required|numeric|min:0',
+            'weekend_price' => 'nullable|numeric|min:0',
+            'holiday_price' => 'nullable|numeric|min:0',
+            'discount_type' => 'nullable|in:amount,percentage',
+            'discount_value' => 'nullable|numeric|min:0',
+            'total_persons' => 'required|integer|min:1',
+            'size' => 'required|numeric|min:0',
+            'total_rooms' => 'required|integer|min:1',
+            'total_washrooms' => 'required|integer|min:0',
+            'total_beds' => 'required|integer|min:0',
+            'description' => 'nullable|string',
+            'wifi_details' => 'nullable|string|max:255',
+            'appliances' => 'nullable|array',
+            'appliances.*' => 'nullable|string|max:255',
+            'furniture' => 'nullable|array',
+            'furniture.*' => 'nullable|string|max:255',
+            'amenities' => 'nullable|array',
+            'amenities.*' => 'nullable|string|max:255',
+            'cancellation_policy' => 'nullable|array',
+            'cancellation_policy.*' => 'nullable|string',
+            'is_active' => 'nullable|in:0,1,true,false,on,off',
+        ], [
+            'hotel_id.required' => 'Hotel ID is required.',
+            'hotel_id.exists' => 'Selected hotel does not exist.',
+            'name.required' => 'Room name is required.',
+            'name.max' => 'Room name must not exceed 255 characters.',
+            'number.required' => 'Room number is required.',
+            'number.max' => 'Room number must not exceed 255 characters.',
+            'floor_number.required' => 'Floor number is required.',
+            'floor_number.max' => 'Floor number must not exceed 255 characters.',
+            'price_per_night.required' => 'Price per night is required.',
+            'price_per_night.numeric' => 'Price per night must be a number.',
+            'price_per_night.min' => 'Price per night must be at least 0.',
+            'weekend_price.numeric' => 'Weekend price must be a number.',
+            'weekend_price.min' => 'Weekend price must be at least 0.',
+            'holiday_price.numeric' => 'Holiday price must be a number.',
+            'holiday_price.min' => 'Holiday price must be at least 0.',
+            'discount_type.in' => 'Discount type must be either amount or percentage.',
+            'discount_value.numeric' => 'Discount value must be a number.',
+            'discount_value.min' => 'Discount value must be at least 0.',
+            'total_persons.required' => 'Total persons is required.',
+            'total_persons.integer' => 'Total persons must be a whole number.',
+            'total_persons.min' => 'Total persons must be at least 1.',
+            'size.required' => 'Room size is required.',
+            'size.numeric' => 'Room size must be a number.',
+            'size.min' => 'Room size must be at least 0.',
+            'total_rooms.required' => 'Total rooms is required.',
+            'total_rooms.integer' => 'Total rooms must be a whole number.',
+            'total_rooms.min' => 'Total rooms must be at least 1.',
+            'total_washrooms.required' => 'Total washrooms is required.',
+            'total_washrooms.integer' => 'Total washrooms must be a whole number.',
+            'total_washrooms.min' => 'Total washrooms must be at least 0.',
+            'total_beds.required' => 'Total beds is required.',
+            'total_beds.integer' => 'Total beds must be a whole number.',
+            'total_beds.min' => 'Total beds must be at least 0.',
+        ]);
+
         Log::info('Received update request', [
             'room_id' => $id,
             'request_data' => $request->except(['_token', '_method']),
@@ -670,13 +865,14 @@ class ManageRoomController extends Controller
                 'amenity_photos' => 'amenity',
             ];
 
+            $photosUploaded = false;
             foreach ($photoCategories as $inputName => $category) {
                 if ($request->hasFile($inputName)) {
                     foreach ($request->file($inputName) as $index => $photo) {
                         try {
                             if ($photo->isValid()) {
                                 $filename = time() . '_' . uniqid() . '.' . $photo->getClientOriginalExtension();
-                                $destinationPath = public_path('room_photos');
+                                $destinationPath = public_path('assets/room_photos');
 
                                 // Ensure the directory exists
                                 if (!file_exists($destinationPath)) {
@@ -685,10 +881,18 @@ class ManageRoomController extends Controller
 
                                 $photo->move($destinationPath, $filename);
 
-                                RoomPhoto::create([
+                                $roomPhoto = RoomPhoto::create([
                                     'room_id' => $room->id,
-                                    'photo_path' => 'room_photos/' . $filename,
+                                    'photo_path' => 'assets/room_photos/' . $filename,
                                     'category' => $category,
+                                ]);
+                                $photosUploaded = true;
+                                Log::info("Photo uploaded successfully in update", [
+                                    'room_id' => $room->id,
+                                    'photo_id' => $roomPhoto->id,
+                                    'category' => $category,
+                                    'filename' => $filename,
+                                    'path' => $roomPhoto->photo_path
                                 ]);
                             }
                         } catch (\Exception $e) {
@@ -707,10 +911,18 @@ class ManageRoomController extends Controller
                     ->with('success', 'Room saved as draft successfully!');
             }
 
+            // If photos were uploaded, ensure Photos tab is active
+            $activeTab = $request->input('active_tab', 'tabItem3');
+            $successMessage = 'Room updated successfully!';
+            if ($photosUploaded) {
+                $activeTab = 'Photos';
+                $successMessage = 'Room updated successfully! Photos have been uploaded.';
+            }
+
             // Preserve the active tab when redirecting back
             return redirect()->route('vendor-admin.room.edit', $room->id)
-                ->with('success', 'Room updated successfully!')
-                ->withInput($request->only('active_tab'));
+                ->with('success', $successMessage)
+                ->withInput(['active_tab' => $activeTab]);
 
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             Log::error("Room not found for ID: $id", ['error' => $e->getMessage()]);
@@ -728,6 +940,69 @@ class ManageRoomController extends Controller
 
     public function updateSuper(Request $request, $id)
     {
+        // Validate the request
+        $validated = $request->validate([
+            'hotel_id' => 'required|exists:hotels,id',
+            'name' => 'required|string|max:255',
+            'number' => 'required|string|max:255',
+            'floor_number' => 'required|string|max:255',
+            'price_per_night' => 'required|numeric|min:0',
+            'weekend_price' => 'nullable|numeric|min:0',
+            'holiday_price' => 'nullable|numeric|min:0',
+            'discount_type' => 'nullable|in:amount,percentage',
+            'discount_value' => 'nullable|numeric|min:0',
+            'total_persons' => 'required|integer|min:1',
+            'size' => 'required|numeric|min:0',
+            'total_rooms' => 'required|integer|min:1',
+            'total_washrooms' => 'required|integer|min:0',
+            'total_beds' => 'required|integer|min:0',
+            'description' => 'nullable|string',
+            'wifi_details' => 'nullable|string|max:255',
+            'appliances' => 'nullable|array',
+            'appliances.*' => 'nullable|string|max:255',
+            'furniture' => 'nullable|array',
+            'furniture.*' => 'nullable|string|max:255',
+            'amenities' => 'nullable|array',
+            'amenities.*' => 'nullable|string|max:255',
+            'cancellation_policy' => 'nullable|array',
+            'cancellation_policy.*' => 'nullable|string',
+            'is_active' => 'nullable|in:0,1,true,false,on,off',
+        ], [
+            'hotel_id.required' => 'Hotel ID is required.',
+            'hotel_id.exists' => 'Selected hotel does not exist.',
+            'name.required' => 'Room name is required.',
+            'name.max' => 'Room name must not exceed 255 characters.',
+            'number.required' => 'Room number is required.',
+            'number.max' => 'Room number must not exceed 255 characters.',
+            'floor_number.required' => 'Floor number is required.',
+            'floor_number.max' => 'Floor number must not exceed 255 characters.',
+            'price_per_night.required' => 'Price per night is required.',
+            'price_per_night.numeric' => 'Price per night must be a number.',
+            'price_per_night.min' => 'Price per night must be at least 0.',
+            'weekend_price.numeric' => 'Weekend price must be a number.',
+            'weekend_price.min' => 'Weekend price must be at least 0.',
+            'holiday_price.numeric' => 'Holiday price must be a number.',
+            'holiday_price.min' => 'Holiday price must be at least 0.',
+            'discount_type.in' => 'Discount type must be either amount or percentage.',
+            'discount_value.numeric' => 'Discount value must be a number.',
+            'discount_value.min' => 'Discount value must be at least 0.',
+            'total_persons.required' => 'Total persons is required.',
+            'total_persons.integer' => 'Total persons must be a whole number.',
+            'total_persons.min' => 'Total persons must be at least 1.',
+            'size.required' => 'Room size is required.',
+            'size.numeric' => 'Room size must be a number.',
+            'size.min' => 'Room size must be at least 0.',
+            'total_rooms.required' => 'Total rooms is required.',
+            'total_rooms.integer' => 'Total rooms must be a whole number.',
+            'total_rooms.min' => 'Total rooms must be at least 1.',
+            'total_washrooms.required' => 'Total washrooms is required.',
+            'total_washrooms.integer' => 'Total washrooms must be a whole number.',
+            'total_washrooms.min' => 'Total washrooms must be at least 0.',
+            'total_beds.required' => 'Total beds is required.',
+            'total_beds.integer' => 'Total beds must be a whole number.',
+            'total_beds.min' => 'Total beds must be at least 0.',
+        ]);
+
         Log::info('Received update request from super admin', [
             'room_id' => $id,
             'request_data' => $request->except(['_token', '_method']),
@@ -857,13 +1132,14 @@ class ManageRoomController extends Controller
                 'amenity_photos' => 'amenity',
             ];
 
+            $photosUploaded = false;
             foreach ($photoCategories as $inputName => $category) {
                 if ($request->hasFile($inputName)) {
                     foreach ($request->file($inputName) as $index => $photo) {
                         try {
                             if ($photo->isValid()) {
                                 $filename = time() . '_' . uniqid() . '.' . $photo->getClientOriginalExtension();
-                                $destinationPath = public_path('room_photos');
+                                $destinationPath = public_path('assets/room_photos');
 
                                 // Ensure the directory exists
                                 if (!file_exists($destinationPath)) {
@@ -874,8 +1150,14 @@ class ManageRoomController extends Controller
 
                                 RoomPhoto::create([
                                     'room_id' => $room->id,
-                                    'photo_path' => 'room_photos/' . $filename, // relative to public folder
+                                    'photo_path' => 'assets/room_photos/' . $filename, // relative to public folder
                                     'category' => $category,
+                                ]);
+                                $photosUploaded = true;
+                                Log::info("Photo uploaded successfully", [
+                                    'room_id' => $room->id,
+                                    'category' => $category,
+                                    'filename' => $filename
                                 ]);
                             }
                         } catch (\Exception $e) {
@@ -894,10 +1176,18 @@ class ManageRoomController extends Controller
                     ->with('success', 'Room saved as draft successfully!');
             }
 
+            // If photos were uploaded, ensure Photos tab is active
+            $activeTab = $request->input('active_tab', 'tabItem3');
+            $successMessage = 'Room updated successfully!';
+            if ($photosUploaded) {
+                $activeTab = 'Photos';
+                $successMessage = 'Room updated successfully! Photos have been uploaded.';
+            }
+
             // Preserve the active tab when redirecting back
             return redirect()->route('super-admin.room.edit', $room->id)
-                ->with('success', 'Room updated successfully!')
-                ->withInput($request->only('active_tab'));
+                ->with('success', $successMessage)
+                ->withInput(['active_tab' => $activeTab]);
 
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             Log::error("Room not found for ID: $id", ['error' => $e->getMessage()]);
@@ -924,9 +1214,10 @@ class ManageRoomController extends Controller
 
             $photo = RoomPhoto::findOrFail($request->photo_id);
 
-            // Delete the file from storage
-            if (Storage::disk('public')->exists($photo->photo_path)) {
-                Storage::disk('public')->delete($photo->photo_path);
+            // Delete the file from public folder
+            $filePath = public_path($photo->photo_path);
+            if (file_exists($filePath)) {
+                unlink($filePath);
             }
 
             // Delete the database record
@@ -948,9 +1239,10 @@ class ManageRoomController extends Controller
 
             $photo = RoomPhoto::findOrFail($request->photo_id);
 
-            // Delete the file from storage
-            if (Storage::disk('public')->exists($photo->photo_path)) {
-                Storage::disk('public')->delete($photo->photo_path);
+            // Delete the file from public folder
+            $filePath = public_path($photo->photo_path);
+            if (file_exists($filePath)) {
+                unlink($filePath);
             }
 
             // Delete the database record
