@@ -1513,19 +1513,19 @@
                                             <div class="row gy-4">
                                                 @php
                                                     $photo_categories = [
-                                                        'feature_photos' => 'Featured Room Photos (Main Display)',
-                                                        'kitchen_photos' => 'Kitchen Photo',
-                                                        'washroom_photos' => 'Washroom Photo',
-                                                        'parking_photos' => 'Parking Lot Photos',
-                                                        'entrance_photos' => 'Entrance Gate/Main Gate Photos',
-                                                        'accessibility_photos' => 'Lift, Stairs, wheelchair area Photos',
-                                                        'spa_photos' => 'Spa & Massage Center Photos',
-                                                        'bar_photos' => 'Bar Photos',
-                                                        'transport_photos' => 'Hotels Car & Bus Photo',
-                                                        'rooftop_photos' => 'Rooftop, Garden, Sitting area Photos',
-                                                        'recreation_photos' => 'Gym, Game room & Kids Zone Photos',
-                                                        'safety_photos' => 'CCTV, Fire Extinguisher & Surveillance Photos',
-                                                        'amenity_photos' => 'Hotel/Property Amenities Photos'
+                                                        'feature_main_photos' => 'Main Feature Photo (Shown as primary image)',
+                                                        'bedroom_photos' => 'Bedroom (Main Bedroom Photos)',
+                                                        'washroom_photos' => 'Washroom (Washroom Photos)',
+                                                        'balcony_photos' => 'Balcony (Balcony Photos)',
+                                                        'living_dining_photos' => 'Living & Dining (Living Room & Dining Room Photos)',
+                                                        'furniture_photos' => 'Furniture (Bed, Sofa, Table, Chair, etc.)',
+                                                        'appliances_photos' => 'Appliances (AC, TV, Fridge, Geyser, etc.)',
+                                                        'kitchen_photos' => 'Kitchen (Kitchen & Kitchen Items – Crockery, Utensils, Stove, etc.)',
+                                                        'amenity_photos' => 'Room Amenities (All in-room / apartment amenities)',
+                                                        'bedroom2_photos' => '2nd Bedroom Photos (If Available)',
+                                                        'bedroom3_photos' => '3rd Bedroom Photos (If Available)',
+                                                        'washroom2_photos' => '2nd Washroom Photos (If Available)',
+                                                        'washroom3_photos' => '3rd Washroom Photos (If Available)',
                                                     ];
                                                     // Use already eager-loaded photos (ordered desc)
                                                     $room_photos = $room->photos->groupBy('category');

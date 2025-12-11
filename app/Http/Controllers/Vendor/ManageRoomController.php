@@ -318,19 +318,19 @@ class ManageRoomController extends Controller
 
         // Handle photo uploads
         $photoCategories = [
-            'feature_photos' => 'feature',
-            'kitchen_photos' => 'kitchen',
+            'feature_main_photos' => 'feature_main',
+            'bedroom_photos' => 'bedroom',
             'washroom_photos' => 'washroom',
-            'parking_photos' => 'parking',
-            'entrance_photos' => 'entrance',
-            'accessibility_photos' => 'accessibility',
-            'spa_photos' => 'spa',
-            'bar_photos' => 'bar',
-            'transport_photos' => 'transport',
-            'rooftop_photos' => 'rooftop',
-            'recreation_photos' => 'recreation',
-            'safety_photos' => 'safety',
+            'balcony_photos' => 'balcony',
+            'living_dining_photos' => 'living_dining',
+            'furniture_photos' => 'furniture',
+            'appliances_photos' => 'appliances',
+            'kitchen_photos' => 'kitchen',
             'amenity_photos' => 'amenity',
+            'bedroom2_photos' => 'bedroom2',
+            'bedroom3_photos' => 'bedroom3',
+            'washroom2_photos' => 'washroom2',
+            'washroom3_photos' => 'washroom3',
         ];
 
         foreach ($photoCategories as $inputName => $category) {
@@ -552,19 +552,19 @@ class ManageRoomController extends Controller
 
         // Handle photo uploads
         $photoCategories = [
-            'feature_photos' => 'feature',
-            'kitchen_photos' => 'kitchen',
+            'feature_main_photos' => 'feature_main',
+            'bedroom_photos' => 'bedroom',
             'washroom_photos' => 'washroom',
-            'parking_photos' => 'parking',
-            'entrance_photos' => 'entrance',
-            'accessibility_photos' => 'accessibility',
-            'spa_photos' => 'spa',
-            'bar_photos' => 'bar',
-            'transport_photos' => 'transport',
-            'rooftop_photos' => 'rooftop',
-            'recreation_photos' => 'recreation',
-            'safety_photos' => 'safety',
+            'balcony_photos' => 'balcony',
+            'living_dining_photos' => 'living_dining',
+            'furniture_photos' => 'furniture',
+            'appliances_photos' => 'appliances',
+            'kitchen_photos' => 'kitchen',
             'amenity_photos' => 'amenity',
+            'bedroom2_photos' => 'bedroom2',
+            'bedroom3_photos' => 'bedroom3',
+            'washroom2_photos' => 'washroom2',
+            'washroom3_photos' => 'washroom3',
         ];
 
         foreach ($photoCategories as $inputName => $category) {
@@ -850,19 +850,19 @@ class ManageRoomController extends Controller
 
             // Handle photo uploads
             $photoCategories = [
-                'feature_photos' => 'feature',
-                'kitchen_photos' => 'kitchen',
+                'feature_main_photos' => 'feature_main',
+                'bedroom_photos' => 'bedroom',
                 'washroom_photos' => 'washroom',
-                'parking_photos' => 'parking',
-                'entrance_photos' => 'entrance',
-                'accessibility_photos' => 'accessibility',
-                'spa_photos' => 'spa',
-                'bar_photos' => 'bar',
-                'transport_photos' => 'transport',
-                'rooftop_photos' => 'rooftop',
-                'recreation_photos' => 'recreation',
-                'safety_photos' => 'safety',
+                'balcony_photos' => 'balcony',
+                'living_dining_photos' => 'living_dining',
+                'furniture_photos' => 'furniture',
+                'appliances_photos' => 'appliances',
+                'kitchen_photos' => 'kitchen',
                 'amenity_photos' => 'amenity',
+                'bedroom2_photos' => 'bedroom2',
+                'bedroom3_photos' => 'bedroom3',
+                'washroom2_photos' => 'washroom2',
+                'washroom3_photos' => 'washroom3',
             ];
 
             $photosUploaded = false;
@@ -1117,19 +1117,19 @@ class ManageRoomController extends Controller
 
             // Handle photo uploads
             $photoCategories = [
-                'feature_photos' => 'feature',
-                'kitchen_photos' => 'kitchen',
+                'feature_main_photos' => 'feature_main',
+                'bedroom_photos' => 'bedroom',
                 'washroom_photos' => 'washroom',
-                'parking_photos' => 'parking',
-                'entrance_photos' => 'entrance',
-                'accessibility_photos' => 'accessibility',
-                'spa_photos' => 'spa',
-                'bar_photos' => 'bar',
-                'transport_photos' => 'transport',
-                'rooftop_photos' => 'rooftop',
-                'recreation_photos' => 'recreation',
-                'safety_photos' => 'safety',
+                'balcony_photos' => 'balcony',
+                'living_dining_photos' => 'living_dining',
+                'furniture_photos' => 'furniture',
+                'appliances_photos' => 'appliances',
+                'kitchen_photos' => 'kitchen',
                 'amenity_photos' => 'amenity',
+                'bedroom2_photos' => 'bedroom2',
+                'bedroom3_photos' => 'bedroom3',
+                'washroom2_photos' => 'washroom2',
+                'washroom3_photos' => 'washroom3',
             ];
 
             $photosUploaded = false;

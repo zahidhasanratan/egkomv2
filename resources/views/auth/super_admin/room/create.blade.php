@@ -660,19 +660,19 @@
                                             <div class="row gy-4">
                                                 @php
                                                     $photo_categories = [
-                                                        'feature' => 'Featured Room Photos (Main Display)',
-                                                        'kitchen' => 'Kitchen Photo',
-                                                        'washroom' => 'Washroom Photo',
-                                                        'parking' => 'Parking Lot Photos',
-                                                        'entrance' => 'Entrance Gate/Main Gate Photos',
-                                                        'accessibility' => 'Lift, Stairs, wheelchair area Photos',
-                                                        'spa' => 'Spa & Massage Center Photos',
-                                                        'bar' => 'Bar Photos',
-                                                        'transport' => 'Hotels Car & Bus Photo',
-                                                        'rooftop' => 'Rooftop, Garden, Sitting area Photos',
-                                                        'recreation' => 'Gym, Game room & Kids Zone Photos',
-                                                        'safety' => 'CCTV, Fire Extinguisher & Surveillance Photos',
-                                                        'amenity' => 'Hotel/Property Amenities Photos'
+                                                        'feature_main' => 'Main Feature Photo (Shown as primary image)',
+                                                        'bedroom' => 'Bedroom (Main Bedroom Photos)',
+                                                        'washroom' => 'Washroom (Washroom Photos)',
+                                                        'balcony' => 'Balcony (Balcony Photos)',
+                                                        'living_dining' => 'Living & Dining (Living Room & Dining Room Photos)',
+                                                        'furniture' => 'Furniture (Bed, Sofa, Table, Chair, etc.)',
+                                                        'appliances' => 'Appliances (AC, TV, Fridge, Geyser, etc.)',
+                                                        'kitchen' => 'Kitchen (Kitchen & Kitchen Items – Crockery, Utensils, Stove, etc.)',
+                                                        'amenity' => 'Room Amenities (All in-room / apartment amenities)',
+                                                        'bedroom2' => '2nd Bedroom Photos (If Available)',
+                                                        'bedroom3' => '3rd Bedroom Photos (If Available)',
+                                                        'washroom2' => '2nd Washroom Photos (If Available)',
+                                                        'washroom3' => '3rd Washroom Photos (If Available)',
                                                     ];
                                                 @endphp
 

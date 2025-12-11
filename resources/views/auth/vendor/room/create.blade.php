@@ -606,7 +606,7 @@
                                                     <h5 class="mb-3"><strong>Additional Bed Policy & Fee</strong></h5>
                                                     <div class="row">
                                                         <div class="col-md-4">
-                                                            <div class="form-group">
+                                                        <div class="form-group">
                                                                 <label class="form-label">Fee Amount</label>
                                                                 <input type="number" class="form-control" name="additional_info[bed_fee_amount]" value="{{ old('additional_info.bed_fee_amount', '') }}" placeholder="e.g., 1000" min="0" step="0.01">
                                                             </div>
@@ -623,9 +623,9 @@
                                                                 <input type="text" class="form-control" name="additional_info[bed_fee_unit]" value="{{ old('additional_info.bed_fee_unit', 'Per Bed') }}" placeholder="e.g., Per Bed">
                                                             </div>
                                                         </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div>
 
                                             <!-- Children & Extra Guest Policy -->
                                             <div class="row mt-4">
@@ -636,8 +636,8 @@
                                                             <div class="form-group">
                                                                 <label class="form-label">Children Free Age Limit</label>
                                                                 <input type="text" class="form-control" name="additional_info[children_free_age]" value="{{ old('additional_info.children_free_age', '') }}" placeholder="e.g., Under 5 years">
-                                                            </div>
-                                                        </div>
+                                                </div>
+                                            </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label class="form-label">Extra Adult Charge</label>
@@ -1341,19 +1341,19 @@
                                             <div class="row gy-4">
                                                 @php
                                                     $photo_categories = [
-                                                        'feature' => 'Featured Room Photos (Main Display)',
-                                                        'kitchen' => 'Kitchen Photo',
-                                                        'washroom' => 'Washroom Photo',
-                                                        'parking' => 'Parking Lot Photos',
-                                                        'entrance' => 'Entrance Gate/Main Gate Photos',
-                                                        'accessibility' => 'Lift, Stairs, wheelchair area Photos',
-                                                        'spa' => 'Spa & Massage Center Photos',
-                                                        'bar' => 'Bar Photos',
-                                                        'transport' => 'Hotels Car & Bus Photo',
-                                                        'rooftop' => 'Rooftop, Garden, Sitting area Photos',
-                                                        'recreation' => 'Gym, Game room & Kids Zone Photos',
-                                                        'safety' => 'CCTV, Fire Extinguisher & Surveillance Photos',
-                                                        'amenity' => 'Hotel/Property Amenities Photos'
+                                                        'feature_main' => 'Main Feature Photo (Shown as primary image)',
+                                                        'bedroom' => 'Bedroom (Main Bedroom Photos)',
+                                                        'washroom' => 'Washroom (Washroom Photos)',
+                                                        'balcony' => 'Balcony (Balcony Photos)',
+                                                        'living_dining' => 'Living & Dining (Living Room & Dining Room Photos)',
+                                                        'furniture' => 'Furniture (Bed, Sofa, Table, Chair, etc.)',
+                                                        'appliances' => 'Appliances (AC, TV, Fridge, Geyser, etc.)',
+                                                        'kitchen' => 'Kitchen (Kitchen & Kitchen Items – Crockery, Utensils, Stove, etc.)',
+                                                        'amenity' => 'Room Amenities (All in-room / apartment amenities)',
+                                                        'bedroom2' => '2nd Bedroom Photos (If Available)',
+                                                        'bedroom3' => '3rd Bedroom Photos (If Available)',
+                                                        'washroom2' => '2nd Washroom Photos (If Available)',
+                                                        'washroom3' => '3rd Washroom Photos (If Available)',
                                                     ];
                                                 @endphp
 
