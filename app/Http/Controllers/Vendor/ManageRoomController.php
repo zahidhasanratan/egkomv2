@@ -163,6 +163,7 @@ class ManageRoomController extends Controller
             'cancellation_policy' => 'nullable|array',
             'cancellation_policy.*' => 'nullable|string',
             'is_active' => 'nullable|in:0,1,true,false,on,off',
+            'availability_dates' => 'nullable|string',
         ], [
             'hotel_id.required' => 'Hotel ID is required.',
             'hotel_id.exists' => 'Selected hotel does not exist.',
@@ -306,6 +307,7 @@ class ManageRoomController extends Controller
             'display_options' => $displayOptions, // Store room information and additional info in display_options
             'is_active' => $request->boolean('is_active', false),
             'status' => $status,
+            'availability_dates' => $this->processAvailabilityDates($request->availability_dates),
         ]);
 
         Log::info('Room created', [
@@ -397,6 +399,7 @@ class ManageRoomController extends Controller
             'cancellation_policy' => 'nullable|array',
             'cancellation_policy.*' => 'nullable|string',
             'is_active' => 'nullable|in:0,1,true,false,on,off',
+            'availability_dates' => 'nullable|string',
         ], [
             'hotel_id.required' => 'Hotel ID is required.',
             'hotel_id.exists' => 'Selected hotel does not exist.',
@@ -540,6 +543,7 @@ class ManageRoomController extends Controller
             'display_options' => $displayOptions, // Store room information and additional info in display_options
             'is_active' => $request->boolean('is_active', false),
             'status' => $status,
+            'availability_dates' => $this->processAvailabilityDates($request->availability_dates),
         ]);
 
         Log::info('Room created by super admin', [
@@ -700,6 +704,7 @@ class ManageRoomController extends Controller
             'cancellation_policy' => 'nullable|array',
             'cancellation_policy.*' => 'nullable|string',
             'is_active' => 'nullable|in:0,1,true,false,on,off',
+            'availability_dates' => 'nullable|string',
         ], [
             'hotel_id.required' => 'Hotel ID is required.',
             'hotel_id.exists' => 'Selected hotel does not exist.',
@@ -835,6 +840,7 @@ class ManageRoomController extends Controller
                 'display_options' => $displayOptions, // Store room information and additional info in display_options
                 'is_active' => $request->boolean('is_active', false),
                 'status' => $status,
+                'availability_dates' => $this->processAvailabilityDates($request->availability_dates),
             ];
 
             // Update the room
@@ -967,6 +973,7 @@ class ManageRoomController extends Controller
             'cancellation_policy' => 'nullable|array',
             'cancellation_policy.*' => 'nullable|string',
             'is_active' => 'nullable|in:0,1,true,false,on,off',
+            'availability_dates' => 'nullable|string',
         ], [
             'hotel_id.required' => 'Hotel ID is required.',
             'hotel_id.exists' => 'Selected hotel does not exist.',
@@ -1102,6 +1109,7 @@ class ManageRoomController extends Controller
                 'display_options' => $displayOptions, // Store room information and additional info in display_options
                 'is_active' => $request->boolean('is_active', false),
                 'status' => $status,
+                'availability_dates' => $this->processAvailabilityDates($request->availability_dates),
             ];
 
             // Update the room
@@ -1255,6 +1263,37 @@ class ManageRoomController extends Controller
         }
     }
 
-
+    /**
+     * Process availability dates from request
+     */
+    private function processAvailabilityDates($datesInput)
+    {
+        if (empty($datesInput)) {
+            return null;
+        }
+        
+        try {
+            // If it's a JSON string, decode it
+            $dates = json_decode($datesInput, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($dates)) {
+                return $dates;
+            }
+            
+            // If it's a comma-separated string, convert to array
+            if (is_string($datesInput)) {
+                $dates = array_filter(array_map('trim', explode(',', $datesInput)));
+                return !empty($dates) ? array_values($dates) : null;
+            }
+            
+            // If it's already an array, return as is
+            if (is_array($datesInput)) {
+                return array_values(array_filter($datesInput));
+            }
+        } catch (\Exception $e) {
+            Log::error('Error processing availability dates', ['error' => $e->getMessage()]);
+        }
+        
+        return null;
+    }
 
 }

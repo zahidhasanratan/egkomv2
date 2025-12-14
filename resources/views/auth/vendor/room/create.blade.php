@@ -177,6 +177,42 @@
                                                     </div>
                                                 </div>
 
+                                                <!-- Room Availability Calendar -->
+                                                <div class="col-md-12 col-lg-12 col-xxl-12">
+                                                    <div class="row gy-4">
+                                                        <div class="price-card-room">
+                                                            <h3 class="can-tittle">Room Availability</h3>
+                                                            <p class="text-muted" style="font-size: 14px; margin-top: -10px;">Select dates when this room will be available for booking. The room will only appear on the website on selected dates.</p>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Select Available Dates</label>
+                                                                <input type="text" class="form-control" id="availability_dates" name="availability_dates" value="{{ old('availability_dates') }}" placeholder="Click to open calendar and select dates" readonly style="margin-bottom: 15px; cursor: pointer;">
+                                                                <small class="form-text text-muted" style="display: block; margin-bottom: 15px;">
+                                                                    <strong>How to select dates:</strong><br>
+                                                                    • <strong>Click the input field</strong> to open/close the calendar<br>
+                                                                    • <strong>Drag</strong> from one date to another to select a range<br>
+                                                                    • <strong>Click</strong> individual dates to toggle selection (click again to deselect)<br>
+                                                                    • The room will be available only on selected dates
+                                                                </small>
+                                                                <div id="availability_calendar_wrapper" style="max-width: 100%; margin: 0 auto; display: none;"></div>
+                                                                <div style="margin-top: 15px; display: flex; gap: 10px; align-items: center;">
+                                                                    <button type="button" id="clear_all_dates" class="btn btn-sm btn-secondary" style="background: #6c757d; color: white; border: none; padding: 8px 20px;">
+                                                                        <i class="fas fa-times"></i> Clear All
+                                                                    </button>
+                                                                    <button type="button" id="apply_dates" class="btn btn-sm btn-primary" style="background: #90278e; color: white; border: none; padding: 8px 20px;">
+                                                                        <i class="fas fa-check"></i> Apply Selection
+                                                                    </button>
+                                                                    <span id="selected_dates_count" style="margin-left: 10px; color: #90278e; font-weight: bold;"></span>
+                                                                </div>
+                                                                @error('availability_dates')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                                 <div class="col-md-12 col-lg-12 col-xxl-3">
                                                     <div class="form-group">
                                                         <label class="form-label" for="default-textarea">Room Description</label>
@@ -1620,6 +1656,334 @@
         
         <!-- SweetAlert2 -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        
+        <!-- Flatpickr CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <!-- Flatpickr JS -->
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        
+        <script>
+            // Initialize Flatpickr for availability dates with drag selection
+            document.addEventListener('DOMContentLoaded', function() {
+                const availabilityInput = document.getElementById('availability_dates');
+                
+                if (availabilityInput) {
+                    // Get existing dates from old input if any
+                    let existingDates = [];
+                    if (availabilityInput.value) {
+                        try {
+                            existingDates = JSON.parse(availabilityInput.value);
+                        } catch(e) {
+                            // If not JSON, try comma-separated dates
+                            existingDates = availabilityInput.value.split(',').map(d => d.trim()).filter(d => d);
+                        }
+                    }
+                    
+                    let isRangeSelecting = false;
+                    let rangeStart = null;
+                    let selectedDatesSet = new Set(existingDates);
+                    
+                    // Create a wrapper div for the calendar if it doesn't exist
+                    const calendarWrapper = document.getElementById('availability_calendar_wrapper');
+                    let flatpickrInstance;
+                    
+                    if (calendarWrapper) {
+                        const calendarInput = document.createElement('input');
+                        calendarInput.type = 'text';
+                        calendarInput.id = 'availability_calendar_input';
+                        calendarInput.style.display = 'none';
+                        calendarWrapper.appendChild(calendarInput);
+                        
+                        // Toggle calendar visibility on input click
+                        availabilityInput.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            const isVisible = calendarWrapper.style.display === 'block';
+                            calendarWrapper.style.display = isVisible ? 'none' : 'block';
+                        });
+                        
+                        // Close calendar when clicking outside
+                        document.addEventListener('click', function(e) {
+                            if (calendarWrapper && 
+                                !calendarWrapper.contains(e.target) && 
+                                e.target !== availabilityInput) {
+                                calendarWrapper.style.display = 'none';
+                            }
+                        });
+                        
+                        flatpickrInstance = flatpickr(calendarInput, {
+                            mode: "multiple",
+                            dateFormat: "Y-m-d",
+                            minDate: "today",
+                            enableTime: false,
+                            defaultDate: existingDates.length > 0 ? existingDates : null,
+                            inline: true,
+                            clickOpens: false,
+                            allowInput: false,
+                            appendTo: calendarWrapper,
+                        onReady: function(selectedDates, dateStr, instance) {
+                            // Add custom CSS for range selection
+                            const style = document.createElement('style');
+                            style.textContent = `
+                                .flatpickr-day.selected.startRange,
+                                .flatpickr-day.selected.endRange {
+                                    background: #90278e;
+                                    border-color: #90278e;
+                                }
+                                .flatpickr-day.inRange {
+                                    background: #e8d5e7;
+                                    border-color: #e8d5e7;
+                                    color: #90278e;
+                                }
+                            `;
+                            document.head.appendChild(style);
+                            
+                            // Enable mouse drag selection
+                            const calendar = instance.calendarContainer;
+                            let isDragging = false;
+                            let dragStartDate = null;
+                            let clickTimer = null;
+                            
+                            calendar.addEventListener('mousedown', function(e) {
+                                const day = e.target.closest('.flatpickr-day:not(.flatpickr-disabled)');
+                                if (day && !day.classList.contains('flatpickr-disabled')) {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    
+                                    const dateStr = day.getAttribute('aria-label');
+                                    if (dateStr) {
+                                        const dateFormatted = new Date(dateStr).toISOString().split('T')[0];
+                                        
+                                        // Start drag selection
+                                        isDragging = false; // Will be set to true on mouse move
+                                        dragStartDate = new Date(dateStr);
+                                        rangeStart = dragStartDate;
+                                        
+                                        // Set a timer to detect if it's a click (not drag)
+                                        clickTimer = setTimeout(function() {
+                                            // This is a click, not a drag
+                                            if (!isDragging) {
+                                                // Toggle selection
+                                                if (selectedDatesSet.has(dateFormatted)) {
+                                                    selectedDatesSet.delete(dateFormatted);
+                                                } else {
+                                                    selectedDatesSet.add(dateFormatted);
+                                                }
+                                                updateFlatpickrDates();
+                                            }
+                                        }, 150); // 150ms threshold to distinguish click from drag
+                                    }
+                                }
+                            });
+                            
+                            calendar.addEventListener('mousemove', function(e) {
+                                if (dragStartDate !== null) {
+                                    // Clear click timer since we're dragging
+                                    if (clickTimer) {
+                                        clearTimeout(clickTimer);
+                                        clickTimer = null;
+                                    }
+                                    isDragging = true;
+                                    const day = e.target.closest('.flatpickr-day:not(.flatpickr-disabled)');
+                                    if (day) {
+                                        const dateStr = day.getAttribute('aria-label');
+                                        if (dateStr && rangeStart) {
+                                            const currentDate = new Date(dateStr);
+                                            const start = rangeStart < currentDate ? rangeStart : currentDate;
+                                            const end = rangeStart < currentDate ? currentDate : rangeStart;
+                                            
+                                            // Highlight range
+                                            const allDays = calendar.querySelectorAll('.flatpickr-day:not(.flatpickr-disabled)');
+                                            allDays.forEach(d => {
+                                                d.classList.remove('in-range', 'start-range', 'end-range');
+                                            });
+                                            
+                                            allDays.forEach(d => {
+                                                const dDateStr = d.getAttribute('aria-label');
+                                                if (dDateStr) {
+                                                    const dDate = new Date(dDateStr);
+                                                    if (dDate >= start && dDate <= end) {
+                                                        d.classList.add('in-range');
+                                                        if (dDate.getTime() === start.getTime()) {
+                                                            d.classList.add('start-range');
+                                                        }
+                                                        if (dDate.getTime() === end.getTime()) {
+                                                            d.classList.add('end-range');
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+                            });
+                            
+                            calendar.addEventListener('mouseup', function(e) {
+                                // Clear click timer
+                                if (clickTimer) {
+                                    clearTimeout(clickTimer);
+                                    clickTimer = null;
+                                }
+                                
+                                if (isDragging && dragStartDate !== null) {
+                                    const day = e.target.closest('.flatpickr-day:not(.flatpickr-disabled)');
+                                    if (day && rangeStart) {
+                                        const dateStr = day.getAttribute('aria-label');
+                                        if (dateStr) {
+                                            const endDate = new Date(dateStr);
+                                            const start = rangeStart < endDate ? rangeStart : endDate;
+                                            const end = rangeStart < endDate ? endDate : rangeStart;
+                                            
+                                            // Add all dates in range
+                                            const currentDate = new Date(start);
+                                            while (currentDate <= end) {
+                                                const dateStr = currentDate.toISOString().split('T')[0];
+                                                selectedDatesSet.add(dateStr);
+                                                currentDate.setDate(currentDate.getDate() + 1);
+                                            }
+                                            
+                                            // Update flatpickr selection
+                                            updateFlatpickrDates();
+                                        }
+                                    }
+                                    
+                                    // Clear dragging state
+                                    isDragging = false;
+                                    dragStartDate = null;
+                                    rangeStart = null;
+                                    
+                                    // Clear highlights
+                                    const allDays = calendar.querySelectorAll('.flatpickr-day');
+                                    allDays.forEach(d => {
+                                        d.classList.remove('in-range', 'start-range', 'end-range');
+                                    });
+                                    
+                                    e.preventDefault();
+                                } else {
+                                    // Reset drag state
+                                    isDragging = false;
+                                    dragStartDate = null;
+                                    rangeStart = null;
+                                }
+                            });
+                            
+                            // Note: Click handling is now done in mousedown with timer to distinguish from drag
+                            
+                            function updateSelectedCount() {
+                                const count = selectedDatesSet.size;
+                                const countElement = document.getElementById('selected_dates_count');
+                                if (countElement) {
+                                    if (count > 0) {
+                                        countElement.textContent = count + ' date' + (count !== 1 ? 's' : '') + ' selected';
+                                    } else {
+                                        countElement.textContent = 'No dates selected';
+                                    }
+                                }
+                            }
+                            
+                            function updateFlatpickrDates() {
+                                const datesArray = Array.from(selectedDatesSet).sort().map(dateStr => {
+                                    return new Date(dateStr + 'T00:00:00');
+                                });
+                                
+                                // Update flatpickr but don't trigger onChange
+                                flatpickrInstance.setDate(datesArray, false);
+                                
+                                // Manually update visual selection
+                                const allDays = calendar.querySelectorAll('.flatpickr-day:not(.flatpickr-disabled)');
+                                allDays.forEach(day => {
+                                    const dateStr = day.getAttribute('aria-label');
+                                    if (dateStr) {
+                                        const dateFormatted = new Date(dateStr).toISOString().split('T')[0];
+                                        if (selectedDatesSet.has(dateFormatted)) {
+                                            day.classList.add('selected', 'flatpickr-selected');
+                                            day.style.background = '#90278e';
+                                            day.style.borderColor = '#90278e';
+                                            day.style.color = 'white';
+                                        } else {
+                                            day.classList.remove('selected', 'flatpickr-selected');
+                                            day.style.background = '';
+                                            day.style.borderColor = '';
+                                            day.style.color = '';
+                                        }
+                                    }
+                                });
+                                
+                                // Update hidden input value
+                                const sortedDates = Array.from(selectedDatesSet).sort();
+                                availabilityInput.value = JSON.stringify(sortedDates);
+                                updateSelectedCount();
+                            }
+                            
+                            // Initialize count on load
+                            updateSelectedCount();
+                            updateSelectedCount();
+                            
+                            // Clear all dates button
+                            const clearAllBtn = document.getElementById('clear_all_dates');
+                            if (clearAllBtn) {
+                                clearAllBtn.addEventListener('click', function() {
+                                    if (confirm('Are you sure you want to clear all selected dates?')) {
+                                        selectedDatesSet.clear();
+                                        updateFlatpickrDates();
+                                    }
+                                });
+                            }
+                            
+                            // Apply dates button (shows confirmation)
+                            const applyBtn = document.getElementById('apply_dates');
+                            if (applyBtn) {
+                                applyBtn.addEventListener('click', function() {
+                                    const count = selectedDatesSet.size;
+                                    if (count === 0) {
+                                        alert('Please select at least one date, or leave empty to make room always available.');
+                                        return;
+                                    }
+                                    const sortedDates = Array.from(selectedDatesSet).sort();
+                                    availabilityInput.value = JSON.stringify(sortedDates);
+                                    flatpickrInstance.setDate(sortedDates.map(d => new Date(d + 'T00:00:00')), false);
+                                    applyBtn.innerHTML = '<i class="fas fa-check-circle"></i> Applied!';
+                                    applyBtn.style.background = '#28a745';
+                                    setTimeout(() => {
+                                        applyBtn.innerHTML = '<i class="fas fa-check"></i> Apply Selection';
+                                        applyBtn.style.background = '#90278e';
+                                    }, 2000);
+                                });
+                            }
+                        },
+                        onChange: function(selectedDates, dateStr, instance) {
+                            // Update our set when dates change through normal selection
+                            selectedDatesSet.clear();
+                            selectedDates.forEach(date => {
+                                selectedDatesSet.add(date.toISOString().split('T')[0]);
+                            });
+                            
+                            const sortedDates = Array.from(selectedDatesSet).sort();
+                            availabilityInput.value = JSON.stringify(sortedDates);
+                            updateSelectedCount();
+                        }
+                    });
+                    } else {
+                        // Fallback: use regular flatpickr with inline calendar
+                        const flatpickrInstance = flatpickr(availabilityInput, {
+                            mode: "multiple",
+                            dateFormat: "Y-m-d",
+                            minDate: "today",
+                            enableTime: false,
+                            defaultDate: existingDates.length > 0 ? existingDates : null,
+                            inline: true,
+                            clickOpens: true,
+                            allowInput: false,
+                            onChange: function(selectedDates, dateStr, instance) {
+                                const datesArray = selectedDates.map(date => {
+                                    return date.toISOString().split('T')[0];
+                                });
+                                availabilityInput.value = JSON.stringify(datesArray);
+                            }
+                        });
+                    }
+                }
+            });
+        </script>
         <script>
             // Show validation errors using SweetAlert - Must run immediately, not in DOMContentLoaded
             @if ($errors->any())

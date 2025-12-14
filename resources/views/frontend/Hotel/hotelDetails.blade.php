@@ -905,6 +905,7 @@
                             'amenities' => $room->amenities ?? [],
                             'cancellation_policy' => $room->cancellation_policy ?? [],
                             'display_options' => $room->display_options ?? [],
+                            'availability_dates' => $room->availability_dates ?? [],
                             'photos' => $room->photos->groupBy('category')->map(function($photos) {
                                 return $photos->map(function($photo) {
                                     return $photo->photo_path;
@@ -2549,6 +2550,70 @@
         bedFilter: 'all'
     };
 
+    // Filter rooms based on availability dates
+    function filterRoomsByAvailability() {
+        const checkin = document.getElementById('checkInDate')?.value;
+        const checkout = document.getElementById('checkoutDate')?.value;
+        
+        // Filter rooms
+        const rooms = document.querySelectorAll('.hotel-all-card');
+        let visibleCount = 0;
+        
+        rooms.forEach(roomElement => {
+            const roomId = parseInt(roomElement.getAttribute('data-room-id'));
+            const room = roomsData.find(r => r.id === roomId);
+            
+            if (!room) {
+                roomElement.style.display = 'none';
+                return;
+            }
+            
+            // If room has no availability_dates set, it's always available
+            if (!room.availability_dates || room.availability_dates.length === 0) {
+                roomElement.style.display = '';
+                visibleCount++;
+                return;
+            }
+            
+            // If room has availability_dates set, it should only show when dates are selected AND match
+            if (!checkin || !checkout) {
+                // No dates selected - hide rooms that have availability_dates set
+                roomElement.style.display = 'none';
+                return;
+            }
+            
+            const checkinDate = new Date(checkin);
+            const checkoutDate = new Date(checkout);
+            
+            // Generate all dates in the range (excluding checkout date)
+            const datesInRange = [];
+            const currentDate = new Date(checkinDate);
+            while (currentDate < checkoutDate) {
+                datesInRange.push(currentDate.toISOString().split('T')[0]);
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            
+            // Check if ALL dates in range are in availability_dates
+            const allDatesAvailable = datesInRange.every(date => {
+                return room.availability_dates.includes(date);
+            });
+            
+            if (allDatesAvailable) {
+                roomElement.style.display = '';
+                visibleCount++;
+            } else {
+                roomElement.style.display = 'none';
+            }
+        });
+        
+        // Show/hide no rooms message
+        if (visibleCount === 0 && (checkin && checkout)) {
+            showNoRoomsMessage();
+        } else {
+            hideNoRoomsMessage();
+        }
+    }
+
     // Modify Search Function
     function modifySearch() {
         const checkin = document.getElementById('checkInDate').value;
@@ -2594,6 +2659,9 @@
 
         // Update summary text
         updateSearchSummary();
+        
+        // Filter rooms by availability dates
+        filterRoomsByAvailability();
         
         // Filter rooms
         filterRooms();
@@ -2712,6 +2780,9 @@
             room.style.display = '';
         });
         
+        // Filter rooms by availability (will show all if no dates)
+        filterRoomsByAvailability();
+        
         hideNoRoomsMessage();
     }
 
@@ -2759,7 +2830,17 @@
             const checkinDate = new Date(this.value);
             checkinDate.setDate(checkinDate.getDate() + 1);
             document.getElementById('checkoutDate').setAttribute('min', checkinDate.toISOString().split('T')[0]);
+            // Filter rooms when check-in date changes
+            filterRoomsByAvailability();
         });
+        
+        // Filter rooms when check-out date changes
+        document.getElementById('checkoutDate').addEventListener('change', function() {
+            filterRoomsByAvailability();
+        });
+        
+        // Filter rooms on initial page load if dates are already set
+        filterRoomsByAvailability();
     });
 </script>
 
