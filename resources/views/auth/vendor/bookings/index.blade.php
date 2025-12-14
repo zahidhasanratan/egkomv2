@@ -179,7 +179,8 @@
                                     <span class="badge badge-{{ 
                                         $booking->booking_status == 'confirmed' ? 'success' : 
                                         ($booking->booking_status == 'pending' ? 'warning' : 
-                                        ($booking->booking_status == 'cancelled' ? 'danger' : 'info')) 
+                                        ($booking->booking_status == 'cancelled' ? 'danger' : 
+                                        ($booking->booking_status == 'staying' ? 'primary' : 'info'))) 
                                     }}">
                                         {{ ucfirst($booking->booking_status) }}
                                     </span>

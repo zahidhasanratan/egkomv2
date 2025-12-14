@@ -209,21 +209,33 @@
 
                                                 <div class="col-md-6 col-lg-4 col-xxl-3">
                                                     <div class="form-group">
-                                                        <label class="form-label" for="first-name">Check-in window start and end time</label>
+                                                        <label class="form-label">Check-in Time</label>
                                                         <select class="form-select mb-3" name="check_in_window" aria-label="Large select example">
                                                             <option selected value="">Select Check-in Time</option>
-                                                            <option value="00:00-02:00">12:00 AM (Midnight) - 2:00 AM</option>
-                                                            <option value="02:00-04:00">2:00 AM - 4:00 AM</option>
-                                                            <option value="04:00-06:00">4:00 AM - 6:00 AM</option>
-                                                            <option value="06:00-08:00">6:00 AM - 8:00 AM</option>
-                                                            <option value="08:00-10:00">8:00 AM - 10:00 AM</option>
-                                                            <option value="10:00-12:00">10:00 AM - 12:00 PM (Noon)</option>
-                                                            <option value="12:00-14:00">12:00 PM (Noon) - 2:00 PM</option>
-                                                            <option value="14:00-16:00">2:00 PM - 4:00 PM</option>
-                                                            <option value="16:00-18:00">4:00 PM - 6:00 PM</option>
-                                                            <option value="18:00-20:00">6:00 PM - 8:00 PM</option>
-                                                            <option value="20:00-22:00">8:00 PM - 10:00 PM</option>
-                                                            <option value="22:00-00:00">10:00 PM - 12:00 AM (Midnight)</option>
+                                                            <option value="1:00 AM">1:00 AM</option>
+                                                            <option value="2:00 AM">2:00 AM</option>
+                                                            <option value="3:00 AM">3:00 AM</option>
+                                                            <option value="4:00 AM">4:00 AM</option>
+                                                            <option value="5:00 AM">5:00 AM</option>
+                                                            <option value="6:00 AM">6:00 AM</option>
+                                                            <option value="7:00 AM">7:00 AM</option>
+                                                            <option value="8:00 AM">8:00 AM</option>
+                                                            <option value="9:00 AM">9:00 AM</option>
+                                                            <option value="10:00 AM">10:00 AM</option>
+                                                            <option value="11:00 AM">11:00 AM</option>
+                                                            <option value="12:00 PM">12:00 PM (Noon)</option>
+                                                            <option value="1:00 PM">1:00 PM</option>
+                                                            <option value="2:00 PM">2:00 PM</option>
+                                                            <option value="3:00 PM">3:00 PM</option>
+                                                            <option value="4:00 PM">4:00 PM</option>
+                                                            <option value="5:00 PM">5:00 PM</option>
+                                                            <option value="6:00 PM">6:00 PM</option>
+                                                            <option value="7:00 PM">7:00 PM</option>
+                                                            <option value="8:00 PM">8:00 PM</option>
+                                                            <option value="9:00 PM">9:00 PM</option>
+                                                            <option value="10:00 PM">10:00 PM</option>
+                                                            <option value="11:00 PM">11:00 PM</option>
+                                                            <option value="12:00 AM">12:00 AM (Midnight)</option>
                                                         </select>
                                                         @error('check_in_window') <span class="text-danger">{{ $message }}</span> @enderror
                                                     </div>

@@ -186,58 +186,105 @@
 
                                                 <div class="col-md-6 col-lg-4 col-xxl-3">
                                                     <div class="form-group">
-                                                        <label class="form-label" for="check-in-window">Check-in window
-                                                            start and end time</label>
+                                                        <label class="form-label" for="check-in-window">Check-in Time</label>
                                                         <select class="form-select mb-3" name="check_in_window"
                                                                 id="check-in-window" aria-label="Large select example">
                                                             <option value="">Select Check-in Time</option>
                                                             <option
-                                                                value="00:00-02:00" {{ old('check_in_window', $hotel->check_in_window) == '00:00-02:00' ? 'selected' : '' }}>
-                                                                12:00 AM (Midnight) - 2:00 AM
+                                                                value="1:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '1:00 AM' ? 'selected' : '' }}>
+                                                                1:00 AM
                                                             </option>
                                                             <option
-                                                                value="02:00-04:00" {{ old('check_in_window', $hotel->check_in_window) == '02:00-04:00' ? 'selected' : '' }}>
-                                                                2:00 AM - 4:00 AM
+                                                                value="2:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '2:00 AM' ? 'selected' : '' }}>
+                                                                2:00 AM
                                                             </option>
                                                             <option
-                                                                value="04:00-06:00" {{ old('check_in_window', $hotel->check_in_window) == '04:00-06:00' ? 'selected' : '' }}>
-                                                                4:00 AM - 6:00 AM
+                                                                value="3:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '3:00 AM' ? 'selected' : '' }}>
+                                                                3:00 AM
                                                             </option>
                                                             <option
-                                                                value="06:00-08:00" {{ old('check_in_window', $hotel->check_in_window) == '06:00-08:00' ? 'selected' : '' }}>
-                                                                6:00 AM - 8:00 AM
+                                                                value="4:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '4:00 AM' ? 'selected' : '' }}>
+                                                                4:00 AM
                                                             </option>
                                                             <option
-                                                                value="08:00-10:00" {{ old('check_in_window', $hotel->check_in_window) == '08:00-10:00' ? 'selected' : '' }}>
-                                                                8:00 AM - 10:00 AM
+                                                                value="5:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '5:00 AM' ? 'selected' : '' }}>
+                                                                5:00 AM
                                                             </option>
                                                             <option
-                                                                value="10:00-12:00" {{ old('check_in_window', $hotel->check_in_window) == '10:00-12:00' ? 'selected' : '' }}>
-                                                                10:00 AM - 12:00 PM (Noon)
+                                                                value="6:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '6:00 AM' ? 'selected' : '' }}>
+                                                                6:00 AM
                                                             </option>
                                                             <option
-                                                                value="12:00-14:00" {{ old('check_in_window', $hotel->check_in_window) == '12:00-14:00' ? 'selected' : '' }}>
-                                                                12:00 PM (Noon) - 2:00 PM
+                                                                value="7:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '7:00 AM' ? 'selected' : '' }}>
+                                                                7:00 AM
                                                             </option>
                                                             <option
-                                                                value="14:00-16:00" {{ old('check_in_window', $hotel->check_in_window) == '14:00-16:00' ? 'selected' : '' }}>
-                                                                2:00 PM - 4:00 PM
+                                                                value="8:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '8:00 AM' ? 'selected' : '' }}>
+                                                                8:00 AM
                                                             </option>
                                                             <option
-                                                                value="16:00-18:00" {{ old('check_in_window', $hotel->check_in_window) == '16:00-18:00' ? 'selected' : '' }}>
-                                                                4:00 PM - 6:00 PM
+                                                                value="9:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '9:00 AM' ? 'selected' : '' }}>
+                                                                9:00 AM
                                                             </option>
                                                             <option
-                                                                value="18:00-20:00" {{ old('check_in_window', $hotel->check_in_window) == '18:00-20:00' ? 'selected' : '' }}>
-                                                                6:00 PM - 8:00 PM
+                                                                value="10:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '10:00 AM' ? 'selected' : '' }}>
+                                                                10:00 AM
                                                             </option>
                                                             <option
-                                                                value="20:00-22:00" {{ old('check_in_window', $hotel->check_in_window) == '20:00-22:00' ? 'selected' : '' }}>
-                                                                8:00 PM - 10:00 PM
+                                                                value="11:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '11:00 AM' ? 'selected' : '' }}>
+                                                                11:00 AM
                                                             </option>
                                                             <option
-                                                                value="22:00-00:00" {{ old('check_in_window', $hotel->check_in_window) == '22:00-00:00' ? 'selected' : '' }}>
-                                                                10:00 PM - 12:00 AM (Midnight)
+                                                                value="12:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '12:00 PM' ? 'selected' : '' }}>
+                                                                12:00 PM (Noon)
+                                                            </option>
+                                                            <option
+                                                                value="1:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '1:00 PM' ? 'selected' : '' }}>
+                                                                1:00 PM
+                                                            </option>
+                                                            <option
+                                                                value="2:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '2:00 PM' ? 'selected' : '' }}>
+                                                                2:00 PM
+                                                            </option>
+                                                            <option
+                                                                value="3:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '3:00 PM' ? 'selected' : '' }}>
+                                                                3:00 PM
+                                                            </option>
+                                                            <option
+                                                                value="4:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '4:00 PM' ? 'selected' : '' }}>
+                                                                4:00 PM
+                                                            </option>
+                                                            <option
+                                                                value="5:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '5:00 PM' ? 'selected' : '' }}>
+                                                                5:00 PM
+                                                            </option>
+                                                            <option
+                                                                value="6:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '6:00 PM' ? 'selected' : '' }}>
+                                                                6:00 PM
+                                                            </option>
+                                                            <option
+                                                                value="7:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '7:00 PM' ? 'selected' : '' }}>
+                                                                7:00 PM
+                                                            </option>
+                                                            <option
+                                                                value="8:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '8:00 PM' ? 'selected' : '' }}>
+                                                                8:00 PM
+                                                            </option>
+                                                            <option
+                                                                value="9:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '9:00 PM' ? 'selected' : '' }}>
+                                                                9:00 PM
+                                                            </option>
+                                                            <option
+                                                                value="10:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '10:00 PM' ? 'selected' : '' }}>
+                                                                10:00 PM
+                                                            </option>
+                                                            <option
+                                                                value="11:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '11:00 PM' ? 'selected' : '' }}>
+                                                                11:00 PM
+                                                            </option>
+                                                            <option
+                                                                value="12:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '12:00 AM' ? 'selected' : '' }}>
+                                                                12:00 AM (Midnight)
                                                             </option>
                                                         </select>
                                                         @error('check_in_window') <span

@@ -135,6 +135,7 @@
                             <select name="booking_status" id="booking_status" class="form-control">
                                 <option value="pending" {{ $booking->booking_status == 'pending' ? 'selected' : '' }}>Pending</option>
                                 <option value="confirmed" {{ $booking->booking_status == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
+                                <option value="staying" {{ $booking->booking_status == 'staying' ? 'selected' : '' }}>Staying</option>
                                 <option value="completed" {{ $booking->booking_status == 'completed' ? 'selected' : '' }}>Completed</option>
                                 <option value="cancelled" {{ $booking->booking_status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                             </select>
@@ -181,27 +182,6 @@
                         });
                     });
                 </script>
-            </div>
-
-            <!-- Currently Staying Card -->
-            <div class="card" style="margin-top: 20px;">
-                <div class="card-header" style="background: #90278e; color: white;">
-                    <h3 class="card-title">Currently Staying</h3>
-                </div>
-                <div class="card-body">
-                    <form action="{{ route('vendor.bookings.updateCurrentlyStaying', $booking->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <div class="form-group">
-                            <label>Currently Staying</label>
-                            <select name="currently_staying" class="form-control">
-                                <option value="no" {{ ($booking->currently_staying ?? 'no') == 'no' ? 'selected' : '' }}>No</option>
-                                <option value="yes" {{ ($booking->currently_staying ?? 'no') == 'yes' ? 'selected' : '' }}>Yes</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block">Update Currently Staying</button>
-                    </form>
-                </div>
             </div>
 
             <!-- Payment Summary -->

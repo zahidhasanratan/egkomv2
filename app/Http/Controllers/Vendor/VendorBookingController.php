@@ -86,7 +86,7 @@ class VendorBookingController extends Controller
         }
         
         $request->validate([
-            'booking_status' => 'required|in:pending,confirmed,cancelled,completed',
+            'booking_status' => 'required|in:pending,confirmed,staying,cancelled,completed',
             'cancellation_comment' => 'nullable|string|max:1000',
         ]);
         
