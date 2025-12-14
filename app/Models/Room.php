@@ -55,11 +55,27 @@ class Room extends Model
 
     /**
      * Check if room is available for a date range (all dates in range must be available)
+     * Note: Checkout date is excluded as guests check out on that day
+     * Example: checkin=2024-12-01, checkout=2024-12-03 means room needed for Dec 1 and Dec 2 only
      */
     public function isAvailableForDateRange($checkinDate, $checkoutDate)
     {
+        // Ensure availability_dates is properly cast as array
+        $availabilityDates = $this->availability_dates;
+        
+        // Handle different possible formats: null, empty string, JSON string, or array
+        if (is_null($availabilityDates) || $availabilityDates === '' || $availabilityDates === '[]') {
+            $availabilityDates = [];
+        } elseif (is_string($availabilityDates)) {
+            // Try to decode if it's a JSON string
+            $decoded = json_decode($availabilityDates, true);
+            $availabilityDates = is_array($decoded) ? $decoded : [];
+        } elseif (!is_array($availabilityDates)) {
+            $availabilityDates = [];
+        }
+
         // If no availability dates set, room is always available (backward compatibility)
-        if (empty($this->availability_dates)) {
+        if (empty($availabilityDates)) {
             return true;
         }
 
@@ -69,11 +85,25 @@ class Room extends Model
         // Generate all dates in the range (excluding checkout date as it's the departure date)
         $start = new \DateTime($checkin);
         $end = new \DateTime($checkout);
-        $end->modify('-1 day'); // Exclude checkout date
+        $end->modify('-1 day'); // Exclude checkout date - guests don't need room on checkout day
+
+        // Check if checkout is after checkin (valid date range)
+        if ($end < $start) {
+            return false;
+        }
+
+        // Ensure all dates in availability_dates are strings (Y-m-d format)
+        $availabilityDates = array_map(function($date) {
+            if ($date instanceof \DateTime) {
+                return $date->format('Y-m-d');
+            }
+            return (string) $date;
+        }, $availabilityDates);
 
         $currentDate = clone $start;
         while ($currentDate <= $end) {
-            if (!in_array($currentDate->format('Y-m-d'), $this->availability_dates)) {
+            $dateString = $currentDate->format('Y-m-d');
+            if (!in_array($dateString, $availabilityDates, true)) {
                 return false;
             }
             $currentDate->modify('+1 day');

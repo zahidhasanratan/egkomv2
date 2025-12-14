@@ -1721,6 +1721,34 @@
                             allowInput: false,
                             appendTo: calendarWrapper,
                         onReady: function(selectedDates, dateStr, instance) {
+                            // Helper function to format date in YYYY-MM-DD without timezone issues
+                            function formatDateLocal(date) {
+                                const year = date.getFullYear();
+                                const month = String(date.getMonth() + 1).padStart(2, '0');
+                                const day = String(date.getDate()).padStart(2, '0');
+                                return `${year}-${month}-${day}`;
+                            }
+                            
+                            // Helper function to parse date from aria-label or flatpickr day element
+                            function getDateFromDayElement(dayElement) {
+                                // Try to get the date from flatpickr's data-date attribute first
+                                const dataDate = dayElement.getAttribute('data-date');
+                                if (dataDate) {
+                                    // data-date is in format YYYY-MM-DD
+                                    return dataDate;
+                                }
+                                
+                                // Fallback to aria-label parsing
+                                const ariaLabel = dayElement.getAttribute('aria-label');
+                                if (ariaLabel) {
+                                    const date = new Date(ariaLabel);
+                                    // Use local date formatting to avoid timezone issues
+                                    return formatDateLocal(date);
+                                }
+                                
+                                return null;
+                            }
+                            
                             // Add custom CSS for range selection
                             const style = document.createElement('style');
                             style.textContent = `
@@ -1749,13 +1777,11 @@
                                     e.preventDefault();
                                     e.stopPropagation();
                                     
-                                    const dateStr = day.getAttribute('aria-label');
-                                    if (dateStr) {
-                                        const dateFormatted = new Date(dateStr).toISOString().split('T')[0];
-                                        
-                                        // Start drag selection
-                                        isDragging = false; // Will be set to true on mouse move
-                                        dragStartDate = new Date(dateStr);
+                                    const dateFormatted = getDateFromDayElement(day);
+                                    if (dateFormatted) {
+                                        // Parse the date string to Date object for comparison
+                                        const [year, month, dayNum] = dateFormatted.split('-').map(Number);
+                                        dragStartDate = new Date(year, month - 1, dayNum);
                                         rangeStart = dragStartDate;
                                         
                                         // Set a timer to detect if it's a click (not drag)
@@ -1784,10 +1810,11 @@
                                     }
                                     isDragging = true;
                                     const day = e.target.closest('.flatpickr-day:not(.flatpickr-disabled)');
-                                    if (day) {
-                                        const dateStr = day.getAttribute('aria-label');
-                                        if (dateStr && rangeStart) {
-                                            const currentDate = new Date(dateStr);
+                                    if (day && rangeStart) {
+                                        const dateStr = getDateFromDayElement(day);
+                                        if (dateStr) {
+                                            const [year, month, dayNum] = dateStr.split('-').map(Number);
+                                            const currentDate = new Date(year, month - 1, dayNum);
                                             const start = rangeStart < currentDate ? rangeStart : currentDate;
                                             const end = rangeStart < currentDate ? currentDate : rangeStart;
                                             
@@ -1827,16 +1854,17 @@
                                 if (isDragging && dragStartDate !== null) {
                                     const day = e.target.closest('.flatpickr-day:not(.flatpickr-disabled)');
                                     if (day && rangeStart) {
-                                        const dateStr = day.getAttribute('aria-label');
+                                        const dateStr = getDateFromDayElement(day);
                                         if (dateStr) {
-                                            const endDate = new Date(dateStr);
+                                            const [year, month, dayNum] = dateStr.split('-').map(Number);
+                                            const endDate = new Date(year, month - 1, dayNum);
                                             const start = rangeStart < endDate ? rangeStart : endDate;
                                             const end = rangeStart < endDate ? endDate : rangeStart;
                                             
-                                            // Add all dates in range
+                                            // Add all dates in range using local date formatting
                                             const currentDate = new Date(start);
                                             while (currentDate <= end) {
-                                                const dateStr = currentDate.toISOString().split('T')[0];
+                                                const dateStr = formatDateLocal(currentDate);
                                                 selectedDatesSet.add(dateStr);
                                                 currentDate.setDate(currentDate.getDate() + 1);
                                             }
@@ -1882,7 +1910,8 @@
                             
                             function updateFlatpickrDates() {
                                 const datesArray = Array.from(selectedDatesSet).sort().map(dateStr => {
-                                    return new Date(dateStr + 'T00:00:00');
+                                    const [year, month, dayNum] = dateStr.split('-').map(Number);
+                                    return new Date(year, month - 1, dayNum);
                                 });
                                 
                                 // Update flatpickr but don't trigger onChange
@@ -1891,9 +1920,8 @@
                                 // Manually update visual selection
                                 const allDays = calendar.querySelectorAll('.flatpickr-day:not(.flatpickr-disabled)');
                                 allDays.forEach(day => {
-                                    const dateStr = day.getAttribute('aria-label');
-                                    if (dateStr) {
-                                        const dateFormatted = new Date(dateStr).toISOString().split('T')[0];
+                                    const dateFormatted = getDateFromDayElement(day);
+                                    if (dateFormatted) {
                                         if (selectedDatesSet.has(dateFormatted)) {
                                             day.classList.add('selected', 'flatpickr-selected');
                                             day.style.background = '#90278e';
@@ -1940,7 +1968,11 @@
                                     }
                                     const sortedDates = Array.from(selectedDatesSet).sort();
                                     availabilityInput.value = JSON.stringify(sortedDates);
-                                    flatpickrInstance.setDate(sortedDates.map(d => new Date(d + 'T00:00:00')), false);
+                                    const datesArray = sortedDates.map(dateStr => {
+                                        const [year, month, dayNum] = dateStr.split('-').map(Number);
+                                        return new Date(year, month - 1, dayNum);
+                                    });
+                                    flatpickrInstance.setDate(datesArray, false);
                                     applyBtn.innerHTML = '<i class="fas fa-check-circle"></i> Applied!';
                                     applyBtn.style.background = '#28a745';
                                     setTimeout(() => {
@@ -1954,7 +1986,10 @@
                             // Update our set when dates change through normal selection
                             selectedDatesSet.clear();
                             selectedDates.forEach(date => {
-                                selectedDatesSet.add(date.toISOString().split('T')[0]);
+                                const year = date.getFullYear();
+                                const month = String(date.getMonth() + 1).padStart(2, '0');
+                                const day = String(date.getDate()).padStart(2, '0');
+                                selectedDatesSet.add(`${year}-${month}-${day}`);
                             });
                             
                             const sortedDates = Array.from(selectedDatesSet).sort();
@@ -1975,7 +2010,10 @@
                             allowInput: false,
                             onChange: function(selectedDates, dateStr, instance) {
                                 const datesArray = selectedDates.map(date => {
-                                    return date.toISOString().split('T')[0];
+                                    const year = date.getFullYear();
+                                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                                    const day = String(date.getDate()).padStart(2, '0');
+                                    return `${year}-${month}-${day}`;
                                 });
                                 availabilityInput.value = JSON.stringify(datesArray);
                             }

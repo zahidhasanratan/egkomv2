@@ -1,0 +1,2415 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Egkom</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="icon" href="images/fav.png" type="image/x-icon">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i,900,900i%7CMerriweather:300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+    <!-- Bootstrap Stylesheet -->
+    <link rel="stylesheet" href="css/bootstrap-5.3.2.min.css">
+    <!-- Sidebar Stylesheet -->
+    <link rel="stylesheet" type="text/css" href="css/jquery.mCustomScrollbar.min.css">
+    <!-- Font Awesome Stylesheet -->
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <!-- Custom Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/2.css">
+    <link rel="stylesheet" id="cpswitch" href="css/orange.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/custom.css">
+    <!-- Owl Carousel Stylesheet -->
+    <link rel="stylesheet" href="css/owl.carousel.css">
+    <link rel="stylesheet" href="css/owl.theme.css">
+    <!-- Flex Slider Stylesheet -->
+    <link rel="stylesheet" href="css/flexslider.css" type="text/css" />
+    <!--Date-Picker Stylesheet-->
+    <link rel="stylesheet" href="css/datepicker.css">
+    <!-- Magnific Gallery -->
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <!-- Swiper slider -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+  </head>
+  <body id="main-homepage">
+    <div class="wrapper">
+      <!--Start: Top Bar -->
+      <section class="top-bar-area" id="stickyBar">
+        <div class="container">
+          <div class="row ">
+            <div class="col-lg-2">
+              <div class="egkom-logo">
+                <a href="index.html" class="navbar-brand main-logo py-1 m-0">
+                  <img src="images/logo.png" alt="Egkom">
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-8">
+              <div class="sticky-top-search" id="smallSearchBox" style="display: none;">
+                <div class="search-bars">
+                  <div class="search-itemss">Anywhere</div>
+                  <div class="search-itemss">Any week</div>
+                  <div class="search-itemss" style="border: none;">2 guests</div>
+                  <button class="search-button">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </div>
+                <!-- <h3>Small Search Box</h3> -->
+              </div>
+              <div class="booking-search-wrapper" id="largeSearchBox">
+                <div class="experices-sec">
+                  <div class="experices-secbtn-group">
+                    <a href="#">Hotel</a>
+                  </div>
+                </div>
+                <div class="booking-search-box">
+                  <div class="search-bar">
+                    <div class="search-container search-item">
+                      <label>Where</label>
+                      <input type="text" id="destination-input" placeholder="Search destinations" onfocus="showSuggestions()" onblur="hideSuggestions()">
+                      <div class="suggestions" id="suggestions-list">
+                        <p class="suggestion-title">Suggested destinations</p>
+                        <div class="suggestion-item">
+                          <img src="images/icons/1.webp" alt="Bangkok" class="suggestion-icon">
+                          <div class="suggestion-text">
+                            <strong>Bangkok, Thailand</strong>
+                            <br>
+                            <span>For sights like Grand Palace</span>
+                          </div>
+                        </div>
+                        <div class="suggestion-item">
+                          <img src="images/icons/2.png" alt="London" class="suggestion-icon">
+                          <div class="suggestion-text">
+                            <strong>London, United Kingdom</strong>
+                            <br>
+                            <span>For its bustling nightlife</span>
+                          </div>
+                        </div>
+                        <div class="suggestion-item">
+                          <img src="images/icons/1.webp" alt="New York" class="suggestion-icon">
+                          <div class="suggestion-text">
+                            <strong>New York City, NY</strong>
+                            <br>
+                            <span>For its stunning architecture</span>
+                          </div>
+                        </div>
+                        <div class="suggestion-item">
+                          <img src="images/icons/2.png" alt="Vancouver" class="suggestion-icon">
+                          <div class="suggestion-text">
+                            <strong>Vancouver, Canada</strong>
+                            <br>
+                            <span>For nature-lovers</span>
+                          </div>
+                        </div>
+                        <div class="suggestion-item">
+                          <img src="images/icons/1.webp" alt="Bangkok" class="suggestion-icon">
+                          <div class="suggestion-text">
+                            <strong>Bangkok, Thailand</strong>
+                            <br>
+                            <span>For sights like Grand Palace</span>
+                          </div>
+                        </div>
+                        <div class="suggestion-item">
+                          <img src="images/icons/2.png" alt="London" class="suggestion-icon">
+                          <div class="suggestion-text">
+                            <strong>London, United Kingdom</strong>
+                            <br>
+                            <span>For its bustling nightlife</span>
+                          </div>
+                        </div>
+                        <div class="suggestion-item">
+                          <img src="images/icons/1.webp" alt="New York" class="suggestion-icon">
+                          <div class="suggestion-text">
+                            <strong>New York City, NY</strong>
+                            <br>
+                            <span>For its stunning architecture</span>
+                          </div>
+                        </div>
+                        <div class="suggestion-item">
+                          <img src="images/icons/2.png" alt="Vancouver" class="suggestion-icon">
+                          <div class="suggestion-text">
+                            <strong>Vancouver, Canada</strong>
+                            <br>
+                            <span>For nature-lovers</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="search-item">
+                      <label>Check in</label>
+                      <input type="text" id="checkin" placeholder="Add dates" readonly />
+                    </div>
+                    <div class="search-item">
+                      <label>Check out</label>
+                      <input type="text" id="checkout" placeholder="Add dates" readonly />
+                    </div>
+                    <div class="search-item search-button-group">
+                      <div class="guest-container">
+                        <!-- Guest Button -->
+                        <div class="guest-dropdown">
+                          <label>Who</label>
+                          <button class="guest-button" onclick="toggleGuestDropdown()">Add Guests</button>
+                          <!-- Guest Selection (Initially Hidden) -->
+                          <div class="guest-selector hidden">
+                            <div class="guest-type">
+                              <div class="person-group">
+                                <span class="guest-label">Adults</span>
+                                <p>Ages 13 or above</p>
+                              </div>
+                              <div class="guest-controls">
+                                <button class="decrease" onclick="decreaseCount('adultCount')">-</button>
+                                <span class="guest-count" id="adultCount">0</span>
+                                <button class="increase" onclick="increaseCount('adultCount')">+</button>
+                              </div>
+                            </div>
+                            <div class="guest-type">
+                              <div class="person-group">
+                                <span class="guest-label">Children</span>
+                                <p> Ages 2 – 12</p>
+                              </div>
+                              <div class="guest-controls">
+                                <button class="decrease" onclick="decreaseCount('childrenCount')">-</button>
+                                <span class="guest-count" id="childrenCount">0</span>
+                                <button class="increase" onclick="increaseCount('childrenCount')">+</button>
+                              </div>
+                            </div>
+                            <div class="guest-type">
+                              <div class="person-group">
+                                <span class="guest-label">Infants</span>
+                                <p>Under 2</p>
+                              </div>
+                              <div class="guest-controls">
+                                <button class="decrease" onclick="decreaseCount('infantCount')">-</button>
+                                <span class="guest-count" id="infantCount">0</span>
+                                <button class="increase" onclick="increaseCount('infantCount')">+</button>
+                              </div>
+                            </div>
+                            <div class="guest-type">
+                              <div class="person-group">
+                                <span class="guest-label">Pets</span>
+                                <p>Bringing a service animal?</p>
+                              </div>
+                              <div class="guest-controls">
+                                <button class="decrease" onclick="decreaseCount('petCount')">-</button>
+                                <span class="guest-count" id="petCount">0</span>
+                                <button class="increase" onclick="increaseCount('petCount')">+</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="search-btn">
+                        <button class="search-button">
+                          <i class="fa fa-search"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <!-- Calendar Pop-up -->
+                    <div id="calendar-popup" class="calendar-popup">
+                      <div class="calendar-header">
+                        <button id="prevMonth">&#10094;</button>
+                        <div id="calendarMonth"></div>
+                        <button id="nextMonth">&#10095;</button>
+                      </div>
+                      <div id="calendar"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-2">
+              <div class="user-bendor">
+                <div class="bendor-section">
+                  <a href="#">Egkom you Home</a>
+                </div>
+                <div class="user-section">
+                  <div class="user-login-button">
+                    <a href="#" id="profileIconToggle">
+                      <div class="user-svg-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true" role="presentation" focusable="false" style="display: block; fill: none; height: 16px; width: 16px; stroke: currentcolor; stroke-width: 3; overflow: visible;">
+                          <g fill="none">
+                            <path d="M2 16h28M2 24h28M2 8h28"></path>
+                          </g>
+                        </svg>
+                      </div>
+                      <div class="user-icon">
+                        <svg class="user-cicle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true" role="presentation" focusable="false" style="display: block;  fill: currentcolor;">
+                          <path d="M16 .7C7.56.7.7 7.56.7 16S7.56 31.3 16 31.3 31.3 24.44 31.3 16 24.44.7 16 .7zm0 28c-4.02 0-7.6-1.88-9.93-4.81a12.43 12.43 0 0 1 6.45-4.4A6.5 6.5 0 0 1 9.5 14a6.5 6.5 0 0 1 13 0 6.51 6.5 0 0 1-3.02 5.5 12.42 12.42 0 0 1 6.45 4.4A12.67 12.67 0 0 1 16 28.7z"></path>
+                        </svg>
+                      </div>
+                    </a>
+                  </div>
+                  <!-- Submenu -->
+                  <div class="user-submenu" id="userSubmenu">
+                    <ul>
+                      <li>
+                        <a href="#" id="loginMenu">Login</a>
+                      </li>
+                      <li>
+                        <a href="#">Signup</a>
+                      </li>
+                      <li>
+                        <a href="#">Profile</a>
+                      </li>
+                      <li>
+                        <a href="#">Settings</a>
+                      </li>
+                      <li>
+                        <a href="#">Logout</a>
+                      </li>
+                    </ul>
+                  </div>
+                  <!-- Login Modal -->
+                  <div id="loginModal" class="modal">
+                    <div class="modal-content">
+                      <span class="close" id="closeLogin">&times;</span>
+                      <h2>Login</h2>
+                      <form action="/login" method="post">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" name="username" required>
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" required>
+                        <button type="submit">Login</button>
+                      </form>
+                      <hr>
+                      <div class="social-login">
+                        <button class="social-btn facebook-btn">Login with Facebook</button>
+                        <button class="social-btn google-btn">Login with Google</button>
+                      </div>
+                      <div class="modal-footer">
+                        <a href="#" id="forgotPassword">Forgot Password?</a>
+                        <span> | </span>
+                        <a href="#" id="signupLink">Don't have an account? Sign Up</a>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Signup Modal -->
+                  <div id="signupModal" class="modal">
+                    <div class="modal-content">
+                      <span class="close" id="closeSignup">&times;</span>
+                      <h2>Sign Up</h2>
+                      <form action="/signup" method="post">
+                        <label for="signupUsername">Username:</label>
+                        <input type="text" id="signupUsername" name="username" required>
+                        <label for="signupEmail">Email:</label>
+                        <input type="email" id="signupEmail" name="email" required>
+                        <label for="signupPhone">Phone Number:</label>
+                        <div class="phone-number-input">
+                          <select id="countryCode" name="countryCode" required>
+                            <option value="+1">+1 (USA)</option>
+                            <option value="+44">+44 (UK)</option>
+                            <option value="+91">+91 (India)</option>
+                            <option value="+61">+61 (Australia)</option>
+                            <option value="+33">+33 (France)</option>
+                            <!-- Add other country codes as needed -->
+                          </select>
+                          <input type="text" id="signupPhone" name="phone" placeholder="Enter your phone number" required>
+                        </div>
+                        <label for="signupPassword">Password:</label>
+                        <input type="password" id="signupPassword" name="password" required>
+                        <button type="submit">Sign Up</button>
+                      </form>
+                      <hr>
+                      <div class="social-login">
+                        <button class="social-btn facebook-btn">Sign Up with Facebook</button>
+                        <button class="social-btn google-btn">Sign Up with Google</button>
+                      </div>
+                      <div class="modal-footer">
+                        <span>Already have an account? </span>
+                        <a href="#" id="loginLink">
+                          <i class="fa fa-sign-in-alt"></i> Login </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End : Top bar -->
+      <style>
+        .phone-number-input {
+          display: flex;
+          align-items: center;
+          margin-bottom: 12px;
+        }
+
+        .phone-number-input select {
+          width: 80px;
+          /* Space for the country code */
+          padding: 10px;
+          margin-right: 10px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          font-size: 16px;
+        }
+
+        .phone-number-input input {
+          flex-grow: 1;
+          padding: 10px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          font-size: 16px;
+        }
+
+        .phone-number-input select,
+        .phone-number-input input {
+          font-size: 14px;
+        }
+
+        /* Modal Styling (unchanged) */
+        .modal {
+          display: none;
+          position: fixed;
+          z-index: 9999;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          overflow: auto;
+          background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+          background-color: white;
+          margin: 10% auto;
+          padding: 20px;
+          border-radius: 8px;
+          width: 80%;
+          max-width: 400px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+          position: relative;
+        }
+
+        .close {
+          color: #aaa;
+          font-size: 30px;
+          font-weight: bold;
+          position: absolute;
+          top: 10px;
+          right: 15px;
+          cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+          color: black;
+          text-decoration: none;
+          cursor: pointer;
+        }
+
+        /* Form Styling */
+        form {
+          margin-bottom: 15px;
+        }
+
+        form label {
+          display: block;
+          margin-bottom: 8px;
+          font-weight: bold;
+        }
+
+        form input {
+          width: 100%;
+          padding: 10px;
+          margin-bottom: 12px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          box-sizing: border-box;
+          font-size: 16px;
+        }
+
+        form button {
+          width: 100%;
+          padding: 12px;
+          background-color: #4CAF50;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 16px;
+        }
+
+        form button:hover {
+          background-color: #45a049;
+        }
+
+        /* Social Login Buttons */
+        .social-login {
+          display: flex;
+          justify-content: space-between;
+        }
+
+        .social-btn {
+          width: 48%;
+          padding: 12px;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 14px;
+          margin-top: 10px;
+        }
+
+        .facebook-btn {
+          background-color: #3b5998;
+        }
+
+        .google-btn {
+          background-color: #db4437;
+        }
+
+        .social-btn:hover {
+          opacity: 0.8;
+        }
+
+        /* Footer Links (Forgot and Sign Up) */
+        .modal-footer {
+          text-align: center;
+          margin-top: 20px;
+        }
+
+        .modal-footer a {
+          color: #007bff;
+          font-size: 14px;
+          text-decoration: none;
+        }
+
+        .modal-footer a:hover {
+          text-decoration: underline;
+        }
+
+        .modal-footer span {
+          color: #666;
+          font-size: 14px;
+        }
+
+        .fa-sign-in-alt {
+          margin-right: 5px;
+          /* Space between icon and text */
+        }
+
+        .top-bar-area.sticky {
+          position: fixed;
+          top: 0;
+          width: 100%;
+          z-index: 999;
+          background-color: #fff;
+          /* Optional: Add background color */
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+          /* Optional: Add shadow for visibility */
+        }
+
+        /* Hide the large search box when sticky */
+        .booking-search-wrapper {
+          transition: all 0.3s ease-in-out;
+        }
+
+        /* Small search box styling */
+        .sticky-top-search {
+          transition: all 0.3s ease-in-out;
+          display: none;
+          /* Hidden initially */
+        }
+
+        /* Initially hide the submenu */
+        .user-submenu {
+          display: none;
+          position: absolute;
+          top: 57px;
+          right: 0;
+          background-color: white;
+          border: 1px solid #ddd;
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+          border-radius: 5px;
+          width: 180px;
+          z-index: 10;
+        }
+
+        /* Submenu list styling */
+        .user-submenu ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
+
+        .user-submenu ul li {
+          padding: 10px;
+        }
+
+        .user-submenu ul li a {
+          text-decoration: none;
+          color: #333;
+          display: block;
+        }
+
+        .user-submenu ul li a:hover {
+          background-color: #f1f1f1;
+        }
+
+        /* Arrow for the profile icon (optional) */
+        .user-login-button {
+          position: relative;
+        }
+      </style>
+      <script>
+        // Get modal and elements
+        var loginModal = document.getElementById("loginModal");
+        var signupModal = document.getElementById("signupModal");
+        var loginMenu = document.getElementById("loginMenu");
+        var closeLogin = document.getElementById("closeLogin");
+        var closeSignup = document.getElementById("closeSignup");
+        var signupLink = document.getElementById("signupLink");
+        var loginLink = document.getElementById("loginLink");
+        var forgotPasswordLink = document.getElementById("forgotPassword");
+        // Open login modal when clicking "Login" menu
+        loginMenu.onclick = function() {
+          loginModal.style.display = "block";
+        }
+        // Open signup modal when clicking "Sign Up" link in login modal
+        signupLink.onclick = function() {
+          loginModal.style.display = "none"; // Close login modal
+          signupModal.style.display = "block"; // Show signup modal
+        }
+        // Open login modal when clicking "Login" icon link in signup modal footer
+        loginLink.onclick = function() {
+          signupModal.style.display = "none"; // Close signup modal
+          loginModal.style.display = "block"; // Show login modal
+        }
+        // Close login modal when clicking "x"
+        closeLogin.onclick = function() {
+          loginModal.style.display = "none";
+        }
+        // Close signup modal when clicking "x"
+        closeSignup.onclick = function() {
+          signupModal.style.display = "none";
+        }
+        // Close modal if the user clicks anywhere outside of the modal content
+        window.onclick = function(event) {
+          if (event.target == loginModal) {
+            loginModal.style.display = "none";
+          } else if (event.target == signupModal) {
+            signupModal.style.display = "none";
+          }
+        }
+      </script>
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          const profileIconToggle = document.getElementById('profileIconToggle');
+          const userSubmenu = document.getElementById('userSubmenu');
+          // Toggle submenu visibility
+          profileIconToggle.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default link behavior (if any)
+            // Toggle visibility of the submenu
+            if (userSubmenu.style.display === 'block') {
+              userSubmenu.style.display = 'none'; // Hide submenu if it's visible
+            } else {
+              userSubmenu.style.display = 'block'; // Show submenu if it's hidden
+            }
+          });
+          // Close the submenu if the user clicks outside of it
+          document.addEventListener('click', function(event) {
+            if (!profileIconToggle.contains(event.target) && !userSubmenu.contains(event.target)) {
+              userSubmenu.style.display = 'none'; // Hide submenu if clicked outside
+            }
+          });
+        });
+      </script>
+      <!--End: Top Bar -->
+
+
+
+      <!--===== Start: Hotel All ====-->
+      <div class="search-tabs-3" id="bottomStickyBar">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-md-11">
+               <div class="row">
+                  <ul class="nav nav-tabs owl-carousel owl-theme owl-custom-tabbing" id="owl-company-logo">
+                    <li class="nav-item">
+                      <a class="nav-link nav-custom active" href="#appartment" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-building"></i>
+                        </span>
+                        <span class="d-none d-md-inline-flex st-text">Apartment</span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link nav-custom " href="#hotel" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-bed fa-bed-custom"></i>
+                        </span>
+                        <span class="d-none d-md-inline-flex st-text">Hotel</span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link nav-custom" href="#resort" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-suitcase"></i>
+                        </span>
+                        <span class="d-none d-md-inline-flex st-text">Resort</span>
+                      </a>
+                    </li>
+
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-custom " href="#others" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-bed fa-bed-custom"></i>
+                        </span>
+                        <span class="d-none d-md-inline-flex st-text">Others</span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link nav-custom" href="#resort" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-suitcase"></i>
+                        </span>
+                        <span class="d-none d-md-inline-flex st-text">Resort</span>
+                      </a>
+                    </li>
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-custom " href="#hotel" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-bed fa-bed-custom"></i>
+                        </span>
+                        <span class="d-none d-md-inline-flex st-text">Hotel</span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link nav-custom" href="#resort" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-suitcase"></i>
+                        </span>
+                        <span class="d-none d-md-inline-flex st-text">Resort</span>
+                      </a>
+                    </li>
+
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-custom " href="#hotel" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-bed fa-bed-custom"></i>
+                        </span>
+                        <span class="d-none d-md-inline-flex st-text">Hotel</span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link nav-custom" href="#resort" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-suitcase"></i>
+                        </span>
+                        <span class="d-none d-md-inline-flex st-text">Resort</span>
+                      </a>
+                    </li>
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-custom " href="#hotel" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-bed fa-bed-custom"></i>
+                        </span>
+                        <span class="d-none d-md-inline-flex st-text">Hotel</span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link nav-custom" href="#resort" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-suitcase"></i>
+                        </span>
+                        <span class="d-none d-md-inline-flex st-text">Resort</span>
+                      </a>
+                    </li>
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-custom " href="#hotel" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-bed fa-bed-custom"></i>
+                        </span>
+                        <span class="d-none d-md-inline-flex st-text">Hotel</span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link nav-custom" href="#resort" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-suitcase"></i>
+                        </span>
+                        <span class="d-none d-md-inline-flex st-text">Resort</span>
+                      </a>
+                    </li>
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-custom " href="#hotel" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-bed fa-bed-custom"></i>
+                        </span>
+                        <span class="d-none d-md-inline-flex st-text">Hotel</span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link nav-custom" href="#resort" data-bs-toggle="tab">
+                        <span>
+                          <i class="fa fa-suitcase"></i>
+                        </span>
+                        <span class="d-none d-md-inline-flex st-text">Resort</span>
+                      </a>
+                    </li>
+
+
+                  </ul>
+
+               </div>
+              
+              <!-- end tab-content -->
+            </div>
+            <!-- end columns -->
+          </div>
+          <!-- end row -->
+        </div>
+        <!-- end container -->
+      </div>
+      <!-- end search-tabs -->
+
+      <!-- tabing -->
+      <section class="innerpage-wrapper">
+        <div id="hotel-grid" class="innerpage-section-padding">
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-12 col-lg-12 col-xl-12 content-side">
+                 <div class="tab-content">
+                  <!-- Start: Appartment -->
+                  <div id="appartment" class="tab-pane in active">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-6 col-xl-3">
+                            <div class="grid-block main-block h-grid-block">
+                                <div class="main-img h-grid-img">
+                                    <a href="hotel-room-details.html">
+                                        <img src="images/hotel/1.jpg" class="img-fluid" alt="hotel-img" />
+                                    </a>
+                                    <div class="guest-favourite">
+                                        <h3>Guest favourite</h3>
+                                    </div>
+
+                                  <div class="wish-list-container">
+                                      <div class="wish-list-btn">
+                                        <a href="#">
+                                            <div class="circle">
+                                              <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon removed">
+                                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06
+                                              1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                              </svg>
+                                              <span class="message">
+                                                <a href="/profile/saved" class="link" target="_blank"> Saved <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" class="icon-right-arrow">
+                                                    <path fill="#1C3C6B" d="M5.086 9.5a.5.5 0 0 0 .39-.186l2.414-3a.5.5 0 0 0-.006-.634l-2.5-3a.5.5 0 0
+                                                    0-.768.64l2.238 2.686-2.158 2.68a.5.5 0 0 0 .39.814z"></path>
+                                                  </svg>
+                                                </a>
+                                              </span>
+                                            </div>
+                                        </a>
+                                      </div>
+                                    </div>
+                                </div><!-- end h-grid-img -->
+                                
+                                 <div class="block-info h-grid-info">
+                                     <h3 class="block-title"><a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a></h3>
+                                    <p class="block-minor">400 kilometers away</p>
+                                    <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                    
+                                    <div class="review-main">
+                                        <div class="review-cat-home">8.9</div>
+                                        <div class="review-cat">Fabulous</div>
+                                        <div class="review-cat spna">3,022 reviews</div>
+                                    </div>
+
+                                    <div class="main-mask">
+                                        <ul class="list-unstyled list-inline offer-price-1">
+                                            <li class="list-inline-item price">5000 Tk.
+                                                <span class="pkg">Night</span>
+                                            </li>
+
+                                            <li class="list-inline-item price">
+                                                <span class="pkg"><del>2000 Tk.</del></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                 </div><!-- end h-grid-info -->
+                                 
+                            </div><!-- end h-grid-block -->
+                        </div>
+
+                         <div class="col-md-6 col-lg-6 col-xl-3">
+                            <div class="grid-block main-block h-grid-block">
+                                <div class="main-img h-grid-img">
+                                    <a href="hotel-room-details.html">
+                                        <img src="images/hotel/2.webp" class="img-fluid" alt="hotel-img" />
+                                    </a>
+                                    <div class="guest-favourite">
+                                        <h3>Guest favourite</h3>
+                                    </div>
+                                </div><!-- end h-grid-img -->
+                                
+                                  <div class="block-info h-grid-info">
+                                     <h3 class="block-title"><a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a></h3>
+                                    <p class="block-minor">400 kilometers away</p>
+                                    <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                    
+                                    <div class="review-main">
+                                        <div class="review-cat-home">8.9</div>
+                                        <div class="review-cat">Fabulous</div>
+                                        <div class="review-cat spna">3,022 reviews</div>
+                                    </div>
+
+                                    <div class="main-mask">
+                                        <ul class="list-unstyled list-inline offer-price-1">
+                                            <li class="list-inline-item price">5000 Tk.
+                                                <span class="pkg">Night</span>
+                                            </li>
+
+                                            <li class="list-inline-item price">
+                                                <span class="pkg"><del>2000 Tk.</del></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                 </div><!-- end h-grid-info -->
+                            </div><!-- end h-grid-block -->
+                        </div>
+
+                        <div class="col-md-6 col-lg-6 col-xl-3">
+                            <div class="grid-block main-block h-grid-block">
+                                <div class="main-img h-grid-img">
+                                    <a href="#">
+                                        <img src="images/hotel/3.jpg" class="img-fluid" alt="hotel-img" />
+                                    </a>
+                                    <div class="guest-favourite">
+                                        <h3>Guest favourite</h3>
+                                    </div>
+                                </div><!-- end h-grid-img -->
+                                
+
+
+                                 <div class="block-info h-grid-info">
+                                     <h3 class="block-title"><a href="hotel-room-details.html">Cox Beach Resort, Cox's Bazar  </a></h3>
+                                    <p class="block-minor">400 kilometers away</p>
+                                    <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                    
+                                    <div class="review-main">
+                                        <div class="review-cat-home">8.9</div>
+                                        <div class="review-cat">Fabulous</div>
+                                        <div class="review-cat spna">3,022 reviews</div>
+                                    </div>
+
+                                    <div class="main-mask">
+                                        <ul class="list-unstyled list-inline offer-price-1">
+                                            <li class="list-inline-item price">5000 Tk.
+                                                <span class="pkg">Night</span>
+                                            </li>
+
+                                            <li class="list-inline-item price">
+                                                <span class="pkg"><del>2000 Tk.</del></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                 </div><!-- end h-grid-info -->
+                            </div><!-- end h-grid-block -->
+                        </div>
+
+                        <div class="col-md-6 col-lg-6 col-xl-3">
+                            <div class="grid-block main-block h-grid-block">
+                                <div class="main-img h-grid-img">
+                                    <a href="#">
+                                        <img src="images/hotel/4.jpg" class="img-fluid" alt="hotel-img" />
+                                    </a>
+                                    <div class="guest-favourite">
+                                        <h3>Guest favourite</h3>
+                                    </div>
+                                </div><!-- end h-grid-img -->
+                                
+
+                                <div class="block-info h-grid-info">
+                                     <h3 class="block-title"><a href="hotel-room-details.html">Hotel Windy Terrace, Cox's Bazar </a></h3>
+                                    <p class="block-minor">400 kilometers away</p>
+                                    <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                    
+                                    <div class="review-main">
+                                        <div class="review-cat-home">8.9</div>
+                                        <div class="review-cat">Fabulous</div>
+                                        <div class="review-cat spna">3,022 reviews</div>
+                                    </div>
+
+                                    <div class="main-mask">
+                                        <ul class="list-unstyled list-inline offer-price-1">
+                                            <li class="list-inline-item price">5000 Tk.
+                                                <span class="pkg">Night</span>
+                                            </li>
+
+                                            <li class="list-inline-item price">
+                                                <span class="pkg"><del>2000 Tk.</del></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                 </div><!-- end h-grid-info -->
+
+
+                            </div><!-- end h-grid-block -->
+                        </div>
+
+                        <div class="col-md-6 col-lg-6 col-xl-3">
+                            <div class="grid-block main-block h-grid-block">
+                                <div class="main-img h-grid-img">
+                                    <a href="#">
+                                        <img src="images/hotel/5.jpg" class="img-fluid" alt="hotel-img" />
+                                    </a>
+                                    <div class="guest-favourite">
+                                        <h3>Guest favourite</h3>
+                                    </div>
+                                </div><!-- end h-grid-img -->
+                                
+                                 <div class="block-info h-grid-info">
+                                     <h3 class="block-title"><a href="hotel-room-details.html">Hotel Windy Terrace, Cox's Bazar </a></h3>
+                                    <p class="block-minor">400 kilometers away</p>
+                                    <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                    
+                                    <div class="review-main">
+                                        <div class="review-cat-home">8.9</div>
+                                        <div class="review-cat">Fabulous</div>
+                                        <div class="review-cat spna">3,022 reviews</div>
+                                    </div>
+
+                                    <div class="main-mask">
+                                        <ul class="list-unstyled list-inline offer-price-1">
+                                            <li class="list-inline-item price">5000 Tk.
+                                                <span class="pkg">Night</span>
+                                            </li>
+
+                                            <li class="list-inline-item price">
+                                                <span class="pkg"><del>2000 Tk.</del></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                 </div><!-- end h-grid-info -->
+
+                            </div><!-- end h-grid-block -->
+                        </div>
+
+                        <div class="col-md-6 col-lg-6 col-xl-3">
+                            <div class="grid-block main-block h-grid-block">
+                                <div class="main-img h-grid-img">
+                                    <a href="#">
+                                        <img src="images/hotel/6.jpg" class="img-fluid" alt="hotel-img" />
+                                    </a>
+                                    <div class="guest-favourite">
+                                        <h3>Guest favourite</h3>
+                                    </div>
+                                </div><!-- end h-grid-img -->
+                                
+                                 <div class="block-info h-grid-info">
+                                     <h3 class="block-title"><a href="hotel-room-details.html">Hotel Windy Terrace, Cox's Bazar </a></h3>
+                                    <p class="block-minor">400 kilometers away</p>
+                                    <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                    
+                                    <div class="review-main">
+                                        <div class="review-cat-home">8.9</div>
+                                        <div class="review-cat">Fabulous</div>
+                                        <div class="review-cat spna">3,022 reviews</div>
+                                    </div>
+
+                                    <div class="main-mask">
+                                        <ul class="list-unstyled list-inline offer-price-1">
+                                            <li class="list-inline-item price">5000 Tk.
+                                                <span class="pkg">Night</span>
+                                            </li>
+
+                                            <li class="list-inline-item price">
+                                                <span class="pkg"><del>2000 Tk.</del></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                 </div><!-- end h-grid-info -->
+                            </div><!-- end h-grid-block -->
+                        </div>
+
+
+                         <div class="col-md-6 col-lg-6 col-xl-3">
+                            <div class="grid-block main-block h-grid-block">
+                                <div class="main-img h-grid-img">
+                                    <a href="#">
+                                        <img src="images/hotel/7.jpg" class="img-fluid" alt="hotel-img" />
+                                    </a>
+                                    <div class="guest-favourite">
+                                        <h3>Guest favourite</h3>
+                                    </div>
+                                </div><!-- end h-grid-img -->
+                                
+                                 <div class="block-info h-grid-info">
+                                     <h3 class="block-title"><a href="hotel-room-details.html">Hotel Windy Terrace, Cox's Bazar </a></h3>
+                                    <p class="block-minor">400 kilometers away</p>
+                                    <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                    
+                                    <div class="review-main">
+                                        <div class="review-cat-home">8.9</div>
+                                        <div class="review-cat">Fabulous</div>
+                                        <div class="review-cat spna">3,022 reviews</div>
+                                    </div>
+
+                                    <div class="main-mask">
+                                        <ul class="list-unstyled list-inline offer-price-1">
+                                            <li class="list-inline-item price">5000 Tk.
+                                                <span class="pkg">Night</span>
+                                            </li>
+
+                                            <li class="list-inline-item price">
+                                                <span class="pkg"><del>2000 Tk.</del></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                 </div><!-- end h-grid-info -->
+                            </div><!-- end h-grid-block -->
+                        </div>
+
+                         <div class="col-md-6 col-lg-6 col-xl-3">
+                            <div class="grid-block main-block h-grid-block">
+                                <div class="main-img h-grid-img">
+                                    <a href="#">
+                                        <img src="images/hotel/8.jpg" class="img-fluid" alt="hotel-img" />
+                                    </a>
+                                    <div class="guest-favourite">
+                                        <h3>Guest favourite</h3>
+                                    </div>
+                                </div><!-- end h-grid-img -->
+                                
+                                 <div class="block-info h-grid-info">
+                                     <h3 class="block-title"><a href="hotel-room-details.html">Hotel Windy Terrace, Cox's Bazar </a></h3>
+                                    <p class="block-minor">400 kilometers away</p>
+                                    <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                    
+                                    <div class="review-main">
+                                        <div class="review-cat-home">8.9</div>
+                                        <div class="review-cat">Fabulous</div>
+                                        <div class="review-cat spna">3,022 reviews</div>
+                                    </div>
+
+                                    <div class="main-mask">
+                                        <ul class="list-unstyled list-inline offer-price-1">
+                                            <li class="list-inline-item price">5000 Tk.
+                                                <span class="pkg">Night</span>
+                                            </li>
+
+                                            <li class="list-inline-item price">
+                                                <span class="pkg"><del>2000 Tk.</del></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                 </div><!-- end h-grid-info -->
+                            </div><!-- end h-grid-block -->
+                        </div>
+
+                        <div class="col-md-6 col-lg-6 col-xl-3">
+                            <div class="grid-block main-block h-grid-block">
+                                <div class="main-img h-grid-img">
+                                    <a href="hotel-room-details.html">
+                                        <img src="images/hotel/1.jpg" class="img-fluid" alt="hotel-img" />
+                                    </a>
+                                    <div class="guest-favourite">
+                                        <h3>Guest favourite</h3>
+                                    </div>
+
+                                  <div class="wish-list-container">
+                                      <div class="wish-list-btn">
+                                        <a href="#">
+                                            <div class="circle">
+                                              <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon removed">
+                                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06
+                                              1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                              </svg>
+                                              <span class="message">
+                                                <a href="/profile/saved" class="link" target="_blank"> Saved <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" class="icon-right-arrow">
+                                                    <path fill="#1C3C6B" d="M5.086 9.5a.5.5 0 0 0 .39-.186l2.414-3a.5.5 0 0 0-.006-.634l-2.5-3a.5.5 0 0
+                                                    0-.768.64l2.238 2.686-2.158 2.68a.5.5 0 0 0 .39.814z"></path>
+                                                  </svg>
+                                                </a>
+                                              </span>
+                                            </div>
+                                        </a>
+                                      </div>
+                                    </div>
+                                </div><!-- end h-grid-img -->
+                                
+                                 <div class="block-info h-grid-info">
+                                     <h3 class="block-title"><a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a></h3>
+                                    <p class="block-minor">400 kilometers away</p>
+                                    <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                    
+                                    <div class="review-main">
+                                        <div class="review-cat-home">8.9</div>
+                                        <div class="review-cat">Fabulous</div>
+                                        <div class="review-cat spna">3,022 reviews</div>
+                                    </div>
+
+                                    <div class="main-mask">
+                                        <ul class="list-unstyled list-inline offer-price-1">
+                                            <li class="list-inline-item price">5000 Tk.
+                                                <span class="pkg">Night</span>
+                                            </li>
+
+                                            <li class="list-inline-item price">
+                                                <span class="pkg"><del>2000 Tk.</del></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                 </div><!-- end h-grid-info -->
+                                 
+                            </div><!-- end h-grid-block -->
+                        </div>
+
+                         <div class="col-md-6 col-lg-6 col-xl-3">
+                            <div class="grid-block main-block h-grid-block">
+                                <div class="main-img h-grid-img">
+                                    <a href="hotel-room-details.html">
+                                        <img src="images/hotel/2.webp" class="img-fluid" alt="hotel-img" />
+                                    </a>
+                                    <div class="guest-favourite">
+                                        <h3>Guest favourite</h3>
+                                    </div>
+                                </div><!-- end h-grid-img -->
+                                
+                                  <div class="block-info h-grid-info">
+                                     <h3 class="block-title"><a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a></h3>
+                                    <p class="block-minor">400 kilometers away</p>
+                                    <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                    
+                                    <div class="review-main">
+                                        <div class="review-cat-home">8.9</div>
+                                        <div class="review-cat">Fabulous</div>
+                                        <div class="review-cat spna">3,022 reviews</div>
+                                    </div>
+
+                                    <div class="main-mask">
+                                        <ul class="list-unstyled list-inline offer-price-1">
+                                            <li class="list-inline-item price">5000 Tk.
+                                                <span class="pkg">Night</span>
+                                            </li>
+
+                                            <li class="list-inline-item price">
+                                                <span class="pkg"><del>2000 Tk.</del></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                 </div><!-- end h-grid-info -->
+                            </div><!-- end h-grid-block -->
+                        </div>
+
+                        <div class="col-md-6 col-lg-6 col-xl-3">
+                            <div class="grid-block main-block h-grid-block">
+                                <div class="main-img h-grid-img">
+                                    <a href="#">
+                                        <img src="images/hotel/3.jpg" class="img-fluid" alt="hotel-img" />
+                                    </a>
+                                    <div class="guest-favourite">
+                                        <h3>Guest favourite</h3>
+                                    </div>
+                                </div><!-- end h-grid-img -->
+                                
+
+
+                                 <div class="block-info h-grid-info">
+                                     <h3 class="block-title"><a href="hotel-room-details.html">Cox Beach Resort, Cox's Bazar  </a></h3>
+                                    <p class="block-minor">400 kilometers away</p>
+                                    <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                    
+                                    <div class="review-main">
+                                        <div class="review-cat-home">8.9</div>
+                                        <div class="review-cat">Fabulous</div>
+                                        <div class="review-cat spna">3,022 reviews</div>
+                                    </div>
+
+                                    <div class="main-mask">
+                                        <ul class="list-unstyled list-inline offer-price-1">
+                                            <li class="list-inline-item price">5000 Tk.
+                                                <span class="pkg">Night</span>
+                                            </li>
+
+                                            <li class="list-inline-item price">
+                                                <span class="pkg"><del>2000 Tk.</del></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                 </div><!-- end h-grid-info -->
+                            </div><!-- end h-grid-block -->
+                        </div>
+
+                        <div class="col-md-6 col-lg-6 col-xl-3">
+                            <div class="grid-block main-block h-grid-block">
+                                <div class="main-img h-grid-img">
+                                    <a href="#">
+                                        <img src="images/hotel/4.jpg" class="img-fluid" alt="hotel-img" />
+                                    </a>
+                                    <div class="guest-favourite">
+                                        <h3>Guest favourite</h3>
+                                    </div>
+                                </div><!-- end h-grid-img -->
+                                
+
+                                <div class="block-info h-grid-info">
+                                     <h3 class="block-title"><a href="hotel-room-details.html">Hotel Windy Terrace, Cox's Bazar </a></h3>
+                                    <p class="block-minor">400 kilometers away</p>
+                                    <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                    
+                                    <div class="review-main">
+                                        <div class="review-cat-home">8.9</div>
+                                        <div class="review-cat">Fabulous</div>
+                                        <div class="review-cat spna">3,022 reviews</div>
+                                    </div>
+
+                                    <div class="main-mask">
+                                        <ul class="list-unstyled list-inline offer-price-1">
+                                            <li class="list-inline-item price">5000 Tk.
+                                                <span class="pkg">Night</span>
+                                            </li>
+
+                                            <li class="list-inline-item price">
+                                                <span class="pkg"><del>2000 Tk.</del></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                 </div>
+
+
+                            </div>
+                        </div>                                
+                      </div>
+                  </div>
+                  <!-- End:Appartment -->
+
+                  <!-- Start:  Hotel -->
+                  <div id="hotel" class="tab-pane">
+                    <div class="row">
+                      <div class="col-md-6 col-lg-6 col-xl-3">
+                        <div class="grid-block main-block h-grid-block">
+                          <div class="main-img h-grid-img">
+                            <a href="hotel-room-details.html">
+                              <img src="images/hotel/2.webp" class="img-fluid" alt="hotel-img" />
+                            </a>
+                            <div class="guest-favourite">
+                              <h3>Guest favourite</h3>
+                            </div>
+                          </div>
+                          <!-- end h-grid-img -->
+                          <div class="block-info h-grid-info">
+                            <h3 class="block-title">
+                              <a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a>
+                            </h3>
+                            <p class="block-minor">400 kilometers away</p>
+                            <!-- <p class="block-minor"> May 1 – 6</p> -->
+                            <div class="review-main">
+                              <div class="review-cat-home">8.9</div>
+                              <div class="review-cat">Fabulous</div>
+                              <div class="review-cat spna">3,022 reviews</div>
+                            </div>
+                            <div class="main-mask">
+                              <ul class="list-unstyled list-inline offer-price-1">
+                                <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
+                                </li>
+                                <li class="list-inline-item price">
+                                  <span class="pkg">
+                                    <del>2000 Tk.</del>
+                                  </span>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <!-- end h-grid-info -->
+                        </div>
+                        <!-- end h-grid-block -->
+                      </div>
+                      <div class="col-md-6 col-lg-6 col-xl-3">
+                        <div class="grid-block main-block h-grid-block">
+                          <div class="main-img h-grid-img">
+                            <a href="#">
+                              <img src="images/hotel/3.jpg" class="img-fluid" alt="hotel-img" />
+                            </a>
+                            <div class="guest-favourite">
+                              <h3>Guest favourite</h3>
+                            </div>
+                          </div>
+                          <!-- end h-grid-img -->
+                          <div class="block-info h-grid-info">
+                            <h3 class="block-title">
+                              <a href="hotel-room-details.html">Cox Beach Resort, Cox's Bazar </a>
+                            </h3>
+                            <p class="block-minor">400 kilometers away</p>
+                            <!-- <p class="block-minor"> May 1 – 6</p> -->
+                            <div class="review-main">
+                              <div class="review-cat-home">8.9</div>
+                              <div class="review-cat">Fabulous</div>
+                              <div class="review-cat spna">3,022 reviews</div>
+                            </div>
+                            <div class="main-mask">
+                              <ul class="list-unstyled list-inline offer-price-1">
+                                <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
+                                </li>
+                                <li class="list-inline-item price">
+                                  <span class="pkg">
+                                    <del>2000 Tk.</del>
+                                  </span>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <!-- end h-grid-info -->
+                        </div>
+                        <!-- end h-grid-block -->
+                      </div>
+                      <div class="col-md-6 col-lg-6 col-xl-3">
+                        <div class="grid-block main-block h-grid-block">
+                          <div class="main-img h-grid-img">
+                            <a href="hotel-room-details.html">
+                              <img src="images/hotel/1.jpg" class="img-fluid" alt="hotel-img" />
+                            </a>
+                            <div class="guest-favourite">
+                              <h3>Guest favourite</h3>
+                            </div>
+                            <div class="wish-list-container">
+                              <div class="wish-list-btn">
+                                <a href="#">
+                                  <div class="circle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon removed">
+                                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06
+                                                          1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                    </svg>
+                                    <span class="message">
+                                      <a href="/profile/saved" class="link" target="_blank"> Saved <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" class="icon-right-arrow">
+                                          <path fill="#1C3C6B" d="M5.086 9.5a.5.5 0 0 0 .39-.186l2.414-3a.5.5 0 0 0-.006-.634l-2.5-3a.5.5 0 0
+                                                                0-.768.64l2.238 2.686-2.158 2.68a.5.5 0 0 0 .39.814z"></path>
+                                        </svg>
+                                      </a>
+                                    </span>
+                                  </div>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- end h-grid-img -->
+                          <div class="block-info h-grid-info">
+                            <h3 class="block-title">
+                              <a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a>
+                            </h3>
+                            <p class="block-minor">400 kilometers away</p>
+                            <!-- <p class="block-minor"> May 1 – 6</p> -->
+                            <div class="review-main">
+                              <div class="review-cat-home">8.9</div>
+                              <div class="review-cat">Fabulous</div>
+                              <div class="review-cat spna">3,022 reviews</div>
+                            </div>
+                            <div class="main-mask">
+                              <ul class="list-unstyled list-inline offer-price-1">
+                                <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
+                                </li>
+                                <li class="list-inline-item price">
+                                  <span class="pkg">
+                                    <del>2000 Tk.</del>
+                                  </span>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <!-- end h-grid-info -->
+                        </div>
+                        <!-- end h-grid-block -->
+                      </div>
+                      
+                      <div class="col-md-6 col-lg-6 col-xl-3">
+                        <div class="grid-block main-block h-grid-block">
+                          <div class="main-img h-grid-img">
+                            <a href="#">
+                              <img src="images/hotel/4.jpg" class="img-fluid" alt="hotel-img" />
+                            </a>
+                            <div class="guest-favourite">
+                              <h3>Guest favourite</h3>
+                            </div>
+                          </div>
+                          <!-- end h-grid-img -->
+                          <div class="block-info h-grid-info">
+                            <h3 class="block-title">
+                              <a href="hotel-room-details.html">Hotel Windy Terrace, Cox's Bazar </a>
+                            </h3>
+                            <p class="block-minor">400 kilometers away</p>
+                            <!-- <p class="block-minor"> May 1 – 6</p> -->
+                            <div class="review-main">
+                              <div class="review-cat-home">8.9</div>
+                              <div class="review-cat">Fabulous</div>
+                              <div class="review-cat spna">3,022 reviews</div>
+                            </div>
+                            <div class="main-mask">
+                              <ul class="list-unstyled list-inline offer-price-1">
+                                <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
+                                </li>
+                                <li class="list-inline-item price">
+                                  <span class="pkg">
+                                    <del>2000 Tk.</del>
+                                  </span>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <!-- end h-grid-info -->
+                        </div>
+                        <!-- end h-grid-block -->
+                      </div>
+                      <div class="col-md-6 col-lg-6 col-xl-3">
+                        <div class="grid-block main-block h-grid-block">
+                          <div class="main-img h-grid-img">
+                            <a href="#">
+                              <img src="images/hotel/5.jpg" class="img-fluid" alt="hotel-img" />
+                            </a>
+                            <div class="guest-favourite">
+                              <h3>Guest favourite</h3>
+                            </div>
+                          </div>
+                          <!-- end h-grid-img -->
+                          <div class="block-info h-grid-info">
+                            <h3 class="block-title">
+                              <a href="hotel-room-details.html">Hotel Windy Terrace, Cox's Bazar </a>
+                            </h3>
+                            <p class="block-minor">400 kilometers away</p>
+                            <!-- <p class="block-minor"> May 1 – 6</p> -->
+                            <div class="review-main">
+                              <div class="review-cat-home">8.9</div>
+                              <div class="review-cat">Fabulous</div>
+                              <div class="review-cat spna">3,022 reviews</div>
+                            </div>
+                            <div class="main-mask">
+                              <ul class="list-unstyled list-inline offer-price-1">
+                                <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
+                                </li>
+                                <li class="list-inline-item price">
+                                  <span class="pkg">
+                                    <del>2000 Tk.</del>
+                                  </span>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <!-- end h-grid-info -->
+                        </div>
+                        <!-- end h-grid-block -->
+                      </div>
+                     
+                    </div>
+                  </div>
+                  <!-- End:  Hotel -->
+
+                  <!-- Start:  Resort -->
+                  <div id="resort" class="tab-pane">
+                    <div class="row">
+                      <div class="col-md-6 col-lg-6 col-xl-3">
+                        <div class="grid-block main-block h-grid-block">
+                          <div class="main-img h-grid-img">
+                            <a href="hotel-room-details.html">
+                              <img src="images/hotel/1.jpg" class="img-fluid" alt="hotel-img" />
+                            </a>
+                            <div class="guest-favourite">
+                              <h3>Guest favourite</h3>
+                            </div>
+                            <div class="wish-list-container">
+                              <div class="wish-list-btn">
+                                <a href="#">
+                                  <div class="circle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon removed">
+                                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06
+                                                          1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                    </svg>
+                                    <span class="message">
+                                      <a href="/profile/saved" class="link" target="_blank"> Saved <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" class="icon-right-arrow">
+                                          <path fill="#1C3C6B" d="M5.086 9.5a.5.5 0 0 0 .39-.186l2.414-3a.5.5 0 0 0-.006-.634l-2.5-3a.5.5 0 0
+                                                                0-.768.64l2.238 2.686-2.158 2.68a.5.5 0 0 0 .39.814z"></path>
+                                        </svg>
+                                      </a>
+                                    </span>
+                                  </div>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- end h-grid-img -->
+                          <div class="block-info h-grid-info">
+                            <h3 class="block-title">
+                              <a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a>
+                            </h3>
+                            <p class="block-minor">400 kilometers away</p>
+                            <!-- <p class="block-minor"> May 1 – 6</p> -->
+                            <div class="review-main">
+                              <div class="review-cat-home">8.9</div>
+                              <div class="review-cat">Fabulous</div>
+                              <div class="review-cat spna">3,022 reviews</div>
+                            </div>
+                            <div class="main-mask">
+                              <ul class="list-unstyled list-inline offer-price-1">
+                                <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
+                                </li>
+                                <li class="list-inline-item price">
+                                  <span class="pkg">
+                                    <del>2000 Tk.</del>
+                                  </span>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <!-- end h-grid-info -->
+                        </div>
+                        <!-- end h-grid-block -->
+                      </div>
+                      
+                      <div class="col-md-6 col-lg-6 col-xl-3">
+                        <div class="grid-block main-block h-grid-block">
+                          <div class="main-img h-grid-img">
+                            <a href="#">
+                              <img src="images/hotel/4.jpg" class="img-fluid" alt="hotel-img" />
+                            </a>
+                            <div class="guest-favourite">
+                              <h3>Guest favourite</h3>
+                            </div>
+                          </div>
+                          <!-- end h-grid-img -->
+                          <div class="block-info h-grid-info">
+                            <h3 class="block-title">
+                              <a href="hotel-room-details.html">Hotel Windy Terrace, Cox's Bazar </a>
+                            </h3>
+                            <p class="block-minor">400 kilometers away</p>
+                            <!-- <p class="block-minor"> May 1 – 6</p> -->
+                            <div class="review-main">
+                              <div class="review-cat-home">8.9</div>
+                              <div class="review-cat">Fabulous</div>
+                              <div class="review-cat spna">3,022 reviews</div>
+                            </div>
+                            <div class="main-mask">
+                              <ul class="list-unstyled list-inline offer-price-1">
+                                <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
+                                </li>
+                                <li class="list-inline-item price">
+                                  <span class="pkg">
+                                    <del>2000 Tk.</del>
+                                  </span>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <!-- end h-grid-info -->
+                        </div>
+                        <!-- end h-grid-block -->
+                      </div>
+                      <div class="col-md-6 col-lg-6 col-xl-3">
+                        <div class="grid-block main-block h-grid-block">
+                          <div class="main-img h-grid-img">
+                            <a href="hotel-room-details.html">
+                              <img src="images/hotel/2.webp" class="img-fluid" alt="hotel-img" />
+                            </a>
+                            <div class="guest-favourite">
+                              <h3>Guest favourite</h3>
+                            </div>
+                          </div>
+                          <!-- end h-grid-img -->
+                          <div class="block-info h-grid-info">
+                            <h3 class="block-title">
+                              <a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a>
+                            </h3>
+                            <p class="block-minor">400 kilometers away</p>
+                            <!-- <p class="block-minor"> May 1 – 6</p> -->
+                            <div class="review-main">
+                              <div class="review-cat-home">8.9</div>
+                              <div class="review-cat">Fabulous</div>
+                              <div class="review-cat spna">3,022 reviews</div>
+                            </div>
+                            <div class="main-mask">
+                              <ul class="list-unstyled list-inline offer-price-1">
+                                <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
+                                </li>
+                                <li class="list-inline-item price">
+                                  <span class="pkg">
+                                    <del>2000 Tk.</del>
+                                  </span>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <!-- end h-grid-info -->
+                        </div>
+                        <!-- end h-grid-block -->
+                      </div>
+                      <div class="col-md-6 col-lg-6 col-xl-3">
+                        <div class="grid-block main-block h-grid-block">
+                          <div class="main-img h-grid-img">
+                            <a href="#">
+                              <img src="images/hotel/3.jpg" class="img-fluid" alt="hotel-img" />
+                            </a>
+                            <div class="guest-favourite">
+                              <h3>Guest favourite</h3>
+                            </div>
+                          </div>
+                          <!-- end h-grid-img -->
+                          <div class="block-info h-grid-info">
+                            <h3 class="block-title">
+                              <a href="hotel-room-details.html">Cox Beach Resort, Cox's Bazar </a>
+                            </h3>
+                            <p class="block-minor">400 kilometers away</p>
+                            <!-- <p class="block-minor"> May 1 – 6</p> -->
+                            <div class="review-main">
+                              <div class="review-cat-home">8.9</div>
+                              <div class="review-cat">Fabulous</div>
+                              <div class="review-cat spna">3,022 reviews</div>
+                            </div>
+                            <div class="main-mask">
+                              <ul class="list-unstyled list-inline offer-price-1">
+                                <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
+                                </li>
+                                <li class="list-inline-item price">
+                                  <span class="pkg">
+                                    <del>2000 Tk.</del>
+                                  </span>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <!-- end h-grid-info -->
+                        </div>
+                        <!-- end h-grid-block -->
+                      </div>
+                      <div class="col-md-6 col-lg-6 col-xl-3">
+                        <div class="grid-block main-block h-grid-block">
+                          <div class="main-img h-grid-img">
+                            <a href="#">
+                              <img src="images/hotel/5.jpg" class="img-fluid" alt="hotel-img" />
+                            </a>
+                            <div class="guest-favourite">
+                              <h3>Guest favourite</h3>
+                            </div>
+                          </div>
+                          <!-- end h-grid-img -->
+                          <div class="block-info h-grid-info">
+                            <h3 class="block-title">
+                              <a href="hotel-room-details.html">Hotel Windy Terrace, Cox's Bazar </a>
+                            </h3>
+                            <p class="block-minor">400 kilometers away</p>
+                            <!-- <p class="block-minor"> May 1 – 6</p> -->
+                            <div class="review-main">
+                              <div class="review-cat-home">8.9</div>
+                              <div class="review-cat">Fabulous</div>
+                              <div class="review-cat spna">3,022 reviews</div>
+                            </div>
+                            <div class="main-mask">
+                              <ul class="list-unstyled list-inline offer-price-1">
+                                <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
+                                </li>
+                                <li class="list-inline-item price">
+                                  <span class="pkg">
+                                    <del>2000 Tk.</del>
+                                  </span>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <!-- end h-grid-info -->
+                        </div>
+                        <!-- end h-grid-block -->
+                      </div>
+                     
+                    </div>
+                  </div>
+                  <!-- End:  Resort -->
+
+                   <!-- Start:  Others -->
+                  <div id="others" class="tab-pane">
+                    <div class="row">
+                      <div class="col-md-6 col-lg-6 col-xl-3">
+                        <div class="grid-block main-block h-grid-block">
+                          <div class="main-img h-grid-img">
+                            <a href="hotel-room-details.html">
+                              <img src="images/hotel/1.jpg" class="img-fluid" alt="hotel-img" />
+                            </a>
+                            <div class="guest-favourite">
+                              <h3>Guest favourite</h3>
+                            </div>
+                            <div class="wish-list-container">
+                              <div class="wish-list-btn">
+                                <a href="#">
+                                  <div class="circle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon removed">
+                                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06
+                                                          1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                    </svg>
+                                    <span class="message">
+                                      <a href="/profile/saved" class="link" target="_blank"> Saved <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" class="icon-right-arrow">
+                                          <path fill="#1C3C6B" d="M5.086 9.5a.5.5 0 0 0 .39-.186l2.414-3a.5.5 0 0 0-.006-.634l-2.5-3a.5.5 0 0
+                                                                0-.768.64l2.238 2.686-2.158 2.68a.5.5 0 0 0 .39.814z"></path>
+                                        </svg>
+                                      </a>
+                                    </span>
+                                  </div>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- end h-grid-img -->
+                          <div class="block-info h-grid-info">
+                            <h3 class="block-title">
+                              <a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a>
+                            </h3>
+                            <p class="block-minor">400 kilometers away</p>
+                            <!-- <p class="block-minor"> May 1 – 6</p> -->
+                            <div class="review-main">
+                              <div class="review-cat-home">8.9</div>
+                              <div class="review-cat">Fabulous</div>
+                              <div class="review-cat spna">3,022 reviews</div>
+                            </div>
+                            <div class="main-mask">
+                              <ul class="list-unstyled list-inline offer-price-1">
+                                <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
+                                </li>
+                                <li class="list-inline-item price">
+                                  <span class="pkg">
+                                    <del>2000 Tk.</del>
+                                  </span>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <!-- end h-grid-info -->
+                        </div>
+                        <!-- end h-grid-block -->
+                      </div>
+                      
+                      <div class="col-md-6 col-lg-6 col-xl-3">
+                        <div class="grid-block main-block h-grid-block">
+                          <div class="main-img h-grid-img">
+                            <a href="#">
+                              <img src="images/hotel/4.jpg" class="img-fluid" alt="hotel-img" />
+                            </a>
+                            <div class="guest-favourite">
+                              <h3>Guest favourite</h3>
+                            </div>
+                          </div>
+                          <!-- end h-grid-img -->
+                          <div class="block-info h-grid-info">
+                            <h3 class="block-title">
+                              <a href="hotel-room-details.html">Hotel Windy Terrace, Cox's Bazar </a>
+                            </h3>
+                            <p class="block-minor">400 kilometers away</p>
+                            <!-- <p class="block-minor"> May 1 – 6</p> -->
+                            <div class="review-main">
+                              <div class="review-cat-home">8.9</div>
+                              <div class="review-cat">Fabulous</div>
+                              <div class="review-cat spna">3,022 reviews</div>
+                            </div>
+                            <div class="main-mask">
+                              <ul class="list-unstyled list-inline offer-price-1">
+                                <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
+                                </li>
+                                <li class="list-inline-item price">
+                                  <span class="pkg">
+                                    <del>2000 Tk.</del>
+                                  </span>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <!-- end h-grid-info -->
+                        </div>
+                        <!-- end h-grid-block -->
+                      </div>
+                      <div class="col-md-6 col-lg-6 col-xl-3">
+                        <div class="grid-block main-block h-grid-block">
+                          <div class="main-img h-grid-img">
+                            <a href="hotel-room-details.html">
+                              <img src="images/hotel/2.webp" class="img-fluid" alt="hotel-img" />
+                            </a>
+                            <div class="guest-favourite">
+                              <h3>Guest favourite</h3>
+                            </div>
+                          </div>
+                          <!-- end h-grid-img -->
+                          <div class="block-info h-grid-info">
+                            <h3 class="block-title">
+                              <a href="hotel-room-details.html">Sea Pearl, Cox's Bazar </a>
+                            </h3>
+                            <p class="block-minor">400 kilometers away</p>
+                            <!-- <p class="block-minor"> May 1 – 6</p> -->
+                            <div class="review-main">
+                              <div class="review-cat-home">8.9</div>
+                              <div class="review-cat">Fabulous</div>
+                              <div class="review-cat spna">3,022 reviews</div>
+                            </div>
+                            <div class="main-mask">
+                              <ul class="list-unstyled list-inline offer-price-1">
+                                <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
+                                </li>
+                                <li class="list-inline-item price">
+                                  <span class="pkg">
+                                    <del>2000 Tk.</del>
+                                  </span>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <!-- end h-grid-info -->
+                        </div>
+                        <!-- end h-grid-block -->
+                      </div>
+                      <div class="col-md-6 col-lg-6 col-xl-3">
+                        <div class="grid-block main-block h-grid-block">
+                          <div class="main-img h-grid-img">
+                            <a href="#">
+                              <img src="images/hotel/3.jpg" class="img-fluid" alt="hotel-img" />
+                            </a>
+                            <div class="guest-favourite">
+                              <h3>Guest favourite</h3>
+                            </div>
+                          </div>
+                          <!-- end h-grid-img -->
+                          <div class="block-info h-grid-info">
+                            <h3 class="block-title">
+                              <a href="hotel-room-details.html">Cox Beach Resort, Cox's Bazar </a>
+                            </h3>
+                            <p class="block-minor">400 kilometers away</p>
+                            <!-- <p class="block-minor"> May 1 – 6</p> -->
+                            <div class="review-main">
+                              <div class="review-cat-home">8.9</div>
+                              <div class="review-cat">Fabulous</div>
+                              <div class="review-cat spna">3,022 reviews</div>
+                            </div>
+                            <div class="main-mask">
+                              <ul class="list-unstyled list-inline offer-price-1">
+                                <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
+                                </li>
+                                <li class="list-inline-item price">
+                                  <span class="pkg">
+                                    <del>2000 Tk.</del>
+                                  </span>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <!-- end h-grid-info -->
+                        </div>
+                        <!-- end h-grid-block -->
+                      </div>
+                      <div class="col-md-6 col-lg-6 col-xl-3">
+                        <div class="grid-block main-block h-grid-block">
+                          <div class="main-img h-grid-img">
+                            <a href="#">
+                              <img src="images/hotel/5.jpg" class="img-fluid" alt="hotel-img" />
+                            </a>
+                            <div class="guest-favourite">
+                              <h3>Guest favourite</h3>
+                            </div>
+                          </div>
+                          <!-- end h-grid-img -->
+                          <div class="block-info h-grid-info">
+                            <h3 class="block-title">
+                              <a href="hotel-room-details.html">Hotel Windy Terrace, Cox's Bazar </a>
+                            </h3>
+                            <p class="block-minor">400 kilometers away</p>
+                            <!-- <p class="block-minor"> May 1 – 6</p> -->
+                            <div class="review-main">
+                              <div class="review-cat-home">8.9</div>
+                              <div class="review-cat">Fabulous</div>
+                              <div class="review-cat spna">3,022 reviews</div>
+                            </div>
+                            <div class="main-mask">
+                              <ul class="list-unstyled list-inline offer-price-1">
+                                <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
+                                </li>
+                                <li class="list-inline-item price">
+                                  <span class="pkg">
+                                    <del>2000 Tk.</del>
+                                  </span>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <!-- end h-grid-info -->
+                        </div>
+                        <!-- end h-grid-block -->
+                      </div>
+                     
+                    </div>
+                  </div>
+                  <!-- End:  Resort -->
+
+
+                <!-- end row -->
+                <div class="pages">
+                  <ol class="pagination justify-content-center">
+                    <li>
+                      <a href="#" aria-label="Previous">
+                        <span aria-hidden="true">
+                          <i class="fa fa-angle-left"></i>
+                        </span>
+                      </a>
+                    </li>
+                    <li class="active">
+                      <a href="#">1</a>
+                    </li>
+                    <li>
+                      <a href="#">2</a>
+                    </li>
+                    <li>
+                      <a href="#">3</a>
+                    </li>
+                    <li>
+                      <a href="#">4</a>
+                    </li>
+                    <li>
+                      <a href="#" aria-label="Next">
+                        <span aria-hidden="true">
+                          <i class="fa fa-angle-right"></i>
+                        </span>
+                      </a>
+                    </li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- end Hotel All -->
+
+      <!--======================= FOOTER =======================-->
+      <section id="footer" class="ftr-heading-o ftr-heading-mgn-1">
+        <div id="footer-top" class="banner-padding ftr-top-grey ftr-text-white">
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-3 col-lg-4 col-xl-3 footer-widget ftr-links">
+                <h3 class="footer-heading">Support</h3>
+                <ul class="list-unstyled">
+                  <li>
+                    <a href="#">Coronavirus (COVID-19) FAQs</a>
+                  </li>
+                  <li>
+                    <a href="#">Manage your trips</a>
+                  </li>
+                  <li>
+                    <a href="#">Contact Customer Service</a>
+                  </li>
+                  <li>
+                    <a href="#">Safety resource centre</a>
+                  </li>
+                  <li>
+                    <a href="#">Video</a>
+                  </li>
+                </ul>
+              </div>
+              <!-- end columns -->
+              <div class="col-12 col-md-3 col-lg-4 col-xl-3 footer-widget ftr-links">
+                <h3 class="footer-heading">Discover</h3>
+                <ul class="list-unstyled">
+                  <li>
+                    <a href="#">Title Name Here</a>
+                  </li>
+                  <li>
+                    <a href="#">Title Name Here</a>
+                  </li>
+                  <li>
+                    <a href="#">Title Name Here</a>
+                  </li>
+                  <li>
+                    <a href="#">Title Name Here</a>
+                  </li>
+                  <li>
+                    <a href="#">Title Name Here</a>
+                  </li>
+                  <li>
+                    <a href="#">Title Name Here</a>
+                  </li>
+                </ul>
+              </div>
+              <!-- end columns -->
+              <div class="col-12 col-md-3 col-lg-4 col-xl-3 footer-widget ftr-links">
+                <h3 class="footer-heading">Terms and settings</h3>
+                <ul class="list-unstyled">
+                  <li>
+                    <a href="#">Privacy & cookies</a>
+                  </li>
+                  <li>
+                    <a href="#">Terms and conditions</a>
+                  </li>
+                  <li>
+                    <a href="#">Partner dispute</a>
+                  </li>
+                  <li>
+                    <a href="#">Modern Slavery Statement</a>
+                  </li>
+                  <li>
+                    <a href="#">Human Rights Statement</a>
+                  </li>
+                </ul>
+              </div>
+              <!-- end columns -->
+              <div class="col-12 col-md-3 col-lg-4 col-xl-3 footer-widget ftr-links">
+                <h3 class="footer-heading">About</h3>
+                <ul class="list-unstyled">
+                  <li>
+                    <a href="#">About Eg Kom</a>
+                  </li>
+                  <li>
+                    <a href="#">How we work</a>
+                  </li>
+                  <li>
+                    <a href="#">Sustainability</a>
+                  </li>
+                  <li>
+                    <a href="#">Press centre</a>
+                  </li>
+                  <li>
+                    <a href="#">Careers</a>
+                  </li>
+                </ul>
+              </div>
+              <!-- end columns -->
+            </div>
+            <!-- end row -->
+          </div>
+          <!-- end container -->
+        </div>
+        <!-- end footer-top -->
+        <div id="footer-bottom" class="ftr-bot-black">
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-6 col-lg-6 col-xl-6" id="copyright">
+                <p>Copyright © 2024 Egkom. All Rights Reserved.</p>
+              </div>
+              <!-- end columns -->
+              <div class="col-12 col-md-6 col-lg-6 col-xl-6" id="terms">
+                <div class="footer-links">
+                  <p class="footer-copytext">
+                    <a href="https://www.esoft.com.bd/" target="_blank"> Web Design Company :</a>
+                    <span style="font-family:cursive">e- <span style="color:red">S</span>oft </span>
+                  </p>
+                </div>
+              </div>
+              <!-- end columns -->
+            </div>
+            <!-- end row -->
+          </div>
+          <!-- end container -->
+        </div>
+        <!-- end footer-bottom -->
+      </section>
+      <!-- end footer -->
+      <!--  <div id="popup-ad" class="modal fade" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body"><button type="button" class="btn close" data-bs-dismiss="modal">&times;</button><div class="row"><div class="col-12 col-md-6"><div class="popup-ad-text"><h4>Get</h4><h2><span>20%</span> off</h2><h4>on all flights booking</h4><p>Lorem ipsum dolor sit amet, ad duo fugit aeque fabulas, in lucilius prodesset pri.</p><a href="#" class="btn btn-orange">Book Now</a></div></div><div class="col-12 col-md-6"><div class="popup-ad-img"><img src="images/about-content-2.png" class="img-fluid" /></div></div></div></div></div></div></div> -->
+      <!-- end popup-ad -->
+    </div>
+    <!-- Page Scripts Starts -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="js/bootstrap-5.3.2.min.js"></script>
+    <script src="js/jquery.flexslider.js"></script>
+    <script src="js/bootstrap-datepicker.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/custom-navigation.js"></script>
+    <script src="js/custom-flex.js"></script>
+    <script src="js/custom-owl.js"></script>
+    <script src="js/custom-date-picker.js"></script>
+    <script src="js/custom-video.js"></script>
+    <script src="js/popup-ad.js"></script>
+    <script src="js/slick.min.js"></script>
+    <script src="js/custom-slick.js"></script>
+    <script src="js/custom-gallery.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!--  -->
+    <script>
+      $(document).ready(function() {
+        // Get the position of the top bar area
+        var stickyBar = $('#stickyBar');
+        var stickyOffset = stickyBar.offset().top;
+        // On scroll event
+        $(window).on('scroll', function() {
+          var scrollTop = $(this).scrollTop();
+          // Check if scrolled past the sticky point
+          if (scrollTop > stickyOffset) {
+            stickyBar.addClass('sticky'); // Make the bar sticky
+            $('#smallSearchBox').fadeIn(); // Show the small search box
+            $('#largeSearchBox').fadeOut(); // Hide the large search box
+          } else {
+            stickyBar.removeClass('sticky'); // Remove sticky behavior
+            $('#smallSearchBox').fadeOut(); // Hide the small search box
+            $('#largeSearchBox').fadeIn(); // Show the large search box
+          }
+        });
+      });
+    </script>
+    <script>
+      $(document).ready(function() {
+        // On click of the small search box
+        $('#smallSearchBox').on('click', function() {
+          // Hide the small search box
+          $(this).fadeOut();
+          // Show the large search box
+          $('#largeSearchBox').fadeIn();
+        });
+      });
+    </script>
+    <!-- New -->
+    <!-- Tabing menu Sticky -->
+    <script type="text/javascript">
+      const checkinInput = document.getElementById('checkin');
+      const checkoutInput = document.getElementById('checkout');
+      const calendarPopup = document.getElementById('calendar-popup');
+      const calendarMonth = document.getElementById('calendarMonth');
+      const calendar = document.getElementById('calendar');
+      let selectedCheckinDate = null;
+      let selectedCheckoutDate = null;
+      let currentMonth = new Date();
+      const today = new Date(); // Get today's date
+      function showCalendar(input) {
+        calendarPopup.style.display = 'block';
+        calendarPopup.style.top = input.getBoundingClientRect().bottom + 'px';
+        calendarPopup.style.left = input.getBoundingClientRect().left + 'px';
+        renderCalendar(currentMonth);
+      }
+
+      function hideCalendar() {
+        calendarPopup.style.display = 'none';
+      }
+
+      function renderCalendar(month) {
+        const firstDay = new Date(month.getFullYear(), month.getMonth(), 1);
+        const lastDay = new Date(month.getFullYear(), month.getMonth() + 1, 0);
+        calendarMonth.textContent = month.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long'
+        });
+        calendar.innerHTML = '';
+        // Add empty cells for days before the start of the month
+        for (let i = 0; i < firstDay.getDay(); i++) {
+          const emptyCell = document.createElement('div');
+          emptyCell.classList.add('disabled');
+          calendar.appendChild(emptyCell);
+        }
+        for (let day = 1; day <= lastDay.getDate(); day++) {
+          const date = new Date(month.getFullYear(), month.getMonth(), day);
+          const dayCell = document.createElement('div');
+          dayCell.textContent = day;
+          // Disable previous and current dates
+          if (date < today) {
+            dayCell.classList.add('disabled'); // Disable past dates
+          } else if (selectedCheckinDate && date.getTime() === selectedCheckinDate.getTime()) {
+            dayCell.classList.add('selected');
+          } else if (selectedCheckoutDate && date.getTime() === selectedCheckoutDate.getTime()) {
+            dayCell.classList.add('selected');
+          }
+          // If the date is in the future, allow it to be selected
+          if (date >= today) {
+            dayCell.addEventListener('click', () => handleDateSelection(date));
+          }
+          calendar.appendChild(dayCell);
+        }
+      }
+
+      function handleDateSelection(date) {
+        if (!selectedCheckinDate || (selectedCheckinDate && selectedCheckoutDate)) {
+          selectedCheckinDate = date;
+          selectedCheckoutDate = null;
+          checkinInput.value = formatDate(selectedCheckinDate);
+          checkoutInput.value = '';
+        } else if (date > selectedCheckinDate) {
+          selectedCheckoutDate = date;
+          checkoutInput.value = formatDate(selectedCheckoutDate);
+        }
+        renderCalendar(currentMonth);
+        hideCalendar();
+      }
+
+      function formatDate(date) {
+        return date.toLocaleDateString('en-GB'); // International date format
+      }
+      document.getElementById('prevMonth').addEventListener('click', () => {
+        currentMonth.setMonth(currentMonth.getMonth() - 1);
+        renderCalendar(currentMonth);
+      });
+      document.getElementById('nextMonth').addEventListener('click', () => {
+        currentMonth.setMonth(currentMonth.getMonth() + 1);
+        renderCalendar(currentMonth);
+      });
+      checkinInput.addEventListener('click', () => showCalendar(checkinInput));
+      checkoutInput.addEventListener('click', () => showCalendar(checkoutInput));
+      document.addEventListener('click', (event) => {
+        if (!calendarPopup.contains(event.target) && event.target !== checkinInput && event.target !== checkoutInput) {
+          hideCalendar();
+        }
+      });
+    </script>
+    <!-- Seache hotel list -->
+    <script type="text/javascript">
+      function showSuggestions() {
+        document.getElementById("suggestions-list").style.display = "block";
+      }
+
+      function hideSuggestions() {
+        setTimeout(function() {
+          document.getElementById("suggestions-list").style.display = "none";
+        }, 200); // delay hiding so click events can register
+      }
+      document.querySelectorAll('.suggestion-item').forEach(item => {
+        item.addEventListener('click', function() {
+          document.getElementById('destination-input').value = this.querySelector('strong').innerText;
+          hideSuggestions();
+        });
+      });
+    </script>
+    <!-- Seache hotel list -->
+    <!-- Most Popular slider -->
+    <script type="text/javascript">
+      const swiper = new Swiper(".swiper", {
+        direction: "horizontal",
+        loop: true,
+        speed: 3500,
+        slidesPerView: 4,
+        spaceBetween: 10,
+        mousewheel: {
+          forceToAxis: true,
+          releaseOnEdges: true,
+        },
+        parallax: true,
+        centeredSlides: true,
+        effect: "coverflow",
+        coverflowEffect: {
+          rotate: 40,
+          slideShadows: true,
+        },
+        autoplay: {
+          delay: 2000,
+          pauseOnMouseEnter: true,
+        },
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true, // Enables clicking on bullet points to change slides
+        },
+        scrollbar: {
+          el: ".swiper-scrollbar",
+        },
+        breakpoints: {
+          0: {
+            slidesPerView: 1,
+            spaceBetween: 60,
+          },
+          600: {
+            slidesPerView: 2,
+            spaceBetween: 60,
+          },
+          1000: {
+            slidesPerView: 4,
+            spaceBetween: 10,
+          },
+          1400: {
+            slidesPerView: 4,
+            spaceBetween: 10,
+          },
+          2300: {
+            slidesPerView: 5,
+            spaceBetween: 60,
+          },
+          2900: {
+            slidesPerView: 6,
+            spaceBetween: 60,
+          },
+        },
+      });
+      // https://codepen.io/TheMOZZARELLA/pen/OJqrvNo
+    </script>
+    <script>
+      // Toggle the guest dropdown visibility
+      function toggleGuestDropdown() {
+        const guestSelector = document.querySelector('.guest-selector');
+        guestSelector.classList.toggle('show');
+      }
+      // Increase count based on the id passed (for adults, children, infants, or pets)
+      function increaseCount(id) {
+        let count = document.getElementById(id).innerText;
+        count = parseInt(count) + 1;
+        document.getElementById(id).innerText = count;
+        updateGuestButtonText();
+      }
+      // Decrease count (ensuring it doesn't go below 0)
+      function decreaseCount(id) {
+        let count = document.getElementById(id).innerText;
+        count = parseInt(count);
+        if (count > 0) {
+          count -= 1;
+        }
+        document.getElementById(id).innerText = count;
+        updateGuestButtonText();
+      }
+      // Update the guest button text to show the total count of guests
+      function updateGuestButtonText() {
+        const adultCount = parseInt(document.getElementById('adultCount').innerText);
+        const childrenCount = parseInt(document.getElementById('childrenCount').innerText);
+        const infantCount = parseInt(document.getElementById('infantCount').innerText);
+        const petCount = parseInt(document.getElementById('petCount').innerText);
+        let totalGuests = adultCount + childrenCount;
+        let guestText = "";
+        if (totalGuests > 0) {
+          guestText += `${totalGuests} guest${totalGuests > 1 ? 's' : ''}`;
+        }
+        if (infantCount > 0) {
+          guestText += `, ${infantCount} infant${infantCount > 1 ? 's' : ''}`;
+        }
+        if (petCount > 0) {
+          guestText += `, ${petCount} pet${petCount > 1 ? 's' : ''}`;
+        }
+        // If no guests selected, show "Add Guests"
+        if (guestText === "") {
+          guestText = "Add Guests";
+        }
+        document.querySelector('.guest-button').innerText = guestText;
+      }
+      // Close guest-selector when clicking outside the dropdown
+      window.addEventListener('click', function(e) {
+        const guestSelector = document.querySelector('.guest-selector');
+        const guestButton = document.querySelector('.guest-button');
+        // Check if click is outside the guestSelector and the guest button
+        if (!guestSelector.contains(e.target) && !guestButton.contains(e.target)) {
+          guestSelector.classList.remove('show');
+        }
+      });
+    </script>
+    <!-- Seache hotel list -->
+    <script type="text/javascript">
+      function showSuggestions() {
+        document.getElementById("suggestions-list").style.display = "block";
+      }
+
+      function hideSuggestions() {
+        setTimeout(function() {
+          document.getElementById("suggestions-list").style.display = "none";
+        }, 200); // delay hiding so click events can register
+      }
+      document.querySelectorAll('.suggestion-item').forEach(item => {
+        item.addEventListener('click', function() {
+          document.getElementById('destination-input').value = this.querySelector('strong').innerText;
+          hideSuggestions();
+        });
+      });
+    </script>
+    <!-- Seache hotel list -->
+    <script>
+      $(document).ready(function() {
+        // Get the position where the second sticky bar should become fixed
+        var bottomStickyOffset = $('#bottomStickyBar').offset().top;
+        $(window).on('scroll', function() {
+          var scrollTop = $(this).scrollTop();
+          // When the user scrolls past the point, make the bottom sticky bar fixed
+          if (scrollTop > bottomStickyOffset - 150) { // Adjust for the 150px offset
+            $('#bottomStickyBar').addClass('sticky');
+          } else {
+            $('#bottomStickyBar').removeClass('sticky');
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

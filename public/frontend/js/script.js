@@ -131,7 +131,11 @@ $(document).ready(function() {
         dayCell.classList.add("selected");
       }
 
-      dayCell.addEventListener("click", () => handleDateSelection(date, "mobile"));
+      dayCell.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        handleDateSelection(date, "mobile");
+      });
       calendarMobile.appendChild(dayCell);
     }
   }
@@ -168,7 +172,11 @@ $(document).ready(function() {
         dayCell.classList.add("selected");
       }
 
-      dayCell.addEventListener("click", () => handleDateSelection(date, "desktop"));
+      dayCell.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        handleDateSelection(date, "desktop");
+      });
       calendarDesktop.appendChild(dayCell);
     }
   }
@@ -197,22 +205,30 @@ $(document).ready(function() {
   }
 
   // Change month (previous or next) for both mobile and desktop
-  document.getElementById("prevMonth-mobile").addEventListener("click", () => {
+  document.getElementById("prevMonth-mobile").addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     currentMonth.setMonth(currentMonth.getMonth() - 1);
     renderCalendarMobile(currentMonth);
   });
 
-  document.getElementById("nextMonth-mobile").addEventListener("click", () => {
+  document.getElementById("nextMonth-mobile").addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     currentMonth.setMonth(currentMonth.getMonth() + 1);
     renderCalendarMobile(currentMonth);
   });
 
-  document.getElementById("prevMonth-desktop").addEventListener("click", () => {
+  document.getElementById("prevMonth-desktop").addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     currentMonth.setMonth(currentMonth.getMonth() - 1);
     renderCalendarDesktop(currentMonth);
   });
 
-  document.getElementById("nextMonth-desktop").addEventListener("click", () => {
+  document.getElementById("nextMonth-desktop").addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     currentMonth.setMonth(currentMonth.getMonth() + 1);
     renderCalendarDesktop(currentMonth);
   });

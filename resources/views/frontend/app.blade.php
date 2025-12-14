@@ -37,6 +37,10 @@
 
 
 <body id="main-homepage">
+@php
+    // Get active hotels once for use in suggestions dropdown
+    $activeHotelsForSuggestions = \App\Models\Hotel::where('approve', 1)->orderBy('description', 'asc')->get();
+@endphp
 <div class="wrapper">
 
     <!--Start:  Mobile Header- -->
@@ -81,101 +85,75 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body modal-body-mb-search">
+                    <form id="mobile-search-form" action="{{ route('search') }}" method="GET">
                     <div class="search-bar search-bar-mb-list">
                         <div class="search-container search-item">
                             <label for="mobile-destination-input">Where</label>
                             <input
                                 type="text"
                                 id="mobile-destination-input"
+                                name="destination"
                                 placeholder="Search destinations"
                                 onfocus="showMobileSuggestions()"
                                 onblur="hideMobileSuggestions()"
                             >
                             <div class="suggestions" id="mobile-suggestions-list">
                                 <p class="suggestion-title">Suggested destinations</p>
-                                <div class="suggestion-item">
-                                    <img src="{{ asset('frontend')}}/images/icons/1.webp" alt="Bangkok" class="suggestion-icon">
-                                    <div class="suggestion-text">
-                                        <strong>Bangkok, Thailand</strong>
-                                        <br>
-                                        <span>For sights like Grand Palace</span>
+                                        @forelse($activeHotelsForSuggestions as $hotel)
+                                            <div class="suggestion-item" data-hotel-name="{{ $hotel->description }}">
+                                                @php
+                                                    $featuredPhotos = json_decode($hotel->featured_photo, true);
+                                                    $nearbyAreas = is_string($hotel->custom_nearby_areas)
+                                                        ? json_decode($hotel->custom_nearby_areas, true)
+                                                        : $hotel->custom_nearby_areas;
+                                                @endphp
+                                                @if (!empty($featuredPhotos[0]))
+                                                    <img src="{{ asset($featuredPhotos[0]) }}" alt="{{ $hotel->description }}" class="suggestion-icon" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
+                                                @else
+                                                    <img src="{{ asset('frontend')}}/images/icons/1.webp" alt="{{ $hotel->description }}" class="suggestion-icon" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
+                                                @endif
+                                                <div class="suggestion-text">
+                                                    <strong>{{ $hotel->description }}</strong>
+                                                    <br>
+                                                    <span>
+                                                        @if (!empty($nearbyAreas[0]))
+                                                            {{ $nearbyAreas[0] }}
+                                                        @elseif(!empty($hotel->address))
+                                                            {{ $hotel->address }}
+                                                        @else
+                                                            Available for booking
+                                                        @endif
+                                                    </span>
+                                                </div>
+                                            </div>
+                                @empty
+                                    <div class="suggestion-item">
+                                        <div class="suggestion-text">
+                                            <span>No hotels available</span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="suggestion-item">
-                                    <img src="{{ asset('frontend')}}/images/icons/2.png" alt="London" class="suggestion-icon">
-                                    <div class="suggestion-text">
-                                        <strong>London, United Kingdom</strong>
-                                        <br>
-                                        <span>For its bustling nightlife</span>
-                                    </div>
-                                </div>
-                                <div class="suggestion-item">
-                                    <img src="{{ asset('frontend')}}/images/icons/1.webp" alt="New York" class="suggestion-icon">
-                                    <div class="suggestion-text">
-                                        <strong>New York City, NY</strong>
-                                        <br>
-                                        <span>For its stunning architecture</span>
-                                    </div>
-                                </div>
-                                <div class="suggestion-item">
-                                    <img src="{{ asset('frontend')}}/images/icons/2.png" alt="Vancouver" class="suggestion-icon">
-                                    <div class="suggestion-text">
-                                        <strong>Vancouver, Canada</strong>
-                                        <br>
-                                        <span>For nature-lovers</span>
-                                    </div>
-                                </div>
-                                <div class="suggestion-item">
-                                    <img src="{{ asset('frontend')}}/images/icons/1.webp" alt="Bangkok" class="suggestion-icon">
-                                    <div class="suggestion-text">
-                                        <strong>Bangkok, Thailand</strong>
-                                        <br>
-                                        <span>For sights like Grand Palace</span>
-                                    </div>
-                                </div>
-                                <div class="suggestion-item">
-                                    <img src="{{ asset('frontend')}}/images/icons/2.png" alt="London" class="suggestion-icon">
-                                    <div class="suggestion-text">
-                                        <strong>London, United Kingdom</strong>
-                                        <br>
-                                        <span>For its bustling nightlife</span>
-                                    </div>
-                                </div>
-                                <div class="suggestion-item">
-                                    <img src="{{ asset('frontend')}}/images/icons/1.webp" alt="New York" class="suggestion-icon">
-                                    <div class="suggestion-text">
-                                        <strong>New York City, NY</strong>
-                                        <br>
-                                        <span>For its stunning architecture</span>
-                                    </div>
-                                </div>
-                                <div class="suggestion-item">
-                                    <img src="{{ asset('frontend')}}/images/icons/2.png" alt="Vancouver" class="suggestion-icon">
-                                    <div class="suggestion-text">
-                                        <strong>Vancouver, Canada</strong>
-                                        <br>
-                                        <span>For nature-lovers</span>
-                                    </div>
-                                </div>
+                                @endforelse
                             </div>
                         </div>
                         <!-- Mobile View HTML -->
                         <div id="mobile-view">
                             <div class=" search-container search-item">
                                 <label for="checkin-mobile">Check in</label>
-                                <input type="text" id="checkin-mobile" placeholder="Add dates" readonly />
+                                <input type="text" id="checkin-mobile" name="checkin_display" placeholder="Add dates" readonly />
+                                <input type="hidden" id="checkin-mobile-hidden" name="checkin" />
                             </div>
                             <div class="search-container search-item">
                                 <label for="checkout-mobile">Check out</label>
-                                <input type="text" id="checkout-mobile" placeholder="Add dates" readonly />
+                                <input type="text" id="checkout-mobile" name="checkout_display" placeholder="Add dates" readonly />
+                                <input type="hidden" id="checkout-mobile-hidden" name="checkout" />
                             </div>
 
                             <!-- Mobile Calendar Popup -->
                             <div id="calendar-popup-mobile" class="calendar-popup">
                                 <div class="calendar-header">
-                                    <button id="prevMonth-mobile">&#10094;</button>
+                                    <button type="button" id="prevMonth-mobile">&#10094;</button>
                                     <span id="calendarMonth-mobile"></span>
-                                    <button id="nextMonth-mobile">&#10095;</button>
+                                    <button type="button" id="nextMonth-mobile">&#10095;</button>
                                 </div>
                                 <div id="calendar-mobile" class="calendar"></div>
                             </div>
@@ -185,7 +163,7 @@
                                 <!-- Guest Button -->
                                 <div id="guest-dropdown-mobile" class="guest-dropdown">
                                     <label>Who</label>
-                                    <button class="guest-button" onclick="toggleGuestDropdown('mobile')">Add Guests</button>
+                                    <button type="button" class="guest-button" onclick="toggleGuestDropdown('mobile')">Add Guests</button>
                                     <!-- Guest Selection (Initially Hidden) -->
                                     <div class="guest-selector hidden" id="guest-selector-mobile">
                                         <div class="guest-type">
@@ -194,9 +172,9 @@
                                                 <p>Ages 13 or above</p>
                                             </div>
                                             <div class="guest-controls">
-                                                <button class="decrease" onclick="decreaseCount('mobile', 'adultCount')">-</button>
+                                                <button type="button" class="decrease" onclick="decreaseCount('mobile', 'adultCount')">-</button>
                                                 <span class="guest-count" id="adultCountMobile">0</span>
-                                                <button class="increase" onclick="increaseCount('mobile', 'adultCount')">+</button>
+                                                <button type="button" class="increase" onclick="increaseCount('mobile', 'adultCount')">+</button>
                                             </div>
                                         </div>
                                         <div class="guest-type">
@@ -205,9 +183,9 @@
                                                 <p>Ages 2 – 12</p>
                                             </div>
                                             <div class="guest-controls">
-                                                <button class="decrease" onclick="decreaseCount('mobile', 'childrenCount')">-</button>
+                                                <button type="button" class="decrease" onclick="decreaseCount('mobile', 'childrenCount')">-</button>
                                                 <span class="guest-count" id="childrenCountMobile">0</span>
-                                                <button class="increase" onclick="increaseCount('mobile', 'childrenCount')">+</button>
+                                                <button type="button" class="increase" onclick="increaseCount('mobile', 'childrenCount')">+</button>
                                             </div>
                                         </div>
                                         <div class="guest-type">
@@ -216,9 +194,9 @@
                                                 <p>Under 2</p>
                                             </div>
                                             <div class="guest-controls">
-                                                <button class="decrease" onclick="decreaseCount('mobile', 'infantCount')">-</button>
+                                                <button type="button" class="decrease" onclick="decreaseCount('mobile', 'infantCount')">-</button>
                                                 <span class="guest-count" id="infantCountMobile">0</span>
-                                                <button class="increase" onclick="increaseCount('mobile', 'infantCount')">+</button>
+                                                <button type="button" class="increase" onclick="increaseCount('mobile', 'infantCount')">+</button>
                                             </div>
                                         </div>
                                         <div class="guest-type">
@@ -227,9 +205,9 @@
                                                 <p>Bringing a service animal?</p>
                                             </div>
                                             <div class="guest-controls">
-                                                <button class="decrease" onclick="decreaseCount('mobile', 'petCount')">-</button>
+                                                <button type="button" class="decrease" onclick="decreaseCount('mobile', 'petCount')">-</button>
                                                 <span class="guest-count" id="petCountMobile">0</span>
-                                                <button class="increase" onclick="increaseCount('mobile', 'petCount')">+</button>
+                                                <button type="button" class="increase" onclick="increaseCount('mobile', 'petCount')">+</button>
                                             </div>
                                         </div>
                                     </div>
@@ -237,12 +215,17 @@
                             </div>
                         </div>
                         <div class="search-btn search-btn-mb-filter">
-                            <button class="search-button seach-mb-filter">
+                            <button type="submit" class="search-button seach-mb-filter">
                                 <i class="fa fa-search search-icon-top-mb"></i>   Search
                             </button>
                         </div>
-
+                        <!-- Hidden inputs for guest counts -->
+                        <input type="hidden" id="adults-input-mobile" name="adults" value="0" />
+                        <input type="hidden" id="children-input-mobile" name="children" value="0" />
+                        <input type="hidden" id="infants-input-mobile" name="infants" value="0" />
+                        <input type="hidden" id="pets-input-mobile" name="pets" value="0" />
                     </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -280,58 +263,54 @@
                         </div>
 
                         <div class="booking-search-box">
+                            <form id="desktop-search-form" action="{{ route('search') }}" method="GET">
                             <div class="search-bar">
                                 <div class="search-container search-item search-box-first">
                                     <label for="desktop-destination-input">Where</label>
                                     <input
                                         type="text"
                                         id="desktop-destination-input"
+                                        name="destination"
                                         placeholder="Search destinations"
                                         onfocus="showDesktopSuggestions()"
                                         onblur="hideDesktopSuggestions()"
                                     >
                                     <div class="suggestions" id="desktop-suggestions-list">
                                         <p class="suggestion-title">Suggested destinations</p>
-                                        <div class="suggestion-item">
-                                            <img src="{{ asset('frontend')}}/images/icons/1.webp" alt="New York" class="suggestion-icon">
-                                            <div class="suggestion-text">
-                                                <strong>New York City, NY</strong>
-                                                <br>
-                                                <span>For its stunning architecture</span>
+                                        @forelse($activeHotelsForSuggestions as $hotel)
+                                            <div class="suggestion-item" data-hotel-name="{{ $hotel->description }}">
+                                                @php
+                                                    $featuredPhotos = json_decode($hotel->featured_photo, true);
+                                                    $nearbyAreas = is_string($hotel->custom_nearby_areas)
+                                                        ? json_decode($hotel->custom_nearby_areas, true)
+                                                        : $hotel->custom_nearby_areas;
+                                                @endphp
+                                                @if (!empty($featuredPhotos[0]))
+                                                    <img src="{{ asset($featuredPhotos[0]) }}" alt="{{ $hotel->description }}" class="suggestion-icon" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
+                                                @else
+                                                    <img src="{{ asset('frontend')}}/images/icons/1.webp" alt="{{ $hotel->description }}" class="suggestion-icon" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
+                                                @endif
+                                                <div class="suggestion-text">
+                                                    <strong>{{ $hotel->description }}</strong>
+                                                    <br>
+                                                    <span>
+                                                        @if (!empty($nearbyAreas[0]))
+                                                            {{ $nearbyAreas[0] }}
+                                                        @elseif(!empty($hotel->address))
+                                                            {{ $hotel->address }}
+                                                        @else
+                                                            Available for booking
+                                                        @endif
+                                                    </span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="suggestion-item">
-                                            <img src="{{ asset('frontend')}}/images/icons/2.png" alt="Vancouver" class="suggestion-icon">
-                                            <div class="suggestion-text">
-                                                <strong>Vancouver, Canada</strong>
-                                                <br>
-                                                <span>For nature-lovers</span>
+                                        @empty
+                                            <div class="suggestion-item">
+                                                <div class="suggestion-text">
+                                                    <span>No hotels available</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="suggestion-item">
-                                            <img src="{{ asset('frontend')}}/images/icons/1.webp" alt="Bangkok" class="suggestion-icon">
-                                            <div class="suggestion-text">
-                                                <strong>Bangkok, Thailand</strong>
-                                                <br>
-                                                <span>For sights like Grand Palace</span>
-                                            </div>
-                                        </div>
-                                        <div class="suggestion-item">
-                                            <img src="{{ asset('frontend')}}/images/icons/2.png" alt="London" class="suggestion-icon">
-                                            <div class="suggestion-text">
-                                                <strong>London, United Kingdom</strong>
-                                                <br>
-                                                <span>For its bustling nightlife</span>
-                                            </div>
-                                        </div>
-                                        <div class="suggestion-item">
-                                            <img src="{{ asset('frontend')}}/images/icons/1.webp" alt="New York" class="suggestion-icon">
-                                            <div class="suggestion-text">
-                                                <strong>New York City, NY</strong>
-                                                <br>
-                                                <span>For its stunning architecture</span>
-                                            </div>
-                                        </div>
+                                        @endforelse
                                     </div>
                                 </div>
 
@@ -348,19 +327,21 @@
 
                                 <div class="search-container search-item">
                                     <label for="checkin-desktop">Check in</label>
-                                    <input type="text" id="checkin-desktop" placeholder="Add dates" readonly />
+                                    <input type="text" id="checkin-desktop" name="checkin_display" placeholder="Add dates" readonly />
+                                    <input type="hidden" id="checkin-desktop-hidden" name="checkin" />
                                 </div>
                                 <div class="search-container search-item">
                                     <label for="checkout-desktop">Check out</label>
-                                    <input type="text" id="checkout-desktop" placeholder="Add dates" readonly />
+                                    <input type="text" id="checkout-desktop" name="checkout_display" placeholder="Add dates" readonly />
+                                    <input type="hidden" id="checkout-desktop-hidden" name="checkout" />
                                 </div>
 
                                 <!-- Desktop Calendar Popup -->
                                 <div id="calendar-popup-desktop" class="calendar-popup">
                                     <div class="calendar-header">
-                                        <button id="prevMonth-desktop">&#10094;</button>
+                                        <button type="button" id="prevMonth-desktop">&#10094;</button>
                                         <span id="calendarMonth-desktop"></span>
-                                        <button id="nextMonth-desktop">&#10095;</button>
+                                        <button type="button" id="nextMonth-desktop">&#10095;</button>
                                     </div>
                                     <div id="calendar-desktop" class="calendar"></div>
                                 </div>
@@ -372,7 +353,7 @@
                                         <!-- Guest Button -->
                                         <div id="guest-dropdown-desktop" class="guest-dropdown">
                                             <label>Who</label>
-                                            <button class="guest-button" onclick="toggleGuestDropdown('desktop')">Add Guests</button>
+                                            <button type="button" class="guest-button" onclick="toggleGuestDropdown('desktop')">Add Guests</button>
                                             <!-- Guest Selection (Initially Hidden) -->
                                             <div class="guest-selector hidden" id="guest-selector-desktop">
                                                 <div class="guest-type">
@@ -381,9 +362,9 @@
                                                         <p>Ages 13 or above</p>
                                                     </div>
                                                     <div class="guest-controls">
-                                                        <button class="decrease" onclick="decreaseCount('desktop', 'adultCount')">-</button>
+                                                        <button type="button" class="decrease" onclick="decreaseCount('desktop', 'adultCount')">-</button>
                                                         <span class="guest-count" id="adultCountDesktop">0</span>
-                                                        <button class="increase" onclick="increaseCount('desktop', 'adultCount')">+</button>
+                                                        <button type="button" class="increase" onclick="increaseCount('desktop', 'adultCount')">+</button>
                                                     </div>
                                                 </div>
                                                 <div class="guest-type">
@@ -392,9 +373,9 @@
                                                         <p>Ages 2 – 12</p>
                                                     </div>
                                                     <div class="guest-controls">
-                                                        <button class="decrease" onclick="decreaseCount('desktop', 'childrenCount')">-</button>
+                                                        <button type="button" class="decrease" onclick="decreaseCount('desktop', 'childrenCount')">-</button>
                                                         <span class="guest-count" id="childrenCountDesktop">0</span>
-                                                        <button class="increase" onclick="increaseCount('desktop', 'childrenCount')">+</button>
+                                                        <button type="button" class="increase" onclick="increaseCount('desktop', 'childrenCount')">+</button>
                                                     </div>
                                                 </div>
                                                 <div class="guest-type">
@@ -403,9 +384,9 @@
                                                         <p>Under 2</p>
                                                     </div>
                                                     <div class="guest-controls">
-                                                        <button class="decrease" onclick="decreaseCount('desktop', 'infantCount')">-</button>
+                                                        <button type="button" class="decrease" onclick="decreaseCount('desktop', 'infantCount')">-</button>
                                                         <span class="guest-count" id="infantCountDesktop">0</span>
-                                                        <button class="increase" onclick="increaseCount('desktop', 'infantCount')">+</button>
+                                                        <button type="button" class="increase" onclick="increaseCount('desktop', 'infantCount')">+</button>
                                                     </div>
                                                 </div>
                                                 <div class="guest-type">
@@ -414,21 +395,27 @@
                                                         <p>Bringing a service animal?</p>
                                                     </div>
                                                     <div class="guest-controls">
-                                                        <button class="decrease" onclick="decreaseCount('desktop', 'petCount')">-</button>
+                                                        <button type="button" class="decrease" onclick="decreaseCount('desktop', 'petCount')">-</button>
                                                         <span class="guest-count" id="petCountDesktop">0</span>
-                                                        <button class="increase" onclick="increaseCount('desktop', 'petCount')">+</button>
+                                                        <button type="button" class="increase" onclick="increaseCount('desktop', 'petCount')">+</button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="search-btn">
-                                        <button class="search-button">
+                                        <button type="submit" class="search-button">
                                             <i class="fa fa-search"></i>
                                         </button>
                                     </div>
                                 </div>
                             </div>
+                            <!-- Hidden inputs for guest counts -->
+                            <input type="hidden" id="adults-input" name="adults" value="0" />
+                            <input type="hidden" id="children-input" name="children" value="0" />
+                            <input type="hidden" id="infants-input" name="infants" value="0" />
+                            <input type="hidden" id="pets-input" name="pets" value="0" />
+                            </form>
                         </div>
 
 
@@ -1343,6 +1330,145 @@
     // Initialize cart on page load
     document.addEventListener('DOMContentLoaded', function() {
         updateGlobalCartDisplay();
+        
+        // Update guest count hidden inputs when counts change
+        function updateGuestHiddenInputs(view) {
+            const adultCount = parseInt(document.getElementById(`adultCount${capitalize(view)}`).innerText) || 0;
+            const childrenCount = parseInt(document.getElementById(`childrenCount${capitalize(view)}`).innerText) || 0;
+            const infantCount = parseInt(document.getElementById(`infantCount${capitalize(view)}`).innerText) || 0;
+            const petCount = parseInt(document.getElementById(`petCount${capitalize(view)}`).innerText) || 0;
+            
+            // Update desktop inputs
+            const adultsInput = document.getElementById('adults-input');
+            const childrenInput = document.getElementById('children-input');
+            const infantsInput = document.getElementById('infants-input');
+            const petsInput = document.getElementById('pets-input');
+            
+            if (adultsInput) adultsInput.value = adultCount;
+            if (childrenInput) childrenInput.value = childrenCount;
+            if (infantsInput) infantsInput.value = infantCount;
+            if (petsInput) petsInput.value = petCount;
+            
+            // Update mobile inputs
+            const adultsInputMobile = document.getElementById('adults-input-mobile');
+            const childrenInputMobile = document.getElementById('children-input-mobile');
+            const infantsInputMobile = document.getElementById('infants-input-mobile');
+            const petsInputMobile = document.getElementById('pets-input-mobile');
+            
+            if (adultsInputMobile) adultsInputMobile.value = adultCount;
+            if (childrenInputMobile) childrenInputMobile.value = childrenCount;
+            if (infantsInputMobile) infantsInputMobile.value = infantCount;
+            if (petsInputMobile) petsInputMobile.value = petCount;
+        }
+        
+        // Override increaseCount to update hidden inputs
+        const originalIncreaseCount = window.increaseCount;
+        window.increaseCount = function(view, id) {
+            originalIncreaseCount(view, id);
+            updateGuestHiddenInputs(view);
+        };
+        
+        // Override decreaseCount to update hidden inputs
+        const originalDecreaseCount = window.decreaseCount;
+        window.decreaseCount = function(view, id) {
+            originalDecreaseCount(view, id);
+            updateGuestHiddenInputs(view);
+        };
+        
+        // Handle search form submission
+        const searchForm = document.getElementById('desktop-search-form');
+        if (searchForm) {
+            searchForm.addEventListener('submit', function(e) {
+                // Convert dates from dd/mm/yyyy to YYYY-MM-DD
+                const checkinDisplay = document.getElementById('checkin-desktop').value;
+                const checkoutDisplay = document.getElementById('checkout-desktop').value;
+                
+                if (checkinDisplay) {
+                    // Convert from dd/mm/yyyy to YYYY-MM-DD
+                    const parts = checkinDisplay.split('/');
+                    if (parts.length === 3) {
+                        const day = parts[0].padStart(2, '0');
+                        const month = parts[1].padStart(2, '0');
+                        const year = parts[2];
+                        document.getElementById('checkin-desktop-hidden').value = `${year}-${month}-${day}`;
+                    }
+                }
+                
+                if (checkoutDisplay) {
+                    // Convert from dd/mm/yyyy to YYYY-MM-DD
+                    const parts = checkoutDisplay.split('/');
+                    if (parts.length === 3) {
+                        const day = parts[0].padStart(2, '0');
+                        const month = parts[1].padStart(2, '0');
+                        const year = parts[2];
+                        document.getElementById('checkout-desktop-hidden').value = `${year}-${month}-${day}`;
+                    }
+                }
+                
+                // Update guest counts
+                updateGuestHiddenInputs('desktop');
+            });
+        }
+        
+        // Handle mobile search form submission
+        const mobileSearchForm = document.getElementById('mobile-search-form');
+        if (mobileSearchForm) {
+            mobileSearchForm.addEventListener('submit', function(e) {
+                // Convert dates from dd/mm/yyyy to YYYY-MM-DD
+                const checkinDisplay = document.getElementById('checkin-mobile').value;
+                const checkoutDisplay = document.getElementById('checkout-mobile').value;
+                
+                if (checkinDisplay) {
+                    // Convert from dd/mm/yyyy to YYYY-MM-DD
+                    const parts = checkinDisplay.split('/');
+                    if (parts.length === 3) {
+                        const day = parts[0].padStart(2, '0');
+                        const month = parts[1].padStart(2, '0');
+                        const year = parts[2];
+                        document.getElementById('checkin-mobile-hidden').value = `${year}-${month}-${day}`;
+                    }
+                }
+                
+                if (checkoutDisplay) {
+                    // Convert from dd/mm/yyyy to YYYY-MM-DD
+                    const parts = checkoutDisplay.split('/');
+                    if (parts.length === 3) {
+                        const day = parts[0].padStart(2, '0');
+                        const month = parts[1].padStart(2, '0');
+                        const year = parts[2];
+                        document.getElementById('checkout-mobile-hidden').value = `${year}-${month}-${day}`;
+                    }
+                }
+                
+                // Update guest counts
+                updateGuestHiddenInputs('mobile');
+            });
+        }
+        
+        // Update suggestion item click handlers to use data attribute
+        document.querySelectorAll("#desktop-suggestions-list .suggestion-item").forEach(item => {
+            item.addEventListener("click", function () {
+                const hotelName = this.getAttribute('data-hotel-name') || this.querySelector("strong")?.innerText;
+                if (hotelName) {
+                    document.getElementById("desktop-destination-input").value = hotelName;
+                    if (typeof hideDesktopSuggestions === 'function') {
+                        hideDesktopSuggestions();
+                    }
+                }
+            });
+        });
+        
+        document.querySelectorAll("#mobile-suggestions-list .suggestion-item").forEach(item => {
+            item.addEventListener("click", function () {
+                const hotelName = this.getAttribute('data-hotel-name') || this.querySelector("strong")?.innerText;
+                if (hotelName) {
+                    document.getElementById("mobile-destination-input").value = hotelName;
+                    if (typeof hideMobileSuggestions === 'function') {
+                        hideMobileSuggestions();
+                    }
+                }
+            });
+        });
     });
 </script>
 
