@@ -271,7 +271,7 @@
                                         type="text"
                                         id="desktop-destination-input"
                                         name="destination"
-                                        placeholder="Search destinations"
+                                        placeholder="Search by hotel"
                                         onfocus="showDesktopSuggestions()"
                                         onblur="hideDesktopSuggestions()"
                                     >

@@ -39,6 +39,10 @@
 </head>
 
 <body id="main-homepage">
+@php
+    // Get active hotels once for use in suggestions dropdown
+    $activeHotelsForSuggestions = \App\Models\Hotel::where('approve', 1)->orderBy('description', 'asc')->get();
+@endphp
 <div class="wrapper">
 
     <!--Start:  Mobile Header- -->
@@ -385,61 +389,58 @@
                     <!-- Large Search Box -->
                     <div class="booking-search-wrapper" id="largeSearchBox" style="display: none;">
                         <div class="booking-search-box">
+                            <form id="hotel-master-search-form" action="{{ route('search') }}" method="GET">
                             <div class="search-bar">
                                 <div class="search-container search-item search-box-first">
                                     <label for="desktop-destination-input">Where</label>
-                                    <input type="text" id="desktop-destination-input" placeholder="Search destinations" onfocus="showDesktopSuggestions()" onblur="hideDesktopSuggestions()">
+                                    <input type="text" id="desktop-destination-input" name="destination" placeholder="Search by hotel" onfocus="showDesktopSuggestions()" onblur="hideDesktopSuggestions()">
                                     <div class="suggestions" id="desktop-suggestions-list">
                                         <p class="suggestion-title">Suggested destinations</p>
-                                        <div class="suggestion-item">
-                                            <img src="{{ asset('frontend')}}/images/icons/1.webp" alt="New York" class="suggestion-icon">
-                                            <div class="suggestion-text">
-                                                <strong>New York City, NY</strong>
-                                                <br>
-                                                <span>For its stunning architecture</span>
+                                        @forelse($activeHotelsForSuggestions as $hotel)
+                                            <div class="suggestion-item" data-hotel-name="{{ $hotel->description }}">
+                                                @php
+                                                    $featuredPhotos = json_decode($hotel->featured_photo, true);
+                                                    $nearbyAreas = is_string($hotel->custom_nearby_areas)
+                                                        ? json_decode($hotel->custom_nearby_areas, true)
+                                                        : $hotel->custom_nearby_areas;
+                                                @endphp
+                                                @if (!empty($featuredPhotos[0]))
+                                                    <img src="{{ asset($featuredPhotos[0]) }}" alt="{{ $hotel->description }}" class="suggestion-icon" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
+                                                @else
+                                                    <img src="{{ asset('frontend')}}/images/icons/1.webp" alt="{{ $hotel->description }}" class="suggestion-icon" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
+                                                @endif
+                                                <div class="suggestion-text">
+                                                    <strong>{{ $hotel->description }}</strong>
+                                                    <br>
+                                                    <span>
+                                                        @if (!empty($nearbyAreas[0]))
+                                                            {{ $nearbyAreas[0] }}
+                                                        @elseif(!empty($hotel->address))
+                                                            {{ $hotel->address }}
+                                                        @else
+                                                            Available for booking
+                                                        @endif
+                                                    </span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="suggestion-item">
-                                            <img src="{{ asset('frontend')}}/images/icons/2.png" alt="Vancouver" class="suggestion-icon">
-                                            <div class="suggestion-text">
-                                                <strong>Vancouver, Canada</strong>
-                                                <br>
-                                                <span>For nature-lovers</span>
+                                        @empty
+                                            <div class="suggestion-item">
+                                                <div class="suggestion-text">
+                                                    <span>No hotels available</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="suggestion-item">
-                                            <img src="{{ asset('frontend')}}/images/icons/1.webp" alt="Bangkok" class="suggestion-icon">
-                                            <div class="suggestion-text">
-                                                <strong>Bangkok, Thailand</strong>
-                                                <br>
-                                                <span>For sights like Grand Palace</span>
-                                            </div>
-                                        </div>
-                                        <div class="suggestion-item">
-                                            <img src="{{ asset('frontend')}}/images/icons/2.png" alt="London" class="suggestion-icon">
-                                            <div class="suggestion-text">
-                                                <strong>London, United Kingdom</strong>
-                                                <br>
-                                                <span>For its bustling nightlife</span>
-                                            </div>
-                                        </div>
-                                        <div class="suggestion-item">
-                                            <img src="{{ asset('frontend')}}/images/icons/1.webp" alt="New York" class="suggestion-icon">
-                                            <div class="suggestion-text">
-                                                <strong>New York City, NY</strong>
-                                                <br>
-                                                <span>For its stunning architecture</span>
-                                            </div>
-                                        </div>
+                                        @endforelse
                                     </div>
                                 </div>
                                 <div class="search-container search-item">
                                     <label for="checkin-desktop">Check in</label>
-                                    <input type="text" id="checkin-desktop" placeholder="Add dates" readonly />
+                                    <input type="text" id="checkin-desktop" name="checkin_display" placeholder="Add dates" readonly onclick="if(typeof showCalendarDesktop === 'function') showCalendarDesktop(this)" />
+                                    <input type="hidden" id="checkin-desktop-hidden" name="checkin" />
                                 </div>
                                 <div class="search-container search-item">
                                     <label for="checkout-desktop">Check out</label>
-                                    <input type="text" id="checkout-desktop" placeholder="Add dates" readonly />
+                                    <input type="text" id="checkout-desktop" name="checkout_display" placeholder="Add dates" readonly onclick="if(typeof showCalendarDesktop === 'function') showCalendarDesktop(this)" />
+                                    <input type="hidden" id="checkout-desktop-hidden" name="checkout" />
                                 </div>
                                 <!-- Desktop Calendar Popup -->
                                 <div id="calendar-popup-desktop" class="calendar-popup">
@@ -506,12 +507,18 @@
                                         </div>
                                     </div>
                                     <div class="search-btn">
-                                        <button class="search-button">
+                                        <button type="submit" class="search-button">
                                             <i class="fa fa-search"></i>
                                         </button>
                                     </div>
                                 </div>
                             </div>
+                            <!-- Hidden inputs for guest counts -->
+                            <input type="hidden" id="adults-input-hotel-master" name="adults" value="0" />
+                            <input type="hidden" id="children-input-hotel-master" name="children" value="0" />
+                            <input type="hidden" id="infants-input-hotel-master" name="infants" value="0" />
+                            <input type="hidden" id="pets-input-hotel-master" name="pets" value="0" />
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -1664,6 +1671,110 @@
         if (!largeSearchBox.contains(event.target) && !smallSearchBox.contains(event.target)) {
             largeSearchBox.style.display = 'none';
         }
+    });
+
+    // Handle hotel master search form submission
+    document.addEventListener('DOMContentLoaded', function() {
+        const hotelMasterSearchForm = document.getElementById('hotel-master-search-form');
+        if (hotelMasterSearchForm) {
+            hotelMasterSearchForm.addEventListener('submit', function(e) {
+                // Convert dates from dd/mm/yyyy to YYYY-MM-DD
+                const checkinDisplay = document.getElementById('checkin-desktop').value;
+                const checkoutDisplay = document.getElementById('checkout-desktop').value;
+                
+                if (checkinDisplay) {
+                    // Convert from dd/mm/yyyy to YYYY-MM-DD
+                    const parts = checkinDisplay.split('/');
+                    if (parts.length === 3) {
+                        const day = parts[0].padStart(2, '0');
+                        const month = parts[1].padStart(2, '0');
+                        const year = parts[2];
+                        document.getElementById('checkin-desktop-hidden').value = `${year}-${month}-${day}`;
+                    } else {
+                        // If already in YYYY-MM-DD format, use as is
+                        document.getElementById('checkin-desktop-hidden').value = checkinDisplay;
+                    }
+                }
+                
+                if (checkoutDisplay) {
+                    // Convert from dd/mm/yyyy to YYYY-MM-DD
+                    const parts = checkoutDisplay.split('/');
+                    if (parts.length === 3) {
+                        const day = parts[0].padStart(2, '0');
+                        const month = parts[1].padStart(2, '0');
+                        const year = parts[2];
+                        document.getElementById('checkout-desktop-hidden').value = `${year}-${month}-${day}`;
+                    } else {
+                        // If already in YYYY-MM-DD format, use as is
+                        document.getElementById('checkout-desktop-hidden').value = checkoutDisplay;
+                    }
+                }
+                
+                // Update guest counts
+                const adultCount = parseInt(document.getElementById('adultCountDesktop').innerText) || 0;
+                const childrenCount = parseInt(document.getElementById('childrenCountDesktop').innerText) || 0;
+                const infantCount = parseInt(document.getElementById('infantCountDesktop').innerText) || 0;
+                const petCount = parseInt(document.getElementById('petCountDesktop').innerText) || 0;
+                
+                document.getElementById('adults-input-hotel-master').value = adultCount;
+                document.getElementById('children-input-hotel-master').value = childrenCount;
+                document.getElementById('infants-input-hotel-master').value = infantCount;
+                document.getElementById('pets-input-hotel-master').value = petCount;
+            });
+        }
+        
+        // Update guest count hidden inputs when counts change
+        function updateHotelMasterGuestHiddenInputs() {
+            const adultCount = parseInt(document.getElementById('adultCountDesktop')?.innerText) || 0;
+            const childrenCount = parseInt(document.getElementById('childrenCountDesktop')?.innerText) || 0;
+            const infantCount = parseInt(document.getElementById('infantCountDesktop')?.innerText) || 0;
+            const petCount = parseInt(document.getElementById('petCountDesktop')?.innerText) || 0;
+            
+            const adultsInput = document.getElementById('adults-input-hotel-master');
+            const childrenInput = document.getElementById('children-input-hotel-master');
+            const infantsInput = document.getElementById('infants-input-hotel-master');
+            const petsInput = document.getElementById('pets-input-hotel-master');
+            
+            if (adultsInput) adultsInput.value = adultCount;
+            if (childrenInput) childrenInput.value = childrenCount;
+            if (infantsInput) infantsInput.value = infantCount;
+            if (petsInput) petsInput.value = petCount;
+        }
+        
+        // Override increaseCount to update hidden inputs
+        const originalIncreaseCount = window.increaseCount;
+        if (typeof originalIncreaseCount === 'function') {
+            window.increaseCount = function(view, id) {
+                originalIncreaseCount(view, id);
+                if (view === 'desktop') {
+                    updateHotelMasterGuestHiddenInputs();
+                }
+            };
+        }
+        
+        // Override decreaseCount to update hidden inputs
+        const originalDecreaseCount = window.decreaseCount;
+        if (typeof originalDecreaseCount === 'function') {
+            window.decreaseCount = function(view, id) {
+                originalDecreaseCount(view, id);
+                if (view === 'desktop') {
+                    updateHotelMasterGuestHiddenInputs();
+                }
+            };
+        }
+        
+        // Update suggestion item click handlers
+        document.querySelectorAll("#desktop-suggestions-list .suggestion-item").forEach(item => {
+            item.addEventListener("click", function () {
+                const hotelName = this.getAttribute('data-hotel-name') || this.querySelector("strong")?.innerText;
+                if (hotelName) {
+                    document.getElementById("desktop-destination-input").value = hotelName;
+                    if (typeof hideDesktopSuggestions === 'function') {
+                        hideDesktopSuggestions();
+                    }
+                }
+            });
+        });
     });
 
 </script>

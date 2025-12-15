@@ -28,7 +28,7 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function hotelDetails($id)
+    public function hotelDetails($id, Request $request)
     {
         try {
             $decryptedId = Crypt::decrypt($id);
@@ -36,6 +36,17 @@ class HomeController extends Controller
             abort(404);
         }
         $show = Hotel::where('id', $decryptedId)->firstOrFail();
-        return view('frontend.Hotel.hotelDetails', compact('show'));
+        
+        // Get search parameters from URL query string
+        $searchParams = [
+            'checkin' => $request->input('checkin', ''),
+            'checkout' => $request->input('checkout', ''),
+            'adults' => (int) $request->input('adults', 0),
+            'children' => (int) $request->input('children', 0),
+            'infants' => (int) $request->input('infants', 0),
+            'pets' => (int) $request->input('pets', 0),
+        ];
+        
+        return view('frontend.Hotel.hotelDetails', compact('show', 'searchParams'));
     }
 }

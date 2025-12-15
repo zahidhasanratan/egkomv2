@@ -41,7 +41,7 @@ class BookingManagementController extends Controller
         $booking = Booking::findOrFail($id);
         
         $request->validate([
-            'booking_status' => 'required|in:pending,confirmed,cancelled,completed',
+            'booking_status' => 'required|in:pending,confirmed,staying,cancelled,completed',
             'cancellation_comment' => 'nullable|string|max:1000',
         ]);
         

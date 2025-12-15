@@ -377,7 +377,7 @@
                                                 <div class="col-12 col-md-3">
                                                     <div class="form-group left-icon">
                                                         <input type="date" class="form-control dpd1" id="checkInDate" name="checkin"
-                                                               placeholder="Check In" required>
+                                                               placeholder="Check In" required onchange="updateDatesAndFilter()">
                                                         <i class="fa fa-calendar"></i>
                                                     </div>
                                                 </div><!-- end columns -->
@@ -385,14 +385,14 @@
                                                 <div class="col-12 col-md-3">
                                                     <div class="form-group left-icon">
                                                         <input type="date" class="form-control dpd1" id="checkoutDate" name="checkout"
-                                                               placeholder="Check Out" required>
+                                                               placeholder="Check Out" required onchange="updateDatesAndFilter()">
                                                         <i class="fa fa-calendar"></i>
                                                     </div>
                                                 </div><!-- end columns -->
 
                                                 <div class="col-6 col-md-6 col-lg-2">
                                                     <div class="form-group right-icon">
-                                                        <select class="form-control" id="guestsSelect" name="guests">
+                                                        <select class="form-control" id="guestsSelect" name="guests" onchange="updateGuestsAndFilter()">
                                                             <option value="0" selected>Add Guests</option>
                                                             <option value="1">1 Guest</option>
                                                             <option value="2">2 Guests</option>
@@ -408,7 +408,7 @@
 
                                                 <div class="col-6 col-md-6 col-lg-2">
                                                     <div class="form-group right-icon">
-                                                        <select class="form-control" id="childrenSelect" name="children">
+                                                        <select class="form-control" id="childrenSelect" name="children" onchange="updateGuestsAndFilter()">
                                                             <option value="0" selected>Add Children</option>
                                                             <option value="1">1 Child</option>
                                                             <option value="2">2 Children</option>
@@ -440,11 +440,57 @@
 
 
                 <script>
-                    // Set the input field to today's date on page load
+                    // Auto-fill form from URL parameters
                     window.onload = function () {
-                        const today = new Date();
-                        const formattedDate = today.toISOString().substr(0, 10); // Format as YYYY-MM-DD
-                        document.getElementById("checkInDate").value = formattedDate;
+                        // Get search parameters from URL
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const checkin = urlParams.get('checkin');
+                        const checkout = urlParams.get('checkout');
+                        const adults = urlParams.get('adults') || '0';
+                        const children = urlParams.get('children') || '0';
+                        
+                        // Set check-in date
+                        if (checkin) {
+                            document.getElementById("checkInDate").value = checkin;
+                        } else {
+                            // Default to today if no checkin in URL
+                            const today = new Date();
+                            const formattedDate = today.toISOString().substr(0, 10);
+                            document.getElementById("checkInDate").value = formattedDate;
+                        }
+                        
+                        // Set check-out date
+                        if (checkout) {
+                            document.getElementById("checkoutDate").value = checkout;
+                        }
+                        
+                        // Set guests
+                        if (adults && parseInt(adults) > 0) {
+                            document.getElementById("guestsSelect").value = adults;
+                        }
+                        
+                        // Set children
+                        if (children && parseInt(children) > 0) {
+                            document.getElementById("childrenSelect").value = children;
+                        }
+                        
+                        // If we have search parameters, trigger the search state update
+                        // Note: searchState is already initialized from URL params above
+                        // Just trigger the filtering and summary update
+                        if (checkin && checkout) {
+                            // Wait a bit for DOM to be fully ready
+                            setTimeout(() => {
+                                if (typeof updateSearchSummary === 'function') {
+                                    updateSearchSummary();
+                                }
+                                if (typeof filterRoomsByAvailability === 'function') {
+                                    filterRoomsByAvailability();
+                                }
+                                if (typeof filterRooms === 'function') {
+                                    filterRooms();
+                                }
+                            }, 100);
+                        }
                     };
 
                 </script>
@@ -622,13 +668,52 @@
                                     <div data-v-58caae98="" class="room-section hotel-summary">
                                         <div data-v-58caae98="" class="room-details-header">
                                             <h2 data-v-58caae98="">Room Details</h2>
-                                            <h2 data-v-58caae98=""> For 2 Adults, for 1 Night </h2>
+                                            <h2 data-v-58caae98="" id="roomDetailsHeader">
+                                                @if(isset($searchParams) && $searchParams['checkin'] && $searchParams['checkout'])
+                                                    @php
+                                                        $checkinDate = \Carbon\Carbon::parse($searchParams['checkin']);
+                                                        $checkoutDate = \Carbon\Carbon::parse($searchParams['checkout']);
+                                                        $nights = $checkinDate->diffInDays($checkoutDate);
+                                                        $totalGuests = $searchParams['adults'] + $searchParams['children'];
+                                                    @endphp
+                                                    @if($searchParams['adults'] > 0 && $searchParams['children'] > 0)
+                                                        For {{ $searchParams['adults'] }} {{ $searchParams['adults'] > 1 ? 'Adults' : 'Adult' }}, {{ $searchParams['children'] }} {{ $searchParams['children'] > 1 ? 'Children' : 'Child' }}, for {{ $nights }} {{ $nights > 1 ? 'Nights' : 'Night' }}
+                                                    @elseif($searchParams['adults'] > 0)
+                                                        For {{ $searchParams['adults'] }} {{ $searchParams['adults'] > 1 ? 'Adults' : 'Adult' }}, for {{ $nights }} {{ $nights > 1 ? 'Nights' : 'Night' }}
+                                                    @elseif($searchParams['children'] > 0)
+                                                        For {{ $searchParams['children'] }} {{ $searchParams['children'] > 1 ? 'Children' : 'Child' }}, for {{ $nights }} {{ $nights > 1 ? 'Nights' : 'Night' }}
+                                                    @else
+                                                        For {{ $totalGuests }} {{ $totalGuests > 1 ? 'Persons' : 'Person' }}, for {{ $nights }} {{ $nights > 1 ? 'Nights' : 'Night' }}
+                                                    @endif
+                                                @else
+                                                    Select dates and guests to see pricing
+                                                @endif
+                                            </h2>
                                         </div>
 
 
                                         <div class="hotel-room">
-
-                                            @foreach(\App\Models\Room::where('hotel_id', $show->id)->where('is_active', true)->get() as $roomList)
+                                            @php
+                                                $activeRooms = \App\Models\Room::where('hotel_id', $show->id)->where('is_active', true)->get();
+                                            @endphp
+                                            
+                                            @if($activeRooms->isEmpty())
+                                                <div id="noRoomsAtAll" style="text-align: center; padding: 60px 30px; background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); border-radius: 12px; margin: 30px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 2px dashed #e0e0e0;">
+                                                    <div style="margin-bottom: 25px;">
+                                                        <i class="fa fa-bed" style="font-size: 64px; color: #91278f; opacity: 0.3; margin-bottom: 20px;"></i>
+                                                    </div>
+                                                    <h3 style="color: #333; margin-bottom: 15px; font-size: 24px; font-weight: 600;">No Rooms Available</h3>
+                                                    <p style="color: #666; margin-bottom: 25px; font-size: 16px; line-height: 1.6; max-width: 500px; margin-left: auto; margin-right: auto;">
+                                                        This hotel currently doesn't have any active rooms available for booking. Please check back later or contact the hotel for more information.
+                                                    </p>
+                                                    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                                                        <a href="{{ route('search') }}" style="background: #91278f; color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s; box-shadow: 0 2px 8px rgba(145, 39, 143, 0.3); text-decoration: none; display: inline-block;">
+                                                            <i class="fa fa-search" style="margin-right: 8px;"></i>Search Other Hotels
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            @else
+                                            @foreach($activeRooms as $roomList)
 
                                                 <div class="hotel-all-card" 
                                                      data-room-id="{{ $roomList->id }}"
@@ -810,6 +895,7 @@
 
                                                 </div>
                                             @endforeach
+                                            @endif
 
                                         </div>
 
@@ -2540,13 +2626,26 @@
 
 
 <script>
-    // Search and Filter State
+    // Search and Filter State - Initialize from URL parameters if available
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlCheckin = urlParams.get('checkin');
+    const urlCheckout = urlParams.get('checkout');
+    const urlAdults = parseInt(urlParams.get('adults')) || 0;
+    const urlChildren = parseInt(urlParams.get('children')) || 0;
+    
+    let nights = 0;
+    if (urlCheckin && urlCheckout) {
+        const checkinDate = new Date(urlCheckin);
+        const checkoutDate = new Date(urlCheckout);
+        nights = Math.ceil((checkoutDate - checkinDate) / (1000 * 60 * 60 * 24));
+    }
+    
     let searchState = {
-        checkin: null,
-        checkout: null,
-        guests: 0,
-        children: 0,
-        nights: 0,
+        checkin: urlCheckin || null,
+        checkout: urlCheckout || null,
+        guests: urlAdults,
+        children: urlChildren,
+        nights: nights,
         bedFilter: 'all'
     };
 
@@ -2614,6 +2713,60 @@
         }
     }
 
+    // Update Guests/Children and Filter Instantly
+    function updateGuestsAndFilter() {
+        const guests = parseInt(document.getElementById('guestsSelect').value) || 0;
+        const children = parseInt(document.getElementById('childrenSelect').value) || 0;
+        
+        // Update search state with new guest values
+        searchState.guests = guests;
+        searchState.children = children;
+        
+        // Update summary text
+        updateSearchSummary();
+        
+        // Filter rooms immediately
+        filterRooms();
+    }
+
+    // Update Dates and Filter Instantly
+    function updateDatesAndFilter() {
+        const checkin = document.getElementById('checkInDate').value;
+        const checkout = document.getElementById('checkoutDate').value;
+        const guests = parseInt(document.getElementById('guestsSelect').value) || 0;
+        const children = parseInt(document.getElementById('childrenSelect').value) || 0;
+        
+        // Only proceed if both dates are selected
+        if (!checkin || !checkout) {
+            return;
+        }
+        
+        const checkinDate = new Date(checkin);
+        const checkoutDate = new Date(checkout);
+        
+        // Validate dates
+        if (checkoutDate <= checkinDate) {
+            return;
+        }
+        
+        // Calculate nights
+        const nights = Math.ceil((checkoutDate - checkinDate) / (1000 * 60 * 60 * 24));
+        
+        // Update search state
+        searchState.checkin = checkin;
+        searchState.checkout = checkout;
+        searchState.guests = guests;
+        searchState.children = children;
+        searchState.nights = nights;
+        
+        // Update summary text
+        updateSearchSummary();
+        
+        // Filter rooms by availability and capacity
+        filterRoomsByAvailability();
+        filterRooms();
+    }
+
     // Modify Search Function
     function modifySearch() {
         const checkin = document.getElementById('checkInDate').value;
@@ -2679,8 +2832,12 @@
     // Update Search Summary
     function updateSearchSummary() {
         const summaryDiv = document.getElementById('searchSummary');
+        const roomDetailsHeader = document.getElementById('roomDetailsHeader');
+        
         if (!searchState.checkin || !searchState.checkout) {
-            summaryDiv.textContent = 'Select dates and guests to see pricing';
+            const defaultText = 'Select dates and guests to see pricing';
+            if (summaryDiv) summaryDiv.textContent = defaultText;
+            if (roomDetailsHeader) roomDetailsHeader.textContent = defaultText;
             return;
         }
 
@@ -2688,15 +2845,17 @@
         let text = `For ${totalPersons} ${totalPersons === 1 ? 'Person' : 'Persons'}`;
         
         if (searchState.guests > 0 && searchState.children > 0) {
-            text = `For ${searchState.guests} Adult${searchState.guests > 1 ? 's' : ''} & ${searchState.children} Child${searchState.children > 1 ? 'ren' : ''}`;
+            text = `For ${searchState.guests} Adult${searchState.guests > 1 ? 's' : ''}, ${searchState.children} ${searchState.children > 1 ? 'Children' : 'Child'}`;
         } else if (searchState.guests > 0) {
             text = `For ${searchState.guests} Adult${searchState.guests > 1 ? 's' : ''}`;
         } else if (searchState.children > 0) {
-            text = `For ${searchState.children} Child${searchState.children > 1 ? 'ren' : ''}`;
+            text = `For ${searchState.children} ${searchState.children > 1 ? 'Children' : 'Child'}`;
         }
         
         text += `, for ${searchState.nights} Night${searchState.nights > 1 ? 's' : ''}`;
-        summaryDiv.textContent = text;
+        
+        if (summaryDiv) summaryDiv.textContent = text;
+        if (roomDetailsHeader) roomDetailsHeader.textContent = text;
     }
 
     // Filter Rooms by Beds
@@ -2792,14 +2951,23 @@
         if (!noRoomsDiv) {
             noRoomsDiv = document.createElement('div');
             noRoomsDiv.id = 'noRoomsMessage';
-            noRoomsDiv.style.cssText = 'text-align: center; padding: 40px; background: #f8f9fa; border-radius: 8px; margin: 20px 0;';
+            noRoomsDiv.style.cssText = 'text-align: center; padding: 60px 30px; background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); border-radius: 12px; margin: 30px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 2px dashed #e0e0e0;';
             noRoomsDiv.innerHTML = `
-                <i class="fa fa-bed" style="font-size: 48px; color: #ddd; margin-bottom: 15px;"></i>
-                <h3 style="color: #666; margin-bottom: 10px;">No rooms match your criteria</h3>
-                <p style="color: #999; margin-bottom: 20px;">Try adjusting your search filters or guest count</p>
-                <button onclick="clearAllFilters()" style="background: #91278f; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
-                    Clear Filters
-                </button>
+                <div style="margin-bottom: 25px;">
+                    <i class="fa fa-search" style="font-size: 64px; color: #91278f; opacity: 0.3; margin-bottom: 20px;"></i>
+                </div>
+                <h3 style="color: #333; margin-bottom: 15px; font-size: 24px; font-weight: 600;">No Rooms Available</h3>
+                <p style="color: #666; margin-bottom: 25px; font-size: 16px; line-height: 1.6; max-width: 500px; margin-left: auto; margin-right: auto;">
+                    We couldn't find any rooms matching your search criteria. Please try adjusting your dates, guest count, or room filters.
+                </p>
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <button onclick="clearAllFilters()" style="background: #91278f; color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s; box-shadow: 0 2px 8px rgba(145, 39, 143, 0.3);">
+                        <i class="fa fa-refresh" style="margin-right: 8px;"></i>Clear All Filters
+                    </button>
+                    <button onclick="document.getElementById('searchForm').scrollIntoView({behavior: 'smooth', block: 'center'})" style="background: white; color: #91278f; border: 2px solid #91278f; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s;">
+                        <i class="fa fa-calendar" style="margin-right: 8px;"></i>Modify Search
+                    </button>
+                </div>
             `;
             
             const hotelRoom = document.querySelector('.hotel-room');
@@ -2808,6 +2976,13 @@
             }
         }
         noRoomsDiv.style.display = 'block';
+        
+        // Also update the room details header
+        const roomDetailsHeader = document.getElementById('roomDetailsHeader');
+        if (roomDetailsHeader) {
+            roomDetailsHeader.textContent = 'No rooms available for selected criteria';
+            roomDetailsHeader.style.color = '#e74c3c';
+        }
     }
 
     // Hide No Rooms Message
@@ -2815,6 +2990,12 @@
         const noRoomsDiv = document.getElementById('noRoomsMessage');
         if (noRoomsDiv) {
             noRoomsDiv.style.display = 'none';
+        }
+        
+        // Reset room details header color
+        const roomDetailsHeader = document.getElementById('roomDetailsHeader');
+        if (roomDetailsHeader) {
+            roomDetailsHeader.style.color = '';
         }
     }
 

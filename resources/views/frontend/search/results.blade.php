@@ -38,10 +38,21 @@
                         <!-- All Hotels Grid -->
                         <div class="row">
                             @forelse($filteredHotels as $hotel)
+                                @php
+                                    // Build query string for search parameters
+                                    $queryParams = [];
+                                    if ($checkin) $queryParams['checkin'] = $checkin;
+                                    if ($checkout) $queryParams['checkout'] = $checkout;
+                                    if ($adults > 0) $queryParams['adults'] = $adults;
+                                    if ($children > 0) $queryParams['children'] = $children;
+                                    if ($infants > 0) $queryParams['infants'] = $infants;
+                                    if ($pets > 0) $queryParams['pets'] = $pets;
+                                    $queryString = !empty($queryParams) ? '?' . http_build_query($queryParams) : '';
+                                @endphp
                                 <div class="col-md-6 col-lg-6 col-xl-3">
                                     <div class="grid-block main-block h-grid-block">
                                         <div class="main-img h-grid-img">
-                                            <a href="{{ route('hotel.details',encrypt($hotel->id)) }}">
+                                            <a href="{{ route('hotel.details',encrypt($hotel->id)) }}{{ $queryString }}">
                                                 @php
                                                     $featuredPhotos = json_decode($hotel->featured_photo, true);
                                                 @endphp
@@ -63,7 +74,7 @@
                                         <!-- end h-grid-img -->
                                         <div class="block-info h-grid-info">
                                             <h3 class="block-title">
-                                                <a href="{{ route('hotel.details',encrypt($hotel->id)) }}">{{ $hotel->description }}</a>
+                                                <a href="{{ route('hotel.details',encrypt($hotel->id)) }}{{ $queryString }}">{{ $hotel->description }}</a>
                                             </h3>
                                             <p class="block-minor">
                                                 @php
