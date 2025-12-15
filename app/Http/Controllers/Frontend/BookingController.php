@@ -15,6 +15,237 @@ class BookingController extends Controller
     {
         return view('frontend.booking.checkout');
     }
+    
+    public function getRoomsData(Request $request)
+    {
+        $roomIds = $request->input('room_ids', []);
+        
+        if (empty($roomIds)) {
+            return response()->json(['rooms' => []]);
+        }
+        
+        $rooms = Room::whereIn('id', $roomIds)->get()->map(function($room) {
+            // Parse display_options to get available additional requests
+            $displayOptions = is_string($room->display_options) 
+                ? json_decode($room->display_options, true) 
+                : ($room->display_options ?? []);
+            
+            // Parse additional_info (stored in display_options)
+            $additionalInfo = $displayOptions['additional_info'] ?? [];
+            if (is_string($additionalInfo)) {
+                $additionalInfo = json_decode($additionalInfo, true) ?? [];
+            }
+            
+            // Parse room_info (stored in display_options)
+            $roomInfo = [];
+            foreach (['bedrooms', 'living', 'dining', 'kitchen', 'bathrooms', 'bed_type', 'number_of_beds', 'max_adults', 'max_children', 'layout', 'view', 'bathroom', 'kitchen_facilities', 'balcony', 'accessibility', 'smoking_policy'] as $key) {
+                if (isset($displayOptions[$key])) {
+                    $roomInfo[$key] = $displayOptions[$key];
+                }
+            }
+            
+            // Determine available additional requests based on room configuration
+            $availableRequests = [];
+            
+            // Airport Transfer - available if airport_pickup is set and not "Not Available"
+            if (isset($additionalInfo['airport_pickup']) && 
+                $additionalInfo['airport_pickup'] !== '' && 
+                $additionalInfo['airport_pickup'] !== null &&
+                $additionalInfo['airport_pickup'] !== 'Not Available') {
+                $availableRequests[] = 'airportTransfer';
+            }
+            
+            // Extra Bed - available if bed_fee_amount is set
+            if (isset($additionalInfo['bed_fee_amount']) && 
+                !empty($additionalInfo['bed_fee_amount']) && 
+                $additionalInfo['bed_fee_amount'] > 0) {
+                $availableRequests[] = 'extraBed';
+            }
+            
+            // Kitchen Facility - available if kitchen facilities are configured
+            if (isset($roomInfo['kitchen_facilities']) && 
+                is_array($roomInfo['kitchen_facilities']) && 
+                !empty($roomInfo['kitchen_facilities']) &&
+                !in_array('None', $roomInfo['kitchen_facilities'])) {
+                $availableRequests[] = 'kitchenFacility';
+            }
+            
+            // Room On a Higher Floor - always available (no specific config needed)
+            $availableRequests[] = 'higherFloor';
+            
+            // Decorations in Room - always available (no specific config needed)
+            $availableRequests[] = 'roomDecorations';
+            
+            // Get available bed types from display_options or default to both
+            $availableBedTypes = [];
+            if (isset($displayOptions['bed_types']) && is_array($displayOptions['bed_types'])) {
+                $availableBedTypes = $displayOptions['bed_types'];
+            } else {
+                // Default: show both if not configured
+                $availableBedTypes = ['large_bed', 'twin_beds'];
+            }
+            
+            // Get available room preferences from display_options or default to both
+            $availableRoomPreferences = [];
+            if (isset($displayOptions['room_preferences']) && is_array($displayOptions['room_preferences'])) {
+                $availableRoomPreferences = $displayOptions['room_preferences'];
+            } else {
+                // Default: show both if not configured
+                $availableRoomPreferences = ['non_smoking', 'smoking'];
+            }
+            
+            return [
+                'id' => $room->id,
+                'name' => $room->name,
+                'total_persons' => $room->total_persons,
+                'total_beds' => $room->total_beds,
+                'available_requests' => $availableRequests,
+                'available_bed_types' => $availableBedTypes,
+                'available_room_preferences' => $availableRoomPreferences,
+                'display_options' => $displayOptions
+            ];
+        });
+        
+        return response()->json(['rooms' => $rooms]);
+    }
+    
+    public function validateRoomAvailability(Request $request)
+    {
+        $roomIds = $request->input('room_ids', []);
+        $checkinDate = $request->input('checkin_date');
+        $checkoutDate = $request->input('checkout_date');
+        $adults = (int) $request->input('adults', 0);
+        $children = (int) $request->input('children', 0);
+        $totalGuests = $adults + $children;
+        
+        if (empty($roomIds) || !$checkinDate || !$checkoutDate) {
+            return response()->json([
+                'available' => false,
+                'message' => 'Missing required parameters'
+            ], 400);
+        }
+        
+        $checkin = new \DateTime($checkinDate);
+        $checkout = new \DateTime($checkoutDate);
+        
+        if ($checkout <= $checkin) {
+            return response()->json([
+                'available' => false,
+                'message' => 'Check-out date must be after check-in date'
+            ], 400);
+        }
+        
+        // Get all rooms from cart
+        $rooms = Room::whereIn('id', $roomIds)->get();
+        
+        if ($rooms->isEmpty()) {
+            return response()->json([
+                'available' => false,
+                'message' => 'No rooms found in your cart'
+            ], 404);
+        }
+        
+        $errors = [];
+        $totalCapacity = 0;
+        
+        // Check each room's availability and capacity
+        foreach ($rooms as $room) {
+            // Check availability dates
+            $availabilityDates = is_string($room->availability_dates) 
+                ? json_decode($room->availability_dates, true) 
+                : ($room->availability_dates ?? []);
+            
+            if (!empty($availabilityDates)) {
+                // Generate all dates in the range
+                $datesInRange = [];
+                $currentDate = clone $checkin;
+                while ($currentDate < $checkout) {
+                    $datesInRange[] = $currentDate->format('Y-m-d');
+                    $currentDate->modify('+1 day');
+                }
+                
+                // Check if all dates are available
+                $allDatesAvailable = true;
+                foreach ($datesInRange as $date) {
+                    if (!in_array($date, $availabilityDates)) {
+                        $allDatesAvailable = false;
+                        break;
+                    }
+                }
+                
+                if (!$allDatesAvailable) {
+                    $errors[] = "Room '{$room->name}' is not available for the selected dates.";
+                }
+            }
+            
+            // Check for existing bookings that conflict with selected dates
+            // Get all bookings that overlap with the selected date range
+            $conflictingBookings = Booking::where('booking_status', '!=', 'cancelled')
+                ->where(function($query) use ($checkin, $checkout) {
+                    $query->where(function($q) use ($checkin, $checkout) {
+                        // Check-in date falls within existing booking
+                        $q->where('checkin_date', '<=', $checkin)
+                          ->where('checkout_date', '>', $checkin);
+                    })->orWhere(function($q) use ($checkin, $checkout) {
+                        // Check-out date falls within existing booking
+                        $q->where('checkin_date', '<', $checkout)
+                          ->where('checkout_date', '>=', $checkout);
+                    })->orWhere(function($q) use ($checkin, $checkout) {
+                        // Selected dates completely encompass existing booking
+                        $q->where('checkin_date', '>=', $checkin)
+                          ->where('checkout_date', '<=', $checkout);
+                    });
+                })
+                ->get()
+                ->filter(function($booking) use ($room) {
+                    // Check if this booking includes the room
+                    $roomsData = is_string($booking->rooms_data) 
+                        ? json_decode($booking->rooms_data, true) 
+                        : ($booking->rooms_data ?? []);
+                    
+                    if (!is_array($roomsData)) {
+                        return false;
+                    }
+                    
+                    foreach ($roomsData as $roomData) {
+                        if (isset($roomData['roomId']) && $roomData['roomId'] == $room->id) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+            
+            if ($conflictingBookings->count() > 0) {
+                $errors[] = "Room '{$room->name}' is already booked for some of the selected dates.";
+            }
+            
+            // Check if room is active
+            if (!$room->is_active) {
+                $errors[] = "Room '{$room->name}' is currently not available.";
+            }
+            
+            // Calculate total capacity
+            $totalCapacity += $room->total_persons;
+        }
+        
+        // Check if total guests exceed capacity
+        if ($totalGuests > $totalCapacity) {
+            $errors[] = "Total guests ({$totalGuests}) exceed the maximum capacity ({$totalCapacity}) for your selected rooms.";
+        }
+        
+        if (!empty($errors)) {
+            return response()->json([
+                'available' => false,
+                'message' => implode(' ', $errors),
+                'errors' => $errors
+            ], 200);
+        }
+        
+        return response()->json([
+            'available' => true,
+            'message' => 'Rooms are available for the selected dates and guest count'
+        ]);
+    }
 
     public function store(Request $request)
     {
@@ -87,8 +318,8 @@ class BookingController extends Controller
             $subtotal = $subtotal * $totalNights;
             
             $discount = 0; // Can be calculated based on coupon
-            $tax = $subtotal * 0.15; // 15% VAT
-            $grandTotal = $subtotal - $discount + $tax;
+            $tax = 0; // Tax not applicable
+            $grandTotal = $subtotal - $discount; // Grand total without tax
 
             // Handle file uploads
             $nidFront = null;

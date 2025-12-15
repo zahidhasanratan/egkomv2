@@ -1157,7 +1157,7 @@
     // Global Shopping Cart Management
     let globalBookingCart = JSON.parse(localStorage.getItem('bookingCart')) || [];
 
-    function addToGlobalCart(roomId, roomName, price, maxQuantity, quantity = 1) {
+    function addToGlobalCart(roomId, roomName, price, maxQuantity, quantity = 1, capacity = 2) {
         // Check if room already in cart
         const existingItem = globalBookingCart.find(item => item.roomId === roomId);
         
@@ -1176,13 +1176,14 @@
                 return false;
             }
         } else {
-            // Add new item
+            // Add new item with capacity
             globalBookingCart.push({
                 roomId: roomId,
                 roomName: roomName,
                 price: price,
                 quantity: quantity,
-                maxQuantity: maxQuantity
+                maxQuantity: maxQuantity,
+                capacity: capacity || 2 // Store room capacity (total_persons)
             });
         }
         
@@ -1263,11 +1264,38 @@
             floatingButton.classList.add('visible');
         }
         
+        // Get number of nights from bookingParams or date inputs
+        let nights = 1; // Default to 1 night
+        
+        // Try to get dates from localStorage first
+        const bookingParams = JSON.parse(localStorage.getItem('bookingParams')) || {};
+        let checkinDate = bookingParams.checkin;
+        let checkoutDate = bookingParams.checkout;
+        
+        // If not in localStorage, try to get from page inputs (if on checkout page)
+        if (!checkinDate || !checkoutDate) {
+            const checkinInput = document.getElementById('checkin-date');
+            const checkoutInput = document.getElementById('checkout-date');
+            if (checkinInput && checkoutInput) {
+                checkinDate = checkinInput.value;
+                checkoutDate = checkoutInput.value;
+            }
+        }
+        
+        // Calculate nights if dates are available
+        if (checkinDate && checkoutDate) {
+            const checkin = new Date(checkinDate + 'T00:00:00');
+            const checkout = new Date(checkoutDate + 'T00:00:00');
+            nights = Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24));
+            if (nights < 1) nights = 1; // Ensure at least 1 night
+        }
+        
         let total = 0;
         let itemsHtml = '';
         
         globalBookingCart.forEach(item => {
-            const itemTotal = item.price * item.quantity;
+            // Calculate: price per night * quantity * number of nights
+            const itemTotal = item.price * item.quantity * nights;
             total += itemTotal;
             
             itemsHtml += `
@@ -1277,6 +1305,7 @@
                         <div class="pax-and-fare">
                             ${item.quantity > 1 ? `<span class="pax">Qty: ${item.quantity} × </span>` : ''}
                             <span class="fare">BDT ${itemTotal.toFixed(2)}</span>
+                            ${nights > 1 ? ` <small style="color: #666; font-size: 0.85em;">(${nights} nights)</small>` : ''}
                         </div>
                     </div>
                     <div class="delete-button" onclick="removeFromGlobalCart(${item.roomId})"></div>
@@ -1311,6 +1340,22 @@
             drawer.classList.toggle('active');
         }
     }
+    
+    // Listen for storage changes to update cart when bookingParams change
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'bookingParams' || e.key === 'bookingCart') {
+            if (typeof updateGlobalCartDisplay === 'function') {
+                updateGlobalCartDisplay();
+            }
+        }
+    });
+    
+    // Also listen for custom events (for same-tab updates)
+    window.addEventListener('bookingParamsUpdated', function() {
+        if (typeof updateGlobalCartDisplay === 'function') {
+            updateGlobalCartDisplay();
+        }
+    });
 
     function proceedToCheckout() {
         if (globalBookingCart.length === 0) {
@@ -1322,6 +1367,20 @@
             });
             return;
         }
+        
+        // Store booking parameters from URL or search state
+        const urlParams = new URLSearchParams(window.location.search);
+        const bookingParams = {
+            checkin: urlParams.get('checkin') || document.getElementById('checkin-desktop-hidden')?.value || document.getElementById('checkin-mobile-hidden')?.value || '',
+            checkout: urlParams.get('checkout') || document.getElementById('checkout-desktop-hidden')?.value || document.getElementById('checkout-mobile-hidden')?.value || '',
+            adults: parseInt(urlParams.get('adults')) || parseInt(document.getElementById('adults-input')?.value) || parseInt(document.getElementById('adults-input-mobile')?.value) || 0,
+            children: parseInt(urlParams.get('children')) || parseInt(document.getElementById('children-input')?.value) || parseInt(document.getElementById('children-input-mobile')?.value) || 0,
+            infants: parseInt(urlParams.get('infants')) || parseInt(document.getElementById('infants-input')?.value) || parseInt(document.getElementById('infants-input-mobile')?.value) || 0,
+            pets: parseInt(urlParams.get('pets')) || parseInt(document.getElementById('pets-input')?.value) || parseInt(document.getElementById('pets-input-mobile')?.value) || 0
+        };
+        
+        // Store booking parameters in localStorage
+        localStorage.setItem('bookingParams', JSON.stringify(bookingParams));
         
         // Redirect to checkout page
         window.location.href = '/booking/checkout';

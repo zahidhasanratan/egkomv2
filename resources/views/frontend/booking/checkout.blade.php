@@ -150,7 +150,7 @@
                                 <div class="mb-1 col-md-6 order-1 order-md-1">
                                     <div class="form-group">
                                         <label for="checkin-date">Check-in Date:</label>
-                                        <input type="date" id="checkin-date" name="checkin-date" class="form-control" required>
+                                        <input type="date" id="checkin-date" name="checkin-date" class="form-control" required readonly style="background-color: #f5f5f5; cursor: not-allowed;">
                                     </div>
                                 </div>
                                 <div class="mb-1 col-md-6 order-3 order-md-2">
@@ -164,7 +164,7 @@
                                 <div class="mb-1 col-md-6 order-2 order-md-3">
                                     <div class="form-group">
                                         <label for="checkout-date">Check-out Date:</label>
-                                        <input type="date" id="checkout-date" name="checkout-date" class="form-control" required>
+                                        <input type="date" id="checkout-date" name="checkout-date" class="form-control" required readonly style="background-color: #f5f5f5; cursor: not-allowed;">
                                     </div>
                                 </div>
                                 <div class="mb-1 col-md-6 order-4 order-md-4">
@@ -495,11 +495,11 @@
                                                     <div id="change-options" style="display: none; margin-top: 20px; border: 1px solid #ddd; padding: 20px; border-radius: 8px; background-color: #f9f9f9;">
                                                         <div class="form-group">
                                                             <label for="change-checkin-date">Check-in Date:</label>
-                                                            <input type="date" id="change-checkin-date" name="change-checkin-date" class="form-control">
+                                                            <input type="date" id="change-checkin-date" name="change-checkin-date" class="form-control" readonly style="background-color: #f5f5f5; cursor: not-allowed;">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="change-checkout-date">Check-out Date:</label>
-                                                            <input type="date" id="change-checkout-date" name="change-checkout-date" class="form-control">
+                                                            <input type="date" id="change-checkout-date" name="change-checkout-date" class="form-control" readonly style="background-color: #f5f5f5; cursor: not-allowed;">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="adults-select">Adults:</label>
@@ -547,6 +547,145 @@
 </section>
 
 <script>
+    // Filter Additional Requests based on room configuration
+    function filterAdditionalRequests(availableRequests) {
+        const requestMapping = {
+            'airportTransfer': 'airportTransfer',
+            'extraBed': 'extraBed',
+            'higherFloor': 'higherFloor',
+            'roomDecorations': 'roomDecorations',
+            'kitchenFacility': 'kitchenFacility'
+        };
+        
+        // Hide all by default
+        Object.keys(requestMapping).forEach(key => {
+            const element = document.getElementById(key);
+            if (element) {
+                const label = element.closest('.mb-1');
+                if (label) {
+                    label.style.display = 'none';
+                }
+            }
+        });
+        
+        // Show only available ones
+        if (availableRequests.length === 0) {
+            // If no specific requests configured, show all (default behavior)
+            Object.keys(requestMapping).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    const label = element.closest('.mb-1');
+                    if (label) {
+                        label.style.display = '';
+                    }
+                }
+            });
+        } else {
+            availableRequests.forEach(request => {
+                const key = requestMapping[request] || request.toLowerCase().replace(/\s+/g, '');
+                const element = document.getElementById(key);
+                if (element) {
+                    const label = element.closest('.mb-1');
+                    if (label) {
+                        label.style.display = '';
+                    }
+                }
+            });
+        }
+    }
+    
+    // Filter Bed Types based on room configuration
+    function filterBedTypes(availableBedTypes) {
+        const bedTypeMapping = {
+            'large_bed': 'largeBed',
+            'Large Bed': 'largeBed',
+            'twin_beds': 'twinBeds',
+            'Twin Beds': 'twinBeds'
+        };
+        
+        // Hide all by default
+        ['largeBed', 'twinBeds'].forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                const label = element.closest('.mb-1');
+                if (label) {
+                    label.style.display = 'none';
+                }
+            }
+        });
+        
+        // Show only available ones
+        if (availableBedTypes.length === 0) {
+            // If no specific bed types configured, show all (default behavior)
+            ['largeBed', 'twinBeds'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    const label = element.closest('.mb-1');
+                    if (label) {
+                        label.style.display = '';
+                    }
+                }
+            });
+        } else {
+            availableBedTypes.forEach(bedType => {
+                const key = bedTypeMapping[bedType] || bedType;
+                const element = document.getElementById(key);
+                if (element) {
+                    const label = element.closest('.mb-1');
+                    if (label) {
+                        label.style.display = '';
+                    }
+                }
+            });
+        }
+    }
+    
+    // Filter Room Preferences based on room configuration
+    function filterRoomPreferences(availableRoomPreferences) {
+        const preferenceMapping = {
+            'non_smoking': 'nonSmoking',
+            'Non-Smoking': 'nonSmoking',
+            'smoking': 'smoking',
+            'Smoking': 'smoking'
+        };
+        
+        // Hide all by default
+        ['nonSmoking', 'smoking'].forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                const label = element.closest('.mb-1');
+                if (label) {
+                    label.style.display = 'none';
+                }
+            }
+        });
+        
+        // Show only available ones
+        if (availableRoomPreferences.length === 0) {
+            // If no specific preferences configured, show all (default behavior)
+            ['nonSmoking', 'smoking'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    const label = element.closest('.mb-1');
+                    if (label) {
+                        label.style.display = '';
+                    }
+                }
+            });
+        } else {
+            availableRoomPreferences.forEach(preference => {
+                const key = preferenceMapping[preference] || preference;
+                const element = document.getElementById(key);
+                if (element) {
+                    const label = element.closest('.mb-1');
+                    if (label) {
+                        label.style.display = '';
+                    }
+                }
+            });
+        }
+    }
+    
     // Populate booking from cart
     document.addEventListener('DOMContentLoaded', function() {
         const cart = JSON.parse(localStorage.getItem('bookingCart')) || [];
@@ -564,7 +703,6 @@
         }
 
         renderBookingCards(cart);
-        renderPriceSummary(cart);
         
         // Auto-fill user information if logged in
         @auth('guest')
@@ -578,6 +716,175 @@
                 document.getElementById('phone-number').value = guestPhone;
             }
         @endauth
+        
+        // Auto-fill booking parameters from localStorage
+        const bookingParams = JSON.parse(localStorage.getItem('bookingParams')) || {};
+        
+        // Auto-fill dates
+        if (bookingParams.checkin) {
+            document.getElementById('checkin-date').value = bookingParams.checkin;
+        }
+        if (bookingParams.checkout) {
+            document.getElementById('checkout-date').value = bookingParams.checkout;
+        }
+        
+        // Update total nights and render price summary after dates are set
+        setTimeout(() => {
+            updateTotalNights();
+            renderPriceSummary(cart); // Call after dates are set
+        }, 100);
+        
+        // Auto-fill Room Type from cart
+        if (cart.length > 0) {
+            // Get unique room names from cart
+            const roomNames = cart.map(item => {
+                const name = item.roomName || 'Room';
+                return item.quantity > 1 ? `${name} (${item.quantity}x)` : name;
+            });
+            const roomTypeValue = roomNames.join(', ');
+            document.getElementById('room-type').value = roomTypeValue;
+            
+            // Calculate and update total nights
+            updateTotalNights();
+            
+            // Add event listeners to update cards when dates change
+            const checkinInput = document.getElementById('checkin-date');
+            const checkoutInput = document.getElementById('checkout-date');
+            
+            if (checkinInput) {
+                checkinInput.addEventListener('change', function() {
+                    updateTotalNights();
+                    renderBookingCards(cart);
+                    renderPriceSummary(cart);
+                    // Update bookingParams in localStorage
+                    const bookingParams = JSON.parse(localStorage.getItem('bookingParams')) || {};
+                    bookingParams.checkin = this.value;
+                    localStorage.setItem('bookingParams', JSON.stringify(bookingParams));
+                    // Trigger global cart update via custom event (for same-tab updates)
+                    window.dispatchEvent(new Event('bookingParamsUpdated'));
+                    // Also call directly if function exists
+                    if (typeof updateGlobalCartDisplay === 'function') {
+                        updateGlobalCartDisplay();
+                    }
+                });
+            }
+            if (checkoutInput) {
+                checkoutInput.addEventListener('change', function() {
+                    updateTotalNights();
+                    renderBookingCards(cart);
+                    renderPriceSummary(cart);
+                    // Update bookingParams in localStorage
+                    const bookingParams = JSON.parse(localStorage.getItem('bookingParams')) || {};
+                    bookingParams.checkout = this.value;
+                    localStorage.setItem('bookingParams', JSON.stringify(bookingParams));
+                    // Trigger global cart update via custom event (for same-tab updates)
+                    window.dispatchEvent(new Event('bookingParamsUpdated'));
+                    // Also call directly if function exists
+                    if (typeof updateGlobalCartDisplay === 'function') {
+                        updateGlobalCartDisplay();
+                    }
+                });
+            }
+            
+            // Fetch room data to get available additional requests
+            const roomIds = cart.map(item => item.roomId);
+            fetch('{{ route("booking.rooms-data") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ room_ids: roomIds })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.rooms && data.rooms.length > 0) {
+                    // Collect all available requests from all rooms
+                    const allAvailableRequests = new Set();
+                    const allAvailableBedTypes = new Set();
+                    const allAvailableRoomPreferences = new Set();
+                    
+                    data.rooms.forEach(room => {
+                        if (room.available_requests && Array.isArray(room.available_requests)) {
+                            room.available_requests.forEach(req => allAvailableRequests.add(req));
+                        }
+                        if (room.available_bed_types && Array.isArray(room.available_bed_types)) {
+                            room.available_bed_types.forEach(bed => allAvailableBedTypes.add(bed));
+                        }
+                        if (room.available_room_preferences && Array.isArray(room.available_room_preferences)) {
+                            room.available_room_preferences.forEach(pref => allAvailableRoomPreferences.add(pref));
+                        }
+                    });
+                    
+                    // Filter additional requests checkboxes
+                    filterAdditionalRequests(Array.from(allAvailableRequests));
+                    
+                    // Filter bed types
+                    filterBedTypes(Array.from(allAvailableBedTypes));
+                    
+                    // Filter room preferences
+                    filterRoomPreferences(Array.from(allAvailableRoomPreferences));
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching room data:', error);
+            });
+        }
+        
+        // Calculate maximum allowed guests based on room capacities
+        let maxAllowedGuests = 0;
+        cart.forEach(item => {
+            const capacity = item.capacity || 2; // Default to 2 if not set
+            maxAllowedGuests += capacity * item.quantity;
+        });
+        
+        // Set max values for guest inputs
+        document.getElementById('qty').setAttribute('max', maxAllowedGuests);
+        document.getElementById('qty2').setAttribute('max', maxAllowedGuests);
+        document.getElementById('qty3').setAttribute('max', maxAllowedGuests);
+        
+        // Store max allowed guests for validation
+        window.maxAllowedGuests = maxAllowedGuests;
+        
+        // Auto-fill guest counts (Total Male = adults, Total Female = 0 initially, Total Kids = children)
+        if (bookingParams.adults !== undefined) {
+            const adults = Math.min(bookingParams.adults || 1, maxAllowedGuests);
+            document.getElementById('qty').value = adults;
+            updateTotalPersons();
+        }
+        if (bookingParams.children !== undefined) {
+            const children = Math.min(bookingParams.children || 0, maxAllowedGuests);
+            document.getElementById('qty3').value = children;
+            updateTotalPersons();
+        }
+        // Total Female starts at 0, can be adjusted by user
+        document.getElementById('qty2').value = 0;
+        updateTotalPersons();
+        
+        // Show max capacity info
+        if (maxAllowedGuests > 0) {
+            const capacityInfo = document.createElement('div');
+            capacityInfo.id = 'capacity-info';
+            capacityInfo.style.cssText = 'margin-top: 10px; padding: 10px; background: #f0f7ff; border-left: 3px solid #91278f; border-radius: 4px; font-size: 14px; color: #666;';
+            capacityInfo.innerHTML = `<i class="fa fa-info-circle" style="color: #91278f; margin-right: 5px;"></i>Maximum capacity: <strong>${maxAllowedGuests} ${maxAllowedGuests === 1 ? 'person' : 'persons'}</strong> based on selected rooms`;
+            document.querySelector('.member-add-cal').appendChild(capacityInfo);
+        }
+        
+        // Add input validation for manual entry
+        ['qty', 'qty2', 'qty3'].forEach(inputId => {
+            const input = document.getElementById(inputId);
+            if (input) {
+                input.addEventListener('input', function() {
+                    const currentTotal = getCurrentTotalPersons();
+                    if (currentTotal > maxAllowedGuests) {
+                        updateTotalPersons(); // This will auto-adjust
+                    }
+                });
+                input.addEventListener('change', function() {
+                    updateTotalPersons();
+                });
+            }
+        });
     });
 
     function renderBookingCards(cart) {
@@ -585,11 +892,31 @@
         const primaryContactRoom = document.getElementById('primaryContactRoomName');
         let html = '';
         
-        // Set today's date and tomorrow's date for check-in/out
-        const checkinDate = new Date();
+        // Get actual dates from form inputs or localStorage
+        let checkinDateInput = document.getElementById('checkin-date')?.value;
+        let checkoutDateInput = document.getElementById('checkout-date')?.value;
+        
+        // If not in form, try localStorage
+        if (!checkinDateInput || !checkoutDateInput) {
+            const bookingParams = JSON.parse(localStorage.getItem('bookingParams')) || {};
+            checkinDateInput = checkinDateInput || bookingParams.checkin;
+            checkoutDateInput = checkoutDateInput || bookingParams.checkout;
+        }
+        
+        // If still no dates, use default (tomorrow and day after)
+        let checkinDate, checkoutDate;
+        if (checkinDateInput && checkoutDateInput) {
+            checkinDate = new Date(checkinDateInput);
+            checkoutDate = new Date(checkoutDateInput);
+        } else {
+            checkinDate = new Date();
         checkinDate.setDate(checkinDate.getDate() + 1);
-        const checkoutDate = new Date(checkinDate);
+            checkoutDate = new Date(checkinDate);
         checkoutDate.setDate(checkoutDate.getDate() + 1);
+        }
+        
+        // Calculate number of nights
+        const nights = Math.ceil((checkoutDate - checkinDate) / (1000 * 60 * 60 * 24));
         
         const checkinFormatted = checkinDate.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
         const checkoutFormatted = checkoutDate.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -624,7 +951,7 @@
                             <h6 data-v-67ade680=""> ${checkinFormatted} </h6>
                             <p data-v-67ade680="">${checkinDay}</p>
                         </div>
-                        <div data-v-67ade680="" class="custom-badge"> 1 Night </div>
+                        <div data-v-67ade680="" class="custom-badge"> ${nights} ${nights === 1 ? 'Night' : 'Nights'} </div>
                         <div data-v-67ade680="" class="details-text details-text-sm">
                             <p data-v-67ade680=""> Check Out 11:00 </p>
                             <h6 data-v-67ade680=""> ${checkoutFormatted} </h6>
@@ -652,6 +979,22 @@
         
         // Update booking date range display
         updateBookingDateRange(checkinDate, checkoutDate);
+    }
+    
+    function updateTotalNights() {
+        const checkinInput = document.getElementById('checkin-date')?.value;
+        const checkoutInput = document.getElementById('checkout-date')?.value;
+        
+        if (checkinInput && checkoutInput) {
+            const checkin = new Date(checkinInput);
+            const checkout = new Date(checkoutInput);
+            const nights = Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24));
+            
+            const totalNightsEl = document.getElementById('totalNights');
+            if (totalNightsEl) {
+                totalNightsEl.textContent = `${nights} ${nights === 1 ? 'night' : 'nights'}`;
+            }
+        }
     }
     
     function updateBookingDateRange(checkinDate, checkoutDate) {
@@ -684,6 +1027,25 @@
         const selectedRoomsList = document.getElementById('selectedRoomsList');
         const selectedRoomsSummary = document.getElementById('selectedRoomsSummary');
         
+        // Get number of nights from dates
+        const checkinInput = document.getElementById('checkin-date')?.value;
+        const checkoutInput = document.getElementById('checkout-date')?.value;
+        let nights = 1; // Default to 1 night
+        
+        if (checkinInput && checkoutInput) {
+            const checkin = new Date(checkinInput + 'T00:00:00'); // Add time to avoid timezone issues
+            const checkout = new Date(checkoutInput + 'T00:00:00');
+            nights = Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24));
+            if (nights < 1) nights = 1; // Ensure at least 1 night
+        }
+        
+        console.log('Price Calculation:', {
+            checkin: checkinInput,
+            checkout: checkoutInput,
+            nights: nights,
+            cart: cart
+        });
+        
         let total = 0;
         let subTotal = 0;
         let rackRate = 0;
@@ -693,8 +1055,11 @@
         let fareItemsHtml = '';
 
         cart.forEach(item => {
-            const itemTotal = item.price * item.quantity;
+            // Calculate: price per night * quantity * number of nights
+            const itemTotal = item.price * item.quantity * nights;
             subTotal += itemTotal;
+            
+            console.log(`Room: ${item.roomName}, Price: ${item.price}, Quantity: ${item.quantity}, Nights: ${nights}, Total: ${itemTotal}`);
             
             // Calculate rack rate (assuming 69% discount as in reference)
             const itemRackRate = itemTotal / 0.31; // If discounted price is 31% of rack rate
@@ -724,8 +1089,14 @@
         
         // Update selected rooms summary
         const totalRooms = cart.reduce((sum, item) => sum + item.quantity, 0);
+        const adults = parseInt(document.getElementById('qty')?.value) || 1;
+        const children = parseInt(document.getElementById('qty3')?.value) || 0;
+        let guestText = `${adults} ${adults === 1 ? 'adult' : 'adults'}`;
+        if (children > 0) {
+            guestText += `, ${children} ${children === 1 ? 'child' : 'children'}`;
+        }
         if (selectedRoomsSummary) {
-            selectedRoomsSummary.textContent = `${totalRooms} room${totalRooms > 1 ? 's' : ''} for 2 adults`;
+            selectedRoomsSummary.textContent = `${totalRooms} room${totalRooms > 1 ? 's' : ''} for ${guestText}`;
         }
         if (selectedRoomsList) {
             selectedRoomsList.innerHTML = roomsListHtml;
@@ -776,7 +1147,7 @@
                             <div data-v-30094f07="" class="fare-info-content">
                                 
                                 <div data-v-30094f07="" class="fare-item">
-                                    <span data-v-30094f07="" class="fare">Room Rate</span>
+                                    <span data-v-30094f07="" class="fare">Room Rate (${nights} ${nights === 1 ? 'night' : 'nights'})</span>
                                     <span data-v-30094f07="" class="fare-price">
                                         <span data-v-30094f07="" class="sm-text">BDT</span>
                                         <span data-v-30094f07="" class="lg-text"> ${subTotal.toFixed(0)} </span>
@@ -929,6 +1300,36 @@
         formData.append('citizenship', document.getElementById('citizenship')?.value || '');
         formData.append('rooms_data', JSON.stringify(cart));
         
+        // Get coupon code if applied
+        const couponCode = document.getElementById('coupon-code')?.value || '';
+        if (couponCode) {
+            formData.append('coupon_code', couponCode);
+        }
+        
+        // Get guest email if not logged in (for guest users)
+        @guest('guest')
+            const guestEmail = document.getElementById('guest-email')?.value || '';
+            if (guestEmail) {
+                formData.append('guest_email', guestEmail);
+            }
+        @endguest
+        
+        // Calculate number of nights for validation
+        const checkin = new Date(checkinDate);
+        const checkout = new Date(checkoutDate);
+        const nights = Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24));
+        
+        // Validate dates
+        if (nights < 1) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid Dates',
+                text: 'Check-out date must be after check-in date.',
+                confirmButtonColor: '#91278f'
+            });
+            return;
+        }
+        
         // Debug: Log what we're sending
         console.log('Sending booking data:', {
             guest_name: guestName,
@@ -937,7 +1338,13 @@
             checkout_date: checkoutDate,
             home_address: homeAddress,
             arrival_time: arrivalTime,
-            rooms_count: cart.length
+            nights: nights,
+            rooms_count: cart.length,
+            total_rooms: cart.reduce((sum, item) => sum + item.quantity, 0),
+            additional_requests: additionalRequests,
+            bed_type: bedType,
+            room_preference: roomPreference,
+            relationship: relationship
         });
         
         // Append files if any
@@ -970,28 +1377,78 @@
             }
         })
         .then(response => {
+            console.log('Response status:', response.status);
             if (!response.ok) {
-                return response.json().then(err => Promise.reject(err));
+                return response.json().then(err => {
+                    console.error('Error response:', err);
+                    return Promise.reject(err);
+                });
             }
             return response.json();
         })
         .then(data => {
+            console.log('Booking response data:', data);
+            Swal.close();
+            
             if (data.success) {
+                // Clear cart and booking params
+                localStorage.removeItem('bookingCart');
+                localStorage.removeItem('bookingParams');
+                
+                // Update global cart display if function exists
+                if (typeof updateGlobalCartDisplay === 'function') {
+                    updateGlobalCartDisplay();
+                }
+                
+                // Determine redirect URL (use redirect_url from response or construct from booking_id)
+                const redirectUrl = data.redirect_url || (data.booking_id ? '/booking/invoice/' + data.booking_id : null);
+                
+                if (!redirectUrl) {
+                    console.error('No redirect URL available. Response:', data);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Redirect Error',
+                        text: 'Booking confirmed but unable to redirect. Please contact support with Booking ID: ' + (data.booking_id || 'N/A'),
+                        confirmButtonColor: '#91278f'
+                    });
+                    return;
+                }
+                
+                console.log('Booking successful. Redirecting to:', redirectUrl);
+                
+                // Show success message and redirect
                 Swal.fire({
                     icon: 'success',
                     title: 'Booking Confirmed!',
                     html: `
-                        <p>Your booking has been confirmed successfully!</p>
-                        <p><strong>Invoice Number:</strong> ${data.invoice_number}</p>
+                        <div style="text-align: left;">
+                            <p style="margin-bottom: 15px;">Your booking has been confirmed successfully!</p>
+                            <p style="margin-bottom: 10px;"><strong>Invoice Number:</strong> <span style="color: #91278f;">${data.invoice_number || 'N/A'}</span></p>
+                            <p style="margin-bottom: 5px;"><strong>Booking ID:</strong> ${data.booking_id || 'N/A'}</p>
+                            <p style="margin-top: 15px; font-size: 0.9em; color: #666;">Redirecting to invoice page...</p>
+                        </div>
                     `,
                     confirmButtonColor: '#91278f',
-                    confirmButtonText: 'View Invoice'
-                }).then(() => {
-                    // Clear cart
-                    localStorage.removeItem('bookingCart');
-                    // Redirect to invoice page
-                    window.location.href = data.redirect_url;
+                    confirmButtonText: 'View Invoice',
+                    allowOutsideClick: false,
+                    showConfirmButton: true,
+                    timer: 2000,
+                    timerProgressBar: true
+                }).then((result) => {
+                    // Redirect to invoice page - always redirect
+                    console.log('Redirecting to:', redirectUrl);
+                    window.location.href = redirectUrl;
+                }).catch((error) => {
+                    // If Swal fails, still redirect
+                    console.error('Swal error, redirecting anyway:', error);
+                    window.location.href = redirectUrl;
                 });
+                
+                // Backup redirect in case Swal doesn't fire properly
+                setTimeout(() => {
+                    console.log('Backup redirect to:', redirectUrl);
+                    window.location.href = redirectUrl;
+                }, 2500);
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -1002,7 +1459,8 @@
             }
         })
         .catch(error => {
-            console.error('Error:', error);
+            Swal.close();
+            console.error('Booking Error:', error);
             let errorMessage = 'An error occurred while processing your booking.';
             
             if (error.message) {
@@ -1010,15 +1468,25 @@
             }
             
             if (error.errors) {
-                errorMessage += '<br><br><small>' + Object.values(error.errors).flat().join('<br>') + '</small>';
+                const errorList = Object.values(error.errors).flat();
+                errorMessage = '<div style="text-align: left;"><p><strong>Please fix the following errors:</strong></p><ul style="margin-left: 20px;">';
+                errorList.forEach(err => {
+                    errorMessage += `<li>${err}</li>`;
+                });
+                errorMessage += '</ul></div>';
             }
             
             Swal.fire({
                 icon: 'error',
                 title: 'Booking Failed',
                 html: errorMessage,
-                confirmButtonColor: '#91278f'
+                confirmButtonColor: '#91278f',
+                width: '500px'
             });
+        })
+        .finally(() => {
+            // Ensure loading is closed
+            Swal.close();
         });
     }
 
@@ -1073,19 +1541,96 @@
             const targetId = e.target.dataset.target;
             const input = document.getElementById(targetId);
             let val = parseInt(input.value);
-            if (val < parseInt(input.max)) {
+            const maxVal = parseInt(input.max);
+            
+            // Check if adding would exceed total capacity
+            const currentTotal = getCurrentTotalPersons();
+            if (currentTotal >= (window.maxAllowedGuests || 999)) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Maximum Capacity Reached',
+                    text: `You cannot exceed ${window.maxAllowedGuests || 999} ${(window.maxAllowedGuests || 999) === 1 ? 'person' : 'persons'} based on your selected rooms.`,
+                    confirmButtonColor: '#91278f',
+                    timer: 3000
+                });
+                return;
+            }
+            
+            if (val < maxVal) {
                 input.value = val + 1;
                 updateTotalPersons();
             }
         }
     });
+    
+    function getCurrentTotalPersons() {
+        const male = parseInt(document.getElementById('qty').value) || 0;
+        const female = parseInt(document.getElementById('qty2').value) || 0;
+        const kids = parseInt(document.getElementById('qty3').value) || 0;
+        return male + female + kids;
+    }
 
     function updateTotalPersons() {
         const male = parseInt(document.getElementById('qty').value) || 0;
         const female = parseInt(document.getElementById('qty2').value) || 0;
         const kids = parseInt(document.getElementById('qty3').value) || 0;
         const total = male + female + kids;
+        const maxAllowed = window.maxAllowedGuests || 999;
+        
+        // Validate against max capacity
+        if (total > maxAllowed) {
+            // Adjust values to not exceed max
+            let remaining = maxAllowed;
+            if (male > 0) {
+                const maleVal = Math.min(male, remaining);
+                document.getElementById('qty').value = maleVal;
+                remaining -= maleVal;
+            }
+            if (female > 0 && remaining > 0) {
+                const femaleVal = Math.min(female, remaining);
+                document.getElementById('qty2').value = femaleVal;
+                remaining -= femaleVal;
+            }
+            if (kids > 0 && remaining > 0) {
+                const kidsVal = Math.min(kids, remaining);
+                document.getElementById('qty3').value = kidsVal;
+                remaining -= kidsVal;
+            }
+            
+            Swal.fire({
+                icon: 'warning',
+                title: 'Maximum Capacity Reached',
+                text: `You cannot exceed ${maxAllowed} ${maxAllowed === 1 ? 'person' : 'persons'} based on your selected rooms.`,
+                confirmButtonColor: '#91278f',
+                timer: 3000
+            });
+            
+            // Recalculate with adjusted values
+            const adjustedTotal = parseInt(document.getElementById('qty').value) + 
+                                 parseInt(document.getElementById('qty2').value) + 
+                                 parseInt(document.getElementById('qty3').value);
+            document.getElementById('totalPersons').textContent = adjustedTotal;
+        } else {
         document.getElementById('totalPersons').textContent = total;
+        }
+        
+        // Update capacity info color if approaching limit
+        const capacityInfo = document.getElementById('capacity-info');
+        if (capacityInfo) {
+            if (total >= maxAllowed) {
+                capacityInfo.style.background = '#ffe6e6';
+                capacityInfo.style.borderLeftColor = '#e74c3c';
+                capacityInfo.style.color = '#c0392b';
+            } else if (total >= maxAllowed * 0.8) {
+                capacityInfo.style.background = '#fff3cd';
+                capacityInfo.style.borderLeftColor = '#ffc107';
+                capacityInfo.style.color = '#856404';
+            } else {
+                capacityInfo.style.background = '#f0f7ff';
+                capacityInfo.style.borderLeftColor = '#91278f';
+                capacityInfo.style.color = '#666';
+            }
+        }
 
         // Generate guest input fields
         const container = document.getElementById('guestInputFields');
@@ -1114,10 +1659,217 @@
         const changeSelectionButton = document.getElementById('change-selection-btn');
         const changeOptions = document.getElementById('change-options');
         
+        // Initialize change options with current values
+        if (changeOptions) {
+            const checkinDate = document.getElementById('checkin-date')?.value || '';
+            const checkoutDate = document.getElementById('checkout-date')?.value || '';
+            const adults = parseInt(document.getElementById('qty')?.value) || 1;
+            const children = parseInt(document.getElementById('qty3')?.value) || 0;
+            
+            document.getElementById('change-checkin-date').value = checkinDate;
+            document.getElementById('change-checkout-date').value = checkoutDate;
+            document.getElementById('adults-select').value = adults;
+            document.getElementById('children-select').value = children;
+        }
+        
         if (changeSelectionButton && changeOptions) {
             changeSelectionButton.addEventListener('click', function(event) {
                 event.preventDefault();
-                changeOptions.style.display = changeOptions.style.display === 'none' || changeOptions.style.display === '' ? 'block' : 'none';
+                const isHidden = changeOptions.style.display === 'none' || changeOptions.style.display === '';
+                changeOptions.style.display = isHidden ? 'block' : 'none';
+                
+                // Update button text
+                if (isHidden) {
+                    this.querySelector('.bui-button__text').textContent = 'Hide selection';
+                } else {
+                    this.querySelector('.bui-button__text').textContent = 'Change your selection';
+                }
+            });
+        }
+        
+        // Sync change options with main form when changed
+        const changeCheckin = document.getElementById('change-checkin-date');
+        const changeCheckout = document.getElementById('change-checkout-date');
+        const changeAdults = document.getElementById('adults-select');
+        const changeChildren = document.getElementById('children-select');
+        
+        if (changeCheckin) {
+            changeCheckin.addEventListener('change', function() {
+                document.getElementById('checkin-date').value = this.value;
+            });
+        }
+        if (changeCheckout) {
+            changeCheckout.addEventListener('change', function() {
+                document.getElementById('checkout-date').value = this.value;
+            });
+        }
+        if (changeAdults) {
+            changeAdults.addEventListener('change', function() {
+                document.getElementById('qty').value = this.value;
+                updateTotalPersons();
+            });
+        }
+        if (changeChildren) {
+            changeChildren.addEventListener('change', function() {
+                document.getElementById('qty3').value = this.value;
+                updateTotalPersons();
+            });
+        }
+        
+        // Save Selection button handler
+        const saveSelectionBtn = document.getElementById('save-selection');
+        if (saveSelectionBtn) {
+            saveSelectionBtn.addEventListener('click', function() {
+                const checkinDate = document.getElementById('change-checkin-date').value;
+                const checkoutDate = document.getElementById('change-checkout-date').value;
+                const adults = parseInt(document.getElementById('adults-select').value) || 0;
+                const children = parseInt(document.getElementById('children-select').value) || 0;
+                
+                // Validate dates
+                if (!checkinDate || !checkoutDate) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Missing Dates',
+                        text: 'Please select both check-in and check-out dates.',
+                        confirmButtonColor: '#91278f'
+                    });
+                    return;
+                }
+                
+                if (new Date(checkoutDate) <= new Date(checkinDate)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid Dates',
+                        text: 'Check-out date must be after check-in date.',
+                        confirmButtonColor: '#91278f'
+                    });
+                    return;
+                }
+                
+                // Get room IDs from cart
+                const cart = JSON.parse(localStorage.getItem('bookingCart')) || [];
+                const roomIds = cart.map(item => item.roomId);
+                
+                if (roomIds.length === 0) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'No Rooms',
+                        text: 'No rooms found in your cart.',
+                        confirmButtonColor: '#91278f'
+                    });
+                    return;
+                }
+                
+                // Show loading
+                Swal.fire({
+                    title: 'Validating...',
+                    text: 'Please wait while we check room availability',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+                
+                // Validate room availability and capacity
+                fetch('{{ route("booking.validate-availability") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        room_ids: roomIds,
+                        checkin_date: checkinDate,
+                        checkout_date: checkoutDate,
+                        adults: adults,
+                        children: children
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    Swal.close();
+                    
+                    if (data.available) {
+                        // Update main form fields
+                        document.getElementById('checkin-date').value = checkinDate;
+                        document.getElementById('checkout-date').value = checkoutDate;
+                        document.getElementById('qty').value = adults;
+                        document.getElementById('qty3').value = children;
+                        
+                        // Update booking params in localStorage
+                        const bookingParams = {
+                            checkin: checkinDate,
+                            checkout: checkoutDate,
+                            adults: adults,
+                            children: children
+                        };
+                        localStorage.setItem('bookingParams', JSON.stringify(bookingParams));
+                        
+                        // Update total persons
+                        updateTotalPersons();
+                        
+                        // Hide the change options section
+                        changeOptions.style.display = 'none';
+                        if (changeSelectionButton) {
+                            changeSelectionButton.querySelector('.bui-button__text').textContent = 'Change your selection';
+                        }
+                        
+                        // Show success message
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Selection Updated',
+                            text: 'Your booking dates and guest count have been updated successfully.',
+                            confirmButtonColor: '#91278f',
+                            timer: 2000
+                        });
+                        
+                        // Refresh booking summary if needed
+                        if (typeof renderBookingCards === 'function') {
+                            renderBookingCards(cart);
+                        }
+                        if (typeof renderPriceSummary === 'function') {
+                            renderPriceSummary(cart);
+                        }
+                        
+                        // Update total nights display
+                        const checkin = new Date(checkinDate);
+                        const checkout = new Date(checkoutDate);
+                        const nights = Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24));
+                        const totalNightsEl = document.getElementById('totalNights');
+                        if (totalNightsEl) {
+                            totalNightsEl.textContent = `${nights} ${nights === 1 ? 'night' : 'nights'}`;
+                        }
+                        
+                        // Update booking date range
+                        if (typeof updateBookingDateRange === 'function') {
+                            updateBookingDateRange(checkin, checkout);
+                        }
+                    } else {
+                        // Show error with details
+                        let errorMessage = data.message || 'Rooms are not available for the selected dates or guest count.';
+                        
+                        if (data.errors && data.errors.length > 0) {
+                            errorMessage = data.errors.join('\n');
+                        }
+                        
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Not Available',
+                            html: errorMessage.replace(/\n/g, '<br>'),
+                            confirmButtonColor: '#91278f'
+                        });
+                    }
+                })
+                .catch(error => {
+                    Swal.close();
+                    console.error('Error validating availability:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred while validating room availability. Please try again.',
+                        confirmButtonColor: '#91278f'
+                    });
+                });
             });
         }
     });

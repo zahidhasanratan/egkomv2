@@ -706,13 +706,9 @@
                                 <td class="text-right tfoot-discount"><strong>-BDT {{ number_format($booking->discount, 2) }}</strong></td>
                             </tr>
                             @endif
-                            <tr>
-                                <td colspan="8" class="text-right tfoot-tax"><strong>Tax (15% VAT):</strong></td>
-                                <td class="text-right tfoot-tax"><strong>BDT {{ number_format($booking->tax, 2) }}</strong></td>
-                            </tr>
                             <tr class="grand-total">
                                 <td colspan="8" class="text-right"><strong>Grand Total:</strong></td>
-                                <td class="text-right"><strong>BDT {{ number_format($booking->grand_total, 2) }}</strong></td>
+                                <td class="text-right"><strong>BDT {{ number_format($booking->subtotal - $booking->discount, 2) }}</strong></td>
                             </tr>
                         </tfoot>
                     </table>

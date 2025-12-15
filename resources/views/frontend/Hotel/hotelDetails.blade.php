@@ -883,7 +883,7 @@
 
                                                                 <div class="book_btn_2">
                                                                     <a href="javascript:void(0)" 
-                                                                       onclick="addToCart({{ $roomList->id }}, '{{ $roomList->name }}', {{ $discountedPrice }}, {{ $roomList->total_rooms ?? 1 }})">
+                                                                       onclick="addToCart({{ $roomList->id }}, '{{ $roomList->name }}', {{ $discountedPrice }}, {{ $roomList->total_rooms ?? 1 }}, {{ $roomList->total_persons ?? 2 }})">
                                                                         Add to<span> Book</span>
                                                                     </a>
                                                                 </div>
@@ -942,11 +942,24 @@
                 <!-- Room Data for Modal -->
                 <script>
                     // Use global cart functions
-                    function addToCart(roomId, roomName, price, maxQuantity) {
+                    function addToCart(roomId, roomName, price, maxQuantity, capacity) {
                         const qtyInput = document.getElementById('qty-' + roomId);
                         const quantity = qtyInput ? parseInt(qtyInput.value) : 1;
                         
-                        if (addToGlobalCart(roomId, roomName, price, maxQuantity, quantity)) {
+                        if (addToGlobalCart(roomId, roomName, price, maxQuantity, quantity, capacity)) {
+                            // Store booking parameters from search form
+                            const bookingParams = {
+                                checkin: document.getElementById('checkInDate')?.value || '',
+                                checkout: document.getElementById('checkoutDate')?.value || '',
+                                adults: parseInt(document.getElementById('guestsSelect')?.value) || 0,
+                                children: parseInt(document.getElementById('childrenSelect')?.value) || 0,
+                                infants: 0,
+                                pets: 0
+                            };
+                            
+                            // Store booking parameters in localStorage
+                            localStorage.setItem('bookingParams', JSON.stringify(bookingParams));
+                            
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Added to Cart!',
@@ -1053,7 +1066,7 @@
                                 const modalQty = document.querySelector('#rightSidebarModalDetails #qty');
                                 const quantity = modalQty ? parseInt(modalQty.value) : 1;
                                 
-                                if (addToGlobalCart(room.id, room.name, discountedPrice, room.total_rooms || 1, quantity)) {
+                                if (addToGlobalCart(room.id, room.name, discountedPrice, room.total_rooms || 1, quantity, room.total_persons || 2)) {
                                     // Close modal first
                                     const modalElement = document.getElementById('rightSidebarModalDetails');
                                     if (modalElement) {
