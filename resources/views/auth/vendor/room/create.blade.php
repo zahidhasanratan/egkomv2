@@ -225,16 +225,6 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label">Room Size (sq. ft / sq. m)</label>
-                                                        <input type="number" class="form-control" name="size" value="{{ old('size') }}" placeholder="Ex: 1200 SFT" required>
-                                                        @error('size')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
                                                 <div class="col-md-6 col-lg-2 col-xxl-3">
                                                     <div class="form-group">
                                                         <label class="form-label">Total Room</label>
@@ -298,20 +288,36 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="wifi_details">WiFi Details/Password</label>
-                                                        <input type="text" class="form-control" name="wifi_details" value="{{ old('wifi_details') }}" placeholder="WiFi Details/Password">
-                                                        @error('wifi_details')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
                                             </div>
 
                                             <div class="row mt-15">
                                                 <div class="checkbox-section">
                                                     <h3 class="can-tittle">Room Information</h3>
+
+                                                    <!-- Room Size and WiFi Details -->
+                                                    <div class="row mt-3 mb-3">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Room Size (sq. ft / sq. m)</label>
+                                                                <input type="number" class="form-control" name="size" value="{{ old('size') }}" placeholder="Ex: 1200 SFT" required>
+                                                                @error('size')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-label" for="wifi_details">WiFi Details/Password</label>
+                                                                <input type="text" class="form-control" name="wifi_details" value="{{ old('wifi_details') }}" placeholder="WiFi Details/Password">
+                                                                @error('wifi_details')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Room Facilities & Amenities -->
+                                                    <h5 class="mt-3 mb-2"><strong>Room Facilities & Amenities</strong></h5>
                                                     <div class="chk-all-sec">
                                                         <div class="form-group">
                                                             <div class="custom-control custom-switch checked">
@@ -320,9 +326,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
-                                                    <!-- Room Facilities & Amenities -->
-                                                    <h5 class="mt-3 mb-2"><strong>Room Facilities & Amenities</strong></h5>
                                                     <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="AC" {{ in_array('AC', old('appliances', [])) ? 'checked' : '' }}> AC</label><br>
                                                     <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Smart TV" {{ in_array('Smart TV', old('appliances', [])) ? 'checked' : '' }}> Smart TV</label><br>
                                                     <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Wi-Fi" {{ in_array('Wi-Fi', old('appliances', [])) ? 'checked' : '' }}> Wi-Fi</label><br>
@@ -684,27 +687,63 @@
                                                 </div>
                                             </div>
 
-                                            <!-- Laundry Service Fee -->
+                                            <!-- Laundry Service -->
                                             <div class="row mt-4">
                                                 <div class="col-md-12">
-                                                    <h5 class="mb-3"><strong>Laundry Service Fee</strong></h5>
+                                                    <h5 class="mb-3"><strong>Laundry Service</strong></h5>
                                                     <div class="row">
-                                                        <div class="col-md-4">
+                                                        <div class="col-md-12 mb-3">
                                                             <div class="form-group">
-                                                                <label class="form-label">Fee Amount</label>
-                                                                <input type="number" class="form-control" name="additional_info[laundry_fee_amount]" value="{{ old('additional_info.laundry_fee_amount', '') }}" placeholder="e.g., 500" min="0" step="0.01">
+                                                                <label class="form-label">Laundry Service Available?</label>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[laundry_service]" id="laundry_service_yes" value="yes" {{ old('additional_info.laundry_service', '') == 'yes' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="laundry_service_yes">Yes</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[laundry_service]" id="laundry_service_no" value="no" {{ old('additional_info.laundry_service', '') == 'no' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="laundry_service_no">No</label>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-4">
+                                                    </div>
+                                                    <div class="row" id="laundry_service_type_container" style="display: {{ old('additional_info.laundry_service', '') == 'yes' ? 'block' : 'none' }};">
+                                                        <div class="col-md-12 mb-3">
                                                             <div class="form-group">
-                                                                <label class="form-label">Currency</label>
-                                                                <input type="text" class="form-control" name="additional_info[laundry_fee_currency]" value="{{ old('additional_info.laundry_fee_currency', 'BDT') }}" placeholder="e.g., BDT">
+                                                                <label class="form-label">Laundry Service Type</label>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[laundry_service_type]" id="laundry_complementary" value="complementary" {{ old('additional_info.laundry_service_type', '') == 'complementary' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="laundry_complementary">Complementary</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[laundry_service_type]" id="laundry_paid" value="paid" {{ old('additional_info.laundry_service_type', '') == 'paid' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="laundry_paid">Paid</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[laundry_service_type]" id="laundry_not_available" value="not_available" {{ old('additional_info.laundry_service_type', '') == 'not_available' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="laundry_not_available">Not Available</label>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-4">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Per Unit</label>
-                                                                <input type="text" class="form-control" name="additional_info[laundry_fee_unit]" value="{{ old('additional_info.laundry_fee_unit', 'Per Person') }}" placeholder="e.g., Per Person">
+                                                        <div class="col-md-12" id="laundry_fee_fields" style="display: {{ old('additional_info.laundry_service_type', '') == 'paid' ? 'block' : 'none' }};">
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Fee Amount</label>
+                                                                        <input type="number" class="form-control" name="additional_info[laundry_fee_amount]" value="{{ old('additional_info.laundry_fee_amount', '') }}" placeholder="e.g., 500" min="0" step="0.01">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Currency</label>
+                                                                        <input type="text" class="form-control" name="additional_info[laundry_fee_currency]" value="{{ old('additional_info.laundry_fee_currency', 'BDT') }}" placeholder="e.g., BDT">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Per Unit</label>
+                                                                        <input type="text" class="form-control" name="additional_info[laundry_fee_unit]" value="{{ old('additional_info.laundry_fee_unit', 'Per Person') }}" placeholder="e.g., Per Person">
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -715,15 +754,61 @@
                                             <div class="row mt-4">
                                                 <div class="col-md-12">
                                                     <h5 class="mb-3"><strong>Housekeeping & Cleaning Policy</strong></h5>
-                                                    <div class="form-group">
-                                                        <label class="form-label">Policy Type</label>
-                                                        <select class="form-control" name="additional_info[housekeeping_type]">
-                                                            <option value="">Select Option</option>
-                                                            <option value="Daily" {{ old('additional_info.housekeeping_type') == 'Daily' ? 'selected' : '' }}>Daily</option>
-                                                            <option value="Weekly" {{ old('additional_info.housekeeping_type') == 'Weekly' ? 'selected' : '' }}>Weekly</option>
-                                                            <option value="On Request" {{ old('additional_info.housekeeping_type') == 'On Request' ? 'selected' : '' }}>On Request</option>
-                                                            <option value="Paid" {{ old('additional_info.housekeeping_type') == 'Paid' ? 'selected' : '' }}>Paid</option>
-                                                        </select>
+                                                    <div class="row">
+                                                        <div class="col-md-12 mb-3">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Housekeeping Service Available?</label>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[housekeeping_service]" id="housekeeping_service_yes" value="yes" {{ old('additional_info.housekeeping_service', '') == 'yes' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="housekeeping_service_yes">Yes</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[housekeeping_service]" id="housekeeping_service_no" value="no" {{ old('additional_info.housekeeping_service', '') == 'no' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="housekeeping_service_no">No</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" id="housekeeping_service_type_container" style="display: {{ old('additional_info.housekeeping_service', '') == 'yes' ? 'block' : 'none' }};">
+                                                        <div class="col-md-12 mb-3">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Housekeeping Service Type</label>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[housekeeping_service_type]" id="housekeeping_complementary" value="complementary" {{ old('additional_info.housekeeping_service_type', '') == 'complementary' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="housekeeping_complementary">Complementary</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[housekeeping_service_type]" id="housekeeping_paid" value="paid" {{ old('additional_info.housekeeping_service_type', '') == 'paid' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="housekeeping_paid">Paid</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[housekeeping_service_type]" id="housekeeping_not_available" value="not_available" {{ old('additional_info.housekeeping_service_type', '') == 'not_available' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="housekeeping_not_available">Not Available</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12" id="housekeeping_fee_fields" style="display: {{ old('additional_info.housekeeping_service_type', '') == 'paid' ? 'block' : 'none' }};">
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Fee Amount</label>
+                                                                        <input type="number" class="form-control" name="additional_info[housekeeping_fee_amount]" value="{{ old('additional_info.housekeeping_fee_amount', '') }}" placeholder="e.g., 500" min="0" step="0.01">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Currency</label>
+                                                                        <input type="text" class="form-control" name="additional_info[housekeeping_fee_currency]" value="{{ old('additional_info.housekeeping_fee_currency', 'BDT') }}" placeholder="e.g., BDT">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Per Unit</label>
+                                                                        <input type="text" class="form-control" name="additional_info[housekeeping_fee_unit]" value="{{ old('additional_info.housekeeping_fee_unit', 'Per Service') }}" placeholder="e.g., Per Service">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -768,6 +853,21 @@
                                                 <div class="col-md-12">
                                                     <h5 class="mb-3"><strong>Security Deposit Requirement</strong></h5>
                                                     <div class="row">
+                                                        <div class="col-md-12 mb-3">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Security Deposit Required?</label>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[security_deposit_required]" id="security_deposit_yes" value="yes" {{ old('additional_info.security_deposit_required', '') == 'yes' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="security_deposit_yes">Yes</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[security_deposit_required]" id="security_deposit_no" value="no" {{ old('additional_info.security_deposit_required', '') == 'no' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="security_deposit_no">No</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" id="security_deposit_fields_container" style="display: {{ old('additional_info.security_deposit_required', '') == 'yes' ? 'block' : 'none' }};">
                                                         <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label class="form-label">Deposit Amount</label>
@@ -777,39 +877,42 @@
                                                         <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label class="form-label">Refundable Terms</label>
-                                                                <input type="text" class="form-control" name="additional_info[security_deposit_refundable]" value="{{ old('additional_info.security_deposit_refundable', '') }}" placeholder="e.g., Fully refundable after check-out">
+                                                                <textarea class="form-control" name="additional_info[security_deposit_refundable]" rows="3" placeholder="e.g., Fully refundable after check-out if no damages">{{ old('additional_info.security_deposit_refundable', '') }}</textarea>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <!-- Parking Availability & Charges -->
+                                            <!-- Parking Availability -->
                                             <div class="row mt-4">
                                                 <div class="col-md-12">
-                                                    <h5 class="mb-3"><strong>Parking Availability & Charges</strong></h5>
+                                                    <h5 class="mb-3"><strong>Parking Availability</strong></h5>
                                                     <div class="row">
-                                                        <div class="col-md-4">
+                                                        <div class="col-md-12 mb-3">
                                                             <div class="form-group">
-                                                                <label class="form-label">Availability</label>
-                                                                <select class="form-control" name="additional_info[parking_availability]">
-                                                                    <option value="">Select Option</option>
-                                                                    <option value="Free" {{ old('additional_info.parking_availability') == 'Free' ? 'selected' : '' }}>Free</option>
-                                                                    <option value="Paid" {{ old('additional_info.parking_availability') == 'Paid' ? 'selected' : '' }}>Paid</option>
-                                                                    <option value="Not Available" {{ old('additional_info.parking_availability') == 'Not Available' ? 'selected' : '' }}>Not Available</option>
-                                                                </select>
+                                                                <label class="form-label">Parking Availability</label>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[parking_availability]" id="parking_available" value="available" {{ old('additional_info.parking_availability', '') == 'available' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="parking_available">Available</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[parking_availability]" id="parking_not_available" value="not_available" {{ old('additional_info.parking_availability', '') == 'not_available' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="parking_not_available">Not Available</label>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-4">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Charge Amount</label>
-                                                                <input type="number" class="form-control" name="additional_info[parking_fee_amount]" value="{{ old('additional_info.parking_fee_amount', '') }}" placeholder="e.g., 500" min="0" step="0.01">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Per Unit</label>
-                                                                <input type="text" class="form-control" name="additional_info[parking_fee_unit]" value="{{ old('additional_info.parking_fee_unit', 'Per Day Per Car') }}" placeholder="e.g., Per Day Per Car">
+                                                        <div class="col-md-12" id="parking_complementary_fields" style="display: {{ old('additional_info.parking_availability', '') == 'available' ? 'block' : 'none' }};">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Complementary Note</label>
+                                                                        <div class="input-group">
+                                                                            <span class="input-group-text">Complementary</span>
+                                                                            <input type="text" class="form-control" name="additional_info[parking_complementary_note]" value="{{ old('additional_info.parking_complementary_note', '') }}" placeholder="e.g., Free parking available">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -820,18 +923,40 @@
                                             <div class="row mt-4">
                                                 <div class="col-md-12">
                                                     <h5 class="mb-3"><strong>Pet Policy</strong></h5>
-                                                    <div class="form-group">
-                                                        <label class="form-label">Policy</label>
-                                                        <select class="form-control" name="additional_info[pet_policy]">
-                                                            <option value="">Select Policy</option>
-                                                            <option value="Allowed" {{ old('additional_info.pet_policy') == 'Allowed' ? 'selected' : '' }}>Allowed</option>
-                                                            <option value="Not Allowed" {{ old('additional_info.pet_policy') == 'Not Allowed' ? 'selected' : '' }}>Not Allowed</option>
-                                                            <option value="Extra Charge" {{ old('additional_info.pet_policy') == 'Extra Charge' ? 'selected' : '' }}>Extra Charge</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group mt-2">
-                                                        <label class="form-label">Pet Fee (if Extra Charge)</label>
-                                                        <input type="text" class="form-control" name="additional_info[pet_fee]" value="{{ old('additional_info.pet_fee', '') }}" placeholder="e.g., 500 BDT per pet per day">
+                                                    <div class="row">
+                                                        <div class="col-md-12 mb-3">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Pet Policy Type</label>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[pet_type]" id="pet_complementary" value="complementary" {{ old('additional_info.pet_type', '') == 'complementary' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="pet_complementary">Complementary</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[pet_type]" id="pet_paid" value="paid" {{ old('additional_info.pet_type', '') == 'paid' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="pet_paid">Paid</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[pet_type]" id="pet_not_available" value="not_available" {{ old('additional_info.pet_type', '') == 'not_available' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="pet_not_available">Not Available</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12" id="pet_price_fields" style="display: {{ old('additional_info.pet_type', '') == 'paid' ? 'block' : 'none' }};">
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Price (Optional)</label>
+                                                                        <input type="text" class="form-control" name="additional_info[pet_fee]" value="{{ old('additional_info.pet_fee', '') }}" placeholder="e.g., 500 BDT per pet per day">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Note</label>
+                                                                        <input type="text" class="form-control" name="additional_info[pet_paid_note]" value="{{ old('additional_info.pet_paid_note', '') }}" placeholder="e.g., Additional charges apply">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -840,19 +965,30 @@
                                             <div class="row mt-4">
                                                 <div class="col-md-12">
                                                     <h5 class="mb-3"><strong>Meal Options</strong></h5>
-                                                    <div class="form-group">
-                                                        <label class="form-label">Meal Type</label>
-                                                        <select class="form-control" name="additional_info[meal_options]">
-                                                            <option value="">Select Option</option>
-                                                            <option value="Buffet" {{ old('additional_info.meal_options') == 'Buffet' ? 'selected' : '' }}>Buffet</option>
-                                                            <option value="Regular Breakfast Included" {{ old('additional_info.meal_options') == 'Regular Breakfast Included' ? 'selected' : '' }}>Regular Breakfast Included</option>
-                                                            <option value="On Request" {{ old('additional_info.meal_options') == 'On Request' ? 'selected' : '' }}>On Request</option>
-                                                            <option value="Paid Separately" {{ old('additional_info.meal_options') == 'Paid Separately' ? 'selected' : '' }}>Paid Separately</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group mt-2">
-                                                        <label class="form-label">Meal Fee (if Paid Separately)</label>
-                                                        <input type="text" class="form-control" name="additional_info[meal_fee]" value="{{ old('additional_info.meal_fee', '') }}" placeholder="e.g., 300 BDT per person">
+                                                    <div class="row">
+                                                        <div class="col-md-12 mb-3">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Meal Type</label>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[meal_type]" id="meal_complementary" value="complementary" {{ old('additional_info.meal_type', '') == 'complementary' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="meal_complementary">Complementary</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[meal_type]" id="meal_paid" value="paid" {{ old('additional_info.meal_type', '') == 'paid' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="meal_paid">Paid</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[meal_type]" id="meal_not_available" value="not_available" {{ old('additional_info.meal_type', '') == 'not_available' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="meal_not_available">Not Available</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12" id="meal_price_fields" style="display: {{ old('additional_info.meal_type', '') == 'paid' ? 'block' : 'none' }};">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Price (Optional)</label>
+                                                                <input type="text" class="form-control" name="additional_info[meal_fee]" value="{{ old('additional_info.meal_fee', '') }}" placeholder="e.g., 300 BDT per person">
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2175,6 +2311,171 @@
                             form.submit();
                         }
                     });
+                }
+            });
+
+            // Laundry Service Toggle Functionality
+            document.addEventListener('DOMContentLoaded', function() {
+                const laundryServiceYes = document.getElementById('laundry_service_yes');
+                const laundryServiceNo = document.getElementById('laundry_service_no');
+                const laundryServiceTypeContainer = document.getElementById('laundry_service_type_container');
+                const laundryPaid = document.getElementById('laundry_paid');
+                const laundryFeeFields = document.getElementById('laundry_fee_fields');
+
+                if (laundryServiceYes && laundryServiceNo && laundryServiceTypeContainer) {
+                    // Toggle laundry service type container
+                    function toggleLaundryServiceType() {
+                        if (laundryServiceYes.checked) {
+                            laundryServiceTypeContainer.style.display = 'block';
+                        } else {
+                            laundryServiceTypeContainer.style.display = 'none';
+                            laundryFeeFields.style.display = 'none';
+                        }
+                    }
+
+                    // Toggle fee fields based on service type
+                    function toggleLaundryFeeFields() {
+                        if (laundryPaid && laundryPaid.checked) {
+                            laundryFeeFields.style.display = 'block';
+                        } else {
+                            laundryFeeFields.style.display = 'none';
+                        }
+                    }
+
+                    laundryServiceYes.addEventListener('change', toggleLaundryServiceType);
+                    laundryServiceNo.addEventListener('change', toggleLaundryServiceType);
+                    
+                    if (laundryPaid) {
+                        laundryPaid.addEventListener('change', toggleLaundryFeeFields);
+                        document.getElementById('laundry_complementary')?.addEventListener('change', toggleLaundryFeeFields);
+                        document.getElementById('laundry_not_available')?.addEventListener('change', toggleLaundryFeeFields);
+                    }
+
+                    // Initialize on page load
+                    toggleLaundryServiceType();
+                    toggleLaundryFeeFields();
+                }
+
+                // Housekeeping Service Toggle Functionality
+                const housekeepingServiceYes = document.getElementById('housekeeping_service_yes');
+                const housekeepingServiceNo = document.getElementById('housekeeping_service_no');
+                const housekeepingServiceTypeContainer = document.getElementById('housekeeping_service_type_container');
+                const housekeepingPaid = document.getElementById('housekeeping_paid');
+                const housekeepingFeeFields = document.getElementById('housekeeping_fee_fields');
+
+                if (housekeepingServiceYes && housekeepingServiceNo && housekeepingServiceTypeContainer) {
+                    // Toggle housekeeping service type container
+                    function toggleHousekeepingServiceType() {
+                        if (housekeepingServiceYes.checked) {
+                            housekeepingServiceTypeContainer.style.display = 'block';
+                        } else {
+                            housekeepingServiceTypeContainer.style.display = 'none';
+                            housekeepingFeeFields.style.display = 'none';
+                        }
+                    }
+
+                    // Toggle fee fields based on service type
+                    function toggleHousekeepingFeeFields() {
+                        if (housekeepingPaid && housekeepingPaid.checked) {
+                            housekeepingFeeFields.style.display = 'block';
+                        } else {
+                            housekeepingFeeFields.style.display = 'none';
+                        }
+                    }
+
+                    housekeepingServiceYes.addEventListener('change', toggleHousekeepingServiceType);
+                    housekeepingServiceNo.addEventListener('change', toggleHousekeepingServiceType);
+                    
+                    if (housekeepingPaid) {
+                        housekeepingPaid.addEventListener('change', toggleHousekeepingFeeFields);
+                        document.getElementById('housekeeping_complementary')?.addEventListener('change', toggleHousekeepingFeeFields);
+                        document.getElementById('housekeeping_not_available')?.addEventListener('change', toggleHousekeepingFeeFields);
+                    }
+
+                    // Initialize on page load
+                    toggleHousekeepingServiceType();
+                    toggleHousekeepingFeeFields();
+                }
+
+                // Security Deposit Toggle Functionality
+                const securityDepositYes = document.getElementById('security_deposit_yes');
+                const securityDepositNo = document.getElementById('security_deposit_no');
+                const securityDepositFieldsContainer = document.getElementById('security_deposit_fields_container');
+
+                if (securityDepositYes && securityDepositNo && securityDepositFieldsContainer) {
+                    function toggleSecurityDepositFields() {
+                        if (securityDepositYes.checked) {
+                            securityDepositFieldsContainer.style.display = 'block';
+                        } else {
+                            securityDepositFieldsContainer.style.display = 'none';
+                        }
+                    }
+
+                    securityDepositYes.addEventListener('change', toggleSecurityDepositFields);
+                    securityDepositNo.addEventListener('change', toggleSecurityDepositFields);
+
+                    // Initialize on page load
+                    toggleSecurityDepositFields();
+                }
+
+                // Parking Toggle Functionality
+                const parkingAvailable = document.getElementById('parking_available');
+                const parkingNotAvailable = document.getElementById('parking_not_available');
+                const parkingComplementaryFields = document.getElementById('parking_complementary_fields');
+
+                if (parkingAvailable && parkingNotAvailable) {
+                    function toggleParkingComplementaryFields() {
+                        if (parkingAvailable.checked) {
+                            parkingComplementaryFields.style.display = 'block';
+                        } else {
+                            parkingComplementaryFields.style.display = 'none';
+                        }
+                    }
+
+                    parkingAvailable.addEventListener('change', toggleParkingComplementaryFields);
+                    parkingNotAvailable.addEventListener('change', toggleParkingComplementaryFields);
+
+                    toggleParkingComplementaryFields();
+                }
+
+                // Pet Policy Toggle Functionality
+                const petPaid = document.getElementById('pet_paid');
+                const petPriceFields = document.getElementById('pet_price_fields');
+
+                if (petPaid) {
+                    function togglePetPriceFields() {
+                        if (petPaid.checked) {
+                            petPriceFields.style.display = 'block';
+                        } else {
+                            petPriceFields.style.display = 'none';
+                        }
+                    }
+
+                    petPaid.addEventListener('change', togglePetPriceFields);
+                    document.getElementById('pet_complementary')?.addEventListener('change', togglePetPriceFields);
+                    document.getElementById('pet_not_available')?.addEventListener('change', togglePetPriceFields);
+
+                    togglePetPriceFields();
+                }
+
+                // Meal Options Toggle Functionality
+                const mealPaid = document.getElementById('meal_paid');
+                const mealPriceFields = document.getElementById('meal_price_fields');
+
+                if (mealPaid) {
+                    function toggleMealPriceFields() {
+                        if (mealPaid.checked) {
+                            mealPriceFields.style.display = 'block';
+                        } else {
+                            mealPriceFields.style.display = 'none';
+                        }
+                    }
+
+                    mealPaid.addEventListener('change', toggleMealPriceFields);
+                    document.getElementById('meal_complementary')?.addEventListener('change', toggleMealPriceFields);
+                    document.getElementById('meal_not_available')?.addEventListener('change', toggleMealPriceFields);
+
+                    toggleMealPriceFields();
                 }
             });
         </script>

@@ -803,6 +803,146 @@
                                                                 <i style="color: #91278f; font-size: 18px;"
                                                                    class="fa fa-bed"></i>Bed: <b> {{ $roomList->total_beds ?? 'N/A' }} {{ $roomList->total_beds > 1 ? 'Beds' : 'Bed' }} </b> </small>
                                                             <!---->
+                                                            @php
+                                                                $displayOptions = $roomList->display_options ?? [];
+                                                                $additionalInfo = $displayOptions['additional_info'] ?? [];
+                                                                $laundryService = $additionalInfo['laundry_service'] ?? null;
+                                                                $laundryServiceType = $additionalInfo['laundry_service_type'] ?? null;
+                                                                $laundryFeeAmount = $additionalInfo['laundry_fee_amount'] ?? null;
+                                                                $laundryFeeCurrency = $additionalInfo['laundry_fee_currency'] ?? 'BDT';
+                                                                $laundryFeeUnit = $additionalInfo['laundry_fee_unit'] ?? 'Per Person';
+                                                            @endphp
+                                                            @if($laundryService === 'yes')
+                                                                <small class="d-block">
+                                                                    <i style="color: #91278f; font-size: 18px;" class="fa fa-tint"></i>Laundry: <b>
+                                                                        @if($laundryServiceType === 'complementary')
+                                                                            Complementary (Free)
+                                                                        @elseif($laundryServiceType === 'paid' && $laundryFeeAmount)
+                                                                            {{ $laundryFeeAmount }} {{ $laundryFeeCurrency }} {{ $laundryFeeUnit }}
+                                                                        @elseif($laundryServiceType === 'not_available')
+                                                                            Not Available
+                                                                        @else
+                                                                            Available
+                                                                        @endif
+                                                                    </b>
+                                                                </small>
+                                                            @elseif($laundryFeeAmount)
+                                                                {{-- Fallback for old data format --}}
+                                                                <small class="d-block">
+                                                                    <i style="color: #91278f; font-size: 18px;" class="fa fa-tint"></i>Laundry: <b>{{ $laundryFeeAmount }} {{ $laundryFeeCurrency }} {{ $laundryFeeUnit }}</b></small>
+                                                            @endif
+                                                            @php
+                                                                $housekeepingService = $additionalInfo['housekeeping_service'] ?? null;
+                                                                $housekeepingServiceType = $additionalInfo['housekeeping_service_type'] ?? null;
+                                                                $housekeepingFeeAmount = $additionalInfo['housekeeping_fee_amount'] ?? null;
+                                                                $housekeepingFeeCurrency = $additionalInfo['housekeeping_fee_currency'] ?? 'BDT';
+                                                                $housekeepingFeeUnit = $additionalInfo['housekeeping_fee_unit'] ?? 'Per Service';
+                                                                $housekeepingType = $additionalInfo['housekeeping_type'] ?? null;
+                                                            @endphp
+                                                            @if($housekeepingService === 'yes')
+                                                                <small class="d-block">
+                                                                    <i style="color: #91278f; font-size: 18px;" class="fa fa-broom"></i>Housekeeping: <b>
+                                                                        @if($housekeepingServiceType === 'complementary')
+                                                                            Complementary (Free)
+                                                                        @elseif($housekeepingServiceType === 'paid' && $housekeepingFeeAmount)
+                                                                            {{ $housekeepingFeeAmount }} {{ $housekeepingFeeCurrency }} {{ $housekeepingFeeUnit }}
+                                                                        @elseif($housekeepingServiceType === 'not_available')
+                                                                            Not Available
+                                                                        @else
+                                                                            Available
+                                                                        @endif
+                                                                    </b>
+                                                                </small>
+                                                            @elseif($housekeepingType)
+                                                                {{-- Fallback for old data format --}}
+                                                                <small class="d-block">
+                                                                    <i style="color: #91278f; font-size: 18px;" class="fa fa-broom"></i>Housekeeping: <b>{{ $housekeepingType }}</b></small>
+                                                            @endif
+                                                            @php
+                                                                $parkingAvailability = $additionalInfo['parking_availability'] ?? null;
+                                                                $parkingComplementaryNote = $additionalInfo['parking_complementary_note'] ?? null;
+                                                                $parkingType = $additionalInfo['parking_type'] ?? null; // For backward compatibility
+                                                                $parkingFeeAmount = $additionalInfo['parking_fee_amount'] ?? null;
+                                                                $parkingFeeCurrency = $additionalInfo['parking_fee_currency'] ?? 'BDT';
+                                                                $parkingFeeUnit = $additionalInfo['parking_fee_unit'] ?? 'Per Day';
+                                                            @endphp
+                                                            @if($parkingAvailability)
+                                                                <small class="d-block">
+                                                                    <i style="color: #91278f; font-size: 18px;" class="fa fa-car"></i>Parking: <b>
+                                                                        @if($parkingAvailability === 'available')
+                                                                            Available - Complementary{{ !empty($parkingComplementaryNote) ? ' (' . $parkingComplementaryNote . ')' : '' }}
+                                                                        @elseif($parkingAvailability === 'not_available')
+                                                                            Not Available
+                                                                        @endif
+                                                                    </b>
+                                                                </small>
+                                                            @elseif($parkingType)
+                                                                {{-- Fallback for old data format --}}
+                                                                <small class="d-block">
+                                                                    <i style="color: #91278f; font-size: 18px;" class="fa fa-car"></i>Parking: <b>
+                                                                        @if($parkingType === 'complementary')
+                                                                            Available - Complementary (Free)
+                                                                        @elseif($parkingType === 'paid' && $parkingFeeAmount)
+                                                                            {{ $parkingFeeAmount }} {{ $parkingFeeCurrency }} {{ $parkingFeeUnit }}
+                                                                        @elseif($parkingType === 'paid')
+                                                                            Paid
+                                                                        @elseif($parkingType === 'not_available')
+                                                                            Not Available
+                                                                        @endif
+                                                                    </b>
+                                                                </small>
+                                                            @elseif(isset($additionalInfo['parking_availability']) && is_string($additionalInfo['parking_availability']) && $additionalInfo['parking_availability'] !== 'available' && $additionalInfo['parking_availability'] !== 'not_available')
+                                                                {{-- Fallback for old string values --}}
+                                                                <small class="d-block">
+                                                                    <i style="color: #91278f; font-size: 18px;" class="fa fa-car"></i>Parking: <b>{{ $additionalInfo['parking_availability'] }}@if($parkingFeeAmount) ({{ $parkingFeeAmount }} {{ $parkingFeeCurrency }} {{ $parkingFeeUnit }})@endif</b></small>
+                                                            @endif
+                                                            @php
+                                                                $petType = $additionalInfo['pet_type'] ?? null;
+                                                                $petFee = $additionalInfo['pet_fee'] ?? null;
+                                                                $petPaidNote = $additionalInfo['pet_paid_note'] ?? null;
+                                                                $petPolicy = $additionalInfo['pet_policy'] ?? null;
+                                                            @endphp
+                                                            @if($petType)
+                                                                <small class="d-block">
+                                                                    <i style="color: #91278f; font-size: 18px;" class="fa fa-paw"></i>Pet Policy: <b>
+                                                                        @if($petType === 'complementary')
+                                                                            Complementary (Free)
+                                                                        @elseif($petType === 'paid')
+                                                                            Paid{{ !empty($petFee) ? ' (' . $petFee . ')' : '' }}{{ !empty($petPaidNote) ? ' - ' . $petPaidNote : '' }}
+                                                                        @elseif($petType === 'not_available')
+                                                                            Not Available
+                                                                        @endif
+                                                                    </b>
+                                                                </small>
+                                                            @elseif($petPolicy)
+                                                                {{-- Fallback for old data format --}}
+                                                                <small class="d-block">
+                                                                    <i style="color: #91278f; font-size: 18px;" class="fa fa-paw"></i>Pet Policy: <b>{{ $petPolicy }}@if($petFee) ({{ $petFee }})@endif</b></small>
+                                                            @endif
+                                                            @php
+                                                                $mealType = $additionalInfo['meal_type'] ?? null;
+                                                                $mealFee = $additionalInfo['meal_fee'] ?? null;
+                                                                $mealOptions = $additionalInfo['meal_options'] ?? null;
+                                                            @endphp
+                                                            @if($mealType)
+                                                                <small class="d-block">
+                                                                    <i style="color: #91278f; font-size: 18px;" class="fa fa-utensils"></i>Meal: <b>
+                                                                        @if($mealType === 'complementary')
+                                                                            Complementary (Free)
+                                                                        @elseif($mealType === 'paid' && $mealFee)
+                                                                            Paid ({{ $mealFee }})
+                                                                        @elseif($mealType === 'paid')
+                                                                            Paid
+                                                                        @elseif($mealType === 'not_available')
+                                                                            Not Available
+                                                                        @endif
+                                                                    </b>
+                                                                </small>
+                                                            @elseif($mealOptions)
+                                                                {{-- Fallback for old data format --}}
+                                                                <small class="d-block">
+                                                                    <i style="color: #91278f; font-size: 18px;" class="fa fa-utensils"></i>Meal: <b>{{ $mealOptions }}@if($mealFee) ({{ $mealFee }})@endif</b></small>
+                                                            @endif
 
                                                         </div>
                                                         <div class="show-amenities-modal mt-1 mb-2">
@@ -1305,15 +1445,55 @@
                             additionalInfoList.push(`Extra Adult Charge: ${additionalInfo.extra_adult_charge}`);
                         }
                         
-                        // Laundry Service Fee
-                        if (additionalInfo.laundry_fee_amount) {
+                        // Laundry Service
+                        if (additionalInfo.laundry_service === 'yes') {
+                            if (additionalInfo.laundry_service_type === 'complementary') {
+                                additionalInfoList.push('Laundry Service: Complementary (Free)');
+                            } else if (additionalInfo.laundry_service_type === 'paid') {
+                                if (additionalInfo.laundry_fee_amount) {
+                                    const currency = additionalInfo.laundry_fee_currency || 'BDT';
+                                    const unit = additionalInfo.laundry_fee_unit || 'Per Person';
+                                    additionalInfoList.push(`Laundry Service: ${additionalInfo.laundry_fee_amount} ${currency} ${unit}`);
+                                } else {
+                                    additionalInfoList.push('Laundry Service: Paid (Fee amount not specified)');
+                                }
+                            } else if (additionalInfo.laundry_service_type === 'not_available') {
+                                additionalInfoList.push('Laundry Service: Not Available');
+                            } else {
+                                // Type not selected yet, show as available
+                                additionalInfoList.push('Laundry Service: Available');
+                            }
+                        } else if (additionalInfo.laundry_service === 'no') {
+                            // Don't show anything if laundry service is explicitly set to 'no'
+                        } else if (additionalInfo.laundry_fee_amount) {
+                            // Fallback for old data format (backward compatibility)
                             const currency = additionalInfo.laundry_fee_currency || 'BDT';
                             const unit = additionalInfo.laundry_fee_unit || 'Per Person';
                             additionalInfoList.push(`Laundry Service: ${additionalInfo.laundry_fee_amount} ${currency} ${unit}`);
                         }
                         
                         // Housekeeping & Cleaning Policy
-                        if (additionalInfo.housekeeping_type) {
+                        if (additionalInfo.housekeeping_service === 'yes') {
+                            if (additionalInfo.housekeeping_service_type === 'complementary') {
+                                additionalInfoList.push('Housekeeping: Complementary (Free)');
+                            } else if (additionalInfo.housekeeping_service_type === 'paid') {
+                                if (additionalInfo.housekeeping_fee_amount) {
+                                    const currency = additionalInfo.housekeeping_fee_currency || 'BDT';
+                                    const unit = additionalInfo.housekeeping_fee_unit || 'Per Service';
+                                    additionalInfoList.push(`Housekeeping: ${additionalInfo.housekeeping_fee_amount} ${currency} ${unit}`);
+                                } else {
+                                    additionalInfoList.push('Housekeeping: Paid (Fee amount not specified)');
+                                }
+                            } else if (additionalInfo.housekeeping_service_type === 'not_available') {
+                                additionalInfoList.push('Housekeeping: Not Available');
+                            } else {
+                                // Type not selected yet, show as available
+                                additionalInfoList.push('Housekeeping: Available');
+                            }
+                        } else if (additionalInfo.housekeeping_service === 'no') {
+                            // Don't show anything if housekeeping service is explicitly set to 'no'
+                        } else if (additionalInfo.housekeeping_type) {
+                            // Fallback for old data format (backward compatibility)
                             additionalInfoList.push(`Housekeeping: ${additionalInfo.housekeeping_type}`);
                         }
                         
@@ -1333,16 +1513,50 @@
                         }
                         
                         // Security Deposit Requirement
-                        if (additionalInfo.security_deposit_amount) {
-                            let deposit = `Security Deposit: ${additionalInfo.security_deposit_amount}`;
-                            if (additionalInfo.security_deposit_refundable !== null) {
-                                deposit += ` (${additionalInfo.security_deposit_refundable ? 'Refundable' : 'Non-refundable'})`;
+                        if (additionalInfo.security_deposit_required === 'yes' || additionalInfo.security_deposit_amount) {
+                            if (additionalInfo.security_deposit_amount) {
+                                let deposit = `Security Deposit: ${additionalInfo.security_deposit_amount}`;
+                                if (additionalInfo.security_deposit_refundable) {
+                                    deposit += ` - ${additionalInfo.security_deposit_refundable}`;
+                                }
+                                additionalInfoList.push(deposit);
+                            } else if (additionalInfo.security_deposit_required === 'yes') {
+                                additionalInfoList.push('Security Deposit: Required (Amount not specified)');
                             }
-                            additionalInfoList.push(deposit);
                         }
                         
-                        // Parking Availability & Charges
+                        // Parking Availability
                         if (additionalInfo.parking_availability) {
+                            let parking = '';
+                            if (additionalInfo.parking_availability === 'available') {
+                                if (additionalInfo.parking_complementary_note) {
+                                    parking = `Parking: Available - Complementary (${additionalInfo.parking_complementary_note})`;
+                                } else {
+                                    parking = 'Parking: Available - Complementary';
+                                }
+                            } else if (additionalInfo.parking_availability === 'not_available') {
+                                parking = 'Parking: Not Available';
+                            }
+                            if (parking) additionalInfoList.push(parking);
+                        } else if (additionalInfo.parking_type) {
+                            // Backward compatibility for old format
+                            let parking = '';
+                            if (additionalInfo.parking_type === 'complementary') {
+                                parking = 'Parking: Available - Complementary (Free)';
+                            } else if (additionalInfo.parking_type === 'paid') {
+                                if (additionalInfo.parking_fee_amount) {
+                                    const currency = additionalInfo.parking_fee_currency || 'BDT';
+                                    const unit = additionalInfo.parking_fee_unit || 'Per Day';
+                                    parking = `Parking: ${additionalInfo.parking_fee_amount} ${currency} ${unit}`;
+                                } else {
+                                    parking = 'Parking: Paid';
+                                }
+                            } else if (additionalInfo.parking_type === 'not_available') {
+                                parking = 'Parking: Not Available';
+                            }
+                            if (parking) additionalInfoList.push(parking);
+                        } else if (additionalInfo.parking_availability && typeof additionalInfo.parking_availability === 'string' && additionalInfo.parking_availability !== 'available' && additionalInfo.parking_availability !== 'not_available') {
+                            // Backward compatibility for old string values
                             let parking = `Parking: ${additionalInfo.parking_availability}`;
                             if (additionalInfo.parking_fee_amount || additionalInfo.parking_charge_amount) {
                                 const amount = additionalInfo.parking_fee_amount || additionalInfo.parking_charge_amount;
@@ -1352,8 +1566,25 @@
                         }
                         
                         // Pet Policy
-                        if (additionalInfo.pet_policy_type) {
-                            let pet = `Pet Policy: ${additionalInfo.pet_policy_type}`;
+                        if (additionalInfo.pet_type) {
+                            let pet = '';
+                            if (additionalInfo.pet_type === 'complementary') {
+                                pet = 'Pet Policy: Complementary (Free)';
+                            } else if (additionalInfo.pet_type === 'paid') {
+                                pet = 'Pet Policy: Paid';
+                                if (additionalInfo.pet_fee) {
+                                    pet += ` (${additionalInfo.pet_fee})`;
+                                }
+                                if (additionalInfo.pet_paid_note) {
+                                    pet += ` - ${additionalInfo.pet_paid_note}`;
+                                }
+                            } else if (additionalInfo.pet_type === 'not_available') {
+                                pet = 'Pet Policy: Not Available';
+                            }
+                            if (pet) additionalInfoList.push(pet);
+                        } else if (additionalInfo.pet_policy) {
+                            // Backward compatibility
+                            let pet = `Pet Policy: ${additionalInfo.pet_policy}`;
                             if (additionalInfo.pet_fee) {
                                 pet += ` (Fee: ${additionalInfo.pet_fee})`;
                             }
@@ -1362,7 +1593,22 @@
                         
                         // Meal Options
                         if (additionalInfo.meal_type) {
-                            let meal = `Meal: ${additionalInfo.meal_type}`;
+                            let meal = '';
+                            if (additionalInfo.meal_type === 'complementary') {
+                                meal = 'Meal: Complementary (Free)';
+                            } else if (additionalInfo.meal_type === 'paid') {
+                                if (additionalInfo.meal_fee) {
+                                    meal = `Meal: Paid (${additionalInfo.meal_fee})`;
+                                } else {
+                                    meal = 'Meal: Paid';
+                                }
+                            } else if (additionalInfo.meal_type === 'not_available') {
+                                meal = 'Meal: Not Available';
+                            }
+                            if (meal) additionalInfoList.push(meal);
+                        } else if (additionalInfo.meal_options) {
+                            // Backward compatibility
+                            let meal = `Meal: ${additionalInfo.meal_options}`;
                             if (additionalInfo.meal_fee) {
                                 meal += ` (Fee: ${additionalInfo.meal_fee})`;
                             }
