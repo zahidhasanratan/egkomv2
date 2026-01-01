@@ -433,6 +433,17 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- Confirm Booking Button at Bottom of Form -->
+                    <div class="mt-5 mb-4" style="padding-top: 30px; border-top: 2px solid #e0e0e0;">
+                        <div class="row">
+                            <div class="col-12 col-md-8 offset-md-2 col-lg-10 offset-lg-1">
+                                <button type="button" class="btn btn-primary btn-lg btn-block confirmation-btn" onclick="confirmBooking()" style="padding: 18px 30px; font-size: 18px; font-weight: 600; border-radius: 8px; background: linear-gradient(135deg, #91278f 0%, #7a1f78 100%); border: none; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(145, 39, 143, 0.3);">
+                                    <i class="fa fa-check-circle" style="margin-right: 8px;"></i> Confirm Booking
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Right Sidebar - Price Summary -->
@@ -495,11 +506,11 @@
                                                     <div id="change-options" style="display: none; margin-top: 20px; border: 1px solid #ddd; padding: 20px; border-radius: 8px; background-color: #f9f9f9;">
                                                         <div class="form-group">
                                                             <label for="change-checkin-date">Check-in Date:</label>
-                                                            <input type="date" id="change-checkin-date" name="change-checkin-date" class="form-control" readonly style="background-color: #f5f5f5; cursor: not-allowed;">
+                                                            <input type="date" id="change-checkin-date" name="change-checkin-date" class="form-control" required>
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="change-checkout-date">Check-out Date:</label>
-                                                            <input type="date" id="change-checkout-date" name="change-checkout-date" class="form-control" readonly style="background-color: #f5f5f5; cursor: not-allowed;">
+                                                            <input type="date" id="change-checkout-date" name="change-checkout-date" class="form-control" required>
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="adults-select">Adults:</label>
@@ -529,9 +540,6 @@
                                                         </div>
                                                         <button id="save-selection" class="btn btn-primary" style="margin-top: 10px;">Save Selection</button>
                                                     </div>
-                                                </div>
-                                                <div data-v-1b1a5b0b="" id="navigation-control">
-                                                    <button data-v-1b1a5b0b="" type="button" class="btn text-b confirmation-btn btn-secondary btn-block mb-confirm-booking" onclick="confirmBooking()"> Confirm Booking </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -799,6 +807,24 @@
             .then(response => response.json())
             .then(data => {
                 if (data.rooms && data.rooms.length > 0) {
+                    // Update cart items with hotelId and encrypted_hotel_id if missing (backward compatibility)
+                    data.rooms.forEach(room => {
+                        const cartItem = cart.find(item => item.roomId === room.id);
+                        if (cartItem) {
+                            if (!cartItem.hotelId && room.hotel_id) {
+                                cartItem.hotelId = room.hotel_id;
+                            }
+                            if (!cartItem.encryptedHotelId && room.encrypted_hotel_id) {
+                                cartItem.encryptedHotelId = room.encrypted_hotel_id;
+                            }
+                        }
+                    });
+                    // Save updated cart
+                    localStorage.setItem('bookingCart', JSON.stringify(cart));
+                    // Re-render cards and summary with updated hotelId
+                    renderBookingCards(cart);
+                    renderPriceSummary(cart);
+                    
                     // Collect all available requests from all rooms
                     const allAvailableRequests = new Set();
                     const allAvailableBedTypes = new Set();
@@ -928,6 +954,9 @@
             primaryContactRoom.textContent = cart[0].roomName;
         }
 
+        // Get encrypted hotel ID from first cart item (all rooms should be from same hotel)
+        const encryptedHotelId = cart.length > 0 && cart[0].encryptedHotelId ? cart[0].encryptedHotelId : '';
+
         cart.forEach((item, index) => {
             const totalPersons = 2; // Default, can be made dynamic
             html += `
@@ -940,9 +969,11 @@
                             </div>
                         </div>
                         <div data-v-67ade680="" class="img-placeholder">
-                            <picture data-v-345c6862="" data-v-67ade680="">
-                                <img data-v-345c6862="" src="{{ asset('frontend/images/urmee.png') }}" alt="${item.roomName}" class="image-box">
-                            </picture>
+                            ${encryptedHotelId ? `<a href="/hotel-details/${encryptedHotelId}" style="display: block; cursor: pointer;">` : ''}
+                                <picture data-v-345c6862="" data-v-67ade680="">
+                                    <img data-v-345c6862="" src="{{ asset('frontend/images/urmee.png') }}" alt="${item.roomName}" class="image-box">
+                                </picture>
+                            ${encryptedHotelId ? '</a>' : ''}
                         </div>
                     </div>
                     <div data-v-67ade680="" class="review-timeline-details">
@@ -1102,6 +1133,9 @@
             selectedRoomsList.innerHTML = roomsListHtml;
         }
 
+        // Get encrypted hotel ID from first cart item
+        const encryptedHotelId = cart.length > 0 && cart[0].encryptedHotelId ? cart[0].encryptedHotelId : '';
+
         const html = `
             <div data-v-30094f07="" class="fare-modal-header text-center">
                 <h4 data-v-30094f07="" class="mb-0 font-weight-bolder"> Price Summary </h4>
@@ -1112,9 +1146,11 @@
                     <div data-v-30094f07="" class="fare-header">
                         <div data-v-30094f07="" class="wrapper">
                             <div data-v-30094f07="" class="img-placeholder">
-                                <picture data-v-345c6862="" data-v-30094f07="">
-                                    <img data-v-345c6862="" src="{{ asset('frontend/images/urmee.png') }}" alt="Hotel" class="image-box">
-                                </picture>
+                                ${encryptedHotelId ? `<a href="/hotel-details/${encryptedHotelId}" style="display: block; cursor: pointer;">` : ''}
+                                    <picture data-v-345c6862="" data-v-30094f07="">
+                                        <img data-v-345c6862="" src="{{ asset('frontend/images/urmee.png') }}" alt="Hotel" class="image-box">
+                                    </picture>
+                                ${encryptedHotelId ? '</a>' : ''}
                             </div>
                             <div data-v-30094f07="" class="header-summary">
                                 <div data-v-30094f07="" class="fare-type">
@@ -1177,9 +1213,6 @@
                             <span data-v-30094f07="" class="lg-text"> ${subTotal.toFixed(0)} </span>
                         </span>
                     </div>
-                </div>
-                <div data-v-1b1a5b0b="" id="navigation-control">
-                    <button data-v-1b1a5b0b="" type="button" class="btn text-b confirmation-btn btn-secondary confirm-btn btn-block" onclick="confirmBooking()"> Confirm Booking </button>
                 </div>
             </div>
         `;
@@ -1666,10 +1699,31 @@
             const adults = parseInt(document.getElementById('qty')?.value) || 1;
             const children = parseInt(document.getElementById('qty3')?.value) || 0;
             
-            document.getElementById('change-checkin-date').value = checkinDate;
-            document.getElementById('change-checkout-date').value = checkoutDate;
-            document.getElementById('adults-select').value = adults;
-            document.getElementById('children-select').value = children;
+            const changeCheckinEl = document.getElementById('change-checkin-date');
+            const changeCheckoutEl = document.getElementById('change-checkout-date');
+            
+            if (changeCheckinEl) {
+                changeCheckinEl.value = checkinDate;
+                // Set minimum date to today
+                const today = new Date().toISOString().split('T')[0];
+                changeCheckinEl.setAttribute('min', today);
+            }
+            if (changeCheckoutEl) {
+                changeCheckoutEl.value = checkoutDate;
+                // Set minimum date based on checkin
+                const today = new Date().toISOString().split('T')[0];
+                const minDate = checkinDate ? (() => {
+                    const checkin = new Date(checkinDate);
+                    checkin.setDate(checkin.getDate() + 1);
+                    return checkin.toISOString().split('T')[0];
+                })() : today;
+                changeCheckoutEl.setAttribute('min', minDate);
+            }
+            
+            const adultsSelect = document.getElementById('adults-select');
+            const childrenSelect = document.getElementById('children-select');
+            if (adultsSelect) adultsSelect.value = adults;
+            if (childrenSelect) childrenSelect.value = children;
         }
         
         if (changeSelectionButton && changeOptions) {
@@ -1693,14 +1747,64 @@
         const changeAdults = document.getElementById('adults-select');
         const changeChildren = document.getElementById('children-select');
         
+        // Set minimum date to today for date inputs
+        const today = new Date().toISOString().split('T')[0];
+        
         if (changeCheckin) {
+            changeCheckin.setAttribute('min', today);
             changeCheckin.addEventListener('change', function() {
-                document.getElementById('checkin-date').value = this.value;
+                // Update main form
+                const mainCheckin = document.getElementById('checkin-date');
+                if (mainCheckin) {
+                    mainCheckin.value = this.value;
+                }
+                // Update checkout minimum date
+                if (changeCheckout) {
+                    const checkinDate = new Date(this.value);
+                    checkinDate.setDate(checkinDate.getDate() + 1);
+                    changeCheckout.setAttribute('min', checkinDate.toISOString().split('T')[0]);
+                    // If checkout date is before new checkin, update it
+                    if (changeCheckout.value && new Date(changeCheckout.value) <= new Date(this.value)) {
+                        changeCheckout.value = checkinDate.toISOString().split('T')[0];
+                        const mainCheckout = document.getElementById('checkout-date');
+                        if (mainCheckout) {
+                            mainCheckout.value = changeCheckout.value;
+                        }
+                    }
+                }
+                // Update total nights
+                updateTotalNights();
             });
         }
         if (changeCheckout) {
+            changeCheckout.setAttribute('min', today);
             changeCheckout.addEventListener('change', function() {
-                document.getElementById('checkout-date').value = this.value;
+                // Update main form
+                const mainCheckout = document.getElementById('checkout-date');
+                if (mainCheckout) {
+                    mainCheckout.value = this.value;
+                }
+                // Validate checkout is after checkin
+                if (changeCheckin && changeCheckin.value) {
+                    const checkinDate = new Date(changeCheckin.value);
+                    const checkoutDate = new Date(this.value);
+                    if (checkoutDate <= checkinDate) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Invalid Date',
+                            text: 'Check-out date must be after check-in date.',
+                            confirmButtonColor: '#91278f'
+                        });
+                        const checkinDatePlusOne = new Date(checkinDate);
+                        checkinDatePlusOne.setDate(checkinDatePlusOne.getDate() + 1);
+                        this.value = checkinDatePlusOne.toISOString().split('T')[0];
+                        if (mainCheckout) {
+                            mainCheckout.value = this.value;
+                        }
+                    }
+                }
+                // Update total nights
+                updateTotalNights();
             });
         }
         if (changeAdults) {

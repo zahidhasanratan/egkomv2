@@ -97,6 +97,8 @@ class BookingController extends Controller
             return [
                 'id' => $room->id,
                 'name' => $room->name,
+                'hotel_id' => $room->hotel_id,
+                'encrypted_hotel_id' => \Illuminate\Support\Facades\Crypt::encrypt($room->hotel_id),
                 'total_persons' => $room->total_persons,
                 'total_beds' => $room->total_beds,
                 'available_requests' => $availableRequests,

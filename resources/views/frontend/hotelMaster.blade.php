@@ -1930,7 +1930,7 @@
     // Global Shopping Cart Management
     let globalBookingCart = JSON.parse(localStorage.getItem('bookingCart')) || [];
 
-    function addToGlobalCart(roomId, roomName, price, maxQuantity, quantity = 1, capacity = 2) {
+    function addToGlobalCart(roomId, roomName, price, maxQuantity, quantity = 1, capacity = 2, hotelId = null) {
         // Check if room already in cart
         const existingItem = globalBookingCart.find(item => item.roomId === roomId);
         
@@ -1956,7 +1956,8 @@
                 price: price,
                 quantity: quantity,
                 maxQuantity: maxQuantity,
-                capacity: capacity || 2 // Store room capacity (total_persons)
+                capacity: capacity || 2, // Store room capacity (total_persons)
+                hotelId: hotelId // Store hotel ID
             });
         }
         

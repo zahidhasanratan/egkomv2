@@ -55,6 +55,7 @@
                     </div>
                 </div>
                 <div class="col-9">
+                    @if(!request()->routeIs('booking.checkout'))
                     <div class="mb-search-box" data-bs-toggle="modal" data-bs-target="#bookingModal">
                         <div class="mb-search-list">
                             <div class="mb-search-icon">
@@ -72,12 +73,14 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Modal -->
+    @if(!request()->routeIs('booking.checkout'))
     <div class="modal fade modal-main-top-search" id="bookingModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-mobile-top">
             <div class="modal-content">
@@ -230,6 +233,7 @@
             </div>
         </div>
     </div>
+    @endif
 
     <!--End:  Mobile Header- -->
 
@@ -245,6 +249,7 @@
                     </div>
                 </div>
                 <div class="col-lg-8">
+                    @if(!request()->routeIs('booking.checkout'))
                     <div class="sticky-top-search" id="smallSearchBox">
                         <div class="search-bars">
                             <div class="search-itemss">Anywhere</div>
@@ -420,6 +425,7 @@
 
 
                     </div>
+                    @endif
                 </div>
 
                 <div class="col-lg-2">

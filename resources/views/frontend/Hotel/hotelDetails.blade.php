@@ -1023,7 +1023,7 @@
 
                                                                 <div class="book_btn_2">
                                                                     <a href="javascript:void(0)" 
-                                                                       onclick="addToCart({{ $roomList->id }}, '{{ $roomList->name }}', {{ $discountedPrice }}, {{ $roomList->total_rooms ?? 1 }}, {{ $roomList->total_persons ?? 2 }})">
+                                                                       onclick="addToCart({{ $roomList->id }}, '{{ $roomList->name }}', {{ $discountedPrice }}, {{ $roomList->total_rooms ?? 1 }}, {{ $roomList->total_persons ?? 2 }}, {{ $show->id }})">
                                                                         Add to<span> Book</span>
                                                                     </a>
                                                                 </div>
@@ -1082,11 +1082,11 @@
                 <!-- Room Data for Modal -->
                 <script>
                     // Use global cart functions
-                    function addToCart(roomId, roomName, price, maxQuantity, capacity) {
+                    function addToCart(roomId, roomName, price, maxQuantity, capacity, hotelId) {
                         const qtyInput = document.getElementById('qty-' + roomId);
                         const quantity = qtyInput ? parseInt(qtyInput.value) : 1;
                         
-                        if (addToGlobalCart(roomId, roomName, price, maxQuantity, quantity, capacity)) {
+                        if (addToGlobalCart(roomId, roomName, price, maxQuantity, quantity, capacity, hotelId)) {
                             // Store booking parameters from search form
                             const bookingParams = {
                                 checkin: document.getElementById('checkInDate')?.value || '',
@@ -1206,7 +1206,7 @@
                                 const modalQty = document.querySelector('#rightSidebarModalDetails #qty');
                                 const quantity = modalQty ? parseInt(modalQty.value) : 1;
                                 
-                                if (addToGlobalCart(room.id, room.name, discountedPrice, room.total_rooms || 1, quantity, room.total_persons || 2)) {
+                                if (addToGlobalCart(room.id, room.name, discountedPrice, room.total_rooms || 1, quantity, room.total_persons || 2, {{ $show->id }})) {
                                     // Close modal first
                                     const modalElement = document.getElementById('rightSidebarModalDetails');
                                     if (modalElement) {
