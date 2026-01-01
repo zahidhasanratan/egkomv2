@@ -187,15 +187,15 @@
                                                         <div class="col-md-12">
                                                             <div class="form-group">
                                                                 <label class="form-label">Select Available Dates</label>
-                                                                <input type="text" class="form-control" id="availability_dates" name="availability_dates" value="{{ old('availability_dates') }}" placeholder="Click to open calendar and select dates" readonly style="margin-bottom: 15px; cursor: pointer;">
-                                                                <small class="form-text text-muted" style="display: block; margin-bottom: 15px;">
+                                                                <input type="hidden" id="availability_dates_hidden" name="availability_dates" value="{{ old('availability_dates') }}">
+                                                                <input type="text" class="form-control" id="availability_dates_display" placeholder="No dates selected yet. Select dates from the calendar below." readonly style="margin-bottom: 15px; background-color: #f8f9fa; border: 1px solid #e0e0e0; padding: 12px; font-size: 14px; min-height: 45px;">
+                                                                <small class="form-text text-muted" style="display: block; margin-bottom: 15px; color: #6c757d;">
                                                                     <strong>How to select dates:</strong><br>
-                                                                    • <strong>Click the input field</strong> to open/close the calendar<br>
                                                                     • <strong>Drag</strong> from one date to another to select a range<br>
                                                                     • <strong>Click</strong> individual dates to toggle selection (click again to deselect)<br>
                                                                     • The room will be available only on selected dates
                                                                 </small>
-                                                                <div id="availability_calendar_wrapper" style="max-width: 100%; margin: 0 auto; display: none;"></div>
+                                                                <div id="availability_calendar_wrapper" style="max-width: 100%; margin: 20px auto; display: block; padding: 20px; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"></div>
                                                                 <div style="margin-top: 15px; display: flex; gap: 10px; align-items: center;">
                                                                     <button type="button" id="clear_all_dates" class="btn btn-sm btn-secondary" style="background: #6c757d; color: white; border: none; padding: 8px 20px;">
                                                                         <i class="fas fa-times"></i> Clear All
@@ -1129,19 +1129,38 @@
         <script>
             // Initialize Flatpickr for availability dates with drag selection
             document.addEventListener('DOMContentLoaded', function() {
-                const availabilityInput = document.getElementById('availability_dates');
+                const availabilityInputHidden = document.getElementById('availability_dates_hidden');
+                const availabilityInputDisplay = document.getElementById('availability_dates_display');
                 
-                if (availabilityInput) {
-                    // Get existing dates from old input if any
+                // Helper function to format dates for display
+                function formatDatesForDisplay(datesArray) {
+                    if (!datesArray || datesArray.length === 0) {
+                        return 'No dates selected yet. Select dates from the calendar below.';
+                    }
+                    
+                    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                    
+                    return datesArray.map(dateStr => {
+                        const [year, month, day] = dateStr.split('-').map(Number);
+                        const date = new Date(year, month - 1, day);
+                        return `${monthNames[date.getMonth()]} ${day}, ${year}`;
+                    }).join(', ');
+                }
+                
+                if (availabilityInputHidden && availabilityInputDisplay) {
+                    // Get existing dates from hidden input if any
                     let existingDates = [];
-                    if (availabilityInput.value) {
+                    if (availabilityInputHidden.value) {
                         try {
-                            existingDates = JSON.parse(availabilityInput.value);
+                            existingDates = JSON.parse(availabilityInputHidden.value);
                         } catch(e) {
                             // If not JSON, try comma-separated dates
-                            existingDates = availabilityInput.value.split(',').map(d => d.trim()).filter(d => d);
+                            existingDates = availabilityInputHidden.value.split(',').map(d => d.trim()).filter(d => d);
                         }
                     }
+                    
+                    // Update display field with formatted dates
+                    availabilityInputDisplay.value = formatDatesForDisplay(existingDates);
                     
                     let isRangeSelecting = false;
                     let rangeStart = null;
@@ -1158,21 +1177,7 @@
                         calendarInput.style.display = 'none';
                         calendarWrapper.appendChild(calendarInput);
                         
-                        // Toggle calendar visibility on input click
-                        availabilityInput.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            const isVisible = calendarWrapper.style.display === 'block';
-                            calendarWrapper.style.display = isVisible ? 'none' : 'block';
-                        });
-                        
-                        // Close calendar when clicking outside
-                        document.addEventListener('click', function(e) {
-                            if (calendarWrapper && 
-                                !calendarWrapper.contains(e.target) && 
-                                e.target !== availabilityInput) {
-                                calendarWrapper.style.display = 'none';
-                            }
-                        });
+                        // Calendar is always visible - no toggle needed
                         
                         flatpickrInstance = flatpickr(calendarInput, {
                             mode: "multiple",
@@ -1400,9 +1405,10 @@
                                     }
                                 });
                                 
-                                // Update hidden input value
+                                // Update hidden input value (JSON) and display field (formatted)
                                 const sortedDates = Array.from(selectedDatesSet).sort();
-                                availabilityInput.value = JSON.stringify(sortedDates);
+                                availabilityInputHidden.value = JSON.stringify(sortedDates);
+                                availabilityInputDisplay.value = formatDatesForDisplay(sortedDates);
                                 updateSelectedCount();
                             }
                             
@@ -1431,7 +1437,8 @@
                                         return;
                                     }
                                     const sortedDates = Array.from(selectedDatesSet).sort();
-                                    availabilityInput.value = JSON.stringify(sortedDates);
+                                    availabilityInputHidden.value = JSON.stringify(sortedDates);
+                                    availabilityInputDisplay.value = formatDatesForDisplay(sortedDates);
                                     const datesArray = sortedDates.map(dateStr => {
                                         const [year, month, dayNum] = dateStr.split('-').map(Number);
                                         return new Date(year, month - 1, dayNum);
@@ -1457,13 +1464,14 @@
                             });
                             
                             const sortedDates = Array.from(selectedDatesSet).sort();
-                            availabilityInput.value = JSON.stringify(sortedDates);
+                            availabilityInputHidden.value = JSON.stringify(sortedDates);
+                            availabilityInputDisplay.value = formatDatesForDisplay(sortedDates);
                             updateSelectedCount();
                         }
                     });
                     } else {
                         // Fallback: use regular flatpickr with inline calendar
-                        const flatpickrInstance = flatpickr(availabilityInput, {
+                        const flatpickrInstance = flatpickr(availabilityInputDisplay, {
                             mode: "multiple",
                             dateFormat: "Y-m-d",
                             minDate: "today",
@@ -1479,7 +1487,8 @@
                                     const day = String(date.getDate()).padStart(2, '0');
                                     return `${year}-${month}-${day}`;
                                 });
-                                availabilityInput.value = JSON.stringify(datesArray);
+                                availabilityInputHidden.value = JSON.stringify(datesArray);
+                                availabilityInputDisplay.value = formatDatesForDisplay(datesArray);
                             }
                         });
                     }
