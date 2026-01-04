@@ -40,6 +40,7 @@ class Booking extends Model
         'room_number',
         'arrival_time',
         'property_note',
+        'admin_note',
         'citizenship',
         'nid_front',
         'nid_back',

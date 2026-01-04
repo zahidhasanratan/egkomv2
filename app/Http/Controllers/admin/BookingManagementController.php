@@ -77,6 +77,230 @@ class BookingManagementController extends Controller
     }
 
     /**
+     * Show edit form for booking
+     */
+    public function edit($id)
+    {
+        $booking = Booking::with('guest')->findOrFail($id);
+        
+        // Get all hotels for super admin
+        $hotels = Hotel::all();
+        
+        // Get rooms for the first hotel in booking
+        $firstRoom = $booking->rooms_data[0] ?? null;
+        $rooms = [];
+        if ($firstRoom && isset($firstRoom['hotelId'])) {
+            $rooms = Room::where('hotel_id', $firstRoom['hotelId'])
+                ->where('is_active', true)
+                ->get();
+        }
+        
+        return view('auth.super_admin.bookings.edit', compact('booking', 'hotels', 'rooms'));
+    }
+
+    /**
+     * Update booking
+     */
+    public function update(Request $request, $id)
+    {
+        $booking = Booking::findOrFail($id);
+        
+        $validated = $request->validate([
+            'checkin_date' => 'required|date',
+            'checkout_date' => 'required|date|after:checkin_date',
+            'admin_note' => 'nullable|string|max:1000',
+            'room_id' => 'nullable|exists:rooms,id',
+            'quantity' => 'nullable|integer|min:1',
+        ]);
+        
+        DB::beginTransaction();
+        try {
+            // Check if dates or room changed
+            $datesChanged = $booking->checkin_date->format('Y-m-d') != $validated['checkin_date'] 
+                || $booking->checkout_date->format('Y-m-d') != $validated['checkout_date'];
+            
+            $roomChanged = false;
+            if ($request->has('room_id') && $request->room_id) {
+                $firstRoom = $booking->rooms_data[0] ?? null;
+                $roomChanged = !$firstRoom || ($firstRoom['roomId'] ?? null) != $request->room_id;
+            }
+            
+            // If dates or room changed, check availability
+            if ($datesChanged || $roomChanged) {
+                $checkinDate = new \DateTime($validated['checkin_date']);
+                $checkoutDate = new \DateTime($validated['checkout_date']);
+                
+                // Determine which room to check
+                $roomIdToCheck = $request->room_id ?? ($booking->rooms_data[0]['roomId'] ?? null);
+                $quantityToCheck = $request->quantity ?? ($booking->rooms_data[0]['quantity'] ?? 1);
+                
+                if ($roomIdToCheck) {
+                    $room = Room::findOrFail($roomIdToCheck);
+                    
+                    // Check room availability dates
+                    if (!$room->isAvailableForDateRange($checkinDate, $checkoutDate)) {
+                        DB::rollBack();
+                        return redirect()->back()
+                            ->withInput()
+                            ->with('error', 'Room is not available for the selected dates.');
+                    }
+                    
+                    // Check for conflicting bookings (excluding current booking)
+                    $conflictingBookings = Booking::where('id', '!=', $booking->id)
+                        ->where('booking_status', '!=', 'cancelled')
+                        ->where(function($query) use ($checkinDate, $checkoutDate) {
+                            $query->where(function($q) use ($checkinDate, $checkoutDate) {
+                                $q->where('checkin_date', '<=', $checkinDate->format('Y-m-d'))
+                                  ->where('checkout_date', '>', $checkinDate->format('Y-m-d'));
+                            })->orWhere(function($q) use ($checkinDate, $checkoutDate) {
+                                $q->where('checkin_date', '<', $checkoutDate->format('Y-m-d'))
+                                  ->where('checkout_date', '>=', $checkoutDate->format('Y-m-d'));
+                            })->orWhere(function($q) use ($checkinDate, $checkoutDate) {
+                                $q->where('checkin_date', '>=', $checkinDate->format('Y-m-d'))
+                                  ->where('checkout_date', '<=', $checkoutDate->format('Y-m-d'));
+                            });
+                        })
+                        ->get()
+                        ->filter(function($otherBooking) use ($roomIdToCheck) {
+                            $roomsData = is_array($otherBooking->rooms_data) 
+                                ? $otherBooking->rooms_data 
+                                : json_decode($otherBooking->rooms_data, true);
+                            
+                            if (!is_array($roomsData)) {
+                                return false;
+                            }
+                            
+                            foreach ($roomsData as $roomData) {
+                                if (isset($roomData['roomId']) && $roomData['roomId'] == $roomIdToCheck) {
+                                    return true;
+                                }
+                            }
+                            return false;
+                        });
+                    
+                    if ($conflictingBookings->count() > 0) {
+                        DB::rollBack();
+                        return redirect()->back()
+                            ->withInput()
+                            ->with('error', 'Room is already booked for some of the selected dates.');
+                    }
+                }
+            }
+            
+            // Check if quantity changed
+            $quantityChanged = false;
+            if ($request->has('quantity')) {
+                $firstRoom = $booking->rooms_data[0] ?? null;
+                $currentQuantity = $firstRoom['quantity'] ?? 1;
+                $quantityChanged = $currentQuantity != $validated['quantity'];
+            }
+            
+            // Always calculate new total nights from provided dates (needed for recalculation)
+            $checkinDate = new \DateTime($validated['checkin_date']);
+            $checkoutDate = new \DateTime($validated['checkout_date']);
+            $newTotalNights = $checkinDate->diff($checkoutDate)->days;
+            
+            // Update dates if changed
+            if ($datesChanged) {
+                $booking->checkin_date = $validated['checkin_date'];
+                $booking->checkout_date = $validated['checkout_date'];
+                $booking->total_nights = $newTotalNights;
+            }
+            
+            // Update room if changed
+            if ($roomChanged && $request->has('room_id') && $request->room_id) {
+                $room = Room::findOrFail($request->room_id);
+                $hotel = $room->hotel;
+                
+                // Get hotel photo
+                $hotelPhoto = null;
+                if ($hotel->featured_photo) {
+                    $featuredPhotos = is_string($hotel->featured_photo) 
+                        ? json_decode($hotel->featured_photo, true) 
+                        : $hotel->featured_photo;
+                    if (!empty($featuredPhotos) && is_array($featuredPhotos) && isset($featuredPhotos[0])) {
+                        $hotelPhoto = $featuredPhotos[0];
+                    }
+                }
+                
+                // Update rooms_data
+                $roomsData = [[
+                    'roomId' => $room->id,
+                    'roomName' => $room->name ?? 'Room',
+                    'quantity' => $validated['quantity'] ?? ($booking->rooms_data[0]['quantity'] ?? 1),
+                    'price' => $room->price_per_night,
+                    'hotelId' => $hotel->id,
+                    'hotelName' => $hotel->description ?? $hotel->property_category ?? 'Hotel',
+                    'hotelAddress' => $hotel->address ?? 'Address not available',
+                    'hotelEmail' => null,
+                    'hotelPhone' => null,
+                    'hotelPhoto' => $hotelPhoto,
+                ]];
+                
+                $booking->rooms_data = $roomsData;
+            }
+            
+            // Update quantity in rooms_data if changed
+            if ($quantityChanged && !$roomChanged) {
+                $roomsData = $booking->rooms_data;
+                if (!empty($roomsData) && isset($roomsData[0])) {
+                    $roomsData[0]['quantity'] = $validated['quantity'] ?? $roomsData[0]['quantity'];
+                    $booking->rooms_data = $roomsData;
+                }
+            }
+            
+            // ALWAYS recalculate pricing when dates, room, or quantity are provided
+            // This ensures the price is always correct based on current values
+            // Force recalculation if dates are provided (even if they appear unchanged)
+            $shouldRecalculate = $datesChanged || $roomChanged || $quantityChanged || 
+                                 ($request->has('checkin_date') && $request->has('checkout_date')) ||
+                                 ($booking->total_nights != $newTotalNights);
+            
+            // Always recalculate to ensure prices are correct
+            if ($shouldRecalculate || true) { // Force recalculation every time
+                $firstRoom = $booking->rooms_data[0] ?? null;
+                if ($firstRoom) {
+                    $pricePerNight = floatval($firstRoom['price'] ?? 0);
+                    $quantity = intval($firstRoom['quantity'] ?? 1);
+                    // Use newTotalNights which was calculated above
+                    $totalNights = intval($newTotalNights);
+                    
+                    // Calculate subtotal: price per night × quantity × total nights
+                    $subtotal = $pricePerNight * $quantity * $totalNights;
+                    $discount = floatval($booking->discount ?? 0);
+                    
+                    // No tax calculation - grand total = subtotal - discount
+                    $tax = 0;
+                    $grandTotal = $subtotal - $discount;
+                    
+                    // Update booking with new calculated values
+                    $booking->subtotal = round($subtotal, 2);
+                    $booking->tax = 0;
+                    $booking->grand_total = round($grandTotal, 2);
+                }
+            }
+            
+            // Update admin note
+            if ($request->has('admin_note')) {
+                $booking->admin_note = $validated['admin_note'];
+            }
+            
+            $booking->save();
+            
+            DB::commit();
+            
+            return redirect()->route('super-admin.bookings.index')
+                ->with('success', 'Booking updated successfully');
+                
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Failed to update booking: ' . $e->getMessage());
+        }
+    }
+
+    /**
      * Delete booking
      */
     public function destroy($id)
@@ -111,6 +335,62 @@ class BookingManagementController extends Controller
             ->get();
         
         return response()->json($rooms);
+    }
+
+    /**
+     * Get room availability dates (AJAX)
+     */
+    public function getRoomAvailability($roomId, $bookingId = null)
+    {
+        $room = Room::findOrFail($roomId);
+        
+        // Get room availability dates
+        $availabilityDates = [];
+        if (!empty($room->availability_dates)) {
+            $availabilityDates = is_array($room->availability_dates) 
+                ? $room->availability_dates 
+                : json_decode($room->availability_dates, true);
+        }
+        
+        // Get booked dates (excluding current booking if editing)
+        $bookedDates = [];
+        $bookings = Booking::where('booking_status', '!=', 'cancelled')
+            ->where('id', '!=', $bookingId)
+            ->get();
+        
+        foreach ($bookings as $booking) {
+            $roomsData = is_array($booking->rooms_data) 
+                ? $booking->rooms_data 
+                : json_decode($booking->rooms_data, true);
+            
+            if (!is_array($roomsData)) {
+                continue;
+            }
+            
+            foreach ($roomsData as $roomData) {
+                if (isset($roomData['roomId']) && $roomData['roomId'] == $roomId) {
+                    // Generate all dates in the booking range
+                    $checkin = new \DateTime($booking->checkin_date->format('Y-m-d'));
+                    $checkout = new \DateTime($booking->checkout_date->format('Y-m-d'));
+                    
+                    $currentDate = clone $checkin;
+                    while ($currentDate < $checkout) {
+                        $dateString = $currentDate->format('Y-m-d');
+                        if (!in_array($dateString, $bookedDates)) {
+                            $bookedDates[] = $dateString;
+                        }
+                        $currentDate->modify('+1 day');
+                    }
+                    break;
+                }
+            }
+        }
+        
+        return response()->json([
+            'availability_dates' => $availabilityDates,
+            'booked_dates' => $bookedDates,
+            'has_availability_dates' => !empty($availabilityDates),
+        ]);
     }
 
     /**
@@ -187,12 +467,11 @@ class BookingManagementController extends Controller
                 'hotelPhoto' => $hotelPhoto,
             ]];
 
-            // Calculate pricing
+            // Calculate pricing (no tax)
             $subtotal = $validated['price_per_night'] * $validated['quantity'] * $totalNights;
             $discount = $validated['discount'] ?? 0;
-            $taxPercentage = $validated['tax_percentage'] ?? 15; // Default 15% VAT
-            $tax = ($subtotal - $discount) * ($taxPercentage / 100);
-            $grandTotal = $subtotal - $discount + $tax;
+            $tax = 0; // No tax calculation
+            $grandTotal = $subtotal - $discount;
 
             // Handle file uploads
             $nidFront = null;

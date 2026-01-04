@@ -57,6 +57,12 @@
     .action-btn-danger:hover {
         background: #dc2626 !important;
     }
+    .action-btn-warning {
+        background: #f59e0b !important;
+    }
+    .action-btn-warning:hover {
+        background: #d97706 !important;
+    }
 </style>
 <div class="nk-content">
     <div class="container-fluid">
@@ -171,6 +177,9 @@
                                         </a>
                                         <a href="{{ route('super-admin.bookings.show', $booking->id) }}" class="action-btn action-btn-primary" title="View Details">
                                             <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('super-admin.bookings.edit', $booking->id) }}" class="action-btn action-btn-warning" title="Edit Booking">
+                                            <i class="fas fa-edit"></i>
                                         </a>
                                         <button type="button" class="action-btn action-btn-danger" onclick="deleteBooking({{ $booking->id }})" title="Delete">
                                             <i class="fas fa-trash"></i>

@@ -312,10 +312,6 @@
                             <td class="text-right text-danger"><strong>-BDT {{ number_format($booking->discount, 2) }}</strong></td>
                         </tr>
                         @endif
-                        <tr>
-                            <td>Tax (15%):</td>
-                            <td class="text-right"><strong>BDT {{ number_format($booking->tax, 2) }}</strong></td>
-                        </tr>
                         <tr style="background: #f8f9fa; font-size: 16px;">
                             <td><strong>Grand Total:</strong></td>
                             <td class="text-right"><strong style="color: #90278e;">BDT {{ number_format($booking->grand_total, 2) }}</strong></td>

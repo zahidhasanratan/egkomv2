@@ -195,10 +195,6 @@
                             <td>Subtotal:</td>
                             <td class="text-right"><strong>BDT {{ number_format($booking->subtotal, 2) }}</strong></td>
                         </tr>
-                        <tr>
-                            <td>Tax (15%):</td>
-                            <td class="text-right"><strong>BDT {{ number_format($booking->tax, 2) }}</strong></td>
-                        </tr>
                         <tr style="background: #f8f9fa; font-size: 16px;">
                             <td><strong>Grand Total:</strong></td>
                             <td class="text-right"><strong style="color: #90278e;">BDT {{ number_format($booking->grand_total, 2) }}</strong></td>

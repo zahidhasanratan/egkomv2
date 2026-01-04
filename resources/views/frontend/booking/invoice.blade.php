@@ -708,7 +708,7 @@
                             @endif
                             <tr class="grand-total">
                                 <td colspan="8" class="text-right"><strong>Grand Total:</strong></td>
-                                <td class="text-right"><strong>BDT {{ number_format($booking->subtotal - $booking->discount, 2) }}</strong></td>
+                                <td class="text-right"><strong>BDT {{ number_format($booking->grand_total, 2) }}</strong></td>
                             </tr>
                         </tfoot>
                     </table>

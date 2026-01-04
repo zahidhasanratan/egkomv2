@@ -51,6 +51,12 @@
     .action-btn-primary:hover {
         background: #7c3aed !important;
     }
+    .action-btn-warning {
+        background: #f59e0b !important;
+    }
+    .action-btn-warning:hover {
+        background: #d97706 !important;
+    }
     .card {
         border-radius: 8px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -192,6 +198,9 @@
                                         </a>
                                         <a href="{{ route('vendor.bookings.show', $booking->id) }}" class="action-btn action-btn-primary" title="View Details">
                                             <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('vendor.bookings.edit', $booking->id) }}" class="action-btn action-btn-warning" title="Edit Booking">
+                                            <i class="fas fa-edit"></i>
                                         </a>
                                     </div>
                                 </td>

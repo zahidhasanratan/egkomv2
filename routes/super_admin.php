@@ -92,6 +92,8 @@ Route::prefix('super-admin')->group(function () {
         // Booking Management
         Route::get('/bookings', [\App\Http\Controllers\Admin\BookingManagementController::class, 'index'])->name('super-admin.bookings.index');
         Route::get('/bookings/{id}', [\App\Http\Controllers\Admin\BookingManagementController::class, 'show'])->name('super-admin.bookings.show');
+        Route::get('/bookings/{id}/edit', [\App\Http\Controllers\Admin\BookingManagementController::class, 'edit'])->name('super-admin.bookings.edit');
+        Route::put('/bookings/{id}', [\App\Http\Controllers\Admin\BookingManagementController::class, 'update'])->name('super-admin.bookings.update');
         Route::put('/bookings/{id}/status', [\App\Http\Controllers\Admin\BookingManagementController::class, 'updateStatus'])->name('super-admin.bookings.updateStatus');
         Route::put('/bookings/{id}/currently-staying', [\App\Http\Controllers\Admin\BookingManagementController::class, 'updateCurrentlyStaying'])->name('super-admin.bookings.updateCurrentlyStaying');
         Route::delete('/bookings/{id}', [\App\Http\Controllers\Admin\BookingManagementController::class, 'destroy'])->name('super-admin.bookings.destroy');
@@ -100,6 +102,7 @@ Route::prefix('super-admin')->group(function () {
         Route::get('/bookings/manual/create', [\App\Http\Controllers\Admin\BookingManagementController::class, 'createManualOrder'])->name('super-admin.bookings.manual.create');
         Route::post('/bookings/manual/store', [\App\Http\Controllers\Admin\BookingManagementController::class, 'storeManualOrder'])->name('super-admin.bookings.manual.store');
         Route::get('/bookings/manual/rooms/{hotelId}', [\App\Http\Controllers\Admin\BookingManagementController::class, 'getRooms'])->name('super-admin.bookings.manual.rooms');
+        Route::get('/bookings/room/{roomId}/availability/{bookingId?}', [\App\Http\Controllers\Admin\BookingManagementController::class, 'getRoomAvailability'])->name('super-admin.bookings.room.availability');
 
     });
     /*Admin Panel Ended */
