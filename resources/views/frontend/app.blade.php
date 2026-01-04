@@ -39,7 +39,12 @@
 <body id="main-homepage">
 @php
     // Get active hotels once for use in suggestions dropdown
-    $activeHotelsForSuggestions = \App\Models\Hotel::where('approve', 1)->orderBy('description', 'asc')->get();
+    $activeHotelsForSuggestions = \App\Models\Hotel::where('approve', 1)
+        ->with(['rooms' => function($query) {
+            $query->where('is_active', true)->select('id', 'hotel_id', 'name', 'description');
+        }])
+        ->orderBy('description', 'asc')
+        ->get();
 @endphp
 <div class="wrapper">
 
@@ -96,20 +101,35 @@
                                 type="text"
                                 id="mobile-destination-input"
                                 name="destination"
-                                placeholder="Search destinations"
+                                placeholder="Search by destination"
                                 onfocus="showMobileSuggestions()"
                                 onblur="hideMobileSuggestions()"
+                                onkeyup="filterMobileSuggestionsByType()"
                             >
+                            <input type="hidden" id="search-type-hidden-mobile" name="search_type" value="">
                             <div class="suggestions" id="mobile-suggestions-list">
                                 <p class="suggestion-title">Suggested destinations</p>
                                         @forelse($activeHotelsForSuggestions as $hotel)
-                                            <div class="suggestion-item" data-hotel-name="{{ $hotel->description }}">
-                                                @php
-                                                    $featuredPhotos = json_decode($hotel->featured_photo, true);
-                                                    $nearbyAreas = is_string($hotel->custom_nearby_areas)
-                                                        ? json_decode($hotel->custom_nearby_areas, true)
-                                                        : $hotel->custom_nearby_areas;
-                                                @endphp
+                                            @php
+                                                $featuredPhotos = json_decode($hotel->featured_photo, true);
+                                                $nearbyAreas = is_string($hotel->custom_nearby_areas)
+                                                    ? json_decode($hotel->custom_nearby_areas, true)
+                                                    : $hotel->custom_nearby_areas;
+                                                $propertyCategory = $hotel->property_category ?? 'Hotel';
+                                                $propertyType = $hotel->property_type ?? '';
+                                                // Get room names for this hotel
+                                                $roomNames = $hotel->rooms->pluck('name')->implode(', ');
+                                                $roomDescriptions = $hotel->rooms->pluck('description')->filter()->implode(', ');
+                                            @endphp
+                                            <div class="suggestion-item" 
+                                                 data-hotel-name="{{ $hotel->description }}"
+                                                 data-location="{{ $hotel->address ?? '' }}"
+                                                 data-nearby="{{ !empty($nearbyAreas) ? implode(', ', $nearbyAreas) : '' }}"
+                                                 data-category="{{ strtolower($propertyCategory) }}"
+                                                 data-type="{{ strtolower($propertyType) }}"
+                                                 data-room-names="{{ strtolower($roomNames) }}"
+                                                 data-room-descriptions="{{ strtolower($roomDescriptions) }}"
+                                                 data-search-type="all">
                                                 @if (!empty($featuredPhotos[0]))
                                                     <img src="{{ asset($featuredPhotos[0]) }}" alt="{{ $hotel->description }}" class="suggestion-icon" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
                                                 @else
@@ -127,12 +147,15 @@
                                                             Available for booking
                                                         @endif
                                                     </span>
+                                                    @if($propertyCategory)
+                                                        <br><small style="color: #666;">{{ $propertyCategory }}@if($propertyType) - {{ $propertyType }}@endif</small>
+                                                    @endif
                                                 </div>
                                             </div>
                                 @empty
                                     <div class="suggestion-item">
                                         <div class="suggestion-text">
-                                            <span>No hotels available</span>
+                                            <span>No destinations available</span>
                                         </div>
                                     </div>
                                 @endforelse
@@ -270,26 +293,41 @@
                         <div class="booking-search-box">
                             <form id="desktop-search-form" action="{{ route('search') }}" method="GET">
                             <div class="search-bar">
-                                <div class="search-container search-item search-box-first">
+                                <div class="search-container search-item search-box-first" style="position: relative;">
                                     <label for="desktop-destination-input">Where</label>
                                     <input
                                         type="text"
                                         id="desktop-destination-input"
                                         name="destination"
-                                        placeholder="Search by hotel"
+                                        placeholder="Search by destination"
                                         onfocus="showDesktopSuggestions()"
                                         onblur="hideDesktopSuggestions()"
+                                        onkeyup="filterSuggestionsByType()"
                                     >
+                                    <input type="hidden" id="search-type-hidden" name="search_type" value="">
                                     <div class="suggestions" id="desktop-suggestions-list">
                                         <p class="suggestion-title">Suggested destinations</p>
                                         @forelse($activeHotelsForSuggestions as $hotel)
-                                            <div class="suggestion-item" data-hotel-name="{{ $hotel->description }}">
-                                                @php
-                                                    $featuredPhotos = json_decode($hotel->featured_photo, true);
-                                                    $nearbyAreas = is_string($hotel->custom_nearby_areas)
-                                                        ? json_decode($hotel->custom_nearby_areas, true)
-                                                        : $hotel->custom_nearby_areas;
-                                                @endphp
+                                            @php
+                                                $featuredPhotos = json_decode($hotel->featured_photo, true);
+                                                $nearbyAreas = is_string($hotel->custom_nearby_areas)
+                                                    ? json_decode($hotel->custom_nearby_areas, true)
+                                                    : $hotel->custom_nearby_areas;
+                                                $propertyCategory = $hotel->property_category ?? 'Hotel';
+                                                $propertyType = $hotel->property_type ?? '';
+                                                // Get room names for this hotel
+                                                $roomNames = $hotel->rooms->pluck('name')->implode(', ');
+                                                $roomDescriptions = $hotel->rooms->pluck('description')->filter()->implode(', ');
+                                            @endphp
+                                            <div class="suggestion-item" 
+                                                 data-hotel-name="{{ $hotel->description }}"
+                                                 data-location="{{ $hotel->address ?? '' }}"
+                                                 data-nearby="{{ !empty($nearbyAreas) ? implode(', ', $nearbyAreas) : '' }}"
+                                                 data-category="{{ strtolower($propertyCategory) }}"
+                                                 data-type="{{ strtolower($propertyType) }}"
+                                                 data-room-names="{{ strtolower($roomNames) }}"
+                                                 data-room-descriptions="{{ strtolower($roomDescriptions) }}"
+                                                 data-search-type="all">
                                                 @if (!empty($featuredPhotos[0]))
                                                     <img src="{{ asset($featuredPhotos[0]) }}" alt="{{ $hotel->description }}" class="suggestion-icon" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
                                                 @else
@@ -307,12 +345,15 @@
                                                             Available for booking
                                                         @endif
                                                     </span>
+                                                    @if($propertyCategory)
+                                                        <br><small style="color: #666;">{{ $propertyCategory }}@if($propertyType) - {{ $propertyType }}@endif</small>
+                                                    @endif
                                                 </div>
                                             </div>
                                         @empty
                                             <div class="suggestion-item">
                                                 <div class="suggestion-text">
-                                                    <span>No hotels available</span>
+                                                    <span>No destinations available</span>
                                                 </div>
                                             </div>
                                         @endforelse
@@ -1534,7 +1575,191 @@
                 }
             });
         });
+
+        // Auto-detect search type based on input
+        const desktopInput = document.getElementById('desktop-destination-input');
+        const desktopSearchTypeHidden = document.getElementById('search-type-hidden');
+        if (desktopInput && desktopSearchTypeHidden) {
+            desktopInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const detectedType = detectSearchType(searchTerm);
+                desktopSearchTypeHidden.value = detectedType;
+            });
+        }
+
+        const mobileInput = document.getElementById('mobile-destination-input');
+        const mobileSearchTypeHidden = document.getElementById('search-type-hidden-mobile');
+        if (mobileInput && mobileSearchTypeHidden) {
+            mobileInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const detectedType = detectSearchType(searchTerm);
+                mobileSearchTypeHidden.value = detectedType;
+            });
+        }
     });
+
+    // Function to show desktop suggestions
+    function showDesktopSuggestions() {
+        const suggestionsList = document.getElementById('desktop-suggestions-list');
+        if (suggestionsList) {
+            suggestionsList.style.display = 'block';
+            filterSuggestionsByType();
+        }
+    }
+
+    // Function to hide desktop suggestions
+    function hideDesktopSuggestions() {
+        setTimeout(() => {
+            const suggestionsList = document.getElementById('desktop-suggestions-list');
+            if (suggestionsList) {
+                suggestionsList.style.display = 'none';
+            }
+        }, 200);
+    }
+
+    // Function to auto-detect search type based on search term
+    function detectSearchType(searchTerm) {
+        if (!searchTerm) return '';
+        
+        const term = searchTerm.toLowerCase();
+        
+        // Check for apartment keywords
+        const apartmentKeywords = ['apartment', 'apt', 'flat', 'unit'];
+        if (apartmentKeywords.some(keyword => term.includes(keyword))) {
+            return 'apartment';
+        }
+        
+        // Check for room keywords
+        const roomKeywords = ['room', 'bedroom', 'bed', 'suite', 'chamber'];
+        if (roomKeywords.some(keyword => term.includes(keyword))) {
+            return 'room';
+        }
+        
+        // Default to location if no specific keywords found
+        return 'location';
+    }
+
+    // Function to filter suggestions by search type (using auto-detection)
+    function filterSuggestionsByType() {
+        const searchInput = document.getElementById('desktop-destination-input');
+        const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+        const searchType = detectSearchType(searchTerm);
+        const suggestions = document.querySelectorAll('#desktop-suggestions-list .suggestion-item');
+
+        suggestions.forEach(item => {
+            let shouldShow = false;
+            const category = (item.getAttribute('data-category') || '').toLowerCase();
+            const type = (item.getAttribute('data-type') || '').toLowerCase();
+            const location = (item.getAttribute('data-location') || '').toLowerCase();
+            const nearby = (item.getAttribute('data-nearby') || '').toLowerCase();
+            const hotelName = (item.getAttribute('data-hotel-name') || '').toLowerCase();
+
+            // Get room names and descriptions (always check these)
+            const roomNames = (item.getAttribute('data-room-names') || '').toLowerCase();
+            const roomDescriptions = (item.getAttribute('data-room-descriptions') || '').toLowerCase();
+            const hasRoomMatch = roomNames.includes(searchTerm) || roomDescriptions.includes(searchTerm);
+            
+            // Filter based on auto-detected search type
+            if (searchType === 'apartment') {
+                // Show if property category is apartment or type contains apartment
+                shouldShow = (category === 'apartment' || type.includes('apartment')) &&
+                            (hotelName.includes(searchTerm) || 
+                             location.includes(searchTerm) || 
+                             nearby.includes(searchTerm) ||
+                             searchTerm === '');
+            } else if (searchType === 'room') {
+                // Show if:
+                // 1. Room name or description matches search term (PRIORITY), OR
+                // 2. Property type/category matches room search, OR
+                // 3. Hotel name/location matches (for general room searches)
+                shouldShow = hasRoomMatch ||
+                            (type.includes('room') || type.includes('bed') || category === 'hotel' || category === 'resort') &&
+                            (hotelName.includes(searchTerm) || 
+                             location.includes(searchTerm) || 
+                             nearby.includes(searchTerm) ||
+                             searchTerm === '');
+            } else {
+                // Default: location search - show all that match location, nearby areas, address, OR room names
+                // This allows finding rooms even when user hasn't typed "room" keyword yet
+                shouldShow = location.includes(searchTerm) || 
+                            nearby.includes(searchTerm) || 
+                            hotelName.includes(searchTerm) ||
+                            hasRoomMatch ||
+                            searchTerm === '';
+            }
+
+            if (shouldShow) {
+                item.style.display = 'flex';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
+    // Function to show mobile suggestions
+    function showMobileSuggestions() {
+        const suggestionsList = document.getElementById('mobile-suggestions-list');
+        if (suggestionsList) {
+            suggestionsList.style.display = 'block';
+            filterMobileSuggestionsByType();
+        }
+    }
+
+    // Function to hide mobile suggestions
+    function hideMobileSuggestions() {
+        setTimeout(() => {
+            const suggestionsList = document.getElementById('mobile-suggestions-list');
+            if (suggestionsList) {
+                suggestionsList.style.display = 'none';
+            }
+        }, 200);
+    }
+
+    // Function to filter mobile suggestions by search type
+    function filterMobileSuggestionsByType() {
+        const searchInput = document.getElementById('mobile-destination-input');
+        const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+        const searchType = detectSearchType(searchTerm);
+        const suggestions = document.querySelectorAll('#mobile-suggestions-list .suggestion-item');
+
+        suggestions.forEach(item => {
+            let shouldShow = false;
+            const category = (item.getAttribute('data-category') || '').toLowerCase();
+            const type = (item.getAttribute('data-type') || '').toLowerCase();
+            const location = (item.getAttribute('data-location') || '').toLowerCase();
+            const nearby = (item.getAttribute('data-nearby') || '').toLowerCase();
+            const hotelName = (item.getAttribute('data-hotel-name') || '').toLowerCase();
+
+            // Filter based on auto-detected search type
+            if (searchType === 'apartment') {
+                // Show if property category is apartment or type contains apartment
+                shouldShow = (category === 'apartment' || type.includes('apartment')) &&
+                            (hotelName.includes(searchTerm) || 
+                             location.includes(searchTerm) || 
+                             nearby.includes(searchTerm) ||
+                             searchTerm === '');
+            } else if (searchType === 'room') {
+                // Show if type contains room or bed
+                shouldShow = (type.includes('room') || type.includes('bed') || category === 'hotel' || category === 'resort') &&
+                            (hotelName.includes(searchTerm) || 
+                             location.includes(searchTerm) || 
+                             nearby.includes(searchTerm) ||
+                             searchTerm === '');
+            } else {
+                // Default: location search - show all that match location, nearby areas, or address
+                shouldShow = location.includes(searchTerm) || 
+                            nearby.includes(searchTerm) || 
+                            hotelName.includes(searchTerm) ||
+                            searchTerm === '';
+            }
+
+            if (shouldShow) {
+                item.style.display = 'flex';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
 </script>
 
 </body>

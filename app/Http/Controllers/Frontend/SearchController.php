@@ -15,6 +15,13 @@ class SearchController extends Controller
     {
         // Get search parameters
         $destination = $request->input('destination', '');
+        $searchType = $request->input('search_type', '');
+        
+        // Auto-detect search type if not provided
+        if (empty($searchType) && !empty($destination)) {
+            $searchType = $this->detectSearchType($destination);
+        }
+        
         $checkin = $request->input('checkin', '');
         $checkout = $request->input('checkout', '');
         $adults = (int) $request->input('adults', 0);
@@ -69,12 +76,57 @@ class SearchController extends Controller
         // Start with approved hotels only
         $query = Hotel::where('approve', 1);
         
+        // Filter by search type (location, apartment, room)
+        if ($searchType === 'apartment') {
+            // Filter for apartments only
+            $query->where(function($q) {
+                $q->where('property_category', 'Apartment')
+                  ->orWhere('property_type', 'like', '%Apartment%')
+                  ->orWhere('property_type', 'Only Apartment');
+            });
+        } elseif ($searchType === 'room') {
+            // For room search, we need to check if hotels have rooms matching the search term
+            // First, get hotel IDs that have matching rooms
+            $matchingRoomHotelIds = Room::where('is_active', true)
+                ->where(function($q) use ($destination) {
+                    $q->where('name', 'like', '%' . $destination . '%')
+                      ->orWhere('description', 'like', '%' . $destination . '%');
+                })
+                ->pluck('hotel_id')
+                ->unique()
+                ->toArray();
+            
+            // Filter hotels that either:
+            // 1. Have rooms matching the search term, OR
+            // 2. Match the property category/type for rooms
+            $query->where(function($q) use ($matchingRoomHotelIds) {
+                if (!empty($matchingRoomHotelIds)) {
+                    $q->whereIn('id', $matchingRoomHotelIds);
+                }
+                $q->orWhere(function($subQ) {
+                    $subQ->whereIn('property_category', ['Hotel', 'Resort'])
+                         ->orWhere('property_type', 'like', '%room%')
+                         ->orWhere('property_type', 'like', '%Room%')
+                         ->orWhere('property_type', 'like', '%Bed%')
+                         ->orWhere('property_type', 'like', '%bed%')
+                         ->orWhere('property_type', 'Only room')
+                         ->orWhere('property_type', 'Only Bed');
+                });
+            });
+        }
+        // For 'location' type, no additional filtering needed - show all approved properties
+        
         // Filter by destination (search in description, address, nearby areas)
         if (!empty($destination)) {
-            $query->where(function($q) use ($destination) {
+            $query->where(function($q) use ($destination, $searchType) {
                 $q->where('description', 'like', '%' . $destination . '%')
                   ->orWhere('address', 'like', '%' . $destination . '%')
                   ->orWhereJsonContains('custom_nearby_areas', $destination);
+                
+                // For room search, also check if hotel description matches (in case room name is in hotel description)
+                if ($searchType === 'room') {
+                    // Already handled above with room matching
+                }
             });
         }
         
@@ -304,6 +356,7 @@ class SearchController extends Controller
             'totalHotelsCount',
             'totalRoomsCount',
             'destination',
+            'searchType',
             'checkin',
             'checkout',
             'adults',
@@ -312,5 +365,36 @@ class SearchController extends Controller
             'pets',
             'totalGuests'
         ));
+    }
+
+    /**
+     * Auto-detect search type based on search term
+     */
+    private function detectSearchType($searchTerm)
+    {
+        if (empty($searchTerm)) {
+            return 'location';
+        }
+        
+        $term = strtolower($searchTerm);
+        
+        // Check for apartment keywords
+        $apartmentKeywords = ['apartment', 'apt', 'flat', 'unit'];
+        foreach ($apartmentKeywords as $keyword) {
+            if (strpos($term, $keyword) !== false) {
+                return 'apartment';
+            }
+        }
+        
+        // Check for room keywords
+        $roomKeywords = ['room', 'bedroom', 'bed', 'suite', 'chamber'];
+        foreach ($roomKeywords as $keyword) {
+            if (strpos($term, $keyword) !== false) {
+                return 'room';
+            }
+        }
+        
+        // Default to location
+        return 'location';
     }
 }
