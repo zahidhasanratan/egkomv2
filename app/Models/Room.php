@@ -12,6 +12,23 @@ class Room extends Model
         'total_persons', 'total_rooms', 'total_washrooms', 'total_beds', 'size', 'wifi_details', 
         'description', 'appliances', 'furniture', 'amenities', 'cancellation_policy', 'display_options', 'is_active', 'status',
         'availability_dates',
+        // Additional Bed Policy fields
+        'additional_bed_available', 'bed_fee_type', 'bed_fee_amount', 'bed_fee_currency', 'bed_fee_unit', 'bed_note',
+        // Children & Extra Guest Policy fields
+        'children_guest_policy_available', 'children_guest_policy_type', 'children_guest_fee_amount',
+        'children_guest_fee_currency', 'children_guest_fee_unit', 'children_guest_note',
+        // Laundry Service fields
+        'laundry_service', 'laundry_service_type', 'laundry_fee_amount', 'laundry_fee_currency',
+        'laundry_fee_unit', 'laundry_note',
+        // Housekeeping Service fields
+        'housekeeping_service', 'housekeeping_service_type', 'housekeeping_fee_amount',
+        'housekeeping_fee_currency', 'housekeeping_fee_unit', 'housekeeping_note',
+        // Parking fields
+        'parking_type', 'parking_fee_amount', 'parking_fee_currency', 'parking_note',
+        // Pet Policy fields
+        'pet_type', 'pet_fee', 'pet_complementary_note', 'pet_paid_note',
+        // Meal Options fields
+        'meal_complementary_note', 'meal_paid_note',
     ];
 
     protected $casts = [

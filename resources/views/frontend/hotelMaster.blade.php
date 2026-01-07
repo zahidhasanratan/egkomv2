@@ -1474,64 +1474,6 @@
 
 
 
-<!-- Desktop view on scroll Cart button -->
-<div class="cart-container-dv" id="cartIcon" onclick="toggleCart(event)">
-    <div class="cart-badge-dv">2</div>
-    <i class="fa fa-shopping-cart"></i>
-    <div class="cart-text-dv">Booking<br> Cart</div>
-</div>
-
-<div class="cart-box" id="cartBox">
-    <div  id="cart-bar" class="cart-visible" style="z-index: 1;">
-        <div class="backdrop"></div>
-        <div class="cart-wrapper">
-            <div class="cart-header">
-                <h2>Pricing Summary</h2>
-            </div>
-            <div class="rooms-selection-container">
-                <div class="rooms">
-                    <p class="text-center text-primary"> Added Rooms </p>
-                    <div>
-                        <div class="room">
-                            <div class="room-content">
-                                <div class="room-name"> Twin Room </div>
-                                <div class="pax-and-fare">
-                                    <span class="fare"> BDT 4,392 </span>
-                                </div>
-                            </div>
-                            <div class="delete-button"></div>
-                        </div>
-                        <!---->
-                    </div>
-                </div>
-
-                <div class="rooms">
-                    <div>
-                        <div class="room">
-                            <div class="room-content">
-                                <div class="room-name"> Queen Room </div>
-                                <div class="pax-and-fare">
-                                    <span class="fare"> BDT 7,500 </span>
-                                </div>
-                            </div>
-                            <div class="delete-button"></div>
-                        </div>
-                        <!---->
-                    </div>
-                </div>
-
-
-                <div class="action">
-                    <div class="total-amount">
-                        <span class="amount">Total=  BDT 4,392 </span>
-                        <p class="tax-tag"> Fee or Tax Will show ate the check out page (if any) </p>
-                    </div>
-                    <a href="hotel-cart.html"> <button type="button" class="btn btn-secondary total-con btn-block"> Continue </button></a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 
@@ -2018,43 +1960,6 @@
 </script>
 
 
-<!-- cart button on scroll top to bottomm -->
-<script>
-    window.addEventListener("scroll", function() {
-        let cartIcon = document.getElementById("cartIcon");
-        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-        // Show cart when within 500px of the top (header)
-        if (scrollTop >= 900) {
-            cartIcon.style.display = "block";
-            setTimeout(() => { cartIcon.style.opacity = "1"; }, 10); // Smooth fade-in
-        } else {
-            cartIcon.style.opacity = "0";
-            setTimeout(() => { cartIcon.style.display = "none"; }, 300); // Hide after fade-out
-        }
-    });
-
-    function toggleCart(event) {
-        event.stopPropagation();
-        let cartBox = document.getElementById("cartBox");
-        if (cartBox.classList.contains("show")) {
-            cartBox.classList.remove("show");
-            setTimeout(() => { cartBox.style.display = "none"; }, 300);
-        } else {
-            cartBox.style.display = "block";
-            setTimeout(() => { cartBox.classList.add("show"); }, 10);
-        }
-    }
-
-    document.addEventListener("click", function(event) {
-        let cartBox = document.getElementById("cartBox");
-        let cartIcon = document.getElementById("cartIcon");
-        if (!cartBox.contains(event.target) && !cartIcon.contains(event.target)) {
-            cartBox.classList.remove("show");
-            setTimeout(() => { cartBox.style.display = "none"; }, 300);
-        }
-    });
-</script>
 
 <!-- Global Booking Cart JavaScript -->
 <script>

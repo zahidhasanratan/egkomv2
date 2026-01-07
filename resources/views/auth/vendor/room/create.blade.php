@@ -53,6 +53,9 @@
                                         <li class="nav-item">
                                             <a class="nav-link" data-bs-toggle="tab" href="#Photos">Room Photos</a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#Availability">Room Availability</a>
+                                        </li>
                                     </ul>
 
                                     <div class="tab-content">
@@ -177,42 +180,6 @@
                                                     </div>
                                                 </div>
 
-                                                <!-- Room Availability Calendar -->
-                                                <div class="col-md-12 col-lg-12 col-xxl-12">
-                                                    <div class="row gy-4">
-                                                        <div class="price-card-room">
-                                                            <h3 class="can-tittle">Room Availability</h3>
-                                                            <p class="text-muted" style="font-size: 14px; margin-top: -10px;">Select dates when this room will be available for booking. The room will only appear on the website on selected dates.</p>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Select Available Dates</label>
-                                                                <input type="hidden" id="availability_dates_hidden" name="availability_dates" value="{{ old('availability_dates') }}">
-                                                                <input type="text" class="form-control" id="availability_dates_display" placeholder="No dates selected yet. Select dates from the calendar below." readonly style="margin-bottom: 15px; background-color: #f8f9fa; border: 1px solid #e0e0e0; padding: 12px; font-size: 14px; min-height: 45px;">
-                                                                <small class="form-text text-muted" style="display: block; margin-bottom: 15px; color: #6c757d;">
-                                                                    <strong>How to select dates:</strong><br>
-                                                                    • <strong>Drag</strong> from one date to another to select a range<br>
-                                                                    • <strong>Click</strong> individual dates to toggle selection (click again to deselect)<br>
-                                                                    • The room will be available only on selected dates
-                                                                </small>
-                                                                <div id="availability_calendar_wrapper" style="max-width: 100%; margin: 20px auto; display: block; padding: 20px; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"></div>
-                                                                <div style="margin-top: 15px; display: flex; gap: 10px; align-items: center;">
-                                                                    <button type="button" id="clear_all_dates" class="btn btn-sm btn-secondary" style="background: #6c757d; color: white; border: none; padding: 8px 20px;">
-                                                                        <i class="fas fa-times"></i> Clear All
-                                                                    </button>
-                                                                    <button type="button" id="apply_dates" class="btn btn-sm btn-primary" style="background: #90278e; color: white; border: none; padding: 8px 20px;">
-                                                                        <i class="fas fa-check"></i> Apply Selection
-                                                                    </button>
-                                                                    <span id="selected_dates_count" style="margin-left: 10px; color: #90278e; font-weight: bold;"></span>
-                                                                </div>
-                                                                @error('availability_dates')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                                @enderror
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
                                                 <div class="col-md-12 col-lg-12 col-xxl-3">
                                                     <div class="form-group">
                                                         <label class="form-label" for="default-textarea">Room Description</label>
@@ -267,26 +234,6 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-6 col-lg-2 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label">Total Beds</label>
-                                                        <div class="counter-wrapper">
-                                                            <div class="counter-card">
-                                                                <div>
-                                                                    <div class="counter">
-                                                                        <button type="button" class="btn decrease-male">-</button>
-                                                                        <span id="totalBeds" class="count male-count">{{ old('total_beds', 0) }}</span>
-                                                                        <input type="hidden" name="total_beds" id="totalBedsInput" value="{{ old('total_beds', 0) }}">
-                                                                        <button type="button" class="btn increase-male">+</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        @error('total_beds')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
 
                                             </div>
 
@@ -346,31 +293,38 @@
                                                     </div>
 
                                                     <!-- Bed Details -->
-                                                    <h5 class="mt-4 mb-2"><strong>Bed Details</strong></h5>
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <label class="form-label">Bed Type</label>
-                                                            <select class="form-control" name="room_info[bed_type]">
-                                                                <option value="">Select Bed Type</option>
-                                                                <option value="King" {{ old('room_info.bed_type') == 'King' ? 'selected' : '' }}>King</option>
-                                                                <option value="Queen" {{ old('room_info.bed_type') == 'Queen' ? 'selected' : '' }}>Queen</option>
-                                                                <option value="Twin" {{ old('room_info.bed_type') == 'Twin' ? 'selected' : '' }}>Twin</option>
-                                                                <option value="Single" {{ old('room_info.bed_type') == 'Single' ? 'selected' : '' }}>Single</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <label class="form-label">Number of Beds</label>
-                                                            <input type="number" class="form-control" name="room_info[number_of_beds]" value="{{ old('room_info.number_of_beds', '') }}" placeholder="0" min="0">
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <label class="form-label">Custom Bed Type</label>
-                                                            <div class="input-group">
-                                                                <input type="text" class="form-control" id="custom-bed-type-input" placeholder="Enter custom bed type">
-                                                                <button type="button" class="btn btn-primary btn-sm" id="add-bed-type-btn">Add</button>
+                                                    <div class="row mt-4">
+                                                        <div class="col-md-12">
+                                                            <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                                <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Bed Details</strong></h5>
+                                                                
+                                                                <!-- Total Beds Counter -->
+                                                                <div class="form-group mb-4">
+                                                                    <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Total Beds</label>
+                                                                    <div class="counter-wrapper" style="max-width: 300px;">
+                                                                        <div class="counter-card">
+                                                                            <div>
+                                                                                <div class="counter">
+                                                                                    <button type="button" class="btn decrease-male" id="bedDecreaseBtn">-</button>
+                                                                                    <span id="totalBeds" class="count male-count">{{ old('total_beds', 0) }}</span>
+                                                                                    <input type="hidden" name="total_beds" id="totalBedsInput" value="{{ old('total_beds', 0) }}">
+                                                                                    <button type="button" class="btn increase-male" id="bedIncreaseBtn">+</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    @error('total_beds')
+                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                    @enderror
+                                                                </div>
+                                                                
+                                                                <!-- Dynamic Bed Details Container -->
+                                                                <div id="bedDetailsContainer" style="margin-top: 20px;">
+                                                                    <!-- Bed detail sections will be dynamically generated here -->
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div id="custom-bed-types-container" class="mt-2"></div>
 
                                                     <!-- Maximum Occupancy -->
                                                     <h5 class="mt-4 mb-2"><strong>Maximum Occupancy</strong></h5>
@@ -423,22 +377,36 @@
                                                     </div>
 
                                                     <!-- Bathroom Details -->
-                                                    <h5 class="mt-4 mb-2"><strong>Bathroom Details</strong></h5>
-                                                    <label><input type="checkbox" name="room_info[bathroom][]" class="checkbox-item-room-info" value="Attached" {{ in_array('Attached', old('room_info.bathroom', [])) ? 'checked' : '' }}> Attached</label><br>
-                                                    <label><input type="checkbox" name="room_info[bathroom][]" class="checkbox-item-room-info" value="Private" {{ in_array('Private', old('room_info.bathroom', [])) ? 'checked' : '' }}> Private</label><br>
-                                                    <label><input type="checkbox" name="room_info[bathroom][]" class="checkbox-item-room-info" value="Shower" {{ in_array('Shower', old('room_info.bathroom', [])) ? 'checked' : '' }}> Shower</label><br>
-                                                    <label><input type="checkbox" name="room_info[bathroom][]" class="checkbox-item-room-info" value="Bathtub" {{ in_array('Bathtub', old('room_info.bathroom', [])) ? 'checked' : '' }}> Bathtub</label><br>
-                                                    <label><input type="checkbox" name="room_info[bathroom][]" class="checkbox-item-room-info" value="Toiletries" {{ in_array('Toiletries', old('room_info.bathroom', [])) ? 'checked' : '' }}> Toiletries</label><br>
-                                                    <label><input type="checkbox" name="room_info[bathroom][]" class="checkbox-item-room-info" value="Hot Water" {{ in_array('Hot Water', old('room_info.bathroom', [])) ? 'checked' : '' }}> Hot Water</label><br>
-                                                    
-                                                    <!-- Custom Bathroom Container -->
-                                                    <div class="custom-bathroom-container mt-3"></div>
-                                                    
-                                                    <!-- Add More Bathroom -->
-                                                    <div class="add-more-section mt-3">
-                                                        <div class="input-group" style="max-width: 400px;">
-                                                            <input type="text" class="form-control" id="custom-bathroom-input" placeholder="Enter custom bathroom feature">
-                                                            <button type="button" class="btn btn-primary btn-sm" id="add-bathroom-btn">Add</button>
+                                                    <div class="row mt-4">
+                                                        <div class="col-md-12">
+                                                            <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                                <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Bathroom Details</strong></h5>
+                                                                
+                                                                <!-- Total Bathroom Counter -->
+                                                                <div class="form-group mb-4">
+                                                                    <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Total Bathroom</label>
+                                                                    <div class="counter-wrapper" style="max-width: 300px;">
+                                                                        <div class="counter-card">
+                                                                            <div>
+                                                                                <div class="counter">
+                                                                                    <button type="button" class="btn decrease-male" id="bathroomDecreaseBtn">-</button>
+                                                                                    <span id="totalBathrooms" class="count male-count">{{ old('total_washrooms', 0) }}</span>
+                                                                                    <input type="hidden" name="total_washrooms" id="totalBathroomsInput" value="{{ old('total_washrooms', 0) }}">
+                                                                                    <button type="button" class="btn increase-male" id="bathroomIncreaseBtn">+</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    @error('total_washrooms')
+                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                    @enderror
+                                                                </div>
+                                                                
+                                                                <!-- Dynamic Bathroom Details Container -->
+                                                                <div id="bathroomDetailsContainer" style="margin-top: 20px;">
+                                                                    <!-- Bathroom detail sections will be dynamically generated here -->
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
 
@@ -489,15 +457,6 @@
                                                         </div>
                                                     </div>
 
-                                                    <!-- Smoking Policy -->
-                                                    <h5 class="mt-4 mb-2"><strong>Smoking Policy</strong></h5>
-                                                    <div class="col-md-4">
-                                                        <select class="form-control" name="room_info[smoking_policy]">
-                                                            <option value="">Select Policy</option>
-                                                            <option value="Smoking Allowed" {{ old('room_info.smoking_policy') == 'Smoking Allowed' ? 'selected' : '' }}>Smoking Allowed</option>
-                                                            <option value="Non-Smoking" {{ old('room_info.smoking_policy') == 'Non-Smoking' ? 'selected' : '' }}>Non-Smoking</option>
-                                                        </select>
-                                                    </div>
                                                 </div>
                                             </div>
                                             <script>
@@ -642,7 +601,40 @@
                                             <!-- Additional Bed Policy & Fee -->
                                             <div class="row mt-3">
                                                 <div class="col-md-12">
-                                                    <h5 class="mb-3"><strong>Additional Bed Policy & Fee</strong></h5>
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Additional Bed Policy & Fee</strong></h5>
+                                                        
+                                                        <div class="form-group mb-4">
+                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Additional Bed Available?</label>
+                                                            <div class="d-flex gap-3">
+                                                                <div class="form-check" style="padding-left: 2rem;">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[additional_bed_available]" id="additional_bed_yes" value="yes" {{ old('additional_info.additional_bed_available', '') == 'yes' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="additional_bed_yes" style="font-weight: 500;">Yes</label>
+                                                                </div>
+                                                                <div class="form-check" style="padding-left: 2rem;">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[additional_bed_available]" id="additional_bed_no" value="no" {{ old('additional_info.additional_bed_available', '') == 'no' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="additional_bed_no" style="font-weight: 500;">No</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div id="additional_bed_fields" style="display: {{ old('additional_info.additional_bed_available', '') == 'yes' ? 'block' : 'none' }}; margin-top: 20px; padding-top: 20px; border-top: 1px solid #dee2e6;">
+                                                            <div class="form-group mb-4">
+                                                                <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Bed Type</label>
+                                                                <div class="d-flex gap-3">
+                                                                    <div class="form-check" style="padding-left: 2rem;">
+                                                                        <input class="form-check-input" type="radio" name="additional_info[bed_fee_type]" id="bed_fee_free" value="free" {{ old('additional_info.bed_fee_type', '') == 'free' ? 'checked' : '' }}>
+                                                                        <label class="form-check-label" for="bed_fee_free" style="font-weight: 500;">Free</label>
+                                                                    </div>
+                                                                    <div class="form-check" style="padding-left: 2rem;">
+                                                                        <input class="form-check-input" type="radio" name="additional_info[bed_fee_type]" id="bed_fee_paid" value="paid" {{ old('additional_info.bed_fee_type', '') == 'paid' ? 'checked' : '' }}>
+                                                                        <label class="form-check-label" for="bed_fee_paid" style="font-weight: 500;">Paid</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div id="bed_fee_amount_fields" style="display: {{ old('additional_info.bed_fee_type', '') == 'paid' ? 'block' : 'none' }}; margin-top: 20px; padding: 15px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
+                                                                <label class="form-label mb-3" style="font-weight: 600; color: #495057;">Fee Details</label>
                                                     <div class="row">
                                                         <div class="col-md-4">
                                                         <div class="form-group">
@@ -660,6 +652,14 @@
                                                             <div class="form-group">
                                                                 <label class="form-label">Per Unit</label>
                                                                 <input type="text" class="form-control" name="additional_info[bed_fee_unit]" value="{{ old('additional_info.bed_fee_unit', 'Per Bed') }}" placeholder="e.g., Per Bed">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="form-group mt-4">
+                                                                <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Note</label>
+                                                                <textarea class="form-control" name="additional_info[bed_note]" rows="3" placeholder="Enter any additional notes about the bed policy" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('additional_info.bed_note', '') }}</textarea>
                                                             </div>
                                                         </div>
                                                             </div>
@@ -669,18 +669,65 @@
                                             <!-- Children & Extra Guest Policy -->
                                             <div class="row mt-4">
                                                 <div class="col-md-12">
-                                                    <h5 class="mb-3"><strong>Children & Extra Guest Policy</strong></h5>
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Children & Extra Guest Policy</strong></h5>
+                                                        
+                                                        <div class="form-group mb-4">
+                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Children & Extra Guest Policy Available?</label>
+                                                            <div class="d-flex gap-3">
+                                                                <div class="form-check" style="padding-left: 2rem;">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[children_guest_policy_available]" id="children_guest_policy_yes" value="yes" {{ old('additional_info.children_guest_policy_available', '') == 'yes' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="children_guest_policy_yes" style="font-weight: 500;">Yes</label>
+                                                                </div>
+                                                                <div class="form-check" style="padding-left: 2rem;">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[children_guest_policy_available]" id="children_guest_policy_no" value="no" {{ old('additional_info.children_guest_policy_available', '') == 'no' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="children_guest_policy_no" style="font-weight: 500;">No</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div id="children_guest_policy_fields" style="display: {{ old('additional_info.children_guest_policy_available', '') == 'yes' ? 'block' : 'none' }}; margin-top: 20px; padding-top: 20px; border-top: 1px solid #dee2e6;">
+                                                            <div class="form-group mb-4">
+                                                                <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Policy Type</label>
+                                                                <div class="d-flex gap-3">
+                                                                    <div class="form-check" style="padding-left: 2rem;">
+                                                                        <input class="form-check-input" type="radio" name="additional_info[children_guest_policy_type]" id="children_guest_complementary" value="complementary" {{ old('additional_info.children_guest_policy_type', '') == 'complementary' ? 'checked' : '' }}>
+                                                                        <label class="form-check-label" for="children_guest_complementary" style="font-weight: 500;">Complementary</label>
+                                                                    </div>
+                                                                    <div class="form-check" style="padding-left: 2rem;">
+                                                                        <input class="form-check-input" type="radio" name="additional_info[children_guest_policy_type]" id="children_guest_paid" value="paid" {{ old('additional_info.children_guest_policy_type', '') == 'paid' ? 'checked' : '' }}>
+                                                                        <label class="form-check-label" for="children_guest_paid" style="font-weight: 500;">Paid</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div id="children_guest_fee_fields" style="display: {{ old('additional_info.children_guest_policy_type', '') == 'paid' ? 'block' : 'none' }}; margin-top: 20px; padding: 15px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
+                                                                <label class="form-label mb-3" style="font-weight: 600; color: #495057;">Fee Details</label>
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                                    <div class="col-md-4">
                                                             <div class="form-group">
-                                                                <label class="form-label">Children Free Age Limit</label>
-                                                                <input type="text" class="form-control" name="additional_info[children_free_age]" value="{{ old('additional_info.children_free_age', '') }}" placeholder="e.g., Under 5 years">
+                                                                            <label class="form-label">Fee Amount</label>
+                                                                            <input type="number" class="form-control" name="additional_info[children_guest_fee_amount]" value="{{ old('additional_info.children_guest_fee_amount', '') }}" placeholder="e.g., 500" min="0" step="0.01">
                                                 </div>
                                             </div>
-                                                        <div class="col-md-6">
+                                                                    <div class="col-md-4">
                                                             <div class="form-group">
-                                                                <label class="form-label">Extra Adult Charge</label>
-                                                                <input type="text" class="form-control" name="additional_info[extra_adult_charge]" value="{{ old('additional_info.extra_adult_charge', '') }}" placeholder="e.g., 500 BDT per adult">
+                                                                            <label class="form-label">Currency</label>
+                                                                            <input type="text" class="form-control" name="additional_info[children_guest_fee_currency]" value="{{ old('additional_info.children_guest_fee_currency', 'BDT') }}" placeholder="e.g., BDT">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-4">
+                                                                        <div class="form-group">
+                                                                            <label class="form-label">Per Unit</label>
+                                                                            <input type="text" class="form-control" name="additional_info[children_guest_fee_unit]" value="{{ old('additional_info.children_guest_fee_unit', 'Per Person') }}" placeholder="e.g., Per Person">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="form-group mt-4">
+                                                                <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Note</label>
+                                                                <textarea class="form-control" name="additional_info[children_guest_note]" rows="3" placeholder="Enter any additional notes about the children & extra guest policy" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('additional_info.children_guest_note', '') }}</textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -690,41 +737,40 @@
                                             <!-- Laundry Service -->
                                             <div class="row mt-4">
                                                 <div class="col-md-12">
-                                                    <h5 class="mb-3"><strong>Laundry Service</strong></h5>
-                                                    <div class="row">
-                                                        <div class="col-md-12 mb-3">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Laundry Service Available?</label>
-                                                                <div class="form-check form-check-inline">
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Laundry Service</strong></h5>
+                                                        
+                                                        <div class="form-group mb-4">
+                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Laundry Service Available?</label>
+                                                            <div class="d-flex gap-3">
+                                                                <div class="form-check" style="padding-left: 2rem;">
                                                                     <input class="form-check-input" type="radio" name="additional_info[laundry_service]" id="laundry_service_yes" value="yes" {{ old('additional_info.laundry_service', '') == 'yes' ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="laundry_service_yes">Yes</label>
+                                                                    <label class="form-check-label" for="laundry_service_yes" style="font-weight: 500;">Yes</label>
                                                                 </div>
-                                                                <div class="form-check form-check-inline">
+                                                                <div class="form-check" style="padding-left: 2rem;">
                                                                     <input class="form-check-input" type="radio" name="additional_info[laundry_service]" id="laundry_service_no" value="no" {{ old('additional_info.laundry_service', '') == 'no' ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="laundry_service_no">No</label>
+                                                                    <label class="form-check-label" for="laundry_service_no" style="font-weight: 500;">No</label>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="row" id="laundry_service_type_container" style="display: {{ old('additional_info.laundry_service', '') == 'yes' ? 'block' : 'none' }};">
-                                                        <div class="col-md-12 mb-3">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Laundry Service Type</label>
-                                                                <div class="form-check form-check-inline">
+                                                        
+                                                        <div id="laundry_service_type_container" style="display: {{ old('additional_info.laundry_service', '') == 'yes' ? 'block' : 'none' }}; margin-top: 20px; padding-top: 20px; border-top: 1px solid #dee2e6;">
+                                                            <div class="form-group mb-4">
+                                                                <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Service Type</label>
+                                                                <div class="d-flex gap-3">
+                                                                    <div class="form-check" style="padding-left: 2rem;">
                                                                     <input class="form-check-input" type="radio" name="additional_info[laundry_service_type]" id="laundry_complementary" value="complementary" {{ old('additional_info.laundry_service_type', '') == 'complementary' ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="laundry_complementary">Complementary</label>
+                                                                        <label class="form-check-label" for="laundry_complementary" style="font-weight: 500;">Complementary</label>
                                                                 </div>
-                                                                <div class="form-check form-check-inline">
+                                                                    <div class="form-check" style="padding-left: 2rem;">
                                                                     <input class="form-check-input" type="radio" name="additional_info[laundry_service_type]" id="laundry_paid" value="paid" {{ old('additional_info.laundry_service_type', '') == 'paid' ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="laundry_paid">Paid</label>
+                                                                        <label class="form-check-label" for="laundry_paid" style="font-weight: 500;">Paid</label>
                                                                 </div>
-                                                                <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="additional_info[laundry_service_type]" id="laundry_not_available" value="not_available" {{ old('additional_info.laundry_service_type', '') == 'not_available' ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="laundry_not_available">Not Available</label>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-md-12" id="laundry_fee_fields" style="display: {{ old('additional_info.laundry_service_type', '') == 'paid' ? 'block' : 'none' }};">
+                                                            
+                                                            <div id="laundry_fee_fields" style="display: {{ old('additional_info.laundry_service_type', '') == 'paid' ? 'block' : 'none' }}; margin-top: 20px; padding: 15px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
+                                                                <label class="form-label mb-3" style="font-weight: 600; color: #495057;">Fee Details</label>
                                                             <div class="row">
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
@@ -744,6 +790,12 @@
                                                                         <input type="text" class="form-control" name="additional_info[laundry_fee_unit]" value="{{ old('additional_info.laundry_fee_unit', 'Per Person') }}" placeholder="e.g., Per Person">
                                                                     </div>
                                                                 </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="form-group mt-4">
+                                                                <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Note</label>
+                                                                <textarea class="form-control" name="additional_info[laundry_note]" rows="3" placeholder="Enter any additional notes about the laundry service" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('additional_info.laundry_note', '') }}</textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -753,41 +805,40 @@
                                             <!-- Housekeeping & Cleaning Policy -->
                                             <div class="row mt-4">
                                                 <div class="col-md-12">
-                                                    <h5 class="mb-3"><strong>Housekeeping & Cleaning Policy</strong></h5>
-                                                    <div class="row">
-                                                        <div class="col-md-12 mb-3">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Housekeeping Service Available?</label>
-                                                                <div class="form-check form-check-inline">
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Housekeeping & Cleaning Policy</strong></h5>
+                                                        
+                                                        <div class="form-group mb-4">
+                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Housekeeping Service Available?</label>
+                                                            <div class="d-flex gap-3">
+                                                                <div class="form-check" style="padding-left: 2rem;">
                                                                     <input class="form-check-input" type="radio" name="additional_info[housekeeping_service]" id="housekeeping_service_yes" value="yes" {{ old('additional_info.housekeeping_service', '') == 'yes' ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="housekeeping_service_yes">Yes</label>
+                                                                    <label class="form-check-label" for="housekeeping_service_yes" style="font-weight: 500;">Yes</label>
                                                                 </div>
-                                                                <div class="form-check form-check-inline">
+                                                                <div class="form-check" style="padding-left: 2rem;">
                                                                     <input class="form-check-input" type="radio" name="additional_info[housekeeping_service]" id="housekeeping_service_no" value="no" {{ old('additional_info.housekeeping_service', '') == 'no' ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="housekeeping_service_no">No</label>
+                                                                    <label class="form-check-label" for="housekeeping_service_no" style="font-weight: 500;">No</label>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="row" id="housekeeping_service_type_container" style="display: {{ old('additional_info.housekeeping_service', '') == 'yes' ? 'block' : 'none' }};">
-                                                        <div class="col-md-12 mb-3">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Housekeeping Service Type</label>
-                                                                <div class="form-check form-check-inline">
+                                                        
+                                                        <div id="housekeeping_service_type_container" style="display: {{ old('additional_info.housekeeping_service', '') == 'yes' ? 'block' : 'none' }}; margin-top: 20px; padding-top: 20px; border-top: 1px solid #dee2e6;">
+                                                            <div class="form-group mb-4">
+                                                                <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Service Type</label>
+                                                                <div class="d-flex gap-3">
+                                                                    <div class="form-check" style="padding-left: 2rem;">
                                                                     <input class="form-check-input" type="radio" name="additional_info[housekeeping_service_type]" id="housekeeping_complementary" value="complementary" {{ old('additional_info.housekeeping_service_type', '') == 'complementary' ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="housekeeping_complementary">Complementary</label>
+                                                                        <label class="form-check-label" for="housekeeping_complementary" style="font-weight: 500;">Complementary</label>
                                                                 </div>
-                                                                <div class="form-check form-check-inline">
+                                                                    <div class="form-check" style="padding-left: 2rem;">
                                                                     <input class="form-check-input" type="radio" name="additional_info[housekeeping_service_type]" id="housekeeping_paid" value="paid" {{ old('additional_info.housekeeping_service_type', '') == 'paid' ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="housekeeping_paid">Paid</label>
+                                                                        <label class="form-check-label" for="housekeeping_paid" style="font-weight: 500;">Paid</label>
                                                                 </div>
-                                                                <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="additional_info[housekeeping_service_type]" id="housekeeping_not_available" value="not_available" {{ old('additional_info.housekeeping_service_type', '') == 'not_available' ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="housekeeping_not_available">Not Available</label>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-md-12" id="housekeeping_fee_fields" style="display: {{ old('additional_info.housekeeping_service_type', '') == 'paid' ? 'block' : 'none' }};">
+                                                            
+                                                            <div id="housekeeping_fee_fields" style="display: {{ old('additional_info.housekeeping_service_type', '') == 'paid' ? 'block' : 'none' }}; margin-top: 20px; padding: 15px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
+                                                                <label class="form-label mb-3" style="font-weight: 600; color: #495057;">Fee Details</label>
                                                             <div class="row">
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
@@ -807,6 +858,12 @@
                                                                         <input type="text" class="form-control" name="additional_info[housekeeping_fee_unit]" value="{{ old('additional_info.housekeeping_fee_unit', 'Per Service') }}" placeholder="e.g., Per Service">
                                                                     </div>
                                                                 </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="form-group mt-4">
+                                                                <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Note</label>
+                                                                <textarea class="form-control" name="additional_info[housekeeping_note]" rows="3" placeholder="Enter any additional notes about the housekeeping service" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('additional_info.housekeeping_note', '') }}</textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -816,32 +873,35 @@
                                             <!-- Check-in & Check-out Policy -->
                                             <div class="row mt-4">
                                                 <div class="col-md-12">
-                                                    <h5 class="mb-3"><strong>Check-in & Check-out Policy</strong></h5>
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Check-in & Check-out Policy</strong></h5>
+                                                        
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label class="form-label">Standard Check-in Time</label>
-                                                                <input type="text" class="form-control" name="additional_info[checkin_time]" value="{{ old('additional_info.checkin_time', '') }}" placeholder="e.g., 2:00 PM">
+                                                                    <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Standard Check-in Time</label>
+                                                                    <input type="text" class="form-control" name="additional_info[checkin_time]" value="{{ old('additional_info.checkin_time', '') }}" placeholder="e.g., 2:00 PM" style="border: 1px solid #dee2e6; border-radius: 6px;">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label class="form-label">Standard Check-out Time</label>
-                                                                <input type="text" class="form-control" name="additional_info[checkout_time]" value="{{ old('additional_info.checkout_time', '') }}" placeholder="e.g., 12:00 PM">
+                                                                    <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Standard Check-out Time</label>
+                                                                    <input type="text" class="form-control" name="additional_info[checkout_time]" value="{{ old('additional_info.checkout_time', '') }}" placeholder="e.g., 12:00 PM" style="border: 1px solid #dee2e6; border-radius: 6px;">
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="row mt-2">
+                                                        <div class="row mt-3">
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label class="form-label">Late Check-out Fee</label>
-                                                                <input type="text" class="form-control" name="additional_info[late_checkout_fee]" value="{{ old('additional_info.late_checkout_fee', '') }}" placeholder="e.g., 500 BDT per hour">
+                                                                    <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Late Check-out Fee</label>
+                                                                    <textarea class="form-control" name="additional_info[late_checkout_fee]" rows="3" placeholder="e.g., 500 BDT per hour" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('additional_info.late_checkout_fee', '') }}</textarea>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label class="form-label">Early Check-in Fee</label>
-                                                                <input type="text" class="form-control" name="additional_info[early_checkin_fee]" value="{{ old('additional_info.early_checkin_fee', '') }}" placeholder="e.g., 500 BDT per hour">
+                                                                    <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Early Check-in Fee</label>
+                                                                    <textarea class="form-control" name="additional_info[early_checkin_fee]" rows="3" placeholder="e.g., 500 BDT per hour" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('additional_info.early_checkin_fee', '') }}</textarea>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -851,33 +911,37 @@
                                             <!-- Security Deposit Requirement -->
                                             <div class="row mt-4">
                                                 <div class="col-md-12">
-                                                    <h5 class="mb-3"><strong>Security Deposit Requirement</strong></h5>
-                                                    <div class="row">
-                                                        <div class="col-md-12 mb-3">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Security Deposit Required?</label>
-                                                                <div class="form-check form-check-inline">
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Security Deposit Requirement</strong></h5>
+                                                        
+                                                        <div class="form-group mb-4">
+                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Security Deposit Required?</label>
+                                                            <div class="d-flex gap-3">
+                                                                <div class="form-check" style="padding-left: 2rem;">
                                                                     <input class="form-check-input" type="radio" name="additional_info[security_deposit_required]" id="security_deposit_yes" value="yes" {{ old('additional_info.security_deposit_required', '') == 'yes' ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="security_deposit_yes">Yes</label>
+                                                                    <label class="form-check-label" for="security_deposit_yes" style="font-weight: 500;">Yes</label>
                                                                 </div>
-                                                                <div class="form-check form-check-inline">
+                                                                <div class="form-check" style="padding-left: 2rem;">
                                                                     <input class="form-check-input" type="radio" name="additional_info[security_deposit_required]" id="security_deposit_no" value="no" {{ old('additional_info.security_deposit_required', '') == 'no' ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="security_deposit_no">No</label>
+                                                                    <label class="form-check-label" for="security_deposit_no" style="font-weight: 500;">No</label>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="row" id="security_deposit_fields_container" style="display: {{ old('additional_info.security_deposit_required', '') == 'yes' ? 'block' : 'none' }};">
+                                                        
+                                                        <div id="security_deposit_fields_container" style="display: {{ old('additional_info.security_deposit_required', '') == 'yes' ? 'block' : 'none' }}; margin-top: 20px; padding-top: 20px; border-top: 1px solid #dee2e6;">
+                                                            <div class="row">
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label class="form-label">Deposit Amount</label>
-                                                                <input type="text" class="form-control" name="additional_info[security_deposit_amount]" value="{{ old('additional_info.security_deposit_amount', '') }}" placeholder="e.g., 5000 BDT">
+                                                                        <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Deposit Amount</label>
+                                                                        <input type="text" class="form-control" name="additional_info[security_deposit_amount]" value="{{ old('additional_info.security_deposit_amount', '') }}" placeholder="e.g., 5000 BDT" style="border: 1px solid #dee2e6; border-radius: 6px;">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label class="form-label">Refundable Terms</label>
-                                                                <textarea class="form-control" name="additional_info[security_deposit_refundable]" rows="3" placeholder="e.g., Fully refundable after check-out if no damages">{{ old('additional_info.security_deposit_refundable', '') }}</textarea>
+                                                                        <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Terms & Refund Policy</label>
+                                                                        <textarea class="form-control" name="additional_info[security_deposit_refundable]" rows="3" placeholder="e.g., Fully refundable after check-out if no damages" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('additional_info.security_deposit_refundable', '') }}</textarea>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -887,32 +951,49 @@
                                             <!-- Parking Availability -->
                                             <div class="row mt-4">
                                                 <div class="col-md-12">
-                                                    <h5 class="mb-3"><strong>Parking Availability</strong></h5>
-                                                    <div class="row">
-                                                        <div class="col-md-12 mb-3">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Parking Availability</label>
-                                                                <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="additional_info[parking_availability]" id="parking_available" value="available" {{ old('additional_info.parking_availability', '') == 'available' ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="parking_available">Available</label>
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Parking Availability</strong></h5>
+                                                        
+                                                        <div class="form-group mb-4">
+                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Parking Type</label>
+                                                            <div class="d-flex gap-3">
+                                                                <div class="form-check" style="padding-left: 2rem;">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[parking_type]" id="parking_available" value="available" {{ old('additional_info.parking_type', '') == 'available' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="parking_available" style="font-weight: 500;">Available</label>
                                                                 </div>
-                                                                <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="additional_info[parking_availability]" id="parking_not_available" value="not_available" {{ old('additional_info.parking_availability', '') == 'not_available' ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="parking_not_available">Not Available</label>
+                                                                <div class="form-check" style="padding-left: 2rem;">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[parking_type]" id="parking_paid" value="paid" {{ old('additional_info.parking_type', '') == 'paid' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="parking_paid" style="font-weight: 500;">Paid</label>
                                                                 </div>
+                                                                <div class="form-check" style="padding-left: 2rem;">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[parking_type]" id="parking_not_available" value="not_available" {{ old('additional_info.parking_type', '') == 'not_available' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="parking_not_available" style="font-weight: 500;">Not Available</label>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-12" id="parking_complementary_fields" style="display: {{ old('additional_info.parking_availability', '') == 'available' ? 'block' : 'none' }};">
+                                                        </div>
+                                                        
+                                                        <div id="parking_fields_container" style="display: {{ old('additional_info.parking_type', '') != 'not_available' && old('additional_info.parking_type', '') != '' ? 'block' : (old('additional_info.parking_type', '') == '' ? 'none' : 'none') }}; margin-top: 20px; padding-top: 20px; border-top: 1px solid #dee2e6;">
+                                                            <div id="parking_fee_fields" style="display: {{ old('additional_info.parking_type', '') == 'paid' ? 'block' : 'none' }}; margin-bottom: 20px; padding: 15px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
+                                                                <label class="form-label mb-3" style="font-weight: 600; color: #495057;">Fee Details</label>
                                                             <div class="row">
-                                                                <div class="col-md-12">
+                                                                    <div class="col-md-6">
                                                                     <div class="form-group">
-                                                                        <label class="form-label">Complementary Note</label>
-                                                                        <div class="input-group">
-                                                                            <span class="input-group-text">Complementary</span>
-                                                                            <input type="text" class="form-control" name="additional_info[parking_complementary_note]" value="{{ old('additional_info.parking_complementary_note', '') }}" placeholder="e.g., Free parking available">
+                                                                            <label class="form-label">Amount</label>
+                                                                            <input type="number" class="form-control" name="additional_info[parking_fee_amount]" value="{{ old('additional_info.parking_fee_amount', '') }}" placeholder="e.g., 500" min="0" step="0.01">
                                                                         </div>
                                                                     </div>
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-group">
+                                                                            <label class="form-label">Currency</label>
+                                                                            <input type="text" class="form-control" name="additional_info[parking_fee_currency]" value="{{ old('additional_info.parking_fee_currency', 'BDT') }}" placeholder="e.g., BDT">
                                                                 </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="form-group">
+                                                                <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Note</label>
+                                                                <textarea class="form-control" name="additional_info[parking_note]" rows="3" placeholder="Enter any additional notes about parking" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('additional_info.parking_note', '') }}</textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -922,26 +1003,37 @@
                                             <!-- Pet Policy -->
                                             <div class="row mt-4">
                                                 <div class="col-md-12">
-                                                    <h5 class="mb-3"><strong>Pet Policy</strong></h5>
-                                                    <div class="row">
-                                                        <div class="col-md-12 mb-3">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Pet Policy Type</label>
-                                                                <div class="form-check form-check-inline">
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Pet Policy</strong></h5>
+                                                        
+                                                        <div class="form-group mb-4">
+                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Pet Policy Type</label>
+                                                            <div class="d-flex gap-3">
+                                                                <div class="form-check" style="padding-left: 2rem;">
                                                                     <input class="form-check-input" type="radio" name="additional_info[pet_type]" id="pet_complementary" value="complementary" {{ old('additional_info.pet_type', '') == 'complementary' ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="pet_complementary">Complementary</label>
+                                                                    <label class="form-check-label" for="pet_complementary" style="font-weight: 500;">Complementary</label>
                                                                 </div>
-                                                                <div class="form-check form-check-inline">
+                                                                <div class="form-check" style="padding-left: 2rem;">
                                                                     <input class="form-check-input" type="radio" name="additional_info[pet_type]" id="pet_paid" value="paid" {{ old('additional_info.pet_type', '') == 'paid' ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="pet_paid">Paid</label>
+                                                                    <label class="form-check-label" for="pet_paid" style="font-weight: 500;">Paid</label>
                                                                 </div>
-                                                                <div class="form-check form-check-inline">
+                                                                <div class="form-check" style="padding-left: 2rem;">
                                                                     <input class="form-check-input" type="radio" name="additional_info[pet_type]" id="pet_not_available" value="not_available" {{ old('additional_info.pet_type', '') == 'not_available' ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="pet_not_available">Not Available</label>
+                                                                    <label class="form-check-label" for="pet_not_available" style="font-weight: 500;">Not Available</label>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-12" id="pet_price_fields" style="display: {{ old('additional_info.pet_type', '') == 'paid' ? 'block' : 'none' }};">
+                                                        
+                                                        <div id="pet_fields_container" style="display: {{ old('additional_info.pet_type', '') != 'not_available' && old('additional_info.pet_type', '') != '' ? 'block' : (old('additional_info.pet_type', '') == '' ? 'none' : 'none') }}; margin-top: 20px; padding-top: 20px; border-top: 1px solid #dee2e6;">
+                                                            <div id="pet_complementary_note_field" style="display: {{ old('additional_info.pet_type', '') == 'complementary' ? 'block' : 'none' }}; margin-bottom: 20px;">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Note</label>
+                                                                    <textarea class="form-control" name="additional_info[pet_complementary_note]" rows="3" placeholder="Enter any additional notes about the pet policy" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('additional_info.pet_complementary_note', '') }}</textarea>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div id="pet_price_fields" style="display: {{ old('additional_info.pet_type', '') == 'paid' ? 'block' : 'none' }}; margin-bottom: 20px; padding: 15px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
+                                                                <label class="form-label mb-3" style="font-weight: 600; color: #495057;">Fee Details</label>
                                                             <div class="row">
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
@@ -953,6 +1045,7 @@
                                                                     <div class="form-group">
                                                                         <label class="form-label">Note</label>
                                                                         <input type="text" class="form-control" name="additional_info[pet_paid_note]" value="{{ old('additional_info.pet_paid_note', '') }}" placeholder="e.g., Additional charges apply">
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -964,29 +1057,51 @@
                                             <!-- Meal Options -->
                                             <div class="row mt-4">
                                                 <div class="col-md-12">
-                                                    <h5 class="mb-3"><strong>Meal Options</strong></h5>
-                                                    <div class="row">
-                                                        <div class="col-md-12 mb-3">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Meal Type</label>
-                                                                <div class="form-check form-check-inline">
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Meal Options</strong></h5>
+                                                        
+                                                        <div class="form-group mb-4">
+                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Meal Type</label>
+                                                            <div class="d-flex gap-3">
+                                                                <div class="form-check" style="padding-left: 2rem;">
                                                                     <input class="form-check-input" type="radio" name="additional_info[meal_type]" id="meal_complementary" value="complementary" {{ old('additional_info.meal_type', '') == 'complementary' ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="meal_complementary">Complementary</label>
+                                                                    <label class="form-check-label" for="meal_complementary" style="font-weight: 500;">Complementary</label>
                                                                 </div>
-                                                                <div class="form-check form-check-inline">
+                                                                <div class="form-check" style="padding-left: 2rem;">
                                                                     <input class="form-check-input" type="radio" name="additional_info[meal_type]" id="meal_paid" value="paid" {{ old('additional_info.meal_type', '') == 'paid' ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="meal_paid">Paid</label>
+                                                                    <label class="form-check-label" for="meal_paid" style="font-weight: 500;">Paid</label>
                                                                 </div>
-                                                                <div class="form-check form-check-inline">
+                                                                <div class="form-check" style="padding-left: 2rem;">
                                                                     <input class="form-check-input" type="radio" name="additional_info[meal_type]" id="meal_not_available" value="not_available" {{ old('additional_info.meal_type', '') == 'not_available' ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="meal_not_available">Not Available</label>
+                                                                    <label class="form-check-label" for="meal_not_available" style="font-weight: 500;">Not Available</label>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-12" id="meal_price_fields" style="display: {{ old('additional_info.meal_type', '') == 'paid' ? 'block' : 'none' }};">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Price (Optional)</label>
-                                                                <input type="text" class="form-control" name="additional_info[meal_fee]" value="{{ old('additional_info.meal_fee', '') }}" placeholder="e.g., 300 BDT per person">
+                                                        
+                                                        <div id="meal_fields_container" style="display: {{ old('additional_info.meal_type', '') != 'not_available' && old('additional_info.meal_type', '') != '' ? 'block' : (old('additional_info.meal_type', '') == '' ? 'none' : 'none') }}; margin-top: 20px; padding-top: 20px; border-top: 1px solid #dee2e6;">
+                                                            <div id="meal_complementary_note_field" style="display: {{ old('additional_info.meal_type', '') == 'complementary' ? 'block' : 'none' }}; margin-bottom: 20px;">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Note</label>
+                                                                    <textarea class="form-control" name="additional_info[meal_complementary_note]" rows="3" placeholder="Enter any additional notes about the meal policy" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('additional_info.meal_complementary_note', '') }}</textarea>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div id="meal_price_fields" style="display: {{ old('additional_info.meal_type', '') == 'paid' ? 'block' : 'none' }}; margin-bottom: 20px; padding: 15px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
+                                                                <label class="form-label mb-3" style="font-weight: 600; color: #495057;">Fee Details</label>
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-group">
+                                                                            <label class="form-label">Price (Optional)</label>
+                                                                            <input type="text" class="form-control" name="additional_info[meal_fee]" value="{{ old('additional_info.meal_fee', '') }}" placeholder="e.g., 300 BDT per person">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-group">
+                                                                            <label class="form-label">Note</label>
+                                                                            <textarea class="form-control" name="additional_info[meal_paid_note]" rows="3" placeholder="Enter any additional notes about the meal policy" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('additional_info.meal_paid_note', '') }}</textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -996,50 +1111,141 @@
                                             <!-- Transportation Services -->
                                             <div class="row mt-4">
                                                 <div class="col-md-12">
-                                                    <h5 class="mb-3"><strong>Transportation Services</strong></h5>
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Airport Pickup</label>
-                                                                <select class="form-control" name="additional_info[airport_pickup]">
-                                                                    <option value="">Select Option</option>
-                                                                    <option value="Free" {{ old('additional_info.airport_pickup') == 'Free' ? 'selected' : '' }}>Free</option>
-                                                                    <option value="Paid" {{ old('additional_info.airport_pickup') == 'Paid' ? 'selected' : '' }}>Paid</option>
-                                                                    <option value="Not Available" {{ old('additional_info.airport_pickup') == 'Not Available' ? 'selected' : '' }}>Not Available</option>
-                                                                </select>
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Transportation Services</strong></h5>
+                                                        
+                                                        <!-- Airport Pickup -->
+                                                        <div class="mb-4" style="padding: 15px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
+                                                            <label class="form-label mb-3" style="font-weight: 600; color: #495057;">Airport Pickup</label>
+                                                            <div class="form-group mb-3">
+                                                                <div class="d-flex gap-3">
+                                                                    <div class="form-check" style="padding-left: 2rem;">
+                                                                        <input class="form-check-input" type="radio" name="additional_info[airport_pickup_type]" id="airport_pickup_complementary" value="complementary" {{ old('additional_info.airport_pickup_type', '') == 'complementary' ? 'checked' : '' }}>
+                                                                        <label class="form-check-label" for="airport_pickup_complementary" style="font-weight: 500;">Complementary</label>
+                                                                    </div>
+                                                                    <div class="form-check" style="padding-left: 2rem;">
+                                                                        <input class="form-check-input" type="radio" name="additional_info[airport_pickup_type]" id="airport_pickup_paid" value="paid" {{ old('additional_info.airport_pickup_type', '') == 'paid' ? 'checked' : '' }}>
+                                                                        <label class="form-check-label" for="airport_pickup_paid" style="font-weight: 500;">Paid</label>
+                                                                    </div>
+                                                                    <div class="form-check" style="padding-left: 2rem;">
+                                                                        <input class="form-check-input" type="radio" name="additional_info[airport_pickup_type]" id="airport_pickup_not_available" value="not_available" {{ old('additional_info.airport_pickup_type', '') == 'not_available' ? 'checked' : '' }}>
+                                                                        <label class="form-check-label" for="airport_pickup_not_available" style="font-weight: 500;">Not Available</label>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                            <div class="form-group mt-2">
-                                                                <label class="form-label">Airport Pickup Fee</label>
-                                                                <input type="text" class="form-control" name="additional_info[airport_pickup_fee]" value="{{ old('additional_info.airport_pickup_fee', '') }}" placeholder="e.g., 1000 BDT">
+                                                            <div id="airport_pickup_fields" style="display: {{ old('additional_info.airport_pickup_type', '') != 'not_available' && old('additional_info.airport_pickup_type', '') != '' ? 'block' : 'none' }}; margin-top: 15px; padding-top: 15px; border-top: 1px solid #dee2e6;">
+                                                                <div id="airport_pickup_amount_field" style="display: {{ old('additional_info.airport_pickup_type', '') == 'paid' ? 'block' : 'none' }}; margin-bottom: 15px;">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Amount</label>
+                                                                        <input type="text" class="form-control" name="additional_info[airport_pickup_fee]" value="{{ old('additional_info.airport_pickup_fee', '') }}" placeholder="e.g., 1000 BDT">
+                                                                    </div>
+                                                                </div>
+                                                                <div id="airport_pickup_note_field" style="display: {{ in_array(old('additional_info.airport_pickup_type', ''), ['complementary', 'paid']) ? 'block' : 'none' }};">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Note</label>
+                                                                        <textarea class="form-control" name="additional_info[airport_pickup_note]" rows="2" placeholder="Enter any additional notes" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('additional_info.airport_pickup_note', '') }}</textarea>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-4">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Shuttle Service</label>
-                                                                <select class="form-control" name="additional_info[shuttle_service]">
-                                                                    <option value="">Select Option</option>
-                                                                    <option value="Free" {{ old('additional_info.shuttle_service') == 'Free' ? 'selected' : '' }}>Free</option>
-                                                                    <option value="Paid" {{ old('additional_info.shuttle_service') == 'Paid' ? 'selected' : '' }}>Paid</option>
-                                                                    <option value="Not Available" {{ old('additional_info.shuttle_service') == 'Not Available' ? 'selected' : '' }}>Not Available</option>
-                                                                </select>
+                                                        
+                                                        <!-- Shuttle Service -->
+                                                        <div class="mb-4" style="padding: 15px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
+                                                            <label class="form-label mb-3" style="font-weight: 600; color: #495057;">Shuttle Service</label>
+                                                            <div class="form-group mb-3">
+                                                                <div class="d-flex gap-3">
+                                                                    <div class="form-check" style="padding-left: 2rem;">
+                                                                        <input class="form-check-input" type="radio" name="additional_info[shuttle_service_type]" id="shuttle_service_complementary" value="complementary" {{ old('additional_info.shuttle_service_type', '') == 'complementary' ? 'checked' : '' }}>
+                                                                        <label class="form-check-label" for="shuttle_service_complementary" style="font-weight: 500;">Complementary</label>
+                                                                    </div>
+                                                                    <div class="form-check" style="padding-left: 2rem;">
+                                                                        <input class="form-check-input" type="radio" name="additional_info[shuttle_service_type]" id="shuttle_service_paid" value="paid" {{ old('additional_info.shuttle_service_type', '') == 'paid' ? 'checked' : '' }}>
+                                                                        <label class="form-check-label" for="shuttle_service_paid" style="font-weight: 500;">Paid</label>
+                                                                    </div>
+                                                                    <div class="form-check" style="padding-left: 2rem;">
+                                                                        <input class="form-check-input" type="radio" name="additional_info[shuttle_service_type]" id="shuttle_service_not_available" value="not_available" {{ old('additional_info.shuttle_service_type', '') == 'not_available' ? 'checked' : '' }}>
+                                                                        <label class="form-check-label" for="shuttle_service_not_available" style="font-weight: 500;">Not Available</label>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                            <div class="form-group mt-2">
-                                                                <label class="form-label">Shuttle Service Fee</label>
-                                                                <input type="text" class="form-control" name="additional_info[shuttle_service_fee]" value="{{ old('additional_info.shuttle_service_fee', '') }}" placeholder="e.g., 500 BDT">
+                                                            <div id="shuttle_service_fields" style="display: {{ old('additional_info.shuttle_service_type', '') != 'not_available' && old('additional_info.shuttle_service_type', '') != '' ? 'block' : 'none' }}; margin-top: 15px; padding-top: 15px; border-top: 1px solid #dee2e6;">
+                                                                <div id="shuttle_service_amount_field" style="display: {{ old('additional_info.shuttle_service_type', '') == 'paid' ? 'block' : 'none' }}; margin-bottom: 15px;">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Amount</label>
+                                                                        <input type="text" class="form-control" name="additional_info[shuttle_service_fee]" value="{{ old('additional_info.shuttle_service_fee', '') }}" placeholder="e.g., 500 BDT">
+                                                                    </div>
+                                                                </div>
+                                                                <div id="shuttle_service_note_field" style="display: {{ in_array(old('additional_info.shuttle_service_type', ''), ['complementary', 'paid']) ? 'block' : 'none' }};">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Note</label>
+                                                                        <textarea class="form-control" name="additional_info[shuttle_service_note]" rows="2" placeholder="Enter any additional notes" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('additional_info.shuttle_service_note', '') }}</textarea>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-4">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Car Rental</label>
-                                                                <select class="form-control" name="additional_info[car_rental]">
-                                                                    <option value="">Select Option</option>
-                                                                    <option value="Available" {{ old('additional_info.car_rental') == 'Available' ? 'selected' : '' }}>Available</option>
-                                                                    <option value="Not Available" {{ old('additional_info.car_rental') == 'Not Available' ? 'selected' : '' }}>Not Available</option>
-                                                                </select>
+                                                        
+                                                        <!-- Car Rental -->
+                                                        <div class="mb-4" style="padding: 15px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
+                                                            <label class="form-label mb-3" style="font-weight: 600; color: #495057;">Car Rental</label>
+                                                            <div class="form-group mb-3">
+                                                                <div class="d-flex gap-3">
+                                                                    <div class="form-check" style="padding-left: 2rem;">
+                                                                        <input class="form-check-input" type="radio" name="additional_info[car_rental_type]" id="car_rental_complementary" value="complementary" {{ old('additional_info.car_rental_type', '') == 'complementary' ? 'checked' : '' }}>
+                                                                        <label class="form-check-label" for="car_rental_complementary" style="font-weight: 500;">Complementary</label>
+                                                                    </div>
+                                                                    <div class="form-check" style="padding-left: 2rem;">
+                                                                        <input class="form-check-input" type="radio" name="additional_info[car_rental_type]" id="car_rental_paid" value="paid" {{ old('additional_info.car_rental_type', '') == 'paid' ? 'checked' : '' }}>
+                                                                        <label class="form-check-label" for="car_rental_paid" style="font-weight: 500;">Paid</label>
+                                                                    </div>
+                                                                    <div class="form-check" style="padding-left: 2rem;">
+                                                                        <input class="form-check-input" type="radio" name="additional_info[car_rental_type]" id="car_rental_not_available" value="not_available" {{ old('additional_info.car_rental_type', '') == 'not_available' ? 'checked' : '' }}>
+                                                                        <label class="form-check-label" for="car_rental_not_available" style="font-weight: 500;">Not Available</label>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                            <div class="form-group mt-2">
-                                                                <label class="form-label">Car Rental Fee</label>
-                                                                <input type="text" class="form-control" name="additional_info[car_rental_fee]" value="{{ old('additional_info.car_rental_fee', '') }}" placeholder="e.g., 2000 BDT per day">
+                                                            <div id="car_rental_fields" style="display: {{ old('additional_info.car_rental_type', '') != 'not_available' && old('additional_info.car_rental_type', '') != '' ? 'block' : 'none' }}; margin-top: 15px; padding-top: 15px; border-top: 1px solid #dee2e6;">
+                                                                <div id="car_rental_amount_field" style="display: {{ old('additional_info.car_rental_type', '') == 'paid' ? 'block' : 'none' }}; margin-bottom: 15px;">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Amount</label>
+                                                                        <input type="text" class="form-control" name="additional_info[car_rental_fee]" value="{{ old('additional_info.car_rental_fee', '') }}" placeholder="e.g., 2000 BDT per day">
+                                                                    </div>
+                                                                </div>
+                                                                <div id="car_rental_note_field" style="display: {{ in_array(old('additional_info.car_rental_type', ''), ['complementary', 'paid']) ? 'block' : 'none' }};">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Note</label>
+                                                                        <textarea class="form-control" name="additional_info[car_rental_note]" rows="2" placeholder="Enter any additional notes" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('additional_info.car_rental_note', '') }}</textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Smoking Policy -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Smoking Policy</strong></h5>
+                                                        
+                                                        <div class="form-group mb-4">
+                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Smoking Policy</label>
+                                                            <div class="d-flex gap-3">
+                                                                <div class="form-check" style="padding-left: 2rem;">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[smoking_policy]" id="smoking_allowed" value="allowed" {{ old('additional_info.smoking_policy', '') == 'allowed' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="smoking_allowed" style="font-weight: 500;">Allowed</label>
+                                                                </div>
+                                                                <div class="form-check" style="padding-left: 2rem;">
+                                                                    <input class="form-check-input" type="radio" name="additional_info[smoking_policy]" id="smoking_not_allowed" value="not_allowed" {{ old('additional_info.smoking_policy', '') == 'not_allowed' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="smoking_not_allowed" style="font-weight: 500;">Not Allowed</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div id="smoking_note_field" style="display: {{ old('additional_info.smoking_policy', '') == 'allowed' ? 'block' : 'none' }}; margin-top: 20px; padding-top: 20px; border-top: 1px solid #dee2e6;">
+                                                            <div class="form-group">
+                                                                <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Note</label>
+                                                                <textarea class="form-control" name="additional_info[smoking_policy_note]" rows="3" placeholder="Enter any additional notes about the smoking policy" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('additional_info.smoking_policy_note', '') }}</textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1508,12 +1714,65 @@
                                             </script>
                                         </div>
 
+                                        <!-- Room Availability Tab -->
+                                        <div class="tab-pane" id="Availability">
+                                            <div class="row gy-4">
+                                                <div class="col-md-12 col-lg-12 col-xxl-12">
+                                                    <div class="row gy-4">
+                                                        <div class="price-card-room">
+                                                            <h3 class="can-tittle">Room Availability</h3>
+                                                            <p class="text-muted" style="font-size: 14px; margin-top: -10px;">Select dates when this room will be available for booking. The room will only appear on the website on selected dates.</p>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Select Available Dates</label>
+                                                                <input type="hidden" id="availability_dates_hidden" name="availability_dates" value="{{ old('availability_dates') }}">
+                                                                <input type="text" class="form-control" id="availability_dates_display" placeholder="No dates selected yet. Select dates from the calendar below." readonly style="margin-bottom: 15px; background-color: #f8f9fa; border: 1px solid #e0e0e0; padding: 12px; font-size: 14px; min-height: 45px;">
+                                                                <small class="form-text text-muted" style="display: block; margin-bottom: 15px; color: #6c757d;">
+                                                                    <strong>How to select dates:</strong><br>
+                                                                    • <strong>Drag</strong> from one date to another to select a range<br>
+                                                                    • <strong>Click</strong> individual dates to toggle selection (click again to deselect)<br>
+                                                                    • The room will be available only on selected dates
+                                                                </small>
+                                                                <div id="availability_calendar_wrapper" style="max-width: 100%; margin: 20px auto; display: block; padding: 20px; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"></div>
+                                                                <div style="margin-top: 15px; display: flex; gap: 10px; align-items: center;">
+                                                                    <button type="button" id="clear_all_dates" class="btn btn-sm btn-secondary" style="background: #6c757d; color: white; border: none; padding: 8px 20px;">
+                                                                        <i class="fas fa-times"></i> Clear All
+                                                                    </button>
+                                                                    <button type="button" id="apply_dates" class="btn btn-sm btn-primary" style="background: #90278e; color: white; border: none; padding: 8px 20px;">
+                                                                        <i class="fas fa-check"></i> Apply Selection
+                                                                    </button>
+                                                                    <span id="selected_dates_count" style="margin-left: 10px; color: #90278e; font-weight: bold;"></span>
+                                                                </div>
+                                                                @error('availability_dates')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="row">
+                                                    <div class="col-sm-2 col-md-2 mt-15">
+                                                        <div class="form-group">
+                                                            <button type="submit" class="btn btn-primary btn-submit">Submit</button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2 col-md-2 mt-15">
+                                                        <div class="form-group">
+                                                            <button type="submit" class="btn btn-primary" name="save_draft" value="1">Save & Drafts</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <!-- Photos Tab -->
                                         <div class="tab-pane" id="Photos">
                                             <div class="row gy-4">
                                                 @php
                                                     $photo_categories = [
-                                                        'feature_main' => 'Main Feature Photo (Shown as primary image)',
+                                                        'feature_main' => 'Thumbnail Photo',
                                                         'bedroom' => 'Bedroom (Main Bedroom Photos)',
                                                         'washroom' => 'Washroom (Washroom Photos)',
                                                         'balcony' => 'Balcony (Balcony Photos)',
@@ -1645,43 +1904,300 @@
                     totalRoomsInput.value = roomCount;
                 });
 
-                let washroomCount = {{ old('total_washrooms', 0) }};
-                const totalWashroomsDisplay = document.getElementById('totalWashrooms');
-                const totalWashroomsInput = document.getElementById('totalWashroomsInput');
-                const washroomIncreaseBtn = document.querySelector('#tabItem3 .counter-card:has(#totalWashrooms) .increase-male');
-                const washroomDecreaseBtn = document.querySelector('#tabItem3 .counter-card:has(#totalWashrooms) .decrease-male');
+                // Bathroom Details Counter and Dynamic Sections
+                let bathroomCount = {{ old('total_washrooms', 0) }};
+                const totalBathroomsDisplay = document.getElementById('totalBathrooms');
+                const totalBathroomsInput = document.getElementById('totalBathroomsInput');
+                const bathroomIncreaseBtn = document.getElementById('bathroomIncreaseBtn');
+                const bathroomDecreaseBtn = document.getElementById('bathroomDecreaseBtn');
+                const bathroomDetailsContainer = document.getElementById('bathroomDetailsContainer');
 
-                washroomIncreaseBtn.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    washroomCount++;
-                    totalWashroomsDisplay.textContent = washroomCount;
-                    totalWashroomsInput.value = washroomCount;
-                });
-                washroomDecreaseBtn.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    if (washroomCount > 0) washroomCount--;
-                    totalWashroomsDisplay.textContent = washroomCount;
-                    totalWashroomsInput.value = washroomCount;
-                });
+                // Bathroom options
+                const bathroomOptions = ['Attached', 'Private', 'Shower', 'Bathtub', 'Toiletries', 'Hot Water'];
 
+                // Function to generate a bathroom detail section
+                function generateBathroomSection(index, existingData = {}) {
+                    const checkedOptions = existingData || [];
+                    return `
+                        <div class="bathroom-section mb-4" data-bathroom-index="${index}" style="padding: 15px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
+                            <h6 style="color: #495057; font-weight: 600; margin-bottom: 15px;">Bathroom ${index + 1} Details</h6>
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 20px;">
+                                ${bathroomOptions.map(option => `
+                                    <label style="display: flex; align-items: center; margin-bottom: 0;">
+                                        <input type="checkbox" name="room_info[bathrooms][${index}][]" class="checkbox-item-room-info" value="${option}" ${checkedOptions.includes(option) ? 'checked' : ''} style="margin-right: 8px;">
+                                        <span>${option}</span>
+                                    </label>
+                                `).join('')}
+                            </div>
+                            <!-- Custom Bathroom Container for this bathroom -->
+                            <div class="custom-bathroom-container-${index} mt-3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 20px;"></div>
+                            <!-- Add More Bathroom Feature -->
+                            <div class="add-more-section mt-3">
+                                <div class="input-group" style="max-width: 400px;">
+                                    <input type="text" class="form-control custom-bathroom-input-${index}" placeholder="Enter custom bathroom feature">
+                                    <button type="button" class="btn btn-primary btn-sm add-bathroom-feature-btn" data-index="${index}">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Function to render all bathroom sections
+                function renderBathroomSections(count, existingBathrooms = []) {
+                    bathroomDetailsContainer.innerHTML = '';
+                    for (let i = 0; i < count; i++) {
+                        const existingData = existingBathrooms[i] || [];
+                        bathroomDetailsContainer.innerHTML += generateBathroomSection(i, existingData);
+                    }
+                    
+                    // Attach event listeners for custom bathroom features
+                    attachBathroomFeatureListeners();
+                }
+
+                // Function to attach listeners for adding custom bathroom features
+                function attachBathroomFeatureListeners() {
+                    document.querySelectorAll('.add-bathroom-feature-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const index = this.getAttribute('data-index');
+                            const input = document.querySelector(`.custom-bathroom-input-${index}`);
+                            const container = document.querySelector(`.custom-bathroom-container-${index}`);
+                            const value = input.value.trim();
+                            
+                            if (value) {
+                                const checkbox = document.createElement('label');
+                                checkbox.style.display = 'flex';
+                                checkbox.style.alignItems = 'center';
+                                checkbox.style.marginBottom = '0';
+                                checkbox.innerHTML = `
+                                    <input type="checkbox" name="room_info[bathrooms][${index}][]" class="checkbox-item-room-info" value="${value}" checked style="margin-right: 8px;">
+                                    <span>${value}</span>
+                                `;
+                                container.appendChild(checkbox);
+                                input.value = '';
+                            }
+                        });
+                    });
+                }
+
+                // Counter event listeners
+                if (bathroomIncreaseBtn) {
+                    bathroomIncreaseBtn.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        bathroomCount++;
+                        totalBathroomsDisplay.textContent = bathroomCount;
+                        totalBathroomsInput.value = bathroomCount;
+                        renderBathroomSections(bathroomCount);
+                    });
+                }
+
+                if (bathroomDecreaseBtn) {
+                    bathroomDecreaseBtn.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        if (bathroomCount > 0) {
+                            bathroomCount--;
+                            totalBathroomsDisplay.textContent = bathroomCount;
+                            totalBathroomsInput.value = bathroomCount;
+                            renderBathroomSections(bathroomCount);
+                        }
+                    });
+                }
+
+                // Initialize bathroom sections on page load
+                @if(old('total_washrooms', 0) > 0)
+                    const existingBathrooms = @json(old('room_info.bathrooms', []));
+                    renderBathroomSections(bathroomCount, existingBathrooms);
+                @else
+                    renderBathroomSections(bathroomCount);
+                @endif
+
+                // Bed Details Counter and Dynamic Sections
                 let bedCount = {{ old('total_beds', 0) }};
                 const totalBedsDisplay = document.getElementById('totalBeds');
                 const totalBedsInput = document.getElementById('totalBedsInput');
-                const bedIncreaseBtn = document.querySelector('#tabItem3 .counter-card:has(#totalBeds) .increase-male');
-                const bedDecreaseBtn = document.querySelector('#tabItem3 .counter-card:has(#totalBeds) .decrease-male');
+                const bedIncreaseBtn = document.getElementById('bedIncreaseBtn');
+                const bedDecreaseBtn = document.getElementById('bedDecreaseBtn');
+                const bedDetailsContainer = document.getElementById('bedDetailsContainer');
 
-                bedIncreaseBtn.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    bedCount++;
-                    totalBedsDisplay.textContent = bedCount;
-                    totalBedsInput.value = bedCount;
-                });
-                bedDecreaseBtn.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    if (bedCount > 0) bedCount--;
-                    totalBedsDisplay.textContent = bedCount;
-                    totalBedsInput.value = bedCount;
-                });
+                // Bed type options
+                const bedTypeOptions = ['King', 'Queen', 'Twin', 'Single'];
+                let customBedTypes = []; // Store custom bed types
+
+                // Function to generate a bed detail section
+                function generateBedSection(index, existingData = {}) {
+                    const bedType = existingData.bed_type || '';
+                    const numberOfBeds = existingData.number_of_beds || '';
+                    const isCustom = bedType && !bedTypeOptions.includes(bedType);
+                    
+                    return `
+                        <div class="bed-section mb-4" data-bed-index="${index}" style="padding: 15px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
+                            <h6 style="color: #495057; font-weight: 600; margin-bottom: 15px;">Bed ${index + 1} Details</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Bed Type</label>
+                                        <select class="form-control bed-type-select" name="room_info[beds][${index}][bed_type]" data-bed-index="${index}" style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                            <option value="">Select Bed Type</option>
+                                            ${bedTypeOptions.map(option => `
+                                                <option value="${option}" ${bedType === option ? 'selected' : ''}>${option}</option>
+                                            `).join('')}
+                                            ${customBedTypes.map(customType => `
+                                                <option value="${customType}" ${bedType === customType ? 'selected' : ''}>${customType}</option>
+                                            `).join('')}
+                                            <option value="Custom" ${isCustom ? 'selected' : ''}>Custom</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group" id="number_of_beds_field_${index}" style="display: ${bedType ? 'block' : 'none'};">
+                                        <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Number of Beds</label>
+                                        <input type="number" class="form-control" name="room_info[beds][${index}][number_of_beds]" value="${numberOfBeds}" placeholder="0" min="1" style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group" id="custom_bed_type_field_${index}" style="display: ${isCustom ? 'block' : 'none'}; margin-top: 15px;">
+                                        <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Custom Bed Type</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control custom-bed-type-input-${index}" placeholder="Enter custom bed type" value="${isCustom ? bedType : ''}" style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                            <button type="button" class="btn btn-primary btn-sm add-custom-bed-type-btn" data-index="${index}">Add</button>
+                                        </div>
+                                        <input type="hidden" name="room_info[beds][${index}][custom_bed_type]" id="custom_bed_type_hidden_${index}" value="${isCustom ? bedType : ''}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Function to render all bed sections
+                function renderBedSections(count, existingBeds = []) {
+                    if (!bedDetailsContainer) return;
+                    bedDetailsContainer.innerHTML = '';
+                    for (let i = 0; i < count; i++) {
+                        const existingData = existingBeds[i] || {};
+                        bedDetailsContainer.innerHTML += generateBedSection(i, existingData);
+                    }
+                    
+                    // Attach event listeners
+                    attachBedEventListeners();
+                }
+
+                // Function to attach event listeners for bed sections
+                function attachBedEventListeners() {
+                    // Bed type select change handlers
+                    document.querySelectorAll('.bed-type-select').forEach(select => {
+                        select.addEventListener('change', function() {
+                            const index = this.getAttribute('data-bed-index');
+                            const selectedValue = this.value;
+                            const numberField = document.getElementById(`number_of_beds_field_${index}`);
+                            const customField = document.getElementById(`custom_bed_type_field_${index}`);
+                            const customHidden = document.getElementById(`custom_bed_type_hidden_${index}`);
+                            
+                            if (selectedValue === 'Custom') {
+                                customField.style.display = 'block';
+                                numberField.style.display = 'block'; // Show number of beds for custom too
+                                customHidden.value = '';
+                            } else if (selectedValue) {
+                                customField.style.display = 'none';
+                                numberField.style.display = 'block';
+                                customHidden.value = '';
+                            } else {
+                                customField.style.display = 'none';
+                                numberField.style.display = 'none';
+                                customHidden.value = '';
+                            }
+                        });
+                    });
+
+                    // Custom bed type add button handlers
+                    document.querySelectorAll('.add-custom-bed-type-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const index = this.getAttribute('data-index');
+                            const input = document.querySelector(`.custom-bed-type-input-${index}`);
+                            const hiddenInput = document.getElementById(`custom_bed_type_hidden_${index}`);
+                            const select = document.querySelector(`select[data-bed-index="${index}"]`);
+                            const value = input.value.trim();
+                            
+                            if (value) {
+                                // Add to custom bed types array if not already present
+                                if (!customBedTypes.includes(value)) {
+                                    customBedTypes.push(value);
+                                }
+                                
+                                // Update hidden input
+                                hiddenInput.value = value;
+                                
+                                // Update select to show the custom value
+                                select.value = value;
+                                
+                                // Add option to select if not exists
+                                if (!Array.from(select.options).some(opt => opt.value === value)) {
+                                    const option = document.createElement('option');
+                                    option.value = value;
+                                    option.textContent = value;
+                                    select.insertBefore(option, select.lastElementChild);
+                                }
+                                
+                                // Number of beds field should already be visible, but ensure it is
+                                document.getElementById(`number_of_beds_field_${index}`).style.display = 'block';
+                                
+                                // Trigger change event to update all selects
+                                document.querySelectorAll('.bed-type-select').forEach(s => {
+                                    if (!Array.from(s.options).some(opt => opt.value === value)) {
+                                        const opt = document.createElement('option');
+                                        opt.value = value;
+                                        opt.textContent = value;
+                                        s.insertBefore(opt, s.lastElementChild);
+                                    }
+                                });
+                                
+                                input.value = '';
+                            }
+                        });
+                    });
+                }
+
+                // Counter event listeners
+                if (bedIncreaseBtn) {
+                    bedIncreaseBtn.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        bedCount++;
+                        totalBedsDisplay.textContent = bedCount;
+                        totalBedsInput.value = bedCount;
+                        renderBedSections(bedCount);
+                    });
+                }
+
+                if (bedDecreaseBtn) {
+                    bedDecreaseBtn.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        if (bedCount > 0) {
+                            bedCount--;
+                            totalBedsDisplay.textContent = bedCount;
+                            totalBedsInput.value = bedCount;
+                            renderBedSections(bedCount);
+                        }
+                    });
+                }
+
+                // Initialize bed sections on page load
+                @if(old('total_beds', 0) > 0)
+                    const existingBeds = @json(old('room_info.beds', []));
+                    // Extract custom bed types from existing beds
+                    if (existingBeds && Array.isArray(existingBeds)) {
+                        existingBeds.forEach(bed => {
+                            if (bed.bed_type && !bedTypeOptions.includes(bed.bed_type)) {
+                                if (!customBedTypes.includes(bed.bed_type)) {
+                                    customBedTypes.push(bed.bed_type);
+                                }
+                            }
+                        });
+                    }
+                    renderBedSections(bedCount, existingBeds);
+                @else
+                    renderBedSections(bedCount);
+                @endif
 
                 const discountAmountRadio = document.getElementById('discountAmount');
                 const discountPercentageRadio = document.getElementById('discountPercentage');
@@ -2307,6 +2823,14 @@
                                 }
                             }
                         } else {
+                            // Ensure total_beds is synced before submission
+                            const totalBedsInput = document.getElementById('totalBedsInput');
+                            const totalBedsDisplay = document.getElementById('totalBeds');
+                            if (totalBedsInput && totalBedsDisplay) {
+                                const currentValue = parseInt(totalBedsDisplay.textContent) || 0;
+                                totalBedsInput.value = currentValue;
+                            }
+                            
                             // No errors, submit the form
                             form.submit();
                         }
@@ -2348,7 +2872,6 @@
                     if (laundryPaid) {
                         laundryPaid.addEventListener('change', toggleLaundryFeeFields);
                         document.getElementById('laundry_complementary')?.addEventListener('change', toggleLaundryFeeFields);
-                        document.getElementById('laundry_not_available')?.addEventListener('change', toggleLaundryFeeFields);
                     }
 
                     // Initialize on page load
@@ -2389,7 +2912,6 @@
                     if (housekeepingPaid) {
                         housekeepingPaid.addEventListener('change', toggleHousekeepingFeeFields);
                         document.getElementById('housekeeping_complementary')?.addEventListener('change', toggleHousekeepingFeeFields);
-                        document.getElementById('housekeeping_not_available')?.addEventListener('change', toggleHousekeepingFeeFields);
                     }
 
                     // Initialize on page load
@@ -2420,63 +2942,275 @@
 
                 // Parking Toggle Functionality
                 const parkingAvailable = document.getElementById('parking_available');
+                const parkingPaid = document.getElementById('parking_paid');
                 const parkingNotAvailable = document.getElementById('parking_not_available');
-                const parkingComplementaryFields = document.getElementById('parking_complementary_fields');
+                const parkingFieldsContainer = document.getElementById('parking_fields_container');
+                const parkingFeeFields = document.getElementById('parking_fee_fields');
 
-                if (parkingAvailable && parkingNotAvailable) {
-                    function toggleParkingComplementaryFields() {
-                        if (parkingAvailable.checked) {
-                            parkingComplementaryFields.style.display = 'block';
+                if (parkingAvailable && parkingPaid && parkingNotAvailable) {
+                    function toggleParkingFields() {
+                        if (parkingNotAvailable.checked) {
+                            parkingFieldsContainer.style.display = 'none';
                         } else {
-                            parkingComplementaryFields.style.display = 'none';
+                            parkingFieldsContainer.style.display = 'block';
                         }
                     }
 
-                    parkingAvailable.addEventListener('change', toggleParkingComplementaryFields);
-                    parkingNotAvailable.addEventListener('change', toggleParkingComplementaryFields);
+                    function toggleParkingFeeFields() {
+                        if (parkingPaid && parkingPaid.checked) {
+                            parkingFeeFields.style.display = 'block';
+                        } else {
+                            parkingFeeFields.style.display = 'none';
+                        }
+                    }
 
-                    toggleParkingComplementaryFields();
+                    parkingAvailable.addEventListener('change', function() {
+                        toggleParkingFields();
+                        toggleParkingFeeFields();
+                    });
+                    parkingPaid.addEventListener('change', function() {
+                        toggleParkingFields();
+                        toggleParkingFeeFields();
+                    });
+                    parkingNotAvailable.addEventListener('change', function() {
+                        toggleParkingFields();
+                        toggleParkingFeeFields();
+                    });
+
+                    // Initialize on page load
+                    toggleParkingFields();
+                    toggleParkingFeeFields();
                 }
 
                 // Pet Policy Toggle Functionality
+                const petComplementary = document.getElementById('pet_complementary');
                 const petPaid = document.getElementById('pet_paid');
+                const petNotAvailable = document.getElementById('pet_not_available');
+                const petFieldsContainer = document.getElementById('pet_fields_container');
+                const petComplementaryNoteField = document.getElementById('pet_complementary_note_field');
                 const petPriceFields = document.getElementById('pet_price_fields');
 
-                if (petPaid) {
+                if (petComplementary && petPaid && petNotAvailable) {
+                    function togglePetFields() {
+                        if (petNotAvailable.checked) {
+                            petFieldsContainer.style.display = 'none';
+                        } else {
+                            petFieldsContainer.style.display = 'block';
+                        }
+                    }
+
+                    function togglePetComplementaryNote() {
+                        if (petComplementary && petComplementary.checked) {
+                            petComplementaryNoteField.style.display = 'block';
+                        } else {
+                            petComplementaryNoteField.style.display = 'none';
+                        }
+                    }
+
                     function togglePetPriceFields() {
-                        if (petPaid.checked) {
+                        if (petPaid && petPaid.checked) {
                             petPriceFields.style.display = 'block';
                         } else {
                             petPriceFields.style.display = 'none';
                         }
                     }
 
-                    petPaid.addEventListener('change', togglePetPriceFields);
-                    document.getElementById('pet_complementary')?.addEventListener('change', togglePetPriceFields);
-                    document.getElementById('pet_not_available')?.addEventListener('change', togglePetPriceFields);
+                    petComplementary.addEventListener('change', function() {
+                        togglePetFields();
+                        togglePetComplementaryNote();
+                        togglePetPriceFields();
+                    });
+                    petPaid.addEventListener('change', function() {
+                        togglePetFields();
+                        togglePetComplementaryNote();
+                        togglePetPriceFields();
+                    });
+                    petNotAvailable.addEventListener('change', function() {
+                        togglePetFields();
+                        togglePetComplementaryNote();
+                        togglePetPriceFields();
+                    });
 
+                    // Initialize on page load
+                    togglePetFields();
+                    togglePetComplementaryNote();
                     togglePetPriceFields();
                 }
 
                 // Meal Options Toggle Functionality
+                const mealComplementary = document.getElementById('meal_complementary');
                 const mealPaid = document.getElementById('meal_paid');
+                const mealNotAvailable = document.getElementById('meal_not_available');
+                const mealFieldsContainer = document.getElementById('meal_fields_container');
+                const mealComplementaryNoteField = document.getElementById('meal_complementary_note_field');
                 const mealPriceFields = document.getElementById('meal_price_fields');
 
-                if (mealPaid) {
-                    function toggleMealPriceFields() {
-                        if (mealPaid.checked) {
-                            mealPriceFields.style.display = 'block';
+                if (mealComplementary || mealPaid || mealNotAvailable) {
+                    function toggleMealFields() {
+                        if (mealNotAvailable && mealNotAvailable.checked) {
+                            mealFieldsContainer.style.display = 'none';
                         } else {
-                            mealPriceFields.style.display = 'none';
+                            mealFieldsContainer.style.display = 'block';
+                            
+                            if (mealComplementary && mealComplementary.checked) {
+                                mealComplementaryNoteField.style.display = 'block';
+                                mealPriceFields.style.display = 'none';
+                            } else if (mealPaid && mealPaid.checked) {
+                                mealComplementaryNoteField.style.display = 'none';
+                                mealPriceFields.style.display = 'block';
+                            } else {
+                                mealComplementaryNoteField.style.display = 'none';
+                                mealPriceFields.style.display = 'none';
+                            }
                         }
                     }
 
-                    mealPaid.addEventListener('change', toggleMealPriceFields);
-                    document.getElementById('meal_complementary')?.addEventListener('change', toggleMealPriceFields);
-                    document.getElementById('meal_not_available')?.addEventListener('change', toggleMealPriceFields);
+                    mealComplementary?.addEventListener('change', toggleMealFields);
+                    mealPaid?.addEventListener('change', toggleMealFields);
+                    mealNotAvailable?.addEventListener('change', toggleMealFields);
 
-                    toggleMealPriceFields();
+                    toggleMealFields();
+                }
+
+                // Transportation Services Toggle Functionality
+                function setupTransportationToggle(serviceName) {
+                    const complementary = document.getElementById(`${serviceName}_complementary`);
+                    const paid = document.getElementById(`${serviceName}_paid`);
+                    const notAvailable = document.getElementById(`${serviceName}_not_available`);
+                    const fieldsContainer = document.getElementById(`${serviceName}_fields`);
+                    const amountField = document.getElementById(`${serviceName}_amount_field`);
+                    const noteField = document.getElementById(`${serviceName}_note_field`);
+
+                    if (complementary || paid || notAvailable) {
+                        function toggleTransportationFields() {
+                            if (notAvailable && notAvailable.checked) {
+                                fieldsContainer.style.display = 'none';
+                            } else {
+                                fieldsContainer.style.display = 'block';
+                                
+                                if (paid && paid.checked) {
+                                    amountField.style.display = 'block';
+                                    noteField.style.display = 'block';
+                                } else if (complementary && complementary.checked) {
+                                    amountField.style.display = 'none';
+                                    noteField.style.display = 'block';
+                                } else {
+                                    amountField.style.display = 'none';
+                                    noteField.style.display = 'none';
+                                }
+                            }
+                        }
+
+                        complementary?.addEventListener('change', toggleTransportationFields);
+                        paid?.addEventListener('change', toggleTransportationFields);
+                        notAvailable?.addEventListener('change', toggleTransportationFields);
+
+                        toggleTransportationFields();
+                    }
+                }
+
+                // Setup toggles for all transportation services
+                setupTransportationToggle('airport_pickup');
+                setupTransportationToggle('shuttle_service');
+                setupTransportationToggle('car_rental');
+
+                // Smoking Policy Toggle Functionality
+                const smokingAllowed = document.getElementById('smoking_allowed');
+                const smokingNotAllowed = document.getElementById('smoking_not_allowed');
+                const smokingNoteField = document.getElementById('smoking_note_field');
+
+                if (smokingAllowed || smokingNotAllowed) {
+                    function toggleSmokingNote() {
+                        if (smokingAllowed && smokingAllowed.checked) {
+                            smokingNoteField.style.display = 'block';
+                        } else {
+                            smokingNoteField.style.display = 'none';
+                        }
+                    }
+
+                    smokingAllowed?.addEventListener('change', toggleSmokingNote);
+                    smokingNotAllowed?.addEventListener('change', toggleSmokingNote);
+
+                    toggleSmokingNote();
+                }
+
+                // Additional Bed Toggle Functionality
+                const additionalBedYes = document.getElementById('additional_bed_yes');
+                const additionalBedNo = document.getElementById('additional_bed_no');
+                const additionalBedFields = document.getElementById('additional_bed_fields');
+                const bedFeeFree = document.getElementById('bed_fee_free');
+                const bedFeePaid = document.getElementById('bed_fee_paid');
+                const bedFeeAmountFields = document.getElementById('bed_fee_amount_fields');
+
+                if (additionalBedYes && additionalBedNo) {
+                    function toggleAdditionalBedFields() {
+                        if (additionalBedYes.checked) {
+                            additionalBedFields.style.display = 'block';
+                        } else {
+                            additionalBedFields.style.display = 'none';
+                        }
+                    }
+
+                    function toggleBedFeeFields() {
+                        if (bedFeePaid && bedFeePaid.checked) {
+                            bedFeeAmountFields.style.display = 'block';
+                        } else {
+                            bedFeeAmountFields.style.display = 'none';
+                        }
+                    }
+
+                    additionalBedYes.addEventListener('change', toggleAdditionalBedFields);
+                    additionalBedNo.addEventListener('change', toggleAdditionalBedFields);
+                    
+                    if (bedFeePaid) {
+                        bedFeePaid.addEventListener('change', toggleBedFeeFields);
+                        bedFeeFree?.addEventListener('change', toggleBedFeeFields);
+                    }
+
+                    // Initialize on page load
+                    toggleAdditionalBedFields();
+                    toggleBedFeeFields();
+                }
+
+                // Children & Extra Guest Policy Toggle Functionality
+                const childrenGuestPolicyYes = document.getElementById('children_guest_policy_yes');
+                const childrenGuestPolicyNo = document.getElementById('children_guest_policy_no');
+                const childrenGuestPolicyFields = document.getElementById('children_guest_policy_fields');
+                const childrenGuestComplementary = document.getElementById('children_guest_complementary');
+                const childrenGuestPaid = document.getElementById('children_guest_paid');
+                const childrenGuestFeeFields = document.getElementById('children_guest_fee_fields');
+
+                if (childrenGuestPolicyYes && childrenGuestPolicyNo) {
+                    function toggleChildrenGuestPolicyFields() {
+                        if (childrenGuestPolicyYes.checked) {
+                            childrenGuestPolicyFields.style.display = 'block';
+                        } else {
+                            childrenGuestPolicyFields.style.display = 'none';
+                        }
+                    }
+
+                    function toggleChildrenGuestFeeFields() {
+                        if (childrenGuestPaid && childrenGuestPaid.checked) {
+                            childrenGuestFeeFields.style.display = 'block';
+                        } else {
+                            childrenGuestFeeFields.style.display = 'none';
+                        }
+                    }
+
+                    childrenGuestPolicyYes.addEventListener('change', toggleChildrenGuestPolicyFields);
+                    childrenGuestPolicyNo.addEventListener('change', toggleChildrenGuestPolicyFields);
+                    
+                    if (childrenGuestPaid) {
+                        childrenGuestPaid.addEventListener('change', toggleChildrenGuestFeeFields);
+                        childrenGuestComplementary?.addEventListener('change', toggleChildrenGuestFeeFields);
+                    }
+
+                    // Initialize on page load
+                    toggleChildrenGuestPolicyFields();
+                    toggleChildrenGuestFeeFields();
                 }
             });
         </script>
 @endsection
+
+

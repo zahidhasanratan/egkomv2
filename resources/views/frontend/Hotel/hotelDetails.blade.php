@@ -1044,35 +1044,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Pricing Summary Sidebar -->
-                                <div data-v-58caae98="" class="col-lg-3 pl-lg-0 mb-hide-cart">
-                                    <div data-v-58caae98="" id="cart-bar" class="cart-visible" style="z-index: 1;">
-                                        <div class="backdrop"></div>
-                                        <div class="cart-wrapper">
-                                            <div class="cart-header">
-                                                <h2>Pricing Summary</h2>
-                                            </div>
-                                            <div class="rooms-selection-container">
-                                                <div class="rooms">
-                                                    <p class="text-center text-primary">Added Rooms</p>
-                                                    <div id="cartItemsList">
-                                                        <!-- Cart items will be added here dynamically -->
-                                                    </div>
-                                                </div>
-                                                <div class="action">
-                                                    <div class="total-amount">
-                                                        <span class="amount" id="cartTotal">Total = BDT 0.00</span>
-                                                        <p class="tax-tag">Fee or Tax Will show at the check out page (if any)</p>
-                                                    </div>
-                                                    <a href="javascript:void(0)" onclick="proceedToCheckout()">
-                                                        <button type="button" class="btn btn-secondary total-con btn-block">CONTINUE</button>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
                     </div>
@@ -1641,10 +1612,8 @@
                             additionalInfoList.push(transport);
                         }
                         
-                        // Other Charges/Policies
-                        if (additionalInfo.other_charges) {
-                            additionalInfoList.push(`Other: ${additionalInfo.other_charges}`);
-                        }
+                        // Store Additional Information separately (not as list item)
+                        const additionalInformationText = additionalInfo.other_charges || '';
                         
                         // Fallback to old structure if display_options is not available
                         if (additionalInfoList.length === 0) {
@@ -1667,6 +1636,16 @@
                                 ${generateDetailsColumn('Room Information', roomInfoList, 'fa-bed fa-bed-custom')}
                                 ${generateDetailsColumn('Additional Room Information', additionalInfoList, 'fa-bed fa-bed-custom')}
                             </div>
+                            ${additionalInformationText ? `
+                            <div class="row mt-4" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #dee2e6;">
+                                <div class="col-md-12">
+                                    <h4 style="color: #91278f; font-weight: 600; margin-bottom: 10px;">
+                                        <span class="faci-icon-awe"><i class="fa fa-bed fa-bed-custom"></i></span> Additional Information
+                                    </h4>
+                                    <p style="color: #495057; line-height: 1.6; margin: 0; white-space: pre-wrap;">${additionalInformationText}</p>
+                                </div>
+                            </div>
+                            ` : ''}
                         `;
                     }
                     
@@ -1675,7 +1654,7 @@
                         
                         return `
                             <div data-v-58caae98="" class="facilities-column">
-                                <h3 data-v-58caae98="" class="general-title">
+                                <h3 data-v-58caae98="" class="general-title" style="white-space: nowrap;">
                                     <span class="faci-icon-awe"><i class="fa ${icon}"></i></span> ${title}
                                 </h3>
                                 <ul data-v-58caae98="" class="general-facilities-list">
