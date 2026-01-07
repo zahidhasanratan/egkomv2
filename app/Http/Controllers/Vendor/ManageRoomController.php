@@ -140,20 +140,25 @@ class ManageRoomController extends Controller
         $validated = $request->validate([
             'hotel_id' => 'required|exists:hotels,id',
             'name' => 'required|string|max:255',
-            'number' => 'required|string|max:255',
-            'floor_number' => 'required|string|max:255',
+            'number' => 'nullable|string|max:255', // Now in room_details array
+            'floor_number' => 'nullable|string|max:255', // Now in room_details array
             'price_per_night' => 'required|numeric|min:0',
             'weekend_price' => 'nullable|numeric|min:0',
             'holiday_price' => 'nullable|numeric|min:0',
             'discount_type' => 'nullable|in:amount,percentage',
             'discount_value' => 'nullable|numeric|min:0',
             'total_persons' => 'required|integer|min:1',
-            'size' => 'required|numeric|min:0',
+            'size' => 'nullable|numeric|min:0', // Now in room_details array
             'total_rooms' => 'required|integer|min:1',
             'total_washrooms' => 'required|integer|min:0',
             'total_beds' => 'required|integer|min:0',
             'description' => 'nullable|string',
-            'wifi_details' => 'nullable|string|max:255',
+            'wifi_details' => 'nullable|string|max:255', // Now in room_details array
+            'room_details' => 'required|array|min:1',
+            'room_details.*.number' => 'required|string|max:255',
+            'room_details.*.floor_number' => 'required|string|max:255',
+            'room_details.*.size' => 'required|numeric|min:0',
+            'room_details.*.wifi_details' => 'nullable|string|max:255',
             'appliances' => 'nullable|array',
             'appliances.*' => 'nullable|string|max:255',
             'furniture' => 'nullable|array',
@@ -186,9 +191,15 @@ class ManageRoomController extends Controller
             'total_persons.required' => 'Total persons is required.',
             'total_persons.integer' => 'Total persons must be a whole number.',
             'total_persons.min' => 'Total persons must be at least 1.',
-            'size.required' => 'Room size is required.',
-            'size.numeric' => 'Room size must be a number.',
-            'size.min' => 'Room size must be at least 0.',
+            'room_details.required' => 'At least one room detail is required.',
+            'room_details.min' => 'At least one room detail is required.',
+            'room_details.*.number.required' => 'Room number is required.',
+            'room_details.*.number.max' => 'Room number must not exceed 255 characters.',
+            'room_details.*.floor_number.required' => 'Floor number is required.',
+            'room_details.*.floor_number.max' => 'Floor number must not exceed 255 characters.',
+            'room_details.*.size.required' => 'Room size is required.',
+            'room_details.*.size.numeric' => 'Room size must be a number.',
+            'room_details.*.size.min' => 'Room size must be at least 0.',
             'total_rooms.required' => 'Total rooms is required.',
             'total_rooms.integer' => 'Total rooms must be a whole number.',
             'total_rooms.min' => 'Total rooms must be at least 1.',
@@ -269,6 +280,37 @@ class ManageRoomController extends Controller
             $additionalInfo = $this->processAdditionalInfo($additionalInfoData);
         }
 
+        // Process room details - new format is array of room objects
+        $roomDetailsData = $request->input('room_details', []);
+        if ($roomDetailsData && is_array($roomDetailsData)) {
+            // Filter out empty room details (name is not in room_details, it's a single field)
+            $roomDetailsData = array_filter($roomDetailsData, function($room) {
+                return !empty($room['number']);
+            });
+            $roomDetailsData = array_values($roomDetailsData);
+        }
+        
+        // For backward compatibility, use first room's data for main fields if only one room
+        $mainRoomName = $request->name ?? '';
+        $mainRoomNumber = $request->number ?? '';
+        $mainFloorNumber = $request->floor_number ?? '';
+        $mainSize = $request->size ?? 0;
+        $mainWifiDetails = $request->wifi_details ?? '';
+        
+        if (!empty($roomDetailsData) && count($roomDetailsData) > 0) {
+            $firstRoom = $roomDetailsData[0];
+            // Room name is not in room_details, it comes from the main 'name' field
+            $mainRoomNumber = $firstRoom['number'] ?? $mainRoomNumber;
+            $mainFloorNumber = $firstRoom['floor_number'] ?? $mainFloorNumber;
+            $mainSize = $firstRoom['size'] ?? $mainSize;
+            $mainWifiDetails = $firstRoom['wifi_details'] ?? $mainWifiDetails;
+        }
+        
+        // Add room_details to roomInfo
+        if (!isset($roomInfo['room_details'])) {
+            $roomInfo['room_details'] = !empty($roomDetailsData) ? $roomDetailsData : null;
+        }
+
         // Merge room info and additional info into display_options
         $displayOptions = array_merge($roomInfo, ['additional_info' => $additionalInfo]);
 
@@ -281,9 +323,9 @@ class ManageRoomController extends Controller
         // Create the room
         $room = Room::create(array_merge([
             'hotel_id' => $request->hotel_id,
-            'name' => $request->name,
-            'number' => $request->number,
-            'floor_number' => $request->floor_number,
+            'name' => $mainRoomName,
+            'number' => $mainRoomNumber,
+            'floor_number' => $mainFloorNumber,
             'price_per_night' => $request->price_per_night,
             'weekend_price' => $request->weekend_price,
             'holiday_price' => $request->holiday_price,
@@ -292,11 +334,11 @@ class ManageRoomController extends Controller
             'discount_percentage' => $request->discount_type == 'percentage' ? $request->discount_value : null,
             'total_persons' => $request->total_persons,
             'description' => $request->description,
-            'size' => $request->size,
-            'total_rooms' => $request->total_rooms,
+            'size' => $mainSize,
+            'total_rooms' => (int)($request->input('total_rooms', 1) ?? 1),
             'total_washrooms' => $request->total_washrooms,
             'total_beds' => (int)($request->input('total_beds', 0) ?? 0),
-            'wifi_details' => $request->wifi_details,
+            'wifi_details' => $mainWifiDetails,
             'appliances' => $appliances,
             'furniture' => $furniture,
             'amenities' => $amenities,
@@ -307,7 +349,7 @@ class ManageRoomController extends Controller
             'availability_dates' => $this->processAvailabilityDates($request->availability_dates),
         ], $additionalInfoColumns));
 
-            Log::info('Room created', [
+        Log::info('Room created', [
                 'room_id' => $room->id,
                 'total_beds' => $room->total_beds,
                 'cancellation_policy' => $room->cancellation_policy,
@@ -374,20 +416,25 @@ class ManageRoomController extends Controller
         $validated = $request->validate([
             'hotel_id' => 'required|exists:hotels,id',
             'name' => 'required|string|max:255',
-            'number' => 'required|string|max:255',
-            'floor_number' => 'required|string|max:255',
+            'number' => 'nullable|string|max:255', // Now in room_details array
+            'floor_number' => 'nullable|string|max:255', // Now in room_details array
             'price_per_night' => 'required|numeric|min:0',
             'weekend_price' => 'nullable|numeric|min:0',
             'holiday_price' => 'nullable|numeric|min:0',
             'discount_type' => 'nullable|in:amount,percentage',
             'discount_value' => 'nullable|numeric|min:0',
             'total_persons' => 'required|integer|min:1',
-            'size' => 'required|numeric|min:0',
+            'size' => 'nullable|numeric|min:0', // Now in room_details array
             'total_rooms' => 'required|integer|min:1',
             'total_washrooms' => 'required|integer|min:0',
             'total_beds' => 'required|integer|min:0',
             'description' => 'nullable|string',
-            'wifi_details' => 'nullable|string|max:255',
+            'wifi_details' => 'nullable|string|max:255', // Now in room_details array
+            'room_details' => 'required|array|min:1',
+            'room_details.*.number' => 'required|string|max:255',
+            'room_details.*.floor_number' => 'required|string|max:255',
+            'room_details.*.size' => 'required|numeric|min:0',
+            'room_details.*.wifi_details' => 'nullable|string|max:255',
             'appliances' => 'nullable|array',
             'appliances.*' => 'nullable|string|max:255',
             'furniture' => 'nullable|array',
@@ -420,9 +467,15 @@ class ManageRoomController extends Controller
             'total_persons.required' => 'Total persons is required.',
             'total_persons.integer' => 'Total persons must be a whole number.',
             'total_persons.min' => 'Total persons must be at least 1.',
-            'size.required' => 'Room size is required.',
-            'size.numeric' => 'Room size must be a number.',
-            'size.min' => 'Room size must be at least 0.',
+            'room_details.required' => 'At least one room detail is required.',
+            'room_details.min' => 'At least one room detail is required.',
+            'room_details.*.number.required' => 'Room number is required.',
+            'room_details.*.number.max' => 'Room number must not exceed 255 characters.',
+            'room_details.*.floor_number.required' => 'Floor number is required.',
+            'room_details.*.floor_number.max' => 'Floor number must not exceed 255 characters.',
+            'room_details.*.size.required' => 'Room size is required.',
+            'room_details.*.size.numeric' => 'Room size must be a number.',
+            'room_details.*.size.min' => 'Room size must be at least 0.',
             'total_rooms.required' => 'Total rooms is required.',
             'total_rooms.integer' => 'Total rooms must be a whole number.',
             'total_rooms.min' => 'Total rooms must be at least 1.',
@@ -503,6 +556,37 @@ class ManageRoomController extends Controller
             $additionalInfo = $this->processAdditionalInfo($additionalInfoData);
         }
 
+        // Process room details - new format is array of room objects
+        $roomDetailsData = $request->input('room_details', []);
+        if ($roomDetailsData && is_array($roomDetailsData)) {
+            // Filter out empty room details (name is not in room_details, it's a single field)
+            $roomDetailsData = array_filter($roomDetailsData, function($room) {
+                return !empty($room['number']);
+            });
+            $roomDetailsData = array_values($roomDetailsData);
+        }
+        
+        // For backward compatibility, use first room's data for main fields if only one room
+        $mainRoomName = $request->name ?? '';
+        $mainRoomNumber = $request->number ?? '';
+        $mainFloorNumber = $request->floor_number ?? '';
+        $mainSize = $request->size ?? 0;
+        $mainWifiDetails = $request->wifi_details ?? '';
+        
+        if (!empty($roomDetailsData) && count($roomDetailsData) > 0) {
+            $firstRoom = $roomDetailsData[0];
+            // Room name is not in room_details, it comes from the main 'name' field
+            $mainRoomNumber = $firstRoom['number'] ?? $mainRoomNumber;
+            $mainFloorNumber = $firstRoom['floor_number'] ?? $mainFloorNumber;
+            $mainSize = $firstRoom['size'] ?? $mainSize;
+            $mainWifiDetails = $firstRoom['wifi_details'] ?? $mainWifiDetails;
+        }
+        
+        // Add room_details to roomInfo
+        if (!isset($roomInfo['room_details'])) {
+            $roomInfo['room_details'] = !empty($roomDetailsData) ? $roomDetailsData : null;
+        }
+
         // Merge room info and additional info into display_options
         $displayOptions = array_merge($roomInfo, ['additional_info' => $additionalInfo]);
 
@@ -515,9 +599,9 @@ class ManageRoomController extends Controller
         // Create the room
         $room = Room::create(array_merge([
             'hotel_id' => $request->hotel_id,
-            'name' => $request->name,
-            'number' => $request->number,
-            'floor_number' => $request->floor_number,
+            'name' => $mainRoomName,
+            'number' => $mainRoomNumber,
+            'floor_number' => $mainFloorNumber,
             'price_per_night' => $request->price_per_night,
             'weekend_price' => $request->weekend_price,
             'holiday_price' => $request->holiday_price,
@@ -526,11 +610,11 @@ class ManageRoomController extends Controller
             'discount_percentage' => $request->discount_type == 'percentage' ? $request->discount_value : null,
             'total_persons' => $request->total_persons,
             'description' => $request->description,
-            'size' => $request->size,
-            'total_rooms' => $request->total_rooms,
+            'size' => $mainSize,
+            'total_rooms' => (int)($request->input('total_rooms', 1) ?? 1),
             'total_washrooms' => $request->total_washrooms,
             'total_beds' => (int)($request->input('total_beds', 0) ?? 0),
-            'wifi_details' => $request->wifi_details,
+            'wifi_details' => $mainWifiDetails,
             'appliances' => $appliances,
             'furniture' => $furniture,
             'amenities' => $amenities,
@@ -677,20 +761,25 @@ class ManageRoomController extends Controller
         $validated = $request->validate([
             'hotel_id' => 'required|exists:hotels,id',
             'name' => 'required|string|max:255',
-            'number' => 'required|string|max:255',
-            'floor_number' => 'required|string|max:255',
+            'number' => 'nullable|string|max:255', // Now in room_details array
+            'floor_number' => 'nullable|string|max:255', // Now in room_details array
             'price_per_night' => 'required|numeric|min:0',
             'weekend_price' => 'nullable|numeric|min:0',
             'holiday_price' => 'nullable|numeric|min:0',
             'discount_type' => 'nullable|in:amount,percentage',
             'discount_value' => 'nullable|numeric|min:0',
             'total_persons' => 'required|integer|min:1',
-            'size' => 'required|numeric|min:0',
+            'size' => 'nullable|numeric|min:0', // Now in room_details array
             'total_rooms' => 'required|integer|min:1',
             'total_washrooms' => 'required|integer|min:0',
             'total_beds' => 'required|integer|min:0',
             'description' => 'nullable|string',
-            'wifi_details' => 'nullable|string|max:255',
+            'wifi_details' => 'nullable|string|max:255', // Now in room_details array
+            'room_details' => 'required|array|min:1',
+            'room_details.*.number' => 'required|string|max:255',
+            'room_details.*.floor_number' => 'required|string|max:255',
+            'room_details.*.size' => 'required|numeric|min:0',
+            'room_details.*.wifi_details' => 'nullable|string|max:255',
             'appliances' => 'nullable|array',
             'appliances.*' => 'nullable|string|max:255',
             'furniture' => 'nullable|array',
@@ -723,9 +812,15 @@ class ManageRoomController extends Controller
             'total_persons.required' => 'Total persons is required.',
             'total_persons.integer' => 'Total persons must be a whole number.',
             'total_persons.min' => 'Total persons must be at least 1.',
-            'size.required' => 'Room size is required.',
-            'size.numeric' => 'Room size must be a number.',
-            'size.min' => 'Room size must be at least 0.',
+            'room_details.required' => 'At least one room detail is required.',
+            'room_details.min' => 'At least one room detail is required.',
+            'room_details.*.number.required' => 'Room number is required.',
+            'room_details.*.number.max' => 'Room number must not exceed 255 characters.',
+            'room_details.*.floor_number.required' => 'Floor number is required.',
+            'room_details.*.floor_number.max' => 'Floor number must not exceed 255 characters.',
+            'room_details.*.size.required' => 'Room size is required.',
+            'room_details.*.size.numeric' => 'Room size must be a number.',
+            'room_details.*.size.min' => 'Room size must be at least 0.',
             'total_rooms.required' => 'Total rooms is required.',
             'total_rooms.integer' => 'Total rooms must be a whole number.',
             'total_rooms.min' => 'Total rooms must be at least 1.',
@@ -754,6 +849,33 @@ class ManageRoomController extends Controller
             $furniture = array_unique(array_filter(array_merge($request->furniture ?? [], $request->custom_furniture ?? [])));
             $amenities = array_unique(array_filter(array_merge($request->amenities ?? [], $request->custom_amenities ?? [])));
             $cancellation_policy = array_unique(array_filter((array)$request->input('cancellation_policy', [])));
+
+            // Process room details - new format is array of room objects (without name, as name is a single field)
+            $roomDetailsData = $request->input('room_details', []);
+            if ($roomDetailsData && is_array($roomDetailsData)) {
+                // Filter out empty room details (name is not in room_details, it's a single field)
+                $roomDetailsData = array_filter($roomDetailsData, function($room) {
+                    return !empty($room['number']);
+                });
+                $roomDetailsData = array_values($roomDetailsData);
+            }
+            
+            // For backward compatibility, use first room's data for main fields if only one room
+            // Room name comes from the main 'name' field, not from room_details
+            $mainRoomName = $request->name ?? $room->name ?? '';
+            $mainRoomNumber = $request->number ?? $room->number ?? '';
+            $mainFloorNumber = $request->floor_number ?? $room->floor_number ?? '';
+            $mainSize = $request->size ?? $room->size ?? 0;
+            $mainWifiDetails = $request->wifi_details ?? $room->wifi_details ?? '';
+            
+            if (!empty($roomDetailsData) && count($roomDetailsData) > 0) {
+                $firstRoom = $roomDetailsData[0];
+                // Room name is not in room_details, it comes from the main 'name' field
+                $mainRoomNumber = $firstRoom['number'] ?? $mainRoomNumber;
+                $mainFloorNumber = $firstRoom['floor_number'] ?? $mainFloorNumber;
+                $mainSize = $firstRoom['size'] ?? $mainSize;
+                $mainWifiDetails = $firstRoom['wifi_details'] ?? $mainWifiDetails;
+            }
 
             // Process room information
             $roomInfo = [];
@@ -800,7 +922,11 @@ class ManageRoomController extends Controller
                     'balcony' => $roomInfoData['balcony'] ?? null,
                     'accessibility' => array_filter($roomInfoData['accessibility'] ?? []),
                     'smoking_policy' => $roomInfoData['smoking_policy'] ?? null,
+                    'room_details' => !empty($roomDetailsData) ? $roomDetailsData : null, // Store room details array
                 ];
+            } else {
+                // If no room_info, still store room_details
+                $roomInfo['room_details'] = !empty($roomDetailsData) ? $roomDetailsData : null;
             }
 
             // Process additional room information - Dynamic approach
@@ -829,9 +955,9 @@ class ManageRoomController extends Controller
             // Prepare update data
             $updateData = [
                 'hotel_id' => $request->hotel_id ?? $room->hotel_id,
-                'name' => $request->name,
-                'number' => $request->number,
-                'floor_number' => $request->floor_number,
+                'name' => $mainRoomName,
+                'number' => $mainRoomNumber,
+                'floor_number' => $mainFloorNumber,
                 'price_per_night' => $request->price_per_night ?? 0,
                 'weekend_price' => $request->weekend_price ?? 0,
                 'holiday_price' => $request->holiday_price ?? 0,
@@ -840,11 +966,11 @@ class ManageRoomController extends Controller
                 'discount_percentage' => $request->discount_type == 'percentage' ? ($request->discount_value ?? 0) : null,
                 'total_persons' => $request->total_persons ?? 0,
                 'description' => $request->description,
-                'size' => $request->size ?? 0,
-                'total_rooms' => $request->total_rooms ?? 0,
+                'size' => $mainSize,
+                'total_rooms' => (int)($request->input('total_rooms', 1) ?? 1),
                 'total_washrooms' => $request->total_washrooms ?? 0,
                 'total_beds' => (int)($request->input('total_beds', 0) ?? 0),
-                'wifi_details' => $request->wifi_details,
+                'wifi_details' => $mainWifiDetails,
                 'appliances' => $appliances,
                 'furniture' => $furniture,
                 'amenities' => $amenities,
@@ -962,20 +1088,25 @@ class ManageRoomController extends Controller
         $validated = $request->validate([
             'hotel_id' => 'required|exists:hotels,id',
             'name' => 'required|string|max:255',
-            'number' => 'required|string|max:255',
-            'floor_number' => 'required|string|max:255',
+            'number' => 'nullable|string|max:255', // Now in room_details array
+            'floor_number' => 'nullable|string|max:255', // Now in room_details array
             'price_per_night' => 'required|numeric|min:0',
             'weekend_price' => 'nullable|numeric|min:0',
             'holiday_price' => 'nullable|numeric|min:0',
             'discount_type' => 'nullable|in:amount,percentage',
             'discount_value' => 'nullable|numeric|min:0',
             'total_persons' => 'required|integer|min:1',
-            'size' => 'required|numeric|min:0',
+            'size' => 'nullable|numeric|min:0', // Now in room_details array
             'total_rooms' => 'required|integer|min:1',
             'total_washrooms' => 'required|integer|min:0',
             'total_beds' => 'required|integer|min:0',
             'description' => 'nullable|string',
-            'wifi_details' => 'nullable|string|max:255',
+            'wifi_details' => 'nullable|string|max:255', // Now in room_details array
+            'room_details' => 'required|array|min:1',
+            'room_details.*.number' => 'required|string|max:255',
+            'room_details.*.floor_number' => 'required|string|max:255',
+            'room_details.*.size' => 'required|numeric|min:0',
+            'room_details.*.wifi_details' => 'nullable|string|max:255',
             'appliances' => 'nullable|array',
             'appliances.*' => 'nullable|string|max:255',
             'furniture' => 'nullable|array',
@@ -1008,9 +1139,15 @@ class ManageRoomController extends Controller
             'total_persons.required' => 'Total persons is required.',
             'total_persons.integer' => 'Total persons must be a whole number.',
             'total_persons.min' => 'Total persons must be at least 1.',
-            'size.required' => 'Room size is required.',
-            'size.numeric' => 'Room size must be a number.',
-            'size.min' => 'Room size must be at least 0.',
+            'room_details.required' => 'At least one room detail is required.',
+            'room_details.min' => 'At least one room detail is required.',
+            'room_details.*.number.required' => 'Room number is required.',
+            'room_details.*.number.max' => 'Room number must not exceed 255 characters.',
+            'room_details.*.floor_number.required' => 'Floor number is required.',
+            'room_details.*.floor_number.max' => 'Floor number must not exceed 255 characters.',
+            'room_details.*.size.required' => 'Room size is required.',
+            'room_details.*.size.numeric' => 'Room size must be a number.',
+            'room_details.*.size.min' => 'Room size must be at least 0.',
             'total_rooms.required' => 'Total rooms is required.',
             'total_rooms.integer' => 'Total rooms must be a whole number.',
             'total_rooms.min' => 'Total rooms must be at least 1.',
@@ -1039,6 +1176,32 @@ class ManageRoomController extends Controller
             $furniture = array_unique(array_filter(array_merge($request->furniture ?? [], $request->custom_furniture ?? [])));
             $amenities = array_unique(array_filter(array_merge($request->amenities ?? [], $request->custom_amenities ?? [])));
             $cancellation_policy = array_unique(array_filter((array)$request->input('cancellation_policy', [])));
+
+            // Process room details - new format is array of room objects (without name, as name is a single field)
+            $roomDetailsData = $request->input('room_details', []);
+            if ($roomDetailsData && is_array($roomDetailsData)) {
+                // Filter out empty room details (name is not in room_details, it's a single field)
+                $roomDetailsData = array_filter($roomDetailsData, function($room) {
+                    return !empty($room['number']);
+                });
+                $roomDetailsData = array_values($roomDetailsData);
+            }
+            
+            // For backward compatibility, use first room's data for main fields if only one room
+            // Room name comes from the main 'name' field, not from room_details
+            $mainRoomName = $request->name ?? $room->name ?? '';
+            $mainRoomNumber = $request->number ?? $room->number ?? '';
+            $mainFloorNumber = $request->floor_number ?? $room->floor_number ?? '';
+            $mainSize = $request->size ?? $room->size ?? 0;
+            $mainWifiDetails = $request->wifi_details ?? $room->wifi_details ?? '';
+            
+            if (!empty($roomDetailsData) && count($roomDetailsData) > 0) {
+                $firstRoom = $roomDetailsData[0];
+                $mainRoomNumber = $firstRoom['number'] ?? $mainRoomNumber;
+                $mainFloorNumber = $firstRoom['floor_number'] ?? $mainFloorNumber;
+                $mainSize = $firstRoom['size'] ?? $mainSize;
+                $mainWifiDetails = $firstRoom['wifi_details'] ?? $mainWifiDetails;
+            }
 
             // Process room information
             $roomInfo = [];
@@ -1085,7 +1248,11 @@ class ManageRoomController extends Controller
                     'balcony' => $roomInfoData['balcony'] ?? null,
                     'accessibility' => array_filter($roomInfoData['accessibility'] ?? []),
                     'smoking_policy' => $roomInfoData['smoking_policy'] ?? null,
+                    'room_details' => !empty($roomDetailsData) ? $roomDetailsData : null, // Store room details array
                 ];
+            } else {
+                // If no room_info, still store room_details
+                $roomInfo['room_details'] = !empty($roomDetailsData) ? $roomDetailsData : null;
             }
 
             // Process additional room information - Dynamic approach
@@ -1117,9 +1284,9 @@ class ManageRoomController extends Controller
             // Prepare update data
             $updateData = array_merge([
                 'hotel_id' => $request->hotel_id ?? $room->hotel_id,
-                'name' => $request->name,
-                'number' => $request->number,
-                'floor_number' => $request->floor_number,
+                'name' => $mainRoomName,
+                'number' => $mainRoomNumber,
+                'floor_number' => $mainFloorNumber,
                 'price_per_night' => $request->price_per_night ?? 0,
                 'weekend_price' => $request->weekend_price ?? 0,
                 'holiday_price' => $request->holiday_price ?? 0,
@@ -1128,11 +1295,11 @@ class ManageRoomController extends Controller
                 'discount_percentage' => $request->discount_type == 'percentage' ? ($request->discount_value ?? 0) : null,
                 'total_persons' => $request->total_persons ?? 0,
                 'description' => $request->description,
-                'size' => $request->size ?? 0,
-                'total_rooms' => $request->total_rooms ?? 0,
+                'size' => $mainSize,
+                'total_rooms' => (int)($request->input('total_rooms', 1) ?? 1),
                 'total_washrooms' => $request->total_washrooms ?? 0,
                 'total_beds' => (int)($request->input('total_beds', 0) ?? 0),
-                'wifi_details' => $request->wifi_details,
+                'wifi_details' => $mainWifiDetails,
                 'appliances' => $appliances,
                 'furniture' => $furniture,
                 'amenities' => $amenities,

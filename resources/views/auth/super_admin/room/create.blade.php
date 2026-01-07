@@ -84,26 +84,6 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label">Room Number</label>
-                                                        <input type="text" class="form-control" name="number" value="{{ old('number') }}" placeholder="Room number" required>
-                                                        @error('number')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label">Room Floor Number</label>
-                                                        <input type="number" class="form-control" name="floor_number" value="{{ old('floor_number') }}" placeholder="Room Floor Number" required>
-                                                        @error('floor_number')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
                                                 <div class="row gy-4">
                                                     <div class="price-card-room">
                                                         <h3 class="can-tittle">Price Section</h3>
@@ -192,16 +172,6 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label">Room Size (sq. ft / sq. m)</label>
-                                                        <input type="number" class="form-control" name="size" value="{{ old('size') }}" placeholder="Ex: 1200 SFT" required>
-                                                        @error('size')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
                                                 <div class="col-md-6 col-lg-2 col-xxl-3">
                                                     <div class="form-group">
                                                         <label class="form-label">Total Room</label>
@@ -209,10 +179,10 @@
                                                             <div class="counter-card">
                                                                 <div>
                                                                     <div class="counter">
-                                                                        <button type="button" class="btn decrease-male">-</button>
-                                                                        <span id="totalRooms" class="count male-count">{{ old('total_rooms', 0) }}</span>
-                                                                        <input type="hidden" name="total_rooms" id="totalRoomsInput" value="{{ old('total_rooms', 0) }}">
-                                                                        <button type="button" class="btn increase-male">+</button>
+                                                                        <button type="button" class="btn decrease-male" id="roomDecreaseBtn">-</button>
+                                                                        <span id="totalRooms" class="count male-count">{{ old('total_rooms', 1) }}</span>
+                                                                        <input type="hidden" name="total_rooms" id="totalRoomsInput" value="{{ old('total_rooms', 1) }}">
+                                                                        <button type="button" class="btn increase-male" id="roomIncreaseBtn">+</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -223,16 +193,9 @@
                                                     </div>
                                                 </div>
 
-
-
-                                                <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="wifi_details">WiFi Details/Password</label>
-                                                        <input type="text" class="form-control" name="wifi_details" value="{{ old('wifi_details') }}" placeholder="WiFi Details/Password">
-                                                        @error('wifi_details')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                        @enderror
-                                                    </div>
+                                                <!-- Dynamic Room Details Container -->
+                                                <div class="col-md-12" id="roomDetailsContainer" style="margin-top: 20px;">
+                                                    <!-- Room detail sections will be dynamically generated here -->
                                                 </div>
                                             </div>
 
@@ -1878,24 +1841,97 @@
                     totalPersonsInput.value = personCount;
                 });
 
-                let roomCount = {{ old('total_rooms', 0) }};
+                // Room Details Counter and Dynamic Sections
+                let roomCount = {{ old('total_rooms', 1) }};
                 const totalRoomsDisplay = document.getElementById('totalRooms');
                 const totalRoomsInput = document.getElementById('totalRoomsInput');
-                const roomIncreaseBtn = document.querySelector('#tabItem3 .counter-card:has(#totalRooms) .increase-male');
-                const roomDecreaseBtn = document.querySelector('#tabItem3 .counter-card:has(#totalRooms) .decrease-male');
+                const roomIncreaseBtn = document.getElementById('roomIncreaseBtn');
+                const roomDecreaseBtn = document.getElementById('roomDecreaseBtn');
+                const roomDetailsContainer = document.getElementById('roomDetailsContainer');
 
-                roomIncreaseBtn.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    roomCount++;
-                    totalRoomsDisplay.textContent = roomCount;
-                    totalRoomsInput.value = roomCount;
-                });
-                roomDecreaseBtn.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    if (roomCount > 0) roomCount--;
-                    totalRoomsDisplay.textContent = roomCount;
-                    totalRoomsInput.value = roomCount;
-                });
+                // Function to generate a room detail section
+                function generateRoomSection(index, existingData = {}) {
+                    const roomNumber = existingData.number || '';
+                    const floorNumber = existingData.floor_number || '';
+                    const roomSize = existingData.size || '';
+                    const wifiDetails = existingData.wifi_details || '';
+                    
+                    return `
+                        <div class="room-detail-section mb-4" data-room-index="${index}" style="padding: 15px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
+                            <h6 style="color: #495057; font-weight: 600; margin-bottom: 15px;">Room ${index + 1} Details</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Room Number</label>
+                                        <input type="text" class="form-control" name="room_details[${index}][number]" value="${roomNumber}" placeholder="Room number" required style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Room Floor Number</label>
+                                        <input type="text" class="form-control" name="room_details[${index}][floor_number]" value="${floorNumber}" placeholder="Room Floor Number" required style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Room Size (sq. ft / sq. m)</label>
+                                        <input type="number" class="form-control" name="room_details[${index}][size]" value="${roomSize}" placeholder="Ex: 1200 SFT" required style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">WiFi Details/Password</label>
+                                        <input type="text" class="form-control" name="room_details[${index}][wifi_details]" value="${wifiDetails}" placeholder="WiFi Details/Password" style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Function to render all room sections
+                function renderRoomSections(count, existingRooms = []) {
+                    if (!roomDetailsContainer) return;
+                    roomDetailsContainer.innerHTML = '';
+                    for (let i = 0; i < count; i++) {
+                        const existingData = existingRooms[i] || {};
+                        roomDetailsContainer.innerHTML += generateRoomSection(i, existingData);
+                    }
+                }
+
+                // Counter event listeners
+                if (roomIncreaseBtn) {
+                    roomIncreaseBtn.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        roomCount++;
+                        totalRoomsDisplay.textContent = roomCount;
+                        totalRoomsInput.value = roomCount;
+                        renderRoomSections(roomCount);
+                    });
+                }
+
+                if (roomDecreaseBtn) {
+                    roomDecreaseBtn.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        if (roomCount > 0) {
+                            roomCount--;
+                            totalRoomsDisplay.textContent = roomCount;
+                            totalRoomsInput.value = roomCount;
+                            renderRoomSections(roomCount);
+                        }
+                    });
+                }
+
+                // Initialize room sections on page load
+                const existingRoomDetails = [];
+                // Ensure container exists before rendering
+                if (roomDetailsContainer) {
+                    renderRoomSections(roomCount, existingRoomDetails);
+                } else {
+                    console.error('roomDetailsContainer not found');
+                }
 
                 // Bathroom Details Counter and Dynamic Sections
                 let bathroomCount = {{ old('total_washrooms', 0) }};

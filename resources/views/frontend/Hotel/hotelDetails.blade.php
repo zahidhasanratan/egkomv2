@@ -694,7 +694,36 @@
 
                                         <div class="hotel-room">
                                             @php
-                                                $activeRooms = \App\Models\Room::where('hotel_id', $show->id)->where('is_active', true)->get();
+                                                $rooms = \App\Models\Room::where('hotel_id', $show->id)->where('is_active', true)->get();
+                                                
+                                                // Expand rooms based on room_details array
+                                                $activeRooms = collect();
+                                                foreach($rooms as $room) {
+                                                    $displayOptions = is_string($room->display_options) ? json_decode($room->display_options, true) : ($room->display_options ?? []);
+                                                    $roomDetails = $displayOptions['room_details'] ?? [];
+                                                    
+                                                    // If room_details exists and has entries, create one entry per room detail
+                                                    if (!empty($roomDetails) && is_array($roomDetails)) {
+                                                        foreach($roomDetails as $index => $roomDetail) {
+                                                            // Create a clone of the room with individual room detail data
+                                                            $expandedRoom = clone $room;
+                                                            $expandedRoom->individual_number = $roomDetail['number'] ?? $room->number ?? '';
+                                                            $expandedRoom->individual_floor_number = $roomDetail['floor_number'] ?? $room->floor_number ?? '';
+                                                            $expandedRoom->individual_size = $roomDetail['size'] ?? $room->size ?? '';
+                                                            $expandedRoom->individual_wifi_details = $roomDetail['wifi_details'] ?? $room->wifi_details ?? '';
+                                                            $expandedRoom->room_detail_index = $index;
+                                                            $activeRooms->push($expandedRoom);
+                                                        }
+                                                    } else {
+                                                        // Fallback to old format - single room entry
+                                                        $room->individual_number = $room->number ?? '';
+                                                        $room->individual_floor_number = $room->floor_number ?? '';
+                                                        $room->individual_size = $room->size ?? '';
+                                                        $room->individual_wifi_details = $room->wifi_details ?? '';
+                                                        $room->room_detail_index = 0;
+                                                        $activeRooms->push($room);
+                                                    }
+                                                }
                                             @endphp
                                             
                                             @if($activeRooms->isEmpty())
@@ -717,13 +746,16 @@
 
                                                 <div class="hotel-all-card" 
                                                      data-room-id="{{ $roomList->id }}"
+                                                     data-room-detail-index="{{ $roomList->room_detail_index ?? 0 }}"
+                                                     data-individual-number="{{ $roomList->individual_number ?? $roomList->number ?? '' }}"
+                                                     data-individual-floor-number="{{ $roomList->individual_floor_number ?? $roomList->floor_number ?? '' }}"
                                                      data-beds="{{ $roomList->total_beds ?? 1 }}" 
                                                      data-capacity="{{ $roomList->total_persons ?? 2 }}">
                                                     <div class="room-info">
                                                         <div class="room-feature-head">
                                                             <h3 class="room-title">{{ $roomList->name }}</h3>
-                                                            <p class="room-numbers">Room # {{ $roomList->number }} <span
-                                                                    class="floor-numbers">{{ $roomList->floor_number }}</span>
+                                                            <p class="room-numbers">Room # {{ $roomList->individual_number ?? $roomList->number ?? 'N/A' }} <span
+                                                                    class="floor-numbers">{{ $roomList->individual_floor_number ?? $roomList->floor_number ?? '' }}</span>
                                                             </p>
 
                                                         </div>
@@ -1127,12 +1159,24 @@
                     // Store current room for modal "Add to Book" button
                     let currentModalRoom = null;
 
-                    function loadRoomDetails(roomId) {
+                    function loadRoomDetails(roomId, roomDetailIndex = 0) {
                         const room = roomsData.find(r => r.id === roomId);
                         if (!room) return;
 
                         // Store for modal add to book button
                         currentModalRoom = room;
+
+                        // Get individual room details if room_details exists
+                        let individualNumber = room.number || '';
+                        let individualFloorNumber = room.floor_number || '';
+                        
+                        if (room.display_options && room.display_options.room_details && Array.isArray(room.display_options.room_details)) {
+                            const roomDetail = room.display_options.room_details[roomDetailIndex];
+                            if (roomDetail) {
+                                individualNumber = roomDetail.number || individualNumber;
+                                individualFloorNumber = roomDetail.floor_number || individualFloorNumber;
+                            }
+                        }
 
                         // Calculate discount
                         const originalPrice = parseFloat(room.price_per_night);
@@ -1152,7 +1196,7 @@
 
                         // Update modal header
                         document.querySelector('.room-title-modal').textContent = room.name;
-                        document.querySelector('.room-numbers').innerHTML = `Room # ${room.number}<br> <span style="padding-left:0px" class="floor-numbers">${room.floor_number || ''}</span>`;
+                        document.querySelector('.room-numbers').innerHTML = `Room # ${individualNumber}<br> <span style="padding-left:0px" class="floor-numbers">${individualFloorNumber || ''}</span>`;
 
                         // Update pricing
                         if (discountPercentage > 0) {

@@ -61,127 +61,9 @@
                                     </ul>
 
                                     <div class="tab-content">
-                                        <div class="room-activate d-flex justify-content-end">
-                                            <div class="col-md-3 col-lg-3 col-xxl-3">
-                                                <div class="form-group" style="margin-bottom: 0px;">
-                                                    <label class="form-label">Room Active/Inactive Button</label>
-                                                    <div class="form-check form-switch custom-control custom-switch checked" style="padding-left: 2rem; margin-bottom: 0px;">
-                                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="is_active" {{ old('is_active', $room->is_active) ? 'checked' : '' }}>
-                                                    </div>
-                                                    <div id="alertMessage" style="display: none; color: red; margin-top:0px;"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-
                                         <!-- Room Description -->
                                         <div class="tab-pane {{ old('active_tab', 'tabItem3') === 'tabItem3' ? 'active' : '' }}" id="tabItem3">
                                             <div class="row gy-4">
-                                                <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label">Room Name</label>
-                                                        <input type="text" class="form-control" name="name" value="{{ old('name', $room->name) }}" placeholder="Room Name" required>
-                                                        @error('name')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label">Room Number</label>
-                                                        <input type="text" class="form-control" name="number" value="{{ old('number', $room->number) }}" placeholder="Room number" required>
-                                                        @error('number')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label">Room Floor Number</label>
-                                                        <input type="number" class="form-control" name="floor_number" value="{{ old('floor_number', $room->floor_number) }}" placeholder="Room Floor Number" required>
-                                                        @error('floor_number')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="row gy-4">
-                                                    <div class="price-card-room">
-                                                        <h3 class="can-tittle">Price Section</h3>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                        <div class="form-group">
-                                                            <label class="form-label">Room Price (Per Night)</label>
-                                                            <input type="number" class="form-control" name="price_per_night" value="{{ old('price_per_night', $room->price_per_night) }}" placeholder="Ex: BDT 1,500" required>
-                                                            @error('price_per_night')
-                                                            <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                        <div class="form-group">
-                                                            <label class="form-label">Weekend Price</label>
-                                                            <input type="number" class="form-control" name="weekend_price" value="{{ old('weekend_price', $room->weekend_price) }}" placeholder="Ex: BDT 1,500">
-                                                            @error('weekend_price')
-                                                            <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                        <div class="form-group">
-                                                            <label class="form-label">Holiday Price</label>
-                                                            <input type="number" class="form-control" name="holiday_price" value="{{ old('holiday_price', $room->holiday_price) }}" placeholder="Ex: BDT 1,500">
-                                                            @error('holiday_price')
-                                                            <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                        <div class="form-group">
-                                                            <label class="form-label">Discount Type</label>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="radio" name="discount_type" id="discountAmount" value="amount" {{ old('discount_type', $room->discount_type) == 'amount' ? 'checked' : '' }}>
-                                                                <label class="form-check-label" for="discountAmount">Discount by Amount</label>
-                                                            </div>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="radio" name="discount_type" id="discountPercentage" value="percentage" {{ old('discount_type', $room->discount_type) == 'percentage' ? 'checked' : '' }}>
-                                                                <label class="form-check-label" for="discountPercentage">Discount by Percentage (%)</label>
-                                                            </div>
-                                                            <div class="mt-3 {{ old('discount_type', $room->discount_type) ? '' : 'hidden' }}" id="discountValueField">
-                                                                <label for="discount_value" class="form-label">Enter Discount {{ old('discount_type', $room->discount_type) == 'amount' ? 'Amount' : 'Percentage (%)' }}</label>
-                                                                <input type="number" class="form-control" name="discount_value" id="discount_value" value="{{ old('discount_value', $room->discount_type == 'amount' ? $room->discount_amount : $room->discount_percentage) }}" placeholder="{{ old('discount_type', $room->discount_type) == 'amount' ? 'Ex: 3500' : 'Ex: 15 %' }}">
-                                                                @error('discount_value')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                                @enderror
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                        <label class="form-label">Total Person in this room!</label>
-                                                        <div class="counter-wrapper">
-                                                            <div class="counter-card">
-                                                                <div>
-                                                                    <div class="counter">
-                                                                        <button type="button" class="btn decrease-male">-</button>
-                                                                        <span class="count male-count" id="totalPersons">{{ old('total_persons', $room->total_persons) }}</span>
-                                                                        <input type="hidden" name="total_persons" id="totalPersonsInput" value="{{ old('total_persons', $room->total_persons) }}">
-                                                                        <button type="button" class="btn increase-male">+</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        @error('total_persons')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
                                                 <div class="col-md-12 col-lg-12 col-xxl-3">
                                                     <div class="form-group">
                                                         <label class="form-label" for="default-textarea">Room Description</label>
@@ -194,70 +76,180 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-6 col-lg-2 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label">Total Room</label>
-                                                        <div class="counter-wrapper">
-                                                            <div class="counter-card">
-                                                                <div>
-                                                                    <div class="counter">
-                                                                        <button type="button" class="btn decrease-male">-</button>
-                                                                        <span id="totalRooms" class="count male-count">{{ old('total_rooms', $room->total_rooms) }}</span>
-                                                                        <input type="hidden" name="total_rooms" id="totalRoomsInput" value="{{ old('total_rooms', $room->total_rooms) }}">
-                                                                        <button type="button" class="btn increase-male">+</button>
+                                            </div>
+
+                                            <!-- Room Information Section -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Room Information</strong></h5>
+                                                        
+                                                        <!-- Room Name (Single Field) -->
+                                                        <div class="form-group mb-4">
+                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Room Name</label>
+                                                            <input type="text" class="form-control" name="name" value="{{ old('name', $room->name) }}" placeholder="Room Name" required style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                                            @error('name')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+                                                        
+                                                        <!-- Room Active/Inactive Button -->
+                                                        <div class="form-group mb-4">
+                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Room Active/Inactive Button</label>
+                                                            <div class="form-check form-switch custom-control custom-switch checked" style="padding-left: 2rem; margin-bottom: 0px;">
+                                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="is_active" {{ old('is_active', $room->is_active) ? 'checked' : '' }}>
+                                                            </div>
+                                                            <div id="alertMessage" style="display: none; color: red; margin-top:0px;"></div>
+                                                        </div>
+                                                        
+                                                        <!-- Total Room Counter -->
+                                                        <div class="form-group mb-4">
+                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Total Room</label>
+                                                            <div class="counter-wrapper" style="max-width: 300px;">
+                                                                <div class="counter-card">
+                                                                    <div>
+                                                                        <div class="counter">
+                                                                            <button type="button" class="btn decrease-male" id="roomDecreaseBtn">-</button>
+                                                                            <span id="totalRooms" class="count male-count">{{ old('total_rooms', $room->total_rooms ?? 1) }}</span>
+                                                                            <input type="hidden" name="total_rooms" id="totalRoomsInput" value="{{ old('total_rooms', $room->total_rooms ?? 1) }}">
+                                                                            <button type="button" class="btn increase-male" id="roomIncreaseBtn">+</button>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            @error('total_rooms')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
                                                         </div>
-                                                        @error('total_rooms')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                        @enderror
+
+                                                        @php
+                                                            $appliances = old('appliances', is_string($room->appliances) ? (json_decode($room->appliances, true) ?? []) : ($room->appliances ?? []));
+                                                            if (!is_array($appliances)) {
+                                                                $appliances = [];
+                                                            }
+                                                            $roomInfo = old('room_info', is_string($room->display_options) ? (json_decode($room->display_options, true) ?? []) : ($room->display_options ?? []));
+                                                            if (!is_array($roomInfo)) {
+                                                                $roomInfo = [];
+                                                            }
+                                                            
+                                                            // Get existing room details - handle both old format (single room) and new format (array of rooms)
+                                                            $existingRoomDetails = old('room_details', $roomInfo['room_details'] ?? []);
+                                                            $totalRooms = old('total_rooms', $room->total_rooms ?? 1);
+                                                            
+                                                            // If old format (single room), convert to new format
+                                                            if (empty($existingRoomDetails) && ($room->number || $room->floor_number || $room->size || $room->wifi_details)) {
+                                                                $existingRoomDetails = [[
+                                                                    'number' => $room->number ?? '',
+                                                                    'floor_number' => $room->floor_number ?? '',
+                                                                    'size' => $room->size ?? '',
+                                                                    'wifi_details' => $room->wifi_details ?? ''
+                                                                ]];
+                                                                $totalRooms = max($totalRooms, 1);
+                                                            }
+                                                            
+                                                            if (!is_array($existingRoomDetails)) {
+                                                                $existingRoomDetails = [];
+                                                            }
+                                                            
+                                                            // Ensure we have at least as many room entries as total_rooms
+                                                            while (count($existingRoomDetails) < $totalRooms) {
+                                                                $existingRoomDetails[] = [];
+                                                            }
+                                                        @endphp
+
+                                                        <!-- Dynamic Room Details Container -->
+                                                        <div id="roomDetailsContainer" style="margin-top: 20px;">
+                                                            <!-- Room detail sections will be dynamically generated here -->
+                                                        </div>
                                                     </div>
                                                 </div>
+                                            </div>
 
+                                            <!-- Price Section -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <div class="row gy-4">
+                                                        <div class="price-card-room">
+                                                            <h3 class="can-tittle">Price Section</h3>
+                                                        </div>
 
+                                                        <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Room Price (Per Night)</label>
+                                                                <input type="number" class="form-control" name="price_per_night" value="{{ old('price_per_night', $room->price_per_night) }}" placeholder="Ex: BDT 1,500" required>
+                                                                @error('price_per_night')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
 
+                                                        <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Weekend Price</label>
+                                                                <input type="number" class="form-control" name="weekend_price" value="{{ old('weekend_price', $room->weekend_price) }}" placeholder="Ex: BDT 1,500">
+                                                                @error('weekend_price')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Holiday Price</label>
+                                                                <input type="number" class="form-control" name="holiday_price" value="{{ old('holiday_price', $room->holiday_price) }}" placeholder="Ex: BDT 1,500">
+                                                                @error('holiday_price')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Discount Type</label>
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio" name="discount_type" id="discountAmount" value="amount" {{ old('discount_type', $room->discount_type) == 'amount' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="discountAmount">Discount by Amount</label>
+                                                                </div>
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio" name="discount_type" id="discountPercentage" value="percentage" {{ old('discount_type', $room->discount_type) == 'percentage' ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="discountPercentage">Discount by Percentage (%)</label>
+                                                                </div>
+                                                                <div class="mt-3 {{ old('discount_type', $room->discount_type) ? '' : 'hidden' }}" id="discountValueField">
+                                                                    <label for="discount_value" class="form-label">Enter Discount {{ old('discount_type', $room->discount_type) == 'amount' ? 'Amount' : 'Percentage (%)' }}</label>
+                                                                    <input type="number" class="form-control" name="discount_value" id="discount_value" value="{{ old('discount_value', $room->discount_type == 'amount' ? $room->discount_amount : $room->discount_percentage) }}" placeholder="{{ old('discount_type', $room->discount_type) == 'amount' ? 'Ex: 3500' : 'Ex: 15 %' }}">
+                                                                    @error('discount_value')
+                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                            <label class="form-label">Total Person in this room!</label>
+                                                            <div class="counter-wrapper">
+                                                                <div class="counter-card">
+                                                                    <div>
+                                                                        <div class="counter">
+                                                                            <button type="button" class="btn decrease-male">-</button>
+                                                                            <span class="count male-count" id="totalPersons">{{ old('total_persons', $room->total_persons) }}</span>
+                                                                            <input type="hidden" name="total_persons" id="totalPersonsInput" value="{{ old('total_persons', $room->total_persons) }}">
+                                                                            <button type="button" class="btn increase-male">+</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            @error('total_persons')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
 
                                             <div class="row mt-15">
                                                 <div class="checkbox-section">
-                                                    <h3 class="can-tittle">Room Information</h3>
-
-                                                    @php
-                                                        $appliances = old('appliances', is_string($room->appliances) ? (json_decode($room->appliances, true) ?? []) : ($room->appliances ?? []));
-                                                        if (!is_array($appliances)) {
-                                                            $appliances = [];
-                                                        }
-                                                        $roomInfo = old('room_info', is_string($room->display_options) ? (json_decode($room->display_options, true) ?? []) : ($room->display_options ?? []));
-                                                        if (!is_array($roomInfo)) {
-                                                            $roomInfo = [];
-                                                        }
-                                                    @endphp
-
-                                                    <!-- Room Size and WiFi Details -->
-                                                    <div class="row mt-3 mb-3">
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Room Size (sq. ft / sq. m)</label>
-                                                                <input type="number" class="form-control" name="size" value="{{ old('size', $room->size) }}" placeholder="Ex: 1200 SFT" required>
-                                                                @error('size')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                                @enderror
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="wifi_details">WiFi Details/Password</label>
-                                                                <input type="text" class="form-control" name="wifi_details" value="{{ old('wifi_details', $room->wifi_details) }}" placeholder="WiFi Details/Password">
-                                                                @error('wifi_details')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                                @enderror
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
                                                     <!-- Room Facilities & Amenities -->
-                                                    <h5 class="mt-3 mb-2"><strong>Room Facilities & Amenities</strong></h5>
+                                                    <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px; margin-top: 20px;"><strong>Room Facilities & Amenities</strong></h5>
                                                     <div class="chk-all-sec">
                                                         <div class="form-group">
                                                             <div class="custom-control custom-switch checked">
@@ -559,6 +551,8 @@
                                                         </div>
                                                     </div>
 
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <script>
@@ -2177,24 +2171,92 @@
                     totalPersonsInput.value = personCount;
                 });
 
-                let roomCount = {{ old('total_rooms', $room->total_rooms) }};
+                // Room Details Counter and Dynamic Sections
+                let roomCount = {{ old('total_rooms', $room->total_rooms ?? 1) }};
                 const totalRoomsDisplay = document.getElementById('totalRooms');
                 const totalRoomsInput = document.getElementById('totalRoomsInput');
-                const roomIncreaseBtn = document.querySelector('#tabItem3 .counter-card:has(#totalRooms) .increase-male');
-                const roomDecreaseBtn = document.querySelector('#tabItem3 .counter-card:has(#totalRooms) .decrease-male');
+                const roomIncreaseBtn = document.getElementById('roomIncreaseBtn');
+                const roomDecreaseBtn = document.getElementById('roomDecreaseBtn');
+                const roomDetailsContainer = document.getElementById('roomDetailsContainer');
 
-                roomIncreaseBtn.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    roomCount++;
-                    totalRoomsDisplay.textContent = roomCount;
-                    totalRoomsInput.value = roomCount;
-                });
-                roomDecreaseBtn.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    if (roomCount > 0) roomCount--;
-                    totalRoomsDisplay.textContent = roomCount;
-                    totalRoomsInput.value = roomCount;
-                });
+                // Function to generate a room detail section
+                function generateRoomSection(index, existingData = {}) {
+                    const roomNumber = existingData.number || '';
+                    const floorNumber = existingData.floor_number || '';
+                    const roomSize = existingData.size || '';
+                    const wifiDetails = existingData.wifi_details || '';
+                    
+                    return `
+                        <div class="room-detail-section mb-4" data-room-index="${index}" style="padding: 15px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
+                            <h6 style="color: #495057; font-weight: 600; margin-bottom: 15px;">Room ${index + 1} Details</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Room Number</label>
+                                        <input type="text" class="form-control" name="room_details[${index}][number]" value="${roomNumber}" placeholder="Room number" required style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Room Floor Number</label>
+                                        <input type="text" class="form-control" name="room_details[${index}][floor_number]" value="${floorNumber}" placeholder="Room Floor Number" required style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Room Size (sq. ft / sq. m)</label>
+                                        <input type="number" class="form-control" name="room_details[${index}][size]" value="${roomSize}" placeholder="Ex: 1200 SFT" required style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">WiFi Details/Password</label>
+                                        <input type="text" class="form-control" name="room_details[${index}][wifi_details]" value="${wifiDetails}" placeholder="WiFi Details/Password" style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Function to render all room sections
+                function renderRoomSections(count, existingRooms = []) {
+                    if (!roomDetailsContainer) return;
+                    roomDetailsContainer.innerHTML = '';
+                    for (let i = 0; i < count; i++) {
+                        const existingData = existingRooms[i] || {};
+                        roomDetailsContainer.innerHTML += generateRoomSection(i, existingData);
+                    }
+                }
+
+                // Counter event listeners
+                if (roomIncreaseBtn) {
+                    roomIncreaseBtn.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        roomCount++;
+                        totalRoomsDisplay.textContent = roomCount;
+                        totalRoomsInput.value = roomCount;
+                        renderRoomSections(roomCount);
+                    });
+                }
+
+                if (roomDecreaseBtn) {
+                    roomDecreaseBtn.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        if (roomCount > 0) {
+                            roomCount--;
+                            totalRoomsDisplay.textContent = roomCount;
+                            totalRoomsInput.value = roomCount;
+                            renderRoomSections(roomCount);
+                        }
+                    });
+                }
+
+                // Initialize room sections on page load
+                const existingRoomDetails = @json($existingRoomDetails);
+                renderRoomSections(roomCount, existingRoomDetails);
 
                 // Bathroom Details Counter and Dynamic Sections
                 let bathroomCount = {{ old('total_washrooms', $room->total_washrooms ?? 0) }};
@@ -3247,6 +3309,14 @@
                             if (totalBedsInput && totalBedsDisplay) {
                                 const currentValue = parseInt(totalBedsDisplay.textContent) || 0;
                                 totalBedsInput.value = currentValue;
+                            }
+                            
+                            // Ensure total_rooms is synced before submission
+                            const totalRoomsInput = document.getElementById('totalRoomsInput');
+                            const totalRoomsDisplay = document.getElementById('totalRooms');
+                            if (totalRoomsInput && totalRoomsDisplay) {
+                                const currentValue = parseInt(totalRoomsDisplay.textContent) || 1;
+                                totalRoomsInput.value = currentValue;
                             }
                             
                             // No errors, submit the form
