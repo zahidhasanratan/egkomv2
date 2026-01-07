@@ -62,21 +62,7 @@
 
                                     <div class="tab-content">
                                         <!-- Room Description -->
-                                        <div class="tab-pane {{ old('active_tab', 'tabItem3') === 'tabItem3' ? 'active' : '' }}" id="tabItem3">
-                                            <div class="row gy-4">
-                                                <div class="col-md-12 col-lg-12 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="default-textarea">Room Description</label>
-                                                        <div class="form-control-wrap">
-                                                            <textarea class="form-control no-resize" name="description" id="default-textarea">{{ old('description', $room->description) }}</textarea>
-                                                            @error('description')
-                                                            <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
+                                        <div class="tab-pane fade {{ old('active_tab', 'tabItem3') === 'tabItem3' ? 'show active' : '' }}" id="tabItem3">
 
                                             <!-- Room Information Section -->
                                             <div class="row mt-4">
@@ -91,6 +77,59 @@
                                                             @error('name')
                                                             <span class="text-danger">{{ $message }}</span>
                                                             @enderror
+                                                        </div>
+                                                        
+                                                        <!-- Room Description -->
+                                                        <div class="form-group mb-4">
+                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Room Description</label>
+                                                            <div class="form-control-wrap">
+                                                                <textarea class="form-control no-resize" name="description" id="default-textarea" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('description', $room->description) }}</textarea>
+                                                                @error('description')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Common Room Fields -->
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group mb-4">
+                                                                    <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Room Number</label>
+                                                                    <input type="text" class="form-control" name="room_number" value="{{ old('room_number', $room->number) }}" placeholder="Room number" style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                                                    @error('room_number')
+                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group mb-4">
+                                                                    <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Room Floor Number</label>
+                                                                    <input type="text" class="form-control" name="floor_number" value="{{ old('floor_number', $room->floor_number) }}" placeholder="Room Floor Number" style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                                                    @error('floor_number')
+                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group mb-4">
+                                                                    <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Room Size (sq. ft / sq. m)</label>
+                                                                    <input type="number" class="form-control" name="size" value="{{ old('size', $room->size) }}" placeholder="Ex: 1200 SFT" style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                                                    @error('size')
+                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group mb-4">
+                                                                    <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">WiFi Details/Password</label>
+                                                                    <input type="text" class="form-control" name="wifi_details" value="{{ old('wifi_details', $room->wifi_details) }}" placeholder="WiFi Details/Password" style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                                                    @error('wifi_details')
+                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                         
                                                         <!-- Room Active/Inactive Button -->
@@ -132,20 +171,9 @@
                                                                 $roomInfo = [];
                                                             }
                                                             
-                                                            // Get existing room details - handle both old format (single room) and new format (array of rooms)
+                                                            // Get existing room details
                                                             $existingRoomDetails = old('room_details', $roomInfo['room_details'] ?? []);
                                                             $totalRooms = old('total_rooms', $room->total_rooms ?? 1);
-                                                            
-                                                            // If old format (single room), convert to new format
-                                                            if (empty($existingRoomDetails) && ($room->number || $room->floor_number || $room->size || $room->wifi_details)) {
-                                                                $existingRoomDetails = [[
-                                                                    'number' => $room->number ?? '',
-                                                                    'floor_number' => $room->floor_number ?? '',
-                                                                    'size' => $room->size ?? '',
-                                                                    'wifi_details' => $room->wifi_details ?? ''
-                                                                ]];
-                                                                $totalRooms = max($totalRooms, 1);
-                                                            }
                                                             
                                                             if (!is_array($existingRoomDetails)) {
                                                                 $existingRoomDetails = [];
@@ -250,15 +278,15 @@
                                                 <div class="checkbox-section">
                                                     <!-- Room Facilities & Amenities -->
                                                     <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px; margin-top: 20px;"><strong>Room Facilities & Amenities</strong></h5>
-                                                    <div class="chk-all-sec">
-                                                        <div class="form-group">
-                                                            <div class="custom-control custom-switch checked">
-                                                                <input type="checkbox" class="custom-control-input" name="room-info-all" id="room-info-all">
-                                                                <label class="custom-control-label" for="room-info-all">Select All</label>
+                                                            <div class="chk-all-sec">
+                                                                <div class="form-group">
+                                                                    <div class="custom-control custom-switch checked">
+                                                                        <input type="checkbox" class="custom-control-input" name="room-info-all" id="room-info-all">
+                                                                        <label class="custom-control-label" for="room-info-all">Select All</label>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="AC" {{ in_array('AC', $appliances) ? 'checked' : '' }}> AC</label><br>
+                                                            <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="AC" {{ in_array('AC', $appliances) ? 'checked' : '' }}> AC</label><br>
                                                     <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Smart TV" {{ in_array('Smart TV', $appliances) ? 'checked' : '' }}> Smart TV</label><br>
                                                     <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Wi-Fi" {{ in_array('Wi-Fi', $appliances) ? 'checked' : '' }}> Wi-Fi</label><br>
                                                     <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Minibar" {{ in_array('Minibar', $appliances) ? 'checked' : '' }}> Minibar</label><br>
@@ -550,9 +578,6 @@
                                                             <button type="button" class="btn btn-primary btn-sm" id="add-accessibility-btn">Add</button>
                                                         </div>
                                                     </div>
-
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </div>
                                             <script>
@@ -630,6 +655,9 @@
                                                     addCustomItem('view', 'custom-view-input', '.custom-view-container', 'room_info[view][]');
                                                 });
 
+                                                document.getElementById('add-bathroom-btn')?.addEventListener('click', function() {
+                                                    addCustomItem('bathroom', 'custom-bathroom-input', '.custom-bathroom-container', 'room_info[bathroom][]');
+                                                });
 
                                                 document.getElementById('add-kitchen-btn')?.addEventListener('click', function() {
                                                     addCustomItem('kitchen', 'custom-kitchen-input', '.custom-kitchen-container', 'room_info[kitchen_facilities][]');
@@ -735,23 +763,23 @@
                                                             
                                                             <div id="bed_fee_amount_fields" style="display: {{ old('additional_info.bed_fee_type', $additionalInfo['bed_fee_type'] ?? '') == 'paid' ? 'block' : 'none' }}; margin-top: 20px; padding: 15px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
                                                                 <label class="form-label mb-3" style="font-weight: 600; color: #495057;">Fee Details</label>
-                                                                <div class="row">
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label class="form-label">Fee Amount</label>
-                                                                            <input type="number" class="form-control" name="additional_info[bed_fee_amount]" value="{{ old('additional_info.bed_fee_amount', $additionalInfo['bed_fee_amount'] ?? '') }}" placeholder="e.g., 1000" min="0" step="0.01">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label class="form-label">Currency</label>
-                                                                            <input type="text" class="form-control" name="additional_info[bed_fee_currency]" value="{{ old('additional_info.bed_fee_currency', $additionalInfo['bed_fee_currency'] ?? 'BDT') }}" placeholder="e.g., BDT">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label class="form-label">Per Unit</label>
-                                                                            <input type="text" class="form-control" name="additional_info[bed_fee_unit]" value="{{ old('additional_info.bed_fee_unit', $additionalInfo['bed_fee_unit'] ?? 'Per Bed') }}" placeholder="e.g., Per Bed">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Fee Amount</label>
+                                                                <input type="number" class="form-control" name="additional_info[bed_fee_amount]" value="{{ old('additional_info.bed_fee_amount', $additionalInfo['bed_fee_amount'] ?? '') }}" placeholder="e.g., 1000" min="0" step="0.01">
+                                                </div>
+                                            </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Currency</label>
+                                                                <input type="text" class="form-control" name="additional_info[bed_fee_currency]" value="{{ old('additional_info.bed_fee_currency', $additionalInfo['bed_fee_currency'] ?? 'BDT') }}" placeholder="e.g., BDT">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Per Unit</label>
+                                                                <input type="text" class="form-control" name="additional_info[bed_fee_unit]" value="{{ old('additional_info.bed_fee_unit', $additionalInfo['bed_fee_unit'] ?? 'Per Bed') }}" placeholder="e.g., Per Bed">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -803,15 +831,15 @@
                                                             
                                                             <div id="children_guest_fee_fields" style="display: {{ old('additional_info.children_guest_policy_type', $additionalInfo['children_guest_policy_type'] ?? '') == 'paid' ? 'block' : 'none' }}; margin-top: 20px; padding: 15px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
                                                                 <label class="form-label mb-3" style="font-weight: 600; color: #495057;">Fee Details</label>
-                                                                <div class="row">
+                                                    <div class="row">
                                                                     <div class="col-md-4">
-                                                                        <div class="form-group">
+                                                            <div class="form-group">
                                                                             <label class="form-label">Fee Amount</label>
                                                                             <input type="number" class="form-control" name="additional_info[children_guest_fee_amount]" value="{{ old('additional_info.children_guest_fee_amount', $additionalInfo['children_guest_fee_amount'] ?? '') }}" placeholder="e.g., 500" min="0" step="0.01">
-                                                                        </div>
-                                                                    </div>
+                                                            </div>
+                                                        </div>
                                                                     <div class="col-md-4">
-                                                                        <div class="form-group">
+                                                            <div class="form-group">
                                                                             <label class="form-label">Currency</label>
                                                                             <input type="text" class="form-control" name="additional_info[children_guest_fee_currency]" value="{{ old('additional_info.children_guest_fee_currency', $additionalInfo['children_guest_fee_currency'] ?? 'BDT') }}" placeholder="e.g., BDT">
                                                                         </div>
@@ -859,37 +887,37 @@
                                                                 <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Service Type</label>
                                                                 <div class="d-flex gap-3">
                                                                     <div class="form-check" style="padding-left: 2rem;">
-                                                                        <input class="form-check-input" type="radio" name="additional_info[laundry_service_type]" id="laundry_complementary" value="complementary" {{ old('additional_info.laundry_service_type', $additionalInfo['laundry_service_type'] ?? '') == 'complementary' ? 'checked' : '' }}>
+                                                                    <input class="form-check-input" type="radio" name="additional_info[laundry_service_type]" id="laundry_complementary" value="complementary" {{ old('additional_info.laundry_service_type', $additionalInfo['laundry_service_type'] ?? '') == 'complementary' ? 'checked' : '' }}>
                                                                         <label class="form-check-label" for="laundry_complementary" style="font-weight: 500;">Complementary</label>
-                                                                    </div>
+                                                                </div>
                                                                     <div class="form-check" style="padding-left: 2rem;">
-                                                                        <input class="form-check-input" type="radio" name="additional_info[laundry_service_type]" id="laundry_paid" value="paid" {{ old('additional_info.laundry_service_type', $additionalInfo['laundry_service_type'] ?? '') == 'paid' ? 'checked' : '' }}>
+                                                                    <input class="form-check-input" type="radio" name="additional_info[laundry_service_type]" id="laundry_paid" value="paid" {{ old('additional_info.laundry_service_type', $additionalInfo['laundry_service_type'] ?? '') == 'paid' ? 'checked' : '' }}>
                                                                         <label class="form-check-label" for="laundry_paid" style="font-weight: 500;">Paid</label>
-                                                                    </div>
+                                                                </div>
                                                                 </div>
                                                             </div>
                                                             
                                                             <div id="laundry_fee_fields" style="display: {{ old('additional_info.laundry_service_type', $additionalInfo['laundry_service_type'] ?? '') == 'paid' ? 'block' : 'none' }}; margin-top: 20px; padding: 15px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
                                                                 <label class="form-label mb-3" style="font-weight: 600; color: #495057;">Fee Details</label>
-                                                                <div class="row">
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label class="form-label">Fee Amount</label>
-                                                                            <input type="number" class="form-control" name="additional_info[laundry_fee_amount]" value="{{ old('additional_info.laundry_fee_amount', $additionalInfo['laundry_fee_amount'] ?? '') }}" placeholder="e.g., 500" min="0" step="0.01">
-                                                                        </div>
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Fee Amount</label>
+                                                                        <input type="number" class="form-control" name="additional_info[laundry_fee_amount]" value="{{ old('additional_info.laundry_fee_amount', $additionalInfo['laundry_fee_amount'] ?? '') }}" placeholder="e.g., 500" min="0" step="0.01">
                                                                     </div>
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label class="form-label">Currency</label>
-                                                                            <input type="text" class="form-control" name="additional_info[laundry_fee_currency]" value="{{ old('additional_info.laundry_fee_currency', $additionalInfo['laundry_fee_currency'] ?? 'BDT') }}" placeholder="e.g., BDT">
-                                                                        </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Currency</label>
+                                                                        <input type="text" class="form-control" name="additional_info[laundry_fee_currency]" value="{{ old('additional_info.laundry_fee_currency', $additionalInfo['laundry_fee_currency'] ?? 'BDT') }}" placeholder="e.g., BDT">
                                                                     </div>
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label class="form-label">Per Unit</label>
-                                                                            <input type="text" class="form-control" name="additional_info[laundry_fee_unit]" value="{{ old('additional_info.laundry_fee_unit', $additionalInfo['laundry_fee_unit'] ?? 'Per Person') }}" placeholder="e.g., Per Person">
-                                                                        </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Per Unit</label>
+                                                                        <input type="text" class="form-control" name="additional_info[laundry_fee_unit]" value="{{ old('additional_info.laundry_fee_unit', $additionalInfo['laundry_fee_unit'] ?? 'Per Person') }}" placeholder="e.g., Per Person">
                                                                     </div>
+                                                                </div>
                                                                 </div>
                                                             </div>
                                                             
@@ -927,37 +955,37 @@
                                                                 <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Service Type</label>
                                                                 <div class="d-flex gap-3">
                                                                     <div class="form-check" style="padding-left: 2rem;">
-                                                                        <input class="form-check-input" type="radio" name="additional_info[housekeeping_service_type]" id="housekeeping_complementary" value="complementary" {{ old('additional_info.housekeeping_service_type', $additionalInfo['housekeeping_service_type'] ?? '') == 'complementary' ? 'checked' : '' }}>
+                                                                    <input class="form-check-input" type="radio" name="additional_info[housekeeping_service_type]" id="housekeeping_complementary" value="complementary" {{ old('additional_info.housekeeping_service_type', $additionalInfo['housekeeping_service_type'] ?? '') == 'complementary' ? 'checked' : '' }}>
                                                                         <label class="form-check-label" for="housekeeping_complementary" style="font-weight: 500;">Complementary</label>
-                                                                    </div>
+                                                                </div>
                                                                     <div class="form-check" style="padding-left: 2rem;">
-                                                                        <input class="form-check-input" type="radio" name="additional_info[housekeeping_service_type]" id="housekeeping_paid" value="paid" {{ old('additional_info.housekeeping_service_type', $additionalInfo['housekeeping_service_type'] ?? '') == 'paid' ? 'checked' : '' }}>
+                                                                    <input class="form-check-input" type="radio" name="additional_info[housekeeping_service_type]" id="housekeeping_paid" value="paid" {{ old('additional_info.housekeeping_service_type', $additionalInfo['housekeeping_service_type'] ?? '') == 'paid' ? 'checked' : '' }}>
                                                                         <label class="form-check-label" for="housekeeping_paid" style="font-weight: 500;">Paid</label>
-                                                                    </div>
+                                                                </div>
                                                                 </div>
                                                             </div>
                                                             
                                                             <div id="housekeeping_fee_fields" style="display: {{ old('additional_info.housekeeping_service_type', $additionalInfo['housekeeping_service_type'] ?? '') == 'paid' ? 'block' : 'none' }}; margin-top: 20px; padding: 15px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
                                                                 <label class="form-label mb-3" style="font-weight: 600; color: #495057;">Fee Details</label>
-                                                                <div class="row">
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label class="form-label">Fee Amount</label>
-                                                                            <input type="number" class="form-control" name="additional_info[housekeeping_fee_amount]" value="{{ old('additional_info.housekeeping_fee_amount', $additionalInfo['housekeeping_fee_amount'] ?? '') }}" placeholder="e.g., 500" min="0" step="0.01">
-                                                                        </div>
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Fee Amount</label>
+                                                                        <input type="number" class="form-control" name="additional_info[housekeeping_fee_amount]" value="{{ old('additional_info.housekeeping_fee_amount', $additionalInfo['housekeeping_fee_amount'] ?? '') }}" placeholder="e.g., 500" min="0" step="0.01">
                                                                     </div>
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label class="form-label">Currency</label>
-                                                                            <input type="text" class="form-control" name="additional_info[housekeeping_fee_currency]" value="{{ old('additional_info.housekeeping_fee_currency', $additionalInfo['housekeeping_fee_currency'] ?? 'BDT') }}" placeholder="e.g., BDT">
-                                                                        </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Currency</label>
+                                                                        <input type="text" class="form-control" name="additional_info[housekeeping_fee_currency]" value="{{ old('additional_info.housekeeping_fee_currency', $additionalInfo['housekeeping_fee_currency'] ?? 'BDT') }}" placeholder="e.g., BDT">
                                                                     </div>
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label class="form-label">Per Unit</label>
-                                                                            <input type="text" class="form-control" name="additional_info[housekeeping_fee_unit]" value="{{ old('additional_info.housekeeping_fee_unit', $additionalInfo['housekeeping_fee_unit'] ?? 'Per Service') }}" placeholder="e.g., Per Service">
-                                                                        </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Per Unit</label>
+                                                                        <input type="text" class="form-control" name="additional_info[housekeeping_fee_unit]" value="{{ old('additional_info.housekeeping_fee_unit', $additionalInfo['housekeeping_fee_unit'] ?? 'Per Service') }}" placeholder="e.g., Per Service">
                                                                     </div>
+                                                                </div>
                                                                 </div>
                                                             </div>
                                                             
@@ -1385,13 +1413,18 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row mt-15">
+                                            <div class="row mt-15 js-limit-two"> {{-- scoped container --}}
                                                 <div class="col-md-12">
                                                     <h3 class="can-tittle">Cancellation Policy</h3>
                                                 </div>
 
                                                 @php
-                                                    $cancellationPolicies = old('cancellation_policy', is_string($room->cancellation_policy) ? (json_decode($room->cancellation_policy, true) ?? []) : ($room->cancellation_policy ?? []));
+                                                    $cancellationPolicies = old(
+                                                        'cancellation_policy',
+                                                        is_string($room->cancellation_policy)
+                                                            ? (json_decode($room->cancellation_policy, true) ?? [])
+                                                            : ($room->cancellation_policy ?? [])
+                                                    );
                                                     if (!is_array($cancellationPolicies)) {
                                                         $cancellationPolicies = [];
                                                     }
@@ -1400,7 +1433,9 @@
                                                 <div class="col-lg-12">
                                                     <div class="form-group">
                                                         <div class="form-check">
-                                                            <input class="form-check-input cancellation-checkbox" type="checkbox" name="cancellation_policy[]" id="flexiblePolicy" value="flexible" {{ in_array('flexible', $cancellationPolicies) ? 'checked' : '' }}>
+                                                            <input class="form-check-input cancellation-checkbox" type="checkbox"
+                                                                   name="cancellation_policy[]" id="flexiblePolicy" value="flexible"
+                                                                {{ in_array('flexible', $cancellationPolicies) ? 'checked' : '' }}>
                                                             <label class="form-check-label" for="flexiblePolicy">
                                                                 Flexible (Guests get a full refund if they cancel up to a day before check-in at least 24 hours.)
                                                             </label>
@@ -1411,7 +1446,9 @@
                                                 <div class="col-lg-12">
                                                     <div class="form-group">
                                                         <div class="form-check">
-                                                            <input class="form-check-input cancellation-checkbox" type="checkbox" name="cancellation_policy[]" id="nonRefundablePolicy" value="non_refundable" {{ in_array('non_refundable', $cancellationPolicies) ? 'checked' : '' }}>
+                                                            <input class="form-check-input cancellation-checkbox" type="checkbox"
+                                                                   name="cancellation_policy[]" id="nonRefundablePolicy" value="non_refundable"
+                                                                {{ in_array('non_refundable', $cancellationPolicies) ? 'checked' : '' }}>
                                                             <label class="form-check-label" for="nonRefundablePolicy">
                                                                 Non-refundable (Regardless of the cancellation window, customers will not get any refund under this.)
                                                             </label>
@@ -1422,9 +1459,11 @@
                                                 <div class="col-lg-12">
                                                     <div class="form-group">
                                                         <div class="form-check">
-                                                            <input class="form-check-input cancellation-checkbox" type="checkbox" name="cancellation_policy[]" id="partiallyRefundablePolicy" value="partially_refundable" {{ in_array('partially_refundable', $cancellationPolicies) ? 'checked' : '' }}>
+                                                            <input class="form-check-input cancellation-checkbox" type="checkbox"
+                                                                   name="cancellation_policy[]" id="partiallyRefundablePolicy" value="partially_refundable"
+                                                                {{ in_array('partially_refundable', $cancellationPolicies) ? 'checked' : '' }}>
                                                             <label class="form-check-label" for="partiallyRefundablePolicy">
-                                                                Partially refundable (Cancellations less than 24 hours... 30% cancellation fee.)
+                                                                Partially refundable (Cancellations that take place in less than 24 hours and Rooms that are labeled with this badge, after deducting a 30% cancellation fee, rest of the amount will be refunded.)
                                                             </label>
                                                         </div>
                                                     </div>
@@ -1433,47 +1472,57 @@
                                                 <div class="col-lg-12">
                                                     <div class="form-group">
                                                         <div class="form-check">
-                                                            <input class="form-check-input cancellation-checkbox" type="checkbox" name="cancellation_policy[]" id="longTermPolicy" value="long_term" {{ in_array('long_term', $cancellationPolicies) ? 'checked' : '' }}>
+                                                            <input class="form-check-input cancellation-checkbox" type="checkbox"
+                                                                   name="cancellation_policy[]" id="longTermPolicy" value="long_term"
+                                                                {{ in_array('long_term', $cancellationPolicies) ? 'checked' : '' }}>
                                                             <label class="form-check-label" for="longTermPolicy">
-                                                                Long-term/Monthly staying policy (Stays more than 30 days... contract paper shall be signed.)
+                                                                Long-term/Monthly staying policy (Stays more than 30 days will fall under this scope and a specific contract paper shall be signed. T&C paper will be found in the system.)
                                                             </label>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                {{-- Error --}}
                                                 @error('cancellation_policy.*')
                                                 <span class="text-danger">{{ $message }}</span>
                                                 @enderror
 
-                                                {{-- Warning Message --}}
+                                                {{-- Warning (scoped to this block) --}}
                                                 <div class="col-lg-12">
-                                                    <small id="policy-warning" class="text-danger" style="display:none;">⚠️ Maximum 2 can be Selected</small>
+                                                    <small class="text-danger policy-warning" style="display:none;">⚠️ Maximum 2 can be Selected</small>
                                                 </div>
                                             </div>
 
-                                            {{-- JavaScript --}}
+                                            {{-- JS: applies to every ".js-limit-two" block independently --}}
                                             <script>
                                                 document.addEventListener('DOMContentLoaded', function () {
-                                                    const checkboxes = document.querySelectorAll('.cancellation-checkbox');
-                                                    const warning = document.getElementById('policy-warning');
+                                                    document.querySelectorAll('.js-limit-two').forEach(function (container) {
+                                                        const checkboxes = container.querySelectorAll('.cancellation-checkbox');
+                                                        const warning = container.querySelector('.policy-warning');
 
-                                                    checkboxes.forEach(cb => {
-                                                        cb.addEventListener('change', function () {
-                                                            const checked = document.querySelectorAll('.cancellation-checkbox:checked').length;
-
-                                                            if (checked > 2) {
-                                                                this.checked = false; // undo last check
+                                                        function maybeWarn(e) {
+                                                            const checkedCount = container.querySelectorAll('.cancellation-checkbox:checked').length;
+                                                            if (checkedCount > 2) {
+                                                                // undo the last toggle
+                                                                if (e && e.target && e.target.type === 'checkbox') {
+                                                                    e.target.checked = false;
+                                                                }
+                                                                // show warning briefly
                                                                 warning.style.display = 'block';
-                                                                setTimeout(() => {
+                                                                clearTimeout(container._warnTimer);
+                                                                container._warnTimer = setTimeout(() => {
                                                                     warning.style.display = 'none';
-                                                                }, 2000); // hide after 2 seconds
+                                                                }, 2000);
                                                             }
-                                                        });
+                                                        }
+
+                                                        // Attach listeners
+                                                        checkboxes.forEach(cb => cb.addEventListener('change', maybeWarn));
+
+                                                        // Handle pre-checked (old() values)
+                                                        maybeWarn();
                                                     });
                                                 });
                                             </script>
-
 
 
                                             <div class="row">
@@ -1490,7 +1539,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="tab-pane {{ old('active_tab', 'tabItem3') === 'tabItem4' ? 'active' : '' }}" id="tabItem4">
+                                        <div class="tab-pane fade {{ old('active_tab', 'tabItem3') === 'tabItem4' ? 'show active' : '' }}" id="tabItem4">
                                             <div class="row mt-15">
                                                 <div class="col-12">
                                                     <p class="text-muted"><i class="fa fa-info-circle"></i> These sections are synced with Room Details Tab. Changes made here will reflect there and vice versa.</p>
@@ -1508,7 +1557,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <div class="appliances-list-facilities"></div>
                                                     
                                                     <!-- Custom Appliances Container for Facilities Tab -->
@@ -1532,9 +1581,9 @@
                                                             <div class="custom-control custom-switch checked">
                                                                 <input type="checkbox" class="custom-control-input sync-checkbox-master" data-target=".checkbox-item-furniture" id="furniture-all-facilities">
                                                                 <label class="custom-control-label" for="furniture-all-facilities">Select All</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                                    </div>
+                                                                </div>
+                                                                            </div>
                                                     
                                                     <div class="furniture-list-facilities">
                                                         @php
@@ -1562,8 +1611,8 @@
                                                             <button type="button" class="btn btn-primary btn-sm" id="add-furniture-btn-facilities">Add</button>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
+                                                                        </div>
+                                                                </div>
 
                                             <div class="row mt-15">
                                                 <div class="checkbox-section">
@@ -1905,7 +1954,7 @@
                                         </div>
 
                                         <!-- Room Availability Tab -->
-                                        <div class="tab-pane {{ old('active_tab', 'tabItem3') === 'Availability' ? 'active' : '' }}" id="Availability">
+                                        <div class="tab-pane fade {{ old('active_tab', 'tabItem3') === 'Availability' ? 'show active' : '' }}" id="Availability">
                                             <div class="row gy-4">
                                                 <div class="col-md-12 col-lg-12 col-xxl-12">
                                                     <div class="row gy-4">
@@ -1917,10 +1966,10 @@
                                                             <div class="form-group">
                                                                 <label class="form-label">Select Available Dates</label>
                                                                 @php
-                                                                    $existingDates = old('availability_dates', $room->availability_dates ?? []);
-                                                                    $datesJson = is_array($existingDates) ? json_encode($existingDates) : $existingDates;
+                                                                    $existingDates = $room->availability_dates ?? [];
+                                                                    $existingDatesJson = json_encode($existingDates);
                                                                 @endphp
-                                                                <input type="hidden" id="availability_dates_hidden" name="availability_dates" value="{{ $datesJson }}">
+                                                                <input type="hidden" id="availability_dates_hidden" name="availability_dates" value="{{ old('availability_dates', $existingDatesJson) }}">
                                                                 <input type="text" class="form-control" id="availability_dates_display" placeholder="No dates selected yet. Select dates from the calendar below." readonly style="margin-bottom: 15px; background-color: #f8f9fa; border: 1px solid #e0e0e0; padding: 12px; font-size: 14px; min-height: 45px;">
                                                                 <small class="form-text text-muted" style="display: block; margin-bottom: 15px; color: #6c757d;">
                                                                     <strong>How to select dates:</strong><br>
@@ -1962,7 +2011,7 @@
                                         </div>
 
                                         <!-- Photos Tab -->
-                                        <div class="tab-pane {{ old('active_tab', 'tabItem3') === 'Photos' ? 'active' : '' }}" id="Photos">
+                                        <div class="tab-pane fade {{ old('active_tab', 'tabItem3') === 'Photos' ? 'show active' : '' }}" id="Photos">
                                             <div class="row gy-4">
                                                 @php
                                                     $photo_categories = [
@@ -2181,39 +2230,25 @@
 
                 // Function to generate a room detail section
                 function generateRoomSection(index, existingData = {}) {
-                    const roomNumber = existingData.number || '';
-                    const floorNumber = existingData.floor_number || '';
-                    const roomSize = existingData.size || '';
-                    const wifiDetails = existingData.wifi_details || '';
+                    const roomName = existingData.name || '';
+                    const roomNote = existingData.note || '';
                     
                     return `
                         <div class="room-detail-section mb-4" data-room-index="${index}" style="padding: 15px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
-                            <h6 style="color: #495057; font-weight: 600; margin-bottom: 15px;">Room ${index + 1} Details</h6>
+                            <h6 style="color: #495057; font-weight: 600; margin-bottom: 15px;">Room ${index + 1}</h6>
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Room Number</label>
-                                        <input type="text" class="form-control" name="room_details[${index}][number]" value="${roomNumber}" placeholder="Room number" required style="border: 1px solid #dee2e6; border-radius: 6px;">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Room Floor Number</label>
-                                        <input type="text" class="form-control" name="room_details[${index}][floor_number]" value="${floorNumber}" placeholder="Room Floor Number" required style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                <div class="col-md-12">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Room ${index + 1} Name</label>
+                                        <input type="text" class="form-control" name="room_details[${index}][name]" value="${roomName}" placeholder="Room ${index + 1} Name" style="border: 1px solid #dee2e6; border-radius: 6px;">
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <div class="form-group">
-                                        <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Room Size (sq. ft / sq. m)</label>
-                                        <input type="number" class="form-control" name="room_details[${index}][size]" value="${roomSize}" placeholder="Ex: 1200 SFT" required style="border: 1px solid #dee2e6; border-radius: 6px;">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">WiFi Details/Password</label>
-                                        <input type="text" class="form-control" name="room_details[${index}][wifi_details]" value="${wifiDetails}" placeholder="WiFi Details/Password" style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                        <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Note</label>
+                                        <textarea class="form-control" name="room_details[${index}][note]" placeholder="Add note for Room ${index + 1}" style="border: 1px solid #dee2e6; border-radius: 6px; min-height: 80px;">${roomNote}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -2357,9 +2392,6 @@
                 }
 
                 // Initialize bathroom sections on page load
-                @php
-                    $existingBathroomsJson = json_encode($existingBathrooms);
-                @endphp
                 const existingBathrooms = @json($existingBathrooms);
                 renderBathroomSections(bathroomCount, existingBathrooms);
 
@@ -2535,9 +2567,6 @@
                 }
 
                 // Initialize bed sections on page load
-                @php
-                    $existingBedsJson = json_encode($existingBeds);
-                @endphp
                 const existingBeds = @json($existingBeds);
                 // Extract custom bed types from existing beds
                 if (existingBeds && Array.isArray(existingBeds)) {
@@ -2648,39 +2677,39 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                if (typeof Swal !== 'undefined') {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Deleted!',
-                                        text: 'Photo has been deleted successfully.',
-                                        timer: 1500,
-                                        showConfirmButton: false
-                                    });
-                                }
-                                button.closest('.multiple-thumbnail-item').remove();
-                            } else {
-                                if (typeof Swal !== 'undefined') {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Error',
-                                        text: data.message || 'Failed to delete photo'
-                                    });
-                            } else {
-                                alert('Failed to delete photo: ' + (data.message || 'Unknown error'));
-                                }
+                            if (typeof Swal !== 'undefined') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Deleted!',
+                                    text: 'Photo has been deleted successfully.',
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                });
                             }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
+                                button.closest('.multiple-thumbnail-item').remove();
+                        } else {
                             if (typeof Swal !== 'undefined') {
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Error',
-                                    text: 'An error occurred while deleting the photo.'
+                                    text: data.message || 'Failed to delete photo'
                                 });
                             } else {
-                            alert('An error occurred while deleting the photo.');
+                                alert('Failed to delete photo: ' + (data.message || 'Unknown error'));
                             }
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        if (typeof Swal !== 'undefined') {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'An error occurred while deleting the photo.'
+                            });
+                        } else {
+                            alert('An error occurred while deleting the photo.');
+                        }
                         });
             }
 
@@ -2748,13 +2777,17 @@
                     const tabPane = document.getElementById(savedTab);
                     
                     if (tabLink && tabPane) {
-                        // Remove active class from all tabs and panes
+                        // Remove active and show classes from all tabs and panes
                         document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-                        document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+                        document.querySelectorAll('.tab-pane').forEach(pane => {
+                            pane.classList.remove('active');
+                            pane.classList.remove('show');
+                        });
                         
-                        // Add active class to the saved tab
+                        // Add active and show classes to the saved tab
                         tabLink.classList.add('active');
                         tabPane.classList.add('active');
+                        tabPane.classList.add('show');
                         
                         // Trigger Bootstrap tab show event
                         const tab = new bootstrap.Tab(tabLink);
@@ -2795,6 +2828,166 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
         <!-- Flatpickr JS -->
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <script>
+            // Show validation errors using SweetAlert - Must run immediately, not in DOMContentLoaded
+            @if ($errors->any())
+                (function() {
+                    let errorList = '';
+                    @foreach ($errors->all() as $error)
+                        errorList += '<li style="text-align: left; margin: 5px 0;">{{ addslashes($error) }}</li>';
+                    @endforeach
+                    
+                    // Wait for SweetAlert to be available
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Validation Error',
+                            html: '<div style="text-align: left;"><strong>Please fix the following errors:</strong><ul style="margin-top: 10px; padding-left: 20px;">' + errorList + '</ul></div>',
+                            confirmButtonColor: '#90278e',
+                            confirmButtonText: 'OK',
+                            width: '600px',
+                            allowOutsideClick: false
+                        }).then(() => {
+                            setTimeout(function() {
+                                const firstErrorField = document.querySelector('input.is-invalid, select.is-invalid, textarea.is-invalid') || 
+                                                       document.querySelector('[class*="text-danger"]')?.closest('.form-group')?.querySelector('input, select, textarea');
+                                if (firstErrorField) {
+                                    firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                    firstErrorField.focus();
+                                }
+                            }, 100);
+                        });
+                    } else {
+                        window.addEventListener('load', function() {
+                            if (typeof Swal !== 'undefined') {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Validation Error',
+                                    html: '<div style="text-align: left;"><strong>Please fix the following errors:</strong><ul style="margin-top: 10px; padding-left: 20px;">' + errorList + '</ul></div>',
+                                    confirmButtonColor: '#90278e',
+                                    confirmButtonText: 'OK',
+                                    width: '600px',
+                                    allowOutsideClick: false
+                                }).then(() => {
+                                    setTimeout(function() {
+                                        const firstErrorField = document.querySelector('input.is-invalid, select.is-invalid, textarea.is-invalid') || 
+                                                               document.querySelector('[class*="text-danger"]')?.closest('.form-group')?.querySelector('input, select, textarea');
+                                        if (firstErrorField) {
+                                            firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                            firstErrorField.focus();
+                                        }
+                                    }, 100);
+                                });
+                            }
+                        });
+                    }
+                })();
+            @endif
+            
+            // Intercept form submission to show validation errors
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.querySelector('form[action*="room.update"]');
+                if (form) {
+                    form.addEventListener('submit', function(e) {
+                        e.preventDefault(); // Always prevent default first
+                        
+                        // Clear previous validation
+                        form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+                        
+                        let hasErrors = false;
+                        let errorMessages = [];
+                        
+                        // Check required fields
+                        const requiredFields = form.querySelectorAll('[required]');
+                        requiredFields.forEach(field => {
+                            if (!field.value || !field.value.toString().trim()) {
+                                hasErrors = true;
+                                field.classList.add('is-invalid');
+                                const label = form.querySelector(`label[for="${field.id}"]`) || 
+                                            field.closest('.form-group')?.querySelector('label') ||
+                                            field.closest('.form-group')?.querySelector('.form-label');
+                                const fieldName = label ? label.textContent.trim().replace('*', '').replace(':', '') : field.name.replace('_', ' ');
+                                errorMessages.push(`${fieldName} is required`);
+                            }
+                        });
+                        
+                        // Check numeric fields
+                        const numericFields = form.querySelectorAll('input[type="number"]');
+                        numericFields.forEach(field => {
+                            if (field.value && field.value.toString().trim() && isNaN(field.value)) {
+                                hasErrors = true;
+                                field.classList.add('is-invalid');
+                                const label = form.querySelector(`label[for="${field.id}"]`) || 
+                                            field.closest('.form-group')?.querySelector('label') ||
+                                            field.closest('.form-group')?.querySelector('.form-label');
+                                const fieldName = label ? label.textContent.trim().replace('*', '').replace(':', '') : field.name.replace('_', ' ');
+                                errorMessages.push(`${fieldName} must be a valid number`);
+                            }
+                            if (field.hasAttribute('min') && field.value && parseFloat(field.value) < parseFloat(field.getAttribute('min'))) {
+                                hasErrors = true;
+                                field.classList.add('is-invalid');
+                                const label = form.querySelector(`label[for="${field.id}"]`) || 
+                                            field.closest('.form-group')?.querySelector('label') ||
+                                            field.closest('.form-group')?.querySelector('.form-label');
+                                const fieldName = label ? label.textContent.trim().replace('*', '').replace(':', '') : field.name.replace('_', ' ');
+                                errorMessages.push(`${fieldName} must be at least ${field.getAttribute('min')}`);
+                            }
+                        });
+                        
+                        if (hasErrors) {
+                            let errorList = '';
+                            errorMessages.forEach(msg => {
+                                errorList += '<li style="text-align: left; margin: 5px 0;">' + msg + '</li>';
+                            });
+                            
+                            if (typeof Swal !== 'undefined') {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Validation Error',
+                                    html: '<div style="text-align: left;"><strong>Please fix the following errors:</strong><ul style="margin-top: 10px; padding-left: 20px;">' + errorList + '</ul></div>',
+                                    confirmButtonColor: '#90278e',
+                                    confirmButtonText: 'OK',
+                                    width: '600px',
+                                    allowOutsideClick: false
+                                }).then(() => {
+                                    const firstErrorField = form.querySelector('.is-invalid');
+                                    if (firstErrorField) {
+                                        firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                        setTimeout(() => firstErrorField.focus(), 300);
+                                    }
+                                });
+                            } else {
+                                alert('Validation Error:\n\n' + errorMessages.join('\n'));
+                                const firstErrorField = form.querySelector('.is-invalid');
+                                if (firstErrorField) {
+                                    firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                    setTimeout(() => firstErrorField.focus(), 300);
+                                }
+                            }
+                        } else {
+                            // Ensure total_beds is synced before submission
+                            const totalBedsInput = document.getElementById('totalBedsInput');
+                            const totalBedsDisplay = document.getElementById('totalBeds');
+                            if (totalBedsInput && totalBedsDisplay) {
+                                const currentValue = parseInt(totalBedsDisplay.textContent) || 0;
+                                totalBedsInput.value = currentValue;
+                            }
+                            
+                            // Ensure total_rooms is synced before submission
+                            const totalRoomsInput = document.getElementById('totalRoomsInput');
+                            const totalRoomsDisplay = document.getElementById('totalRooms');
+                            if (totalRoomsInput && totalRoomsDisplay) {
+                                const currentValue = parseInt(totalRoomsDisplay.textContent) || 1;
+                                totalRoomsInput.value = currentValue;
+                            }
+                            
+                            // No errors, submit the form
+                            form.submit();
+                        }
+                    });
+                }
+            });
+        </script>
         
         <script>
             // Initialize Flatpickr for availability dates with drag selection
@@ -2859,7 +3052,6 @@
                             clickOpens: false,
                             allowInput: false,
                             appendTo: calendarWrapper,
-                            disableMobile: true,
                         onReady: function(selectedDates, dateStr, instance) {
                             // Helper function to format date in YYYY-MM-DD without timezone issues
                             function formatDateLocal(date) {
@@ -2950,10 +3142,11 @@
                                     }
                                     isDragging = true;
                                     const day = e.target.closest('.flatpickr-day:not(.flatpickr-disabled)');
-                                    if (day) {
-                                        const dateStr = day.getAttribute('aria-label');
-                                        if (dateStr && rangeStart) {
-                                            const currentDate = new Date(dateStr);
+                                    if (day && rangeStart) {
+                                        const dateStr = getDateFromDayElement(day);
+                                        if (dateStr) {
+                                            const [year, month, dayNum] = dateStr.split('-').map(Number);
+                                            const currentDate = new Date(year, month - 1, dayNum);
                                             const start = rangeStart < currentDate ? rangeStart : currentDate;
                                             const end = rangeStart < currentDate ? currentDate : rangeStart;
                                             
@@ -2964,9 +3157,10 @@
                                             });
                                             
                                             allDays.forEach(d => {
-                                                const dDateStr = d.getAttribute('aria-label');
+                                                const dDateStr = getDateFromDayElement(d);
                                                 if (dDateStr) {
-                                                    const dDate = new Date(dDateStr);
+                                                    const [year, month, dayNum] = dDateStr.split('-').map(Number);
+                                                    const dDate = new Date(year, month - 1, dayNum);
                                                     if (dDate >= start && dDate <= end) {
                                                         d.classList.add('in-range');
                                                         if (dDate.getTime() === start.getTime()) {
@@ -3084,6 +3278,7 @@
                             
                             // Initialize count on load
                             updateSelectedCount();
+                            updateSelectedCount();
                             
                             // Clear all dates button
                             const clearAllBtn = document.getElementById('clear_all_dates');
@@ -3135,9 +3330,7 @@
                             const sortedDates = Array.from(selectedDatesSet).sort();
                             availabilityInputHidden.value = JSON.stringify(sortedDates);
                             availabilityInputDisplay.value = formatDatesForDisplay(sortedDates);
-                            if (typeof updateSelectedCount === 'function') {
-                                updateSelectedCount();
-                            }
+                            updateSelectedCount();
                         }
                     });
                     } else {
@@ -3153,176 +3346,16 @@
                             allowInput: false,
                             onChange: function(selectedDates, dateStr, instance) {
                                 const datesArray = selectedDates.map(date => {
-                                    return date.toISOString().split('T')[0];
+                                    const year = date.getFullYear();
+                                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                                    const day = String(date.getDate()).padStart(2, '0');
+                                    return `${year}-${month}-${day}`;
                                 });
                                 availabilityInputHidden.value = JSON.stringify(datesArray);
                                 availabilityInputDisplay.value = formatDatesForDisplay(datesArray);
                             }
                         });
                     }
-                }
-            });
-        </script>
-        <script>
-            // Show validation errors using SweetAlert - Must run immediately, not in DOMContentLoaded
-            @if ($errors->any())
-                (function() {
-                    let errorList = '';
-                    @foreach ($errors->all() as $error)
-                        errorList += '<li style="text-align: left; margin: 5px 0;">{{ addslashes($error) }}</li>';
-                    @endforeach
-                    
-                    // Wait for SweetAlert to be available
-                    if (typeof Swal !== 'undefined') {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Validation Error',
-                            html: '<div style="text-align: left;"><strong>Please fix the following errors:</strong><ul style="margin-top: 10px; padding-left: 20px;">' + errorList + '</ul></div>',
-                            confirmButtonColor: '#90278e',
-                            confirmButtonText: 'OK',
-                            width: '600px',
-                            allowOutsideClick: false
-                        }).then(() => {
-                            // Scroll to first error field
-                            setTimeout(function() {
-                                const firstErrorField = document.querySelector('input.is-invalid, select.is-invalid, textarea.is-invalid') || 
-                                                       document.querySelector('[class*="text-danger"]')?.closest('.form-group')?.querySelector('input, select, textarea');
-                                if (firstErrorField) {
-                                    firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                    firstErrorField.focus();
-                                }
-                            }, 100);
-                        });
-                    } else {
-                        // If SweetAlert not loaded yet, wait for it
-                        window.addEventListener('load', function() {
-                            if (typeof Swal !== 'undefined') {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Validation Error',
-                                    html: '<div style="text-align: left;"><strong>Please fix the following errors:</strong><ul style="margin-top: 10px; padding-left: 20px;">' + errorList + '</ul></div>',
-                                    confirmButtonColor: '#90278e',
-                                    confirmButtonText: 'OK',
-                                    width: '600px',
-                                    allowOutsideClick: false
-                                }).then(() => {
-                                    setTimeout(function() {
-                                        const firstErrorField = document.querySelector('input.is-invalid, select.is-invalid, textarea.is-invalid') || 
-                                                               document.querySelector('[class*="text-danger"]')?.closest('.form-group')?.querySelector('input, select, textarea');
-                                        if (firstErrorField) {
-                                            firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                            firstErrorField.focus();
-                                        }
-                                    }, 100);
-                                });
-                            }
-                        });
-                    }
-                })();
-            @endif
-            
-            // Intercept form submission to show validation errors
-            document.addEventListener('DOMContentLoaded', function() {
-                const form = document.querySelector('form[action*="room.update"]');
-                if (form) {
-                    form.addEventListener('submit', function(e) {
-                        e.preventDefault(); // Always prevent default first
-                        
-                        // Clear previous validation
-                        form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
-                        
-                        let hasErrors = false;
-                        let errorMessages = [];
-                        
-                        // Check required fields
-                        const requiredFields = form.querySelectorAll('[required]');
-                        requiredFields.forEach(field => {
-                            if (!field.value || !field.value.toString().trim()) {
-                                hasErrors = true;
-                                field.classList.add('is-invalid');
-                                const label = form.querySelector(`label[for="${field.id}"]`) || 
-                                            field.closest('.form-group')?.querySelector('label') ||
-                                            field.closest('.form-group')?.querySelector('.form-label');
-                                const fieldName = label ? label.textContent.trim().replace('*', '').replace(':', '') : field.name.replace('_', ' ');
-                                errorMessages.push(`${fieldName} is required`);
-                            }
-                        });
-                        
-                        // Check numeric fields
-                        const numericFields = form.querySelectorAll('input[type="number"]');
-                        numericFields.forEach(field => {
-                            if (field.value && field.value.toString().trim() && isNaN(field.value)) {
-                                hasErrors = true;
-                                field.classList.add('is-invalid');
-                                const label = form.querySelector(`label[for="${field.id}"]`) || 
-                                            field.closest('.form-group')?.querySelector('label') ||
-                                            field.closest('.form-group')?.querySelector('.form-label');
-                                const fieldName = label ? label.textContent.trim().replace('*', '').replace(':', '') : field.name.replace('_', ' ');
-                                errorMessages.push(`${fieldName} must be a valid number`);
-                            }
-                            if (field.hasAttribute('min') && field.value && parseFloat(field.value) < parseFloat(field.getAttribute('min'))) {
-                                hasErrors = true;
-                                field.classList.add('is-invalid');
-                                const label = form.querySelector(`label[for="${field.id}"]`) || 
-                                            field.closest('.form-group')?.querySelector('label') ||
-                                            field.closest('.form-group')?.querySelector('.form-label');
-                                const fieldName = label ? label.textContent.trim().replace('*', '').replace(':', '') : field.name.replace('_', ' ');
-                                errorMessages.push(`${fieldName} must be at least ${field.getAttribute('min')}`);
-                            }
-                        });
-                        
-                        if (hasErrors) {
-                            let errorList = '';
-                            errorMessages.forEach(msg => {
-                                errorList += '<li style="text-align: left; margin: 5px 0;">' + msg + '</li>';
-                            });
-                            
-                            if (typeof Swal !== 'undefined') {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Validation Error',
-                                    html: '<div style="text-align: left;"><strong>Please fix the following errors:</strong><ul style="margin-top: 10px; padding-left: 20px;">' + errorList + '</ul></div>',
-                                    confirmButtonColor: '#90278e',
-                                    confirmButtonText: 'OK',
-                                    width: '600px',
-                                    allowOutsideClick: false
-                                }).then(() => {
-                                    // Scroll to first error field
-                                    const firstErrorField = form.querySelector('.is-invalid');
-                                    if (firstErrorField) {
-                                        firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                        setTimeout(() => firstErrorField.focus(), 300);
-                                    }
-                                });
-                            } else {
-                                alert('Validation Error:\n\n' + errorMessages.join('\n'));
-                                const firstErrorField = form.querySelector('.is-invalid');
-                                if (firstErrorField) {
-                                    firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                    setTimeout(() => firstErrorField.focus(), 300);
-                                }
-                            }
-                        } else {
-                            // Ensure total_beds is synced before submission
-                            const totalBedsInput = document.getElementById('totalBedsInput');
-                            const totalBedsDisplay = document.getElementById('totalBeds');
-                            if (totalBedsInput && totalBedsDisplay) {
-                                const currentValue = parseInt(totalBedsDisplay.textContent) || 0;
-                                totalBedsInput.value = currentValue;
-                            }
-                            
-                            // Ensure total_rooms is synced before submission
-                            const totalRoomsInput = document.getElementById('totalRoomsInput');
-                            const totalRoomsDisplay = document.getElementById('totalRooms');
-                            if (totalRoomsInput && totalRoomsDisplay) {
-                                const currentValue = parseInt(totalRoomsDisplay.textContent) || 1;
-                                totalRoomsInput.value = currentValue;
-                            }
-                            
-                            // No errors, submit the form
-                            form.submit();
-                        }
-                    });
                 }
             });
 

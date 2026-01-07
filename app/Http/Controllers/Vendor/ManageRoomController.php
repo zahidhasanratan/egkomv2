@@ -140,25 +140,23 @@ class ManageRoomController extends Controller
         $validated = $request->validate([
             'hotel_id' => 'required|exists:hotels,id',
             'name' => 'required|string|max:255',
-            'number' => 'nullable|string|max:255', // Now in room_details array
-            'floor_number' => 'nullable|string|max:255', // Now in room_details array
+            'room_number' => 'nullable|string|max:255',
+            'floor_number' => 'nullable|string|max:255',
             'price_per_night' => 'required|numeric|min:0',
             'weekend_price' => 'nullable|numeric|min:0',
             'holiday_price' => 'nullable|numeric|min:0',
             'discount_type' => 'nullable|in:amount,percentage',
             'discount_value' => 'nullable|numeric|min:0',
             'total_persons' => 'required|integer|min:1',
-            'size' => 'nullable|numeric|min:0', // Now in room_details array
+            'size' => 'nullable|numeric|min:0',
             'total_rooms' => 'required|integer|min:1',
             'total_washrooms' => 'required|integer|min:0',
             'total_beds' => 'required|integer|min:0',
             'description' => 'nullable|string',
-            'wifi_details' => 'nullable|string|max:255', // Now in room_details array
-            'room_details' => 'required|array|min:1',
-            'room_details.*.number' => 'required|string|max:255',
-            'room_details.*.floor_number' => 'required|string|max:255',
-            'room_details.*.size' => 'required|numeric|min:0',
-            'room_details.*.wifi_details' => 'nullable|string|max:255',
+            'wifi_details' => 'nullable|string|max:255',
+            'room_details' => 'nullable|array',
+            'room_details.*.name' => 'nullable|string|max:255',
+            'room_details.*.note' => 'nullable|string',
             'appliances' => 'nullable|array',
             'appliances.*' => 'nullable|string|max:255',
             'furniture' => 'nullable|array',
@@ -174,9 +172,7 @@ class ManageRoomController extends Controller
             'hotel_id.exists' => 'Selected hotel does not exist.',
             'name.required' => 'Room name is required.',
             'name.max' => 'Room name must not exceed 255 characters.',
-            'number.required' => 'Room number is required.',
-            'number.max' => 'Room number must not exceed 255 characters.',
-            'floor_number.required' => 'Floor number is required.',
+            'room_number.max' => 'Room number must not exceed 255 characters.',
             'floor_number.max' => 'Floor number must not exceed 255 characters.',
             'price_per_night.required' => 'Price per night is required.',
             'price_per_night.numeric' => 'Price per night must be a number.',
@@ -191,15 +187,7 @@ class ManageRoomController extends Controller
             'total_persons.required' => 'Total persons is required.',
             'total_persons.integer' => 'Total persons must be a whole number.',
             'total_persons.min' => 'Total persons must be at least 1.',
-            'room_details.required' => 'At least one room detail is required.',
-            'room_details.min' => 'At least one room detail is required.',
-            'room_details.*.number.required' => 'Room number is required.',
-            'room_details.*.number.max' => 'Room number must not exceed 255 characters.',
-            'room_details.*.floor_number.required' => 'Floor number is required.',
-            'room_details.*.floor_number.max' => 'Floor number must not exceed 255 characters.',
-            'room_details.*.size.required' => 'Room size is required.',
-            'room_details.*.size.numeric' => 'Room size must be a number.',
-            'room_details.*.size.min' => 'Room size must be at least 0.',
+            'room_details.*.name.max' => 'Room name must not exceed 255 characters.',
             'total_rooms.required' => 'Total rooms is required.',
             'total_rooms.integer' => 'Total rooms must be a whole number.',
             'total_rooms.min' => 'Total rooms must be at least 1.',
@@ -416,25 +404,23 @@ class ManageRoomController extends Controller
         $validated = $request->validate([
             'hotel_id' => 'required|exists:hotels,id',
             'name' => 'required|string|max:255',
-            'number' => 'nullable|string|max:255', // Now in room_details array
-            'floor_number' => 'nullable|string|max:255', // Now in room_details array
+            'room_number' => 'nullable|string|max:255',
+            'floor_number' => 'nullable|string|max:255',
             'price_per_night' => 'required|numeric|min:0',
             'weekend_price' => 'nullable|numeric|min:0',
             'holiday_price' => 'nullable|numeric|min:0',
             'discount_type' => 'nullable|in:amount,percentage',
             'discount_value' => 'nullable|numeric|min:0',
             'total_persons' => 'required|integer|min:1',
-            'size' => 'nullable|numeric|min:0', // Now in room_details array
+            'size' => 'nullable|numeric|min:0',
             'total_rooms' => 'required|integer|min:1',
             'total_washrooms' => 'required|integer|min:0',
             'total_beds' => 'required|integer|min:0',
             'description' => 'nullable|string',
-            'wifi_details' => 'nullable|string|max:255', // Now in room_details array
-            'room_details' => 'required|array|min:1',
-            'room_details.*.number' => 'required|string|max:255',
-            'room_details.*.floor_number' => 'required|string|max:255',
-            'room_details.*.size' => 'required|numeric|min:0',
-            'room_details.*.wifi_details' => 'nullable|string|max:255',
+            'wifi_details' => 'nullable|string|max:255',
+            'room_details' => 'nullable|array',
+            'room_details.*.name' => 'nullable|string|max:255',
+            'room_details.*.note' => 'nullable|string',
             'appliances' => 'nullable|array',
             'appliances.*' => 'nullable|string|max:255',
             'furniture' => 'nullable|array',
@@ -450,9 +436,7 @@ class ManageRoomController extends Controller
             'hotel_id.exists' => 'Selected hotel does not exist.',
             'name.required' => 'Room name is required.',
             'name.max' => 'Room name must not exceed 255 characters.',
-            'number.required' => 'Room number is required.',
-            'number.max' => 'Room number must not exceed 255 characters.',
-            'floor_number.required' => 'Floor number is required.',
+            'room_number.max' => 'Room number must not exceed 255 characters.',
             'floor_number.max' => 'Floor number must not exceed 255 characters.',
             'price_per_night.required' => 'Price per night is required.',
             'price_per_night.numeric' => 'Price per night must be a number.',
@@ -467,15 +451,7 @@ class ManageRoomController extends Controller
             'total_persons.required' => 'Total persons is required.',
             'total_persons.integer' => 'Total persons must be a whole number.',
             'total_persons.min' => 'Total persons must be at least 1.',
-            'room_details.required' => 'At least one room detail is required.',
-            'room_details.min' => 'At least one room detail is required.',
-            'room_details.*.number.required' => 'Room number is required.',
-            'room_details.*.number.max' => 'Room number must not exceed 255 characters.',
-            'room_details.*.floor_number.required' => 'Floor number is required.',
-            'room_details.*.floor_number.max' => 'Floor number must not exceed 255 characters.',
-            'room_details.*.size.required' => 'Room size is required.',
-            'room_details.*.size.numeric' => 'Room size must be a number.',
-            'room_details.*.size.min' => 'Room size must be at least 0.',
+            'room_details.*.name.max' => 'Room name must not exceed 255 characters.',
             'total_rooms.required' => 'Total rooms is required.',
             'total_rooms.integer' => 'Total rooms must be a whole number.',
             'total_rooms.min' => 'Total rooms must be at least 1.',
@@ -761,25 +737,23 @@ class ManageRoomController extends Controller
         $validated = $request->validate([
             'hotel_id' => 'required|exists:hotels,id',
             'name' => 'required|string|max:255',
-            'number' => 'nullable|string|max:255', // Now in room_details array
-            'floor_number' => 'nullable|string|max:255', // Now in room_details array
+            'room_number' => 'nullable|string|max:255',
+            'floor_number' => 'nullable|string|max:255',
             'price_per_night' => 'required|numeric|min:0',
             'weekend_price' => 'nullable|numeric|min:0',
             'holiday_price' => 'nullable|numeric|min:0',
             'discount_type' => 'nullable|in:amount,percentage',
             'discount_value' => 'nullable|numeric|min:0',
             'total_persons' => 'required|integer|min:1',
-            'size' => 'nullable|numeric|min:0', // Now in room_details array
+            'size' => 'nullable|numeric|min:0',
             'total_rooms' => 'required|integer|min:1',
             'total_washrooms' => 'required|integer|min:0',
             'total_beds' => 'required|integer|min:0',
             'description' => 'nullable|string',
-            'wifi_details' => 'nullable|string|max:255', // Now in room_details array
-            'room_details' => 'required|array|min:1',
-            'room_details.*.number' => 'required|string|max:255',
-            'room_details.*.floor_number' => 'required|string|max:255',
-            'room_details.*.size' => 'required|numeric|min:0',
-            'room_details.*.wifi_details' => 'nullable|string|max:255',
+            'wifi_details' => 'nullable|string|max:255',
+            'room_details' => 'nullable|array',
+            'room_details.*.name' => 'nullable|string|max:255',
+            'room_details.*.note' => 'nullable|string',
             'appliances' => 'nullable|array',
             'appliances.*' => 'nullable|string|max:255',
             'furniture' => 'nullable|array',
@@ -795,9 +769,7 @@ class ManageRoomController extends Controller
             'hotel_id.exists' => 'Selected hotel does not exist.',
             'name.required' => 'Room name is required.',
             'name.max' => 'Room name must not exceed 255 characters.',
-            'number.required' => 'Room number is required.',
-            'number.max' => 'Room number must not exceed 255 characters.',
-            'floor_number.required' => 'Floor number is required.',
+            'room_number.max' => 'Room number must not exceed 255 characters.',
             'floor_number.max' => 'Floor number must not exceed 255 characters.',
             'price_per_night.required' => 'Price per night is required.',
             'price_per_night.numeric' => 'Price per night must be a number.',
@@ -812,15 +784,7 @@ class ManageRoomController extends Controller
             'total_persons.required' => 'Total persons is required.',
             'total_persons.integer' => 'Total persons must be a whole number.',
             'total_persons.min' => 'Total persons must be at least 1.',
-            'room_details.required' => 'At least one room detail is required.',
-            'room_details.min' => 'At least one room detail is required.',
-            'room_details.*.number.required' => 'Room number is required.',
-            'room_details.*.number.max' => 'Room number must not exceed 255 characters.',
-            'room_details.*.floor_number.required' => 'Floor number is required.',
-            'room_details.*.floor_number.max' => 'Floor number must not exceed 255 characters.',
-            'room_details.*.size.required' => 'Room size is required.',
-            'room_details.*.size.numeric' => 'Room size must be a number.',
-            'room_details.*.size.min' => 'Room size must be at least 0.',
+            'room_details.*.name.max' => 'Room name must not exceed 255 characters.',
             'total_rooms.required' => 'Total rooms is required.',
             'total_rooms.integer' => 'Total rooms must be a whole number.',
             'total_rooms.min' => 'Total rooms must be at least 1.',
@@ -850,12 +814,12 @@ class ManageRoomController extends Controller
             $amenities = array_unique(array_filter(array_merge($request->amenities ?? [], $request->custom_amenities ?? [])));
             $cancellation_policy = array_unique(array_filter((array)$request->input('cancellation_policy', [])));
 
-            // Process room details - new format is array of room objects (without name, as name is a single field)
+            // Process room details - new format is array of room objects with name and note
             $roomDetailsData = $request->input('room_details', []);
             if ($roomDetailsData && is_array($roomDetailsData)) {
-                // Filter out empty room details (name is not in room_details, it's a single field)
+                // Filter out empty room details
                 $roomDetailsData = array_filter($roomDetailsData, function($room) {
-                    return !empty($room['number']);
+                    return !empty($room['name']) || !empty($room['note']);
                 });
                 $roomDetailsData = array_values($roomDetailsData);
             }
@@ -1088,25 +1052,23 @@ class ManageRoomController extends Controller
         $validated = $request->validate([
             'hotel_id' => 'required|exists:hotels,id',
             'name' => 'required|string|max:255',
-            'number' => 'nullable|string|max:255', // Now in room_details array
-            'floor_number' => 'nullable|string|max:255', // Now in room_details array
+            'room_number' => 'nullable|string|max:255',
+            'floor_number' => 'nullable|string|max:255',
             'price_per_night' => 'required|numeric|min:0',
             'weekend_price' => 'nullable|numeric|min:0',
             'holiday_price' => 'nullable|numeric|min:0',
             'discount_type' => 'nullable|in:amount,percentage',
             'discount_value' => 'nullable|numeric|min:0',
             'total_persons' => 'required|integer|min:1',
-            'size' => 'nullable|numeric|min:0', // Now in room_details array
+            'size' => 'nullable|numeric|min:0',
             'total_rooms' => 'required|integer|min:1',
             'total_washrooms' => 'required|integer|min:0',
             'total_beds' => 'required|integer|min:0',
             'description' => 'nullable|string',
-            'wifi_details' => 'nullable|string|max:255', // Now in room_details array
-            'room_details' => 'required|array|min:1',
-            'room_details.*.number' => 'required|string|max:255',
-            'room_details.*.floor_number' => 'required|string|max:255',
-            'room_details.*.size' => 'required|numeric|min:0',
-            'room_details.*.wifi_details' => 'nullable|string|max:255',
+            'wifi_details' => 'nullable|string|max:255',
+            'room_details' => 'nullable|array',
+            'room_details.*.name' => 'nullable|string|max:255',
+            'room_details.*.note' => 'nullable|string',
             'appliances' => 'nullable|array',
             'appliances.*' => 'nullable|string|max:255',
             'furniture' => 'nullable|array',
@@ -1122,9 +1084,7 @@ class ManageRoomController extends Controller
             'hotel_id.exists' => 'Selected hotel does not exist.',
             'name.required' => 'Room name is required.',
             'name.max' => 'Room name must not exceed 255 characters.',
-            'number.required' => 'Room number is required.',
-            'number.max' => 'Room number must not exceed 255 characters.',
-            'floor_number.required' => 'Floor number is required.',
+            'room_number.max' => 'Room number must not exceed 255 characters.',
             'floor_number.max' => 'Floor number must not exceed 255 characters.',
             'price_per_night.required' => 'Price per night is required.',
             'price_per_night.numeric' => 'Price per night must be a number.',
@@ -1139,15 +1099,7 @@ class ManageRoomController extends Controller
             'total_persons.required' => 'Total persons is required.',
             'total_persons.integer' => 'Total persons must be a whole number.',
             'total_persons.min' => 'Total persons must be at least 1.',
-            'room_details.required' => 'At least one room detail is required.',
-            'room_details.min' => 'At least one room detail is required.',
-            'room_details.*.number.required' => 'Room number is required.',
-            'room_details.*.number.max' => 'Room number must not exceed 255 characters.',
-            'room_details.*.floor_number.required' => 'Floor number is required.',
-            'room_details.*.floor_number.max' => 'Floor number must not exceed 255 characters.',
-            'room_details.*.size.required' => 'Room size is required.',
-            'room_details.*.size.numeric' => 'Room size must be a number.',
-            'room_details.*.size.min' => 'Room size must be at least 0.',
+            'room_details.*.name.max' => 'Room name must not exceed 255 characters.',
             'total_rooms.required' => 'Total rooms is required.',
             'total_rooms.integer' => 'Total rooms must be a whole number.',
             'total_rooms.min' => 'Total rooms must be at least 1.',
@@ -1177,31 +1129,22 @@ class ManageRoomController extends Controller
             $amenities = array_unique(array_filter(array_merge($request->amenities ?? [], $request->custom_amenities ?? [])));
             $cancellation_policy = array_unique(array_filter((array)$request->input('cancellation_policy', [])));
 
-            // Process room details - new format is array of room objects (without name, as name is a single field)
+            // Process room details - new format is array of room objects with name and note
             $roomDetailsData = $request->input('room_details', []);
             if ($roomDetailsData && is_array($roomDetailsData)) {
-                // Filter out empty room details (name is not in room_details, it's a single field)
+                // Filter out empty room details
                 $roomDetailsData = array_filter($roomDetailsData, function($room) {
-                    return !empty($room['number']);
+                    return !empty($room['name']) || !empty($room['note']);
                 });
                 $roomDetailsData = array_values($roomDetailsData);
             }
             
-            // For backward compatibility, use first room's data for main fields if only one room
-            // Room name comes from the main 'name' field, not from room_details
+            // Common room fields
             $mainRoomName = $request->name ?? $room->name ?? '';
-            $mainRoomNumber = $request->number ?? $room->number ?? '';
+            $mainRoomNumber = $request->room_number ?? $room->number ?? '';
             $mainFloorNumber = $request->floor_number ?? $room->floor_number ?? '';
             $mainSize = $request->size ?? $room->size ?? 0;
             $mainWifiDetails = $request->wifi_details ?? $room->wifi_details ?? '';
-            
-            if (!empty($roomDetailsData) && count($roomDetailsData) > 0) {
-                $firstRoom = $roomDetailsData[0];
-                $mainRoomNumber = $firstRoom['number'] ?? $mainRoomNumber;
-                $mainFloorNumber = $firstRoom['floor_number'] ?? $mainFloorNumber;
-                $mainSize = $firstRoom['size'] ?? $mainSize;
-                $mainWifiDetails = $firstRoom['wifi_details'] ?? $mainWifiDetails;
-            }
 
             // Process room information
             $roomInfo = [];

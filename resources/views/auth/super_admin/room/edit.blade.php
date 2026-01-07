@@ -62,21 +62,7 @@
 
                                     <div class="tab-content">
                                         <!-- Room Description -->
-                                        <div class="tab-pane {{ old('active_tab', 'tabItem3') === 'tabItem3' ? 'active' : '' }}" id="tabItem3">
-                                            <div class="row gy-4">
-                                                <div class="col-md-12 col-lg-12 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="default-textarea">Room Description</label>
-                                                        <div class="form-control-wrap">
-                                                            <textarea class="form-control no-resize" name="description" id="default-textarea">{{ old('description', $room->description) }}</textarea>
-                                                            @error('description')
-                                                            <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
+                                        <div class="tab-pane fade {{ old('active_tab', 'tabItem3') === 'tabItem3' ? 'show active' : '' }}" id="tabItem3">
 
                                             <!-- Room Information Section -->
                                             <div class="row mt-4">
@@ -91,6 +77,59 @@
                                                             @error('name')
                                                             <span class="text-danger">{{ $message }}</span>
                                                             @enderror
+                                                        </div>
+                                                        
+                                                        <!-- Room Description -->
+                                                        <div class="form-group mb-4">
+                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Room Description</label>
+                                                            <div class="form-control-wrap">
+                                                                <textarea class="form-control no-resize" name="description" id="default-textarea" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('description', $room->description) }}</textarea>
+                                                                @error('description')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Common Room Fields -->
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group mb-4">
+                                                                    <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Room Number</label>
+                                                                    <input type="text" class="form-control" name="room_number" value="{{ old('room_number', $room->number) }}" placeholder="Room number" style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                                                    @error('room_number')
+                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group mb-4">
+                                                                    <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Room Floor Number</label>
+                                                                    <input type="text" class="form-control" name="floor_number" value="{{ old('floor_number', $room->floor_number) }}" placeholder="Room Floor Number" style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                                                    @error('floor_number')
+                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group mb-4">
+                                                                    <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Room Size (sq. ft / sq. m)</label>
+                                                                    <input type="number" class="form-control" name="size" value="{{ old('size', $room->size) }}" placeholder="Ex: 1200 SFT" style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                                                    @error('size')
+                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group mb-4">
+                                                                    <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">WiFi Details/Password</label>
+                                                                    <input type="text" class="form-control" name="wifi_details" value="{{ old('wifi_details', $room->wifi_details) }}" placeholder="WiFi Details/Password" style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                                                    @error('wifi_details')
+                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                         
                                                         <!-- Room Active/Inactive Button -->
@@ -132,20 +171,9 @@
                                                                 $roomInfo = [];
                                                             }
                                                             
-                                                            // Get existing room details - handle both old format (single room) and new format (array of rooms)
+                                                            // Get existing room details
                                                             $existingRoomDetails = old('room_details', $roomInfo['room_details'] ?? []);
                                                             $totalRooms = old('total_rooms', $room->total_rooms ?? 1);
-                                                            
-                                                            // If old format (single room), convert to new format
-                                                            if (empty($existingRoomDetails) && ($room->number || $room->floor_number || $room->size || $room->wifi_details)) {
-                                                                $existingRoomDetails = [[
-                                                                    'number' => $room->number ?? '',
-                                                                    'floor_number' => $room->floor_number ?? '',
-                                                                    'size' => $room->size ?? '',
-                                                                    'wifi_details' => $room->wifi_details ?? ''
-                                                                ]];
-                                                                $totalRooms = max($totalRooms, 1);
-                                                            }
                                                             
                                                             if (!is_array($existingRoomDetails)) {
                                                                 $existingRoomDetails = [];
@@ -1511,7 +1539,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="tab-pane {{ old('active_tab', 'tabItem3') === 'tabItem4' ? 'active' : '' }}" id="tabItem4">
+                                        <div class="tab-pane fade {{ old('active_tab', 'tabItem3') === 'tabItem4' ? 'show active' : '' }}" id="tabItem4">
                                             <div class="row mt-15">
                                                 <div class="col-12">
                                                     <p class="text-muted"><i class="fa fa-info-circle"></i> These sections are synced with Room Details Tab. Changes made here will reflect there and vice versa.</p>
@@ -1926,7 +1954,7 @@
                                         </div>
 
                                         <!-- Room Availability Tab -->
-                                        <div class="tab-pane {{ old('active_tab', 'tabItem3') === 'Availability' ? 'active' : '' }}" id="Availability">
+                                        <div class="tab-pane fade {{ old('active_tab', 'tabItem3') === 'Availability' ? 'show active' : '' }}" id="Availability">
                                             <div class="row gy-4">
                                                 <div class="col-md-12 col-lg-12 col-xxl-12">
                                                     <div class="row gy-4">
@@ -1983,7 +2011,7 @@
                                         </div>
 
                                         <!-- Photos Tab -->
-                                        <div class="tab-pane {{ old('active_tab', 'tabItem3') === 'Photos' ? 'active' : '' }}" id="Photos">
+                                        <div class="tab-pane fade {{ old('active_tab', 'tabItem3') === 'Photos' ? 'show active' : '' }}" id="Photos">
                                             <div class="row gy-4">
                                                 @php
                                                     $photo_categories = [
@@ -2202,39 +2230,25 @@
 
                 // Function to generate a room detail section
                 function generateRoomSection(index, existingData = {}) {
-                    const roomNumber = existingData.number || '';
-                    const floorNumber = existingData.floor_number || '';
-                    const roomSize = existingData.size || '';
-                    const wifiDetails = existingData.wifi_details || '';
+                    const roomName = existingData.name || '';
+                    const roomNote = existingData.note || '';
                     
                     return `
                         <div class="room-detail-section mb-4" data-room-index="${index}" style="padding: 15px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
-                            <h6 style="color: #495057; font-weight: 600; margin-bottom: 15px;">Room ${index + 1} Details</h6>
+                            <h6 style="color: #495057; font-weight: 600; margin-bottom: 15px;">Room ${index + 1}</h6>
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Room Number</label>
-                                        <input type="text" class="form-control" name="room_details[${index}][number]" value="${roomNumber}" placeholder="Room number" required style="border: 1px solid #dee2e6; border-radius: 6px;">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Room Floor Number</label>
-                                        <input type="text" class="form-control" name="room_details[${index}][floor_number]" value="${floorNumber}" placeholder="Room Floor Number" required style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                <div class="col-md-12">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Room ${index + 1} Name</label>
+                                        <input type="text" class="form-control" name="room_details[${index}][name]" value="${roomName}" placeholder="Room ${index + 1} Name" style="border: 1px solid #dee2e6; border-radius: 6px;">
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <div class="form-group">
-                                        <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Room Size (sq. ft / sq. m)</label>
-                                        <input type="number" class="form-control" name="room_details[${index}][size]" value="${roomSize}" placeholder="Ex: 1200 SFT" required style="border: 1px solid #dee2e6; border-radius: 6px;">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">WiFi Details/Password</label>
-                                        <input type="text" class="form-control" name="room_details[${index}][wifi_details]" value="${wifiDetails}" placeholder="WiFi Details/Password" style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                        <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Note</label>
+                                        <textarea class="form-control" name="room_details[${index}][note]" placeholder="Add note for Room ${index + 1}" style="border: 1px solid #dee2e6; border-radius: 6px; min-height: 80px;">${roomNote}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -2763,13 +2777,17 @@
                     const tabPane = document.getElementById(savedTab);
                     
                     if (tabLink && tabPane) {
-                        // Remove active class from all tabs and panes
+                        // Remove active and show classes from all tabs and panes
                         document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-                        document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+                        document.querySelectorAll('.tab-pane').forEach(pane => {
+                            pane.classList.remove('active');
+                            pane.classList.remove('show');
+                        });
                         
-                        // Add active class to the saved tab
+                        // Add active and show classes to the saved tab
                         tabLink.classList.add('active');
                         tabPane.classList.add('active');
+                        tabPane.classList.add('show');
                         
                         // Trigger Bootstrap tab show event
                         const tab = new bootstrap.Tab(tabLink);
