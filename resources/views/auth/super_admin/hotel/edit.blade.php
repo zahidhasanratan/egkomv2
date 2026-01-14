@@ -38,86 +38,92 @@
                                     <div class="tab-content">
                                         <!-- Hotel Description -->
                                         <div class="tab-pane active" id="tabItem3">
-                                            <div class="row gy-4">
-                                                <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label for="property_type" class="form-label">Property Type</label>
-                                                        <select name="property_type" class="form-control">
-                                                            <option {{ $hotel->property_type == 'Hotels' ? 'selected' : '' }}>Hotels</option>
-                                                            <option {{ $hotel->property_type == 'Transit' ? 'selected' : '' }}>Transit</option>
-                                                            <option {{ $hotel->property_type == 'Resorts' ? 'selected' : '' }}>Resorts</option>
-                                                            <option {{ $hotel->property_type == 'Lodges' ? 'selected' : '' }}>Lodges</option>
-                                                            <option {{ $hotel->property_type == 'Guesthouses' ? 'selected' : '' }}>Guesthouses</option>
-                                                            <option {{ $hotel->property_type == 'Crisis' ? 'selected' : '' }}>Crisis</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12 col-lg-12 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="default-textarea">Hotel /
-                                                            Property Name</label>
-                                                        <div class="form-control-wrap">
-                                                            <input class="form-control no-resize"
-                                                                      id="default-textarea"
-                                                                      name="description" value="{{ old('description', $hotel->description) }}"></input>
-                                                            @error('description') <span
-                                                                class="text-danger">{{ $description }}</span> @enderror
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12 col-lg-12 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="hotel-description">Hotel/Property Description & Policy</label>
-                                                        <div class="form-control-wrap">
-                                                            <textarea class="form-control" id="hotel-description" name="details">{{ old('details', $hotel->details) }}</textarea>
-                                                            @error('details') <span class="text-danger">{{ $details }}</span> @enderror
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                            <!-- Hotel Information Section -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Hotel / Property Information</strong></h5>
+                                                        
+                                                        <div class="row gy-4">
+                                                            <div class="col-md-6 col-lg-4 col-xxl-12">
+                                                                <div class="form-group">
+                                                                    <label for="property_type" class="form-label">Property Type</label>
+                                                                    <select name="property_type" class="form-control">
+                                                                        <option {{ $hotel->property_type == 'Hotels' ? 'selected' : '' }}>Hotels</option>
+                                                                        <option {{ $hotel->property_type == 'Transit' ? 'selected' : '' }}>Transit</option>
+                                                                        <option {{ $hotel->property_type == 'Resorts' ? 'selected' : '' }}>Resorts</option>
+                                                                        <option {{ $hotel->property_type == 'Lodges' ? 'selected' : '' }}>Lodges</option>
+                                                                        <option {{ $hotel->property_type == 'Guesthouses' ? 'selected' : '' }}>Guesthouses</option>
+                                                                        <option {{ $hotel->property_type == 'Crisis' ? 'selected' : '' }}>Crisis</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12 col-lg-12 col-xxl-12">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="default-textarea">Hotel /
+                                                                        Property Name</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <input class="form-control no-resize"
+                                                                                  id="default-textarea"
+                                                                                  name="description" value="{{ old('description', $hotel->description) }}"></input>
+                                                                        @error('description') <span
+                                                                            class="text-danger">{{ $description }}</span> @enderror
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12 col-lg-12 col-xxl-12">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="hotel-description">Hotel/Property Description & Policy</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <textarea class="form-control" id="hotel-description" name="details">{{ old('details', $hotel->details) }}</textarea>
+                                                                        @error('details') <span class="text-danger">{{ $details }}</span> @enderror
+                                                                    </div>
+                                                                </div>
+                                                            </div>
 
+                                                            <div class="col-md-6 col-lg-6 col-xxl-12">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="hotel-description">Location Latitude</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <input class="form-control" id="hotel-description" name="lati" placeholder="Enter Latitude" value="{{ $hotel->lati }}"></input>
+                                                                        @error('lati') <span class="text-danger">{{ $lati }}</span> @enderror
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6 col-lg-6 col-xxl-12">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="hotel-description">Location Longitude</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <input class="form-control" id="hotel-description" name="longi" placeholder="Enter Longitude" value="{{ $hotel->longi }}"></input>
+                                                                        @error('longi') <span class="text-danger">{{ $longi }}</span> @enderror
+                                                                    </div>
+                                                                </div>
+                                                            </div>
 
-                                                <div class="col-md-6 col-lg-6 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="hotel-description">Location Latitude</label>
-                                                        <div class="form-control-wrap">
-                                                            <input class="form-control" id="hotel-description" name="lati" placeholder="Enter Latitude" value="{{ $hotel->lati }}"></input>
-                                                            @error('lati') <span class="text-danger">{{ $lati }}</span> @enderror
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6 col-lg-6 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="hotel-description">Location Longitude</label>
-                                                        <div class="form-control-wrap">
-                                                            <input class="form-control" id="hotel-description" name="longi" placeholder="Enter Longitude" value="{{ $hotel->longi }}"></input>
-                                                            @error('longi') <span class="text-danger">{{ $longi }}</span> @enderror
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-
-
-                                                <div class="col-md-12 col-lg-12 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="default-textarea">Address</label>
-                                                        <div class="form-control-wrap">
-                                                            <textarea class="form-control no-resize"
-                                                                      id="default-textarea"
-                                                                      name="address">{{ old('address', $hotel->address) }}</textarea>
-                                                            @error('address') <span
-                                                                class="text-danger">{{ $address }}</span> @enderror
+                                                            <div class="col-md-12 col-lg-12 col-xxl-12">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="default-textarea">Address</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <textarea class="form-control no-resize"
+                                                                                  id="default-textarea"
+                                                                                  name="address">{{ old('address', $hotel->address) }}</textarea>
+                                                                        @error('address') <span
+                                                                            class="text-danger">{{ $address }}</span> @enderror
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <!-- Property Policy And Rules -->
-                                            <div class="row gy-4">
-                                                <div class="col-md-12 col-lg-12 col-xxl-3">
-                                                    <h3 class="can-tittle" style="padding-top: 50px;">Property Policy
-                                                        and Rules</h3>
-                                                </div>
+                                            <!-- Property Policy And Rules Section -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Property Policy and Rules</strong></h5>
+                                                        
+                                                        <div class="row gy-4">
 
                                                 <div class="col-md-6 col-lg-4 col-xxl-3 pets-section">
                                                     <div class="form-group">
@@ -568,15 +574,19 @@
                                                         <span class="text-danger">{{ $message }}</span>
                                                         @enderror
                                                     </div>
-
-
+                                                </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
 
-                                            <!-- Start: Property Information -->
-                                            <div class="row mt-15">
-                                                <div class="checkbox-section">
-                                                    <h3 class="can-tittle">Property Info</h3>
+                                            <!-- Property Information Section -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Property Info</strong></h5>
+                                                        
+                                                        <div class="checkbox-section">
                                                     <div class="chk-all-sec">
                                                         <div class="form-group">
                                                             <div class="custom-control custom-switch checked">
@@ -729,6 +739,8 @@
                                                     </div>
                                                     @error('property_info') <span
                                                         class="text-danger">{{ $message }}</span> @enderror
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -931,76 +943,100 @@
                                                 </div>
                                             </div>
 
-                                            <!-- Start: Cancellation Policies -->
-                                            <div class="row mt-15">
+                                            @php
+                                                $defaultCancellationPolicyTexts = [
+                                                    'Flexible' => 'Flexible (Guests get a full refund if they cancel up to a day before check-in at least 24 hours.)',
+                                                    'Non-refundable' => 'Non-refundable (Regardless of the cancellation window, customers will not get any refund under this.)',
+                                                    'Partially refundable' => 'Partially refundable (Cancellations less than 24 hours… after deducting a 30% cancellation fee.)',
+                                                    'Long-term/Monthly staying policy' => 'Long-term/Monthly staying policy (Stays more than 30 days will fall under this scope and a specific contract paper shall be signed.)',
+                                                ];
+                                                $cancellationPolicyTexts = old(
+                                                    'cancellation_policy_texts',
+                                                    is_array($hotel->cancellation_policy_texts ?? null) ? $hotel->cancellation_policy_texts : []
+                                                );
+                                                $cancellationPolicyTexts = array_merge($defaultCancellationPolicyTexts, $cancellationPolicyTexts ?: []);
+                                            @endphp
+
+                                            <!-- Cancellation Policies Section -->
+                                            <div class="row mt-4">
                                                 <div class="col-md-12">
-                                                    <h3 class="can-tittle">Cancellation Policies</h3>
-                                                </div>
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Cancellation Policies</strong></h5>
+                                                        
+                                                        <div class="col-lg-12">
+                                                            <div class="form-group">
+                                                                <div class="form-check form-switch custom-switch">
+                                                                    <input class="form-check-input cancellation-checkbox" type="checkbox"
+                                                                           name="cancellation_policies[]" value="Flexible"
+                                                                           id="flexSwitchCheckFlexible"
+                                                                        {{ in_array('Flexible', old('cancellation_policies', $hotel->cancellation_policies ?? [])) ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="flexSwitchCheckFlexible">
+                                                                        {{ $cancellationPolicyTexts['Flexible'] }}
+                                                                    </label>
+                                                                </div>
+                                                                <small class="text-muted d-block mt-1">Edit text (super-admin)</small>
+                                                                <textarea class="form-control mt-1" rows="2" name="cancellation_policy_texts[Flexible]">{{ $cancellationPolicyTexts['Flexible'] }}</textarea>
+                                                            </div>
+                                                        </div>
 
-                                                <div class="col-lg-12">
-                                                    <div class="form-group">
-                                                        <div class="form-check form-switch custom-switch">
-                                                            <input class="form-check-input cancellation-checkbox" type="checkbox"
-                                                                   name="cancellation_policies[]" value="Flexible"
-                                                                   id="flexSwitchCheckFlexible"
-                                                                {{ in_array('Flexible', old('cancellation_policies', $hotel->cancellation_policies ?? [])) ? 'checked' : '' }}>
-                                                            <label class="form-check-label" for="flexSwitchCheckFlexible">
-                                                                Flexible (Guests get a full refund if they cancel up to a day before check-in at least 24 hours.)
-                                                            </label>
+                                                        <div class="col-lg-12">
+                                                            <div class="form-group">
+                                                                <div class="form-check form-switch custom-switch">
+                                                                    <input class="form-check-input cancellation-checkbox" type="checkbox"
+                                                                           name="cancellation_policies[]" value="Non-refundable"
+                                                                           id="flexSwitchCheckNonRefundable"
+                                                                        {{ in_array('Non-refundable', old('cancellation_policies', $hotel->cancellation_policies ?? [])) ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="flexSwitchCheckNonRefundable">
+                                                                        {{ $cancellationPolicyTexts['Non-refundable'] }}
+                                                                    </label>
+                                                                </div>
+                                                                <small class="text-muted d-block mt-1">Edit text (super-admin)</small>
+                                                                <textarea class="form-control mt-1" rows="2" name="cancellation_policy_texts[Non-refundable]">{{ $cancellationPolicyTexts['Non-refundable'] }}</textarea>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-12">
+                                                            <div class="form-group">
+                                                                <div class="form-check form-switch custom-switch">
+                                                                    <input class="form-check-input cancellation-checkbox" type="checkbox"
+                                                                           name="cancellation_policies[]" value="Partially refundable"
+                                                                           id="flexSwitchCheckPartially"
+                                                                        {{ in_array('Partially refundable', old('cancellation_policies', $hotel->cancellation_policies ?? [])) ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="flexSwitchCheckPartially">
+                                                                        {{ $cancellationPolicyTexts['Partially refundable'] }}
+                                                                    </label>
+                                                                </div>
+                                                                <small class="text-muted d-block mt-1">Edit text (super-admin)</small>
+                                                                <textarea class="form-control mt-1" rows="2" name="cancellation_policy_texts[Partially refundable]">{{ $cancellationPolicyTexts['Partially refundable'] }}</textarea>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-12">
+                                                            <div class="form-group">
+                                                                <div class="form-check form-switch custom-switch">
+                                                                    <input class="form-check-input cancellation-checkbox" type="checkbox"
+                                                                           name="cancellation_policies[]" value="Long-term/Monthly staying policy"
+                                                                           id="flexSwitchCheckLongTerm"
+                                                                        {{ in_array('Long-term/Monthly staying policy', old('cancellation_policies', $hotel->cancellation_policies ?? [])) ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="flexSwitchCheckLongTerm">
+                                                                        {{ $cancellationPolicyTexts['Long-term/Monthly staying policy'] }}
+                                                                    </label>
+                                                                </div>
+                                                                <small class="text-muted d-block mt-1">Edit text (super-admin)</small>
+                                                                <textarea class="form-control mt-1" rows="2" name="cancellation_policy_texts[Long-term/Monthly staying policy]">{{ $cancellationPolicyTexts['Long-term/Monthly staying policy'] }}</textarea>
+                                                            </div>
+                                                        </div>
+
+                                                        {{-- Validation Error --}}
+                                                        @error('cancellation_policies')
+                                                        <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+
+                                                        {{-- Warning Message --}}
+                                                        <div class="col-lg-12">
+                                                            <small id="policy-warning" class="text-danger" style="display:none;">⚠️ Maximum 2 can be Selected</small>
                                                         </div>
                                                     </div>
-                                                </div>
-
-                                                <div class="col-lg-12">
-                                                    <div class="form-group">
-                                                        <div class="form-check form-switch custom-switch">
-                                                            <input class="form-check-input cancellation-checkbox" type="checkbox"
-                                                                   name="cancellation_policies[]" value="Non-refundable"
-                                                                   id="flexSwitchCheckNonRefundable"
-                                                                {{ in_array('Non-refundable', old('cancellation_policies', $hotel->cancellation_policies ?? [])) ? 'checked' : '' }}>
-                                                            <label class="form-check-label" for="flexSwitchCheckNonRefundable">
-                                                                Non-refundable (Regardless of the cancellation window, customers will not get any refund under this.)
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-lg-12">
-                                                    <div class="form-group">
-                                                        <div class="form-check form-switch custom-switch">
-                                                            <input class="form-check-input cancellation-checkbox" type="checkbox"
-                                                                   name="cancellation_policies[]" value="Partially refundable"
-                                                                   id="flexSwitchCheckPartially"
-                                                                {{ in_array('Partially refundable', old('cancellation_policies', $hotel->cancellation_policies ?? [])) ? 'checked' : '' }}>
-                                                            <label class="form-check-label" for="flexSwitchCheckPartially">
-                                                                Partially refundable (Cancellations less than 24 hours… after deducting a 30% cancellation fee.)
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-lg-12">
-                                                    <div class="form-group">
-                                                        <div class="form-check form-switch custom-switch">
-                                                            <input class="form-check-input cancellation-checkbox" type="checkbox"
-                                                                   name="cancellation_policies[]" value="Long-term/Monthly staying policy"
-                                                                   id="flexSwitchCheckLongTerm"
-                                                                {{ in_array('Long-term/Monthly staying policy', old('cancellation_policies', $hotel->cancellation_policies ?? [])) ? 'checked' : '' }}>
-                                                            <label class="form-check-label" for="flexSwitchCheckLongTerm">
-                                                                Long-term/Monthly staying policy (Stays more than 30 days will fall under this scope and a specific contract paper shall be signed.)
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                {{-- Validation Error --}}
-                                                @error('cancellation_policies')
-                                                <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-
-                                                {{-- Warning Message --}}
-                                                <div class="col-lg-12">
-                                                    <small id="policy-warning" class="text-danger" style="display:none;">⚠️ Maximum 2 can be Selected</small>
                                                 </div>
                                             </div>
 

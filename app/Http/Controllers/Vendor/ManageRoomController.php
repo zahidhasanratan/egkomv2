@@ -249,8 +249,8 @@ class ManageRoomController extends Controller
                 'bed_type' => $roomInfoData['bed_type'] ?? null, // Keep for backward compatibility
                 'number_of_beds' => $roomInfoData['number_of_beds'] ?? null, // Keep for backward compatibility
                 'custom_bed_types' => array_filter($roomInfoData['custom_bed_types'] ?? []), // Keep for backward compatibility
-                'max_adults' => $roomInfoData['max_adults'] ?? null,
-                'max_children' => $roomInfoData['max_children'] ?? null,
+                'max_occupancy' => $roomInfoData['max_occupancy'] ?? null,
+                'min_occupancy' => $roomInfoData['min_occupancy'] ?? null,
                 'layout' => array_filter($roomInfoData['layout'] ?? []),
                 'view' => array_filter($roomInfoData['view'] ?? []),
                 'bathroom' => array_filter($roomInfoData['bathroom'] ?? []), // Keep for backward compatibility
@@ -361,6 +361,7 @@ class ManageRoomController extends Controller
             'bedroom3_photos' => 'bedroom3',
             'washroom2_photos' => 'washroom2',
             'washroom3_photos' => 'washroom3',
+            'additional_photos' => 'additional',
         ];
 
         foreach ($photoCategories as $inputName => $category) {
@@ -513,8 +514,8 @@ class ManageRoomController extends Controller
                 'bed_type' => $roomInfoData['bed_type'] ?? null, // Keep for backward compatibility
                 'number_of_beds' => $roomInfoData['number_of_beds'] ?? null, // Keep for backward compatibility
                 'custom_bed_types' => array_filter($roomInfoData['custom_bed_types'] ?? []), // Keep for backward compatibility
-                'max_adults' => $roomInfoData['max_adults'] ?? null,
-                'max_children' => $roomInfoData['max_children'] ?? null,
+                'max_occupancy' => $roomInfoData['max_occupancy'] ?? null,
+                'min_occupancy' => $roomInfoData['min_occupancy'] ?? null,
                 'layout' => array_filter($roomInfoData['layout'] ?? []),
                 'view' => array_filter($roomInfoData['view'] ?? []),
                 'bathroom' => array_filter($roomInfoData['bathroom'] ?? []), // Keep for backward compatibility
@@ -625,6 +626,7 @@ class ManageRoomController extends Controller
             'bedroom3_photos' => 'bedroom3',
             'washroom2_photos' => 'washroom2',
             'washroom3_photos' => 'washroom3',
+            'additional_photos' => 'additional',
         ];
 
         foreach ($photoCategories as $inputName => $category) {
@@ -877,8 +879,8 @@ class ManageRoomController extends Controller
                     'bed_type' => $roomInfoData['bed_type'] ?? null, // Keep for backward compatibility
                     'number_of_beds' => $roomInfoData['number_of_beds'] ?? null, // Keep for backward compatibility
                     'custom_bed_types' => array_filter($roomInfoData['custom_bed_types'] ?? []), // Keep for backward compatibility
-                    'max_adults' => $roomInfoData['max_adults'] ?? null,
-                    'max_children' => $roomInfoData['max_children'] ?? null,
+                    'max_occupancy' => $roomInfoData['max_occupancy'] ?? null,
+                    'min_occupancy' => $roomInfoData['min_occupancy'] ?? null,
                     'layout' => array_filter($roomInfoData['layout'] ?? []),
                     'view' => array_filter($roomInfoData['view'] ?? []),
                     'bathroom' => array_filter($roomInfoData['bathroom'] ?? []), // Keep for backward compatibility
@@ -971,6 +973,7 @@ class ManageRoomController extends Controller
                 'bedroom3_photos' => 'bedroom3',
                 'washroom2_photos' => 'washroom2',
                 'washroom3_photos' => 'washroom3',
+                'additional_photos' => 'additional',
             ];
 
             $photosUploaded = false;
@@ -1182,8 +1185,8 @@ class ManageRoomController extends Controller
                     'bed_type' => $roomInfoData['bed_type'] ?? null, // Keep for backward compatibility
                     'number_of_beds' => $roomInfoData['number_of_beds'] ?? null, // Keep for backward compatibility
                     'custom_bed_types' => array_filter($roomInfoData['custom_bed_types'] ?? []), // Keep for backward compatibility
-                    'max_adults' => $roomInfoData['max_adults'] ?? null,
-                    'max_children' => $roomInfoData['max_children'] ?? null,
+                    'max_occupancy' => $roomInfoData['max_occupancy'] ?? null,
+                    'min_occupancy' => $roomInfoData['min_occupancy'] ?? null,
                     'layout' => array_filter($roomInfoData['layout'] ?? []),
                     'view' => array_filter($roomInfoData['view'] ?? []),
                     'bathroom' => array_filter($roomInfoData['bathroom'] ?? []), // Keep for backward compatibility
@@ -1247,6 +1250,7 @@ class ManageRoomController extends Controller
                 'furniture' => $furniture,
                 'amenities' => $amenities,
                 'cancellation_policy' => $cancellation_policy,
+                'cancellation_policy_texts' => (array)$request->input('cancellation_policy_texts', $room->cancellation_policy_texts ?? []),
                 'display_options' => $displayOptions, // Store room information and additional info in display_options
                 'is_active' => $request->boolean('is_active', false),
                 'status' => $status,
@@ -1280,6 +1284,7 @@ class ManageRoomController extends Controller
                 'bedroom3_photos' => 'bedroom3',
                 'washroom2_photos' => 'washroom2',
                 'washroom3_photos' => 'washroom3',
+                'additional_photos' => 'additional',
             ];
 
             $photosUploaded = false;

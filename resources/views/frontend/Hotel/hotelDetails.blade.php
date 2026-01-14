@@ -1663,7 +1663,7 @@
                                 <div class="col-md-12">
                                     <div data-v-58caae98="" class="facilities-column">
                                         <h3 data-v-58caae98="" class="general-title">
-                                            <span class="faci-icon-awe"><i class="fa fa-bed fa-bed-custom"></i></span> Others Information
+                                            <span class="faci-icon-awe"><i class="fa fa-bed fa-bed-custom"></i></span> Other Information
                                         </h3>
                                         <div style="color: #495057; line-height: 1.6; margin-top: 10px; white-space: pre-wrap;">${otherCharges}</div>
                                     </div>

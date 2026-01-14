@@ -582,7 +582,7 @@ class ManageHotel extends Controller
         // 8) Always keep vendor_id unchanged
         $data['vendor_id'] = $hotel->vendor_id;
 
-        // 9) Update and redirect
+        // 10) Update and redirect
         $hotel->update($data);
 
         return redirect()->back()
@@ -633,6 +633,8 @@ class ManageHotel extends Controller
             'check_in_methods'          => 'nullable|array',
             'custom_check_in_methods'   => 'nullable|array',
             'cancellation_policies'     => 'nullable|array',
+            'cancellation_policy_texts' => 'nullable|array',
+            'cancellation_policy_texts.*' => 'nullable|string',
             'facilities'                => 'nullable|array',
             'custom_facilities'         => 'nullable|array',
             'custom_facilities_icon.*'  => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -658,6 +660,14 @@ class ManageHotel extends Controller
         $data = collect($validated)
             ->filter(fn($v) => !is_null($v) && $v !== '' && $v !== [])
             ->toArray();
+
+        // Keep policy texts even if some values are empty (we want partial edits)
+        if ($request->has('cancellation_policy_texts')) {
+            $data['cancellation_policy_texts'] = array_filter(
+                (array)$request->input('cancellation_policy_texts', []),
+                fn($v) => $v !== null
+            );
+        }
 
         // 3) Merge check-in rules
         $mergedCheck = array_filter(array_merge(

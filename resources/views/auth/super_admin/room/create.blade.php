@@ -54,9 +54,20 @@
                                             <a class="nav-link" data-bs-toggle="tab" href="#Photos">Room Photos</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-bs-toggle="tab" href="#Availability">Room Availability</a>
+                                            <a class="nav-link" data-bs-toggle="tab" href="#Availability">Calender & Room Pricing</a>
                                         </li>
                                     </ul>
+
+                                    <!-- Room Active/Inactive Button - Top Right -->
+                                    <div class="d-flex justify-content-end mb-3" style="margin-top: 15px;">
+                                        <div class="form-group" style="margin-bottom: 0px;">
+                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Room Active/Inactive Button</label>
+                                            <div class="form-check form-switch custom-control custom-switch checked" style="padding-left: 2rem; margin-bottom: 0px;">
+                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="is_active" {{ old('is_active') ? 'checked' : '' }}>
+                                            </div>
+                                            <div id="alertMessage" style="display: none; color: red; margin-top:0px;"></div>
+                                        </div>
+                                    </div>
 
                                     <div class="tab-content">
                                         <!-- Room Description -->
@@ -75,17 +86,6 @@
                                                             @error('name')
                                                             <span class="text-danger">{{ $message }}</span>
                                                             @enderror
-                                                        </div>
-                                                        
-                                                        <!-- Room Description -->
-                                                        <div class="form-group mb-4">
-                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Room Description</label>
-                                                            <div class="form-control-wrap">
-                                                                <textarea class="form-control no-resize" name="description" id="default-textarea" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('description') }}</textarea>
-                                                                @error('description')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                                @enderror
-                                                            </div>
                                                         </div>
 
                                                         <!-- Common Room Fields -->
@@ -130,15 +130,6 @@
                                                             </div>
                                                         </div>
                                                         
-                                                        <!-- Room Active/Inactive Button -->
-                                                        <div class="form-group mb-4">
-                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Room Active/Inactive Button</label>
-                                                            <div class="form-check form-switch custom-control custom-switch checked" style="padding-left: 2rem; margin-bottom: 0px;">
-                                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="is_active" {{ old('is_active') ? 'checked' : '' }}>
-                                                            </div>
-                                                            <div id="alertMessage" style="display: none; color: red; margin-top:0px;"></div>
-                                                        </div>
-                                                        
                                                         <!-- Total Room Counter -->
                                                         <div class="form-group mb-4">
                                                             <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Total Room</label>
@@ -163,87 +154,17 @@
                                                         <div id="roomDetailsContainer" style="margin-top: 20px;">
                                                             <!-- Room detail sections will be dynamically generated here -->
                                                         </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Price Section -->
-                                            <div class="row mt-4">
-                                                <div class="col-md-12">
-                                                    <div class="row gy-4">
-                                                        <div class="price-card-room">
-                                                            <h3 class="can-tittle">Price Section</h3>
-                                                        </div>
-
-                                                    <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                        <div class="form-group">
-                                                            <label class="form-label">Room Price (Per Night)</label>
-                                                            <input type="number" class="form-control" name="price_per_night" value="{{ old('price_per_night') }}" placeholder="Ex: BDT 1,500" required>
-                                                            @error('price_per_night')
-                                                            <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                        <div class="form-group">
-                                                            <label class="form-label">Weekend Price</label>
-                                                            <input type="number" class="form-control" name="weekend_price" value="{{ old('weekend_price') }}" placeholder="Ex: BDT 1,500">
-                                                            @error('weekend_price')
-                                                            <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                        <div class="form-group">
-                                                            <label class="form-label">Holiday Price</label>
-                                                            <input type="number" class="form-control" name="holiday_price" value="{{ old('holiday_price') }}" placeholder="Ex: BDT 1,500">
-                                                            @error('holiday_price')
-                                                            <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                        <div class="form-group">
-                                                            <label class="form-label">Discount Type</label>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="radio" name="discount_type" id="discountAmount" value="amount" {{ old('discount_type') == 'amount' ? 'checked' : '' }}>
-                                                                <label class="form-check-label" for="discountAmount">Discount by Amount</label>
-                                                            </div>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="radio" name="discount_type" id="discountPercentage" value="percentage" {{ old('discount_type') == 'percentage' ? 'checked' : '' }}>
-                                                                <label class="form-check-label" for="discountPercentage">Discount by Percentage (%)</label>
-                                                            </div>
-                                                            <div class="mt-3 {{ old('discount_type') ? '' : 'hidden' }}" id="discountValueField">
-                                                                <label for="discount_value" class="form-label">Enter Discount {{ old('discount_type') == 'amount' ? 'Amount' : 'Percentage (%)' }}</label>
-                                                                <input type="number" class="form-control" name="discount_value" id="discount_value" value="{{ old('discount_value') }}" placeholder="{{ old('discount_type') == 'amount' ? 'Ex: 3500' : 'Ex: 15 %' }}">
-                                                                @error('discount_value')
+                                                        
+                                                        <!-- Room Description -->
+                                                        <div class="form-group mb-4" style="margin-top: 20px;">
+                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Room Description</label>
+                                                            <div class="form-control-wrap">
+                                                                <textarea class="form-control no-resize" name="description" id="default-textarea" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('description') }}</textarea>
+                                                                @error('description')
                                                                 <span class="text-danger">{{ $message }}</span>
                                                                 @enderror
                                                             </div>
                                                         </div>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                        <label class="form-label">Total Person in this room!</label>
-                                                        <div class="counter-wrapper">
-                                                            <div class="counter-card">
-                                                                <div>
-                                                                    <div class="counter">
-                                                                        <button type="button" class="btn decrease-male">-</button>
-                                                                        <span class="count male-count" id="totalPersons">{{ old('total_persons', 0) }}</span>
-                                                                        <input type="hidden" name="total_persons" id="totalPersonsInput" value="{{ old('total_persons', 0) }}">
-                                                                        <button type="button" class="btn increase-male">+</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        @error('total_persons')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                        @enderror
-                                                    </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -306,230 +227,10 @@
                                             </script>
 
                                             <div class="row mt-15">
-                                                <div class="checkbox-section">
+                                                <div class="col-md-12">
                                                     <h3 class="can-tittle">Additional Room Information</h3>
-                                                    <div class="chk-all-sec">
-                                                        <div class="form-group">
-                                                            <div class="custom-control custom-switch checked">
-                                                                <input type="checkbox" class="custom-control-input" name="additional-info-all" id="additional-info-all">
-                                                                <label class="custom-control-label" for="additional-info-all">Select All</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Bed" {{ in_array('Bed', old('furniture', [])) ? 'checked' : '' }}> Bed</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Dining Table with Chair" {{ in_array('Dining Table with Chair', old('furniture', [])) ? 'checked' : '' }}> Dining Table with Chair</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Sofa/Couch" {{ in_array('Sofa/Couch', old('furniture', [])) ? 'checked' : '' }}> Sofa/Couch</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Tea Table" {{ in_array('Tea Table', old('furniture', [])) ? 'checked' : '' }}> Tea Table</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Bedside Table" {{ in_array('Bedside Table', old('furniture', [])) ? 'checked' : '' }}> Bedside Table</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Shoe Rack" {{ in_array('Shoe Rack', old('furniture', [])) ? 'checked' : '' }}> Shoe Rack</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Clothing Cabinet" {{ in_array('Clothing Cabinet', old('furniture', [])) ? 'checked' : '' }}> Clothing Cabinet</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Clothes Drying Hanger" {{ in_array('Clothes Drying Hanger', old('furniture', [])) ? 'checked' : '' }}> Clothes Drying Hanger</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Iron Stand" {{ in_array('Iron Stand', old('furniture', [])) ? 'checked' : '' }}> Iron Stand</label><br>
-                                                    <label><input type="checkbox" name="furniture[]" class="checkbox-item-furniture checkbox-item-additional" value="Locker/Safe" {{ in_array('Locker/Safe', old('furniture', [])) ? 'checked' : '' }}> Locker/Safe</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Soap" {{ in_array('Soap', old('amenities', [])) ? 'checked' : '' }}> Soap</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Tissue" {{ in_array('Tissue', old('amenities', [])) ? 'checked' : '' }}> Tissue</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Shampoo" {{ in_array('Shampoo', old('amenities', [])) ? 'checked' : '' }}> Shampoo</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Toothbrush" {{ in_array('Toothbrush', old('amenities', [])) ? 'checked' : '' }}> Toothbrush</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Towel" {{ in_array('Towel', old('amenities', [])) ? 'checked' : '' }}> Towel</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Water bottle" {{ in_array('Water bottle', old('amenities', [])) ? 'checked' : '' }}> Water bottle</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Free laundry" {{ in_array('Free laundry', old('amenities', [])) ? 'checked' : '' }}> Free laundry</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Air freshener" {{ in_array('Air freshener', old('amenities', [])) ? 'checked' : '' }}> Air freshener</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Fruit basket" {{ in_array('Fruit basket', old('amenities', [])) ? 'checked' : '' }}> Fruit basket</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Complimentary drinks" {{ in_array('Complimentary drinks', old('amenities', [])) ? 'checked' : '' }}> Complimentary drinks</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-additional" value="Buffet breakfast" {{ in_array('Buffet breakfast', old('amenities', [])) ? 'checked' : '' }}> Buffet breakfast</label><br>
                                                 </div>
                                             </div>
-                                            <script>
-                                                (function initAdditionalInfoSelectAll() {
-                                                    const containers = document.querySelectorAll('.checkbox-section');
-                                                    const container = containers[containers.length - 1];
-                                                    if (!container) return;
-
-                                                    const selectAll = container.querySelector('#additional-info-all');
-                                                    if (!selectAll) return;
-
-                                                    container.addEventListener('change', function (e) {
-                                                        if (e.target === selectAll) {
-                                                            const items = container.querySelectorAll('.checkbox-item-additional');
-                                                            items.forEach(chk => { chk.checked = selectAll.checked; });
-                                                            return;
-                                                        }
-
-                                                        if (e.target.classList.contains('checkbox-item-additional')) {
-                                                            const items = container.querySelectorAll('.checkbox-item-additional');
-                                                            const checkedCount = container.querySelectorAll('.checkbox-item-additional:checked').length;
-                                                            selectAll.checked = (checkedCount === items.length && items.length > 0);
-                                                        }
-                                                    });
-
-                                                    const items = container.querySelectorAll('.checkbox-item-additional');
-                                                    const checkedCount = container.querySelectorAll('.checkbox-item-additional:checked').length;
-                                                    selectAll.checked = (checkedCount === items.length && items.length > 0);
-                                                })();
-                                            </script>
-
-                                            <!-- Bed Details -->
-                                            <div class="row mt-4">
-                                                <div class="col-md-12">
-                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
-                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Bed Details</strong></h5>
-                                                        
-                                                        <!-- Total Beds Counter -->
-                                                        <div class="form-group mb-4">
-                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Total Beds</label>
-                                                            <div class="counter-wrapper" style="max-width: 300px;">
-                                                                <div class="counter-card">
-                                                                    <div>
-                                                                        <div class="counter">
-                                                                            <button type="button" class="btn decrease-male" id="bedDecreaseBtn">-</button>
-                                                                            <span id="totalBeds" class="count male-count">{{ old('total_beds', 0) }}</span>
-                                                                            <input type="hidden" name="total_beds" id="totalBedsInput" value="{{ old('total_beds', 0) }}">
-                                                                            <button type="button" class="btn increase-male" id="bedIncreaseBtn">+</button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            @error('total_beds')
-                                                            <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                        
-                                                        <!-- Dynamic Bed Details Container -->
-                                                        <div id="bedDetailsContainer" style="margin-top: 20px;">
-                                                            <!-- Bed detail sections will be dynamically generated here -->
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Bathroom Details -->
-                                            <div class="row mt-4">
-                                                <div class="col-md-12">
-                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
-                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Bathroom Details</strong></h5>
-                                                        
-                                                        <!-- Total Bathroom Counter -->
-                                                        <div class="form-group mb-4">
-                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Total Bathroom</label>
-                                                            <div class="counter-wrapper" style="max-width: 300px;">
-                                                                <div class="counter-card">
-                                                                    <div>
-                                                                        <div class="counter">
-                                                                            <button type="button" class="btn decrease-male" id="bathroomDecreaseBtn">-</button>
-                                                                            <span id="totalBathrooms" class="count male-count">{{ old('total_washrooms', 0) }}</span>
-                                                                            <input type="hidden" name="total_washrooms" id="totalBathroomsInput" value="{{ old('total_washrooms', 0) }}">
-                                                                            <button type="button" class="btn increase-male" id="bathroomIncreaseBtn">+</button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            @error('total_washrooms')
-                                                            <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                        
-                                                        <!-- Dynamic Bathroom Details Container -->
-                                                        <div id="bathroomDetailsContainer" style="margin-top: 20px;">
-                                                            <!-- Bathroom detail sections will be dynamically generated here -->
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row mt-15">
-                                                <div class="col-md-12">
-                                                    <h3 class="can-tittle">Cancellation Policies</h3>
-                                                </div>
-
-                                                <div class="col-lg-12">
-                                                    <div class="form-group">
-                                                        <div class="form-check form-switch custom-switch">
-                                                            <input class="form-check-input cancellation-checkbox" type="checkbox"
-                                                                   name="cancellation_policies[]" value="Flexible"
-                                                                   id="flexSwitchCheckFlexible"
-                                                                {{ in_array('Flexible', old('cancellation_policies', $hotel->cancellation_policies ?? [])) ? 'checked' : '' }}>
-                                                            <label class="form-check-label" for="flexSwitchCheckFlexible">
-                                                                Flexible (Guests get a full refund if they cancel up to a day before check-in at least 24 hours.)
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-lg-12">
-                                                    <div class="form-group">
-                                                        <div class="form-check form-switch custom-switch">
-                                                            <input class="form-check-input cancellation-checkbox" type="checkbox"
-                                                                   name="cancellation_policies[]" value="Non-refundable"
-                                                                   id="flexSwitchCheckNonRefundable"
-                                                                {{ in_array('Non-refundable', old('cancellation_policies', $hotel->cancellation_policies ?? [])) ? 'checked' : '' }}>
-                                                            <label class="form-check-label" for="flexSwitchCheckNonRefundable">
-                                                                Non-refundable (Regardless of the cancellation window, customers will not get any refund under this.)
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-lg-12">
-                                                    <div class="form-group">
-                                                        <div class="form-check form-switch custom-switch">
-                                                            <input class="form-check-input cancellation-checkbox" type="checkbox"
-                                                                   name="cancellation_policies[]" value="Partially refundable"
-                                                                   id="flexSwitchCheckPartially"
-                                                                {{ in_array('Partially refundable', old('cancellation_policies', $hotel->cancellation_policies ?? [])) ? 'checked' : '' }}>
-                                                            <label class="form-check-label" for="flexSwitchCheckPartially">
-                                                                Partially refundable (Cancellations less than 24 hours… after deducting a 30% cancellation fee.)
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-lg-12">
-                                                    <div class="form-group">
-                                                        <div class="form-check form-switch custom-switch">
-                                                            <input class="form-check-input cancellation-checkbox" type="checkbox"
-                                                                   name="cancellation_policies[]" value="Long-term/Monthly staying policy"
-                                                                   id="flexSwitchCheckLongTerm"
-                                                                {{ in_array('Long-term/Monthly staying policy', old('cancellation_policies', $hotel->cancellation_policies ?? [])) ? 'checked' : '' }}>
-                                                            <label class="form-check-label" for="flexSwitchCheckLongTerm">
-                                                                Long-term/Monthly staying policy (Stays more than 30 days will fall under this scope and a specific contract paper shall be signed.)
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                {{-- Validation Error --}}
-                                                @error('cancellation_policies')
-                                                <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-
-                                                {{-- Warning Message --}}
-                                                <div class="col-lg-12">
-                                                    <small id="policy-warning" class="text-danger" style="display:none;">⚠️ Maximum 2 can be Selected</small>
-                                                </div>
-                                            </div>
-
-                                            {{-- JavaScript --}}
-                                            <script>
-                                                document.addEventListener('DOMContentLoaded', function () {
-                                                    const checkboxes = document.querySelectorAll('.cancellation-checkbox');
-                                                    const warning = document.getElementById('policy-warning');
-
-                                                    checkboxes.forEach(cb => {
-                                                        cb.addEventListener('change', function () {
-                                                            const checked = document.querySelectorAll('.cancellation-checkbox:checked').length;
-
-                                                            if (checked > 2) {
-                                                                this.checked = false; // undo last check
-                                                                warning.style.display = 'block';
-                                                                setTimeout(() => {
-                                                                    warning.style.display = 'none';
-                                                                }, 2000); // auto-hide after 2s
-                                                            }
-                                                        });
-                                                    });
-                                                });
-                                            </script>
 
                                             <!-- Additional Bed Policy & Fee -->
                                             <div class="row mt-3">
@@ -570,7 +271,7 @@
                                                                 <label class="form-label mb-3" style="font-weight: 600; color: #495057;">Fee Details</label>
                                                                 <div class="row">
                                                                     <div class="col-md-4">
-                                                                        <div class="form-group">
+                                                        <div class="form-group">
                                                                             <label class="form-label">Fee Amount</label>
                                                                             <input type="number" class="form-control" name="additional_info[bed_fee_amount]" value="{{ old('additional_info.bed_fee_amount', '') }}" placeholder="e.g., 1000" min="0" step="0.01">
                                                                         </div>
@@ -586,15 +287,15 @@
                                                                             <label class="form-label">Per Unit</label>
                                                                             <input type="text" class="form-control" name="additional_info[bed_fee_unit]" value="{{ old('additional_info.bed_fee_unit', 'Per Bed') }}" placeholder="e.g., Per Bed">
                                                                         </div>
-                                                                    </div>
-                                                                </div>
                                                             </div>
-                                                            
+                                                        </div>
+                                                    </div>
+
                                                             <div class="form-group mt-4">
                                                                 <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Note</label>
                                                                 <textarea class="form-control" name="additional_info[bed_note]" rows="3" placeholder="Enter any additional notes about the bed policy" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('additional_info.bed_note', '') }}</textarea>
-                                                            </div>
-                                                        </div>
+                                                </div>
+                                            </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -636,15 +337,15 @@
                                                             
                                                             <div id="children_guest_fee_fields" style="display: {{ old('additional_info.children_guest_policy_type', '') == 'paid' ? 'block' : 'none' }}; margin-top: 20px; padding: 15px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
                                                                 <label class="form-label mb-3" style="font-weight: 600; color: #495057;">Fee Details</label>
-                                                                <div class="row">
+                                                    <div class="row">
                                                                     <div class="col-md-4">
-                                                                        <div class="form-group">
+                                                            <div class="form-group">
                                                                             <label class="form-label">Fee Amount</label>
                                                                             <input type="number" class="form-control" name="additional_info[children_guest_fee_amount]" value="{{ old('additional_info.children_guest_fee_amount', '') }}" placeholder="e.g., 500" min="0" step="0.01">
-                                                                        </div>
-                                                                    </div>
+                                                </div>
+                                            </div>
                                                                     <div class="col-md-4">
-                                                                        <div class="form-group">
+                                                            <div class="form-group">
                                                                             <label class="form-label">Currency</label>
                                                                             <input type="text" class="form-control" name="additional_info[children_guest_fee_currency]" value="{{ old('additional_info.children_guest_fee_currency', 'BDT') }}" placeholder="e.g., BDT">
                                                                         </div>
@@ -692,37 +393,37 @@
                                                                 <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Service Type</label>
                                                                 <div class="d-flex gap-3">
                                                                     <div class="form-check" style="padding-left: 2rem;">
-                                                                        <input class="form-check-input" type="radio" name="additional_info[laundry_service_type]" id="laundry_complementary" value="complementary" {{ old('additional_info.laundry_service_type', '') == 'complementary' ? 'checked' : '' }}>
+                                                                    <input class="form-check-input" type="radio" name="additional_info[laundry_service_type]" id="laundry_complementary" value="complementary" {{ old('additional_info.laundry_service_type', '') == 'complementary' ? 'checked' : '' }}>
                                                                         <label class="form-check-label" for="laundry_complementary" style="font-weight: 500;">Complementary</label>
-                                                                    </div>
+                                                                </div>
                                                                     <div class="form-check" style="padding-left: 2rem;">
-                                                                        <input class="form-check-input" type="radio" name="additional_info[laundry_service_type]" id="laundry_paid" value="paid" {{ old('additional_info.laundry_service_type', '') == 'paid' ? 'checked' : '' }}>
+                                                                    <input class="form-check-input" type="radio" name="additional_info[laundry_service_type]" id="laundry_paid" value="paid" {{ old('additional_info.laundry_service_type', '') == 'paid' ? 'checked' : '' }}>
                                                                         <label class="form-check-label" for="laundry_paid" style="font-weight: 500;">Paid</label>
-                                                                    </div>
+                                                                </div>
                                                                 </div>
                                                             </div>
                                                             
                                                             <div id="laundry_fee_fields" style="display: {{ old('additional_info.laundry_service_type', '') == 'paid' ? 'block' : 'none' }}; margin-top: 20px; padding: 15px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
                                                                 <label class="form-label mb-3" style="font-weight: 600; color: #495057;">Fee Details</label>
-                                                                <div class="row">
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label class="form-label">Fee Amount</label>
-                                                                            <input type="number" class="form-control" name="additional_info[laundry_fee_amount]" value="{{ old('additional_info.laundry_fee_amount', '') }}" placeholder="e.g., 500" min="0" step="0.01">
-                                                                        </div>
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Fee Amount</label>
+                                                                        <input type="number" class="form-control" name="additional_info[laundry_fee_amount]" value="{{ old('additional_info.laundry_fee_amount', '') }}" placeholder="e.g., 500" min="0" step="0.01">
                                                                     </div>
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label class="form-label">Currency</label>
-                                                                            <input type="text" class="form-control" name="additional_info[laundry_fee_currency]" value="{{ old('additional_info.laundry_fee_currency', 'BDT') }}" placeholder="e.g., BDT">
-                                                                        </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Currency</label>
+                                                                        <input type="text" class="form-control" name="additional_info[laundry_fee_currency]" value="{{ old('additional_info.laundry_fee_currency', 'BDT') }}" placeholder="e.g., BDT">
                                                                     </div>
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label class="form-label">Per Unit</label>
-                                                                            <input type="text" class="form-control" name="additional_info[laundry_fee_unit]" value="{{ old('additional_info.laundry_fee_unit', 'Per Person') }}" placeholder="e.g., Per Person">
-                                                                        </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Per Unit</label>
+                                                                        <input type="text" class="form-control" name="additional_info[laundry_fee_unit]" value="{{ old('additional_info.laundry_fee_unit', 'Per Person') }}" placeholder="e.g., Per Person">
                                                                     </div>
+                                                                </div>
                                                                 </div>
                                                             </div>
                                                             
@@ -760,37 +461,37 @@
                                                                 <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Service Type</label>
                                                                 <div class="d-flex gap-3">
                                                                     <div class="form-check" style="padding-left: 2rem;">
-                                                                        <input class="form-check-input" type="radio" name="additional_info[housekeeping_service_type]" id="housekeeping_complementary" value="complementary" {{ old('additional_info.housekeeping_service_type', '') == 'complementary' ? 'checked' : '' }}>
+                                                                    <input class="form-check-input" type="radio" name="additional_info[housekeeping_service_type]" id="housekeeping_complementary" value="complementary" {{ old('additional_info.housekeeping_service_type', '') == 'complementary' ? 'checked' : '' }}>
                                                                         <label class="form-check-label" for="housekeeping_complementary" style="font-weight: 500;">Complementary</label>
-                                                                    </div>
+                                                                </div>
                                                                     <div class="form-check" style="padding-left: 2rem;">
-                                                                        <input class="form-check-input" type="radio" name="additional_info[housekeeping_service_type]" id="housekeeping_paid" value="paid" {{ old('additional_info.housekeeping_service_type', '') == 'paid' ? 'checked' : '' }}>
+                                                                    <input class="form-check-input" type="radio" name="additional_info[housekeeping_service_type]" id="housekeeping_paid" value="paid" {{ old('additional_info.housekeeping_service_type', '') == 'paid' ? 'checked' : '' }}>
                                                                         <label class="form-check-label" for="housekeeping_paid" style="font-weight: 500;">Paid</label>
-                                                                    </div>
+                                                                </div>
                                                                 </div>
                                                             </div>
                                                             
                                                             <div id="housekeeping_fee_fields" style="display: {{ old('additional_info.housekeeping_service_type', '') == 'paid' ? 'block' : 'none' }}; margin-top: 20px; padding: 15px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
                                                                 <label class="form-label mb-3" style="font-weight: 600; color: #495057;">Fee Details</label>
-                                                                <div class="row">
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label class="form-label">Fee Amount</label>
-                                                                            <input type="number" class="form-control" name="additional_info[housekeeping_fee_amount]" value="{{ old('additional_info.housekeeping_fee_amount', '') }}" placeholder="e.g., 500" min="0" step="0.01">
-                                                                        </div>
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Fee Amount</label>
+                                                                        <input type="number" class="form-control" name="additional_info[housekeeping_fee_amount]" value="{{ old('additional_info.housekeeping_fee_amount', '') }}" placeholder="e.g., 500" min="0" step="0.01">
                                                                     </div>
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label class="form-label">Currency</label>
-                                                                            <input type="text" class="form-control" name="additional_info[housekeeping_fee_currency]" value="{{ old('additional_info.housekeeping_fee_currency', 'BDT') }}" placeholder="e.g., BDT">
-                                                                        </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Currency</label>
+                                                                        <input type="text" class="form-control" name="additional_info[housekeeping_fee_currency]" value="{{ old('additional_info.housekeeping_fee_currency', 'BDT') }}" placeholder="e.g., BDT">
                                                                     </div>
-                                                                    <div class="col-md-4">
-                                                                        <div class="form-group">
-                                                                            <label class="form-label">Per Unit</label>
-                                                                            <input type="text" class="form-control" name="additional_info[housekeeping_fee_unit]" value="{{ old('additional_info.housekeeping_fee_unit', 'Per Service') }}" placeholder="e.g., Per Service">
-                                                                        </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Per Unit</label>
+                                                                        <input type="text" class="form-control" name="additional_info[housekeeping_fee_unit]" value="{{ old('additional_info.housekeeping_fee_unit', 'Per Service') }}" placeholder="e.g., Per Service">
                                                                     </div>
+                                                                </div>
                                                                 </div>
                                                             </div>
                                                             
@@ -809,29 +510,29 @@
                                                     <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
                                                         <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Check-in & Check-out Policy</strong></h5>
                                                         
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
                                                                     <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Standard Check-in Time</label>
                                                                     <input type="text" class="form-control" name="additional_info[checkin_time]" value="{{ old('additional_info.checkin_time', '') }}" placeholder="e.g., 2:00 PM" style="border: 1px solid #dee2e6; border-radius: 6px;">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Standard Check-out Time</label>
-                                                                    <input type="text" class="form-control" name="additional_info[checkout_time]" value="{{ old('additional_info.checkout_time', '') }}" placeholder="e.g., 12:00 PM" style="border: 1px solid #dee2e6; border-radius: 6px;">
-                                                                </div>
                                                             </div>
                                                         </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                    <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Standard Check-out Time</label>
+                                                                    <input type="text" class="form-control" name="additional_info[checkout_time]" value="{{ old('additional_info.checkout_time', '') }}" placeholder="e.g., 12:00 PM" style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                         <div class="row mt-3">
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
                                                                     <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Late Check-out Fee</label>
                                                                     <textarea class="form-control" name="additional_info[late_checkout_fee]" rows="3" placeholder="e.g., 500 BDT per hour" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('additional_info.late_checkout_fee', '') }}</textarea>
-                                                                </div>
                                                             </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
                                                                     <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Early Check-in Fee</label>
                                                                     <textarea class="form-control" name="additional_info[early_checkin_fee]" rows="3" placeholder="e.g., 500 BDT per hour" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('additional_info.early_checkin_fee', '') }}</textarea>
                                                                 </div>
@@ -863,14 +564,14 @@
                                                         
                                                         <div id="security_deposit_fields_container" style="display: {{ old('additional_info.security_deposit_required', '') == 'yes' ? 'block' : 'none' }}; margin-top: 20px; padding-top: 20px; border-top: 1px solid #dee2e6;">
                                                             <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
                                                                         <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Deposit Amount</label>
                                                                         <input type="text" class="form-control" name="additional_info[security_deposit_amount]" value="{{ old('additional_info.security_deposit_amount', '') }}" placeholder="e.g., 5000 BDT" style="border: 1px solid #dee2e6; border-radius: 6px;">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
                                                                         <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Terms & Refund Policy</label>
                                                                         <textarea class="form-control" name="additional_info[security_deposit_refundable]" rows="3" placeholder="e.g., Fully refundable after check-out if no damages" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('additional_info.security_deposit_refundable', '') }}</textarea>
                                                                     </div>
@@ -901,16 +602,16 @@
                                                                 <div class="form-check" style="padding-left: 2rem;">
                                                                     <input class="form-check-input" type="radio" name="additional_info[parking_type]" id="parking_not_available" value="not_available" {{ old('additional_info.parking_type', '') == 'not_available' ? 'checked' : '' }}>
                                                                     <label class="form-check-label" for="parking_not_available" style="font-weight: 500;">Not Available</label>
-                                                                </div>
                                                             </div>
+                                                        </div>
                                                         </div>
                                                         
                                                         <div id="parking_fields_container" style="display: {{ old('additional_info.parking_type', '') != 'not_available' && old('additional_info.parking_type', '') != '' ? 'block' : (old('additional_info.parking_type', '') == '' ? 'none' : 'none') }}; margin-top: 20px; padding-top: 20px; border-top: 1px solid #dee2e6;">
                                                             <div id="parking_fee_fields" style="display: {{ old('additional_info.parking_type', '') == 'paid' ? 'block' : 'none' }}; margin-bottom: 20px; padding: 15px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
                                                                 <label class="form-label mb-3" style="font-weight: 600; color: #495057;">Fee Details</label>
-                                                                <div class="row">
+                                                            <div class="row">
                                                                     <div class="col-md-6">
-                                                                        <div class="form-group">
+                                                                    <div class="form-group">
                                                                             <label class="form-label">Amount</label>
                                                                             <input type="number" class="form-control" name="additional_info[parking_fee_amount]" value="{{ old('additional_info.parking_fee_amount', '') }}" placeholder="e.g., 500" min="0" step="0.01">
                                                                         </div>
@@ -919,7 +620,7 @@
                                                                         <div class="form-group">
                                                                             <label class="form-label">Currency</label>
                                                                             <input type="text" class="form-control" name="additional_info[parking_fee_currency]" value="{{ old('additional_info.parking_fee_currency', 'BDT') }}" placeholder="e.g., BDT">
-                                                                        </div>
+                                                                </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -967,17 +668,17 @@
                                                             
                                                             <div id="pet_price_fields" style="display: {{ old('additional_info.pet_type', '') == 'paid' ? 'block' : 'none' }}; margin-bottom: 20px; padding: 15px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
                                                                 <label class="form-label mb-3" style="font-weight: 600; color: #495057;">Fee Details</label>
-                                                                <div class="row">
-                                                                    <div class="col-md-6">
-                                                                        <div class="form-group">
-                                                                            <label class="form-label">Price (Optional)</label>
-                                                                            <input type="text" class="form-control" name="additional_info[pet_fee]" value="{{ old('additional_info.pet_fee', '') }}" placeholder="e.g., 500 BDT per pet per day">
-                                                                        </div>
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Price (Optional)</label>
+                                                                        <input type="text" class="form-control" name="additional_info[pet_fee]" value="{{ old('additional_info.pet_fee', '') }}" placeholder="e.g., 500 BDT per pet per day">
                                                                     </div>
-                                                                    <div class="col-md-6">
-                                                                        <div class="form-group">
-                                                                            <label class="form-label">Note</label>
-                                                                            <input type="text" class="form-control" name="additional_info[pet_paid_note]" value="{{ old('additional_info.pet_paid_note', '') }}" placeholder="e.g., Additional charges apply">
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Note</label>
+                                                                        <input type="text" class="form-control" name="additional_info[pet_paid_note]" value="{{ old('additional_info.pet_paid_note', '') }}" placeholder="e.g., Additional charges apply">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1185,21 +886,293 @@
                                                 </div>
                                             </div>
 
+                                            <!-- Other Charges/Policies -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <h5 class="mb-3"><strong>Other Charges/Policies (If Any)</strong></h5>
+                                                    <div class="form-group">
+                                                        <label class="form-label">Additional Information</label>
+                                                        <textarea class="form-control" name="additional_info[other_charges]" rows="3" placeholder="Enter any other charges or policies">{{ old('additional_info.other_charges', '') }}</textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Bed Details -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Bed Details</strong></h5>
+                                                        
+                                                        <!-- Total Beds Counter -->
+                                                        <div class="form-group mb-4">
+                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Total Beds</label>
+                                                            <div class="counter-wrapper" style="max-width: 300px;">
+                                                                <div class="counter-card">
+                                                                    <div>
+                                                                        <div class="counter">
+                                                                            <button type="button" class="btn decrease-male" id="bedDecreaseBtn">-</button>
+                                                                            <span id="totalBeds" class="count male-count">{{ old('total_beds', 0) }}</span>
+                                                                            <input type="hidden" name="total_beds" id="totalBedsInput" value="{{ old('total_beds', 0) }}">
+                                                                            <button type="button" class="btn increase-male" id="bedIncreaseBtn">+</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            @error('total_beds')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+                                                        
+                                                        <!-- Dynamic Bed Details Container -->
+                                                        <div id="bedDetailsContainer" style="margin-top: 20px;">
+                                                            <!-- Bed detail sections will be dynamically generated here -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Total Person in this room -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Total Person in this room!</label>
+                                                    <div class="counter-wrapper" style="max-width: 300px;">
+                                                        <div class="counter-card">
+                                                            <div>
+                                                                <div class="counter">
+                                                                    <button type="button" class="btn decrease-male" id="personDecreaseBtn">-</button>
+                                                                    <span class="count male-count" id="totalPersons">{{ old('total_persons', 0) }}</span>
+                                                                    <input type="hidden" name="total_persons" id="totalPersonsInput" value="{{ old('total_persons', 0) }}">
+                                                                    <button type="button" class="btn increase-male" id="personIncreaseBtn">+</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    @error('total_persons')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+
+                                            <!-- Maximum and Minimum Occupancy -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Maximum and Minimum Occupancy</strong></h5>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group mb-3">
+                                                                    <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Maximum Occupancy</label>
+                                                                    <input type="number" class="form-control" name="room_info[max_occupancy]" value="{{ old('room_info.max_occupancy', '') }}" placeholder="0" min="0" style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group mb-3">
+                                                                    <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Minimum Occupancy</label>
+                                                                    <input type="number" class="form-control" name="room_info[min_occupancy]" value="{{ old('room_info.min_occupancy', '') }}" placeholder="0" min="0" style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Bathroom Details -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Bathroom Details</strong></h5>
+                                                        
+                                                        <!-- Total Bathroom Counter -->
+                                                        <div class="form-group mb-4">
+                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Total Bathroom</label>
+                                                            <div class="counter-wrapper" style="max-width: 300px;">
+                                                                <div class="counter-card">
+                                                                    <div>
+                                                                        <div class="counter">
+                                                                            <button type="button" class="btn decrease-male" id="bathroomDecreaseBtn">-</button>
+                                                                            <span id="totalBathrooms" class="count male-count">{{ old('total_washrooms', 0) }}</span>
+                                                                            <input type="hidden" name="total_washrooms" id="totalBathroomsInput" value="{{ old('total_washrooms', 0) }}">
+                                                                            <button type="button" class="btn increase-male" id="bathroomIncreaseBtn">+</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            @error('total_washrooms')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+                                                        
+                                                        <!-- Dynamic Bathroom Details Container -->
+                                                        <div id="bathroomDetailsContainer" style="margin-top: 20px;">
+                                                            <!-- Bathroom detail sections will be dynamically generated here -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mt-15">
+                                                <div class="col-md-12">
+                                                    <h3 class="can-tittle">Cancellation Policies</h3>
+                                                </div>
+
+                                                <div class="col-lg-12">
+                                                    <div class="form-group">
+                                                        <div class="form-check form-switch custom-switch">
+                                                            <input class="form-check-input cancellation-checkbox" type="checkbox"
+                                                                   name="cancellation_policies[]" value="Flexible"
+                                                                   id="flexSwitchCheckFlexible"
+                                                                {{ in_array('Flexible', old('cancellation_policies', $hotel->cancellation_policies ?? [])) ? 'checked' : '' }}>
+                                                            <label class="form-check-label" for="flexSwitchCheckFlexible">
+                                                                Flexible (Guests get a full refund if they cancel up to a day before check-in at least 24 hours.)
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-12">
+                                                    <div class="form-group">
+                                                        <div class="form-check form-switch custom-switch">
+                                                            <input class="form-check-input cancellation-checkbox" type="checkbox"
+                                                                   name="cancellation_policies[]" value="Non-refundable"
+                                                                   id="flexSwitchCheckNonRefundable"
+                                                                {{ in_array('Non-refundable', old('cancellation_policies', $hotel->cancellation_policies ?? [])) ? 'checked' : '' }}>
+                                                            <label class="form-check-label" for="flexSwitchCheckNonRefundable">
+                                                                Non-refundable (Regardless of the cancellation window, customers will not get any refund under this.)
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-12">
+                                                    <div class="form-group">
+                                                        <div class="form-check form-switch custom-switch">
+                                                            <input class="form-check-input cancellation-checkbox" type="checkbox"
+                                                                   name="cancellation_policies[]" value="Partially refundable"
+                                                                   id="flexSwitchCheckPartially"
+                                                                {{ in_array('Partially refundable', old('cancellation_policies', $hotel->cancellation_policies ?? [])) ? 'checked' : '' }}>
+                                                            <label class="form-check-label" for="flexSwitchCheckPartially">
+                                                                Partially refundable (Cancellations less than 24 hours… after deducting a 30% cancellation fee.)
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-12">
+                                                    <div class="form-group">
+                                                        <div class="form-check form-switch custom-switch">
+                                                            <input class="form-check-input cancellation-checkbox" type="checkbox"
+                                                                   name="cancellation_policies[]" value="Long-term/Monthly staying policy"
+                                                                   id="flexSwitchCheckLongTerm"
+                                                                {{ in_array('Long-term/Monthly staying policy', old('cancellation_policies', $hotel->cancellation_policies ?? [])) ? 'checked' : '' }}>
+                                                            <label class="form-check-label" for="flexSwitchCheckLongTerm">
+                                                                Long-term/Monthly staying policy (Stays more than 30 days will fall under this scope and a specific contract paper shall be signed.)
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {{-- Validation Error --}}
+                                                @error('cancellation_policies')
+                                                <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+
+                                                {{-- Warning Message --}}
+                                                <div class="col-lg-12">
+                                                    <small id="policy-warning" class="text-danger" style="display:none;">⚠️ Maximum 2 can be Selected</small>
+                                                </div>
+                                            </div>
+
+                                            {{-- JavaScript --}}
+                                            <script>
+                                                document.addEventListener('DOMContentLoaded', function () {
+                                                    const checkboxes = document.querySelectorAll('.cancellation-checkbox');
+                                                    const warning = document.getElementById('policy-warning');
+
+                                                    checkboxes.forEach(cb => {
+                                                        cb.addEventListener('change', function () {
+                                                            const checked = document.querySelectorAll('.cancellation-checkbox:checked').length;
+
+                                                            if (checked > 2) {
+                                                                this.checked = false; // undo last check
+                                                                warning.style.display = 'block';
+                                                                setTimeout(() => {
+                                                                    warning.style.display = 'none';
+                                                                }, 2000); // auto-hide after 2s
+                                                            }
+                                                        });
+                                                    });
+                                                });
+                                            </script>
+
                                             <div class="row">
                                                 <div class="col-sm-2 col-md-2 mt-15">
                                                     <div class="form-group">
                                                         <button type="submit" class="btn btn-primary btn-submit">Submit</button>
-                                                    </div>
-                                                </div>
+                                                                </div>
+                                                                </div>
                                                 <div class="col-sm-2 col-md-2 mt-15">
                                                     <div class="form-group">
                                                         <button type="submit" class="btn btn-primary" name="save_draft" value="1">Save & Drafts</button>
+                                                            </div>
+                                                        </div>
+                                                                    </div>
+                                                                    </div>
+
+                                        <div class="tab-pane" id="tabItem4">
+                                            <div class="row mt-15">
+                                                <div class="col-12">
+                                                    <p class="text-muted"><i class="fa fa-info-circle"></i> These sections are synced with Room Details Tab. Changes made here will reflect there and vice versa.</p>
+                                                                </div>
+                                                            </div>
+                                                            
+                                            <div class="row mt-15">
+                                                <div class="checkbox-section">
+                                                    <h3 class="can-tittle">Appliances Information</h3>
+                                                    <div class="chk-all-sec">
+                                                                        <div class="form-group">
+                                                            <div class="custom-control custom-switch checked">
+                                                                <input type="checkbox" class="custom-control-input sync-checkbox-master" data-target=".checkbox-item-appliances" id="appliances-all-facilities">
+                                                                <label class="custom-control-label" for="appliances-all-facilities">Select All</label>
+                                                                        </div>
+                                                                    </div>
+                                                                        </div>
+                                                    
+                                                    <div class="appliances-list-facilities"></div>
+                                                                    </div>
+                                            </div>
+
+                                            <div class="row mt-15">
+                                                <div class="checkbox-section">
+                                                    <h3 class="can-tittle">Furniture Information</h3>
+                                                    <div class="chk-all-sec">
+                                                                        <div class="form-group">
+                                                            <div class="custom-control custom-switch checked">
+                                                                <input type="checkbox" class="custom-control-input sync-checkbox-master" data-target=".checkbox-item-furniture" id="furniture-all-facilities">
+                                                                <label class="custom-control-label" for="furniture-all-facilities">Select All</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                    <div class="furniture-list-facilities"></div>
+                                                            </div>
+                                                        </div>
+                                                            
+                                            <div class="row mt-15">
+                                                <div class="checkbox-section">
+                                                    <h3 class="label-chk">Room Amenities</h3>
+                                                    <div class="chk-all-sec">
+                                                        <div class="form-group">
+                                                            <div class="custom-control custom-switch checked">
+                                                                <input type="checkbox" class="custom-control-input sync-checkbox-master" data-target=".checkbox-item" id="amenities-all-facilities">
+                                                                <label class="custom-control-label" for="amenities-all-facilities">Select All</label>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div class="tab-pane" id="tabItem4">
+                                                    <div class="amenities-list-facilities"></div>
+                                                </div>
+                                            </div>
+                                        </div>
                                             <div class="row mt-15">
                                                 <div class="col-12">
                                                     <p class="text-muted"><i class="fa fa-info-circle"></i> These sections are synced with Room Details Tab. Changes made here will reflect there and vice versa.</p>
@@ -1724,34 +1697,99 @@
                                             <div class="row gy-4">
                                                 <div class="col-md-12 col-lg-12 col-xxl-12">
                                                     <div class="row gy-4">
-                                                        <div class="price-card-room">
-                                                            <h3 class="can-tittle">Room Availability</h3>
-                                                            <p class="text-muted" style="font-size: 14px; margin-top: -10px;">Select dates when this room will be available for booking. The room will only appear on the website on selected dates.</p>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Select Available Dates</label>
-                                                                <input type="hidden" id="availability_dates_hidden" name="availability_dates" value="{{ old('availability_dates') }}">
-                                                                <input type="text" class="form-control" id="availability_dates_display" placeholder="No dates selected yet. Select dates from the calendar below." readonly style="margin-bottom: 15px; background-color: #f8f9fa; border: 1px solid #e0e0e0; padding: 12px; font-size: 14px; min-height: 45px;">
-                                                                <small class="form-text text-muted" style="display: block; margin-bottom: 15px; color: #6c757d;">
-                                                                    <strong>How to select dates:</strong><br>
-                                                                    • <strong>Drag</strong> from one date to another to select a range<br>
-                                                                    • <strong>Click</strong> individual dates to toggle selection (click again to deselect)<br>
-                                                                    • The room will be available only on selected dates
-                                                                </small>
-                                                                <div id="availability_calendar_wrapper" style="max-width: 100%; margin: 20px auto; display: block; padding: 20px; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"></div>
-                                                                <div style="margin-top: 15px; display: flex; gap: 10px; align-items: center;">
-                                                                    <button type="button" id="clear_all_dates" class="btn btn-sm btn-secondary" style="background: #6c757d; color: white; border: none; padding: 8px 20px;">
-                                                                        <i class="fas fa-times"></i> Clear All
-                                                                    </button>
-                                                                    <button type="button" id="apply_dates" class="btn btn-sm btn-primary" style="background: #90278e; color: white; border: none; padding: 8px 20px;">
-                                                                        <i class="fas fa-check"></i> Apply Selection
-                                                                    </button>
-                                                                    <span id="selected_dates_count" style="margin-left: 10px; color: #90278e; font-weight: bold;"></span>
+                                                        <!-- Select Available Dates Section -->
+                                                        <div class="row mt-4">
+                                                            <div class="col-md-12">
+                                                                <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                                    <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Select Available Dates</strong></h5>
+                                                                    
+                                                                    <div class="form-group">
+                                                                        <input type="hidden" id="availability_dates_hidden" name="availability_dates" value="{{ old('availability_dates') }}">
+                                                                        <input type="text" class="form-control" id="availability_dates_display" placeholder="No dates selected yet. Select dates from the calendar below." readonly style="margin-bottom: 15px; background-color: #f8f9fa; border: 1px solid #e0e0e0; padding: 12px; font-size: 14px; min-height: 45px;">
+                                                                        <small class="form-text text-muted" style="display: block; margin-bottom: 15px; color: #6c757d;">
+                                                                            <strong>How to select dates:</strong><br>
+                                                                            • <strong>Drag</strong> from one date to another to select a range<br>
+                                                                            • <strong>Click</strong> individual dates to toggle selection (click again to deselect)<br>
+                                                                            • The room will be available only on selected dates
+                                                                        </small>
+                                                                        <div id="availability_calendar_wrapper" style="max-width: 100%; margin: 20px auto; display: block; padding: 20px; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"></div>
+                                                                        <div style="margin-top: 15px; display: flex; gap: 10px; align-items: center;">
+                                                                            <button type="button" id="clear_all_dates" class="btn btn-sm btn-secondary" style="background: #6c757d; color: white; border: none; padding: 8px 20px;">
+                                                                                <i class="fas fa-times"></i> Clear All
+                                                                            </button>
+                                                                            <button type="button" id="apply_dates" class="btn btn-sm btn-primary" style="background: #90278e; color: white; border: none; padding: 8px 20px;">
+                                                                                <i class="fas fa-check"></i> Apply Selection
+                                                                            </button>
+                                                                            <span id="selected_dates_count" style="margin-left: 10px; color: #90278e; font-weight: bold;"></span>
+                                                                        </div>
+                                                                        @error('availability_dates')
+                                                                        <span class="text-danger">{{ $message }}</span>
+                                                                        @enderror
+                                                                    </div>
                                                                 </div>
-                                                                @error('availability_dates')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <!-- Price Section -->
+                                                        <div class="row mt-4">
+                                                            <div class="col-md-12">
+                                                                <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                                    <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Price Section</strong></h5>
+                                                                    
+                                                                    <div class="row gy-4">
+                                                                        <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                                            <div class="form-group">
+                                                                                <label class="form-label">Room Price (Per Night)</label>
+                                                                                <input type="number" class="form-control" name="price_per_night" value="{{ old('price_per_night') }}" placeholder="Ex: BDT 1,500" required>
+                                                                                @error('price_per_night')
+                                                                                <span class="text-danger">{{ $message }}</span>
+                                                                                @enderror
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                                            <div class="form-group">
+                                                                                <label class="form-label">Weekend Price</label>
+                                                                                <input type="number" class="form-control" name="weekend_price" value="{{ old('weekend_price') }}" placeholder="Ex: BDT 1,500">
+                                                                                @error('weekend_price')
+                                                                                <span class="text-danger">{{ $message }}</span>
+                                                                                @enderror
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                                            <div class="form-group">
+                                                                                <label class="form-label">Holiday Price</label>
+                                                                                <input type="number" class="form-control" name="holiday_price" value="{{ old('holiday_price') }}" placeholder="Ex: BDT 1,500">
+                                                                                @error('holiday_price')
+                                                                                <span class="text-danger">{{ $message }}</span>
+                                                                                @enderror
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                                            <div class="form-group">
+                                                                                <label class="form-label">Discount Type</label>
+                                                                                <div class="form-check">
+                                                                                    <input class="form-check-input" type="radio" name="discount_type" id="discountAmount" value="amount" {{ old('discount_type') == 'amount' ? 'checked' : '' }}>
+                                                                                    <label class="form-check-label" for="discountAmount">Discount by Amount</label>
+                                                                                </div>
+                                                                                <div class="form-check">
+                                                                                    <input class="form-check-input" type="radio" name="discount_type" id="discountPercentage" value="percentage" {{ old('discount_type') == 'percentage' ? 'checked' : '' }}>
+                                                                                    <label class="form-check-label" for="discountPercentage">Discount by Percentage (%)</label>
+                                                                                </div>
+                                                                                <div class="mt-3 {{ old('discount_type') ? '' : 'hidden' }}" id="discountValueField">
+                                                                                    <label for="discount_value" class="form-label">Enter Discount {{ old('discount_type') == 'amount' ? 'Amount' : 'Percentage (%)' }}</label>
+                                                                                    <input type="number" class="form-control" name="discount_value" id="discount_value" value="{{ old('discount_value') }}" placeholder="{{ old('discount_type') == 'amount' ? 'Ex: 3500' : 'Ex: 15 %' }}">
+                                                                                    @error('discount_value')
+                                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                                    @enderror
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1790,6 +1828,7 @@
                                                         'bedroom3' => '3rd Bedroom Photos (If Available)',
                                                         'washroom2' => '2nd Washroom Photos (If Available)',
                                                         'washroom3' => '3rd Washroom Photos (If Available)',
+                                                        'additional' => 'Additional Photo',
                                                     ];
                                                 @endphp
 
@@ -1874,21 +1913,25 @@
                 let personCount = {{ old('total_persons', 0) }};
                 const totalPersonsDisplay = document.getElementById('totalPersons');
                 const totalPersonsInput = document.getElementById('totalPersonsInput');
-                const personIncreaseBtn = document.querySelector('#tabItem3 .counter-card:nth-child(1) .increase-male');
-                const personDecreaseBtn = document.querySelector('#tabItem3 .counter-card:nth-child(1) .decrease-male');
+                const personIncreaseBtn = document.getElementById('personIncreaseBtn');
+                const personDecreaseBtn = document.getElementById('personDecreaseBtn');
 
-                personIncreaseBtn.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    personCount++;
-                    totalPersonsDisplay.textContent = personCount;
-                    totalPersonsInput.value = personCount;
-                });
-                personDecreaseBtn.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    if (personCount > 0) personCount--;
-                    totalPersonsDisplay.textContent = personCount;
-                    totalPersonsInput.value = personCount;
-                });
+                if (personIncreaseBtn) {
+                    personIncreaseBtn.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        personCount++;
+                        totalPersonsDisplay.textContent = personCount;
+                        totalPersonsInput.value = personCount;
+                    });
+                }
+                if (personDecreaseBtn) {
+                    personDecreaseBtn.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        if (personCount > 0) personCount--;
+                        totalPersonsDisplay.textContent = personCount;
+                        totalPersonsInput.value = personCount;
+                    });
+                }
 
                 // Room Details Counter and Dynamic Sections
                 let roomCount = {{ old('total_rooms', 1) }};

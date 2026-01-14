@@ -34,161 +34,158 @@
                                     <div class="tab-content">
                                         <!-- Hotel Description -->
                                         <div class="tab-pane active" id="tabItem3">
-                                            <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                <div class="mb-3">
-                                                    <label for="division" class="form-label">Select Property
-                                                        Category</label>
-                                                    <select class="form-select" id="division"
-                                                            name="property_category">
-                                                        <option value=""
-                                                                disabled {{ !$hotel || !$hotel->property_category ? 'selected' : '' }}>
-                                                            Choose Property Category
-                                                        </option>
-                                                        <option
-                                                            value="Hotels" {{ old('property_category', $hotel->property_category ?? '') === 'Hotels' ? 'selected' : '' }}>
-                                                            Hotels
-                                                        </option>
-                                                        <option
-                                                            value="Transit" {{ old('property_category', $hotel->property_category ?? '') === 'Transit' ? 'selected' : '' }}>
-                                                            Transit Hotels
-                                                        </option>
-                                                        <option
-                                                            value="Resorts" {{ old('property_category', $hotel->property_category ?? '') === 'Resorts' ? 'selected' : '' }}>
-                                                            Resorts, Eco, & Outdoor
-                                                        </option>
-                                                        <option
-                                                            value="Lodges" {{ old('property_category', $hotel->property_category ?? '') === 'Lodges' ? 'selected' : '' }}>
-                                                            Hostels & Lodges
-                                                        </option>
-                                                        <option
-                                                            value="Apartments" {{ old('property_category', $hotel->property_category ?? '') === 'Apartments' ? 'selected' : '' }}>
-                                                            Apartments & Homestays
-                                                        </option>
-                                                        <option
-                                                            value="Guesthouses" {{ old('property_category', $hotel->property_category ?? '') === 'Guesthouses' ? 'selected' : '' }}>
-                                                            Vacation Rentals & Guesthouses
-                                                        </option>
-                                                        <option
-                                                            value="Crisis" {{ old('property_category', $hotel->property_category ?? '') === 'Crisis' ? 'selected' : '' }}>
-                                                            Crisis & Shelter Accommodation
-                                                        </option>
-                                                    </select>
-                                                </div>
-                                            </div>
+                                            <!-- Hotel Information Section -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Hotel / Property Information</strong></h5>
+                                                        
+                                                        <div class="row gy-4">
+                                                            <div class="col-md-6 col-lg-4 col-xxl-12">
+                                                                <div class="mb-3">
+                                                                    <label for="division" class="form-label">Select Property
+                                                                        Category</label>
+                                                                    <select class="form-select" id="division"
+                                                                            name="property_category">
+                                                                        <option value=""
+                                                                                disabled {{ !$hotel || !$hotel->property_category ? 'selected' : '' }}>
+                                                                            Choose Property Category
+                                                                        </option>
+                                                                        <option
+                                                                            value="Hotels" {{ old('property_category', $hotel->property_category ?? '') === 'Hotels' ? 'selected' : '' }}>
+                                                                            Hotels
+                                                                        </option>
+                                                                        <option
+                                                                            value="Transit" {{ old('property_category', $hotel->property_category ?? '') === 'Transit' ? 'selected' : '' }}>
+                                                                            Transit Hotels
+                                                                        </option>
+                                                                        <option
+                                                                            value="Resorts" {{ old('property_category', $hotel->property_category ?? '') === 'Resorts' ? 'selected' : '' }}>
+                                                                            Resorts, Eco, & Outdoor
+                                                                        </option>
+                                                                        <option
+                                                                            value="Lodges" {{ old('property_category', $hotel->property_category ?? '') === 'Lodges' ? 'selected' : '' }}>
+                                                                            Hostels & Lodges
+                                                                        </option>
+                                                                        <option
+                                                                            value="Apartments" {{ old('property_category', $hotel->property_category ?? '') === 'Apartments' ? 'selected' : '' }}>
+                                                                            Apartments & Homestays
+                                                                        </option>
+                                                                        <option
+                                                                            value="Guesthouses" {{ old('property_category', $hotel->property_category ?? '') === 'Guesthouses' ? 'selected' : '' }}>
+                                                                            Vacation Rentals & Guesthouses
+                                                                        </option>
+                                                                        <option
+                                                                            value="Crisis" {{ old('property_category', $hotel->property_category ?? '') === 'Crisis' ? 'selected' : '' }}>
+                                                                            Crisis & Shelter Accommodation
+                                                                        </option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
 
-                                            <div class="row gy-4">
-                                                <div class="col-md-12 col-lg-12 col-xxl-3" id="districtContainer" style="display:none;">
-                                                    <div class="form-group">
-                                                        <label for="district" class="form-label">Property Type</label>
-                                                        <select name="property_type" id="district" class="form-control">
-                                                            <option value="" disabled selected>Choose Property Type</option>
-                                                            <option {{ $hotel->property_type == 'Hotels' ? 'selected' : '' }}>Hotels</option>
-                                                            <option {{ $hotel->property_type == 'Transit' ? 'selected' : '' }}>Transit</option>
-                                                            <option {{ $hotel->property_type == 'Resorts' ? 'selected' : '' }}>Resorts</option>
-                                                            <option {{ $hotel->property_type == 'Lodges' ? 'selected' : '' }}>Lodges</option>
-                                                            <option {{ $hotel->property_type == 'Guesthouses' ? 'selected' : '' }}>Guesthouses</option>
-                                                            <option {{ $hotel->property_type == 'Crisis' ? 'selected' : '' }}>Crisis</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                            <div class="col-md-12 col-lg-12 col-xxl-12" id="districtContainer" style="display:none;">
+                                                                <div class="form-group">
+                                                                    <label for="district" class="form-label">Property Type</label>
+                                                                    <select name="property_type" id="district" class="form-control">
+                                                                        <option value="" disabled selected>Choose Property Type</option>
+                                                                        <option {{ $hotel->property_type == 'Hotels' ? 'selected' : '' }}>Hotels</option>
+                                                                        <option {{ $hotel->property_type == 'Transit' ? 'selected' : '' }}>Transit</option>
+                                                                        <option {{ $hotel->property_type == 'Resorts' ? 'selected' : '' }}>Resorts</option>
+                                                                        <option {{ $hotel->property_type == 'Lodges' ? 'selected' : '' }}>Lodges</option>
+                                                                        <option {{ $hotel->property_type == 'Guesthouses' ? 'selected' : '' }}>Guesthouses</option>
+                                                                        <option {{ $hotel->property_type == 'Crisis' ? 'selected' : '' }}>Crisis</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
 
-                                            <div class="col-md-6 col-lg-4 col-xxl-3" id="placeCheckboxList"
-                                                 style="display: none;">
-                                                <div class="form-group">
-                                                    <label class="form-label">Choose Room/Accommodation Type</label>
-                                                    <ul id="placeOptions" class="list-unstyled"
-                                                        style="max-height: 200px; overflow-y: auto;">
-                                                        <!-- Dynamic Checkboxes Will Appear Here -->
-                                                    </ul>
-                                                    @error('room_types')
-                                                    <span class="invalid-feedback"
-                                                          role="alert">{{ $message }}</span>
-                                                    @enderror
-                                                </div>
-                                            </div>
+                                                            <div class="col-md-6 col-lg-4 col-xxl-12" id="placeCheckboxList"
+                                                                 style="display: none;">
+                                                                <div class="form-group">
+                                                                    <label class="form-label">Choose Room/Accommodation Type</label>
+                                                                    <ul id="placeOptions" class="list-unstyled"
+                                                                        style="max-height: 200px; overflow-y: auto;">
+                                                                        <!-- Dynamic Checkboxes Will Appear Here -->
+                                                                    </ul>
+                                                                    @error('room_types')
+                                                                    <span class="invalid-feedback"
+                                                                          role="alert">{{ $message }}</span>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
 
+                                                            <div class="col-md-12 col-lg-12 col-xxl-12">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="default-textarea">Hotel / Property Name</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <input class="form-control no-resize"
+                                                                               name="description" value="{{ \App\Models\Property::where('vendor_id', auth()->user()->id)->first()->property_name ?? '' }}
+                                                                            " readonly></input>
+                                                                        @error('description') <span
+                                                                            class="text-danger">{{ $message }}</span> @enderror
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12 col-lg-12 col-xxl-12">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="hotel-description">Hotel/Property Description & Policy</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <textarea class="form-control" id="hotel-description" name="details">{!!  old('details', $hotel->details)  !!}</textarea>
+                                                                        @error('details') <span class="text-danger">{{ $details }}</span> @enderror
+                                                                    </div>
+                                                                </div>
+                                                            </div>
 
-                                            <div class="row gy-4">
-                                                <div class="col-md-12 col-lg-12 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="default-textarea">Hotel / Property Name</label>
-                                                        <div class="form-control-wrap">
-                                                            <input class="form-control no-resize"
-                                                                   name="description" value="{{ \App\Models\Property::where('vendor_id', auth()->user()->id)->first()->property_name ?? '' }}
-                                                                " readonly></input>
-                                                            @error('description') <span
-                                                                class="text-danger">{{ $message }}</span> @enderror
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row gy-4">
-                                                <div class="col-md-12 col-lg-12 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="hotel-description">Hotel/Property Description & Policy</label>
-                                                        <div class="form-control-wrap">
-                                                            <textarea class="form-control" id="hotel-description" name="details">{!!  old('details', $hotel->details)  !!}</textarea>
-                                                            @error('details') <span class="text-danger">{{ $details }}</span> @enderror
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                            <div class="col-md-6 col-lg-4 col-xxl-12">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="building-age">Building
+                                                                        Age/Founding Year</label>
+                                                                    <input type="number" class="form-control" id="building-age"
+                                                                           name="building_age" placeholder="ex: 2010"
+                                                                           value="{{ old('building_age', $property->building_age ?? '') }}">
+                                                                </div>
+                                                            </div>
 
-                                            <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                <div class="form-group">
-                                                    <label class="form-label" for="building-age">Building
-                                                        Age/Founding Year</label>
-                                                    <input type="number" class="form-control" id="building-age"
-                                                           name="building_age" placeholder="ex: 2010"
-                                                           value="{{ old('building_age', $property->building_age ?? '') }}">
-                                                </div>
-                                            </div>
+                                                            <div class="col-md-6 col-lg-4 col-xxl-12">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="building-stories">Building
+                                                                        Storied</label>
+                                                                    <input type="number" class="form-control" id="building-stories"
+                                                                           name="building_stories" placeholder="ex: 10 Story"
+                                                                           value="{{ old('building_stories', $property->building_stories ?? '') }}">
+                                                                </div>
+                                                            </div>
 
+                                                            <div class="col-md-6 col-lg-6 col-xxl-12">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="hotel-description">Location Latitude</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <input class="form-control" id="hotel-description" name="lati" placeholder="Enter Latitude" value="{{ $hotel->lati }}"></input>
+                                                                        @error('lati') <span class="text-danger">{{ $lati }}</span> @enderror
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6 col-lg-6 col-xxl-12">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="hotel-description">Location Longitude</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <input class="form-control" id="hotel-description" name="longi" placeholder="Enter Longitude" value="{{ $hotel->longi }}"></input>
+                                                                        @error('longi') <span class="text-danger">{{ $longi }}</span> @enderror
+                                                                    </div>
+                                                                </div>
+                                                            </div>
 
-
-
-                                            <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                <div class="form-group">
-                                                    <label class="form-label" for="building-stories">Building
-                                                        Storied</label>
-                                                    <input type="number" class="form-control" id="building-stories"
-                                                           name="building_stories" placeholder="ex: 10 Story"
-                                                           value="{{ old('building_stories', $property->building_stories ?? '') }}">
-                                                </div>
-                                            </div>
-
-
-
-                                            <div class="row gy-4">
-                                                <div class="col-md-6 col-lg-6 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="hotel-description">Location Latitude</label>
-                                                        <div class="form-control-wrap">
-                                                            <input class="form-control" id="hotel-description" name="lati" placeholder="Enter Latitude" value="{{ $hotel->lati }}"></input>
-                                                            @error('lati') <span class="text-danger">{{ $lati }}</span> @enderror
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6 col-lg-6 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="hotel-description">Location Longitude</label>
-                                                        <div class="form-control-wrap">
-                                                            <input class="form-control" id="hotel-description" name="longi" placeholder="Enter Longitude" value="{{ $hotel->longi }}"></input>
-                                                            @error('longi') <span class="text-danger">{{ $longi }}</span> @enderror
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-12 col-lg-12 col-xxl-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="default-textarea">Address</label>
-                                                        <div class="form-control-wrap">
-                                                            <textarea class="form-control no-resize"
-                                                                      id="default-textarea"
-                                                                      name="address">{{ old('address', $hotel->address) }}</textarea>
-                                                            @error('address') <span
-                                                                class="text-danger">{{ $address }}</span> @enderror
+                                                            <div class="col-md-12 col-lg-12 col-xxl-12">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="default-textarea">Address</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <textarea class="form-control no-resize"
+                                                                                  id="default-textarea"
+                                                                                  name="address">{{ old('address', $hotel->address) }}</textarea>
+                                                                        @error('address') <span
+                                                                            class="text-danger">{{ $address }}</span> @enderror
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

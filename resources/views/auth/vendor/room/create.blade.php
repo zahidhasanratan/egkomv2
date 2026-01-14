@@ -54,9 +54,20 @@
                                             <a class="nav-link" data-bs-toggle="tab" href="#Photos">Room Photos</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-bs-toggle="tab" href="#Availability">Room Availability</a>
+                                            <a class="nav-link" data-bs-toggle="tab" href="#Availability">Calender & Room Pricing</a>
                                         </li>
                                     </ul>
+
+                                    <!-- Room Active/Inactive Button - Top Right -->
+                                    <div class="d-flex justify-content-end mb-3" style="margin-top: 15px;">
+                                        <div class="form-group" style="margin-bottom: 0px;">
+                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Room Active/Inactive Button</label>
+                                            <div class="form-check form-switch custom-control custom-switch checked" style="padding-left: 2rem; margin-bottom: 0px;">
+                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="is_active" {{ old('is_active') ? 'checked' : '' }}>
+                                            </div>
+                                            <div id="alertMessage" style="display: none; color: red; margin-top:0px;"></div>
+                                        </div>
+                                    </div>
 
                                     <div class="tab-content">
                                         <!-- Room Description -->
@@ -75,17 +86,6 @@
                                                             @error('name')
                                                             <span class="text-danger">{{ $message }}</span>
                                                             @enderror
-                                                        </div>
-                                                        
-                                                        <!-- Room Description -->
-                                                        <div class="form-group mb-4">
-                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Room Description</label>
-                                                            <div class="form-control-wrap">
-                                                                <textarea class="form-control no-resize" name="description" id="default-textarea" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('description') }}</textarea>
-                                                                @error('description')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                                @enderror
-                                                            </div>
                                                         </div>
 
                                                         <!-- Common Room Fields -->
@@ -130,15 +130,6 @@
                                                             </div>
                                                         </div>
                                                         
-                                                        <!-- Room Active/Inactive Button -->
-                                                        <div class="form-group mb-4">
-                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Room Active/Inactive Button</label>
-                                                            <div class="form-check form-switch custom-control custom-switch checked" style="padding-left: 2rem; margin-bottom: 0px;">
-                                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="is_active" {{ old('is_active') ? 'checked' : '' }}>
-                                                            </div>
-                                                            <div id="alertMessage" style="display: none; color: red; margin-top:0px;"></div>
-                                                        </div>
-                                                        
                                                         <!-- Total Room Counter -->
                                                         <div class="form-group mb-4">
                                                             <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Total Room</label>
@@ -163,87 +154,17 @@
                                                         <div id="roomDetailsContainer" style="margin-top: 20px;">
                                                             <!-- Room detail sections will be dynamically generated here -->
                                                         </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Price Section -->
-                                            <div class="row mt-4">
-                                                <div class="col-md-12">
-                                                    <div class="row gy-4">
-                                                        <div class="price-card-room">
-                                                            <h3 class="can-tittle">Price Section</h3>
-                                                        </div>
-
-                                                    <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                        <div class="form-group">
-                                                            <label class="form-label">Room Price (Per Night)</label>
-                                                            <input type="number" class="form-control" name="price_per_night" value="{{ old('price_per_night') }}" placeholder="Ex: BDT 1,500" required>
-                                                            @error('price_per_night')
-                                                            <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                        <div class="form-group">
-                                                            <label class="form-label">Weekend Price</label>
-                                                            <input type="number" class="form-control" name="weekend_price" value="{{ old('weekend_price') }}" placeholder="Ex: BDT 1,500">
-                                                            @error('weekend_price')
-                                                            <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                        <div class="form-group">
-                                                            <label class="form-label">Holiday Price</label>
-                                                            <input type="number" class="form-control" name="holiday_price" value="{{ old('holiday_price') }}" placeholder="Ex: BDT 1,500">
-                                                            @error('holiday_price')
-                                                            <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                        <div class="form-group">
-                                                            <label class="form-label">Discount Type</label>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="radio" name="discount_type" id="discountAmount" value="amount" {{ old('discount_type') == 'amount' ? 'checked' : '' }}>
-                                                                <label class="form-check-label" for="discountAmount">Discount by Amount</label>
-                                                            </div>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="radio" name="discount_type" id="discountPercentage" value="percentage" {{ old('discount_type') == 'percentage' ? 'checked' : '' }}>
-                                                                <label class="form-check-label" for="discountPercentage">Discount by Percentage (%)</label>
-                                                            </div>
-                                                            <div class="mt-3 {{ old('discount_type') ? '' : 'hidden' }}" id="discountValueField">
-                                                                <label for="discount_value" class="form-label">Enter Discount {{ old('discount_type') == 'amount' ? 'Amount' : 'Percentage (%)' }}</label>
-                                                                <input type="number" class="form-control" name="discount_value" id="discount_value" value="{{ old('discount_value') }}" placeholder="{{ old('discount_type') == 'amount' ? 'Ex: 3500' : 'Ex: 15 %' }}">
-                                                                @error('discount_value')
+                                                        
+                                                        <!-- Room Description -->
+                                                        <div class="form-group mb-4" style="margin-top: 20px;">
+                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Room Description</label>
+                                                            <div class="form-control-wrap">
+                                                                <textarea class="form-control no-resize" name="description" id="default-textarea" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('description') }}</textarea>
+                                                                @error('description')
                                                                 <span class="text-danger">{{ $message }}</span>
                                                                 @enderror
                                                             </div>
                                                         </div>
-                                                    </div>
-
-                                                    <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                        <label class="form-label">Total Person in this room!</label>
-                                                        <div class="counter-wrapper">
-                                                            <div class="counter-card">
-                                                                <div>
-                                                                    <div class="counter">
-                                                                        <button type="button" class="btn decrease-male">-</button>
-                                                                        <span class="count male-count" id="totalPersons">{{ old('total_persons', 0) }}</span>
-                                                                        <input type="hidden" name="total_persons" id="totalPersonsInput" value="{{ old('total_persons', 0) }}">
-                                                                        <button type="button" class="btn increase-male">+</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        @error('total_persons')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                        @enderror
-                                                    </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -312,16 +233,48 @@
                                                         </div>
                                                     </div>
 
-                                                    <!-- Maximum Occupancy -->
-                                                    <h5 class="mt-4 mb-2"><strong>Maximum Occupancy</strong></h5>
-                                                    <div class="row">
-                                                        <div class="col-md-3">
-                                                            <label class="form-label">Adults</label>
-                                                            <input type="number" class="form-control" name="room_info[max_adults]" value="{{ old('room_info.max_adults', '') }}" placeholder="0" min="0">
+                                                    <!-- Total Person in this room -->
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">Total Person in this room!</label>
+                                                            <div class="counter-wrapper" style="max-width: 300px;">
+                                                                <div class="counter-card">
+                                                                    <div>
+                                                                        <div class="counter">
+                                                                            <button type="button" class="btn decrease-male" id="personDecreaseBtn">-</button>
+                                                                            <span class="count male-count" id="totalPersons">{{ old('total_persons', 0) }}</span>
+                                                                            <input type="hidden" name="total_persons" id="totalPersonsInput" value="{{ old('total_persons', 0) }}">
+                                                                            <button type="button" class="btn increase-male" id="personIncreaseBtn">+</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            @error('total_persons')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
                                                         </div>
-                                                        <div class="col-md-3">
-                                                            <label class="form-label">Children</label>
-                                                            <input type="number" class="form-control" name="room_info[max_children]" value="{{ old('room_info.max_children', '') }}" placeholder="0" min="0">
+                                                    </div>
+
+                                                    <!-- Maximum and Minimum Occupancy -->
+                                                    <div class="row mt-4">
+                                                        <div class="col-md-12">
+                                                            <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                                <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Maximum and Minimum Occupancy</strong></h5>
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-group mb-3">
+                                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Maximum Occupancy</label>
+                                                                            <input type="number" class="form-control" name="room_info[max_occupancy]" value="{{ old('room_info.max_occupancy', '') }}" placeholder="0" min="0" style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-group mb-3">
+                                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Minimum Occupancy</label>
+                                                                            <input type="number" class="form-control" name="room_info[min_occupancy]" value="{{ old('room_info.min_occupancy', '') }}" placeholder="0" min="0" style="border: 1px solid #dee2e6; border-radius: 6px;">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
 
@@ -1705,34 +1658,99 @@
                                             <div class="row gy-4">
                                                 <div class="col-md-12 col-lg-12 col-xxl-12">
                                                     <div class="row gy-4">
-                                                        <div class="price-card-room">
-                                                            <h3 class="can-tittle">Room Availability</h3>
-                                                            <p class="text-muted" style="font-size: 14px; margin-top: -10px;">Select dates when this room will be available for booking. The room will only appear on the website on selected dates.</p>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Select Available Dates</label>
-                                                                <input type="hidden" id="availability_dates_hidden" name="availability_dates" value="{{ old('availability_dates') }}">
-                                                                <input type="text" class="form-control" id="availability_dates_display" placeholder="No dates selected yet. Select dates from the calendar below." readonly style="margin-bottom: 15px; background-color: #f8f9fa; border: 1px solid #e0e0e0; padding: 12px; font-size: 14px; min-height: 45px;">
-                                                                <small class="form-text text-muted" style="display: block; margin-bottom: 15px; color: #6c757d;">
-                                                                    <strong>How to select dates:</strong><br>
-                                                                    • <strong>Drag</strong> from one date to another to select a range<br>
-                                                                    • <strong>Click</strong> individual dates to toggle selection (click again to deselect)<br>
-                                                                    • The room will be available only on selected dates
-                                                                </small>
-                                                                <div id="availability_calendar_wrapper" style="max-width: 100%; margin: 20px auto; display: block; padding: 20px; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"></div>
-                                                                <div style="margin-top: 15px; display: flex; gap: 10px; align-items: center;">
-                                                                    <button type="button" id="clear_all_dates" class="btn btn-sm btn-secondary" style="background: #6c757d; color: white; border: none; padding: 8px 20px;">
-                                                                        <i class="fas fa-times"></i> Clear All
-                                                                    </button>
-                                                                    <button type="button" id="apply_dates" class="btn btn-sm btn-primary" style="background: #90278e; color: white; border: none; padding: 8px 20px;">
-                                                                        <i class="fas fa-check"></i> Apply Selection
-                                                                    </button>
-                                                                    <span id="selected_dates_count" style="margin-left: 10px; color: #90278e; font-weight: bold;"></span>
+                                                        <!-- Select Available Dates Section -->
+                                                        <div class="row mt-4">
+                                                            <div class="col-md-12">
+                                                                <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                                    <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Select Available Dates</strong></h5>
+                                                                    
+                                                                    <div class="form-group">
+                                                                        <input type="hidden" id="availability_dates_hidden" name="availability_dates" value="{{ old('availability_dates') }}">
+                                                                        <input type="text" class="form-control" id="availability_dates_display" placeholder="No dates selected yet. Select dates from the calendar below." readonly style="margin-bottom: 15px; background-color: #f8f9fa; border: 1px solid #e0e0e0; padding: 12px; font-size: 14px; min-height: 45px;">
+                                                                        <small class="form-text text-muted" style="display: block; margin-bottom: 15px; color: #6c757d;">
+                                                                            <strong>How to select dates:</strong><br>
+                                                                            • <strong>Drag</strong> from one date to another to select a range<br>
+                                                                            • <strong>Click</strong> individual dates to toggle selection (click again to deselect)<br>
+                                                                            • The room will be available only on selected dates
+                                                                        </small>
+                                                                        <div id="availability_calendar_wrapper" style="max-width: 100%; margin: 20px auto; display: block; padding: 20px; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"></div>
+                                                                        <div style="margin-top: 15px; display: flex; gap: 10px; align-items: center;">
+                                                                            <button type="button" id="clear_all_dates" class="btn btn-sm btn-secondary" style="background: #6c757d; color: white; border: none; padding: 8px 20px;">
+                                                                                <i class="fas fa-times"></i> Clear All
+                                                                            </button>
+                                                                            <button type="button" id="apply_dates" class="btn btn-sm btn-primary" style="background: #90278e; color: white; border: none; padding: 8px 20px;">
+                                                                                <i class="fas fa-check"></i> Apply Selection
+                                                                            </button>
+                                                                            <span id="selected_dates_count" style="margin-left: 10px; color: #90278e; font-weight: bold;"></span>
+                                                                        </div>
+                                                                        @error('availability_dates')
+                                                                        <span class="text-danger">{{ $message }}</span>
+                                                                        @enderror
+                                                                    </div>
                                                                 </div>
-                                                                @error('availability_dates')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <!-- Price Section -->
+                                                        <div class="row mt-4">
+                                                            <div class="col-md-12">
+                                                                <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                                    <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Price Section</strong></h5>
+                                                                    
+                                                                    <div class="row gy-4">
+                                                                        <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                                            <div class="form-group">
+                                                                                <label class="form-label">Room Price (Per Night)</label>
+                                                                                <input type="number" class="form-control" name="price_per_night" value="{{ old('price_per_night') }}" placeholder="Ex: BDT 1,500" required>
+                                                                                @error('price_per_night')
+                                                                                <span class="text-danger">{{ $message }}</span>
+                                                                                @enderror
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                                            <div class="form-group">
+                                                                                <label class="form-label">Weekend Price</label>
+                                                                                <input type="number" class="form-control" name="weekend_price" value="{{ old('weekend_price') }}" placeholder="Ex: BDT 1,500">
+                                                                                @error('weekend_price')
+                                                                                <span class="text-danger">{{ $message }}</span>
+                                                                                @enderror
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                                            <div class="form-group">
+                                                                                <label class="form-label">Holiday Price</label>
+                                                                                <input type="number" class="form-control" name="holiday_price" value="{{ old('holiday_price') }}" placeholder="Ex: BDT 1,500">
+                                                                                @error('holiday_price')
+                                                                                <span class="text-danger">{{ $message }}</span>
+                                                                                @enderror
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                                            <div class="form-group">
+                                                                                <label class="form-label">Discount Type</label>
+                                                                                <div class="form-check">
+                                                                                    <input class="form-check-input" type="radio" name="discount_type" id="discountAmount" value="amount" {{ old('discount_type') == 'amount' ? 'checked' : '' }}>
+                                                                                    <label class="form-check-label" for="discountAmount">Discount by Amount</label>
+                                                                                </div>
+                                                                                <div class="form-check">
+                                                                                    <input class="form-check-input" type="radio" name="discount_type" id="discountPercentage" value="percentage" {{ old('discount_type') == 'percentage' ? 'checked' : '' }}>
+                                                                                    <label class="form-check-label" for="discountPercentage">Discount by Percentage (%)</label>
+                                                                                </div>
+                                                                                <div class="mt-3 {{ old('discount_type') ? '' : 'hidden' }}" id="discountValueField">
+                                                                                    <label for="discount_value" class="form-label">Enter Discount {{ old('discount_type') == 'amount' ? 'Amount' : 'Percentage (%)' }}</label>
+                                                                                    <input type="number" class="form-control" name="discount_value" id="discount_value" value="{{ old('discount_value') }}" placeholder="{{ old('discount_type') == 'amount' ? 'Ex: 3500' : 'Ex: 15 %' }}">
+                                                                                    @error('discount_value')
+                                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                                    @enderror
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1771,6 +1789,7 @@
                                                         'bedroom3' => '3rd Bedroom Photos (If Available)',
                                                         'washroom2' => '2nd Washroom Photos (If Available)',
                                                         'washroom3' => '3rd Washroom Photos (If Available)',
+                                                        'additional' => 'Additional Photo',
                                                     ];
                                                 @endphp
 
@@ -1855,21 +1874,25 @@
                 let personCount = {{ old('total_persons', 0) }};
                 const totalPersonsDisplay = document.getElementById('totalPersons');
                 const totalPersonsInput = document.getElementById('totalPersonsInput');
-                const personIncreaseBtn = document.querySelector('#tabItem3 .counter-card:nth-child(1) .increase-male');
-                const personDecreaseBtn = document.querySelector('#tabItem3 .counter-card:nth-child(1) .decrease-male');
+                const personIncreaseBtn = document.getElementById('personIncreaseBtn');
+                const personDecreaseBtn = document.getElementById('personDecreaseBtn');
 
-                personIncreaseBtn.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    personCount++;
-                    totalPersonsDisplay.textContent = personCount;
-                    totalPersonsInput.value = personCount;
-                });
-                personDecreaseBtn.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    if (personCount > 0) personCount--;
-                    totalPersonsDisplay.textContent = personCount;
-                    totalPersonsInput.value = personCount;
-                });
+                if (personIncreaseBtn) {
+                    personIncreaseBtn.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        personCount++;
+                        totalPersonsDisplay.textContent = personCount;
+                        totalPersonsInput.value = personCount;
+                    });
+                }
+                if (personDecreaseBtn) {
+                    personDecreaseBtn.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        if (personCount > 0) personCount--;
+                        totalPersonsDisplay.textContent = personCount;
+                        totalPersonsInput.value = personCount;
+                    });
+                }
 
                 // Room Details Counter and Dynamic Sections
                 let roomCount = {{ old('total_rooms', 1) }};

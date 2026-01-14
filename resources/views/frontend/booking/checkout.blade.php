@@ -437,8 +437,8 @@
                     <!-- Confirm Booking Button at Bottom of Form -->
                     <div class="mt-5 mb-4" style="padding-top: 30px; border-top: 2px solid #e0e0e0;">
                         <div class="row">
-                            <div class="col-12 col-md-8 offset-md-2 col-lg-10 offset-lg-1">
-                                <button type="button" class="btn btn-primary btn-lg btn-block confirmation-btn" onclick="confirmBooking()" style="padding: 18px 30px; font-size: 18px; font-weight: 600; border-radius: 8px; background: linear-gradient(135deg, #91278f 0%, #7a1f78 100%); border: none; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(145, 39, 143, 0.3);">
+                            <div class="col-12 text-center">
+                                <button type="button" class="btn btn-primary btn-lg confirmation-btn" onclick="confirmBooking()" style="padding: 18px 50px; font-size: 18px; font-weight: 600; border-radius: 8px; background: linear-gradient(135deg, #91278f 0%, #7a1f78 100%); border: none; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(145, 39, 143, 0.3); color: white;">
                                     <i class="fa fa-check-circle" style="margin-right: 8px;"></i> Confirm Booking
                                 </button>
                             </div>
@@ -982,7 +982,7 @@
                             <h6 data-v-67ade680=""> ${checkinFormatted} </h6>
                             <p data-v-67ade680="">${checkinDay}</p>
                         </div>
-                        <div data-v-67ade680="" class="custom-badge"> ${nights} ${nights === 1 ? 'Night' : 'Nights'} </div>
+                        <div data-v-67ade680="" class="custom-badge" style="color: white !important;"> ${nights} ${nights === 1 ? 'Night' : 'Nights'} </div>
                         <div data-v-67ade680="" class="details-text details-text-sm">
                             <p data-v-67ade680=""> Check Out 11:00 </p>
                             <h6 data-v-67ade680=""> ${checkoutFormatted} </h6>
@@ -2038,7 +2038,7 @@
     }
     .custom-badge {
         background: #91278f;
-        color: white;
+        color: white !important;
         padding: 8px 16px;
         border-radius: 20px;
         font-size: 14px;

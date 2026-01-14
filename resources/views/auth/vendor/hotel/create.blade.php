@@ -37,85 +37,94 @@
                                     <div class="tab-content">
                                         <!-- Hotel Description -->
                                         <div class="tab-pane active" id="tabItem3">
-                                            <div class="row gy-4">
-                                                <div class="col-md-12 col-lg-12 col-xxl-3">
-                                                    <div class="col-md-6 col-lg-4 col-xxl-12">
-                                                        <div class="form-group">
-                                                            <label for="division" class="form-label">Select Property
-                                                                Category</label>
-                                                            <select name="property_category" class="form-control" id="division">
-                                                                <option value="">Select Property</option>
-                                                                <option value="Hotels">Hotels</option>
-                                                                <option value="Transit">Transit Hotels</option>
-                                                                <option value="Resorts">Resorts, Eco, & Outdoor</option>
-                                                                <option value="Apartments">Hostels & Lodges</option>
-                                                                <option value="Guesthouses">Apartments & Homestays</option>
-                                                                <option value="Guesthouses">Vacation Rentals & Guesthouses</option>
-                                                                <option value="Crisis">Crisis & Shelter Accommodation</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-4 col-xxl-12">
-                                                        <div class="form-group">
-                                                            <label for="property_type" id="districtContainer" class="form-label">Property Type</label>
-                                                            <select name="property_type" class="form-control">
-                                                                <option>Hotels</option>
-                                                                <option>Transit</option>
-                                                                <option>Resorts</option>
-                                                                <option>Lodges</option>
-                                                                <option>Guesthouses</option>
-                                                                <option>Crisis</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6 col-lg-4 col-xxl-12" id="placeCheckboxList"
-                                                         style="display: none;">
-                                                        <div class="form-group">
-                                                            <label class="form-label">Choose Room/Accommodation Type</label>
-                                                            <ul id="placeOptions" class="list-unstyled"
-                                                                style="max-height: 200px; overflow-y: auto;">
-                                                                <!-- Dynamic Checkboxes Will Appear Here -->
-                                                            </ul>
-                                                            @error('room_types')
-                                                            <span class="invalid-feedback"
-                                                                  role="alert">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
+                                            <!-- Hotel Information Section -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Hotel / Property Information</strong></h5>
+                                                        
+                                                        <div class="row gy-4">
+                                                            <div class="col-md-6 col-lg-4 col-xxl-12">
+                                                                <div class="form-group">
+                                                                    <label for="division" class="form-label">Select Property
+                                                                        Category</label>
+                                                                    <select name="property_category" class="form-control" id="division">
+                                                                        <option value="">Select Property</option>
+                                                                        <option value="Hotels">Hotels</option>
+                                                                        <option value="Transit">Transit Hotels</option>
+                                                                        <option value="Resorts">Resorts, Eco, & Outdoor</option>
+                                                                        <option value="Apartments">Hostels & Lodges</option>
+                                                                        <option value="Guesthouses">Apartments & Homestays</option>
+                                                                        <option value="Guesthouses">Vacation Rentals & Guesthouses</option>
+                                                                        <option value="Crisis">Crisis & Shelter Accommodation</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6 col-lg-4 col-xxl-12">
+                                                                <div class="form-group">
+                                                                    <label for="property_type" id="districtContainer" class="form-label">Property Type</label>
+                                                                    <select name="property_type" class="form-control">
+                                                                        <option>Hotels</option>
+                                                                        <option>Transit</option>
+                                                                        <option>Resorts</option>
+                                                                        <option>Lodges</option>
+                                                                        <option>Guesthouses</option>
+                                                                        <option>Crisis</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6 col-lg-4 col-xxl-12" id="placeCheckboxList"
+                                                                 style="display: none;">
+                                                                <div class="form-group">
+                                                                    <label class="form-label">Choose Room/Accommodation Type</label>
+                                                                    <ul id="placeOptions" class="list-unstyled"
+                                                                        style="max-height: 200px; overflow-y: auto;">
+                                                                        <!-- Dynamic Checkboxes Will Appear Here -->
+                                                                    </ul>
+                                                                    @error('room_types')
+                                                                    <span class="invalid-feedback"
+                                                                          role="alert">{{ $message }}</span>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
 
-                                                    <div class="col-md-4 col-lg-4 col-xxl-12">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="default-textarea">Hotel /
-                                                                Property Name</label>
-                                                            <div class="form-control-wrap">
-                                                                <input class="form-control no-resize"
-                                                                       name="description" value="{{ old('description', '') }}"
-                                                                       placeholder="Enter Hotel / Property Name"></input>
-                                                                @error('description') <span
-                                                                    class="text-danger"></span> @enderror
+                                                            <div class="col-md-4 col-lg-4 col-xxl-12">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="default-textarea">Hotel /
+                                                                        Property Name</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <input class="form-control no-resize"
+                                                                               name="description" value="{{ old('description', '') }}"
+                                                                               placeholder="Enter Hotel / Property Name"></input>
+                                                                        @error('description') <span
+                                                                            class="text-danger"></span> @enderror
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="default-textarea">Hotel/Property Description & Policy</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <textarea class="form-control no-resize" id="default-textarea1" name="details"></textarea>
+                                                                        @error('details') <span class="text-danger">{{ $message }}</span> @enderror
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            {{-- Select how many apartments/rooms --}}
+                                                            <div class="col-md-4 col-lg-4 col-xxl-12">
+                                                                <div class="form-group">
+                                                                    <label for="apartment-count">Enter Number of Apartments/Rooms</label>
+                                                                    <input type="number" 
+                                                                           class="form-control" 
+                                                                           id="apartment-count" 
+                                                                           name="apartment_count" 
+                                                                           min="0" 
+                                                                           value="{{ old('apartment_count', 0) }}" 
+                                                                           placeholder="Enter number of rooms">
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="default-textarea">Hotel/Property Description & Policy</label>
-                                                        <div class="form-control-wrap">
-                                                            <textarea class="form-control no-resize" id="default-textarea1" name="details"></textarea>
-                                                            @error('details') <span class="text-danger">{{ $message }}</span> @enderror
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {{-- Select how many apartments/rooms --}}
-                                            <div class="col-md-4 col-lg-4 col-xxl-3">
-                                                <div class="form-group">
-                                                    <label for="apartment-count">Enter Number of Apartments/Rooms</label>
-                                                    <input type="number" 
-                                                           class="form-control" 
-                                                           id="apartment-count" 
-                                                           name="apartment_count" 
-                                                           min="0" 
-                                                           value="{{ old('apartment_count', 0) }}" 
-                                                           placeholder="Enter number of rooms">
                                                 </div>
                                             </div>
 
@@ -124,11 +133,13 @@
                                                 {{-- Rooms will be created as blank entries on the room list page based on apartment_count --}}
                                             </div>
 
-                                            <!-- Property Policy And Rules -->
-                                            <div class="row gy-4">
-                                                <div class="col-md-12 col-lg-12 col-xxl-3">
-                                                    <h3 class="can-tittle" style="padding-top: 50px;">Property Policy and Rules</h3>
-                                                </div>
+                                            <!-- Property Policy And Rules Section -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Property Policy and Rules</strong></h5>
+                                                        
+                                                        <div class="row gy-4">
 
                                                 <div class="col-md-6 col-lg-4 col-xxl-3 pets-section">
                                                     <div class="form-group">
@@ -318,18 +329,19 @@
 
                                                         @error('check_in_rules') <span class="text-danger">{{ $message }}</span> @enderror
                                                     </div>
-
-
                                                 </div>
-
-
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
 
-                                            <!-- Start: Property Information -->
-                                            <div class="row mt-15">
-
-                                                <div class="checkbox-section">
-                                                    <h3 class="can-tittle">Property Info</h3>
+                                            <!-- Property Information Section -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Property Info</strong></h5>
+                                                        
+                                                        <div class="checkbox-section">
 
                                                     <!-- “Select All” toggle and predefined checkboxes -->
                                                     <div class="chk-all-sec">
@@ -381,7 +393,10 @@
                                                     @error('property_info')
                                                     <span class="text-danger">{{ $message }}</span>
                                                     @enderror
+                                                        </div>
+                                                    </div>
                                                 </div>
+                                            </div>
 
                                                 <script>
                                                     document.addEventListener('DOMContentLoaded', function () {
@@ -645,10 +660,12 @@
 
                                         <!-- Most Popular Facilities -->
                                         <div class="tab-pane" id="tabItem4">
-                                            <div class="row mt-15">
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Most Popular Facilities</strong></h5>
 
-                                                <div class="checkbox-section">
-                                                    <h3 class="can-tittle">Most Popular Facilities</h3>
+                                                        <div class="checkbox-section">
 {{--                                                    <div class="chk-all-sec">--}}
 {{--                                                        <div class="form-group">--}}
 {{--                                                            <div class="custom-control custom-switch checked">--}}
@@ -856,14 +873,19 @@
                                                 </script>
 
 
+                                                    </div>
+                                                </div>
                                             </div>
 
                                             <!-- All Facilities -->
                                             <!-- All Facilities -->
 
-                                            <div class="container mt-15">
-                                                <div class="row">
-                                                    <h3 class="can-tittle">Hotel Facilities Categories</h3>
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Hotel Facilities Categories</strong></h5>
+
+                                                        <div class="row">
 
                                                     <!-- Dropdown -->
                                                     <div class="col-lg-5">
@@ -901,6 +923,8 @@
                                                     </div>
                                                     <!-- Add More Button -->
 
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -924,11 +948,12 @@
                                         <!-- Nearby Area -->
 
                                         <div class="tab-pane" id="tabItem1">
-                                            <div class="row">
-                                                <div class="col-lg-12">
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Most Popular Nearby Area</strong></h5>
 
-                                                    <div class="form-group">
-                                                        <h3 class="can-tittle">Most Popular Nearby Area</h3>
+                                                        <div class="form-group">
                                                         <div id="nearby-areas-wrapper">
                                                             <div class="form-group mb-3 d-flex align-items-center">
                                                                 <input type="text" name="custom_nearby_areas[]" class="form-control" placeholder="Enter something">
@@ -990,13 +1015,18 @@
 
 
 
+                                                        </div>
+                                                    </div>
                                                 </div>
+                                            </div>
 
 
-                                                <div class="container mt-4">
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Nearby Area Categories</strong></h5>
 
-                                                    <div class="row">
-                                                        <h3 class="can-tittle">Nearby Area Categories</h3>
+                                                        <div class="row">
                                                         <!-- Dropdown -->
                                                         <div class="col-lg-5">
                                                             <div class="form-group">
@@ -1026,10 +1056,9 @@
                                                     </div>
 
 
+                                                        </div>
+                                                    </div>
                                                 </div>
-
-
-
                                             </div>
 
                                             <div class="row">
@@ -1071,7 +1100,12 @@
                                                 ];
                                             @endphp
 
-                                            <div class="row gy-4">
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Photos</strong></h5>
+
+                                                        <div class="row gy-4">
                                                 @foreach($photoFields as $index => $field)
                                                     <div class="col-md-6 col-lg-4 col-xxl-3">
                                                         <div class="form-group mt-15">
@@ -1091,6 +1125,9 @@
                                                         </div>
                                                     </div>
                                                 @endforeach
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
 
                                             <div class="row">
