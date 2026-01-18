@@ -559,55 +559,81 @@
                                                 </div>
                                             </div>
 
+                                            @php
+                                                // Get global cancellation policies from hotel_settings
+                                                $globalSettings = \App\Models\HotelSetting::first();
+                                                
+                                                $defaultCancellationPolicyTexts = [
+                                                    'Flexible' => 'Flexible (Guests get a full refund if they cancel up to a day before check-in at least 24 hours.)',
+                                                    'Non-refundable' => 'Non-refundable (Regardless of the cancellation window, customers will not get any refund under this.)',
+                                                    'Partially refundable' => 'Partially refundable (Cancellations less than 24 hours… after deducting a 30% cancellation fee.)',
+                                                    'Long-term/Monthly staying policy' => 'Long-term/Monthly staying policy (Stays more than 30 days will fall under this scope and a specific contract paper shall be signed.)',
+                                                ];
+                                                
+                                                // Get policy texts from global settings (merged with defaults)
+                                                $cancellationPolicyTexts = $defaultCancellationPolicyTexts;
+                                                if ($globalSettings && is_array($globalSettings->cancellation_policy_texts ?? null)) {
+                                                    $cancellationPolicyTexts = array_merge($defaultCancellationPolicyTexts, $globalSettings->cancellation_policy_texts);
+                                                }
+                                                
+                                                // Get custom policies from global settings
+                                                $customPolicies = [];
+                                                if ($globalSettings && is_array($globalSettings->custom_cancellation_policies ?? null)) {
+                                                    $customPolicies = $globalSettings->custom_cancellation_policies;
+                                                }
+                                                
+                                                // Get enabled policies from global settings
+                                                $enabledPolicies = null;
+                                                if ($globalSettings) {
+                                                    $enabledPolicies = $globalSettings->enabled_cancellation_policies;
+                                                }
+                                                
+                                                // If null, default to all policies (backward compatibility)
+                                                // If empty array [], it means super admin explicitly disabled all
+                                                if ($enabledPolicies === null) {
+                                                    // Never been set, default to all
+                                                    $enabledPolicies = array_keys($defaultCancellationPolicyTexts);
+                                                } elseif (!is_array($enabledPolicies)) {
+                                                    $enabledPolicies = [];
+                                                }
+                                                
+                                                // Build available policies (default + custom) that are enabled
+                                                $availablePolicies = [];
+                                                foreach ($enabledPolicies as $policyKey) {
+                                                    if (isset($cancellationPolicyTexts[$policyKey])) {
+                                                        $availablePolicies[$policyKey] = $cancellationPolicyTexts[$policyKey];
+                                                    } elseif (strpos($policyKey, 'custom_') === 0) {
+                                                        // Find custom policy
+                                                        foreach ($customPolicies as $customPolicy) {
+                                                            if (($customPolicy['key'] ?? '') === $policyKey) {
+                                                                $availablePolicies[$policyKey] = $customPolicy['text'] ?? '';
+                                                                break;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            @endphp
+
                                             <!-- Start: Cancellation Policies -->
                                             <div class="row mt-15">
                                                 <div class="col-md-12">
                                                     <h3 class="can-tittle">Cancellation Policies</h3>
                                                 </div>
 
+                                                @foreach($availablePolicies as $policyKey => $policyText)
                                                 <div class="col-lg-12">
                                                     <div class="form-group">
                                                         <div class="form-check form-switch custom-switch">
-                                                            <input class="form-check-input cancellation-checkbox" type="checkbox" name="cancellation_policies[]" value="Flexible" id="flexSwitch1">
-                                                            <label class="form-check-label" for="flexSwitch1">
-                                                                Flexible (Guests get a full refund if they cancel up to a day before check-in at least 24 hours.)
+                                                            <input class="form-check-input cancellation-checkbox" type="checkbox" 
+                                                                   name="cancellation_policies[]" value="{{ $policyKey }}" 
+                                                                   id="flexSwitch{{ str_replace([' ', '/', '-', '_'], '', $policyKey) }}">
+                                                            <label class="form-check-label" for="flexSwitch{{ str_replace([' ', '/', '-', '_'], '', $policyKey) }}">
+                                                                {{ $policyText }}
                                                             </label>
                                                         </div>
                                                     </div>
                                                 </div>
-
-                                                <div class="col-lg-12">
-                                                    <div class="form-group">
-                                                        <div class="form-check form-switch custom-switch">
-                                                            <input class="form-check-input cancellation-checkbox" type="checkbox" name="cancellation_policies[]" value="Non-refundable" id="flexSwitch2">
-                                                            <label class="form-check-label" for="flexSwitch2">
-                                                                Non-refundable (Regardless of the cancellation window, customers will not get any refund under this.)
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-lg-12">
-                                                    <div class="form-group">
-                                                        <div class="form-check form-switch custom-switch">
-                                                            <input class="form-check-input cancellation-checkbox" type="checkbox" name="cancellation_policies[]" value="Partially refundable" id="flexSwitch3">
-                                                            <label class="form-check-label" for="flexSwitch3">
-                                                                Partially refundable (Cancellations less than 24 hours… 30% cancellation fee.)
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-lg-12">
-                                                    <div class="form-group">
-                                                        <div class="form-check form-switch custom-switch">
-                                                            <input class="form-check-input cancellation-checkbox" type="checkbox" name="cancellation_policies[]" value="Long-term/Monthly staying policy" id="flexSwitch4">
-                                                            <label class="form-check-label" for="flexSwitch4">
-                                                                Long-term/Monthly staying policy (Stays more than 30 days will fall under this scope and a specific contract paper shall be signed.)
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                @endforeach
 
                                                 {{-- Validation error --}}
                                                 @error('cancellation_policies')

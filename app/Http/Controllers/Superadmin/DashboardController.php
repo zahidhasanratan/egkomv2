@@ -114,6 +114,129 @@ class DashboardController extends Controller
         return back()->with('success', 'Hotel settings updated successfully!');
     }
 
+    public function cancellationPolicySettings()
+    {
+        $hotelSetting = HotelSetting::first();
+        
+        if (!$hotelSetting) {
+            $hotelSetting = new HotelSetting();
+            $hotelSetting->hotel_name = 'Default';
+            $hotelSetting->hotel_address = '';
+            $hotelSetting->email = '';
+            $hotelSetting->phone = '';
+            $hotelSetting->copyright = '';
+            $hotelSetting->save();
+        }
+        
+        return view('auth.super_admin.cancellationPolicySettings', compact('hotelSetting'));
+    }
+
+    public function updateCancellationPolicySettings(Request $request)
+    {
+        $request->validate([
+            // Hotel policies
+            'cancellation_policy_texts' => 'nullable|array',
+            'cancellation_policy_texts.*' => 'nullable|string',
+            'custom_cancellation_policies' => 'nullable|array',
+            'enabled_cancellation_policies' => 'nullable|array',
+            // Room policies
+            'room_cancellation_policy_texts' => 'nullable|array',
+            'room_cancellation_policy_texts.*' => 'nullable|string',
+            'room_custom_cancellation_policies' => 'nullable|array',
+            'room_enabled_cancellation_policies' => 'nullable|array',
+        ]);
+
+        $hotelSetting = HotelSetting::first();
+        
+        if (!$hotelSetting) {
+            $hotelSetting = new HotelSetting();
+            $hotelSetting->hotel_name = 'Default';
+            $hotelSetting->hotel_address = '';
+            $hotelSetting->email = '';
+            $hotelSetting->phone = '';
+            $hotelSetting->copyright = '';
+        }
+
+        // ========== HOTEL POLICIES ==========
+        // Handle hotel policy texts
+        if ($request->has('cancellation_policy_texts')) {
+            $policyTexts = array_filter(
+                (array)$request->input('cancellation_policy_texts', []),
+                fn($v) => $v !== null && trim($v) !== ''
+            );
+            $hotelSetting->cancellation_policy_texts = !empty($policyTexts) ? $policyTexts : null;
+        }
+
+        // Handle hotel custom policies
+        if ($request->has('custom_cancellation_policies')) {
+            $customPolicies = [];
+            foreach ($request->input('custom_cancellation_policies', []) as $index => $policy) {
+                if (!empty($policy['text']) && trim($policy['text']) !== '') {
+                    $customPolicies[] = [
+                        'key' => $policy['key'] ?? 'custom_' . ($index + 1),
+                        'text' => $policy['text']
+                    ];
+                }
+            }
+            $hotelSetting->custom_cancellation_policies = !empty($customPolicies) ? $customPolicies : null;
+        }
+
+        // Handle hotel enabled policies
+        if ($request->has('enabled_cancellation_policies_force') || $request->has('enabled_cancellation_policies')) {
+            $enabledPolicies = array_filter(
+                (array)$request->input('enabled_cancellation_policies', []),
+                fn($v) => $v !== null && $v !== ''
+            );
+            
+            if ($request->has('enabled_cancellation_policies_force') && empty($enabledPolicies)) {
+                $hotelSetting->enabled_cancellation_policies = [];
+            } else {
+                $hotelSetting->enabled_cancellation_policies = $enabledPolicies;
+            }
+        }
+
+        // ========== ROOM POLICIES ==========
+        // Handle room policy texts
+        if ($request->has('room_cancellation_policy_texts')) {
+            $roomPolicyTexts = array_filter(
+                (array)$request->input('room_cancellation_policy_texts', []),
+                fn($v) => $v !== null && trim($v) !== ''
+            );
+            $hotelSetting->room_cancellation_policy_texts = !empty($roomPolicyTexts) ? $roomPolicyTexts : null;
+        }
+
+        // Handle room custom policies
+        if ($request->has('room_custom_cancellation_policies')) {
+            $roomCustomPolicies = [];
+            foreach ($request->input('room_custom_cancellation_policies', []) as $index => $policy) {
+                if (!empty($policy['text']) && trim($policy['text']) !== '') {
+                    $roomCustomPolicies[] = [
+                        'key' => $policy['key'] ?? 'custom_' . ($index + 1),
+                        'text' => $policy['text']
+                    ];
+                }
+            }
+            $hotelSetting->room_custom_cancellation_policies = !empty($roomCustomPolicies) ? $roomCustomPolicies : null;
+        }
+
+        // Handle room enabled policies
+        if ($request->has('room_enabled_cancellation_policies_force') || $request->has('room_enabled_cancellation_policies')) {
+            $roomEnabledPolicies = array_filter(
+                (array)$request->input('room_enabled_cancellation_policies', []),
+                fn($v) => $v !== null && $v !== ''
+            );
+            
+            if ($request->has('room_enabled_cancellation_policies_force') && empty($roomEnabledPolicies)) {
+                $hotelSetting->room_enabled_cancellation_policies = [];
+            } else {
+                $hotelSetting->room_enabled_cancellation_policies = $roomEnabledPolicies;
+            }
+        }
+
+        $hotelSetting->save();
+
+        return back()->with('success', 'Cancellation policy settings updated successfully!');
+    }
 
     public function accountEmail()
     {

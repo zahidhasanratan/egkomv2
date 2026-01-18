@@ -78,6 +78,7 @@
                                             <ul class="link-list">
 {{--                                                <li><a href="#"><em class="icon ni ni-user-alt"></em><span>View Profile</span></a></li>--}}
                                                 <li><a href="{{ route('super-admin.accountSettings') }}"><em class="icon ni ni-setting-alt"></em><span>Account Setting</span></a></li>
+                                                <li><a href="{{ route('super-admin.cancellationPolicySettings') }}"><em class="icon ni ni-file-text"></em><span>Cancellation Policy Settings</span></a></li>
                                                 <li><a href="{{ route('super-admin.activityLog') }}"><em class="icon ni ni-activity-alt"></em><span>Login Activity</span></a></li>
                                             </ul>
                                         </div>

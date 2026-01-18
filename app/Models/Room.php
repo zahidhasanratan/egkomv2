@@ -10,7 +10,7 @@ class Room extends Model
         'hotel_id','feature_photos', 'name', 'number', 'floor_number', 'price_per_night', 'weekend_price',
         'holiday_price', 'discount_type', 'discount_value', 'discount_amount', 'discount_percentage',
         'total_persons', 'total_rooms', 'total_washrooms', 'total_beds', 'size', 'wifi_details', 
-        'description', 'appliances', 'furniture', 'amenities', 'cancellation_policy', 'cancellation_policy_texts', 'display_options', 'is_active', 'status',
+        'description', 'appliances', 'furniture', 'amenities', 'cancellation_policy', 'cancellation_policy_texts', 'custom_cancellation_policies', 'enabled_cancellation_policies', 'display_options', 'is_active', 'status',
         'availability_dates',
         // Additional Bed Policy fields
         'additional_bed_available', 'bed_fee_type', 'bed_fee_amount', 'bed_fee_currency', 'bed_fee_unit', 'bed_note',
@@ -37,6 +37,8 @@ class Room extends Model
         'amenities' => 'array',
         'cancellation_policy' => 'array',
         'cancellation_policy_texts' => 'array',
+        'custom_cancellation_policies' => 'array',
+        'enabled_cancellation_policies' => 'array',
         'display_options' => 'array',
         'is_active' => 'boolean',
         'availability_dates' => 'array',

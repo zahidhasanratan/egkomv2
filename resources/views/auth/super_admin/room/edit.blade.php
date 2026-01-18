@@ -1375,17 +1375,58 @@
                                             </div>
 
                                             @php
+                                                // Get global ROOM cancellation policies from hotel_settings
+                                                $globalSettings = \App\Models\HotelSetting::first();
+                                                
                                                 $defaultRoomCancellationPolicyTexts = [
                                                     'flexible' => 'Flexible (Guests get a full refund if they cancel up to a day before check-in at least 24 hours.)',
                                                     'non_refundable' => 'Non-refundable (Regardless of the cancellation window, customers will not get any refund under this.)',
                                                     'partially_refundable' => 'Partially refundable (Cancellations that take place in less than 24 hours and Rooms that are labeled with this badge, after deducting a 30% cancellation fee, rest of the amount will be refunded.)',
                                                     'long_term' => 'Long-term/Monthly staying policy (Stays more than 30 days will fall under this scope and a specific contract paper shall be signed. T&C paper will be found in the system.)',
                                                 ];
-                                                $roomCancellationPolicyTexts = old(
-                                                    'cancellation_policy_texts',
-                                                    is_array($room->cancellation_policy_texts ?? null) ? $room->cancellation_policy_texts : []
-                                                );
-                                                $roomCancellationPolicyTexts = array_merge($defaultRoomCancellationPolicyTexts, $roomCancellationPolicyTexts ?: []);
+                                                
+                                                // Get ROOM policy texts from global settings (merged with defaults)
+                                                $roomCancellationPolicyTexts = $defaultRoomCancellationPolicyTexts;
+                                                if ($globalSettings && is_array($globalSettings->room_cancellation_policy_texts ?? null)) {
+                                                    $roomCancellationPolicyTexts = array_merge($defaultRoomCancellationPolicyTexts, $globalSettings->room_cancellation_policy_texts);
+                                                }
+                                                
+                                                // Allow old() to override for form validation errors
+                                                if (old('cancellation_policy_texts')) {
+                                                    $roomCancellationPolicyTexts = array_merge($defaultRoomCancellationPolicyTexts, old('cancellation_policy_texts'));
+                                                }
+                                                
+                                                // Get ROOM custom policies from global settings
+                                                $customPolicies = [];
+                                                if ($globalSettings && is_array($globalSettings->room_custom_cancellation_policies ?? null)) {
+                                                    $customPolicies = $globalSettings->room_custom_cancellation_policies;
+                                                }
+                                                
+                                                // Allow old() to override for form validation errors
+                                                if (old('custom_cancellation_policies')) {
+                                                    $customPolicies = old('custom_cancellation_policies');
+                                                }
+                                                
+                                                // Get ROOM enabled policies from global settings
+                                                $enabledPolicies = null;
+                                                if ($globalSettings) {
+                                                    $enabledPolicies = $globalSettings->room_enabled_cancellation_policies;
+                                                }
+                                                
+                                                // Allow old() to override for form validation errors
+                                                if (old('enabled_cancellation_policies') !== null) {
+                                                    $enabledPolicies = old('enabled_cancellation_policies');
+                                                }
+                                                
+                                                // If null, default to all policies (backward compatibility)
+                                                // If empty array [], it means super admin explicitly disabled all
+                                                if ($enabledPolicies === null) {
+                                                    // Never been set, default to all
+                                                    $enabledPolicies = array_keys($defaultRoomCancellationPolicyTexts);
+                                                } elseif (!is_array($enabledPolicies)) {
+                                                    $enabledPolicies = [];
+                                                }
+                                                // If it's an empty array, that means all are disabled - don't default
                                             @endphp
 
                                             <!-- Cancellation Policy Section -->
@@ -1406,65 +1447,89 @@
                                                             }
                                                         @endphp
 
+                                                        @php
+                                                            $defaultPolicyKeys = ['flexible', 'non_refundable', 'partially_refundable', 'long_term'];
+                                                        @endphp
+                                                        
+                                                        @foreach($defaultPolicyKeys as $policyKey)
                                                         <div class="col-lg-12">
                                                             <div class="form-group">
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input cancellation-checkbox" type="checkbox"
-                                                                           name="cancellation_policy[]" id="flexiblePolicy" value="flexible"
-                                                                        {{ in_array('flexible', $cancellationPolicies) ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="flexiblePolicy">
-                                                                        {{ $roomCancellationPolicyTexts['flexible'] }}
-                                                                    </label>
+                                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input cancellation-checkbox" type="checkbox"
+                                                                               name="cancellation_policy[]" id="{{ ucfirst(str_replace('_', '', $policyKey)) }}Policy" value="{{ $policyKey }}"
+                                                                            {{ in_array($policyKey, $cancellationPolicies) ? 'checked' : '' }}>
+                                                                        <label class="form-check-label" for="{{ ucfirst(str_replace('_', '', $policyKey)) }}Policy">
+                                                                            {{ $roomCancellationPolicyTexts[$policyKey] ?? $policyKey }}
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="form-check form-switch">
+                                                                        <input class="form-check-input enable-policy-toggle" type="checkbox"
+                                                                               name="enabled_cancellation_policies[]" value="{{ $policyKey }}"
+                                                                               id="enablePolicy{{ ucfirst(str_replace('_', '', $policyKey)) }}"
+                                                                            {{ in_array($policyKey, $enabledPolicies) ? 'checked' : '' }}>
+                                                                        <label class="form-check-label" for="enablePolicy{{ ucfirst(str_replace('_', '', $policyKey)) }}" style="font-size: 12px;">
+                                                                            Show to Vendor
+                                                                        </label>
+                                                                    </div>
                                                                 </div>
                                                                 <small class="text-muted d-block mt-1">Edit text (super-admin)</small>
-                                                                <textarea class="form-control mt-1" rows="2" name="cancellation_policy_texts[flexible]">{{ $roomCancellationPolicyTexts['flexible'] }}</textarea>
+                                                                <textarea class="form-control mt-1" rows="2" name="cancellation_policy_texts[{{ $policyKey }}]">{{ $roomCancellationPolicyTexts[$policyKey] ?? '' }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                        @endforeach
+
+                                                        {{-- Custom Policies --}}
+                                                        <div class="col-lg-12 mt-3">
+                                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                                <h6 style="color: #91278f;"><strong>Custom Policies</strong></h6>
+                                                                <button type="button" class="btn btn-sm btn-primary" id="addCustomPolicyBtn" style="background: #91278f; border: none;">
+                                                                    <i class="fas fa-plus"></i> Add Custom Policy
+                                                                </button>
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-lg-12">
-                                                            <div class="form-group">
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input cancellation-checkbox" type="checkbox"
-                                                                           name="cancellation_policy[]" id="nonRefundablePolicy" value="non_refundable"
-                                                                        {{ in_array('non_refundable', $cancellationPolicies) ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="nonRefundablePolicy">
-                                                                        {{ $roomCancellationPolicyTexts['non_refundable'] }}
-                                                                    </label>
+                                                        <div id="customPoliciesContainer">
+                                                            @if(!empty($customPolicies))
+                                                                @foreach($customPolicies as $index => $customPolicy)
+                                                                <div class="col-lg-12 custom-policy-item mb-3" data-index="{{ $index }}">
+                                                                    <div class="form-group" style="border: 1px solid #ddd; padding: 15px; border-radius: 5px; background: #fff;">
+                                                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                                                            <div class="form-check">
+                                                                                <input class="form-check-input cancellation-checkbox" type="checkbox"
+                                                                                       name="cancellation_policy[]" value="custom_{{ $index }}"
+                                                                                       id="customPolicyCheck{{ $index }}"
+                                                                                    {{ in_array('custom_' . $index, $cancellationPolicies) ? 'checked' : '' }}>
+                                                                                <label class="form-check-label" for="customPolicyCheck{{ $index }}">
+                                                                                    Custom Policy {{ $index + 1 }}
+                                                                                </label>
+                                                                            </div>
+                                                                            <div class="d-flex gap-2">
+                                                                                <div class="form-check form-switch">
+                                                                                    <input class="form-check-input enable-policy-toggle" type="checkbox"
+                                                                                           name="enabled_cancellation_policies[]" value="custom_{{ $index }}"
+                                                                                           id="enableCustomPolicy{{ $index }}"
+                                                                                        {{ in_array('custom_' . $index, $enabledPolicies) ? 'checked' : '' }}>
+                                                                                    <label class="form-check-label" for="enableCustomPolicy{{ $index }}" style="font-size: 12px;">
+                                                                                        Show to Vendor
+                                                                                    </label>
+                                                                                </div>
+                                                                                <button type="button" class="btn btn-sm btn-danger remove-custom-policy" data-index="{{ $index }}">
+                                                                                    <i class="fas fa-trash"></i> Remove
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                        <small class="text-muted d-block mt-1">Policy Text</small>
+                                                                        <textarea class="form-control mt-1" rows="2" name="custom_cancellation_policies[{{ $index }}][text]" placeholder="Enter custom policy text...">{{ $customPolicy['text'] ?? '' }}</textarea>
+                                                                        <input type="hidden" name="custom_cancellation_policies[{{ $index }}][key]" value="custom_{{ $index }}">
+                                                                    </div>
                                                                 </div>
-                                                                <small class="text-muted d-block mt-1">Edit text (super-admin)</small>
-                                                                <textarea class="form-control mt-1" rows="2" name="cancellation_policy_texts[non_refundable]">{{ $roomCancellationPolicyTexts['non_refundable'] }}</textarea>
-                                                            </div>
+                                                                @endforeach
+                                                            @endif
                                                         </div>
 
-                                                        <div class="col-lg-12">
-                                                            <div class="form-group">
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input cancellation-checkbox" type="checkbox"
-                                                                           name="cancellation_policy[]" id="partiallyRefundablePolicy" value="partially_refundable"
-                                                                        {{ in_array('partially_refundable', $cancellationPolicies) ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="partiallyRefundablePolicy">
-                                                                        {{ $roomCancellationPolicyTexts['partially_refundable'] }}
-                                                                    </label>
-                                                                </div>
-                                                                <small class="text-muted d-block mt-1">Edit text (super-admin)</small>
-                                                                <textarea class="form-control mt-1" rows="2" name="cancellation_policy_texts[partially_refundable]">{{ $roomCancellationPolicyTexts['partially_refundable'] }}</textarea>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-lg-12">
-                                                            <div class="form-group">
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input cancellation-checkbox" type="checkbox"
-                                                                           name="cancellation_policy[]" id="longTermPolicy" value="long_term"
-                                                                        {{ in_array('long_term', $cancellationPolicies) ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="longTermPolicy">
-                                                                        {{ $roomCancellationPolicyTexts['long_term'] }}
-                                                                    </label>
-                                                                </div>
-                                                                <small class="text-muted d-block mt-1">Edit text (super-admin)</small>
-                                                                <textarea class="form-control mt-1" rows="2" name="cancellation_policy_texts[long_term]">{{ $roomCancellationPolicyTexts['long_term'] }}</textarea>
-                                                            </div>
-                                                        </div>
+                                                        {{-- Hidden input to ensure enabled_cancellation_policies is always sent --}}
+                                                        <input type="hidden" name="enabled_cancellation_policies_sent" value="1">
 
                                                         @error('cancellation_policy.*')
                                                         <span class="text-danger">{{ $message }}</span>
@@ -1481,6 +1546,8 @@
                                             {{-- JS: applies to every ".js-limit-two" block independently --}}
                                             <script>
                                                 document.addEventListener('DOMContentLoaded', function () {
+                                                    let customPolicyIndex = {{ !empty($customPolicies) ? count($customPolicies) : 0 }};
+                                                    
                                                     document.querySelectorAll('.js-limit-two').forEach(function (container) {
                                                         const checkboxes = container.querySelectorAll('.cancellation-checkbox');
                                                         const warning = container.querySelector('.policy-warning');
@@ -1507,6 +1574,96 @@
                                                         // Handle pre-checked (old() values)
                                                         maybeWarn();
                                                     });
+
+                                                    // Add custom policy
+                                                    document.getElementById('addCustomPolicyBtn')?.addEventListener('click', function() {
+                                                        const container = document.getElementById('customPoliciesContainer');
+                                                        const newIndex = customPolicyIndex++;
+                                                        const policyContainer = document.querySelector('.js-limit-two');
+                                                        
+                                                        const newPolicyHtml = `
+                                                            <div class="col-lg-12 custom-policy-item mb-3" data-index="${newIndex}">
+                                                                <div class="form-group" style="border: 1px solid #ddd; padding: 15px; border-radius: 5px; background: #fff;">
+                                                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input cancellation-checkbox" type="checkbox"
+                                                                                   name="cancellation_policy[]" value="custom_${newIndex}"
+                                                                                   id="customPolicyCheck${newIndex}">
+                                                                            <label class="form-check-label" for="customPolicyCheck${newIndex}">
+                                                                                Custom Policy ${newIndex + 1}
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="d-flex gap-2">
+                                                                            <div class="form-check form-switch">
+                                                                                <input class="form-check-input enable-policy-toggle" type="checkbox"
+                                                                                       name="enabled_cancellation_policies[]" value="custom_${newIndex}"
+                                                                                       id="enableCustomPolicy${newIndex}" checked>
+                                                                                <label class="form-check-label" for="enableCustomPolicy${newIndex}" style="font-size: 12px;">
+                                                                                    Show to Vendor
+                                                                                </label>
+                                                                            </div>
+                                                                            <button type="button" class="btn btn-sm btn-danger remove-custom-policy" data-index="${newIndex}">
+                                                                                <i class="fas fa-trash"></i> Remove
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                    <small class="text-muted d-block mt-1">Policy Text</small>
+                                                                    <textarea class="form-control mt-1" rows="2" name="custom_cancellation_policies[${newIndex}][text]" placeholder="Enter custom policy text..."></textarea>
+                                                                    <input type="hidden" name="custom_cancellation_policies[${newIndex}][key]" value="custom_${newIndex}">
+                                                                </div>
+                                                            </div>
+                                                        `;
+                                                        
+                                                        container.insertAdjacentHTML('beforeend', newPolicyHtml);
+                                                        
+                                                        // Re-attach event listeners for the new checkbox
+                                                        if (policyContainer) {
+                                                            const newCheckbox = document.getElementById(`customPolicyCheck${newIndex}`);
+                                                            const warning = policyContainer.querySelector('.policy-warning');
+                                                            newCheckbox.addEventListener('change', function () {
+                                                                const checked = policyContainer.querySelectorAll('.cancellation-checkbox:checked').length;
+                                                                if (checked > 2) {
+                                                                    this.checked = false;
+                                                                    if (warning) {
+                                                                        warning.style.display = 'block';
+                                                                        setTimeout(() => {
+                                                                            warning.style.display = 'none';
+                                                                        }, 2000);
+                                                                    }
+                                                                }
+                                                            });
+                                                        }
+                                                    });
+
+                                                    // Remove custom policy
+                                                    document.addEventListener('click', function(e) {
+                                                        if (e.target.closest('.remove-custom-policy')) {
+                                                            const button = e.target.closest('.remove-custom-policy');
+                                                            const item = button.closest('.custom-policy-item');
+                                                            if (item) {
+                                                                item.remove();
+                                                            }
+                                                        }
+                                                    });
+
+                                                    // Ensure enabled_cancellation_policies is always submitted, even if all are unchecked
+                                                    const form = document.querySelector('form');
+                                                    if (form) {
+                                                        form.addEventListener('submit', function(e) {
+                                                            // Remove any existing hidden inputs for enabled policies
+                                                            document.querySelectorAll('input[name="enabled_cancellation_policies_force"]').forEach(el => el.remove());
+                                                            
+                                                            // If no enabled policies are checked, add a hidden input to ensure empty array is sent
+                                                            const checkedEnabled = document.querySelectorAll('input[name="enabled_cancellation_policies[]"]:checked');
+                                                            if (checkedEnabled.length === 0) {
+                                                                const hiddenInput = document.createElement('input');
+                                                                hiddenInput.type = 'hidden';
+                                                                hiddenInput.name = 'enabled_cancellation_policies_force';
+                                                                hiddenInput.value = 'empty';
+                                                                form.appendChild(hiddenInput);
+                                                            }
+                                                        });
+                                                    }
                                                 });
                                             </script>
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Hotel;
+use App\Models\HotelSetting;
 use App\Models\Owner;
 use App\Models\Room;
 use Illuminate\Http\Request;
@@ -29,7 +30,12 @@ class ManageHotel extends Controller
 
     public function create()
     {
-        return view('auth.vendor.hotel.create');
+        // Get vendor's most recent hotel to inherit enabled policies (if any)
+        $latestHotel = Hotel::where('vendor_id', auth()->user()->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+        
+        return view('auth.vendor.hotel.create', compact('latestHotel'));
     }
 
     public function store(Request $request)
@@ -635,6 +641,8 @@ class ManageHotel extends Controller
             'cancellation_policies'     => 'nullable|array',
             'cancellation_policy_texts' => 'nullable|array',
             'cancellation_policy_texts.*' => 'nullable|string',
+            'custom_cancellation_policies' => 'nullable|array',
+            'enabled_cancellation_policies' => 'nullable|array',
             'facilities'                => 'nullable|array',
             'custom_facilities'         => 'nullable|array',
             'custom_facilities_icon.*'  => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -661,12 +669,60 @@ class ManageHotel extends Controller
             ->filter(fn($v) => !is_null($v) && $v !== '' && $v !== [])
             ->toArray();
 
+        // Handle cancellation policies - SAVE GLOBALLY (not per-hotel)
+        // Get or create global hotel settings
+        $hotelSetting = HotelSetting::first();
+        if (!$hotelSetting) {
+            $hotelSetting = new \App\Models\HotelSetting();
+            $hotelSetting->hotel_name = 'Default';
+            $hotelSetting->hotel_address = '';
+            $hotelSetting->email = '';
+            $hotelSetting->phone = '';
+            $hotelSetting->copyright = '';
+            $hotelSetting->save();
+        }
+
         // Keep policy texts even if some values are empty (we want partial edits)
         if ($request->has('cancellation_policy_texts')) {
-            $data['cancellation_policy_texts'] = array_filter(
+            $policyTexts = array_filter(
                 (array)$request->input('cancellation_policy_texts', []),
                 fn($v) => $v !== null
             );
+            $hotelSetting->cancellation_policy_texts = $policyTexts;
+        }
+
+        // Handle custom cancellation policies - SAVE GLOBALLY
+        if ($request->has('custom_cancellation_policies')) {
+            $customPolicies = [];
+            foreach ($request->input('custom_cancellation_policies', []) as $index => $policy) {
+                if (!empty($policy['text'])) {
+                    $customPolicies[] = [
+                        'key' => $policy['key'] ?? 'custom_' . $index,
+                        'text' => $policy['text']
+                    ];
+                }
+            }
+            $hotelSetting->custom_cancellation_policies = !empty($customPolicies) ? $customPolicies : null;
+        }
+
+        // Handle enabled cancellation policies - SAVE GLOBALLY
+        // Process if cancellation policies section was edited (check for the hidden field or any policy-related field)
+        if ($request->has('enabled_cancellation_policies_sent') || $request->has('enabled_cancellation_policies_force') || $request->has('cancellation_policy_texts') || $request->has('cancellation_policies') || $request->has('enabled_cancellation_policies')) {
+            $enabledPolicies = array_filter(
+                (array)$request->input('enabled_cancellation_policies', []),
+                fn($v) => $v !== null && $v !== ''
+            );
+            // If force field is present and no policies checked, explicitly set to empty array
+            if ($request->has('enabled_cancellation_policies_force') && empty($enabledPolicies)) {
+                $hotelSetting->enabled_cancellation_policies = [];
+            } else {
+                $hotelSetting->enabled_cancellation_policies = $enabledPolicies; // Can be empty array if none checked
+            }
+        }
+
+        // Save global cancellation policies
+        if ($request->has('cancellation_policy_texts') || $request->has('custom_cancellation_policies') || $request->has('enabled_cancellation_policies_sent') || $request->has('enabled_cancellation_policies_force') || $request->has('enabled_cancellation_policies')) {
+            $hotelSetting->save();
         }
 
         // 3) Merge check-in rules

@@ -32,6 +32,10 @@ Route::prefix('super-admin')->group(function () {
 
         Route::get('account-settings', [DashboardController::class, 'accountSettings'])->name('super-admin.accountSettings');
         Route::post('super-admin/update-settings', [DashboardController::class, 'updateSettings'])->name('super-admin.update.settings');
+        
+        // Cancellation Policy Settings
+        Route::get('cancellation-policy-settings', [DashboardController::class, 'cancellationPolicySettings'])->name('super-admin.cancellationPolicySettings');
+        Route::post('cancellation-policy-settings/update', [DashboardController::class, 'updateCancellationPolicySettings'])->name('super-admin.updateCancellationPolicySettings');
 
         Route::get('account-email', [DashboardController::class, 'accountEmail'])->name('super-admin.accountEmail');
         Route::get('account-security', [DashboardController::class, 'accountSecurity'])->name('super-admin.accountSecurity');

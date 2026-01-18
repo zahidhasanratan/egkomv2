@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Hotel;
+use App\Models\HotelSetting;
 use App\Models\Room;
 use App\Models\RoomPhoto;
 use Illuminate\Contracts\Encryption\DecryptException;
@@ -125,7 +126,8 @@ class ManageRoomController extends Controller
     public function create($id)
     {
         $hotelId = Crypt::decrypt($id);
-        return view('auth.vendor.room.create', ['hotel' => $hotelId]);
+        $hotel = Hotel::findOrFail($hotelId);
+        return view('auth.vendor.room.create', ['hotel' => $hotelId, 'hotelObj' => $hotel]);
     }
 
     public function createSuper($id)
@@ -165,6 +167,10 @@ class ManageRoomController extends Controller
             'amenities.*' => 'nullable|string|max:255',
             'cancellation_policy' => 'nullable|array',
             'cancellation_policy.*' => 'nullable|string',
+            'cancellation_policy_texts' => 'nullable|array',
+            'cancellation_policy_texts.*' => 'nullable|string',
+            'custom_cancellation_policies' => 'nullable|array',
+            'enabled_cancellation_policies' => 'nullable|array',
             'is_active' => 'nullable|in:0,1,true,false,on,off',
             'availability_dates' => 'nullable|string',
         ], [
@@ -430,6 +436,10 @@ class ManageRoomController extends Controller
             'amenities.*' => 'nullable|string|max:255',
             'cancellation_policy' => 'nullable|array',
             'cancellation_policy.*' => 'nullable|string',
+            'cancellation_policy_texts' => 'nullable|array',
+            'cancellation_policy_texts.*' => 'nullable|string',
+            'custom_cancellation_policies' => 'nullable|array',
+            'enabled_cancellation_policies' => 'nullable|array',
             'is_active' => 'nullable|in:0,1,true,false,on,off',
             'availability_dates' => 'nullable|string',
         ], [
@@ -764,6 +774,10 @@ class ManageRoomController extends Controller
             'amenities.*' => 'nullable|string|max:255',
             'cancellation_policy' => 'nullable|array',
             'cancellation_policy.*' => 'nullable|string',
+            'cancellation_policy_texts' => 'nullable|array',
+            'cancellation_policy_texts.*' => 'nullable|string',
+            'custom_cancellation_policies' => 'nullable|array',
+            'enabled_cancellation_policies' => 'nullable|array',
             'is_active' => 'nullable|in:0,1,true,false,on,off',
             'availability_dates' => 'nullable|string',
         ], [
@@ -1080,6 +1094,10 @@ class ManageRoomController extends Controller
             'amenities.*' => 'nullable|string|max:255',
             'cancellation_policy' => 'nullable|array',
             'cancellation_policy.*' => 'nullable|string',
+            'cancellation_policy_texts' => 'nullable|array',
+            'cancellation_policy_texts.*' => 'nullable|string',
+            'custom_cancellation_policies' => 'nullable|array',
+            'enabled_cancellation_policies' => 'nullable|array',
             'is_active' => 'nullable|in:0,1,true,false,on,off',
             'availability_dates' => 'nullable|string',
         ], [
@@ -1256,6 +1274,53 @@ class ManageRoomController extends Controller
                 'status' => $status,
                 'availability_dates' => $this->processAvailabilityDates($request->availability_dates),
             ], $additionalInfoColumns);
+
+            // Handle cancellation policies - SAVE GLOBALLY (not per-room)
+            // Get or create global hotel settings
+            $hotelSetting = HotelSetting::first();
+            if (!$hotelSetting) {
+                $hotelSetting = new \App\Models\HotelSetting();
+                $hotelSetting->hotel_name = 'Default';
+                $hotelSetting->hotel_address = '';
+                $hotelSetting->email = '';
+                $hotelSetting->phone = '';
+                $hotelSetting->copyright = '';
+                $hotelSetting->save();
+            }
+
+            // Handle custom cancellation policies - SAVE GLOBALLY
+            if ($request->has('custom_cancellation_policies')) {
+                $customPolicies = [];
+                foreach ($request->input('custom_cancellation_policies', []) as $index => $policy) {
+                    if (!empty($policy['text'])) {
+                        $customPolicies[] = [
+                            'key' => $policy['key'] ?? 'custom_' . $index,
+                            'text' => $policy['text']
+                        ];
+                    }
+                }
+                $hotelSetting->custom_cancellation_policies = !empty($customPolicies) ? $customPolicies : null;
+            }
+
+            // Handle enabled cancellation policies - SAVE GLOBALLY
+            // Process if cancellation policies section was edited (check for the hidden field or any policy-related field)
+            if ($request->has('enabled_cancellation_policies_sent') || $request->has('enabled_cancellation_policies_force') || $request->has('cancellation_policy_texts') || $request->has('cancellation_policy') || $request->has('enabled_cancellation_policies')) {
+                $enabledPolicies = array_filter(
+                    (array)$request->input('enabled_cancellation_policies', []),
+                    fn($v) => $v !== null && $v !== ''
+                );
+                // If force field is present and no policies checked, explicitly set to empty array
+                if ($request->has('enabled_cancellation_policies_force') && empty($enabledPolicies)) {
+                    $hotelSetting->enabled_cancellation_policies = [];
+                } else {
+                    $hotelSetting->enabled_cancellation_policies = $enabledPolicies; // Can be empty array if none checked
+                }
+            }
+
+            // Save global cancellation policies
+            if ($request->has('custom_cancellation_policies') || $request->has('enabled_cancellation_policies_sent') || $request->has('enabled_cancellation_policies_force') || $request->has('enabled_cancellation_policies')) {
+                $hotelSetting->save();
+            }
 
             // Update the room
             $room->update($updateData);

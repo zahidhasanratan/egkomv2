@@ -1375,17 +1375,60 @@
                                             </div>
 
                                             @php
+                                                // Get global ROOM cancellation policies from hotel_settings
+                                                $globalSettings = \App\Models\HotelSetting::first();
+                                                
                                                 $defaultRoomCancellationPolicyTexts = [
                                                     'flexible' => 'Flexible (Guests get a full refund if they cancel up to a day before check-in at least 24 hours.)',
                                                     'non_refundable' => 'Non-refundable (Regardless of the cancellation window, customers will not get any refund under this.)',
                                                     'partially_refundable' => 'Partially refundable (Cancellations that take place in less than 24 hours and Rooms that are labeled with this badge, after deducting a 30% cancellation fee, rest of the amount will be refunded.)',
                                                     'long_term' => 'Long-term/Monthly staying policy (Stays more than 30 days will fall under this scope and a specific contract paper shall be signed. T&C paper will be found in the system.)',
                                                 ];
-                                                $roomCancellationPolicyTexts = old(
-                                                    'cancellation_policy_texts',
-                                                    is_array($room->cancellation_policy_texts ?? null) ? $room->cancellation_policy_texts : []
-                                                );
-                                                $roomCancellationPolicyTexts = array_merge($defaultRoomCancellationPolicyTexts, $roomCancellationPolicyTexts ?: []);
+                                                
+                                                // Get ROOM policy texts from global settings (merged with defaults)
+                                                $roomCancellationPolicyTexts = $defaultRoomCancellationPolicyTexts;
+                                                if ($globalSettings && is_array($globalSettings->room_cancellation_policy_texts ?? null)) {
+                                                    $roomCancellationPolicyTexts = array_merge($defaultRoomCancellationPolicyTexts, $globalSettings->room_cancellation_policy_texts);
+                                                }
+                                                
+                                                // Get ROOM custom policies from global settings
+                                                $customPolicies = [];
+                                                if ($globalSettings && is_array($globalSettings->room_custom_cancellation_policies ?? null)) {
+                                                    $customPolicies = $globalSettings->room_custom_cancellation_policies;
+                                                }
+                                                
+                                                // Get ROOM enabled policies from global settings
+                                                $enabledPolicies = null;
+                                                if ($globalSettings) {
+                                                    $enabledPolicies = $globalSettings->room_enabled_cancellation_policies;
+                                                }
+                                                
+                                                // If null, default to all policies (backward compatibility)
+                                                // If empty array [], it means super admin explicitly disabled all
+                                                if ($enabledPolicies === null) {
+                                                    // Never been set, default to all
+                                                    $enabledPolicies = array_keys($defaultRoomCancellationPolicyTexts);
+                                                } elseif (!is_array($enabledPolicies)) {
+                                                    $enabledPolicies = [];
+                                                }
+                                                // If it's an empty array, that means all are disabled - don't default
+                                                
+                                                // Build available policies (default + custom) that are enabled
+                                                $availablePolicies = [];
+                                                foreach ($enabledPolicies as $policyKey) {
+                                                    if (isset($roomCancellationPolicyTexts[$policyKey])) {
+                                                        $availablePolicies[$policyKey] = $roomCancellationPolicyTexts[$policyKey];
+                                                    } elseif (strpos($policyKey, 'custom_') === 0) {
+                                                        // Find custom policy
+                                                        $customIndex = str_replace('custom_', '', $policyKey);
+                                                        foreach ($customPolicies as $customPolicy) {
+                                                            if (($customPolicy['key'] ?? '') === $policyKey) {
+                                                                $availablePolicies[$policyKey] = $customPolicy['text'] ?? '';
+                                                                break;
+                                                            }
+                                                        }
+                                                    }
+                                                }
                                             @endphp
 
                                             <!-- Cancellation Policy Section -->
@@ -1393,78 +1436,47 @@
                                                 <div class="col-md-12">
                                                     <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
                                                         <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Cancellation Policy</strong></h5>
+
+                                                @php
+                                                    $cancellationPolicies = old(
+                                                        'cancellation_policy',
+                                                        is_string($room->cancellation_policy)
+                                                            ? (json_decode($room->cancellation_policy, true) ?? [])
+                                                            : ($room->cancellation_policy ?? [])
+                                                    );
+                                                    if (!is_array($cancellationPolicies)) {
+                                                        $cancellationPolicies = [];
+                                                    }
+                                                @endphp
+
+                                                        @foreach($availablePolicies as $policyKey => $policyText)
+                                                        <div class="col-lg-12">
+                                                            <div class="form-group">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input cancellation-checkbox" type="checkbox"
+                                                                           name="cancellation_policy[]" id="{{ ucfirst(str_replace(['_', 'custom_'], '', $policyKey)) }}Policy" value="{{ $policyKey }}"
+                                                                        {{ in_array($policyKey, $cancellationPolicies) ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="{{ ucfirst(str_replace(['_', 'custom_'], '', $policyKey)) }}Policy">
+                                                                        {{ $policyText }}
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        @endforeach
                                                         
-                                                        @php
-                                                            $cancellationPolicies = old(
-                                                                'cancellation_policy',
-                                                                is_string($room->cancellation_policy)
-                                                                    ? (json_decode($room->cancellation_policy, true) ?? [])
-                                                                    : ($room->cancellation_policy ?? [])
-                                                            );
-                                                            if (!is_array($cancellationPolicies)) {
-                                                                $cancellationPolicies = [];
-                                                            }
-                                                        @endphp
-
+                                                        @if(empty($availablePolicies))
                                                         <div class="col-lg-12">
-                                                            <div class="form-group">
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input cancellation-checkbox" type="checkbox"
-                                                                           name="cancellation_policy[]" id="flexiblePolicy" value="flexible"
-                                                                        {{ in_array('flexible', $cancellationPolicies) ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="flexiblePolicy">
-                                                                        {{ $roomCancellationPolicyTexts['flexible'] }}
-                                                                    </label>
-                                                                </div>
-                                                            </div>
+                                                            <p class="text-muted">No cancellation policies are currently enabled by super admin.</p>
                                                         </div>
+                                                        @endif
 
-                                                        <div class="col-lg-12">
-                                                            <div class="form-group">
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input cancellation-checkbox" type="checkbox"
-                                                                           name="cancellation_policy[]" id="nonRefundablePolicy" value="non_refundable"
-                                                                        {{ in_array('non_refundable', $cancellationPolicies) ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="nonRefundablePolicy">
-                                                                        {{ $roomCancellationPolicyTexts['non_refundable'] }}
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                @error('cancellation_policy.*')
+                                                <span class="text-danger">{{ $message }}</span>
+                                                @enderror
 
-                                                        <div class="col-lg-12">
-                                                            <div class="form-group">
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input cancellation-checkbox" type="checkbox"
-                                                                           name="cancellation_policy[]" id="partiallyRefundablePolicy" value="partially_refundable"
-                                                                        {{ in_array('partially_refundable', $cancellationPolicies) ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="partiallyRefundablePolicy">
-                                                                        {{ $roomCancellationPolicyTexts['partially_refundable'] }}
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-lg-12">
-                                                            <div class="form-group">
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input cancellation-checkbox" type="checkbox"
-                                                                           name="cancellation_policy[]" id="longTermPolicy" value="long_term"
-                                                                        {{ in_array('long_term', $cancellationPolicies) ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="longTermPolicy">
-                                                                        {{ $roomCancellationPolicyTexts['long_term'] }}
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        @error('cancellation_policy.*')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                        @enderror
-
-                                                        {{-- Warning (scoped to this block) --}}
-                                                        <div class="col-lg-12">
-                                                            <small class="text-danger policy-warning" style="display:none;">⚠️ Maximum 2 can be Selected</small>
+                                                {{-- Warning (scoped to this block) --}}
+                                                <div class="col-lg-12">
+                                                    <small class="text-danger policy-warning" style="display:none;">⚠️ Maximum 2 can be Selected</small>
                                                         </div>
                                                     </div>
                                                 </div>
