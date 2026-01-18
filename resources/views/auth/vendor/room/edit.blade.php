@@ -75,12 +75,10 @@
                                         <!-- Room Description -->
                                         <div class="tab-pane fade {{ old('active_tab', 'tabItem3') === 'tabItem3' ? 'show active' : '' }}" id="tabItem3">
 
-                                            <!-- Room Information Section -->
+                                            <!-- Room Name, Room Number, Room Floor Number (Outside Room Information Section) -->
                                             <div class="row mt-4">
                                                 <div class="col-md-12">
                                                     <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
-                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Room Information</strong></h5>
-                                                        
                                                         <!-- Room Name (Single Field) -->
                                                         <div class="form-group mb-4">
                                                             <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Room Name</label>
@@ -111,6 +109,16 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Room Information Section -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Room Information</strong></h5>
+                                                        
                                                         <div class="row">
                                                             <div class="col-md-6">
                                                                 <div class="form-group mb-4">
@@ -1928,43 +1936,6 @@
                                             <div class="row gy-4">
                                                 <div class="col-md-12 col-lg-12 col-xxl-12">
                                                     <div class="row gy-4">
-                                                        <!-- Select Available Dates Section -->
-                                                        <div class="row mt-4">
-                                                            <div class="col-md-12">
-                                                                <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
-                                                                    <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Select Available Dates</strong></h5>
-                                                                    
-                                                                    <div class="form-group">
-                                                                        @php
-                                                                            $existingDates = $room->availability_dates ?? [];
-                                                                            $existingDatesJson = json_encode($existingDates);
-                                                                        @endphp
-                                                                        <input type="hidden" id="availability_dates_hidden" name="availability_dates" value="{{ old('availability_dates', $existingDatesJson) }}">
-                                                                        <input type="text" class="form-control" id="availability_dates_display" placeholder="No dates selected yet. Select dates from the calendar below." readonly style="margin-bottom: 15px; background-color: #f8f9fa; border: 1px solid #e0e0e0; padding: 12px; font-size: 14px; min-height: 45px;">
-                                                                        <small class="form-text text-muted" style="display: block; margin-bottom: 15px; color: #6c757d;">
-                                                                            <strong>How to select dates:</strong><br>
-                                                                            • <strong>Drag</strong> from one date to another to select a range<br>
-                                                                            • <strong>Click</strong> individual dates to toggle selection (click again to deselect)<br>
-                                                                            • The room will be available only on selected dates
-                                                                        </small>
-                                                                        <div id="availability_calendar_wrapper" style="max-width: 100%; margin: 20px auto; display: block; padding: 20px; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"></div>
-                                                                        <div style="margin-top: 15px; display: flex; gap: 10px; align-items: center;">
-                                                                            <button type="button" id="clear_all_dates" class="btn btn-sm btn-secondary" style="background: #6c757d; color: white; border: none; padding: 8px 20px;">
-                                                                                <i class="fas fa-times"></i> Clear All
-                                                                            </button>
-                                                                            <button type="button" id="apply_dates" class="btn btn-sm btn-primary" style="background: #90278e; color: white; border: none; padding: 8px 20px;">
-                                                                                <i class="fas fa-check"></i> Apply Selection
-                                                                            </button>
-                                                                            <span id="selected_dates_count" style="margin-left: 10px; color: #90278e; font-weight: bold;"></span>
-                                                                        </div>
-                                                                        @error('availability_dates')
-                                                                        <span class="text-danger">{{ $message }}</span>
-                                                                        @enderror
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        
                                                         <!-- Price Section -->
                                                         <div class="row mt-4">
                                                             <div class="col-md-12">
@@ -2023,6 +1994,43 @@
                                                                             </div>
                                                                         </div>
 
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <!-- Select Available Dates Section -->
+                                                        <div class="row mt-4">
+                                                            <div class="col-md-12">
+                                                                <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                                    <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Select Available Dates</strong></h5>
+                                                                    
+                                                                    <div class="form-group">
+                                                                        @php
+                                                                            $existingDates = $room->availability_dates ?? [];
+                                                                            $existingDatesJson = json_encode($existingDates);
+                                                                        @endphp
+                                                                        <input type="hidden" id="availability_dates_hidden" name="availability_dates" value="{{ old('availability_dates', $existingDatesJson) }}">
+                                                                        <input type="text" class="form-control" id="availability_dates_display" placeholder="No dates selected yet. Select dates from the calendar below." readonly style="margin-bottom: 15px; background-color: #f8f9fa; border: 1px solid #e0e0e0; padding: 12px; font-size: 14px; min-height: 45px;">
+                                                                        <small class="form-text text-muted" style="display: block; margin-bottom: 15px; color: #6c757d;">
+                                                                            <strong>How to select dates:</strong><br>
+                                                                            • <strong>Drag</strong> from one date to another to select a range<br>
+                                                                            • <strong>Click</strong> individual dates to toggle selection (click again to deselect)<br>
+                                                                            • The room will be available only on selected dates
+                                                                        </small>
+                                                                        <div id="availability_calendar_wrapper" style="max-width: 100%; margin: 20px auto; display: block; padding: 20px; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"></div>
+                                                                        <div style="margin-top: 15px; display: flex; gap: 10px; align-items: center;">
+                                                                            <button type="button" id="clear_all_dates" class="btn btn-sm btn-secondary" style="background: #6c757d; color: white; border: none; padding: 8px 20px;">
+                                                                                <i class="fas fa-times"></i> Clear All
+                                                                            </button>
+                                                                            <button type="button" id="apply_dates" class="btn btn-sm btn-primary" style="background: #90278e; color: white; border: none; padding: 8px 20px;">
+                                                                                <i class="fas fa-check"></i> Apply Selection
+                                                                            </button>
+                                                                            <span id="selected_dates_count" style="margin-left: 10px; color: #90278e; font-weight: bold;"></span>
+                                                                        </div>
+                                                                        @error('availability_dates')
+                                                                        <span class="text-danger">{{ $message }}</span>
+                                                                        @enderror
                                                                     </div>
                                                                 </div>
                                                             </div>
