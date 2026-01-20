@@ -62,7 +62,20 @@ class HomeController extends Controller
             ->where('footer1',1)
             ->get();
 
-        return view('frontend/home.index',compact('main','footer'));
+        // Fetch popular destinations with hotel counts
+        $popularDestinations = \App\Models\PopularDestination::where('is_active', 1)
+            ->orderBy('order', 'ASC')
+            ->orderBy('name', 'ASC')
+            ->get()
+            ->map(function ($destination) {
+                $destination->hotels_count = \App\Models\Hotel::where('popular_destination_id', $destination->id)
+                    ->where('approve', 1)
+                    ->where('status', 'submitted')
+                    ->count();
+                return $destination;
+            });
+
+        return view('frontend/home.index',compact('main','footer', 'popularDestinations'));
     }
 
     /**

@@ -19,6 +19,8 @@ Route::get('/login-selection', function() {
 })->name('login.selection');
 Route::get('/hotel-details/{id}', [App\Http\Controllers\HomeController::class, 'hotelDetails'])->name('hotel.details');
 Route::get('/search', [App\Http\Controllers\Frontend\SearchController::class, 'search'])->name('search');
+Route::get('/destinations', [App\Http\Controllers\Frontend\DestinationController::class, 'index'])->name('destinations.index');
+Route::get('/destinations/{slug}', [App\Http\Controllers\Frontend\DestinationController::class, 'show'])->name('destination.show');
 Route::get('/booking/checkout', [App\Http\Controllers\Frontend\BookingController::class, 'checkout'])->name('booking.checkout');
 Route::post('/booking/rooms-data', [App\Http\Controllers\Frontend\BookingController::class, 'getRoomsData'])->name('booking.rooms-data');
 Route::post('/booking/validate-availability', [App\Http\Controllers\Frontend\BookingController::class, 'validateRoomAvailability'])->name('booking.validate-availability');

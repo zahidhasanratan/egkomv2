@@ -681,92 +681,73 @@
                 <div class="col-md-12">
                     <div class="page-heading-2" style=" margin-bottom: 40px; text-align: center;">
                         <h2>Most Popular Destinations</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+                        <p>Explore our handpicked collection of the most popular destinations with amazing hotels and accommodations waiting for you.</p>
                     </div>
                     <!-- end page-heading -->
+                    @if($popularDestinations->count() > 0)
                     <article>
                         <section class="sectionWrapper">
                             <section class="swiper">
                                 <div class="parallax-bg" data-swiper-parallax="600" data-swiper-parallax-scale="0.85"></div>
                                 <div class="swiper-wrapper">
+                                    @foreach($popularDestinations as $destination)
                                     <figure class="swiper-slide">
                                         <div class="explore-card-main">
-                                            <a href="hotel-category-search.html">
+                                            <a href="{{ route('destination.show', $destination->slug) }}">
                                                 <div class="explore-card mui-style-lxguk4">
-                                                    <img class="st-image-card__img" src="{{ asset('frontend')}}/images/destination-1.jpg">
+                                                    @if($destination->media_type == 'video' && $destination->feature_video)
+                                                        @php
+                                                            // Extract YouTube video ID from URL
+                                                            $videoUrl = $destination->feature_video;
+                                                            $videoId = '';
+                                                            if (preg_match('/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/', $videoUrl, $matches)) {
+                                                                $videoId = $matches[1];
+                                                            }
+                                                        @endphp
+                                                        @if($videoId)
+                                                            <div class="st-image-card__img" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+                                                                <iframe src="https://www.youtube.com/embed/{{ $videoId }}?autoplay=1&mute=1&loop=1&playlist={{ $videoId }}" 
+                                                                        frameborder="0" 
+                                                                        allow="autoplay; encrypted-media" 
+                                                                        allowfullscreen
+                                                                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+                                                            </div>
+                                                        @else
+                                                            <video class="st-image-card__img" autoplay muted loop>
+                                                                <source src="{{ $destination->feature_video }}" type="video/mp4">
+                                                                Your browser does not support the video tag.
+                                                            </video>
+                                                        @endif
+                                                    @elseif($destination->feature_photo)
+                                                        <img class="st-image-card__img" src="{{ asset($destination->feature_photo) }}" alt="{{ $destination->name }}">
+                                                    @else
+                                                        <img class="st-image-card__img" src="{{ asset('frontend')}}/images/destination-1.jpg" alt="{{ $destination->name }}">
+                                                    @endif
                                                     <div class="MuiBox-root mui-style-1tyhrx3"></div>
                                                     <div class="st-image-card__card_details MuiBox-root mui-style-a34mib">
-                                                        <p class="MuiTypography-root MuiTypography-body1 mui-style-sq479" fw="semiBold">Dubai</p>
-                                                        <p class="MuiTypography-root MuiTypography-body1 mui-style-1mmzlec">97 Hotels Available</p>
+                                                        <p class="MuiTypography-root MuiTypography-body1 mui-style-sq479" fw="semiBold">{{ $destination->name }}</p>
+                                                        <p class="MuiTypography-root MuiTypography-body1 mui-style-1mmzlec">{{ $destination->hotels_count }} {{ $destination->hotels_count == 1 ? 'Hotel' : 'Hotels' }} Available</p>
                                                     </div>
                                                 </div>
                                             </a>
                                         </div>
                                     </figure>
-                                    <!-- Video Card -->
-                                    <figure class="swiper-slide">
-                                        <div class="explore-card-main">
-                                            <a href="hotel-category-search.html">
-                                                <div class="explore-card mui-style-lxguk4">
-                                                    <!-- Embed video here, with the video taking the same space as the image -->
-                                                    <video class="st-image-card__img" autoplay muted loop>
-                                                        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"> Your browser does not support the video tag.
-                                                    </video>
-                                                    <div class="MuiBox-root mui-style-1tyhrx3"></div>
-                                                    <div class="st-image-card__card_details MuiBox-root mui-style-a34mib">
-                                                        <p class="MuiTypography-root MuiTypography-body1 mui-style-sq479" fw="semiBold">Australia</p>
-                                                        <p class="MuiTypography-root MuiTypography-body1 mui-style-1mmzlec">97 Hotels Available</p>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </figure>
-                                    <figure class="swiper-slide">
-                                        <div class="explore-card-main">
-                                            <a href="hotel-category-search.html">
-                                                <div class="explore-card mui-style-lxguk4">
-                                                    <img class="st-image-card__img" src="{{ asset('frontend')}}/images/destination-3.jpg">
-                                                    <div class="MuiBox-root mui-style-1tyhrx3"></div>
-                                                    <div class="st-image-card__card_details MuiBox-root mui-style-a34mib">
-                                                        <p class="MuiTypography-root MuiTypography-body1 mui-style-sq479" fw="semiBold">Nepal</p>
-                                                        <p class="MuiTypography-root MuiTypography-body1 mui-style-1mmzlec">97 Hotels Available</p>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </figure>
-                                    <figure class="swiper-slide">
-                                        <div class="explore-card-main">
-                                            <a href="hotel-category-search.html">
-                                                <div class="explore-card mui-style-lxguk4">
-                                                    <img class="st-image-card__img" src="{{ asset('frontend')}}/images/destination-4.jpg">
-                                                    <div class="MuiBox-root mui-style-1tyhrx3"></div>
-                                                    <div class="st-image-card__card_details MuiBox-root mui-style-a34mib">
-                                                        <p class="MuiTypography-root MuiTypography-body1 mui-style-sq479" fw="semiBold">India</p>
-                                                        <p class="MuiTypography-root MuiTypography-body1 mui-style-1mmzlec">97 Hotels Available</p>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </figure>
-                                    <figure class="swiper-slide">
-                                        <div class="explore-card-main">
-                                            <a href="hotel-category-search.html">
-                                                <div class="explore-card mui-style-lxguk4">
-                                                    <img class="st-image-card__img" src="{{ asset('frontend')}}/images/destination-3.jpg">
-                                                    <div class="MuiBox-root mui-style-1tyhrx3"></div>
-                                                    <div class="st-image-card__card_details MuiBox-root mui-style-a34mib">
-                                                        <p class="MuiTypography-root MuiTypography-body1 mui-style-sq479" fw="semiBold">Canada</p>
-                                                        <p class="MuiTypography-root MuiTypography-body1 mui-style-1mmzlec">97 Hotels Available</p>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </figure>
+                                    @endforeach
                                 </div>
                             </section>
                         </section>
                     </article>
+                    
+                    <div class="text-center mt-4">
+                        <a href="{{ route('destinations.index') }}" class="btn btn-primary" style="padding: 12px 30px; font-size: 16px; border-radius: 5px;">
+                            View All Destinations
+                        </a>
+                    </div>
+                    @else
+                    <div class="text-center py-5">
+                        <p>No popular destinations available at the moment.</p>
+                    </div>
+                    @endif
                 </div>
                 <!-- end columns -->
             </div>
