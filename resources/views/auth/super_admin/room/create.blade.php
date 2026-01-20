@@ -111,6 +111,23 @@
                                                 </div>
                                             </div>
 
+                                            <!-- Room Description Section -->
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <div class="form-group mb-4">
+                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Room Description</label>
+                                                            <div class="form-control-wrap">
+                                                                <textarea class="form-control no-resize" name="description" id="default-textarea" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('description') }}</textarea>
+                                                                @error('description')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <!-- Room Information Section -->
                                             <div class="row mt-4">
                                                 <div class="col-md-12">
@@ -161,17 +178,6 @@
                                                         <!-- Dynamic Room Details Container -->
                                                         <div id="roomDetailsContainer" style="margin-top: 20px;">
                                                             <!-- Room detail sections will be dynamically generated here -->
-                                                        </div>
-                                                        
-                                                        <!-- Room Description -->
-                                                        <div class="form-group mb-4" style="margin-top: 20px;">
-                                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Room Description</label>
-                                                            <div class="form-control-wrap">
-                                                                <textarea class="form-control no-resize" name="description" id="default-textarea" style="border: 1px solid #dee2e6; border-radius: 6px;">{{ old('description') }}</textarea>
-                                                                @error('description')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                                @enderror
-                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -44,11 +44,26 @@
                                                         <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Hotel / Property Information</strong></h5>
                                                         
                                                         <div class="row gy-4">
-                                                            <div class="col-md-6 col-lg-4 col-xxl-12">
+                                                            <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label for="division" class="form-label">Select Property
-                                                                        Category</label>
-                                                                    <select name="property_category" class="form-control" id="division">
+                                                                    <label for="popular_destination_id" class="form-label">Select Your Area <span class="text-danger">*</span></label>
+                                                                    <select name="popular_destination_id" class="form-control" id="popular_destination_id" required style="border: 1px solid #dee2e6; border-radius: 6px; padding: 8px 12px;">
+                                                                        <option value="">Select Area</option>
+                                                                        @foreach($popularDestinations as $destination)
+                                                                            <option value="{{ $destination->id }}" {{ old('popular_destination_id') == $destination->id ? 'selected' : '' }}>
+                                                                                {{ $destination->name }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                    @error('popular_destination_id')
+                                                                        <span class="text-danger">{{ $message }}</span>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="division" class="form-label">Select Property Category</label>
+                                                                    <select name="property_category" class="form-control" id="division" style="border: 1px solid #dee2e6; border-radius: 6px; padding: 8px 12px;">
                                                                         <option value="">Select Property</option>
                                                                         <option value="Hotels">Hotels</option>
                                                                         <option value="Transit">Transit Hotels</option>
@@ -60,10 +75,25 @@
                                                                     </select>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-6 col-lg-4 col-xxl-12">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="hotel_name">Hotel / Property Name</label>
+                                                                    <input class="form-control" 
+                                                                           name="description" 
+                                                                           id="hotel_name"
+                                                                           value="{{ old('description', '') }}"
+                                                                           placeholder="Enter Hotel / Property Name"
+                                                                           style="border: 1px solid #dee2e6; border-radius: 6px; padding: 8px 12px;">
+                                                                    @error('description')
+                                                                        <span class="text-danger">{{ $message }}</span>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label for="property_type" id="districtContainer" class="form-label">Property Type</label>
-                                                                    <select name="property_type" class="form-control">
+                                                                    <select name="property_type" class="form-control" style="border: 1px solid #dee2e6; border-radius: 6px; padding: 8px 12px;">
+                                                                        <option value="">Select Property Type</option>
                                                                         <option>Hotels</option>
                                                                         <option>Transit</option>
                                                                         <option>Resorts</option>
@@ -88,19 +118,6 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-md-4 col-lg-4 col-xxl-12">
-                                                                <div class="form-group">
-                                                                    <label class="form-label" for="default-textarea">Hotel /
-                                                                        Property Name</label>
-                                                                    <div class="form-control-wrap">
-                                                                        <input class="form-control no-resize"
-                                                                               name="description" value="{{ old('description', '') }}"
-                                                                               placeholder="Enter Hotel / Property Name"></input>
-                                                                        @error('description') <span
-                                                                            class="text-danger"></span> @enderror
-                                                                    </div>
-                                                                </div>
-                                                            </div>
                                                             <div class="col-md-12">
                                                                 <div class="form-group">
                                                                     <label class="form-label" for="default-textarea">Hotel/Property Description & Policy</label>

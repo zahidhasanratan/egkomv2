@@ -14,6 +14,7 @@ use App\Http\Controllers\Vendor\ManageRoomController;
 use App\Http\Controllers\Vendor\VendorController;
 use App\Http\Controllers\Vendor\OwnerController;
 use App\Http\Controllers\Vendor\BankingController;
+use App\Http\Controllers\Superadmin\PopularDestinationController;
 
 // Super Admin Login Routes
 Route::prefix('super-admin')->group(function () {
@@ -92,6 +93,17 @@ Route::prefix('super-admin')->group(function () {
 
         Route::get('/pagedetails/{slug}', [PageController::class, 'details'])->name('page.details');
         Route::get('/ajaxsearch', [MenuController::class, 'searchajax'])->name('menu.ajaxsearch');
+
+        // Popular Destinations
+        Route::resource('popular-destinations', PopularDestinationController::class)->names([
+            'index' => 'super-admin.popular-destinations.index',
+            'create' => 'super-admin.popular-destinations.create',
+            'store' => 'super-admin.popular-destinations.store',
+            'show' => 'super-admin.popular-destinations.show',
+            'edit' => 'super-admin.popular-destinations.edit',
+            'update' => 'super-admin.popular-destinations.update',
+            'destroy' => 'super-admin.popular-destinations.destroy',
+        ]);
 
         // Booking Management
         Route::get('/bookings', [\App\Http\Controllers\Admin\BookingManagementController::class, 'index'])->name('super-admin.bookings.index');

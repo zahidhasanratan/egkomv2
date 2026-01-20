@@ -50,6 +50,16 @@
                     </a>
                 </li>
 
+                <li class="nk-menu-item has-sub"><a href="#" class="nk-menu-link nk-menu-toggle"><span
+                            class="nk-menu-icon"><em class="icon ni ni-map-pin-fill"></em></span><span
+                            class="nk-menu-text">Most Popular Destination</span></a>
+                    <ul class="nk-menu-sub">
+                        <li class="nk-menu-item"><a href="{{ route('super-admin.popular-destinations.create') }}"
+                                                    class="nk-menu-link"><span class="nk-menu-text">Add Destination</span></a></li>
+                        <li class="nk-menu-item"><a href="{{ route('super-admin.popular-destinations.index') }}" class="nk-menu-link"><span class="nk-menu-text">All Destinations</span></a></li>
+                    </ul>
+                </li>
+
                 <li class="nk-menu-item">
                     <a href="{{ route('admin.dashboard') }}" class="nk-menu-link">
         <span class="nk-menu-icon">

@@ -722,6 +722,9 @@
                                                     <div class="room-info">
                                                         <div class="room-feature-head">
                                                             <h3 class="room-title">{{ $roomList->name }}</h3>
+                                                            @if($roomList->description)
+                                                                <p class="room-description" style="color: #666; font-size: 14px; line-height: 1.6; margin-top: 8px; margin-bottom: 12px;">{{ $roomList->description }}</p>
+                                                            @endif
                                                             <p class="room-numbers">Room # {{ $roomList->number }} <span
                                                                     class="floor-numbers">{{ $roomList->floor_number }}</span>
                                                             </p>
@@ -1181,6 +1184,12 @@
 
                         // Update modal header
                         document.querySelector('.room-title-modal').textContent = room.name;
+                        const roomDescriptionEl = document.querySelector('.room-description-modal');
+                        if (roomDescriptionEl) {
+                            const desc = (room.description || '').toString().trim();
+                            roomDescriptionEl.textContent = desc;
+                            roomDescriptionEl.style.display = desc ? 'block' : 'none';
+                        }
                         document.querySelector('.room-numbers').innerHTML = `Room # ${room.number}<br> <span style="padding-left:0px" class="floor-numbers">${room.floor_number || ''}</span>`;
 
                         // Update pricing
@@ -1672,9 +1681,6 @@
                         ` : '';
                         
                         detailsModal.innerHTML = `
-                            <div class="room-details-des">
-                                <p>${description}</p>
-                            </div>
                             <div data-v-58caae98="" class="facilities-flex">
                                 ${generateDetailsColumn('Room Information', roomInfoList, 'fa-bed fa-bed-custom')}
                                 ${generateDetailsColumn('Additional Room Information', additionalInfoList, 'fa-bed fa-bed-custom')}

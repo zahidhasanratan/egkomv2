@@ -41,88 +41,73 @@
                                                         <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Hotel / Property Information</strong></h5>
                                                         
                                                         <div class="row gy-4">
-                                                            <div class="col-md-6 col-lg-4 col-xxl-12">
-                                                                <div class="mb-3">
-                                                                    <label for="division" class="form-label">Select Property
-                                                                        Category</label>
-                                                                    <select class="form-select" id="division"
-                                                                            name="property_category">
-                                                                        <option value=""
-                                                                                disabled {{ !$hotel || !$hotel->property_category ? 'selected' : '' }}>
-                                                                            Choose Property Category
-                                                                        </option>
-                                                                        <option
-                                                                            value="Hotels" {{ old('property_category', $hotel->property_category ?? '') === 'Hotels' ? 'selected' : '' }}>
-                                                                            Hotels
-                                                                        </option>
-                                                                        <option
-                                                                            value="Transit" {{ old('property_category', $hotel->property_category ?? '') === 'Transit' ? 'selected' : '' }}>
-                                                                            Transit Hotels
-                                                                        </option>
-                                                                        <option
-                                                                            value="Resorts" {{ old('property_category', $hotel->property_category ?? '') === 'Resorts' ? 'selected' : '' }}>
-                                                                            Resorts, Eco, & Outdoor
-                                                                        </option>
-                                                                        <option
-                                                                            value="Lodges" {{ old('property_category', $hotel->property_category ?? '') === 'Lodges' ? 'selected' : '' }}>
-                                                                            Hostels & Lodges
-                                                                        </option>
-                                                                        <option
-                                                                            value="Apartments" {{ old('property_category', $hotel->property_category ?? '') === 'Apartments' ? 'selected' : '' }}>
-                                                                            Apartments & Homestays
-                                                                        </option>
-                                                                        <option
-                                                                            value="Guesthouses" {{ old('property_category', $hotel->property_category ?? '') === 'Guesthouses' ? 'selected' : '' }}>
-                                                                            Vacation Rentals & Guesthouses
-                                                                        </option>
-                                                                        <option
-                                                                            value="Crisis" {{ old('property_category', $hotel->property_category ?? '') === 'Crisis' ? 'selected' : '' }}>
-                                                                            Crisis & Shelter Accommodation
-                                                                        </option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-md-12 col-lg-12 col-xxl-12" id="districtContainer" style="display:none;">
+                                                            <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label for="district" class="form-label">Property Type</label>
-                                                                    <select name="property_type" id="district" class="form-control">
-                                                                        <option value="" disabled selected>Choose Property Type</option>
-                                                                        <option {{ $hotel->property_type == 'Hotels' ? 'selected' : '' }}>Hotels</option>
-                                                                        <option {{ $hotel->property_type == 'Transit' ? 'selected' : '' }}>Transit</option>
-                                                                        <option {{ $hotel->property_type == 'Resorts' ? 'selected' : '' }}>Resorts</option>
-                                                                        <option {{ $hotel->property_type == 'Lodges' ? 'selected' : '' }}>Lodges</option>
-                                                                        <option {{ $hotel->property_type == 'Guesthouses' ? 'selected' : '' }}>Guesthouses</option>
-                                                                        <option {{ $hotel->property_type == 'Crisis' ? 'selected' : '' }}>Crisis</option>
+                                                                    <label for="popular_destination_id" class="form-label">Select Your Area <span class="text-danger">*</span></label>
+                                                                    <select name="popular_destination_id" class="form-control" id="popular_destination_id" required style="border: 1px solid #dee2e6; border-radius: 6px; padding: 8px 12px;">
+                                                                        <option value="">Select Area</option>
+                                                                        @foreach($popularDestinations as $destination)
+                                                                            <option value="{{ $destination->id }}" {{ old('popular_destination_id', $hotel->popular_destination_id) == $destination->id ? 'selected' : '' }}>
+                                                                                {{ $destination->name }}
+                                                                            </option>
+                                                                        @endforeach
                                                                     </select>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-md-6 col-lg-4 col-xxl-12" id="placeCheckboxList"
-                                                                 style="display: none;">
-                                                                <div class="form-group">
-                                                                    <label class="form-label">Choose Room/Accommodation Type</label>
-                                                                    <ul id="placeOptions" class="list-unstyled"
-                                                                        style="max-height: 200px; overflow-y: auto;">
-                                                                        <!-- Dynamic Checkboxes Will Appear Here -->
-                                                                    </ul>
-                                                                    @error('room_types')
-                                                                    <span class="invalid-feedback"
-                                                                          role="alert">{{ $message }}</span>
+                                                                    @error('popular_destination_id')
+                                                                        <span class="text-danger">{{ $message }}</span>
                                                                     @enderror
                                                                 </div>
                                                             </div>
-
-                                                            <div class="col-md-12 col-lg-12 col-xxl-12">
+                                                            <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label class="form-label" for="default-textarea">Hotel / Property Name</label>
-                                                                    <div class="form-control-wrap">
-                                                                        <input class="form-control no-resize"
-                                                                               name="description" value="{{ \App\Models\Property::where('vendor_id', auth()->user()->id)->first()->property_name ?? '' }}
-                                                                            " readonly></input>
-                                                                        @error('description') <span
-                                                                            class="text-danger">{{ $message }}</span> @enderror
-                                                                    </div>
+                                                                    <label for="division" class="form-label">Select Property Category</label>
+                                                                    <select name="property_category" class="form-control" id="division" style="border: 1px solid #dee2e6; border-radius: 6px; padding: 8px 12px;">
+                                                                        <option value="" {{ !$hotel || !$hotel->property_category ? 'selected' : '' }}>Select Property</option>
+                                                                        <option value="Hotels" {{ old('property_category', $hotel->property_category ?? '') === 'Hotels' ? 'selected' : '' }}>Hotels</option>
+                                                                        <option value="Transit" {{ old('property_category', $hotel->property_category ?? '') === 'Transit' ? 'selected' : '' }}>Transit Hotels</option>
+                                                                        <option value="Resorts" {{ old('property_category', $hotel->property_category ?? '') === 'Resorts' ? 'selected' : '' }}>Resorts, Eco, & Outdoor</option>
+                                                                        <option value="Apartments" {{ old('property_category', $hotel->property_category ?? '') === 'Apartments' ? 'selected' : '' }}>Hostels & Lodges</option>
+                                                                        <option value="Guesthouses" {{ old('property_category', $hotel->property_category ?? '') === 'Guesthouses' ? 'selected' : '' }}>Apartments & Homestays</option>
+                                                                        <option value="Crisis" {{ old('property_category', $hotel->property_category ?? '') === 'Crisis' ? 'selected' : '' }}>Crisis & Shelter Accommodation</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="hotel_name">Hotel / Property Name</label>
+                                                                    <input class="form-control" 
+                                                                           name="description" 
+                                                                           id="hotel_name"
+                                                                           value="{{ old('description', \App\Models\Property::where('vendor_id', auth()->user()->id)->first()->property_name ?? $hotel->description ?? '') }}"
+                                                                           placeholder="Enter Hotel / Property Name"
+                                                                           style="border: 1px solid #dee2e6; border-radius: 6px; padding: 8px 12px;">
+                                                                    @error('description')
+                                                                        <span class="text-danger">{{ $message }}</span>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12" id="districtContainer" style="display:none;">
+                                                                <div class="form-group">
+                                                                    <label for="district" class="form-label">Property Type</label>
+                                                                    <select name="property_type" id="district" class="form-control" style="border: 1px solid #dee2e6; border-radius: 6px; padding: 8px 12px;">
+                                                                        <option value="" disabled selected>Choose Property Type</option>
+                                                                        <option {{ old('property_type', $hotel->property_type) == 'Hotels' ? 'selected' : '' }}>Hotels</option>
+                                                                        <option {{ old('property_type', $hotel->property_type) == 'Transit' ? 'selected' : '' }}>Transit</option>
+                                                                        <option {{ old('property_type', $hotel->property_type) == 'Resorts' ? 'selected' : '' }}>Resorts</option>
+                                                                        <option {{ old('property_type', $hotel->property_type) == 'Lodges' ? 'selected' : '' }}>Lodges</option>
+                                                                        <option {{ old('property_type', $hotel->property_type) == 'Guesthouses' ? 'selected' : '' }}>Guesthouses</option>
+                                                                        <option {{ old('property_type', $hotel->property_type) == 'Crisis' ? 'selected' : '' }}>Crisis</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12" id="placeCheckboxList" style="display: none;">
+                                                                <div class="form-group">
+                                                                    <label class="form-label">Choose Room/Accommodation Type</label>
+                                                                    <ul id="placeOptions" class="list-unstyled" style="max-height: 200px; overflow-y: auto;">
+                                                                        <!-- Dynamic Checkboxes Will Appear Here -->
+                                                                    </ul>
+                                                                    @error('room_types')
+                                                                    <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                                                                    @enderror
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-12 col-lg-12 col-xxl-12">

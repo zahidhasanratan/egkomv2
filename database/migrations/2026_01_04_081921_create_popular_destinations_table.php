@@ -15,6 +15,9 @@ class CreatePopularDestinationsTable extends Migration
     {
         Schema::create('popular_destinations', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('image')->nullable();
+            $table->string('video_url')->nullable(); // YouTube link
             $table->timestamps();
         });
     }

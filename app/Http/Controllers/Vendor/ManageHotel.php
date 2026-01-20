@@ -35,13 +35,16 @@ class ManageHotel extends Controller
             ->orderBy('created_at', 'desc')
             ->first();
         
-        return view('auth.vendor.hotel.create', compact('latestHotel'));
+        $popularDestinations = \App\Models\PopularDestination::where('is_active', 1)->orderBy('name')->get();
+        
+        return view('auth.vendor.hotel.create', compact('latestHotel', 'popularDestinations'));
     }
 
     public function store(Request $request)
     {
         // (Optional) light validation. Tweak as needed.
         $request->validate([
+            'popular_destination_id' => 'required|exists:popular_destinations,id',
             'property_category' => 'required|string|in:Hotels,Transit,Resorts,Lodges,Apartments,Guesthouses,Crisis',
             'property_type'     => 'nullable|string|max:255',
 
@@ -231,7 +234,8 @@ class ManageHotel extends Controller
         }
 
         $hotelFacilities = json_decode($hotel->hotel_facilities, true);
-        return view('auth.vendor.hotel.edit', compact('hotel','hotelFacilities'));
+        $popularDestinations = \App\Models\PopularDestination::where('is_active', 1)->orderBy('name')->get();
+        return view('auth.vendor.hotel.edit', compact('hotel','hotelFacilities', 'popularDestinations'));
     }
 
 
@@ -241,7 +245,8 @@ class ManageHotel extends Controller
             return redirect()->route('vendor-admin.hotel.index')->with('error', 'Unauthorized access.');
         }
         $hotelFacilities = json_decode($hotel->hotel_facilities, true);
-        return view('auth.vendor.hotel.part.partOne1', compact('hotel','hotelFacilities'));
+        $popularDestinations = \App\Models\PopularDestination::where('is_active', 1)->orderBy('name')->get();
+        return view('auth.vendor.hotel.part.partOne1', compact('hotel','hotelFacilities', 'popularDestinations'));
     }
 
     public function partOne2(Hotel $hotel)
@@ -367,13 +372,15 @@ class ManageHotel extends Controller
     public function editSuper(Hotel $hotel)
     {
         $hotelFacilities = json_decode($hotel->hotel_facilities, true);
-        return view('auth.super_admin.hotel.edit', compact('hotel','hotelFacilities'));
+        $popularDestinations = \App\Models\PopularDestination::where('is_active', 1)->orderBy('name')->get();
+        return view('auth.super_admin.hotel.edit', compact('hotel','hotelFacilities', 'popularDestinations'));
     }
 
     public function update(Request $request, Hotel $hotel)
     {
         // 1) Validate input
         $validated = $request->validate([
+            'popular_destination_id' => 'required|exists:popular_destinations,id',
             'property_type'               => 'nullable|string',
 
             // 👇 room_types support
@@ -604,6 +611,7 @@ class ManageHotel extends Controller
 
         // 1) Validate input
         $validated = $request->validate([
+            'popular_destination_id' => 'required|exists:popular_destinations,id',
             'property_type'               => 'nullable|string',
 
             'address'               => 'nullable|string',

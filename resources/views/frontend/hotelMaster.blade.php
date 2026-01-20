@@ -717,6 +717,7 @@
                     <div class="modal-header-custom">
                         <div class="modal-header-left">
                             <h3 class="room-title-modal"> Suite Room </h3>
+                            <p class="room-description-modal" style="color: #666; font-size: 14px; line-height: 1.6; margin-top: 8px; margin-bottom: 12px; display: none;"></p>
                             <p class="room-numbers">Room # 105<br> <span style="padding-left:0px" class="floor-numbers">3rd Floor</span></p>
                             <div class="option-meta">
                    <span data-v-798d4468="" data-toggle="tooltip" class="non-refundable" data-bs-original-title="The Option is not non-refundable"> Non-Refundable <i data-v-798d4468="" variant="primary" class="fa fa-info-circle"></i>
