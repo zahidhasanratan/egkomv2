@@ -133,6 +133,35 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <div class="col-md-6 col-lg-6 col-xxl-12">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="district">District</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <select class="form-control" 
+                                                                                id="district" 
+                                                                                name="district">
+                                                                            <option value="">Select District</option>
+                                                                            @foreach(['Bagerhat', 'Bandarban', 'Barguna', 'Barisal', 'Bhola', 'Bogra', 'Brahmanbaria', 'Chandpur', 'Chittagong', 'Chuadanga', 'Comilla', "Cox'sBazar", 'Dhaka', 'Dinajpur', 'Faridpur', 'Feni', 'Gaibandha', 'Gazipur', 'Gopalganj', 'Habiganj', 'Jaipurhat', 'Jamalpur', 'Jessore', 'Jhalokati', 'Jhenaidah', 'Khagrachari', 'Khulna', 'Kishoreganj', 'Kurigram', 'Kushtia', 'Lakshmipur', 'Lalmonirhat', 'Madaripur', 'Magura', 'Manikganj', 'Maulvibazar', 'Meherpur', 'Munshiganj', 'Mymensingh', 'Naogaon', 'Narail', 'Narayanganj', 'Narsingdi', 'Natore', 'Nawabganj', 'Netrokona', 'Nilphamari', 'Noakhali', 'Pabna', 'Panchagarh', 'Patuakhali', 'Pirojpur', 'Rajbari', 'Rajshahi', 'Rangamati', 'Rangpur', 'Satkhira', 'Shariatpur', 'Sherpur', 'Sirajganj', 'Sunamganj', 'Sylhet', 'Tangail', 'Thakurgaon'] as $districtOption)
+                                                                                <option value="{{ $districtOption }}" {{ old('district', $hotel->district) === $districtOption ? 'selected' : '' }}>{{ $districtOption }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                        @error('district') <span class="text-danger">{{ $message }}</span> @enderror
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6 col-lg-6 col-xxl-12">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="city">City</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <input class="form-control" 
+                                                                               id="city" 
+                                                                               name="city" 
+                                                                               placeholder="Enter City" 
+                                                                               value="{{ old('city', $hotel->city) }}">
+                                                                        @error('city') <span class="text-danger">{{ $message }}</span> @enderror
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

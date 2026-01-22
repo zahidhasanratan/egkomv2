@@ -75,7 +75,41 @@ class HomeController extends Controller
                 return $destination;
             });
 
-        return view('frontend/home.index',compact('main','footer', 'popularDestinations'));
+        // Fetch districts dynamically from hotels
+        $districts = \App\Models\Hotel::where('approve', 1)
+            ->where('status', 'submitted')
+            ->whereNotNull('district')
+            ->where('district', '!=', '')
+            ->select('district')
+            ->distinct()
+            ->orderBy('district', 'ASC')
+            ->get()
+            ->map(function ($hotel) {
+                $hotel->properties_count = \App\Models\Hotel::where('district', $hotel->district)
+                    ->where('approve', 1)
+                    ->where('status', 'submitted')
+                    ->count();
+                return $hotel;
+            });
+
+        // Fetch cities dynamically from hotels
+        $cities = \App\Models\Hotel::where('approve', 1)
+            ->where('status', 'submitted')
+            ->whereNotNull('city')
+            ->where('city', '!=', '')
+            ->select('city')
+            ->distinct()
+            ->orderBy('city', 'ASC')
+            ->get()
+            ->map(function ($hotel) {
+                $hotel->properties_count = \App\Models\Hotel::where('city', $hotel->city)
+                    ->where('approve', 1)
+                    ->where('status', 'submitted')
+                    ->count();
+                return $hotel;
+            });
+
+        return view('frontend/home.index',compact('main','footer', 'popularDestinations', 'districts', 'cities'));
     }
 
     /**

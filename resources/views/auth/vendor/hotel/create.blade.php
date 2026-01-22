@@ -89,6 +89,51 @@
                                                                     @enderror
                                                                 </div>
                                                             </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="address">Address</label>
+                                                                    <textarea class="form-control" 
+                                                                              name="address" 
+                                                                              id="address"
+                                                                              rows="2"
+                                                                              placeholder="Enter full address"
+                                                                              style="border: 1px solid #dee2e6; border-radius: 6px; padding: 8px 12px;">{{ old('address', '') }}</textarea>
+                                                                    @error('address')
+                                                                        <span class="text-danger">{{ $message }}</span>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="district">District</label>
+                                                                    <select class="form-control" 
+                                                                            name="district" 
+                                                                            id="district"
+                                                                            style="border: 1px solid #dee2e6; border-radius: 6px; padding: 8px 12px;">
+                                                                        <option value="">Select District</option>
+                                                                        @foreach(['Bagerhat', 'Bandarban', 'Barguna', 'Barisal', 'Bhola', 'Bogra', 'Brahmanbaria', 'Chandpur', 'Chittagong', 'Chuadanga', 'Comilla', "Cox'sBazar", 'Dhaka', 'Dinajpur', 'Faridpur', 'Feni', 'Gaibandha', 'Gazipur', 'Gopalganj', 'Habiganj', 'Jaipurhat', 'Jamalpur', 'Jessore', 'Jhalokati', 'Jhenaidah', 'Khagrachari', 'Khulna', 'Kishoreganj', 'Kurigram', 'Kushtia', 'Lakshmipur', 'Lalmonirhat', 'Madaripur', 'Magura', 'Manikganj', 'Maulvibazar', 'Meherpur', 'Munshiganj', 'Mymensingh', 'Naogaon', 'Narail', 'Narayanganj', 'Narsingdi', 'Natore', 'Nawabganj', 'Netrokona', 'Nilphamari', 'Noakhali', 'Pabna', 'Panchagarh', 'Patuakhali', 'Pirojpur', 'Rajbari', 'Rajshahi', 'Rangamati', 'Rangpur', 'Satkhira', 'Shariatpur', 'Sherpur', 'Sirajganj', 'Sunamganj', 'Sylhet', 'Tangail', 'Thakurgaon'] as $districtOption)
+                                                                            <option value="{{ $districtOption }}" {{ old('district') === $districtOption ? 'selected' : '' }}>{{ $districtOption }}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                    @error('district')
+                                                                        <span class="text-danger">{{ $message }}</span>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="city">City</label>
+                                                                    <input class="form-control" 
+                                                                           name="city" 
+                                                                           id="city"
+                                                                           value="{{ old('city', '') }}"
+                                                                           placeholder="Enter city"
+                                                                           style="border: 1px solid #dee2e6; border-radius: 6px; padding: 8px 12px;">
+                                                                    @error('city')
+                                                                        <span class="text-danger">{{ $message }}</span>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label for="property_type" id="districtContainer" class="form-label">Property Type</label>

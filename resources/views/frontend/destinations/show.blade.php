@@ -130,10 +130,18 @@
                                                     <div class="check-filter-list">
                                                         <ul>
                                                             @php
-                                                                $propertyTypes = \App\Models\Hotel::where('popular_destination_id', $destination->id)
-                                                                    ->where('approve', 1)
-                                                                    ->where('status', 'submitted')
-                                                                    ->selectRaw('property_category, COUNT(*) as count')
+                                                                $propertyTypesQuery = \App\Models\Hotel::where('approve', 1)
+                                                                    ->where('status', 'submitted');
+                                                                
+                                                                if (isset($type) && $type === 'district') {
+                                                                    $propertyTypesQuery->where('district', $destination->name);
+                                                                } elseif (isset($type) && $type === 'city') {
+                                                                    $propertyTypesQuery->where('city', $destination->name);
+                                                                } elseif (isset($destination->id) && $destination->id !== null) {
+                                                                    $propertyTypesQuery->where('popular_destination_id', $destination->id);
+                                                                }
+                                                                
+                                                                $propertyTypes = $propertyTypesQuery->selectRaw('property_category, COUNT(*) as count')
                                                                     ->groupBy('property_category')
                                                                     ->get();
                                                             @endphp

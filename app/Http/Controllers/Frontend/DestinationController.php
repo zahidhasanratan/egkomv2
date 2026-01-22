@@ -29,16 +29,65 @@ class DestinationController extends Controller
 
     public function show($slug)
     {
+        // First, try to find as PopularDestination
         $destination = PopularDestination::where('slug', $slug)
             ->where('is_active', 1)
-            ->firstOrFail();
+            ->first();
 
-        // Get hotels for this destination
-        $hotels = Hotel::where('popular_destination_id', $destination->id)
+        $type = 'destination';
+        $name = null;
+        $query = null;
+
+        if ($destination) {
+            // It's a popular destination
+            $query = Hotel::where('popular_destination_id', $destination->id);
+            $name = $destination->name;
+        } else {
+            // Check if it's a district
+            $districts = ['Bagerhat', 'Bandarban', 'Barguna', 'Barisal', 'Bhola', 'Bogra', 'Brahmanbaria', 'Chandpur', 'Chittagong', 'Chuadanga', 'Comilla', "Cox'sBazar", 'Dhaka', 'Dinajpur', 'Faridpur', 'Feni', 'Gaibandha', 'Gazipur', 'Gopalganj', 'Habiganj', 'Jaipurhat', 'Jamalpur', 'Jessore', 'Jhalokati', 'Jhenaidah', 'Khagrachari', 'Khulna', 'Kishoreganj', 'Kurigram', 'Kushtia', 'Lakshmipur', 'Lalmonirhat', 'Madaripur', 'Magura', 'Manikganj', 'Maulvibazar', 'Meherpur', 'Munshiganj', 'Mymensingh', 'Naogaon', 'Narail', 'Narayanganj', 'Narsingdi', 'Natore', 'Nawabganj', 'Netrokona', 'Nilphamari', 'Noakhali', 'Pabna', 'Panchagarh', 'Patuakhali', 'Pirojpur', 'Rajbari', 'Rajshahi', 'Rangamati', 'Rangpur', 'Satkhira', 'Shariatpur', 'Sherpur', 'Sirajganj', 'Sunamganj', 'Sylhet', 'Tangail', 'Thakurgaon'];
+            
+            foreach ($districts as $district) {
+                if (Str::slug($district) === $slug) {
+                    $query = Hotel::where('district', $district);
+                    $name = $district;
+                    $type = 'district';
+                    break;
+                }
+            }
+
+            // If not a district, check if it's a city
+            if (!$query) {
+                $cities = Hotel::where('approve', 1)
+                    ->where('status', 'submitted')
+                    ->whereNotNull('city')
+                    ->where('city', '!=', '')
+                    ->select('city')
+                    ->distinct()
+                    ->pluck('city')
+                    ->toArray();
+
+                foreach ($cities as $city) {
+                    if (Str::slug($city) === $slug) {
+                        $query = Hotel::where('city', $city);
+                        $name = $city;
+                        $type = 'city';
+                        break;
+                    }
+                }
+            }
+        }
+
+        // If still not found, return 404
+        if (!$query) {
+            abort(404);
+        }
+
+        // Get hotels for this destination/district/city
+        $hotels = $query
             ->where('approve', 1)
             ->where('status', 'submitted')
-            ->with(['rooms' => function($query) {
-                $query->where('is_active', 1);
+            ->with(['rooms' => function($roomQuery) {
+                $roomQuery->where('is_active', 1);
             }])
             ->get()
             ->map(function ($hotel) {
@@ -73,7 +122,17 @@ class DestinationController extends Controller
                 return $hotel;
             });
 
-        return view('frontend.destinations.show', compact('destination', 'hotels'));
+        // Create a destination object for the view
+        if (!$destination) {
+            $destination = (object)[
+                'id' => null,
+                'name' => $name,
+                'slug' => $slug
+            ];
+        }
+
+        return view('frontend.destinations.show', compact('destination', 'hotels', 'type'));
     }
+
 }
 

@@ -941,50 +941,21 @@
                                 <li class="nav-item">
                                     <a class="nav-link nav-link-custom" href="#restaurant" data-bs-toggle="tab">Cities</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link nav-link-custom" href="#pick-up" data-bs-toggle="tab">Pick Up Places of interest</a>
-                                </li>
                             </ul>
                             <div class="tab-content">
                                 <div id="hotel-overview" class="tab-pane tab-pane-custom in active">
                                     <div class="destination-list">
                                         <ul>
-                                            <li class="des-list">
-                                                <a href="#">Bangladesh</a>
-                                                <span class="count-pro">80,929 properties</span>
-                                            </li>
-                                            <li class="des-list">
-                                                <a href="#">Bangladesh</a>
-                                                <span class="count-pro">80,929 properties</span>
-                                            </li>
-                                            <li class="des-list">
-                                                <a href="#">Bangladesh</a>
-                                                <span class="count-pro">80,929 properties</span>
-                                            </li>
-                                            <li class="des-list">
-                                                <a href="#">Bangladesh</a>
-                                                <span class="count-pro">80,929 properties</span>
-                                            </li>
-                                            <li class="des-list">
-                                                <a href="#">Bangladesh</a>
-                                                <span class="count-pro">80,929 properties</span>
-                                            </li>
-                                            <li class="des-list">
-                                                <a href="#">Bangladesh</a>
-                                                <span class="count-pro">80,929 properties</span>
-                                            </li>
-                                            <li class="des-list">
-                                                <a href="#">Bangladesh</a>
-                                                <span class="count-pro">80,929 properties</span>
-                                            </li>
-                                            <li class="des-list">
-                                                <a href="#">Bangladesh</a>
-                                                <span class="count-pro">80,929 properties</span>
-                                            </li>
-                                            <li class="des-list">
-                                                <a href="#">Bangladesh</a>
-                                                <span class="count-pro">80,929 properties</span>
-                                            </li>
+                                            @forelse($districts as $district)
+                                                <li class="des-list">
+                                                    <a href="{{ route('destination.show', \Illuminate\Support\Str::slug($district->district)) }}">{{ $district->district }}</a>
+                                                    <span class="count-pro">{{ number_format($district->properties_count) }} {{ $district->properties_count == 1 ? 'property' : 'properties' }}</span>
+                                                </li>
+                                            @empty
+                                                <li class="des-list">
+                                                    <span>No districts available</span>
+                                                </li>
+                                            @endforelse
                                         </ul>
                                     </div>
                                 </div>
@@ -992,89 +963,20 @@
                                 <div id="restaurant" class="tab-pane tab-pane-custom">
                                     <div class="destination-list">
                                         <ul>
-                                            <li class="des-list">
-                                                <a href="#">Dhaka</a>
-                                                <span class="count-pro">46, Kazi Nazrul Islam Avenue</span>
-                                            </li>
-                                            <li class="des-list">
-                                                <a href="#">Dhaka</a>
-                                                <span class="count-pro">46, Kazi Nazrul Islam Avenue</span>
-                                            </li>
-                                            <li class="des-list">
-                                                <a href="#">Dhaka</a>
-                                                <span class="count-pro">46, Kazi Nazrul Islam Avenue</span>
-                                            </li>
-                                            <li class="des-list">
-                                                <a href="#">Dhaka</a>
-                                                <span class="count-pro">46, Kazi Nazrul Islam Avenue</span>
-                                            </li>
-                                            <li class="des-list">
-                                                <a href="#">Dhaka</a>
-                                                <span class="count-pro">46, Kazi Nazrul Islam Avenue</span>
-                                            </li>
-                                            <li class="des-list">
-                                                <a href="#">Dhaka</a>
-                                                <span class="count-pro">46, Kazi Nazrul Islam Avenue</span>
-                                            </li>
-                                            <li class="des-list">
-                                                <a href="#">Dhaka</a>
-                                                <span class="count-pro">46, Kazi Nazrul Islam Avenue</span>
-                                            </li>
-                                            <li class="des-list">
-                                                <a href="#">Dhaka</a>
-                                                <span class="count-pro">46, Kazi Nazrul Islam Avenue</span>
-                                            </li>
+                                            @forelse($cities as $city)
+                                                <li class="des-list">
+                                                    <a href="{{ route('destination.show', \Illuminate\Support\Str::slug($city->city)) }}">{{ $city->city }}</a>
+                                                    <span class="count-pro">{{ number_format($city->properties_count) }} {{ $city->properties_count == 1 ? 'property' : 'properties' }}</span>
+                                                </li>
+                                            @empty
+                                                <li class="des-list">
+                                                    <span>No cities available</span>
+                                                </li>
+                                            @endforelse
                                         </ul>
                                     </div>
                                 </div>
                                 <!-- end restaurant -->
-                                <div id="pick-up" class="tab-pane tab-pane-custom">
-                                    <div class="destination-list">
-                                        <ul>
-                                            <li class="des-list">
-                                                <a href="#">Kawran Bazar</a>
-                                                <span class="count-pro">100 properties</span>
-                                            </li>
-                                            <li class="des-list">
-                                                <a href="#">Kawran Bazar</a>
-                                                <span class="count-pro">100 properties</span>
-                                            </li>
-                                            <li class="des-list">
-                                                <a href="#">Kawran Bazar</a>
-                                                <span class="count-pro">100 properties</span>
-                                            </li>
-                                            <li class="des-list">
-                                                <a href="#">Kawran Bazar</a>
-                                                <span class="count-pro">100 properties</span>
-                                            </li>
-                                            <li class="des-list">
-                                                <a href="#">Kawran Bazar</a>
-                                                <span class="count-pro">100 properties</span>
-                                            </li>
-                                            <li class="des-list">
-                                                <a href="#">Kawran Bazar</a>
-                                                <span class="count-pro">100 properties</span>
-                                            </li>
-                                            <li class="des-list">
-                                                <a href="#">Kawran Bazar</a>
-                                                <span class="count-pro">100 properties</span>
-                                            </li>
-                                            <li class="des-list">
-                                                <a href="#">Kawran Bazar</a>
-                                                <span class="count-pro">100 properties</span>
-                                            </li>
-                                            <li class="des-list">
-                                                <a href="#">Kawran Bazar</a>
-                                                <span class="count-pro">100 properties</span>
-                                            </li>
-                                            <li class="des-list">
-                                                <a href="#">Kawran Bazar</a>
-                                                <span class="count-pro">100 properties</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <!-- end pick-up -->
                             </div>
                             <!-- end tab-content -->
                         </div>

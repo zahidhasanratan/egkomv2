@@ -47,6 +47,9 @@ class ManageHotel extends Controller
             'popular_destination_id' => 'required|exists:popular_destinations,id',
             'property_category' => 'required|string|in:Hotels,Transit,Resorts,Lodges,Apartments,Guesthouses,Crisis',
             'property_type'     => 'nullable|string|max:255',
+            'address'           => 'nullable|string|max:500',
+            'district'          => 'nullable|string|max:255',
+            'city'              => 'nullable|string|max:255',
 
             'room_types'   => 'nullable|array',
             'room_types.*' => 'nullable|string|max:255',
@@ -393,6 +396,8 @@ class ManageHotel extends Controller
             'lati'                        => 'nullable|string',
             'longi'                       => 'nullable|string',
             'address'                     => 'nullable|string',
+            'district'                    => 'nullable|string',
+            'city'                        => 'nullable|string',
             'pets_allowed'                => 'nullable|in:yes,no',
             'pets_details'                => 'nullable|string',
             'events_allowed'              => 'nullable|in:yes,no',
@@ -615,6 +620,8 @@ class ManageHotel extends Controller
             'property_type'               => 'nullable|string',
 
             'address'               => 'nullable|string',
+            'district'               => 'nullable|string',
+            'city'               => 'nullable|string',
             'details'               => 'nullable|string',
             'lati'               => 'nullable|string',
             'longi'               => 'nullable|string',
