@@ -8,7 +8,7 @@
                     <div class="nk-block-head nk-block-head-sm">
                         <div class="nk-block-between">
                             <div class="nk-block-head-content">
-                                <h3 class="nk-block-title page-title">Create Hotel / Property</h3>
+                                <h3 class="nk-block-title page-title">Manage Hotel / Property</h3>
                             </div>
                         </div>
                     </div>
@@ -31,9 +31,10 @@
                                     </li>
                                 </ul>
 
-                                <form method="POST" action="{{ route('vendor-admin.hotel.store') }}"
+                                <form method="POST" action="{{ route('super-admin.hotel.update', $hotel->id) }}"
                                       enctype="multipart/form-data">
                                     @csrf
+                                    
                                     <div class="tab-content">
                                         <!-- Hotel Description -->
                                         <div class="tab-pane active" id="tabItem3">
@@ -50,7 +51,7 @@
                                                                     <select name="popular_destination_id" class="form-control" id="popular_destination_id" required style="border: 1px solid #dee2e6; border-radius: 6px; padding: 8px 12px;">
                                                                         <option value="">Select Area</option>
                                                                         @foreach($popularDestinations as $destination)
-                                                                            <option value="{{ $destination->id }}" {{ old('popular_destination_id') == $destination->id ? 'selected' : '' }}>
+                                                                            <option value="{{ $destination->id }}" {{ old('popular_destination_id', $hotel->popular_destination_id) == $destination->id ? 'selected' : '' }}>
                                                                                 {{ $destination->name }}
                                                                             </option>
                                                                         @endforeach
@@ -65,12 +66,12 @@
                                                                     <label for="property_category" class="form-label">Select Property Category</label>
                                                                     <select name="property_category" class="form-control" id="property_category" style="border: 1px solid #dee2e6; border-radius: 6px; padding: 8px 12px;">
                                                                         <option value="">Select Property</option>
-                                                                        <option value="Hotels" {{ old('property_category') == 'Hotels' ? 'selected' : '' }}>Hotels</option>
-                                                                        <option value="Transit" {{ old('property_category') == 'Transit' ? 'selected' : '' }}>Transit Hotels</option>
-                                                                        <option value="Resorts" {{ old('property_category') == 'Resorts' ? 'selected' : '' }}>Resorts, Eco, & Outdoor</option>
-                                                                        <option value="Apartments" {{ old('property_category') == 'Apartments' ? 'selected' : '' }}>Hostels & Lodges</option>
-                                                                        <option value="Guesthouses" {{ old('property_category') == 'Guesthouses' ? 'selected' : '' }}>Apartments & Homestays</option>
-                                                                        <option value="Crisis" {{ old('property_category') == 'Crisis' ? 'selected' : '' }}>Crisis & Shelter Accommodation</option>
+                                                                        <option value="Hotels" {{ old('property_category', $hotel->property_category) == 'Hotels' ? 'selected' : '' }}>Hotels</option>
+                                                                        <option value="Transit" {{ old('property_category', $hotel->property_category) == 'Transit' ? 'selected' : '' }}>Transit Hotels</option>
+                                                                        <option value="Resorts" {{ old('property_category', $hotel->property_category) == 'Resorts' ? 'selected' : '' }}>Resorts, Eco, & Outdoor</option>
+                                                                        <option value="Apartments" {{ old('property_category', $hotel->property_category) == 'Apartments' ? 'selected' : '' }}>Hostels & Lodges</option>
+                                                                        <option value="Guesthouses" {{ old('property_category', $hotel->property_category) == 'Guesthouses' ? 'selected' : '' }}>Apartments & Homestays</option>
+                                                                        <option value="Crisis" {{ old('property_category', $hotel->property_category) == 'Crisis' ? 'selected' : '' }}>Crisis & Shelter Accommodation</option>
                                                                     </select>
                                                                     @error('property_category')
                                                                         <span class="text-danger">{{ $message }}</span>
@@ -83,7 +84,7 @@
                                                                     <input class="form-control" 
                                                                            name="description" 
                                                                            id="hotel_name"
-                                                                           value="{{ old('description') }}"
+                                                                           value="{{ old('description', $hotel->description) }}"
                                                                            placeholder="Enter Hotel / Property Name"
                                                                            style="border: 1px solid #dee2e6; border-radius: 6px; padding: 8px 12px;">
                                                                     @error('description')
@@ -95,7 +96,7 @@
                                                                 <div class="form-group">
                                                                     <label class="form-label" for="hotel-description">Hotel/Property Description & Policy</label>
                                                                     <div class="form-control-wrap">
-                                                                        <textarea class="form-control" id="hotel-description" name="details">{{ old('details') }}</textarea>
+                                                                        <textarea class="form-control" id="hotel-description" name="details">{{ old('details', $hotel->details) }}</textarea>
                                                                         @error('details') <span class="text-danger">{{ $details }}</span> @enderror
                                                                     </div>
                                                                 </div>
@@ -105,7 +106,7 @@
                                                                 <div class="form-group">
                                                                     <label class="form-label" for="hotel-description">Location Latitude</label>
                                                                     <div class="form-control-wrap">
-                                                                        <input class="form-control" id="hotel-description" name="lati" placeholder="Enter Latitude" value="{{ old('lati') }}"></input>
+                                                                        <input class="form-control" id="hotel-description" name="lati" placeholder="Enter Latitude" value="{{ $hotel->lati }}"></input>
                                                                         @error('lati') <span class="text-danger">{{ $lati }}</span> @enderror
                                                                     </div>
                                                                 </div>
@@ -114,7 +115,7 @@
                                                                 <div class="form-group">
                                                                     <label class="form-label" for="hotel-description">Location Longitude</label>
                                                                     <div class="form-control-wrap">
-                                                                        <input class="form-control" id="hotel-description" name="longi" placeholder="Enter Longitude" value="{{ old('longi') }}"></input>
+                                                                        <input class="form-control" id="hotel-description" name="longi" placeholder="Enter Longitude" value="{{ $hotel->longi }}"></input>
                                                                         @error('longi') <span class="text-danger">{{ $longi }}</span> @enderror
                                                                     </div>
                                                                 </div>
@@ -126,7 +127,7 @@
                                                                     <div class="form-control-wrap">
                                                                         <textarea class="form-control no-resize"
                                                                                   id="default-textarea"
-                                                                                  name="address">{{ old('address') }}</textarea>
+                                                                                  name="address">{{ old('address', $hotel->address) }}</textarea>
                                                                         @error('address') <span
                                                                             class="text-danger">{{ $address }}</span> @enderror
                                                                     </div>
@@ -141,7 +142,7 @@
                                                                                 name="district">
                                                                             <option value="">Select District</option>
                                                                             @foreach(['Bagerhat', 'Bandarban', 'Barguna', 'Barisal', 'Bhola', 'Bogra', 'Brahmanbaria', 'Chandpur', 'Chittagong', 'Chuadanga', 'Comilla', "Cox'sBazar", 'Dhaka', 'Dinajpur', 'Faridpur', 'Feni', 'Gaibandha', 'Gazipur', 'Gopalganj', 'Habiganj', 'Jaipurhat', 'Jamalpur', 'Jessore', 'Jhalokati', 'Jhenaidah', 'Khagrachari', 'Khulna', 'Kishoreganj', 'Kurigram', 'Kushtia', 'Lakshmipur', 'Lalmonirhat', 'Madaripur', 'Magura', 'Manikganj', 'Maulvibazar', 'Meherpur', 'Munshiganj', 'Mymensingh', 'Naogaon', 'Narail', 'Narayanganj', 'Narsingdi', 'Natore', 'Nawabganj', 'Netrokona', 'Nilphamari', 'Noakhali', 'Pabna', 'Panchagarh', 'Patuakhali', 'Pirojpur', 'Rajbari', 'Rajshahi', 'Rangamati', 'Rangpur', 'Satkhira', 'Shariatpur', 'Sherpur', 'Sirajganj', 'Sunamganj', 'Sylhet', 'Tangail', 'Thakurgaon'] as $districtOption)
-                                                                                <option value="{{ $districtOption }}" {{ old('district') === $districtOption ? 'selected' : '' }}>{{ $districtOption }}</option>
+                                                                                <option value="{{ $districtOption }}" {{ old('district', $hotel->district) === $districtOption ? 'selected' : '' }}>{{ $districtOption }}</option>
                                                                             @endforeach
                                                                         </select>
                                                                         @error('district') <span class="text-danger">{{ $message }}</span> @enderror
@@ -156,7 +157,7 @@
                                                                                id="city" 
                                                                                name="city" 
                                                                                placeholder="Enter City" 
-                                                                               value="{{ old('city') }}">
+                                                                               value="{{ old('city', $hotel->city) }}">
                                                                         @error('city') <span class="text-danger">{{ $message }}</span> @enderror
                                                                     </div>
                                                                 </div>
@@ -181,22 +182,22 @@
                                                             <label>
                                                                 <input type="radio" name="pets_allowed" value="yes"
                                                                        class="bar-radio-yes"
-                                                                       data-target="pets-input" {{ old('pets_allowed') == 'yes' ? 'checked' : '' }}>
+                                                                       data-target="pets-input" {{ old('pets_allowed', $hotel->pets_allowed) == 'yes' ? 'checked' : '' }}>
                                                                 Yes
                                                             </label>
                                                             <label>
                                                                 <input type="radio" name="pets_allowed" value="no"
                                                                        class="bar-radio-no"
-                                                                       data-target="pets-input" {{ old('pets_allowed') == 'no' ? 'checked' : '' }}>
+                                                                       data-target="pets-input" {{ old('pets_allowed', $hotel->pets_allowed) == 'no' ? 'checked' : '' }}>
                                                                 No
                                                             </label>
                                                         </div>
                                                         <div
-                                                            class="input-group {{ old('pets_allowed') == 'yes' ? '' : 'hidden' }}"
+                                                            class="input-group {{ old('pets_allowed', $hotel->pets_allowed) == 'yes' ? '' : 'hidden' }}"
                                                             id="pets-input">
                                                             <textarea class="form-control" id="pets-details" name="pets_details"
                                                                       placeholder=""
-                                                                      style="height: 50px;">{{ old('pets_details') }}</textarea>
+                                                                      style="height: 50px;">{{ old('pets_details', $hotel->pets_details) }}</textarea>
                                                         </div>
                                                         @error('pets_allowed') <span
                                                             class="text-danger">{{ $message }}</span> @enderror
@@ -210,22 +211,22 @@
                                                             <label>
                                                                 <input type="radio" name="events_allowed" value="yes"
                                                                        class="bar-radio-yes"
-                                                                       data-target="events-input" {{ old('events_allowed') == 'yes' ? 'checked' : '' }}>
+                                                                       data-target="events-input" {{ old('events_allowed', $hotel->events_allowed) == 'yes' ? 'checked' : '' }}>
                                                                 Yes
                                                             </label>
                                                             <label>
                                                                 <input type="radio" name="events_allowed" value="no"
                                                                        class="bar-radio-no"
-                                                                       data-target="events-input" {{ old('events_allowed') == 'no' ? 'checked' : '' }}>
+                                                                       data-target="events-input" {{ old('events_allowed', $hotel->events_allowed) == 'no' ? 'checked' : '' }}>
                                                                 No
                                                             </label>
                                                         </div>
                                                         <div
-                                                            class="input-group {{ old('events_allowed') == 'yes' ? '' : 'hidden' }}"
+                                                            class="input-group {{ old('events_allowed', $hotel->events_allowed) == 'yes' ? '' : 'hidden' }}"
                                                             id="events-input">
                                                             <textarea class="form-control" name="events_details"
                                                                       placeholder=""
-                                                                      style="height: 50px;">{{ old('events_details') }}</textarea>
+                                                                      style="height: 50px;">{{ old('events_details', $hotel->events_details) }}</textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -237,22 +238,22 @@
                                                             <label>
                                                                 <input type="radio" name="smoking_allowed" value="yes"
                                                                        class="bar-radio-yes"
-                                                                       data-target="Smoking-input" {{ old('smoking_allowed') == 'yes' ? 'checked' : '' }}>
+                                                                       data-target="Smoking-input" {{ old('smoking_allowed', $hotel->smoking_allowed) == 'yes' ? 'checked' : '' }}>
                                                                 Yes (Vaping Or e‑cigarettes)
                                                             </label>
                                                             <label>
                                                                 <input type="radio" name="smoking_allowed" value="no"
                                                                        class="bar-radio-no"
-                                                                       data-target="Smoking-input" {{ old('smoking_allowed') == 'no' ? 'checked' : '' }}>
+                                                                       data-target="Smoking-input" {{ old('smoking_allowed', $hotel->smoking_allowed) == 'no' ? 'checked' : '' }}>
                                                                 No
                                                             </label>
                                                         </div>
                                                         <div
-                                                            class="input-group {{ old('smoking_allowed') == 'yes' ? '' : 'hidden' }}"
+                                                            class="input-group {{ old('smoking_allowed', $hotel->smoking_allowed) == 'yes' ? '' : 'hidden' }}"
                                                             id="Smoking-input">
                                                             <textarea class="form-control" name="smoking_details"
                                                                       placeholder=""
-                                                                      style="height: 50px;">{{ old('smoking_details') }}</textarea>
+                                                                      style="height: 50px;">{{ old('smoking_details', $hotel->smoking_details) }}</textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -262,7 +263,7 @@
                                                         <label class="form-label">Quiet Hours</label>
                                                         <input type="text" class="form-control" name="quiet_hours"
                                                                placeholder="Quiet Hours"
-                                                               value="{{ old('quiet_hours') }}">
+                                                               value="{{ old('quiet_hours', $hotel->quiet_hours) }}">
                                                         @error('quiet_hours') <span
                                                             class="text-danger">{{ $message }}</span> @enderror
                                                     </div>
@@ -276,22 +277,22 @@
                                                             <label>
                                                                 <input type="radio" name="photography_allowed"
                                                                        value="yes" class="bar-radio-yes"
-                                                                       data-target="photography-input" {{ old('photography_allowed') == 'yes' ? 'checked' : '' }}>
+                                                                       data-target="photography-input" {{ old('photography_allowed', $hotel->photography_allowed) == 'yes' ? 'checked' : '' }}>
                                                                 Yes
                                                             </label>
                                                             <label>
                                                                 <input type="radio" name="photography_allowed"
                                                                        value="no" class="bar-radio-no"
-                                                                       data-target="photography-input" {{ old('photography_allowed') == 'no' ? 'checked' : '' }}>
+                                                                       data-target="photography-input" {{ old('photography_allowed', $hotel->photography_allowed) == 'no' ? 'checked' : '' }}>
                                                                 No
                                                             </label>
                                                         </div>
                                                         <div
-                                                            class="input-group {{ old('photography_allowed') == 'yes' ? '' : 'hidden' }}"
+                                                            class="input-group {{ old('photography_allowed', $hotel->photography_allowed) == 'yes' ? '' : 'hidden' }}"
                                                             id="photography-input">
                                                             <textarea class="form-control" name="photography_details"
                                                                       placeholder=""
-                                                                      style="height: 50px;">{{ old('photography_details') }}</textarea>
+                                                                      style="height: 50px;">{{ old('photography_details', $hotel->photography_details) }}</textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -302,99 +303,99 @@
                                                         <select class="form-select mb-3" name="check_in_window" id="check-in-window" aria-label="Large select example">
                                                             <option value="">Select Check-in Time</option>
                                                             <option
-                                                                value="1:00 AM" {{ old('check_in_window') == '1:00 AM' ? 'selected' : '' }}>
+                                                                value="1:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '1:00 AM' ? 'selected' : '' }}>
                                                                 1:00 AM
                                                             </option>
                                                             <option
-                                                                value="2:00 AM" {{ old('check_in_window') == '2:00 AM' ? 'selected' : '' }}>
+                                                                value="2:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '2:00 AM' ? 'selected' : '' }}>
                                                                 2:00 AM
                                                             </option>
                                                             <option
-                                                                value="3:00 AM" {{ old('check_in_window') == '3:00 AM' ? 'selected' : '' }}>
+                                                                value="3:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '3:00 AM' ? 'selected' : '' }}>
                                                                 3:00 AM
                                                             </option>
                                                             <option
-                                                                value="4:00 AM" {{ old('check_in_window') == '4:00 AM' ? 'selected' : '' }}>
+                                                                value="4:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '4:00 AM' ? 'selected' : '' }}>
                                                                 4:00 AM
                                                             </option>
                                                             <option
-                                                                value="5:00 AM" {{ old('check_in_window') == '5:00 AM' ? 'selected' : '' }}>
+                                                                value="5:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '5:00 AM' ? 'selected' : '' }}>
                                                                 5:00 AM
                                                             </option>
                                                             <option
-                                                                value="6:00 AM" {{ old('check_in_window') == '6:00 AM' ? 'selected' : '' }}>
+                                                                value="6:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '6:00 AM' ? 'selected' : '' }}>
                                                                 6:00 AM
                                                             </option>
                                                             <option
-                                                                value="7:00 AM" {{ old('check_in_window') == '7:00 AM' ? 'selected' : '' }}>
+                                                                value="7:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '7:00 AM' ? 'selected' : '' }}>
                                                                 7:00 AM
                                                             </option>
                                                             <option
-                                                                value="8:00 AM" {{ old('check_in_window') == '8:00 AM' ? 'selected' : '' }}>
+                                                                value="8:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '8:00 AM' ? 'selected' : '' }}>
                                                                 8:00 AM
                                                             </option>
                                                             <option
-                                                                value="9:00 AM" {{ old('check_in_window') == '9:00 AM' ? 'selected' : '' }}>
+                                                                value="9:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '9:00 AM' ? 'selected' : '' }}>
                                                                 9:00 AM
                                                             </option>
                                                             <option
-                                                                value="10:00 AM" {{ old('check_in_window') == '10:00 AM' ? 'selected' : '' }}>
+                                                                value="10:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '10:00 AM' ? 'selected' : '' }}>
                                                                 10:00 AM
                                                             </option>
                                                             <option
-                                                                value="11:00 AM" {{ old('check_in_window') == '11:00 AM' ? 'selected' : '' }}>
+                                                                value="11:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '11:00 AM' ? 'selected' : '' }}>
                                                                 11:00 AM
                                                             </option>
                                                             <option
-                                                                value="12:00 PM" {{ old('check_in_window') == '12:00 PM' ? 'selected' : '' }}>
+                                                                value="12:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '12:00 PM' ? 'selected' : '' }}>
                                                                 12:00 PM (Noon)
                                                             </option>
                                                             <option
-                                                                value="1:00 PM" {{ old('check_in_window') == '1:00 PM' ? 'selected' : '' }}>
+                                                                value="1:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '1:00 PM' ? 'selected' : '' }}>
                                                                 1:00 PM
                                                             </option>
                                                             <option
-                                                                value="2:00 PM" {{ old('check_in_window') == '2:00 PM' ? 'selected' : '' }}>
+                                                                value="2:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '2:00 PM' ? 'selected' : '' }}>
                                                                 2:00 PM
                                                             </option>
                                                             <option
-                                                                value="3:00 PM" {{ old('check_in_window') == '3:00 PM' ? 'selected' : '' }}>
+                                                                value="3:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '3:00 PM' ? 'selected' : '' }}>
                                                                 3:00 PM
                                                             </option>
                                                             <option
-                                                                value="4:00 PM" {{ old('check_in_window') == '4:00 PM' ? 'selected' : '' }}>
+                                                                value="4:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '4:00 PM' ? 'selected' : '' }}>
                                                                 4:00 PM
                                                             </option>
                                                             <option
-                                                                value="5:00 PM" {{ old('check_in_window') == '5:00 PM' ? 'selected' : '' }}>
+                                                                value="5:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '5:00 PM' ? 'selected' : '' }}>
                                                                 5:00 PM
                                                             </option>
                                                             <option
-                                                                value="6:00 PM" {{ old('check_in_window') == '6:00 PM' ? 'selected' : '' }}>
+                                                                value="6:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '6:00 PM' ? 'selected' : '' }}>
                                                                 6:00 PM
                                                             </option>
                                                             <option
-                                                                value="7:00 PM" {{ old('check_in_window') == '7:00 PM' ? 'selected' : '' }}>
+                                                                value="7:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '7:00 PM' ? 'selected' : '' }}>
                                                                 7:00 PM
                                                             </option>
                                                             <option
-                                                                value="8:00 PM" {{ old('check_in_window') == '8:00 PM' ? 'selected' : '' }}>
+                                                                value="8:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '8:00 PM' ? 'selected' : '' }}>
                                                                 8:00 PM
                                                             </option>
                                                             <option
-                                                                value="9:00 PM" {{ old('check_in_window') == '9:00 PM' ? 'selected' : '' }}>
+                                                                value="9:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '9:00 PM' ? 'selected' : '' }}>
                                                                 9:00 PM
                                                             </option>
                                                             <option
-                                                                value="10:00 PM" {{ old('check_in_window') == '10:00 PM' ? 'selected' : '' }}>
+                                                                value="10:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '10:00 PM' ? 'selected' : '' }}>
                                                                 10:00 PM
                                                             </option>
                                                             <option
-                                                                value="11:00 PM" {{ old('check_in_window') == '11:00 PM' ? 'selected' : '' }}>
+                                                                value="11:00 PM" {{ old('check_in_window', $hotel->check_in_window) == '11:00 PM' ? 'selected' : '' }}>
                                                                 11:00 PM
                                                             </option>
                                                             <option
-                                                                value="12:00 AM" {{ old('check_in_window') == '12:00 AM' ? 'selected' : '' }}>
+                                                                value="12:00 AM" {{ old('check_in_window', $hotel->check_in_window) == '12:00 AM' ? 'selected' : '' }}>
                                                                 12:00 AM (Midnight)
                                                             </option>
                                                         </select>
@@ -410,99 +411,99 @@
                                                                 aria-label="Large select example">
                                                             <option value="">Select Check Out time</option>
                                                             <option
-                                                                value="1:00 AM" {{ old('check_out_time') == '1:00 AM' ? 'selected' : '' }}>
+                                                                value="1:00 AM" {{ old('check_out_time', $hotel->check_out_time) == '1:00 AM' ? 'selected' : '' }}>
                                                                 1:00 AM
                                                             </option>
                                                             <option
-                                                                value="2:00 AM" {{ old('check_out_time') == '2:00 AM' ? 'selected' : '' }}>
+                                                                value="2:00 AM" {{ old('check_out_time', $hotel->check_out_time) == '2:00 AM' ? 'selected' : '' }}>
                                                                 2:00 AM
                                                             </option>
                                                             <option
-                                                                value="3:00 AM" {{ old('check_out_time') == '3:00 AM' ? 'selected' : '' }}>
+                                                                value="3:00 AM" {{ old('check_out_time', $hotel->check_out_time) == '3:00 AM' ? 'selected' : '' }}>
                                                                 3:00 AM
                                                             </option>
                                                             <option
-                                                                value="4:00 AM" {{ old('check_out_time') == '4:00 AM' ? 'selected' : '' }}>
+                                                                value="4:00 AM" {{ old('check_out_time', $hotel->check_out_time) == '4:00 AM' ? 'selected' : '' }}>
                                                                 4:00 AM
                                                             </option>
                                                             <option
-                                                                value="5:00 AM" {{ old('check_out_time') == '5:00 AM' ? 'selected' : '' }}>
+                                                                value="5:00 AM" {{ old('check_out_time', $hotel->check_out_time) == '5:00 AM' ? 'selected' : '' }}>
                                                                 5:00 AM
                                                             </option>
                                                             <option
-                                                                value="6:00 AM" {{ old('check_out_time') == '6:00 AM' ? 'selected' : '' }}>
+                                                                value="6:00 AM" {{ old('check_out_time', $hotel->check_out_time) == '6:00 AM' ? 'selected' : '' }}>
                                                                 6:00 AM
                                                             </option>
                                                             <option
-                                                                value="7:00 AM" {{ old('check_out_time') == '7:00 AM' ? 'selected' : '' }}>
+                                                                value="7:00 AM" {{ old('check_out_time', $hotel->check_out_time) == '7:00 AM' ? 'selected' : '' }}>
                                                                 7:00 AM
                                                             </option>
                                                             <option
-                                                                value="8:00 AM" {{ old('check_out_time') == '8:00 AM' ? 'selected' : '' }}>
+                                                                value="8:00 AM" {{ old('check_out_time', $hotel->check_out_time) == '8:00 AM' ? 'selected' : '' }}>
                                                                 8:00 AM
                                                             </option>
                                                             <option
-                                                                value="9:00 AM" {{ old('check_out_time') == '9:00 AM' ? 'selected' : '' }}>
+                                                                value="9:00 AM" {{ old('check_out_time', $hotel->check_out_time) == '9:00 AM' ? 'selected' : '' }}>
                                                                 9:00 AM
                                                             </option>
                                                             <option
-                                                                value="10:00 AM" {{ old('check_out_time') == '10:00 AM' ? 'selected' : '' }}>
+                                                                value="10:00 AM" {{ old('check_out_time', $hotel->check_out_time) == '10:00 AM' ? 'selected' : '' }}>
                                                                 10:00 AM
                                                             </option>
                                                             <option
-                                                                value="11:00 AM" {{ old('check_out_time') == '11:00 AM' ? 'selected' : '' }}>
+                                                                value="11:00 AM" {{ old('check_out_time', $hotel->check_out_time) == '11:00 AM' ? 'selected' : '' }}>
                                                                 11:00 AM
                                                             </option>
                                                             <option
-                                                                value="12:00 PM" {{ old('check_out_time') == '12:00 PM' ? 'selected' : '' }}>
+                                                                value="12:00 PM" {{ old('check_out_time', $hotel->check_out_time) == '12:00 PM' ? 'selected' : '' }}>
                                                                 12:00 PM (Noon)
                                                             </option>
                                                             <option
-                                                                value="1:00 PM" {{ old('check_out_time') == '1:00 PM' ? 'selected' : '' }}>
+                                                                value="1:00 PM" {{ old('check_out_time', $hotel->check_out_time) == '1:00 PM' ? 'selected' : '' }}>
                                                                 1:00 PM
                                                             </option>
                                                             <option
-                                                                value="2:00 PM" {{ old('check_out_time') == '2:00 PM' ? 'selected' : '' }}>
+                                                                value="2:00 PM" {{ old('check_out_time', $hotel->check_out_time) == '2:00 PM' ? 'selected' : '' }}>
                                                                 2:00 PM
                                                             </option>
                                                             <option
-                                                                value="3:00 PM" {{ old('check_out_time') == '3:00 PM' ? 'selected' : '' }}>
+                                                                value="3:00 PM" {{ old('check_out_time', $hotel->check_out_time) == '3:00 PM' ? 'selected' : '' }}>
                                                                 3:00 PM
                                                             </option>
                                                             <option
-                                                                value="4:00 PM" {{ old('check_out_time') == '4:00 PM' ? 'selected' : '' }}>
+                                                                value="4:00 PM" {{ old('check_out_time', $hotel->check_out_time) == '4:00 PM' ? 'selected' : '' }}>
                                                                 4:00 PM
                                                             </option>
                                                             <option
-                                                                value="5:00 PM" {{ old('check_out_time') == '5:00 PM' ? 'selected' : '' }}>
+                                                                value="5:00 PM" {{ old('check_out_time', $hotel->check_out_time) == '5:00 PM' ? 'selected' : '' }}>
                                                                 5:00 PM
                                                             </option>
                                                             <option
-                                                                value="6:00 PM" {{ old('check_out_time') == '6:00 PM' ? 'selected' : '' }}>
+                                                                value="6:00 PM" {{ old('check_out_time', $hotel->check_out_time) == '6:00 PM' ? 'selected' : '' }}>
                                                                 6:00 PM
                                                             </option>
                                                             <option
-                                                                value="7:00 PM" {{ old('check_out_time') == '7:00 PM' ? 'selected' : '' }}>
+                                                                value="7:00 PM" {{ old('check_out_time', $hotel->check_out_time) == '7:00 PM' ? 'selected' : '' }}>
                                                                 7:00 PM
                                                             </option>
                                                             <option
-                                                                value="8:00 PM" {{ old('check_out_time') == '8:00 PM' ? 'selected' : '' }}>
+                                                                value="8:00 PM" {{ old('check_out_time', $hotel->check_out_time) == '8:00 PM' ? 'selected' : '' }}>
                                                                 8:00 PM
                                                             </option>
                                                             <option
-                                                                value="9:00 PM" {{ old('check_out_time') == '9:00 PM' ? 'selected' : '' }}>
+                                                                value="9:00 PM" {{ old('check_out_time', $hotel->check_out_time) == '9:00 PM' ? 'selected' : '' }}>
                                                                 9:00 PM
                                                             </option>
                                                             <option
-                                                                value="10:00 PM" {{ old('check_out_time') == '10:00 PM' ? 'selected' : '' }}>
+                                                                value="10:00 PM" {{ old('check_out_time', $hotel->check_out_time) == '10:00 PM' ? 'selected' : '' }}>
                                                                 10:00 PM
                                                             </option>
                                                             <option
-                                                                value="11:00 PM" {{ old('check_out_time') == '11:00 PM' ? 'selected' : '' }}>
+                                                                value="11:00 PM" {{ old('check_out_time', $hotel->check_out_time) == '11:00 PM' ? 'selected' : '' }}>
                                                                 11:00 PM
                                                             </option>
                                                             <option
-                                                                value="12:00 AM" {{ old('check_out_time') == '12:00 AM' ? 'selected' : '' }}>
+                                                                value="12:00 AM" {{ old('check_out_time', $hotel->check_out_time) == '12:00 AM' ? 'selected' : '' }}>
                                                                 12:00 AM (Midnight)
                                                             </option>
                                                         </select>
@@ -517,12 +518,12 @@
                                                         <div class="bar-radio-group">
                                                             <label>
                                                                 <input type="radio" name="food_laundry" value="yes"
-                                                                       class="bar-yes" {{ old('food_laundry') == 'yes' ? 'checked' : '' }}>
+                                                                       class="bar-yes" {{ old('food_laundry', $hotel->food_laundry) == 'yes' ? 'checked' : '' }}>
                                                                 Yes
                                                             </label>
                                                             <label>
                                                                 <input type="radio" name="food_laundry" value="no"
-                                                                       class="bar-no" {{ old('food_laundry') == 'no' ? 'checked' : '' }}>
+                                                                       class="bar-no" {{ old('food_laundry', $hotel->food_laundry) == 'no' ? 'checked' : '' }}>
                                                                 No
                                                             </label>
                                                         </div>
@@ -535,7 +536,7 @@
 
                                                     @php
                                                         // 1) Grab the raw saved/old data
-                                                        $rawRules = old('check_in_rules', []);
+                                                        $rawRules = old('check_in_rules', $hotel->check_in_rules);
 
                                                         // 2) Normalize into an array
                                                         if (is_string($rawRules)) {
@@ -642,7 +643,7 @@
                                                                 <input type="checkbox"
                                                                        class="custom-control-input select-all"
                                                                        name="property_all" id="property-all"
-                                                                       data-target="checkbox-item-property" {{ count(array_intersect(['Guests must climb stairs', 'No lift/Elevator', 'Potential noise during stays', 'Pet(s) live on the property', 'No parking on the property', 'Property has shared spaces', 'Limited essential amenities', 'Weapon(s) on the property', 'Commercial shops in the building', 'Offices in the building'], old('property_info', []))) === 10 ? 'checked' : '' }}>
+                                                                       data-target="checkbox-item-property" {{ count(array_intersect(['Guests must climb stairs', 'No lift/Elevator', 'Potential noise during stays', 'Pet(s) live on the property', 'No parking on the property', 'Property has shared spaces', 'Limited essential amenities', 'Weapon(s) on the property', 'Commercial shops in the building', 'Offices in the building'], old('property_info', $hotel->property_info ?? []))) === 10 ? 'checked' : '' }}>
                                                                 <label class="custom-control-label" for="property-all">Select
                                                                     All Property Info</label>
                                                             </div>
@@ -650,51 +651,51 @@
                                                     </div>
                                                     <label><input type="checkbox" name="property_info[]"
                                                                   value="Guests must climb stairs"
-                                                                  class="checkbox-item-property" {{ in_array('Guests must climb stairs', old('property_info', [])) ? 'checked' : '' }}>
+                                                                  class="checkbox-item-property" {{ in_array('Guests must climb stairs', old('property_info', $hotel->property_info ?? [])) ? 'checked' : '' }}>
                                                         Guests must climb stairs</label><br>
                                                     <label><input type="checkbox" name="property_info[]"
                                                                   value="No lift/Elevator"
-                                                                  class="checkbox-item-property" {{ in_array('No lift/Elevator', old('property_info', [])) ? 'checked' : '' }}>
+                                                                  class="checkbox-item-property" {{ in_array('No lift/Elevator', old('property_info', $hotel->property_info ?? [])) ? 'checked' : '' }}>
                                                         No lift/Elevator</label><br>
                                                     <label><input type="checkbox" name="property_info[]"
                                                                   value="Potential noise during stays"
-                                                                  class="checkbox-item-property" {{ in_array('Potential noise during stays', old('property_info', [])) ? 'checked' : '' }}>
+                                                                  class="checkbox-item-property" {{ in_array('Potential noise during stays', old('property_info', $hotel->property_info ?? [])) ? 'checked' : '' }}>
                                                         Potential noise during stays</label><br>
                                                     <label><input type="checkbox" name="property_info[]"
                                                                   value="Pet(s) live on the property"
-                                                                  class="checkbox-item-property" {{ in_array('Pet(s) live on the property', old('property_info', [])) ? 'checked' : '' }}>
+                                                                  class="checkbox-item-property" {{ in_array('Pet(s) live on the property', old('property_info', $hotel->property_info ?? [])) ? 'checked' : '' }}>
                                                         Pet(s) live on the property</label><br>
                                                     <label><input type="checkbox" name="property_info[]"
                                                                   value="No parking on the property"
-                                                                  class="checkbox-item-property" {{ in_array('No parking on the property', old('property_info', [])) ? 'checked' : '' }}>
+                                                                  class="checkbox-item-property" {{ in_array('No parking on the property', old('property_info', $hotel->property_info ?? [])) ? 'checked' : '' }}>
                                                         No parking on the property</label><br>
                                                     <label><input type="checkbox" name="property_info[]"
                                                                   value="Property has shared spaces"
-                                                                  class="checkbox-item-property" {{ in_array('Property has shared spaces', old('property_info', [])) ? 'checked' : '' }}>
+                                                                  class="checkbox-item-property" {{ in_array('Property has shared spaces', old('property_info', $hotel->property_info ?? [])) ? 'checked' : '' }}>
                                                         Property has shared spaces</label><br>
                                                     <label><input type="checkbox" name="property_info[]"
                                                                   value="Limited essential amenities"
-                                                                  class="checkbox-item-property" {{ in_array('Limited essential amenities', old('property_info', [])) ? 'checked' : '' }}>
+                                                                  class="checkbox-item-property" {{ in_array('Limited essential amenities', old('property_info', $hotel->property_info ?? [])) ? 'checked' : '' }}>
                                                         Limited essential amenities</label><br>
                                                     <label><input type="checkbox" name="property_info[]"
                                                                   value="Weapon(s) on the property"
-                                                                  class="checkbox-item-property" {{ in_array('Weapon(s) on the property', old('property_info', [])) ? 'checked' : '' }}>
+                                                                  class="checkbox-item-property" {{ in_array('Weapon(s) on the property', old('property_info', $hotel->property_info ?? [])) ? 'checked' : '' }}>
                                                         Weapon(s) on the property</label><br>
                                                     <label><input type="checkbox" name="property_info[]"
                                                                   value="Commercial shops in the building"
-                                                                  class="checkbox-item-property" {{ in_array('Commercial shops in the building', old('property_info', [])) ? 'checked' : '' }}>
+                                                                  class="checkbox-item-property" {{ in_array('Commercial shops in the building', old('property_info', $hotel->property_info ?? [])) ? 'checked' : '' }}>
                                                         Commercial shops in the building</label><br>
                                                     <label><input type="checkbox" name="property_info[]"
                                                                   value="Offices in the building"
-                                                                  class="checkbox-item-property" {{ in_array('Offices in the building', old('property_info', [])) ? 'checked' : '' }}>
+                                                                  class="checkbox-item-property" {{ in_array('Offices in the building', old('property_info', $hotel->property_info ?? [])) ? 'checked' : '' }}>
                                                         Offices in the building</label><br>
                                                     <div class="row">
                                                         <div class="col-md-5">
                                                             <div class="section" id="custom-property-wrapper">
 
                                                                 {{-- If there are existing values --}}
-                                                                @if(!empty(old('custom_property_info')) && is_array(old('custom_property_info')))
-                                                                    @foreach(array_filter(old('custom_property_info', [])) as $info)
+                                                                @if(!empty($hotel->custom_property_info) && is_array($hotel->custom_property_info))
+                                                                    @foreach(array_filter(old('custom_property_info', $hotel->custom_property_info)) as $info)
                                                                         <div
                                                                             class="form-group mb-3 d-flex align-items-center">
                                                                             <input type="text"
@@ -806,21 +807,21 @@
                                                                     <label>
                                                                         <input type="radio" name="age_restriction"
                                                                                value="yes" class="bar-radio-yes"
-                                                                               data-target="Age-input" {{ old('age_restriction') == 'yes' ? 'checked' : '' }}>
+                                                                               data-target="Age-input" {{ old('age_restriction', $hotel->age_restriction) == 'yes' ? 'checked' : '' }}>
                                                                         Yes
                                                                     </label>
                                                                     <label>
                                                                         <input type="radio" name="age_restriction"
                                                                                value="no" class="bar-radio-no"
-                                                                               data-target="Age-input" {{ old('age_restriction') == 'no' ? 'checked' : '' }}>
+                                                                               data-target="Age-input" {{ old('age_restriction', $hotel->age_restriction) == 'no' ? 'checked' : '' }}>
                                                                         No
                                                                     </label>
                                                                 </div>
                                                                 <div
-                                                                    class="input-group {{ old('age_restriction') == 'yes' ? '' : 'hidden' }}"
+                                                                    class="input-group {{ old('age_restriction', $hotel->age_restriction) == 'yes' ? '' : 'hidden' }}"
                                                                     id="Age-input">
                                                                     <textarea class="form-control no-resize"
-                                                                              name="age_restriction_details">{{ old('age_restriction_details') }}</textarea>
+                                                                              name="age_restriction_details">{{ old('age_restriction_details', $hotel->age_restriction_details) }}</textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -833,21 +834,21 @@
                                                                     <label>
                                                                         <input type="radio" name="vlogging_allowed"
                                                                                value="yes" class="bar-radio-yes"
-                                                                               data-target="Vlogging-input" {{ old('vlogging_allowed') == 'yes' ? 'checked' : '' }}>
+                                                                               data-target="Vlogging-input" {{ old('vlogging_allowed', $hotel->vlogging_allowed) == 'yes' ? 'checked' : '' }}>
                                                                         Yes
                                                                     </label>
                                                                     <label>
                                                                         <input type="radio" name="vlogging_allowed"
                                                                                value="no" class="bar-radio-no"
-                                                                               data-target="Vlogging-input" {{ old('vlogging_allowed') == 'no' ? 'checked' : '' }}>
+                                                                               data-target="Vlogging-input" {{ old('vlogging_allowed', $hotel->vlogging_allowed) == 'no' ? 'checked' : '' }}>
                                                                         No
                                                                     </label>
                                                                 </div>
                                                                 <div
-                                                                    class="input-group {{ old('vlogging_allowed') == 'yes' ? '' : 'hidden' }}"
+                                                                    class="input-group {{ old('vlogging_allowed', $hotel->vlogging_allowed) == 'yes' ? '' : 'hidden' }}"
                                                                     id="Vlogging-input">
                                                                     <textarea class="form-control no-resize"
-                                                                              name="vlogging_details">{{ old('vlogging_details') }}</textarea>
+                                                                              name="vlogging_details">{{ old('vlogging_details', $hotel->vlogging_details) }}</textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -858,7 +859,7 @@
                                                                     Policy</label>
                                                                 <div class="form-control-wrap">
                                                                     <textarea class="form-control no-resize" id="ChildPolicy"
-                                                                              name="child_policy">{{ old('child_policy') }}</textarea>
+                                                                              name="child_policy">{{ old('child_policy', $hotel->child_policy) }}</textarea>
 
                                                                 </div>
                                                             </div>
@@ -869,7 +870,7 @@
                                                                 <label class="form-label" for="extra-bed-policy">Special Instructions</label>
                                                                 <div class="form-control-wrap">
                                                                     <textarea class="form-control no-resize"
-                                                                              name="extra_bed_policy" id="extra-bed-policy">{{ old('extra_bed_policy') }}</textarea>
+                                                                              name="extra_bed_policy" id="extra-bed-policy">{{ old('extra_bed_policy', $hotel->extra_bed_policy) }}</textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -880,7 +881,7 @@
                                                                     Policy</label>
                                                                 <div class="form-control-wrap">
                                                                     <textarea class="form-control no-resize"
-                                                                              name="cooking_policy">{{ old('cooking_policy') }}</textarea>
+                                                                              name="cooking_policy">{{ old('cooking_policy', $hotel->cooking_policy) }}</textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -891,7 +892,7 @@
                                                                     (Location Direction details)</label>
                                                                 <div class="form-control-wrap">
                                                                     <textarea class="form-control no-resize"
-                                                                              name="directions" id="location-direction">{{ old('directions') }}</textarea>
+                                                                              name="directions" id="location-direction">{{ old('directions', $hotel->directions) }}</textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -902,7 +903,7 @@
                                                                     Policy</label>
                                                                 <div class="form-control-wrap">
                                                                     <textarea class="form-control no-resize"
-                                                                              name="additional_policy" id="additional-policy">{{ old('additional_policy') }}</textarea>
+                                                                              name="additional_policy" id="additional-policy">{{ old('additional_policy', $hotel->additional_policy) }}</textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -919,7 +920,7 @@
                                                             <div class="custom-control custom-switch checked">
                                                                 <input type="checkbox" class="custom-control-input"
                                                                        name="check_in_all"
-                                                                       id="check-in-all" {{ count(array_intersect(['Building staff', 'Housekeeping', 'Bell boy', 'In-person/Self check-in', 'Smart lock', 'Keypad', 'Lockbox'], old('check_in_methods', []))) === 7 ? 'checked' : '' }}>
+                                                                       id="check-in-all" {{ count(array_intersect(['Building staff', 'Housekeeping', 'Bell boy', 'In-person/Self check-in', 'Smart lock', 'Keypad', 'Lockbox'], old('check_in_methods', $hotel->check_in_methods ?? []))) === 7 ? 'checked' : '' }}>
                                                                 <label class="custom-control-label" for="check-in-all">Check
                                                                     All</label>
                                                             </div>
@@ -927,31 +928,31 @@
                                                     </div>
                                                     <label><input type="checkbox" name="check_in_methods[]"
                                                                   value="Building staff"
-                                                                  class="checkbox-item-checkin" {{ in_array('Building staff', old('check_in_methods', [])) ? 'checked' : '' }}>
+                                                                  class="checkbox-item-checkin" {{ in_array('Building staff', old('check_in_methods', $hotel->check_in_methods ?? [])) ? 'checked' : '' }}>
                                                         Building staff</label><br>
                                                     <label><input type="checkbox" name="check_in_methods[]"
                                                                   value="Housekeeping"
-                                                                  class="checkbox-item-checkin" {{ in_array('Housekeeping', old('check_in_methods', [])) ? 'checked' : '' }}>
+                                                                  class="checkbox-item-checkin" {{ in_array('Housekeeping', old('check_in_methods', $hotel->check_in_methods ?? [])) ? 'checked' : '' }}>
                                                         Housekeeping</label><br>
                                                     <label><input type="checkbox" name="check_in_methods[]"
                                                                   value="Bell boy"
-                                                                  class="checkbox-item-checkin" {{ in_array('Bell boy', old('check_in_methods', [])) ? 'checked' : '' }}>
+                                                                  class="checkbox-item-checkin" {{ in_array('Bell boy', old('check_in_methods', $hotel->check_in_methods ?? [])) ? 'checked' : '' }}>
                                                         Bell boy</label><br>
                                                     <label><input type="checkbox" name="check_in_methods[]"
                                                                   value="In-person/Self check-in"
-                                                                  class="checkbox-item-checkin" {{ in_array('In-person/Self check-in', old('check_in_methods', [])) ? 'checked' : '' }}>
+                                                                  class="checkbox-item-checkin" {{ in_array('In-person/Self check-in', old('check_in_methods', $hotel->check_in_methods ?? [])) ? 'checked' : '' }}>
                                                         In-person/Self check-in</label><br>
                                                     <label><input type="checkbox" name="check_in_methods[]"
                                                                   value="Smart lock"
-                                                                  class="checkbox-item-checkin" {{ in_array('Smart lock', old('check_in_methods', [])) ? 'checked' : '' }}>
+                                                                  class="checkbox-item-checkin" {{ in_array('Smart lock', old('check_in_methods', $hotel->check_in_methods ?? [])) ? 'checked' : '' }}>
                                                         Smart lock</label><br>
                                                     <label><input type="checkbox" name="check_in_methods[]"
                                                                   value="Keypad"
-                                                                  class="checkbox-item-checkin" {{ in_array('Keypad', old('check_in_methods', [])) ? 'checked' : '' }}>
+                                                                  class="checkbox-item-checkin" {{ in_array('Keypad', old('check_in_methods', $hotel->check_in_methods ?? [])) ? 'checked' : '' }}>
                                                         Keypad</label><br>
                                                     <label><input type="checkbox" name="check_in_methods[]"
                                                                   value="Lockbox"
-                                                                  class="checkbox-item-checkin" {{ in_array('Lockbox', old('check_in_methods', [])) ? 'checked' : '' }}>
+                                                                  class="checkbox-item-checkin" {{ in_array('Lockbox', old('check_in_methods', $hotel->check_in_methods ?? [])) ? 'checked' : '' }}>
                                                         Lockbox</label><br>
                                                     <div class="row">
                                                         <div class="col-md-3">
@@ -961,8 +962,8 @@
                                                         </div>
                                                         <div class="form-container" id="formContainer">
                                                             <!-- Added check for custom_check_in_methods -->
-                                                            @if(!empty(old('custom_check_in_methods')) && is_array(old('custom_check_in_methods')))
-                                                                @foreach(old('custom_check_in_methods', []) as $method)
+                                                            @if(!empty($hotel->custom_check_in_methods) && is_array($hotel->custom_check_in_methods))
+                                                                @foreach(old('custom_check_in_methods', $hotel->custom_check_in_methods) as $method)
                                                                     <div class="col-md-6 col-lg-4 col-xxl-3">
                                                                         <div class="form-group">
                                                                             <input type="text" class="form-control"
@@ -1065,7 +1066,7 @@
                                                                         <input class="form-check-input cancellation-checkbox" type="checkbox"
                                                                                name="cancellation_policies[]" value="{{ $policyKey }}"
                                                                                id="flexSwitchCheck{{ str_replace([' ', '/', '-'], '', $policyKey) }}"
-                                                                            {{ in_array($policyKey, old('cancellation_policies', [])) ? 'checked' : '' }}>
+                                                                            {{ in_array($policyKey, old('cancellation_policies', $hotel->cancellation_policies ?? [])) ? 'checked' : '' }}>
                                                                         <label class="form-check-label" for="flexSwitchCheck{{ str_replace([' ', '/', '-'], '', $policyKey) }}">
                                                                             {{ $cancellationPolicyTexts[$policyKey] ?? $policyKey }}
                                                                         </label>
@@ -1106,7 +1107,7 @@
                                                                                 <input class="form-check-input cancellation-checkbox" type="checkbox"
                                                                                        name="cancellation_policies[]" value="custom_{{ $index }}"
                                                                                        id="customPolicyCheck{{ $index }}"
-                                                                                    {{ in_array('custom_' . $index, old('cancellation_policies', [])) ? 'checked' : '' }}>
+                                                                                    {{ in_array('custom_' . $index, old('cancellation_policies', $hotel->cancellation_policies ?? [])) ? 'checked' : '' }}>
                                                                                 <label class="form-check-label" for="customPolicyCheck{{ $index }}">
                                                                                     Custom Policy {{ $index + 1 }}
                                                                                 </label>
@@ -1283,17 +1284,17 @@
                                     @php
                                         // ────────────────────────────────────────────────────────
                                         // 1) Decode saved “facilities” (popular ones) & custom ones
-                                        $savedFacilities = old('facilities', []);
+                                        $savedFacilities = old('facilities', $hotel->facilities ?? []);
                                         if (is_string($savedFacilities)) {
                                             $savedFacilities = json_decode($savedFacilities, true) ?: [];
                                         }
-                                        $customFacilities = old('custom_facilities', []);
+                                        $customFacilities = old('custom_facilities', $hotel->custom_facilities ?? []);
                                         if (is_string($customFacilities)) {
                                             $customFacilities = json_decode($customFacilities, true) ?: [];
                                         }
 
                                         // 2) Decode saved “hotel_facilities” JSON into grouped array
-                                        $savedHF = old('hotel_facilities', []);
+                                        $savedHF = old('hotel_facilities', $hotel->hotel_facilities ?? []);
                                         if (is_string($savedHF)) {
                                             $savedHF = json_decode($savedHF, true) ?: [];
                                         }
@@ -1374,8 +1375,10 @@
 
                                                     <div id="facility-container">
                                                         @php
-                                                            // No existing icons for create form
-                                                            $icons = [];
+                                                            // decode JSON into array once
+                                                            $icons = is_array($hotel->custom_facilities_icon)
+                                                                     ? $hotel->custom_facilities_icon
+                                                                     : ( json_decode($hotel->custom_facilities_icon,true) ?: [] );
                                                         @endphp
 
                                                         @foreach($customFacilities as $i => $facility)
@@ -1390,7 +1393,7 @@
                                                                         name="custom_facilities[]"
                                                                         id="custom_facility_{{ $i }}"
                                                                         class="form-control"
-                                                                        value="{{ old("custom_facilities.{$i}") }}"
+                                                                        value="{{ old("custom_facilities.{$i}", $facility) }}"
                                                                         placeholder="Enter facility name">
                                                                 </div>
 
@@ -1563,8 +1566,8 @@
                                                     <h3 class="can-tittle">Most Popular Nearby Area</h3>
                                                     <div id="nearby-areas-wrapper">
                                                         @php
-                                                            // No existing nearby areas for create form
-                                                            $nearbyAreas = [];
+                                                            // Ensure nearby_areas is a valid array. If it's not, decode it.
+                                                            $nearbyAreas = is_array($hotel->custom_nearby_areas) ? $hotel->custom_nearby_areas : json_decode($hotel->custom_nearby_areas, true);
                                                         @endphp
 
                                                         @if(is_array($nearbyAreas) && count($nearbyAreas) > 0)
@@ -1634,23 +1637,23 @@
                                                                     class="form-control">
                                                                 <option value="" disabled selected>Select category</option>
                                                                 <option
-                                                                    value="Restaurant & Cafe" {{ old('area_category') == 'Restaurant & Cafe' ? 'selected' : '' }}>
+                                                                    value="Restaurant & Cafe" {{ $hotel->area_category == 'Restaurant & Cafe' ? 'selected' : '' }}>
                                                                     Restaurant & Cafe
                                                                 </option>
                                                                 <option
-                                                                    value="Entertainment & Attraction Point" {{ old('area_category') == 'Entertainment & Attraction Point' ? 'selected' : '' }}>
+                                                                    value="Entertainment & Attraction Point" {{ $hotel->area_category == 'Entertainment & Attraction Point' ? 'selected' : '' }}>
                                                                     Entertainment & Attraction Point
                                                                 </option>
                                                                 <option
-                                                                    value="Hospital & Police Station" {{ old('area_category') == 'Hospital & Police Station' ? 'selected' : '' }}>
+                                                                    value="Hospital & Police Station" {{ $hotel->area_category == 'Hospital & Police Station' ? 'selected' : '' }}>
                                                                     Hospital & Police Station
                                                                 </option>
                                                                 <option
-                                                                    value="Transport & Airport" {{ old('area_category') == 'Transport & Airport' ? 'selected' : '' }}>
+                                                                    value="Transport & Airport" {{ $hotel->area_category == 'Transport & Airport' ? 'selected' : '' }}>
                                                                     Transport & Airport
                                                                 </option>
                                                                 <option
-                                                                    value="Shopping & ATM" {{ old('area_category') == 'Shopping & ATM' ? 'selected' : '' }}>
+                                                                    value="Shopping & ATM" {{ $hotel->area_category == 'Shopping & ATM' ? 'selected' : '' }}>
                                                                     Shopping & ATM
                                                                 </option>
                                                             </select>
@@ -1743,8 +1746,15 @@
                                                             <div class="multiple-upload-container"
                                                                  id="upload-container-{{ $index + 1 }}">
                                                                 @php
-                                                                    // No existing photos for create form
-                                                                    $photos = [];
+                                                                    $photos = json_decode($hotel->$field, true);
+                                                                    // Check if the decoded photos are an array
+                                                                    if (is_array($photos)) {
+                                                                        $photos = array_map(function ($photo) {
+                                                                            return str_replace("\\", "/", $photo); // Remove extra backslashes
+                                                                        }, $photos);
+                                                                    } else {
+                                                                        $photos = [];
+                                                                    }
                                                                 @endphp
 
                                                                 @if(!empty($photos))
@@ -1839,8 +1849,8 @@
     </div>
 
     @php
-        // No existing hotel facilities for create form
-        $hotelFacilitiesArray = [];
+        // Decode if it's a JSON string
+        $hotelFacilitiesArray = is_string($hotelFacilities) ? json_decode($hotelFacilities, true) : $hotelFacilities;
     @endphp
 
 
@@ -2578,8 +2588,16 @@
             });
         }
 
-        // No existing facilities to preload for create form
-        const hotelFacilitiesData = [];
+        // Preload existing facilities
+        const hotelFacilitiesData = {!! json_encode($hotelFacilitiesArray ?? []) !!};
+        (Array.isArray(hotelFacilitiesData) ? hotelFacilitiesData : []).forEach(facility => {
+            const categoryKey = facility.category;     // e.g., "general_services"
+            const name = facility.name;
+            const category = hotelFacilitiesCategoryKeysMap[categoryKey];
+            if (category && hotelFacilitiesLabelsMap[category]) {
+                createHotelFieldGroup(category, name);
+            }
+        });
     </script>
 
 
@@ -2694,8 +2712,11 @@
             });
         }
 
-        // No existing nearby areas for create form
-        // populateExistingNearbyAreas is not needed
+        // Call this after page load
+        document.addEventListener('DOMContentLoaded', function () {
+            const existingNearbyAreas = @json($hotel->nearby_areas);
+            populateExistingNearbyAreas(existingNearbyAreas);
+        });
     </script>
 
 
