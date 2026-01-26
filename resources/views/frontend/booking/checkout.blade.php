@@ -505,16 +505,22 @@
                                                     <!-- Hidden change options -->
                                                     <div id="change-options" style="display: none; margin-top: 20px; border: 1px solid #ddd; padding: 20px; border-radius: 8px; background-color: #f9f9f9;">
                                                         <div class="form-group">
-                                                            <label for="change-checkin-date">Check-in Date:</label>
-                                                            <input type="date" id="change-checkin-date" name="change-checkin-date" class="form-control" required>
+                                                            <label for="change-checkin-date" style="font-weight: 600; color: #333; margin-bottom: 8px;">Check-in Date:</label>
+                                                            <div style="position: relative;">
+                                                                <input type="date" id="change-checkin-date" name="change-checkin-date" class="form-control" required style="padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                                                                <i class="fa fa-calendar" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none;"></i>
+                                                            </div>
                                                         </div>
-                                                        <div class="form-group">
-                                                            <label for="change-checkout-date">Check-out Date:</label>
-                                                            <input type="date" id="change-checkout-date" name="change-checkout-date" class="form-control" required>
+                                                        <div class="form-group" style="margin-top: 15px;">
+                                                            <label for="change-checkout-date" style="font-weight: 600; color: #333; margin-bottom: 8px;">Check-out Date:</label>
+                                                            <div style="position: relative;">
+                                                                <input type="date" id="change-checkout-date" name="change-checkout-date" class="form-control" required style="padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                                                                <i class="fa fa-calendar" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none;"></i>
+                                                            </div>
                                                         </div>
-                                                        <div class="form-group">
-                                                            <label for="adults-select">Adults:</label>
-                                                            <select id="adults-select" name="adults" class="form-control">
+                                                        <div class="form-group" style="margin-top: 15px;">
+                                                            <label for="adults-select" style="font-weight: 600; color: #333; margin-bottom: 8px;">Adults:</label>
+                                                            <select id="adults-select" name="adults" class="form-control" style="padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
                                                                 <option value="1">1 Adult</option>
                                                                 <option value="2" selected>2 Adults</option>
                                                                 <option value="3">3 Adults</option>
@@ -527,9 +533,9 @@
                                                                 <option value="10">10 Adults</option>
                                                             </select>
                                                         </div>
-                                                        <div class="form-group">
-                                                            <label for="children-select">Children:</label>
-                                                            <select id="children-select" name="children" class="form-control">
+                                                        <div class="form-group" style="margin-top: 15px;">
+                                                            <label for="children-select" style="font-weight: 600; color: #333; margin-bottom: 8px;">Children:</label>
+                                                            <select id="children-select" name="children" class="form-control" style="padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
                                                                 <option value="0" selected>0 Children</option>
                                                                 <option value="1">1 Child</option>
                                                                 <option value="2">2 Children</option>
@@ -538,7 +544,7 @@
                                                                 <option value="5">5 Children</option>
                                                             </select>
                                                         </div>
-                                                        <button id="save-selection" class="btn btn-primary" style="margin-top: 10px;">Save Selection</button>
+                                                        <button id="save-selection" class="btn btn-primary" style="margin-top: 20px; width: 100%; padding: 12px; background-color: #8C349C; border: none; border-radius: 4px; color: white; font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#7a2d8a'" onmouseout="this.style.backgroundColor='#8C349C'">SAVE SELECTION</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1998,10 +2004,15 @@
                     
                     if (data.available) {
                         // Update main form fields
-                        document.getElementById('checkin-date').value = checkinDate;
-                        document.getElementById('checkout-date').value = checkoutDate;
-                        document.getElementById('qty').value = adults;
-                        document.getElementById('qty3').value = children;
+                        const mainCheckin = document.getElementById('checkin-date');
+                        const mainCheckout = document.getElementById('checkout-date');
+                        const mainAdults = document.getElementById('qty');
+                        const mainChildren = document.getElementById('qty3');
+                        
+                        if (mainCheckin) mainCheckin.value = checkinDate;
+                        if (mainCheckout) mainCheckout.value = checkoutDate;
+                        if (mainAdults) mainAdults.value = adults;
+                        if (mainChildren) mainChildren.value = children;
                         
                         // Update booking params in localStorage
                         const bookingParams = {
@@ -2012,13 +2023,35 @@
                         };
                         localStorage.setItem('bookingParams', JSON.stringify(bookingParams));
                         
+                        // Update cart items with new dates (for price recalculation)
+                        const updatedCart = cart.map(item => ({
+                            ...item,
+                            checkin: checkinDate,
+                            checkout: checkoutDate,
+                            adults: adults,
+                            children: children
+                        }));
+                        localStorage.setItem('bookingCart', JSON.stringify(updatedCart));
+                        
                         // Update total persons
-                        updateTotalPersons();
+                        if (typeof updateTotalPersons === 'function') {
+                            updateTotalPersons();
+                        }
+                        
+                        // Update total nights
+                        if (typeof updateTotalNights === 'function') {
+                            updateTotalNights();
+                        }
                         
                         // Hide the change options section
-                        changeOptions.style.display = 'none';
+                        if (changeOptions) {
+                            changeOptions.style.display = 'none';
+                        }
                         if (changeSelectionButton) {
-                            changeSelectionButton.querySelector('.bui-button__text').textContent = 'Change your selection';
+                            const buttonText = changeSelectionButton.querySelector('.bui-button__text');
+                            if (buttonText) {
+                                buttonText.textContent = 'Change your selection';
+                            }
                         }
                         
                         // Show success message
@@ -2030,27 +2063,35 @@
                             timer: 2000
                         });
                         
-                        // Refresh booking summary if needed
-                        if (typeof renderBookingCards === 'function') {
-                            renderBookingCards(cart);
-                        }
-                        if (typeof renderPriceSummary === 'function') {
-                            renderPriceSummary(cart);
-                        }
-                        
-                        // Update total nights display
-                        const checkin = new Date(checkinDate);
-                        const checkout = new Date(checkoutDate);
-                        const nights = Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24));
-                        const totalNightsEl = document.getElementById('totalNights');
-                        if (totalNightsEl) {
-                            totalNightsEl.textContent = `${nights} ${nights === 1 ? 'night' : 'nights'}`;
-                        }
-                        
-                        // Update booking date range
-                        if (typeof updateBookingDateRange === 'function') {
-                            updateBookingDateRange(checkin, checkout);
-                        }
+                        // Refresh booking summary - use updated cart
+                        setTimeout(() => {
+                            if (typeof renderBookingCards === 'function') {
+                                renderBookingCards(updatedCart);
+                            }
+                            if (typeof renderPriceSummary === 'function') {
+                                renderPriceSummary(updatedCart);
+                            }
+                            
+                            // Update total nights display
+                            const checkin = new Date(checkinDate);
+                            const checkout = new Date(checkoutDate);
+                            const nights = Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24));
+                            const totalNightsEl = document.getElementById('totalNights');
+                            if (totalNightsEl) {
+                                totalNightsEl.textContent = `${nights} ${nights === 1 ? 'night' : 'nights'}`;
+                            }
+                            
+                            // Update booking date range
+                            if (typeof updateBookingDateRange === 'function') {
+                                updateBookingDateRange(checkin, checkout);
+                            }
+                            
+                            // Trigger global cart update event
+                            window.dispatchEvent(new Event('bookingParamsUpdated'));
+                            if (typeof updateGlobalCartDisplay === 'function') {
+                                updateGlobalCartDisplay();
+                            }
+                        }, 100);
                     } else {
                         // Show error with details
                         let errorMessage = data.message || 'Rooms are not available for the selected dates or guest count.';
