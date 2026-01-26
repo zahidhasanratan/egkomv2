@@ -72,17 +72,12 @@ class ManageHotel extends Controller
             'custom_check_in_rules.*' => 'nullable|string|max:255',
 
             // Photos (5MB each, adjust as needed)
-            'kitchen_photos.*'         => 'nullable|image|max:5120',
-            'washroom_photos.*'        => 'nullable|image|max:5120',
-            'parking_lot_photos.*'     => 'nullable|image|max:5120',
+            'featured_photo'            => 'nullable|image|max:5120', // Single file
             'entrance_gate_photos.*'   => 'nullable|image|max:5120',
             'lift_stairs_photos.*'     => 'nullable|image|max:5120',
-            'spa_photos.*'             => 'nullable|image|max:5120',
-            'bar_photos.*'             => 'nullable|image|max:5120',
-            'transport_photos.*'       => 'nullable|image|max:5120',
             'rooftop_photos.*'         => 'nullable|image|max:5120',
+            'spa_photos.*'             => 'nullable|image|max:5120',
             'gym_photos.*'             => 'nullable|image|max:5120',
-            'security_photos.*'        => 'nullable|image|max:5120',
             'amenities_photos.*'       => 'nullable|image|max:5120',
             'custom_facilities_icon.*' => 'nullable|image|max:5120',
 
@@ -173,8 +168,8 @@ class ManageHotel extends Controller
 
         // ✅ File uploads → /public/hotel_photos
         // Updated hotel photo categories (plus custom facility icons)
-        $photoFields = [
-            'featured_photo', // single, stored as JSON array for consistency
+        $singlePhotoFields = ['featured_photo']; // Single file inputs
+        $multiplePhotoFields = [
             'entrance_gate_photos',  // Hotel Exterior
             'lift_stairs_photos',    // Common Areas
             'rooftop_photos',        // Facilities
@@ -185,15 +180,36 @@ class ManageHotel extends Controller
         ];
         $uploadDir = public_path('hotel_photos');
         if (!is_dir($uploadDir)) { @mkdir($uploadDir, 0755, true); }
-        foreach ($photoFields as $field) {
+        
+        // Handle single file inputs
+        foreach ($singlePhotoFields as $field) {
+            $data[$field] = null;
+            if ($request->hasFile($field)) {
+                $file = $request->file($field);
+                if ($file && $file->isValid()) {
+                    $filename = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
+                    $file->move($uploadDir, $filename);
+                    $data[$field] = json_encode(['hotel_photos/' . $filename]);
+                }
+            }
+        }
+        
+        // Handle multiple file inputs (arrays)
+        foreach ($multiplePhotoFields as $field) {
             $data[$field] = null;
             if ($request->hasFile($field)) {
                 $paths = [];
-                foreach ((array)$request->file($field) as $file) {
-                    if (!$file || !$file->isValid()) continue;
-                    $filename = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
-                    $file->move($uploadDir, $filename);
-                    $paths[] = 'hotel_photos/' . $filename;
+                $files = $request->file($field);
+                // Ensure it's an array
+                if (!is_array($files)) {
+                    $files = [$files];
+                }
+                foreach ($files as $file) {
+                    if ($file && $file->isValid()) {
+                        $filename = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
+                        $file->move($uploadDir, $filename);
+                        $paths[] = 'hotel_photos/' . $filename;
+                    }
                 }
                 $data[$field] = !empty($paths) ? json_encode($paths) : null;
             }
@@ -455,10 +471,25 @@ class ManageHotel extends Controller
             'amenities_photos.*'          => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // 2) Filter out null/empty values
+        // 2) Filter out null/empty values, but preserve property_category and description
         $data = collect($validated)
-            ->filter(fn($v) => !is_null($v) && $v !== '' && $v !== [])
+            ->filter(function($v, $k) {
+                // Always include property_category and description
+                if (in_array($k, ['property_category', 'description'])) {
+                    return true;
+                }
+                // For other fields, filter out null/empty values
+                return !is_null($v) && $v !== '' && $v !== [];
+            })
             ->toArray();
+        
+        // Explicitly include property_category and description even if empty (to ensure they're always saved)
+        if ($request->has('property_category')) {
+            $data['property_category'] = $request->input('property_category', '');
+        }
+        if ($request->has('description')) {
+            $data['description'] = $request->input('description', '');
+        }
 
         // ✅ Encode generic array fields so they persist as JSON (if your columns are TEXT/JSON)
         $arrayFieldsToEncode = [
@@ -618,6 +649,7 @@ class ManageHotel extends Controller
         $validated = $request->validate([
             'popular_destination_id' => 'required|exists:popular_destinations,id',
             'property_type'               => 'nullable|string',
+            'property_category'           => 'nullable|string',
 
             'address'               => 'nullable|string',
             'district'               => 'nullable|string',
@@ -679,10 +711,25 @@ class ManageHotel extends Controller
             'amenities_photos.*'        => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // 2) Filter out null/empty values
+        // 2) Filter out null/empty values, but preserve property_category and description
         $data = collect($validated)
-            ->filter(fn($v) => !is_null($v) && $v !== '' && $v !== [])
+            ->filter(function($v, $k) {
+                // Always include property_category and description
+                if (in_array($k, ['property_category', 'description'])) {
+                    return true;
+                }
+                // For other fields, filter out null/empty values
+                return !is_null($v) && $v !== '' && $v !== [];
+            })
             ->toArray();
+        
+        // Explicitly include property_category and description even if empty (to ensure they're always saved)
+        if ($request->has('property_category')) {
+            $data['property_category'] = $request->input('property_category', '');
+        }
+        if ($request->has('description')) {
+            $data['description'] = $request->input('description', '');
+        }
 
         // Handle cancellation policies - SAVE GLOBALLY (not per-hotel)
         // Get or create global hotel settings

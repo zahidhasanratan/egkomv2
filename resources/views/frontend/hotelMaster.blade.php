@@ -569,21 +569,30 @@
                             <!-- Submenu -->
                             <div class="user-submenu" id="userSubmenu">
                                 <ul>
+                                    @if(auth()->guard('guest')->check())
                                     <li>
-                                        <a href="login.html" id="loginMenu">Login</a>
+                                        <a href="{{ route('guest.dashboard') }}">Dashboard</a>
                                     </li>
                                     <li>
-                                        <a href="sign-up.html">Signup</a>
+                                        <a href="{{ route('guest.profile') }}">Profile</a>
                                     </li>
                                     <li>
-                                        <a href="profile.html">Profile</a>
+                                        <a href="{{ route('guest.settings') }}">Settings</a>
                                     </li>
                                     <li>
-                                        <a href="#">Settings</a>
+                                        <form method="POST" action="{{ route('guest.logout') }}" style="display: inline;">
+                                            @csrf
+                                            <a href="#" onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
+                                        </form>
+                                    </li>
+                                    @else
+                                    <li>
+                                        <a href="{{ route('guest.login') }}" id="loginMenu">Login</a>
                                     </li>
                                     <li>
-                                        <a href="#">Logout</a>
+                                        <a href="{{ route('guest.signup') }}">Signup</a>
                                     </li>
+                                    @endif
                                 </ul>
                             </div>
                             <!-- Login Modal -->
@@ -2171,3 +2180,4 @@
 </body>
 
 </html>
+

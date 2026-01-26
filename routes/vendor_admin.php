@@ -53,8 +53,8 @@ Route::prefix('vendor-admin')->group(function () {
 
 
         Route::get('/hotel-create', [ManageHotel::class, 'create'])->name('vendor-admin.hotel.create');
-        Route::post('/vendor-admin/hotel/store', [ManageHotel::class, 'store'])->name('vendor-admin.hotel.store');
-        Route::get('/vendor-admin/hotel', [ManageHotel::class, 'index'])->name('vendor-admin.hotel.index');
+        Route::post('/hotel/store', [ManageHotel::class, 'store'])->name('vendor-admin.hotel.store');
+        Route::get('/hotel', [ManageHotel::class, 'index'])->name('vendor-admin.hotel.index');
 
 
 

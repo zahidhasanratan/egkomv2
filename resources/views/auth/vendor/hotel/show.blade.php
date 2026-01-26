@@ -359,7 +359,13 @@
                                                 <div class="card-body">
                                                     @php
                                                         $propertyInfo = old('property_info', $hotel->property_info ?? []);
+                                                        if (is_string($propertyInfo)) {
+                                                            $propertyInfo = json_decode($propertyInfo, true) ?: [];
+                                                        }
                                                         $customPropertyInfo = old('custom_property_info', $hotel->custom_property_info ?? []);
+                                                        if (is_string($customPropertyInfo)) {
+                                                            $customPropertyInfo = json_decode($customPropertyInfo, true) ?: [];
+                                                        }
                                                     @endphp
                                                     @if(!empty($propertyInfo) || !empty($customPropertyInfo))
                                                         <ul class="list-group">
@@ -442,7 +448,13 @@
                                                 <div class="card-body">
                                                     @php
                                                         $checkInMethods = old('check_in_methods', $hotel->check_in_methods ?? []);
+                                                        if (is_string($checkInMethods)) {
+                                                            $checkInMethods = json_decode($checkInMethods, true) ?: [];
+                                                        }
                                                         $customCheckInMethods = old('custom_check_in_methods', $hotel->custom_check_in_methods ?? []);
+                                                        if (is_string($customCheckInMethods)) {
+                                                            $customCheckInMethods = json_decode($customCheckInMethods, true) ?: [];
+                                                        }
                                                     @endphp
                                                     @if(!empty($checkInMethods) || !empty($customCheckInMethods))
                                                         <ul class="list-group">
@@ -473,6 +485,9 @@
                                                 <div class="card-body">
                                                     @php
                                                         $cancellationPolicies = old('cancellation_policies', $hotel->cancellation_policies ?? []);
+                                                        if (is_string($cancellationPolicies)) {
+                                                            $cancellationPolicies = json_decode($cancellationPolicies, true) ?: [];
+                                                        }
                                                     @endphp
                                                     @if(!empty($cancellationPolicies))
                                                         <ul class="list-group">
@@ -611,8 +626,15 @@
                                                 </div>
                                                 <div class="card-body">
                                                     @php
+                                                        // Decode saved "facilities" (popular ones) & custom ones
                                                         $savedFacilities = old('facilities', $hotel->facilities ?? []);
+                                                        if (is_string($savedFacilities)) {
+                                                            $savedFacilities = json_decode($savedFacilities, true) ?: [];
+                                                        }
                                                         $customFacilities = old('custom_facilities', $hotel->custom_facilities ?? []);
+                                                        if (is_string($customFacilities)) {
+                                                            $customFacilities = json_decode($customFacilities, true) ?: [];
+                                                        }
                                                         $icons = is_array($hotel->custom_facilities_icon) ? $hotel->custom_facilities_icon : (json_decode($hotel->custom_facilities_icon, true) ?: []);
                                                     @endphp
                                                     @if(!empty($savedFacilities) || !empty($customFacilities))

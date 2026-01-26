@@ -212,7 +212,7 @@
                             <!-- Start:  Hotel -->
                             <div id="Hotel" class="tab-pane in active">
                                 <div class="row">
-                                @foreach(\App\Models\Hotel:: where('property_type','Hotels')->where('approve',1)->get() as $hotel)
+                                @foreach(\App\Models\Hotel::where('property_category','Hotels')->where('approve',1)->where('status','submitted')->get() as $hotel)
                                     <div class="col-md-6 col-lg-6 col-xl-3">
                                         <div class="grid-block main-block h-grid-block">
                                             <div class="main-img h-grid-img">
@@ -283,7 +283,7 @@
                             <div id="Transit" class="tab-pane">
                                 <div class="row">
 
-                                    @foreach(\App\Models\Hotel:: where('property_type','Transit')->get() as $hotel)
+                                    @foreach(\App\Models\Hotel::where('property_category','Transit')->where('approve',1)->where('status','submitted')->get() as $hotel)
                                         <div class="col-md-6 col-lg-6 col-xl-3">
                                             <div class="grid-block main-block h-grid-block">
                                                 <div class="main-img h-grid-img">
@@ -353,7 +353,7 @@
                             <div id="Resorts" class="tab-pane">
                                 <div class="row">
 
-                                    @foreach(\App\Models\Hotel:: where('property_type','Resorts')->get() as $hotel)
+                                    @foreach(\App\Models\Hotel:: where('property_category','Resorts')->where('approve',1)->where('status','submitted')->get() as $hotel)
                                         <div class="col-md-6 col-lg-6 col-xl-3">
                                             <div class="grid-block main-block h-grid-block">
                                                 <div class="main-img h-grid-img">
@@ -424,7 +424,7 @@
                             <div id="Lodges" class="tab-pane">
                                 <div class="row">
 
-                                    @foreach(\App\Models\Hotel:: where('property_type','Lodges')->get() as $hotel)
+                                    @foreach(\App\Models\Hotel:: where('property_category','Apartments')->where('approve',1)->where('status','submitted')->get() as $hotel)
                                         <div class="col-md-6 col-lg-6 col-xl-3">
                                             <div class="grid-block main-block h-grid-block">
                                                 <div class="main-img h-grid-img">
@@ -495,7 +495,7 @@
                             <div id="Guesthouses" class="tab-pane">
                                 <div class="row">
 
-                                    @foreach(\App\Models\Hotel:: where('property_type','Guesthouses')->get() as $hotel)
+                                    @foreach(\App\Models\Hotel:: where('property_category','Guesthouses')->where('approve',1)->where('status','submitted')->get() as $hotel)
                                         <div class="col-md-6 col-lg-6 col-xl-3">
                                             <div class="grid-block main-block h-grid-block">
                                                 <div class="main-img h-grid-img">
@@ -566,7 +566,7 @@
                             <div id="Crisis" class="tab-pane">
                                 <div class="row">
 
-                                    @foreach(\App\Models\Hotel:: where('property_type','Crisis')->get() as $hotel)
+                                    @foreach(\App\Models\Hotel:: where('property_category','Crisis')->where('approve',1)->where('status','submitted')->get() as $hotel)
                                         <div class="col-md-6 col-lg-6 col-xl-3">
                                             <div class="grid-block main-block h-grid-block">
                                                 <div class="main-img h-grid-img">

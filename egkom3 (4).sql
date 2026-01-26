@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 25, 2026 at 05:12 AM
+-- Generation Time: Jan 25, 2026 at 09:39 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.23
 
@@ -354,7 +354,8 @@ INSERT INTO `activity_logs` (`id`, `browser`, `os`, `ip_address`, `activity_time
 (309, 'Chrome on Windows', 'Windows', '127.0.0.1', '08:59:20', 'Logged In', '2026-01-20 02:59:20', '2026-01-20 02:59:20'),
 (310, 'Chrome on Windows', 'Windows', '127.0.0.1', '06:14:16', 'Logged In', '2026-01-22 00:14:16', '2026-01-22 00:14:16'),
 (311, 'Chrome on Windows', 'Windows', '127.0.0.1', '06:35:52', 'Logged In', '2026-01-22 00:35:52', '2026-01-22 00:35:52'),
-(312, 'Chrome on Windows', 'Windows', '127.0.0.1', '04:08:11', 'Logged In', '2026-01-24 22:08:11', '2026-01-24 22:08:11');
+(312, 'Chrome on Windows', 'Windows', '127.0.0.1', '04:08:11', 'Logged In', '2026-01-24 22:08:11', '2026-01-24 22:08:11'),
+(313, 'Chrome on Windows', 'Windows', '127.0.0.1', '04:46:14', 'Logged In', '2026-01-24 22:46:14', '2026-01-24 22:46:14');
 
 -- --------------------------------------------------------
 
@@ -655,7 +656,8 @@ INSERT INTO `hotels` (`id`, `vendor_id`, `popular_destination_id`, `property_cat
 (61, 7, NULL, NULL, 'Hotels', NULL, NULL, NULL, '<p>detailsdetails detailsdetailsdetails detailsdetailsdetails detailsdetailsdetails detailsdetailsdetails detailsdetailsdetails detailsdetailsdetails detailsdetailsdetails detailsdetailsdetails detailsdetailsdetails detailsdetailsdetails detailsdetailsdetails detailsdetailsdetails detailsdetailsdetails details</p>', NULL, NULL, NULL, 'Propertyname 1', NULL, NULL, NULL, NULL, NULL, NULL, 'sadf', NULL, NULL, NULL, NULL, NULL, NULL, '[null]', NULL, '[null]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'submitted', 0, '2025-08-20 00:10:22', '2025-08-20 00:10:22'),
 (72, 7, NULL, 'Hotels', 'Hotels', '[\"Single Room\",\"Double Room\"]', NULL, NULL, 'new hotel', NULL, NULL, NULL, 'another hotel', 'no', NULL, 'no', NULL, 'no', NULL, '324', NULL, NULL, NULL, NULL, NULL, NULL, '[null]', NULL, '[null]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '\"[]\"', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', NULL, '[{\"name\":\"test1\",\"number\":\"1\",\"floor\":\"101\"},{\"name\":\"test2\",\"number\":\"2\",\"floor\":\"201\"}]', 0, 'submitted', 1, '2025-09-01 00:34:42', '2025-09-01 00:41:07'),
 (74, 7, NULL, 'Hotels', 'Hotel', NULL, NULL, NULL, '<p>sf sdf&nbsp;</p>', NULL, NULL, NULL, 'Shopno Bilash Holiday Suites', 'yes', 'Est adipisicing cor', 'no', 'Eius enim id ullamc', 'yes', 'Esse dolorem facilis', 'Ex commodi dolor eni', 'no', NULL, '08:00-10:00', '12:00 PM', 'no', '\"[\\\"Pay in advance\\\",\\\"Security money for keys\\\",\\\"Exercitationem ducim\\\"]\"', '[\"Exercitationem ducim\"]', '[\"No lift\\/Elevator\",\"Pet(s) live on the property\"]', '[\"Qui at cumque totam\"]', 'no', 'Et voluptatem quibu', 'yes', 'Sint ex Nam eos opt', NULL, NULL, 'Dolore voluptas cons', NULL, 'Reprehenderit neque', '[\"Building staff\",\"In-person\\/Self check-in\",\"Keypad\"]', NULL, '[\"Non-refundable\",\"Partially refundable\"]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '[{\"name\":\"123\",\"number\":\"123\",\"floor\":\"123\"},{\"name\":\"123\",\"number\":\"123\",\"floor\":\"123\"}]', 0, 'draft', 0, '2025-12-06 22:52:22', '2025-12-06 22:52:22'),
-(77, 15, NULL, 'Hotels', 'Hotels', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'estt', 'no', NULL, 'no', NULL, 'yes', 'Excepteur magnam off', 'Illo animi similiqu', 'no', NULL, '22:00-00:00', '10:00 PM', 'yes', '\"[\\\"Pay in advance\\\",\\\"Rentals\\\",\\\"Quam enim aut maiore\\\"]\"', '[\"Quam enim aut maiore\"]', '[\"Guests must climb stairs\",\"Potential noise during stays\",\"Pet(s) live on the property\",\"Limited essential amenities\",\"Weapon(s) on the property\",\"Commercial shops in the building\"]', '[\"Aspernatur omnis ex\",null]', 'no', NULL, 'yes', 'Facilis quidem dolor', NULL, NULL, 'Dolores exercitation', NULL, '<p>Laborum sequi rerum</p>', '[\"Housekeeping\",\"In-person\\/Self check-in\",\"Smart lock\",\"Keypad\"]', NULL, '[\"Partially refundable\",\"Long-term\\/Monthly staying policy\"]', NULL, NULL, NULL, '[\"On-site restaurant\",\"Bar\\/lounge\",\"Private Pool\",\"24-hour reception\",\"Airport shuttle service\"]', '\"[]\"', NULL, NULL, NULL, NULL, NULL, '\"[\\\"45\\\"]\"', NULL, NULL, '[\"hotel_photos\\/1765451309_prescipriton_2.png\"]', '[{},{}]', '[{},{}]', '[{},{}]', '\"[\\\"hotel_photos\\\\\\/1765450953_admin.png\\\",\\\"hotel_photos\\\\\\/1765450953_cpanel.png\\\"]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', NULL, NULL, 10, 'submitted', 1, '2025-12-10 03:19:31', '2025-12-11 05:08:29');
+(77, 15, NULL, 'Hotels', 'Hotels', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'estt', 'no', NULL, 'no', NULL, 'yes', 'Excepteur magnam off', 'Illo animi similiqu', 'no', NULL, '22:00-00:00', '10:00 PM', 'yes', '\"[\\\"Pay in advance\\\",\\\"Rentals\\\",\\\"Quam enim aut maiore\\\"]\"', '[\"Quam enim aut maiore\"]', '[\"Guests must climb stairs\",\"Potential noise during stays\",\"Pet(s) live on the property\",\"Limited essential amenities\",\"Weapon(s) on the property\",\"Commercial shops in the building\"]', '[\"Aspernatur omnis ex\",null]', 'no', NULL, 'yes', 'Facilis quidem dolor', NULL, NULL, 'Dolores exercitation', NULL, '<p>Laborum sequi rerum</p>', '[\"Housekeeping\",\"In-person\\/Self check-in\",\"Smart lock\",\"Keypad\"]', NULL, '[\"Partially refundable\",\"Long-term\\/Monthly staying policy\"]', NULL, NULL, NULL, '[\"On-site restaurant\",\"Bar\\/lounge\",\"Private Pool\",\"24-hour reception\",\"Airport shuttle service\"]', '\"[]\"', NULL, NULL, NULL, NULL, NULL, '\"[\\\"45\\\"]\"', NULL, NULL, '[\"hotel_photos\\/1765451309_prescipriton_2.png\"]', '[{},{}]', '[{},{}]', '[{},{}]', '\"[\\\"hotel_photos\\\\\\/1765450953_admin.png\\\",\\\"hotel_photos\\\\\\/1765450953_cpanel.png\\\"]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', '\"[]\"', NULL, NULL, 10, 'submitted', 1, '2025-12-10 03:19:31', '2025-12-11 05:08:29'),
+(79, 7, 1, 'Crisis', NULL, NULL, 'Asperiores placeat', 'Voluptatem ut offic', NULL, 'Sed vel ullamco offi', 'Sylhet', 'Voluptas accusamus q', 'Allistair Mcknight', 'yes', 'Dolore impedit erro', 'yes', 'Suscipit duis offici', 'yes', 'Culpa qui quo enim', 'Illum perspiciatis', 'no', NULL, '11:00 PM', '5:00 AM', 'yes', '\"[\\\"Pay in advance\\\",\\\"Rentals\\\",\\\"Molestiae vel quos e\\\"]\"', '[\"Molestiae vel quos e\"]', '[\"Guests must climb stairs\",\"Potential noise during stays\",\"No parking on the property\",\"Property has shared spaces\",\"Offices in the building\"]', '[\"Culpa totam reprehe\",null]', 'no', NULL, 'yes', 'In quasi aut eveniet', NULL, NULL, 'Impedit esse tempo', NULL, NULL, '[\"Building staff\",\"Bell boy\",\"Smart lock\",\"Keypad\"]', NULL, '[\"Non-refundable\",\"Partially refundable\"]', '{\"Flexible\":\"Et est officia adipi\",\"Non-refundable\":\"Beatae enim quis vol\",\"Partially refundable\":\"Et velit dolor perfe\",\"Long-term\\/Monthly staying policy\":\"Libero laudantium s\"}', '[{\"text\":\"Autem iusto quis eum\",\"key\":\"custom_0\"}]', '[\"Long-term\\/Monthly staying policy\"]', '\"[\\\"On-site restaurant\\\",\\\"Buffet Breakfast\\\",\\\"Parking facilities\\\"]\"', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '[\"hotel_photos\\/1769326616_admin.png\"]', NULL, NULL, NULL, '\"[\\\"hotel_photos\\\\\\/1769326616_admin.png\\\"]\"', '\"[\\\"hotel_photos\\\\\\/1769326616_admin.png\\\"]\"', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'draft', 0, '2026-01-25 01:36:56', '2026-01-25 01:36:56');
 
 -- --------------------------------------------------------
 
@@ -1544,7 +1546,7 @@ ALTER TABLE `wishlists`
 -- AUTO_INCREMENT for table `activity_logs`
 --
 ALTER TABLE `activity_logs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=313;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=314;
 
 --
 -- AUTO_INCREMENT for table `bankings`
@@ -1586,7 +1588,7 @@ ALTER TABLE `guests`
 -- AUTO_INCREMENT for table `hotels`
 --
 ALTER TABLE `hotels`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
 
 --
 -- AUTO_INCREMENT for table `hotel_settings`
