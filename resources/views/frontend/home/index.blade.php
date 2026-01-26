@@ -210,9 +210,12 @@
                         <div class="tab-content">
 
                             <!-- Start:  Hotel -->
-                            <div id="Hotel" class="tab-pane in active">
+                            <div id="Hotel" class="tab-pane in active" data-category="Hotels">
                                 <div class="row">
-                                @foreach(\App\Models\Hotel::where('property_category','Hotels')->where('approve',1)->where('status','submitted')->get() as $hotel)
+                                @php
+                                    $hotelsData = isset($allCategoriesData['Hotels']) ? $allCategoriesData['Hotels'] : (isset($hotelsPaginated) && $category === 'Hotels' ? $hotelsPaginated : collect());
+                                @endphp
+                                @foreach($hotelsData as $hotel)
                                     <div class="col-md-6 col-lg-6 col-xl-3">
                                         <div class="grid-block main-block h-grid-block">
                                             <div class="main-img h-grid-img">
@@ -277,13 +280,38 @@
                                     </div>
                                 @endforeach
                                 </div>
+                                @if(isset($allCategoriesData['Hotels']) && $allCategoriesData['Hotels']->total() > 16)
+                                <div class="pages">
+                                    <ol class="pagination justify-content-center">
+                                        <li>
+                                            <a href="{{ $allCategoriesData['Hotels']->previousPageUrl() ? $allCategoriesData['Hotels']->previousPageUrl() . '&category=Hotels' : '#' }}" aria-label="Previous" class="{{ !$allCategoriesData['Hotels']->previousPageUrl() ? 'disabled' : '' }}">
+                                                <span aria-hidden="true">
+                                                    <i class="fa fa-angle-left"></i>
+                                                </span>
+                                            </a>
+                                        </li>
+                                        @for($i = 1; $i <= $allCategoriesData['Hotels']->lastPage(); $i++)
+                                        <li class="{{ $allCategoriesData['Hotels']->currentPage() == $i ? 'active' : '' }}">
+                                            <a href="{{ $allCategoriesData['Hotels']->url($i) }}&category=Hotels">{{ $i }}</a>
+                                        </li>
+                                        @endfor
+                                        <li>
+                                            <a href="{{ $allCategoriesData['Hotels']->nextPageUrl() ? $allCategoriesData['Hotels']->nextPageUrl() . '&category=Hotels' : '#' }}" aria-label="Next" class="{{ !$allCategoriesData['Hotels']->nextPageUrl() ? 'disabled' : '' }}">
+                                                <span aria-hidden="true">
+                                                    <i class="fa fa-angle-right"></i>
+                                                </span>
+                                            </a>
+                                        </li>
+                                    </ol>
+                                </div>
+                                @endif
                             </div>
                             <!-- End:  Hotel -->
 
                             <div id="Transit" class="tab-pane">
                                 <div class="row">
 
-                                    @foreach(\App\Models\Hotel::where('property_category','Transit')->where('approve',1)->where('status','submitted')->get() as $hotel)
+                                    @foreach($allCategoriesData['Transit'] as $hotel)
                                         <div class="col-md-6 col-lg-6 col-xl-3">
                                             <div class="grid-block main-block h-grid-block">
                                                 <div class="main-img h-grid-img">
@@ -349,11 +377,36 @@
                                     @endforeach
 
                                 </div>
+                                @if(isset($allCategoriesData['Transit']) && $allCategoriesData['Transit']->total() > 16)
+                                <div class="pages">
+                                    <ol class="pagination justify-content-center">
+                                        <li>
+                                            <a href="{{ $allCategoriesData['Transit']->previousPageUrl() ? $allCategoriesData['Transit']->previousPageUrl() . '&category=Transit' : '#' }}" aria-label="Previous" class="{{ !$allCategoriesData['Transit']->previousPageUrl() ? 'disabled' : '' }}">
+                                                <span aria-hidden="true">
+                                                    <i class="fa fa-angle-left"></i>
+                                                </span>
+                                            </a>
+                                        </li>
+                                        @for($i = 1; $i <= $allCategoriesData['Transit']->lastPage(); $i++)
+                                        <li class="{{ $allCategoriesData['Transit']->currentPage() == $i ? 'active' : '' }}">
+                                            <a href="{{ $allCategoriesData['Transit']->url($i) }}&category=Transit">{{ $i }}</a>
+                                        </li>
+                                        @endfor
+                                        <li>
+                                            <a href="{{ $allCategoriesData['Transit']->nextPageUrl() ? $allCategoriesData['Transit']->nextPageUrl() . '&category=Transit' : '#' }}" aria-label="Next" class="{{ !$allCategoriesData['Transit']->nextPageUrl() ? 'disabled' : '' }}">
+                                                <span aria-hidden="true">
+                                                    <i class="fa fa-angle-right"></i>
+                                                </span>
+                                            </a>
+                                        </li>
+                                    </ol>
+                                </div>
+                                @endif
                             </div>
                             <div id="Resorts" class="tab-pane">
                                 <div class="row">
 
-                                    @foreach(\App\Models\Hotel:: where('property_category','Resorts')->where('approve',1)->where('status','submitted')->get() as $hotel)
+                                    @foreach($allCategoriesData['Resorts'] as $hotel)
                                         <div class="col-md-6 col-lg-6 col-xl-3">
                                             <div class="grid-block main-block h-grid-block">
                                                 <div class="main-img h-grid-img">
@@ -419,12 +472,37 @@
                                     @endforeach
 
                                 </div>
+                                @if(isset($allCategoriesData['Resorts']) && $allCategoriesData['Resorts']->total() > 16)
+                                <div class="pages">
+                                    <ol class="pagination justify-content-center">
+                                        <li>
+                                            <a href="{{ $allCategoriesData['Resorts']->previousPageUrl() ? $allCategoriesData['Resorts']->previousPageUrl() . '&category=Resorts' : '#' }}" aria-label="Previous" class="{{ !$allCategoriesData['Resorts']->previousPageUrl() ? 'disabled' : '' }}">
+                                                <span aria-hidden="true">
+                                                    <i class="fa fa-angle-left"></i>
+                                                </span>
+                                            </a>
+                                        </li>
+                                        @for($i = 1; $i <= $allCategoriesData['Resorts']->lastPage(); $i++)
+                                        <li class="{{ $allCategoriesData['Resorts']->currentPage() == $i ? 'active' : '' }}">
+                                            <a href="{{ $allCategoriesData['Resorts']->url($i) }}&category=Resorts">{{ $i }}</a>
+                                        </li>
+                                        @endfor
+                                        <li>
+                                            <a href="{{ $allCategoriesData['Resorts']->nextPageUrl() ? $allCategoriesData['Resorts']->nextPageUrl() . '&category=Resorts' : '#' }}" aria-label="Next" class="{{ !$allCategoriesData['Resorts']->nextPageUrl() ? 'disabled' : '' }}">
+                                                <span aria-hidden="true">
+                                                    <i class="fa fa-angle-right"></i>
+                                                </span>
+                                            </a>
+                                        </li>
+                                    </ol>
+                                </div>
+                                @endif
                             </div>
 
                             <div id="Lodges" class="tab-pane">
                                 <div class="row">
 
-                                    @foreach(\App\Models\Hotel:: where('property_category','Apartments')->where('approve',1)->where('status','submitted')->get() as $hotel)
+                                    @foreach($allCategoriesData['Lodges'] as $hotel)
                                         <div class="col-md-6 col-lg-6 col-xl-3">
                                             <div class="grid-block main-block h-grid-block">
                                                 <div class="main-img h-grid-img">
@@ -490,12 +568,37 @@
                                     @endforeach
 
                                 </div>
+                                @if(isset($allCategoriesData['Lodges']) && $allCategoriesData['Lodges']->total() > 16)
+                                <div class="pages">
+                                    <ol class="pagination justify-content-center">
+                                        <li>
+                                            <a href="{{ $allCategoriesData['Lodges']->previousPageUrl() ? $allCategoriesData['Lodges']->previousPageUrl() . '&category=Lodges' : '#' }}" aria-label="Previous" class="{{ !$allCategoriesData['Lodges']->previousPageUrl() ? 'disabled' : '' }}">
+                                                <span aria-hidden="true">
+                                                    <i class="fa fa-angle-left"></i>
+                                                </span>
+                                            </a>
+                                        </li>
+                                        @for($i = 1; $i <= $allCategoriesData['Lodges']->lastPage(); $i++)
+                                        <li class="{{ $allCategoriesData['Lodges']->currentPage() == $i ? 'active' : '' }}">
+                                            <a href="{{ $allCategoriesData['Lodges']->url($i) }}&category=Lodges">{{ $i }}</a>
+                                        </li>
+                                        @endfor
+                                        <li>
+                                            <a href="{{ $allCategoriesData['Lodges']->nextPageUrl() ? $allCategoriesData['Lodges']->nextPageUrl() . '&category=Lodges' : '#' }}" aria-label="Next" class="{{ !$allCategoriesData['Lodges']->nextPageUrl() ? 'disabled' : '' }}">
+                                                <span aria-hidden="true">
+                                                    <i class="fa fa-angle-right"></i>
+                                                </span>
+                                            </a>
+                                        </li>
+                                    </ol>
+                                </div>
+                                @endif
                             </div>
 
                             <div id="Guesthouses" class="tab-pane">
                                 <div class="row">
 
-                                    @foreach(\App\Models\Hotel:: where('property_category','Guesthouses')->where('approve',1)->where('status','submitted')->get() as $hotel)
+                                    @foreach($allCategoriesData['Guesthouses'] as $hotel)
                                         <div class="col-md-6 col-lg-6 col-xl-3">
                                             <div class="grid-block main-block h-grid-block">
                                                 <div class="main-img h-grid-img">
@@ -565,8 +668,7 @@
                             </div>
                             <div id="Crisis" class="tab-pane">
                                 <div class="row">
-
-                                    @foreach(\App\Models\Hotel:: where('property_category','Crisis')->where('approve',1)->where('status','submitted')->get() as $hotel)
+                                    @foreach($allCategoriesData['Crisis'] as $hotel)
                                         <div class="col-md-6 col-lg-6 col-xl-3">
                                             <div class="grid-block main-block h-grid-block">
                                                 <div class="main-img h-grid-img">
@@ -582,32 +684,26 @@
                                                     <div class="guest-favourite">
                                                         <h3>Guest favourite</h3>
                                                     </div>
-                                                    {{-- Hotel Wishlist Heart Icon --}}
                                                     <div class="wishlist-heart-icon hotel-wishlist-icon" 
                                                          data-hotel-id="{{ $hotel->id }}"
                                                          onclick="toggleHotelWishlist({{ $hotel->id }})">
                                                         <i class="fa fa-heart-o"></i>
                                                     </div>
                                                 </div>
-                                                <!-- end h-grid-img -->
                                                 <div class="block-info h-grid-info">
                                                     <h3 class="block-title">
                                                         <a href="{{ route('hotel.details',encrypt($hotel->id)) }}">{{ $hotel->description }}</a>
                                                     </h3>
                                                     <p class="block-minor">
-
                                                         @php
                                                             $nearbyAreas = is_string($hotel->custom_nearby_areas)
                                                                 ? json_decode($hotel->custom_nearby_areas, true)
                                                                 : $hotel->custom_nearby_areas;
                                                         @endphp
-
                                                         @if (!empty($nearbyAreas[0]))
                                                             {{ $nearbyAreas[0] }}
                                                         @endif
-
                                                     </p>
-                                                    <!-- <p class="block-minor"> May 1 – 6</p> -->
                                                     <div class="review-main">
                                                         <div class="review-cat-home">8.9</div>
                                                         <div class="review-cat">Fabulous</div>
@@ -615,55 +711,125 @@
                                                     </div>
                                                     <div class="main-mask">
                                                         <ul class="list-unstyled list-inline offer-price-1">
-                                                            <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
-                                                            </li>
+                                                            <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span></li>
                                                             <li class="list-inline-item price">
-                                                          <span class="pkg">
-                                                            <del>2000 Tk.</del>
-                                                          </span>
+                                                                <span class="pkg"><del>2000 Tk.</del></span>
                                                             </li>
                                                         </ul>
                                                     </div>
                                                 </div>
-                                                <!-- end h-grid-info -->
                                             </div>
-                                            <!-- end h-grid-block -->
                                         </div>
                                     @endforeach
-
-
                                 </div>
+                                @if(isset($allCategoriesData['Crisis']) && $allCategoriesData['Crisis']->total() > 16)
+                                <div class="pages">
+                                    <ol class="pagination justify-content-center">
+                                        <li>
+                                            <a href="{{ $allCategoriesData['Crisis']->previousPageUrl() ? $allCategoriesData['Crisis']->previousPageUrl() . '&category=Crisis' : '#' }}" aria-label="Previous" class="{{ !$allCategoriesData['Crisis']->previousPageUrl() ? 'disabled' : '' }}">
+                                                <span aria-hidden="true">
+                                                    <i class="fa fa-angle-left"></i>
+                                                </span>
+                                            </a>
+                                        </li>
+                                        @for($i = 1; $i <= $allCategoriesData['Crisis']->lastPage(); $i++)
+                                        <li class="{{ $allCategoriesData['Crisis']->currentPage() == $i ? 'active' : '' }}">
+                                            <a href="{{ $allCategoriesData['Crisis']->url($i) }}&category=Crisis">{{ $i }}</a>
+                                        </li>
+                                        @endfor
+                                        <li>
+                                            <a href="{{ $allCategoriesData['Crisis']->nextPageUrl() ? $allCategoriesData['Crisis']->nextPageUrl() . '&category=Crisis' : '#' }}" aria-label="Next" class="{{ !$allCategoriesData['Crisis']->nextPageUrl() ? 'disabled' : '' }}">
+                                                <span aria-hidden="true">
+                                                    <i class="fa fa-angle-right"></i>
+                                                </span>
+                                            </a>
+                                        </li>
+                                    </ol>
+                                </div>
+                                @endif
                             </div>
-                            <!-- end row -->
-                            <div class="pages">
-                                <ol class="pagination justify-content-center">
-                                    <li>
-                                        <a href="#" aria-label="Previous">
-                        <span aria-hidden="true">
-                          <i class="fa fa-angle-left"></i>
-                        </span>
-                                        </a>
-                                    </li>
-                                    <li class="active">
-                                        <a href="#">1</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">2</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">3</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">4</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" aria-label="Next">
-                        <span aria-hidden="true">
-                          <i class="fa fa-angle-right"></i>
-                        </span>
-                                        </a>
-                                    </li>
-                                </ol>
+                            
+                            <div id="Crisis" class="tab-pane">
+                                <div class="row">
+                                    @foreach($allCategoriesData['Crisis'] as $hotel)
+                                        <div class="col-md-6 col-lg-6 col-xl-3">
+                                            <div class="grid-block main-block h-grid-block">
+                                                <div class="main-img h-grid-img">
+                                                    <a href="{{ route('hotel.details',encrypt($hotel->id)) }}">
+                                                        @php
+                                                            $featuredPhotos = json_decode($hotel->featured_photo, true);
+                                                        @endphp
+
+                                                        @if (!empty($featuredPhotos[0]))
+                                                            <img style="height: 270px;width: 100%;" src="{{ asset($featuredPhotos[0]) }}" class="img-fluid" alt="{{ $hotel->description }}" />
+                                                        @endif
+                                                    </a>
+                                                    <div class="guest-favourite">
+                                                        <h3>Guest favourite</h3>
+                                                    </div>
+                                                    <div class="wishlist-heart-icon hotel-wishlist-icon" 
+                                                         data-hotel-id="{{ $hotel->id }}"
+                                                         onclick="toggleHotelWishlist({{ $hotel->id }})">
+                                                        <i class="fa fa-heart-o"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="block-info h-grid-info">
+                                                    <h3 class="block-title">
+                                                        <a href="{{ route('hotel.details',encrypt($hotel->id)) }}">{{ $hotel->description }}</a>
+                                                    </h3>
+                                                    <p class="block-minor">
+                                                        @php
+                                                            $nearbyAreas = is_string($hotel->custom_nearby_areas)
+                                                                ? json_decode($hotel->custom_nearby_areas, true)
+                                                                : $hotel->custom_nearby_areas;
+                                                        @endphp
+                                                        @if (!empty($nearbyAreas[0]))
+                                                            {{ $nearbyAreas[0] }}
+                                                        @endif
+                                                    </p>
+                                                    <div class="review-main">
+                                                        <div class="review-cat-home">8.9</div>
+                                                        <div class="review-cat">Fabulous</div>
+                                                        <div class="review-cat spna">3,022 reviews</div>
+                                                    </div>
+                                                    <div class="main-mask">
+                                                        <ul class="list-unstyled list-inline offer-price-1">
+                                                            <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span></li>
+                                                            <li class="list-inline-item price">
+                                                                <span class="pkg"><del>2000 Tk.</del></span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                @if(isset($allCategoriesData['Crisis']) && $allCategoriesData['Crisis']->total() > 16)
+                                <div class="pages">
+                                    <ol class="pagination justify-content-center">
+                                        <li>
+                                            <a href="{{ $allCategoriesData['Crisis']->previousPageUrl() ? $allCategoriesData['Crisis']->previousPageUrl() . '&category=Crisis' : '#' }}" aria-label="Previous" class="{{ !$allCategoriesData['Crisis']->previousPageUrl() ? 'disabled' : '' }}">
+                                                <span aria-hidden="true">
+                                                    <i class="fa fa-angle-left"></i>
+                                                </span>
+                                            </a>
+                                        </li>
+                                        @for($i = 1; $i <= $allCategoriesData['Crisis']->lastPage(); $i++)
+                                        <li class="{{ $allCategoriesData['Crisis']->currentPage() == $i ? 'active' : '' }}">
+                                            <a href="{{ $allCategoriesData['Crisis']->url($i) }}&category=Crisis">{{ $i }}</a>
+                                        </li>
+                                        @endfor
+                                        <li>
+                                            <a href="{{ $allCategoriesData['Crisis']->nextPageUrl() ? $allCategoriesData['Crisis']->nextPageUrl() . '&category=Crisis' : '#' }}" aria-label="Next" class="{{ !$allCategoriesData['Crisis']->nextPageUrl() ? 'disabled' : '' }}">
+                                                <span aria-hidden="true">
+                                                    <i class="fa fa-angle-right"></i>
+                                                </span>
+                                            </a>
+                                        </li>
+                                    </ol>
+                                </div>
+                                @endif
                             </div>
                         </div>
                     </div>

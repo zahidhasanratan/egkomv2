@@ -51,9 +51,8 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function index()
+    public function index(Request $request)
     {
-
         $main   =   Menu::orderBy('sequence','ASC')
             ->where('display',1)
             ->get();
@@ -109,7 +108,35 @@ class HomeController extends Controller
                 return $hotel;
             });
 
-        return view('frontend/home.index',compact('main','footer', 'popularDestinations', 'districts', 'cities'));
+        // Get category and page from request
+        $category = $request->get('category', 'Hotels');
+        $page = $request->get('page', 1);
+        
+        // Define category mapping (Lodges tab uses Apartments)
+        $categoryMap = [
+            'Hotels' => 'Hotels',
+            'Transit' => 'Transit',
+            'Resorts' => 'Resorts',
+            'Lodges' => 'Apartments',
+            'Guesthouses' => 'Guesthouses',
+            'Crisis' => 'Crisis'
+        ];
+        
+        // Get paginated data for all categories
+        $allCategoriesData = [];
+        foreach ($categoryMap as $tabName => $dbCat) {
+            $currentPage = ($category === $tabName) ? $page : 1;
+            $query = \App\Models\Hotel::where('property_category', $dbCat)
+                ->where('approve', 1)
+                ->where('status', 'submitted');
+            
+            $allCategoriesData[$tabName] = $query->paginate(16, ['*'], 'page', $currentPage)
+                ->withPath(route('welcome'))
+                ->appends(['category' => $tabName]);
+
+        }
+
+        return view('frontend/home.index', compact('main', 'footer', 'popularDestinations', 'districts', 'cities', 'category', 'allCategoriesData', 'categoryMap'));
     }
 
     /**
