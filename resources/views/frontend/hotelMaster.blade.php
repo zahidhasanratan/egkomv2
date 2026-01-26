@@ -728,8 +728,8 @@
                             <h3 class="room-title-modal"> Suite Room </h3>
                             <p class="room-description-modal" style="color: #666; font-size: 14px; line-height: 1.6; margin-top: 8px; margin-bottom: 12px; display: none;"></p>
                             <p class="room-numbers">Room # 105<br> <span style="padding-left:0px" class="floor-numbers">3rd Floor</span></p>
-                            <div class="option-meta">
-                   <span data-v-798d4468="" data-toggle="tooltip" class="non-refundable" data-bs-original-title="The Option is not non-refundable"> Non-Refundable <i data-v-798d4468="" variant="primary" class="fa fa-info-circle"></i>
+                            <div class="option-meta" style="display: none;">
+                   <span data-v-798d4468="" data-toggle="tooltip" class="non-refundable" data-bs-original-title="Regardless of the cancellation window, customers will not get any refund under this." style="display: none;"> Non-Refundable <i data-v-798d4468="" variant="primary" class="fa fa-info-circle"></i>
                    </span>
                             </div>
                         </div>
@@ -763,7 +763,7 @@
                                                 <button type="button" class="qtyminus" aria-hidden="true">&minus;</button>
                                                 <input type="number" name="qty" id="qty" min="1" max="10" step="1" value="1">
                                                 <button type="button" class="qtyplus" aria-hidden="true">&plus;</button>
-                                                <label style="padding-left: 15px;" for="qty">Quantity</label>
+                                                <label style="padding-left: 15px;" for="qty">Night</label>
                                             </p>
                                         </form>
                                     </div>
@@ -1080,6 +1080,55 @@
 
 
 <style>
+    /* Room Photo Gallery Styles */
+    #rightSidebarModalDetails .all-rooms-details .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -7.5px;
+    }
+    
+    #rightSidebarModalDetails .luxury-room-block {
+        padding: 0 7.5px;
+        margin-bottom: 15px;
+    }
+    
+    #rightSidebarModalDetails .luxury-room-block img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 8px;
+        display: block;
+    }
+    
+    #rightSidebarModalDetails .luxury-room-block.col-12 img {
+        height: 300px;
+    }
+    
+    #rightSidebarModalDetails .luxury-room-block.col-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+    
+    #rightSidebarModalDetails .luxury-room-block.col-12 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    
+    @media (max-width: 768px) {
+        #rightSidebarModalDetails .luxury-room-block.col-6 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+        
+        #rightSidebarModalDetails .luxury-room-block img {
+            height: 250px;
+        }
+        
+        #rightSidebarModalDetails .luxury-room-block.col-12 img {
+            height: 300px;
+        }
+    }
+
     div#hotel-details {
         padding-top: 105px;
     }
@@ -1976,7 +2025,7 @@
     // Global Shopping Cart Management
     let globalBookingCart = JSON.parse(localStorage.getItem('bookingCart')) || [];
 
-    function addToGlobalCart(roomId, roomName, price, maxQuantity, quantity = 1, capacity = 2, hotelId = null) {
+    function addToGlobalCart(roomId, roomName, price, maxQuantity, quantity = 1, capacity = 2, hotelId = null, roomNumber = null, floorNumber = null) {
         // Check if room already in cart
         const existingItem = globalBookingCart.find(item => item.roomId === roomId);
         
@@ -2003,7 +2052,9 @@
                 quantity: quantity,
                 maxQuantity: maxQuantity,
                 capacity: capacity || 2, // Store room capacity (total_persons)
-                hotelId: hotelId // Store hotel ID
+                hotelId: hotelId, // Store hotel ID
+                roomNumber: roomNumber || null, // Store room number
+                floorNumber: floorNumber || null // Store floor number
             });
         }
         
@@ -2107,7 +2158,7 @@
                     <div class="room-content">
                         <div class="room-name">${item.roomName}</div>
                         <div class="pax-and-fare">
-                            ${item.quantity > 1 ? `<span class="pax">Qty: ${item.quantity} × </span>` : ''}
+                            ${item.quantity > 1 ? `<span class="pax">${item.quantity} Night${item.quantity > 1 ? 's' : ''} × </span>` : ''}
                             <span class="fare">BDT ${itemTotal.toFixed(2)}</span>
                         </div>
                     </div>

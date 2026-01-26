@@ -63,8 +63,8 @@
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label for="property_category" class="form-label">Select Property Category</label>
-                                                                    <select name="property_category" class="form-control" id="property_category" style="border: 1px solid #dee2e6; border-radius: 6px; padding: 8px 12px;">
+                                                                    <label for="division" class="form-label">Select Property Category</label>
+                                                                    <select name="property_category" class="form-control" id="division" style="border: 1px solid #dee2e6; border-radius: 6px; padding: 8px 12px;">
                                                                         <option value="">Select Property</option>
                                                                         <option value="Hotels" {{ old('property_category', $hotel->property_category) == 'Hotels' ? 'selected' : '' }}>Hotels</option>
                                                                         <option value="Transit" {{ old('property_category', $hotel->property_category) == 'Transit' ? 'selected' : '' }}>Transit Hotels</option>
@@ -75,6 +75,31 @@
                                                                     </select>
                                                                     @error('property_category')
                                                                         <span class="text-danger">{{ $message }}</span>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12" id="districtContainer" style="display:none;">
+                                                                <div class="form-group">
+                                                                    <label for="district" class="form-label">Property Type</label>
+                                                                    <select name="property_type" id="district" class="form-control" style="border: 1px solid #dee2e6; border-radius: 6px; padding: 8px 12px;">
+                                                                        <option value="" disabled selected>Choose Property Type</option>
+                                                                        <option value="Hotels" {{ old('property_type', $hotel->property_type) == 'Hotels' ? 'selected' : '' }}>Hotels</option>
+                                                                        <option value="Transit" {{ old('property_type', $hotel->property_type) == 'Transit' ? 'selected' : '' }}>Transit</option>
+                                                                        <option value="Resorts" {{ old('property_type', $hotel->property_type) == 'Resorts' ? 'selected' : '' }}>Resorts</option>
+                                                                        <option value="Lodges" {{ old('property_type', $hotel->property_type) == 'Lodges' ? 'selected' : '' }}>Lodges</option>
+                                                                        <option value="Guesthouses" {{ old('property_type', $hotel->property_type) == 'Guesthouses' ? 'selected' : '' }}>Guesthouses</option>
+                                                                        <option value="Crisis" {{ old('property_type', $hotel->property_type) == 'Crisis' ? 'selected' : '' }}>Crisis</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12" id="placeCheckboxList" style="display: none;">
+                                                                <div class="form-group">
+                                                                    <label class="form-label">Choose Room/Accommodation Type</label>
+                                                                    <ul id="placeOptions" class="list-unstyled" style="max-height: 200px; overflow-y: auto;">
+                                                                        <!-- Dynamic Checkboxes Will Appear Here -->
+                                                                    </ul>
+                                                                    @error('room_types')
+                                                                    <span class="invalid-feedback" role="alert">{{ $message }}</span>
                                                                     @enderror
                                                                 </div>
                                                             </div>
@@ -135,10 +160,10 @@
                                                             </div>
                                                             <div class="col-md-6 col-lg-6 col-xxl-12">
                                                                 <div class="form-group">
-                                                                    <label class="form-label" for="district">District</label>
+                                                                    <label class="form-label" for="geographic_district">District</label>
                                                                     <div class="form-control-wrap">
                                                                         <select class="form-control" 
-                                                                                id="district" 
+                                                                                id="geographic_district" 
                                                                                 name="district">
                                                                             <option value="">Select District</option>
                                                                             @foreach(['Bagerhat', 'Bandarban', 'Barguna', 'Barisal', 'Bhola', 'Bogra', 'Brahmanbaria', 'Chandpur', 'Chittagong', 'Chuadanga', 'Comilla', "Cox'sBazar", 'Dhaka', 'Dinajpur', 'Faridpur', 'Feni', 'Gaibandha', 'Gazipur', 'Gopalganj', 'Habiganj', 'Jaipurhat', 'Jamalpur', 'Jessore', 'Jhalokati', 'Jhenaidah', 'Khagrachari', 'Khulna', 'Kishoreganj', 'Kurigram', 'Kushtia', 'Lakshmipur', 'Lalmonirhat', 'Madaripur', 'Magura', 'Manikganj', 'Maulvibazar', 'Meherpur', 'Munshiganj', 'Mymensingh', 'Naogaon', 'Narail', 'Narayanganj', 'Narsingdi', 'Natore', 'Nawabganj', 'Netrokona', 'Nilphamari', 'Noakhali', 'Pabna', 'Panchagarh', 'Patuakhali', 'Pirojpur', 'Rajbari', 'Rajshahi', 'Rangamati', 'Rangpur', 'Satkhira', 'Shariatpur', 'Sherpur', 'Sirajganj', 'Sunamganj', 'Sylhet', 'Tangail', 'Thakurgaon'] as $districtOption)
@@ -2269,83 +2294,157 @@
 
     <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", function () {
-            divisionSelect = document.getElementById("division");
-            districtSelect = document.getElementById("district");
-            districtContainer = document.getElementById("districtContainer");
-            placeCheckboxList = document.getElementById("placeCheckboxList");
-            placeOptions = document.getElementById("placeOptions");
+            const divisionSelect = document.getElementById("division");
+            const districtSelect = document.getElementById("district");
+            const districtContainer = document.getElementById("districtContainer");
+            const placeCheckboxList = document.getElementById("placeCheckboxList");
+            const placeOptions = document.getElementById("placeOptions");
 
             const data = {
                 Hotels: {
                     districts: {
                         "hotel": ["Single Room", "Double Room", "Twin Room", "Suite", "Family Room", "Penthouse Suite", "Accessible Room"],
                         "Luxury Hotels": ["Single Room", "Double Room", "Twin Room", "Suite", "Family Room", "Penthouse Suite", "Accessible Room"],
-                        "farmgate": ["Single Room", "Double Room", "Twin Room", "Suite", "Family Room", "Penthouse Suite", "Accessible Room"]
+                        "Resort Hotels ": ["Single Room", "Double Room", "Twin Room", "Suite", "Family Room", "Penthouse Suite", "Accessible Room"],
+                        "Budget Hotels ": ["Single Room", "Double Room", "Twin Room", "Suite", "Family Room", "Penthouse Suite", "Accessible Room"],
+                        "Hotels 3 Star ": ["Single Room", "Double Room", "Twin Room", "Suite", "Family Room", "Penthouse Suite", "Accessible Room"],
+                        "Hotels 4 Star": ["Single Room", "Double Room", "Twin Room", "Suite", "Family Room", "Penthouse Suite", "Accessible Room"],
+                        "Hotels 5 Star ": ["Single Room", "Double Room", "Twin Room", "Suite", "Family Room", "Penthouse Suite", "Accessible Room"]
                     }
                 },
-                chittagong: {
+                Transit: {
                     districts: {
-                        agrabad: ["Area 1", "Area 2", "Area 3"],
-                        halishahar: ["Location X", "Location Y", "Location Z"],
-                        patenga: ["Site P", "Site Q", "Site R"]
+                        "Airport Hotels ": ["Single Room", "Double Room", "Family Unit", "Parking-Accessible Room"],
+                        "Station Hotels ": ["Single Room", "Double Room", "Family Unit", "Parking-Accessible Room"],
+                        "Bus Stop Hotels": ["Single Room", "Double Room", "Family Unit", "Parking-Accessible Room"],
+                        "Jetty Hotels ": ["Single Room", "Double Room", "Family Unit", "Parking-Accessible Room"],
+                        "Hospital & Visa Center Area hotels": ["Single Room", "Double Room", "Family Unit", "Parking-Accessible Room"],
                     }
                 },
-                khulna: {
+                Resorts: {
                     districts: {
-                        khalishpur: ["Zone 1", "Zone 2", "Zone 3"],
-                        sonadanga: ["Point A", "Point B", "Point C"],
-                        rupsha: ["Spot X", "Spot Y", "Spot Z"]
+                        "Resorts ": ["Luxury Resort Suites","Oceanfront Villas","Private Pool Villas","Garden View Rooms","Eco Resorts & Hotels","Bamboo Cottages","Solar-Powered Cabins","Off-Grid Stays","Farm Stays","Rustic Farmhouses","Luxury Farm Villas","Campsites","Standard Camping Tent","Luxury Tent (Glamping)","RV/Caravan Parking","Glamping","Safari-Style Tents","Dome Pods","Airstream Trailers","Treehouses","Basic Tree Cabins","Luxury Tree Villas","Adventure Resorts","Zipline Resorts","Rock Climbing Camps","Water Sports Resorts","Wellness Retreats","Ayurveda Resorts","Yoga Retreats","Meditation Centers","Beach Resorts","Overwater Bungalows","Beach Huts","Mountain Resorts","Safari Lodges","Wildlife Observation Rooms","Riverside Safari Cottages"],
+                        "Eco Resorts ": ["Luxury Resort Suites","Oceanfront Villas","Private Pool Villas","Garden View Rooms","Eco Resorts & Hotels","Bamboo Cottages","Solar-Powered Cabins","Off-Grid Stays","Farm Stays","Rustic Farmhouses","Luxury Farm Villas","Campsites","Standard Camping Tent","Luxury Tent (Glamping)","RV/Caravan Parking","Glamping","Safari-Style Tents","Dome Pods","Airstream Trailers","Treehouses","Basic Tree Cabins","Luxury Tree Villas","Adventure Resorts","Zipline Resorts","Rock Climbing Camps","Water Sports Resorts","Wellness Retreats","Ayurveda Resorts","Yoga Retreats","Meditation Centers","Beach Resorts","Overwater Bungalows","Beach Huts","Mountain Resorts","Safari Lodges","Wildlife Observation Rooms","Riverside Safari Cottages"],
+                        "Eco Hotels ": ["Luxury Resort Suites","Oceanfront Villas","Private Pool Villas","Garden View Rooms","Eco Resorts & Hotels","Bamboo Cottages","Solar-Powered Cabins","Off-Grid Stays","Farm Stays","Rustic Farmhouses","Luxury Farm Villas","Campsites","Standard Camping Tent","Luxury Tent (Glamping)","RV/Caravan Parking","Glamping","Safari-Style Tents","Dome Pods","Airstream Trailers","Treehouses","Basic Tree Cabins","Luxury Tree Villas","Adventure Resorts","Zipline Resorts","Rock Climbing Camps","Water Sports Resorts","Wellness Retreats","Ayurveda Resorts","Yoga Retreats","Meditation Centers","Beach Resorts","Overwater Bungalows","Beach Huts","Mountain Resorts","Safari Lodges","Wildlife Observation Rooms","Riverside Safari Cottages"],
+                        "Farm Stays": ["Luxury Resort Suites","Oceanfront Villas","Private Pool Villas","Garden View Rooms","Eco Resorts & Hotels","Bamboo Cottages","Solar-Powered Cabins","Off-Grid Stays","Farm Stays","Rustic Farmhouses","Luxury Farm Villas","Campsites","Standard Camping Tent","Luxury Tent (Glamping)","RV/Caravan Parking","Glamping","Safari-Style Tents","Dome Pods","Airstream Trailers","Treehouses","Basic Tree Cabins","Luxury Tree Villas","Adventure Resorts","Zipline Resorts","Rock Climbing Camps","Water Sports Resorts","Wellness Retreats","Ayurveda Resorts","Yoga Retreats","Meditation Centers","Beach Resorts","Overwater Bungalows","Beach Huts","Mountain Resorts","Safari Lodges","Wildlife Observation Rooms","Riverside Safari Cottages"],
+                        "Campsites ": ["Luxury Resort Suites","Oceanfront Villas","Private Pool Villas","Garden View Rooms","Eco Resorts & Hotels","Bamboo Cottages","Solar-Powered Cabins","Off-Grid Stays","Farm Stays","Rustic Farmhouses","Luxury Farm Villas","Campsites","Standard Camping Tent","Luxury Tent (Glamping)","RV/Caravan Parking","Glamping","Safari-Style Tents","Dome Pods","Airstream Trailers","Treehouses","Basic Tree Cabins","Luxury Tree Villas","Adventure Resorts","Zipline Resorts","Rock Climbing Camps","Water Sports Resorts","Wellness Retreats","Ayurveda Resorts","Yoga Retreats","Meditation Centers","Beach Resorts","Overwater Bungalows","Beach Huts","Mountain Resorts","Safari Lodges","Wildlife Observation Rooms","Riverside Safari Cottages"],
+                        "Glamping ": ["Luxury Resort Suites","Oceanfront Villas","Private Pool Villas","Garden View Rooms","Eco Resorts & Hotels","Bamboo Cottages","Solar-Powered Cabins","Off-Grid Stays","Farm Stays","Rustic Farmhouses","Luxury Farm Villas","Campsites","Standard Camping Tent","Luxury Tent (Glamping)","RV/Caravan Parking","Glamping","Safari-Style Tents","Dome Pods","Airstream Trailers","Treehouses","Basic Tree Cabins","Luxury Tree Villas","Adventure Resorts","Zipline Resorts","Rock Climbing Camps","Water Sports Resorts","Wellness Retreats","Ayurveda Resorts","Yoga Retreats","Meditation Centers","Beach Resorts","Overwater Bungalows","Beach Huts","Mountain Resorts","Safari Lodges","Wildlife Observation Rooms","Riverside Safari Cottages"],
+                        "Treehouses ": ["Luxury Resort Suites","Oceanfront Villas","Private Pool Villas","Garden View Rooms","Eco Resorts & Hotels","Bamboo Cottages","Solar-Powered Cabins","Off-Grid Stays","Farm Stays","Rustic Farmhouses","Luxury Farm Villas","Campsites","Standard Camping Tent","Luxury Tent (Glamping)","RV/Caravan Parking","Glamping","Safari-Style Tents","Dome Pods","Airstream Trailers","Treehouses","Basic Tree Cabins","Luxury Tree Villas","Adventure Resorts","Zipline Resorts","Rock Climbing Camps","Water Sports Resorts","Wellness Retreats","Ayurveda Resorts","Yoga Retreats","Meditation Centers","Beach Resorts","Overwater Bungalows","Beach Huts","Mountain Resorts","Safari Lodges","Wildlife Observation Rooms","Riverside Safari Cottages"],
+                        "Adventure Resorts  ": ["Luxury Resort Suites","Oceanfront Villas","Private Pool Villas","Garden View Rooms","Eco Resorts & Hotels","Bamboo Cottages","Solar-Powered Cabins","Off-Grid Stays","Farm Stays","Rustic Farmhouses","Luxury Farm Villas","Campsites","Standard Camping Tent","Luxury Tent (Glamping)","RV/Caravan Parking","Glamping","Safari-Style Tents","Dome Pods","Airstream Trailers","Treehouses","Basic Tree Cabins","Luxury Tree Villas","Adventure Resorts","Zipline Resorts","Rock Climbing Camps","Water Sports Resorts","Wellness Retreats","Ayurveda Resorts","Yoga Retreats","Meditation Centers","Beach Resorts","Overwater Bungalows","Beach Huts","Mountain Resorts","Safari Lodges","Wildlife Observation Rooms","Riverside Safari Cottages"],
+                        "Wellness Retreats  ": ["Luxury Resort Suites","Oceanfront Villas","Private Pool Villas","Garden View Rooms","Eco Resorts & Hotels","Bamboo Cottages","Solar-Powered Cabins","Off-Grid Stays","Farm Stays","Rustic Farmhouses","Luxury Farm Villas","Campsites","Standard Camping Tent","Luxury Tent (Glamping)","RV/Caravan Parking","Glamping","Safari-Style Tents","Dome Pods","Airstream Trailers","Treehouses","Basic Tree Cabins","Luxury Tree Villas","Adventure Resorts","Zipline Resorts","Rock Climbing Camps","Water Sports Resorts","Wellness Retreats","Ayurveda Resorts","Yoga Retreats","Meditation Centers","Beach Resorts","Overwater Bungalows","Beach Huts","Mountain Resorts","Safari Lodges","Wildlife Observation Rooms","Riverside Safari Cottages"],
+                        "Beach Resorts ": ["Luxury Resort Suites","Oceanfront Villas","Private Pool Villas","Garden View Rooms","Eco Resorts & Hotels","Bamboo Cottages","Solar-Powered Cabins","Off-Grid Stays","Farm Stays","Rustic Farmhouses","Luxury Farm Villas","Campsites","Standard Camping Tent","Luxury Tent (Glamping)","RV/Caravan Parking","Glamping","Safari-Style Tents","Dome Pods","Airstream Trailers","Treehouses","Basic Tree Cabins","Luxury Tree Villas","Adventure Resorts","Zipline Resorts","Rock Climbing Camps","Water Sports Resorts","Wellness Retreats","Ayurveda Resorts","Yoga Retreats","Meditation Centers","Beach Resorts","Overwater Bungalows","Beach Huts","Mountain Resorts","Safari Lodges","Wildlife Observation Rooms","Riverside Safari Cottages"],
+                        "Mountain Resorts": ["Luxury Resort Suites","Oceanfront Villas","Private Pool Villas","Garden View Rooms","Eco Resorts & Hotels","Bamboo Cottages","Solar-Powered Cabins","Off-Grid Stays","Farm Stays","Rustic Farmhouses","Luxury Farm Villas","Campsites","Standard Camping Tent","Luxury Tent (Glamping)","RV/Caravan Parking","Glamping","Safari-Style Tents","Dome Pods","Airstream Trailers","Treehouses","Basic Tree Cabins","Luxury Tree Villas","Adventure Resorts","Zipline Resorts","Rock Climbing Camps","Water Sports Resorts","Wellness Retreats","Ayurveda Resorts","Yoga Retreats","Meditation Centers","Beach Resorts","Overwater Bungalows","Beach Huts","Mountain Resorts","Safari Lodges","Wildlife Observation Rooms","Riverside Safari Cottages"],
+                        "Safari Lodges": ["Luxury Resort Suites","Oceanfront Villas","Private Pool Villas","Garden View Rooms","Eco Resorts & Hotels","Bamboo Cottages","Solar-Powered Cabins","Off-Grid Stays","Farm Stays","Rustic Farmhouses","Luxury Farm Villas","Campsites","Standard Camping Tent","Luxury Tent (Glamping)","RV/Caravan Parking","Glamping","Safari-Style Tents","Dome Pods","Airstream Trailers","Treehouses","Basic Tree Cabins","Luxury Tree Villas","Adventure Resorts","Zipline Resorts","Rock Climbing Camps","Water Sports Resorts","Wellness Retreats","Ayurveda Resorts","Yoga Retreats","Meditation Centers","Beach Resorts","Overwater Bungalows","Beach Huts","Mountain Resorts","Safari Lodges","Wildlife Observation Rooms","Riverside Safari Cottages"],
                     }
-                }
+                },
+                Lodges: {
+                    districts: {
+                        "Hostels ": ["Single Bed in Dormitory/Room/Apartment ","Oceanfront Villas","Private Room/Apartment","Female-Only Dormitory/Apartment/Room","Male-Only Dormitory/Apartment/Room","Mixed Dormitory: Shared Room (All Genders) ","Studio Apartment-Style Hostel"],
+                        "Motels ": ["Single Bed in Dormitory/Room/Apartment ","Oceanfront Villas","Private Room/Apartment","Female-Only Dormitory/Apartment/Room","Male-Only Dormitory/Apartment/Room","Mixed Dormitory: Shared Room (All Genders) ","Studio Apartment-Style Hostel"],
+                        "Lodges ": ["Single Bed in Dormitory/Room/Apartment ","Oceanfront Villas","Private Room/Apartment","Female-Only Dormitory/Apartment/Room","Male-Only Dormitory/Apartment/Room","Mixed Dormitory: Shared Room (All Genders) ","Studio Apartment-Style Hostel"],
+                        "Mountain Lodges ": ["Single Bed in Dormitory/Room/Apartment ","Oceanfront Villas","Private Room/Apartment","Female-Only Dormitory/Apartment/Room","Male-Only Dormitory/Apartment/Room","Mixed Dormitory: Shared Room (All Genders) ","Studio Apartment-Style Hostel"],
+                        "Fishing Lodges ": ["Single Bed in Dormitory/Room/Apartment ","Oceanfront Villas","Private Room/Apartment","Female-Only Dormitory/Apartment/Room","Male-Only Dormitory/Apartment/Room","Mixed Dormitory: Shared Room (All Genders) ","Studio Apartment-Style Hostel"],
+                        "Hunting Lodges ": ["Single Bed in Dormitory/Room/Apartment ","Oceanfront Villas","Private Room/Apartment","Female-Only Dormitory/Apartment/Room","Male-Only Dormitory/Apartment/Room","Mixed Dormitory: Shared Room (All Genders) ","Studio Apartment-Style Hostel"],
+                    }
+                },
+                Apartments: {
+                    districts: {
+                        "Apartments": ["Luxury Serviced Apartments","Budget Serviced Apartments","Furnished Apartments","Unfurnished Apartments","Studio Apartments","One-Bedroom Apartments","Two-Bedroom Apartments","Three-Bedroom Apartments","Penthouse Apartments","Shared Apartments"],
+                        "Serviced Apartments": ["Luxury Serviced Apartments","Budget Serviced Apartments","Furnished Apartments","Unfurnished Apartments","Studio Apartments","One-Bedroom Apartments","Two-Bedroom Apartments","Three-Bedroom Apartments","Penthouse Apartments","Shared Apartments"],
+                        "Homestays": ["Luxury Serviced Apartments","Budget Serviced Apartments","Furnished Apartments","Unfurnished Apartments","Studio Apartments","One-Bedroom Apartments","Two-Bedroom Apartments","Three-Bedroom Apartments","Penthouse Apartments","Shared Apartments"],
+                    }
+                },
+                Guesthouses: {
+                    districts: {
+                        "Vacation Rentals": ["Bed Only","Room with Shared Bathroom","Entire Place","Private Room","Entire House","Farmhouse Room","Tent/Glamping Tent","RV/Caravan: Mobile Accommodations"],
+                        "Condominiums": ["Bed Only","Room with Shared Bathroom","Entire Place","Private Room","Entire House","Farmhouse Room","Tent/Glamping Tent","RV/Caravan: Mobile Accommodations"],
+                        "Bed and Breakfasts (B&Bs)": ["Bed Only","Room with Shared Bathroom","Entire Place","Private Room","Entire House","Farmhouse Room","Tent/Glamping Tent","RV/Caravan: Mobile Accommodations"],
+                        "Guesthouses": ["Bed Only","Room with Shared Bathroom","Entire Place","Private Room","Entire House","Farmhouse Room","Tent/Glamping Tent","RV/Caravan: Mobile Accommodations"],
+                    }
+                },
+                Crisis: {
+                    districts: {
+                        "Old Age Homes": ["Old Age Homes","Orphanages","Rehabilitation Centers","Asylums"],
+                        "Orphanages": ["Old Age Homes","Orphanages","Rehabilitation Centers","Asylums"],
+                        "Rehabilitation Centers": ["Old Age Homes","Orphanages","Rehabilitation Centers","Asylums"],
+                        "Asylums": ["Old Age Homes","Orphanages","Rehabilitation Centers","Asylums"],
+                    }
+                },
             };
 
-            divisionSelect?.addEventListener("change", function () {
-                const division = this.value;
+            // Use old(...) if available, else DB
+            const savedRoomTypes = @json(old('room_types', json_decode($hotel->room_types ?? '[]', true)));
+            const initialDivision = @json(old('property_category', $hotel->property_category ?? ''));
+            const initialDistrict = @json(old('property_type', $hotel->property_type ?? ''));
+
+            function populateDistricts(division) {
+                if (!districtSelect) return;
                 districtSelect.innerHTML = '<option value="" disabled selected>Choose Property Type</option>';
-                placeOptions.innerHTML = "";
-                placeCheckboxList.style.display = "none";
 
                 if (data[division]) {
-                    districtContainer.style.display = "block";
+                    if (districtContainer) districtContainer.style.display = "block";
                     Object.keys(data[division].districts).forEach(district => {
                         const option = document.createElement("option");
                         option.value = district;
-                        option.textContent = district.charAt(0).toUpperCase() + district.slice(1);
+                        option.textContent = district; // keep exact label
                         districtSelect.appendChild(option);
                     });
+                } else {
+                    if (districtContainer) districtContainer.style.display = "none";
+                    if (placeCheckboxList) placeCheckboxList.style.display = "none";
+                    if (placeOptions) placeOptions.innerHTML = "";
                 }
-            });
+            }
 
-            districtSelect?.addEventListener("change", function () {
-                const division = divisionSelect.value;
-                const district = this.value;
+            function populateRoomTypes(division, district) {
+                if (!placeOptions) return;
                 placeOptions.innerHTML = "";
 
                 if (data[division] && data[division].districts[district]) {
-                    placeCheckboxList.style.display = "block";
+                    if (placeCheckboxList) placeCheckboxList.style.display = "block";
                     data[division].districts[district].forEach((place, index) => {
-                        const listItem = document.createElement("li");
-                        const checkboxContainer = document.createElement("div");
-                        checkboxContainer.classList.add("form-check");
-
-                        const checkbox = document.createElement("input");
-                        checkbox.type = "checkbox";
-                        checkbox.classList.add("form-check-input");
-                        checkbox.id = `checkbox${index}`;
-                        checkbox.value = place;
-
-                        const label = document.createElement("label");
-                        label.classList.add("form-check-label");
-                        label.htmlFor = `checkbox${index}`;
-                        label.textContent = place;
-
-                        checkboxContainer.appendChild(checkbox);
-                        checkboxContainer.appendChild(label);
-                        listItem.appendChild(checkboxContainer);
-                        placeOptions.appendChild(listItem);
+                        const inputId = `room_type_${index}`;
+                        const isChecked = Array.isArray(savedRoomTypes) && savedRoomTypes.includes(place);
+                        const li = document.createElement("li");
+                        li.innerHTML = `
+                            <div class="form-check">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       id="${inputId}"
+                                       name="room_types[]"
+                                       value="${place}"
+                                       ${isChecked ? 'checked' : ''}>
+                                <label class="form-check-label" for="${inputId}">${place}</label>
+                            </div>
+                        `;
+                        placeOptions.appendChild(li);
                     });
+                } else {
+                    if (placeCheckboxList) placeCheckboxList.style.display = "none";
                 }
+            }
+
+            // Listeners
+            divisionSelect?.addEventListener("change", function () {
+                populateDistricts(this.value);
+                if (placeOptions) placeOptions.innerHTML = "";
+                if (placeCheckboxList) placeCheckboxList.style.display = "none";
             });
+
+            districtSelect?.addEventListener("change", function () {
+                populateRoomTypes(divisionSelect.value, this.value);
+            });
+
+            // Initial render on load
+            if (initialDivision && divisionSelect) {
+                divisionSelect.value = initialDivision;
+                populateDistricts(initialDivision);
+                const hasDistrict = data[initialDivision] && data[initialDivision].districts[initialDistrict];
+                if (initialDistrict && hasDistrict && districtSelect) {
+                    districtSelect.value = initialDistrict;
+                    populateRoomTypes(initialDivision, initialDistrict);
+                }
+            }
         });
     </script>
 

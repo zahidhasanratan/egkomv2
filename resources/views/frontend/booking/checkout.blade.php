@@ -807,7 +807,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.rooms && data.rooms.length > 0) {
-                    // Update cart items with hotelId and encrypted_hotel_id if missing (backward compatibility)
+                    // Update cart items with hotelId, encrypted_hotel_id, roomNumber, and floorNumber if missing (backward compatibility)
                     data.rooms.forEach(room => {
                         const cartItem = cart.find(item => item.roomId === room.id);
                         if (cartItem) {
@@ -816,6 +816,25 @@
                             }
                             if (!cartItem.encryptedHotelId && room.encrypted_hotel_id) {
                                 cartItem.encryptedHotelId = room.encrypted_hotel_id;
+                            }
+                            // Add room number and floor number if missing
+                            if (!cartItem.roomNumber && room.number) {
+                                cartItem.roomNumber = room.number;
+                            }
+                            if (!cartItem.floorNumber && room.floor_number) {
+                                cartItem.floorNumber = room.floor_number;
+                            }
+                            // Add cancellation policy if missing
+                            if (!cartItem.cancellationPolicy && room.cancellation_policy) {
+                                cartItem.cancellationPolicy = room.cancellation_policy;
+                            }
+                            // Add hotel photo if missing
+                            if (!cartItem.hotelPhoto && room.hotel_photo) {
+                                cartItem.hotelPhoto = room.hotel_photo;
+                            }
+                            // Add hotel name if missing
+                            if (!cartItem.hotelName && room.hotel_name) {
+                                cartItem.hotelName = room.hotel_name;
                             }
                         }
                     });
@@ -959,11 +978,30 @@
 
         cart.forEach((item, index) => {
             const totalPersons = 2; // Default, can be made dynamic
+            
+            // Get room number and floor number with fallbacks
+            const roomNumber = item.roomNumber || item.number || null;
+            const floorNumber = item.floorNumber || item.floor_number || null;
+            
+            // Format floor number with ordinal suffix
+            let floorText = '';
+            if (floorNumber) {
+                const floorNum = parseInt(floorNumber);
+                let suffix = 'th';
+                if (floorNum == 1) suffix = 'st';
+                else if (floorNum == 2) suffix = 'nd';
+                else if (floorNum == 3) suffix = 'rd';
+                floorText = ` - ${floorNum}${suffix} Floor`;
+            }
+            
+            // Format room number
+            const roomNumberText = roomNumber ? ` (Room #${roomNumber})` : '';
+            
             html += `
                 <div data-v-67ade680="" data-v-1b1a5b0b="" class="hotel-review-card">
                     <div data-v-67ade680="" class="review-header">
                         <div data-v-67ade680="" class="review-header-text">
-                            <h4 data-v-67ade680="">Room ${index + 1}: ${item.roomName}</h4>
+                            <h4 data-v-67ade680="">Room ${index + 1}: ${item.roomName}${roomNumberText}${floorText}</h4>
                             <div data-v-67ade680="">
                                 <p data-v-67ade680=""> ${totalPersons} Guests | ${item.quantity} Room${item.quantity > 1 ? 's' : ''} </p>
                             </div>
@@ -971,7 +1009,18 @@
                         <div data-v-67ade680="" class="img-placeholder">
                             ${encryptedHotelId ? `<a href="/hotel-details/${encryptedHotelId}" style="display: block; cursor: pointer;">` : ''}
                                 <picture data-v-345c6862="" data-v-67ade680="">
-                                    <img data-v-345c6862="" src="{{ asset('frontend/images/urmee.png') }}" alt="${item.roomName}" class="image-box">
+                                    ${(() => {
+                                        // Use hotel photo from cart item, fallback to default
+                                        const hotelPhoto = item.hotelPhoto || null;
+                                        const defaultPhoto = '{{ asset("frontend/images/urmee.png") }}';
+                                        if (hotelPhoto) {
+                                            // Ensure proper path format
+                                            const photoPath = hotelPhoto.startsWith('http') || hotelPhoto.startsWith('/') ? hotelPhoto : '/' + hotelPhoto;
+                                            return `<img data-v-345c6862="" src="${photoPath}" alt="${item.roomName}" class="image-box" onerror="this.src='${defaultPhoto}'">`;
+                                        } else {
+                                            return `<img data-v-345c6862="" src="${defaultPhoto}" alt="${item.roomName}" class="image-box">`;
+                                        }
+                                    })()}
                                 </picture>
                             ${encryptedHotelId ? '</a>' : ''}
                         </div>
@@ -991,14 +1040,20 @@
                     </div>
                     <div data-v-67ade680="" class="review-container">
                         <div data-v-67ade680="" class="review-card">
-                            <h4 data-v-67ade680="">${item.roomName}</h4>
+                            <h4 data-v-67ade680="">${item.roomName}${roomNumberText}${floorText}</h4>
                             <div data-v-67ade680="">
                                 <p data-v-67ade680="">
                                     <svg data-v-67ade680="" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M13.3251 17.6743H14.5863C15.2245 17.6743 15.7488 17.188 15.8247 16.565L17.0784 4.04389H13.2795V0.966797H11.7827V4.04389H8.00663L8.23457 5.82177C9.53378 6.17886 10.7494 6.82467 11.4788 7.53886C12.5729 8.61775 13.3251 9.73462 13.3251 11.5581V17.6743ZM0.363281 16.9145V16.1623H11.7827V16.9145C11.7827 17.3324 11.4408 17.6743 11.0153 17.6743H1.13066C0.705181 17.6743 0.363281 17.3324 0.363281 16.9145ZM11.7827 11.5961C11.7827 5.51786 0.363281 5.51786 0.363281 11.5961H11.7827ZM0.378477 13.1232H11.7751V14.6428H0.378477V13.1232Z" fill="#5D6974"/>
                                     </svg> Room Only
                                 </p>
-                                <p data-v-67ade680=""> Non-Refundable </p>
+                                ${(() => {
+                                    // Check if Non-refundable is selected in room's cancellation_policy field
+                                    // The form uses cancellation_policy[] with value 'non_refundable'
+                                    const roomCancellationPolicy = item.cancellationPolicy || [];
+                                    const isNonRefundable = Array.isArray(roomCancellationPolicy) && roomCancellationPolicy.includes('non_refundable');
+                                    return isNonRefundable ? '<p data-v-67ade680=""> Non-Refundable </p>' : '';
+                                })()}
                             </div>
                         </div>
                     </div>
@@ -1090,7 +1145,25 @@
             const itemTotal = item.price * item.quantity * nights;
             subTotal += itemTotal;
             
-            console.log(`Room: ${item.roomName}, Price: ${item.price}, Quantity: ${item.quantity}, Nights: ${nights}, Total: ${itemTotal}`);
+            // Get room number and floor number with fallbacks
+            const itemRoomNumber = item.roomNumber || item.number || null;
+            const itemFloorNumber = item.floorNumber || item.floor_number || null;
+            
+            // Format floor number with ordinal suffix
+            let itemFloorText = '';
+            if (itemFloorNumber) {
+                const floorNum = parseInt(itemFloorNumber);
+                let suffix = 'th';
+                if (floorNum == 1) suffix = 'st';
+                else if (floorNum == 2) suffix = 'nd';
+                else if (floorNum == 3) suffix = 'rd';
+                itemFloorText = ` - ${floorNum}${suffix} Floor`;
+            }
+            
+            // Format room number
+            const itemRoomNumberText = itemRoomNumber ? ` (Room #${itemRoomNumber})` : '';
+            
+            console.log(`Room: ${item.roomName}, Price: ${item.price}, Night: ${item.quantity}, Nights: ${nights}, Total: ${itemTotal}`);
             
             // Calculate rack rate (assuming 69% discount as in reference)
             const itemRackRate = itemTotal / 0.31; // If discounted price is 31% of rack rate
@@ -1098,7 +1171,7 @@
             
             fareItemsHtml += `
                 <div data-v-30094f07="" class="fare-item">
-                    <span data-v-30094f07="" class="fare">${item.roomName} ${item.quantity > 1 ? '(' + item.quantity + 'x)' : ''}</span>
+                    <span data-v-30094f07="" class="fare">${item.roomName}${itemRoomNumberText}${itemFloorText} ${item.quantity > 1 ? '(' + item.quantity + 'x)' : ''}</span>
                     <span data-v-30094f07="" class="fare-price">
                         <span data-v-30094f07="" class="sm-text">BDT</span>
                         <span data-v-30094f07="" class="lg-text"> ${itemTotal.toFixed(0)} </span>
@@ -1108,7 +1181,7 @@
             
             roomsListHtml += `
                 <li class="bui-list__item">
-                    <div class="bui-text bui-text--variant-emphasized_2"> ${item.quantity} x ${item.roomName} </div>
+                    <div class="bui-text bui-text--variant-emphasized_2"> ${item.quantity} x ${item.roomName}${itemRoomNumberText}${itemFloorText} </div>
                 </li>
             `;
         });
@@ -1148,7 +1221,19 @@
                             <div data-v-30094f07="" class="img-placeholder">
                                 ${encryptedHotelId ? `<a href="/hotel-details/${encryptedHotelId}" style="display: block; cursor: pointer;">` : ''}
                                     <picture data-v-345c6862="" data-v-30094f07="">
-                                        <img data-v-345c6862="" src="{{ asset('frontend/images/urmee.png') }}" alt="Hotel" class="image-box">
+                                        ${(() => {
+                                            // Use hotel photo from first cart item, fallback to default
+                                            const firstItem = cart.length > 0 ? cart[0] : null;
+                                            const hotelPhoto = firstItem && firstItem.hotelPhoto ? firstItem.hotelPhoto : null;
+                                            const defaultPhoto = '{{ asset("frontend/images/urmee.png") }}';
+                                            if (hotelPhoto) {
+                                                // Ensure proper path format
+                                                const photoPath = hotelPhoto.startsWith('http') || hotelPhoto.startsWith('/') ? hotelPhoto : '/' + hotelPhoto;
+                                                return `<img data-v-345c6862="" src="${photoPath}" alt="Hotel" class="image-box" onerror="this.src='${defaultPhoto}'">`;
+                                            } else {
+                                                return `<img data-v-345c6862="" src="${defaultPhoto}" alt="Hotel" class="image-box">`;
+                                            }
+                                        })()}
                                     </picture>
                                 ${encryptedHotelId ? '</a>' : ''}
                             </div>
@@ -1161,7 +1246,11 @@
                                             <path d="M13.8712 7.48535V24.5135H3.93799V8.90508C3.93766 8.52909 4.08663 8.16834 4.35215 7.90212C4.61767 7.63591 4.97802 7.486 5.35402 7.48535H13.8712Z" fill="#43CAF9"></path>
                                         </g>
                                     </svg>
-                                    <span data-v-30094f07="">Hotel</span>
+                                    <span data-v-30094f07="">${(() => {
+                                        // Get hotel name from first cart item, fallback to "Hotel"
+                                        const firstItem = cart.length > 0 ? cart[0] : null;
+                                        return firstItem && firstItem.hotelName ? firstItem.hotelName : 'Hotel';
+                                    })()}</span>
                                 </div>
                                 <span data-v-30094f07="" class="name">Hotel Booking</span>
                                 <span data-v-30094f07="" class="subtitle"> Booking Summary </span>
@@ -1173,7 +1262,21 @@
                         <div data-v-30094f07="" class="fare-content">
                             <div data-v-30094f07="" class="fare-info-content">
                                 <div data-v-30094f07="" class="room-details">
-                                    ${cart.map(item => `<p data-v-30094f07=""> ${item.roomName} (${item.quantity}x) </p>`).join('')}
+                                    ${cart.map(item => {
+                                        const rNum = item.roomNumber || item.number || null;
+                                        const fNum = item.floorNumber || item.floor_number || null;
+                                        let fText = '';
+                                        if (fNum) {
+                                            const f = parseInt(fNum);
+                                            let s = 'th';
+                                            if (f == 1) s = 'st';
+                                            else if (f == 2) s = 'nd';
+                                            else if (f == 3) s = 'rd';
+                                            fText = ` - ${f}${s} Floor`;
+                                        }
+                                        const rText = rNum ? ` (Room #${rNum})` : '';
+                                        return `<p data-v-30094f07=""> ${item.roomName}${rText}${fText} (${item.quantity}x) </p>`;
+                                    }).join('')}
                                 </div>
                             </div>
                         </div>
@@ -1559,7 +1662,7 @@
         }
     }
 
-    // Quantity buttons
+    // Night buttons
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('qtyminus')) {
             const targetId = e.target.dataset.target;

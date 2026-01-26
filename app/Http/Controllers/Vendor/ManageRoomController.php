@@ -172,6 +172,7 @@ class ManageRoomController extends Controller
             'custom_cancellation_policies' => 'nullable|array',
             'enabled_cancellation_policies' => 'nullable|array',
             'is_active' => 'nullable|in:0,1,true,false,on,off',
+            'couple_friendly' => 'nullable|boolean',
             'availability_dates' => 'nullable|string',
         ], [
             'hotel_id.required' => 'Hotel ID is required.',
@@ -286,7 +287,7 @@ class ManageRoomController extends Controller
         
         // For backward compatibility, use first room's data for main fields if only one room
         $mainRoomName = $request->name ?? '';
-        $mainRoomNumber = $request->number ?? '';
+        $mainRoomNumber = $request->room_number ?? $request->number ?? '';
         $mainFloorNumber = $request->floor_number ?? '';
         $mainSize = $request->size ?? 0;
         $mainWifiDetails = $request->wifi_details ?? '';
@@ -333,6 +334,7 @@ class ManageRoomController extends Controller
             'total_washrooms' => $request->total_washrooms,
             'total_beds' => (int)($request->input('total_beds', 0) ?? 0),
             'wifi_details' => $mainWifiDetails,
+            'couple_friendly' => $request->has('couple_friendly') ? (bool)$request->couple_friendly : false,
             'appliances' => $appliances,
             'furniture' => $furniture,
             'amenities' => $amenities,
@@ -555,7 +557,7 @@ class ManageRoomController extends Controller
         
         // For backward compatibility, use first room's data for main fields if only one room
         $mainRoomName = $request->name ?? '';
-        $mainRoomNumber = $request->number ?? '';
+        $mainRoomNumber = $request->room_number ?? $request->number ?? '';
         $mainFloorNumber = $request->floor_number ?? '';
         $mainSize = $request->size ?? 0;
         $mainWifiDetails = $request->wifi_details ?? '';
@@ -602,6 +604,7 @@ class ManageRoomController extends Controller
             'total_washrooms' => $request->total_washrooms,
             'total_beds' => (int)($request->input('total_beds', 0) ?? 0),
             'wifi_details' => $mainWifiDetails,
+            'couple_friendly' => $request->has('couple_friendly') ? (bool)$request->couple_friendly : false,
             'appliances' => $appliances,
             'furniture' => $furniture,
             'amenities' => $amenities,
@@ -843,7 +846,7 @@ class ManageRoomController extends Controller
             // For backward compatibility, use first room's data for main fields if only one room
             // Room name comes from the main 'name' field, not from room_details
             $mainRoomName = $request->name ?? $room->name ?? '';
-            $mainRoomNumber = $request->number ?? $room->number ?? '';
+            $mainRoomNumber = $request->room_number ?? $request->number ?? $room->number ?? '';
             $mainFloorNumber = $request->floor_number ?? $room->floor_number ?? '';
             $mainSize = $request->size ?? $room->size ?? 0;
             $mainWifiDetails = $request->wifi_details ?? $room->wifi_details ?? '';
@@ -951,6 +954,7 @@ class ManageRoomController extends Controller
                 'total_washrooms' => $request->total_washrooms ?? 0,
                 'total_beds' => (int)($request->input('total_beds', 0) ?? 0),
                 'wifi_details' => $mainWifiDetails,
+                'couple_friendly' => $request->has('couple_friendly') ? (bool)$request->couple_friendly : false,
                 'appliances' => $appliances,
                 'furniture' => $furniture,
                 'amenities' => $amenities,

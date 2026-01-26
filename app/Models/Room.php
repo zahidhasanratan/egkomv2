@@ -29,6 +29,8 @@ class Room extends Model
         'pet_type', 'pet_fee', 'pet_complementary_note', 'pet_paid_note',
         // Meal Options fields
         'meal_complementary_note', 'meal_paid_note',
+        // Couple Friendly field
+        'couple_friendly',
     ];
 
     protected $casts = [
@@ -42,6 +44,7 @@ class Room extends Model
         'display_options' => 'array',
         'is_active' => 'boolean',
         'availability_dates' => 'array',
+        'couple_friendly' => 'boolean',
     ];
 
     public function hotel()

@@ -24,7 +24,7 @@ class BookingController extends Controller
             return response()->json(['rooms' => []]);
         }
         
-        $rooms = Room::whereIn('id', $roomIds)->get()->map(function($room) {
+        $rooms = Room::whereIn('id', $roomIds)->with('hotel')->get()->map(function($room) {
             // Parse display_options to get available additional requests
             $displayOptions = is_string($room->display_options) 
                 ? json_decode($room->display_options, true) 
@@ -94,17 +94,43 @@ class BookingController extends Controller
                 $availableRoomPreferences = ['non_smoking', 'smoking'];
             }
             
+            // Get hotel photo (featured_photo first element or photo field)
+            $hotelPhoto = null;
+            $hotelName = null;
+            if ($room->hotel) {
+                // Get hotel name
+                $hotelName = $room->hotel->description ?? $room->hotel->property_category ?? 'Hotel';
+                
+                // Get hotel photo
+                if (isset($room->hotel->photo) && $room->hotel->photo) {
+                    $hotelPhoto = $room->hotel->photo;
+                } elseif (isset($room->hotel->featured_photo) && $room->hotel->featured_photo) {
+                    $featuredPhotos = is_string($room->hotel->featured_photo) 
+                        ? json_decode($room->hotel->featured_photo, true) 
+                        : $room->hotel->featured_photo;
+                    if (!empty($featuredPhotos) && is_array($featuredPhotos) && isset($featuredPhotos[0])) {
+                        $hotelPhoto = $featuredPhotos[0];
+                    }
+                }
+            }
+            
             return [
                 'id' => $room->id,
                 'name' => $room->name,
+                'number' => $room->number ?? null,
+                'floor_number' => $room->floor_number ?? null,
+                'couple_friendly' => (bool)($room->couple_friendly ?? false),
                 'hotel_id' => $room->hotel_id,
                 'encrypted_hotel_id' => \Illuminate\Support\Facades\Crypt::encrypt($room->hotel_id),
+                'hotel_photo' => $hotelPhoto,
+                'hotel_name' => $hotelName,
                 'total_persons' => $room->total_persons,
                 'total_beds' => $room->total_beds,
                 'available_requests' => $availableRequests,
                 'available_bed_types' => $availableBedTypes,
                 'available_room_preferences' => $availableRoomPreferences,
-                'display_options' => $displayOptions
+                'display_options' => $displayOptions,
+                'cancellation_policy' => $room->cancellation_policy ?? []
             ];
         });
         
@@ -303,6 +329,8 @@ class BookingController extends Controller
                         'hotelEmail' => $room->hotel->email ?? null,
                         'hotelPhone' => $room->hotel->phone ?? null,
                         'hotelPhoto' => $hotelPhoto,
+                        'roomNumber' => $cartItem['roomNumber'] ?? $room->number ?? null,
+                        'floorNumber' => $cartItem['floorNumber'] ?? $room->floor_number ?? null,
                     ];
                 }
             }
@@ -323,23 +351,46 @@ class BookingController extends Controller
             $tax = 0; // Tax not applicable
             $grandTotal = $subtotal - $discount; // Grand total without tax
 
-            // Handle file uploads
+            // Handle file uploads - save directly to public folder
             $nidFront = null;
             $nidBack = null;
             $passport = null;
             $visa = null;
 
+            // Ensure directories exist
+            if (!file_exists(public_path('documents/nid'))) {
+                mkdir(public_path('documents/nid'), 0755, true);
+            }
+            if (!file_exists(public_path('documents/passport'))) {
+                mkdir(public_path('documents/passport'), 0755, true);
+            }
+            if (!file_exists(public_path('documents/visa'))) {
+                mkdir(public_path('documents/visa'), 0755, true);
+            }
+
             if ($request->hasFile('nid_front')) {
-                $nidFront = $request->file('nid_front')->store('documents/nid', 'public');
+                $file = $request->file('nid_front');
+                $filename = 'nid_front_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('documents/nid'), $filename);
+                $nidFront = 'documents/nid/' . $filename;
             }
             if ($request->hasFile('nid_back')) {
-                $nidBack = $request->file('nid_back')->store('documents/nid', 'public');
+                $file = $request->file('nid_back');
+                $filename = 'nid_back_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('documents/nid'), $filename);
+                $nidBack = 'documents/nid/' . $filename;
             }
             if ($request->hasFile('passport')) {
-                $passport = $request->file('passport')->store('documents/passport', 'public');
+                $file = $request->file('passport');
+                $filename = 'passport_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('documents/passport'), $filename);
+                $passport = 'documents/passport/' . $filename;
             }
             if ($request->hasFile('visa')) {
-                $visa = $request->file('visa')->store('documents/visa', 'public');
+                $file = $request->file('visa');
+                $filename = 'visa_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('documents/visa'), $filename);
+                $visa = 'documents/visa/' . $filename;
             }
 
             // Parse other guests

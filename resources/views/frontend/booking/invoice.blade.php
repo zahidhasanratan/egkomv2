@@ -673,7 +673,7 @@
                                 <th>Check-in</th>
                                 <th>Check-out</th>
                                 <th class="text-right">Nights</th>
-                                <th class="text-right">Quantity</th>
+                                <th class="text-right">Night</th>
                                 <th class="text-right">Adults</th>
                                 <th class="text-right">Kids</th>
                                 <th class="text-right">Price/Night</th>
@@ -683,7 +683,15 @@
                         <tbody>
                             @foreach($booking->rooms_data as $room)
                             <tr>
-                                <td>{{ $room['roomName'] }}</td>
+                                <td>
+                                    {{ $room['roomName'] }}
+                                    @if(isset($room['roomNumber']) && $room['roomNumber'])
+                                        (Room #{{ $room['roomNumber'] }})
+                                    @endif
+                                    @if(isset($room['floorNumber']) && $room['floorNumber'])
+                                        - {{ $room['floorNumber'] }}{{ $room['floorNumber'] == 1 ? 'st' : ($room['floorNumber'] == 2 ? 'nd' : ($room['floorNumber'] == 3 ? 'rd' : 'th')) }} Floor
+                                    @endif
+                                </td>
                                 <td>{{ $booking->checkin_date->format('d M Y') }}</td>
                                 <td>{{ $booking->checkout_date->format('d M Y') }}</td>
                                 <td class="text-right">{{ $booking->total_nights }}</td>
@@ -810,25 +818,53 @@
                 <div class="document-section">
                     @if($booking->nid_front)
                         <div class="document-preview">
-                            <img src="{{ asset('storage/' . $booking->nid_front) }}" alt="NID Front">
+                            @php
+                                // Support both old storage path and new public folder path
+                                $nidFrontPath = strpos($booking->nid_front, 'storage/') === 0 
+                                    ? asset('storage/' . str_replace('storage/', '', $booking->nid_front)) 
+                                    : asset($booking->nid_front);
+                            @endphp
+                            <img src="{{ $nidFrontPath }}" alt="NID Front" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="doc-icon" style="display: none; flex-direction: column; align-items: center; justify-content: center;"><i class="fa fa-file-image"></i></div>
                             <div class="doc-text">NID Front</div>
                         </div>
                     @endif
                     @if($booking->nid_back)
                         <div class="document-preview">
-                            <img src="{{ asset('storage/' . $booking->nid_back) }}" alt="NID Back">
+                            @php
+                                // Support both old storage path and new public folder path
+                                $nidBackPath = strpos($booking->nid_back, 'storage/') === 0 
+                                    ? asset('storage/' . str_replace('storage/', '', $booking->nid_back)) 
+                                    : asset($booking->nid_back);
+                            @endphp
+                            <img src="{{ $nidBackPath }}" alt="NID Back" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="doc-icon" style="display: none; flex-direction: column; align-items: center; justify-content: center;"><i class="fa fa-file-image"></i></div>
                             <div class="doc-text">NID Back</div>
                         </div>
                     @endif
                     @if($booking->passport)
                         <div class="document-preview">
-                            <img src="{{ asset('storage/' . $booking->passport) }}" alt="Passport">
+                            @php
+                                // Support both old storage path and new public folder path
+                                $passportPath = strpos($booking->passport, 'storage/') === 0 
+                                    ? asset('storage/' . str_replace('storage/', '', $booking->passport)) 
+                                    : asset($booking->passport);
+                            @endphp
+                            <img src="{{ $passportPath }}" alt="Passport" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="doc-icon" style="display: none; flex-direction: column; align-items: center; justify-content: center;"><i class="fa fa-file-image"></i></div>
                             <div class="doc-text">Passport</div>
                         </div>
                     @endif
                     @if($booking->visa)
                         <div class="document-preview">
-                            <img src="{{ asset('storage/' . $booking->visa) }}" alt="Visa">
+                            @php
+                                // Support both old storage path and new public folder path
+                                $visaPath = strpos($booking->visa, 'storage/') === 0 
+                                    ? asset('storage/' . str_replace('storage/', '', $booking->visa)) 
+                                    : asset($booking->visa);
+                            @endphp
+                            <img src="{{ $visaPath }}" alt="Visa" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="doc-icon" style="display: none; flex-direction: column; align-items: center; justify-content: center;"><i class="fa fa-file-image"></i></div>
                             <div class="doc-text">Visa</div>
                         </div>
                     @endif

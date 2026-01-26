@@ -295,7 +295,7 @@
                                 <h4>{{ $firstRoom['hotelName'] ?? 'Hotel Booking' }}</h4>
                                 <p class="room-info">
                                     @foreach($booking->rooms_data as $room)
-                                        {{ $room['quantity'] }}x {{ $room['roomName'] }}@if(!$loop->last), @endif
+                                        {{ $room['quantity'] }}x {{ $room['roomName'] }}@if(isset($room['roomNumber']) && $room['roomNumber']) (Room #{{ $room['roomNumber'] }})@endif@if(isset($room['floorNumber']) && $room['floorNumber']) - {{ $room['floorNumber'] }}{{ $room['floorNumber'] == 1 ? 'st' : ($room['floorNumber'] == 2 ? 'nd' : ($room['floorNumber'] == 3 ? 'rd' : 'th')) }} Floor@endif@if(!$loop->last), @endif
                                     @endforeach
                                 </p>
                             </div>

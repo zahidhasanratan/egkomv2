@@ -49,7 +49,7 @@
                                 <tr>
                                     <th>Hotel</th>
                                     <th>Room Name</th>
-                                    <th>Quantity</th>
+                                    <th>Night</th>
                                     <th>Price/Night</th>
                                     <th>Total</th>
                                 </tr>
@@ -62,7 +62,15 @@
                                 @endphp
                                 <tr>
                                     <td>{{ $hotelName }}</td>
-                                    <td>{{ $room['roomName'] }}</td>
+                                    <td>
+                                        {{ $room['roomName'] }}
+                                        @if(isset($room['roomNumber']) && $room['roomNumber'])
+                                            (Room #{{ $room['roomNumber'] }})
+                                        @endif
+                                        @if(isset($room['floorNumber']) && $room['floorNumber'])
+                                            - {{ $room['floorNumber'] }}{{ $room['floorNumber'] == 1 ? 'st' : ($room['floorNumber'] == 2 ? 'nd' : ($room['floorNumber'] == 3 ? 'rd' : 'th')) }} Floor
+                                        @endif
+                                    </td>
                                     <td>{{ $room['quantity'] }}</td>
                                     <td>BDT {{ number_format($room['price'], 2) }}</td>
                                     <td>BDT {{ number_format($room['price'] * $room['quantity'] * $booking->total_nights, 2) }}</td>
@@ -195,32 +203,52 @@
                         @if($booking->nid_front)
                         <div class="col-md-6">
                             <p><strong>NID Front:</strong></p>
-                            <a href="{{ asset('storage/' . $booking->nid_front) }}" target="_blank">
-                                <img src="{{ asset('storage/' . $booking->nid_front) }}" style="max-width: 100%; border: 1px solid #ddd; border-radius: 4px;">
+                            @php
+                                $nidFrontUrl = strpos($booking->nid_front, 'storage/') === 0 
+                                    ? asset('storage/' . str_replace('storage/', '', $booking->nid_front)) 
+                                    : asset($booking->nid_front);
+                            @endphp
+                            <a href="{{ $nidFrontUrl }}" target="_blank">
+                                <img src="{{ $nidFrontUrl }}" style="max-width: 100%; border: 1px solid #ddd; border-radius: 4px;">
                             </a>
                         </div>
                         @endif
                         @if($booking->nid_back)
                         <div class="col-md-6">
                             <p><strong>NID Back:</strong></p>
-                            <a href="{{ asset('storage/' . $booking->nid_back) }}" target="_blank">
-                                <img src="{{ asset('storage/' . $booking->nid_back) }}" style="max-width: 100%; border: 1px solid #ddd; border-radius: 4px;">
+                            @php
+                                $nidBackUrl = strpos($booking->nid_back, 'storage/') === 0 
+                                    ? asset('storage/' . str_replace('storage/', '', $booking->nid_back)) 
+                                    : asset($booking->nid_back);
+                            @endphp
+                            <a href="{{ $nidBackUrl }}" target="_blank">
+                                <img src="{{ $nidBackUrl }}" style="max-width: 100%; border: 1px solid #ddd; border-radius: 4px;">
                             </a>
                         </div>
                         @endif
                         @if($booking->passport)
                         <div class="col-md-6">
                             <p><strong>Passport:</strong></p>
-                            <a href="{{ asset('storage/' . $booking->passport) }}" target="_blank">
-                                <img src="{{ asset('storage/' . $booking->passport) }}" style="max-width: 100%; border: 1px solid #ddd; border-radius: 4px;">
+                            @php
+                                $passportUrl = strpos($booking->passport, 'storage/') === 0 
+                                    ? asset('storage/' . str_replace('storage/', '', $booking->passport)) 
+                                    : asset($booking->passport);
+                            @endphp
+                            <a href="{{ $passportUrl }}" target="_blank">
+                                <img src="{{ $passportUrl }}" style="max-width: 100%; border: 1px solid #ddd; border-radius: 4px;">
                             </a>
                         </div>
                         @endif
                         @if($booking->visa)
                         <div class="col-md-6">
                             <p><strong>Visa:</strong></p>
-                            <a href="{{ asset('storage/' . $booking->visa) }}" target="_blank">
-                                <img src="{{ asset('storage/' . $booking->visa) }}" style="max-width: 100%; border: 1px solid #ddd; border-radius: 4px;">
+                            @php
+                                $visaUrl = strpos($booking->visa, 'storage/') === 0 
+                                    ? asset('storage/' . str_replace('storage/', '', $booking->visa)) 
+                                    : asset($booking->visa);
+                            @endphp
+                            <a href="{{ $visaUrl }}" target="_blank">
+                                <img src="{{ $visaUrl }}" style="max-width: 100%; border: 1px solid #ddd; border-radius: 4px;">
                             </a>
                         </div>
                         @endif

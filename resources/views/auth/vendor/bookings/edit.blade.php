@@ -308,7 +308,7 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="quantity">Quantity</label>
+                                                    <label for="quantity">Night</label>
                                                     <input type="number" 
                                                            class="form-control @error('quantity') is-invalid @enderror" 
                                                            id="quantity" 

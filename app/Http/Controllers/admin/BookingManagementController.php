@@ -479,17 +479,40 @@ class BookingManagementController extends Controller
             $passport = null;
             $visa = null;
 
+            // Ensure directories exist
+            if (!file_exists(public_path('documents/nid'))) {
+                mkdir(public_path('documents/nid'), 0755, true);
+            }
+            if (!file_exists(public_path('documents/passport'))) {
+                mkdir(public_path('documents/passport'), 0755, true);
+            }
+            if (!file_exists(public_path('documents/visa'))) {
+                mkdir(public_path('documents/visa'), 0755, true);
+            }
+
             if ($request->hasFile('nid_front')) {
-                $nidFront = $request->file('nid_front')->store('documents/nid', 'public');
+                $file = $request->file('nid_front');
+                $filename = 'nid_front_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('documents/nid'), $filename);
+                $nidFront = 'documents/nid/' . $filename;
             }
             if ($request->hasFile('nid_back')) {
-                $nidBack = $request->file('nid_back')->store('documents/nid', 'public');
+                $file = $request->file('nid_back');
+                $filename = 'nid_back_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('documents/nid'), $filename);
+                $nidBack = 'documents/nid/' . $filename;
             }
             if ($request->hasFile('passport')) {
-                $passport = $request->file('passport')->store('documents/passport', 'public');
+                $file = $request->file('passport');
+                $filename = 'passport_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('documents/passport'), $filename);
+                $passport = 'documents/passport/' . $filename;
             }
             if ($request->hasFile('visa')) {
-                $visa = $request->file('visa')->store('documents/visa', 'public');
+                $file = $request->file('visa');
+                $filename = 'visa_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('documents/visa'), $filename);
+                $visa = 'documents/visa/' . $filename;
             }
 
             // Parse other guests

@@ -62,48 +62,21 @@
                                             </div>
                                         </div>
 
-                                        <div data-v-58caae98="" class="couple-friendly-card">
-                                         <span data-v-4323310d="" data-v-58caae98="" class="guest-tags-container">
-                                            <!---->
-                                            <span data-v-01d7cf4a="" data-v-4323310d="" class="hotel-guest-tag">
-                                               <span data-v-01d7cf4a="" id="tag-for-couples"
-                                                     class="guest-type-tag for-couples">
-                                                  <svg data-v-01d7cf4a="" width="9" height="14" viewBox="0 0 9 14"
-                                                       fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                     <use data-v-01d7cf4a="" xlink:href="#couple-tag"></use>
-                                                  </svg>
-                                                  Couple Friendly
-                                               </span>
-                                                <!---->
-                                               <svg data-v-01d7cf4a="" style="display: none;">
-                                                  <symbol data-v-01d7cf4a="" id="couple-tag">
-                                                     <g data-v-01d7cf4a="" clip-path="url(#clip0_3759_25068)">
-                                                        <path data-v-01d7cf4a=""
-                                                              d="M3.55554 1.50366H2.39844V3.23931H3.55554V1.50366Z"
-                                                              fill="#F44586"></path>
-                                                        <path data-v-01d7cf4a=""
-                                                              d="M6.15893 1.50366H5.00183V3.23931H6.15893V1.50366Z"
-                                                              fill="#F44586"></path>
-                                                        <path data-v-01d7cf4a=""
-                                                              d="M7.7836 12.4957C8.02825 12.2816 8.18382 11.968 8.18382 11.6182V6.42125C8.18382 6.2865 8.09072 6.16977 7.95965 6.13932L7.89455 6.12427V0.346648C7.89455 0.187048 7.76505 0.057373 7.60527 0.057373H0.952298C0.792698 0.057373 0.663023 0.187048 0.663023 0.346648V4.45547L0.438848 4.40367C0.352923 4.38407 0.262798 4.40437 0.193848 4.45915C0.124898 4.51392 0.0846477 4.59722 0.0846477 4.68542V11.6181C0.0846477 11.9679 0.240223 12.2815 0.485048 12.4955C0.240048 12.7099 0.0844727 13.0235 0.0844727 13.3733V13.6528C0.0844727 13.8124 0.214148 13.942 0.373748 13.942H7.89455C8.05415 13.942 8.18382 13.8125 8.184 13.6528V13.3733C8.184 13.0235 8.02842 12.7097 7.7836 12.4957ZM1.2414 0.635923H7.316V5.99092L6.1589 5.72387V4.39632H5.0018V5.45682L3.55542 5.1231V4.3965H2.39832V4.85622L1.24122 4.58917V0.635923H1.2414ZM6.98682 9.88152C6.74707 10.2462 5.71475 11.1133 5.49092 11.1133C5.27182 11.1133 4.23022 10.2431 3.99205 9.88152C3.87287 9.70057 3.78817 9.50072 3.80217 9.23822C3.82702 8.7736 4.20695 8.38982 4.67227 8.38982C5.15072 8.38982 5.42932 8.9003 5.48935 8.9003C5.55812 8.9003 5.84862 8.38982 6.30642 8.38982C6.77175 8.38982 7.15167 8.7736 7.17652 9.23822C7.1907 9.5009 7.10635 9.69987 6.98682 9.88152ZM1.0923 8.1016C1.12467 7.49627 1.61957 6.99647 2.2256 6.99647C2.84877 6.99647 3.21155 7.6613 3.28977 7.6613C3.3792 7.6613 3.75772 6.99647 4.35395 6.99647C4.95997 6.99647 5.45487 7.49627 5.48725 8.1016C5.4918 8.18822 5.49232 8.26697 5.47972 8.34012C5.47115 8.38982 5.42442 8.42045 5.3847 8.37967C5.21127 8.2122 5.02577 8.09495 4.6721 8.09495C4.37057 8.09495 4.08392 8.21395 3.86482 8.42972C3.65045 8.64112 3.52357 8.92252 3.50747 9.22248C3.48717 9.6038 3.63365 9.87382 3.74547 10.0437C3.78012 10.0962 3.79395 10.1171 3.84767 10.1787C3.87375 10.2126 3.85327 10.2357 3.84015 10.2452C3.59357 10.4233 3.38655 10.5435 3.2917 10.5435C3.00645 10.5435 1.64967 9.41007 1.3394 8.93915C1.18417 8.70377 1.0741 8.44355 1.0923 8.1016ZM0.663023 13.3637C0.668273 13.044 0.930073 12.7851 1.2512 12.7851H7.0171H7.01727C7.33822 12.7851 7.6002 13.0438 7.60527 13.3637H0.663023Z"
-                                                              fill="#F44586"></path>
-                                                     </g>
-                                                     <defs data-v-01d7cf4a="">
-                                                        <clipPath data-v-01d7cf4a="" id="clip0_3759_25068">
-                                                           <rect data-v-01d7cf4a="" width="8.26822" height="14"
-                                                                 fill="white"></rect>
-                                                        </clipPath>
-                                                     </defs>
-                                                  </symbol>
-                                               </svg>
-                                            </span>
-                                             <!---->
-                                             <!---->
-                                             <!---->
-                                         </span>
-                                        </div>
-                                    </div>
-                                </div>
+                                        {{-- Couple Friendly Badge SVG Symbol (defined once, used per room) --}}
+                                        <svg style="display: none;">
+                                            <symbol id="couple-tag">
+                                                <g clip-path="url(#clip0_3759_25068)">
+                                                    <path d="M3.55554 1.50366H2.39844V3.23931H3.55554V1.50366Z" fill="#F44586"></path>
+                                                    <path d="M6.15893 1.50366H5.00183V3.23931H6.15893V1.50366Z" fill="#F44586"></path>
+                                                    <path d="M7.7836 12.4957C8.02825 12.2816 8.18382 11.968 8.18382 11.6182V6.42125C8.18382 6.2865 8.09072 6.16977 7.95965 6.13932L7.89455 6.12427V0.346648C7.89455 0.187048 7.76505 0.057373 7.60527 0.057373H0.952298C0.792698 0.057373 0.663023 0.187048 0.663023 0.346648V4.45547L0.438848 4.40367C0.352923 4.38407 0.262798 4.40437 0.193848 4.45915C0.124898 4.51392 0.0846477 4.59722 0.0846477 4.68542V11.6181C0.0846477 11.9679 0.240223 12.2815 0.485048 12.4955C0.240048 12.7099 0.0844727 13.0235 0.0844727 13.3733V13.6528C0.0844727 13.8124 0.214148 13.942 0.373748 13.942H7.89455C8.05415 13.942 8.18382 13.8125 8.184 13.6528V13.3733C8.184 13.0235 8.02842 12.7097 7.7836 12.4957ZM1.2414 0.635923H7.316V5.99092L6.1589 5.72387V4.39632H5.0018V5.45682L3.55542 5.1231V4.3965H2.39832V4.85622L1.24122 4.58917V0.635923H1.2414ZM6.98682 9.88152C6.74707 10.2462 5.71475 11.1133 5.49092 11.1133C5.27182 11.1133 4.23022 10.2431 3.99205 9.88152C3.87287 9.70057 3.78817 9.50072 3.80217 9.23822C3.82702 8.7736 4.20695 8.38982 4.67227 8.38982C5.15072 8.38982 5.42932 8.9003 5.48935 8.9003C5.55812 8.9003 5.84862 8.38982 6.30642 8.38982C6.77175 8.38982 7.15167 8.7736 7.17652 9.23822C7.1907 9.5009 7.10635 9.69987 6.98682 9.88152ZM1.0923 8.1016C1.12467 7.49627 1.61957 6.99647 2.2256 6.99647C2.84877 6.99647 3.21155 7.6613 3.28977 7.6613C3.3792 7.6613 3.75772 6.99647 4.35395 6.99647C4.95997 6.99647 5.45487 7.49627 5.48725 8.1016C5.4918 8.18822 5.49232 8.26697 5.47972 8.34012C5.47115 8.38982 5.42442 8.42045 5.3847 8.37967C5.21127 8.2122 5.02577 8.09495 4.6721 8.09495C4.37057 8.09495 4.08392 8.21395 3.86482 8.42972C3.65045 8.64112 3.52357 8.92252 3.50747 9.22248C3.48717 9.6038 3.63365 9.87382 3.74547 10.0437C3.78012 10.0962 3.79395 10.1171 3.84767 10.1787C3.87375 10.2126 3.85327 10.2357 3.84015 10.2452C3.59357 10.4233 3.38655 10.5435 3.2917 10.5435C3.00645 10.5435 1.64967 9.41007 1.3394 8.93915C1.18417 8.70377 1.0741 8.44355 1.0923 8.1016ZM0.663023 13.3637C0.668273 13.044 0.930073 12.7851 1.2512 12.7851H7.0171H7.01727C7.33822 12.7851 7.6002 13.0438 7.60527 13.3637H0.663023Z" fill="#F44586"></path>
+                                                </g>
+                                                <defs>
+                                                    <clipPath id="clip0_3759_25068">
+                                                        <rect width="8.26822" height="14" transform="translate(0.0844727 0.057373)" fill="white"></rect>
+                                                    </clipPath>
+                                                </defs>
+                                            </symbol>
+                                        </svg>
 
 
                                 <div class="hotel-preview hotel-nearby-lg">
@@ -474,23 +447,12 @@
                             document.getElementById("childrenSelect").value = children;
                         }
                         
-                        // If we have search parameters, trigger the search state update
-                        // Note: searchState is already initialized from URL params above
-                        // Just trigger the filtering and summary update
-                        if (checkin && checkout) {
-                            // Wait a bit for DOM to be fully ready
-                            setTimeout(() => {
-                                if (typeof updateSearchSummary === 'function') {
-                                    updateSearchSummary();
-                                }
-                                if (typeof filterRoomsByAvailability === 'function') {
-                                    filterRoomsByAvailability();
-                                }
-                                if (typeof filterRooms === 'function') {
-                                    filterRooms();
-                                }
-                            }, 100);
-                        }
+                        // Check if dates are selected and update visibility
+                        setTimeout(() => {
+                            if (typeof updateDatesAndFilter === 'function') {
+                                updateDatesAndFilter();
+                            }
+                        }, 100);
                     };
 
                 </script>
@@ -608,7 +570,7 @@
                     }
                 </style>
 
-                <div class="uitk-pill-container">
+                <div class="uitk-pill-container" id="bedFilterContainer" style="display: none;">
                     <div class="uitk-pill">
                         <input id="ALLROOMS" aria-checked="true" type="radio" name="bedFilter"
                                class="uitk-pill-standard is-visually-hidden" value="all" checked="" onchange="filterRoomsByBeds()"/>
@@ -662,7 +624,18 @@
 
                 <div id="Room_Details" class="row">
                     <div class="col-md-12">
-                        <div data-v-58caae98="" id="rooms">
+                        <!-- Message when dates not selected -->
+                        <div id="noDatesMessage" style="display: none; text-align: center; padding: 60px 30px; background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); border-radius: 12px; margin: 30px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 2px dashed #e0e0e0;">
+                            <div style="margin-bottom: 25px;">
+                                <i class="fa fa-calendar" style="font-size: 64px; color: #91278f; opacity: 0.3; margin-bottom: 20px;"></i>
+                            </div>
+                            <h3 style="color: #333; margin-bottom: 15px; font-size: 24px; font-weight: 600;">Select Dates to View Rooms</h3>
+                            <p style="color: #666; margin-bottom: 25px; font-size: 16px; line-height: 1.6; max-width: 500px; margin-left: auto; margin-right: auto;">
+                                Please select your check-in and check-out dates above to view available rooms and pricing.
+                            </p>
+                        </div>
+                        
+                        <div data-v-58caae98="" id="rooms" style="display: none;">
                             <div data-v-58caae98="" class="row">
                                 <div data-v-58caae98="" class="col-lg-9 col-md-12">
                                     <div data-v-58caae98="" class="room-section hotel-summary">
@@ -725,10 +698,44 @@
                                                             @if($roomList->description)
                                                                 <p class="room-description" style="color: #666; font-size: 14px; line-height: 1.6; margin-top: 8px; margin-bottom: 12px;">{{ $roomList->description }}</p>
                                                             @endif
-                                                            <p class="room-numbers">Room # {{ $roomList->number }} <span
-                                                                    class="floor-numbers">{{ $roomList->floor_number }}</span>
+                                                            <p class="room-numbers">Room # {{ $roomList->number ?: 'N/A' }} <span
+                                                                    class="floor-numbers">{{ $roomList->floor_number ? $roomList->floor_number . ' Floor' : '' }}</span>
                                                             </p>
-
+                                                            @if($roomList->couple_friendly)
+                                                                <div data-v-58caae98="" class="couple-friendly-card" style="margin-top: 10px;">
+                                                                    <span data-v-4323310d="" data-v-58caae98="" class="guest-tags-container">
+                                                                        <span data-v-01d7cf4a="" data-v-4323310d="" class="hotel-guest-tag">
+                                                                            <span data-v-01d7cf4a="" class="guest-type-tag for-couples">
+                                                                                <svg data-v-01d7cf4a="" width="9" height="14" viewBox="0 0 9 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                    <use data-v-01d7cf4a="" xlink:href="#couple-tag"></use>
+                                                                                </svg>
+                                                                                Couple Friendly
+                                                                            </span>
+                                                                        </span>
+                                                                    </span>
+                                                                </div>
+                                                            @endif
+                                                            @php
+                                                                // Check if Non-refundable is selected in room's cancellation_policy field
+                                                                // The form uses cancellation_policy[] with value 'non_refundable'
+                                                                $roomCancellationPolicy = $roomList->cancellation_policy ?? [];
+                                                                if (is_string($roomCancellationPolicy)) {
+                                                                    $roomCancellationPolicy = json_decode($roomCancellationPolicy, true) ?: [];
+                                                                }
+                                                                if (!is_array($roomCancellationPolicy)) {
+                                                                    $roomCancellationPolicy = [];
+                                                                }
+                                                                
+                                                                // Check if 'non_refundable' is in the cancellation_policy array
+                                                                $isNonRefundable = in_array('non_refundable', $roomCancellationPolicy);
+                                                            @endphp
+                                                            @if($isNonRefundable)
+                                                                <div class="option-meta" style="margin-top: 8px;">
+                                                                    <span data-toggle="tooltip" class="non-refundable" data-bs-original-title="Regardless of the cancellation window, customers will not get any refund under this.">
+                                                                        Non-Refundable <i variant="primary" class="fa fa-info-circle"></i>
+                                                                    </span>
+                                                                </div>
+                                                            @endif
                                                         </div>
                                                         <div class="image-gallery multiple-row" data-bs-toggle="modal"
                                                              data-bs-target="#rightSidebarModalDetails"
@@ -1006,6 +1013,26 @@
                                                                 <div data-v-b6728cd0="" class="price-per"> Per Night
                                                                 </div>
 
+                                                                @php
+                                                                    // Check if Non-refundable is selected in room's cancellation_policy field
+                                                                    $roomCancellationPolicyPricing = $roomList->cancellation_policy ?? [];
+                                                                    if (is_string($roomCancellationPolicyPricing)) {
+                                                                        $roomCancellationPolicyPricing = json_decode($roomCancellationPolicyPricing, true) ?: [];
+                                                                    }
+                                                                    if (!is_array($roomCancellationPolicyPricing)) {
+                                                                        $roomCancellationPolicyPricing = [];
+                                                                    }
+                                                                    
+                                                                    // Check if 'non_refundable' is in the cancellation_policy array
+                                                                    $isNonRefundablePricing = in_array('non_refundable', $roomCancellationPolicyPricing);
+                                                                @endphp
+                                                                @if($isNonRefundablePricing)
+                                                                <div class="option-meta" style="margin-top: 10px; margin-bottom: 10px;">
+                                                                    <span data-toggle="tooltip" class="non-refundable" data-bs-original-title="Regardless of the cancellation window, customers will not get any refund under this.">
+                                                                        Non-Refundable <i variant="primary" class="fa fa-info-circle"></i>
+                                                                    </span>
+                                                                </div>
+                                                                @endif
 
                                                                 <div class="quantity-btn">
                                                                     <form action="">
@@ -1019,7 +1046,7 @@
                                                                                     aria-hidden="true">&plus;
                                                                             </button>
                                                                             <label style="padding-left: 15px;"
-                                                                                   for="qty-{{ $roomList->id }}">Quantity</label>
+                                                                                   for="qty-{{ $roomList->id }}">Night</label>
                                                                         </p>
                                                                     </form>
                                                                 </div>
@@ -1089,7 +1116,12 @@
                         const qtyInput = document.getElementById('qty-' + roomId);
                         const quantity = qtyInput ? parseInt(qtyInput.value) : 1;
                         
-                        if (addToGlobalCart(roomId, roomName, price, maxQuantity, quantity, capacity, hotelId)) {
+                        // Get room number and floor number from roomsData
+                        const room = roomsData.find(r => r.id === roomId);
+                        const roomNumber = room ? (room.number || null) : null;
+                        const floorNumber = room ? (room.floor_number || null) : null;
+                        
+                        if (addToGlobalCart(roomId, roomName, price, maxQuantity, quantity, capacity, hotelId, roomNumber, floorNumber)) {
                             // Store booking parameters from search form
                             const bookingParams = {
                                 checkin: document.getElementById('checkInDate')?.value || '',
@@ -1106,7 +1138,7 @@
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Added to Cart!',
-                                text: `${roomName} (Qty: ${quantity}) has been added to your booking cart.`,
+                                text: `${roomName} (${quantity} Night${quantity > 1 ? 's' : ''}) has been added to your booking cart.`,
                                 confirmButtonColor: '#91278f',
                                 timer: 2000,
                                 showConfirmButton: true,
@@ -1129,6 +1161,7 @@
                             'name' => $room->name,
                             'number' => $room->number,
                             'floor_number' => $room->floor_number,
+                            'couple_friendly' => (bool)($room->couple_friendly ?? false),
                             'price_per_night' => $room->price_per_night,
                             'weekend_price' => $room->weekend_price,
                             'holiday_price' => $room->holiday_price,
@@ -1182,26 +1215,78 @@
                         // Store calculated price for modal button
                         room.calculatedPrice = discountedPrice;
 
-                        // Update modal header
-                        document.querySelector('.room-title-modal').textContent = room.name;
-                        const roomDescriptionEl = document.querySelector('.room-description-modal');
+                        // Update modal header - target modal specifically to avoid updating room cards
+                        const modalTitle = document.querySelector('#rightSidebarModalDetails .room-title-modal');
+                        if (modalTitle) {
+                            modalTitle.textContent = room.name;
+                        }
+                        
+                        const roomDescriptionEl = document.querySelector('#rightSidebarModalDetails .room-description-modal');
                         if (roomDescriptionEl) {
                             const desc = (room.description || '').toString().trim();
                             roomDescriptionEl.textContent = desc;
                             roomDescriptionEl.style.display = desc ? 'block' : 'none';
                         }
-                        document.querySelector('.room-numbers').innerHTML = `Room # ${room.number}<br> <span style="padding-left:0px" class="floor-numbers">${room.floor_number || ''}</span>`;
+                        
+                        // Update room numbers in modal (target modal specifically to avoid updating room cards)
+                        const modalRoomNumbers = document.querySelector('#rightSidebarModalDetails .room-numbers');
+                        if (modalRoomNumbers) {
+                            // Format floor number with ordinal suffix
+                            let floorText = '';
+                            if (room.floor_number) {
+                                const floorNum = parseInt(room.floor_number);
+                                let suffix = 'th';
+                                if (floorNum == 1) suffix = 'st';
+                                else if (floorNum == 2) suffix = 'nd';
+                                else if (floorNum == 3) suffix = 'rd';
+                                floorText = `${floorNum}${suffix} Floor`;
+                            }
+                            modalRoomNumbers.innerHTML = `Room # ${room.number || 'N/A'}<br> <span style="padding-left:0px" class="floor-numbers">${floorText}</span>`;
+                        }
 
-                        // Update pricing
+                        // Update Non-Refundable badge in modal
+                        const optionMeta = document.querySelector('#rightSidebarModalDetails .option-meta');
+                        const nonRefundableBadge = document.querySelector('#rightSidebarModalDetails .option-meta .non-refundable');
+                        
+                        // Check if Non-refundable is selected in room's cancellation_policy field
+                        // The form uses cancellation_policy[] with value 'non_refundable'
+                        const roomCancellationPolicy = room.cancellation_policy || [];
+                        const isNonRefundable = Array.isArray(roomCancellationPolicy) && roomCancellationPolicy.includes('non_refundable');
+                        
+                        if (optionMeta) {
+                            if (isNonRefundable) {
+                                // Show the option-meta container and badge
+                                optionMeta.style.display = '';
+                                if (nonRefundableBadge) {
+                                    nonRefundableBadge.style.display = '';
+                                } else {
+                                    // Create badge if it doesn't exist
+                                    optionMeta.innerHTML = `<span data-toggle="tooltip" class="non-refundable" data-bs-original-title="Regardless of the cancellation window, customers will not get any refund under this."> Non-Refundable <i variant="primary" class="fa fa-info-circle"></i></span>`;
+                                }
+                            } else {
+                                // Hide badge if Non-refundable is not enabled
+                                optionMeta.style.display = 'none';
+                                if (nonRefundableBadge) {
+                                    nonRefundableBadge.style.display = 'none';
+                                }
+                            }
+                        }
+
+                        // Update pricing - target modal specifically
+                        const discountTagModal = document.querySelector('#rightSidebarModalDetails .discount-tag-modal');
+                        const priceBeforeDiscountModal = document.querySelector('#rightSidebarModalDetails .price-before-discount-modal');
+                        const discountPriceModal = document.querySelector('#rightSidebarModalDetails .discount-price-modal');
+                        
                         if (discountPercentage > 0) {
-                            document.querySelector('.discount-tag-modal').style.display = 'block';
-                            document.querySelector('.discount-tag-modal .discount-tag').textContent = Math.round(discountPercentage) + '% off';
-                            document.querySelector('.price-before-discount-modal').innerHTML = `<del>BDT ${originalPrice.toFixed(2)}</del>`;
-                            document.querySelector('.discount-price-modal').textContent = `BDT ${discountedPrice.toFixed(2)}`;
+                            if (discountTagModal) discountTagModal.style.display = 'block';
+                            const discountTag = document.querySelector('#rightSidebarModalDetails .discount-tag-modal .discount-tag');
+                            if (discountTag) discountTag.textContent = Math.round(discountPercentage) + '% off';
+                            if (priceBeforeDiscountModal) priceBeforeDiscountModal.innerHTML = `<del>BDT ${originalPrice.toFixed(2)}</del>`;
+                            if (discountPriceModal) discountPriceModal.textContent = `BDT ${discountedPrice.toFixed(2)}`;
                         } else {
-                            document.querySelector('.discount-tag-modal').style.display = 'none';
-                            document.querySelector('.price-before-discount-modal').textContent = '';
-                            document.querySelector('.discount-price-modal').textContent = `BDT ${originalPrice.toFixed(2)}`;
+                            if (discountTagModal) discountTagModal.style.display = 'none';
+                            if (priceBeforeDiscountModal) priceBeforeDiscountModal.textContent = '';
+                            if (discountPriceModal) discountPriceModal.textContent = `BDT ${originalPrice.toFixed(2)}`;
                         }
 
                         // Update quantity max value
@@ -1215,7 +1300,7 @@
                                 const modalQty = document.querySelector('#rightSidebarModalDetails #qty');
                                 const quantity = modalQty ? parseInt(modalQty.value) : 1;
                                 
-                                if (addToGlobalCart(room.id, room.name, discountedPrice, room.total_rooms || 1, quantity, room.total_persons || 2, {{ $show->id }})) {
+                                if (addToGlobalCart(room.id, room.name, discountedPrice, room.total_rooms || 1, quantity, room.total_persons || 2, {{ $show->id }}, room.number || null, room.floor_number || null)) {
                                     // Close modal first
                                     const modalElement = document.getElementById('rightSidebarModalDetails');
                                     if (modalElement) {
@@ -1227,7 +1312,7 @@
                                     Swal.fire({
                                         icon: 'success',
                                         title: 'Added to Cart!',
-                                        text: `${room.name} (Qty: ${quantity}) has been added to your booking cart.`,
+                                        text: `${room.name} (${quantity} Night${quantity > 1 ? 's' : ''}) has been added to your booking cart.`,
                                         confirmButtonColor: '#91278f',
                                         timer: 2000,
                                         showConfirmButton: true,
@@ -1279,7 +1364,8 @@
                             photos['feature_main'].forEach(photoPath => {
                                 const div = document.createElement('div');
                                 div.className = 'col-12 luxury-room-block';
-                                div.innerHTML = `<img class="img-fluid" src="/${photoPath}" alt="main-feature-photo">`;
+                                div.style.cssText = 'margin-bottom: 15px;';
+                                div.innerHTML = `<img class="img-fluid" src="/${photoPath}" alt="main-feature-photo" style="width: 100%; height: 300px; object-fit: cover; border-radius: 8px;">`;
                                 photoContainer.appendChild(div);
                                 hasPhotos = true;
                             });
@@ -1291,7 +1377,8 @@
                                 photos[category].forEach(photoPath => {
                                     const div = document.createElement('div');
                                     div.className = 'col-6 col-md-6 luxury-room-block';
-                                    div.innerHTML = `<img class="img-fluid" src="/${photoPath}" alt="${category}-photo">`;
+                                    div.style.cssText = 'margin-bottom: 15px;';
+                                    div.innerHTML = `<img class="img-fluid" src="/${photoPath}" alt="${category}-photo" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">`;
                                     photoContainer.appendChild(div);
                                     hasPhotos = true;
                                 });
@@ -3014,35 +3101,54 @@
         const guests = parseInt(document.getElementById('guestsSelect').value) || 0;
         const children = parseInt(document.getElementById('childrenSelect').value) || 0;
         
-        // Only proceed if both dates are selected
-        if (!checkin || !checkout) {
-            return;
+        // Check if both dates are selected
+        const datesSelected = checkin && checkout;
+        
+        // Show/hide filter pills based on date selection
+        const filterContainer = document.getElementById('bedFilterContainer');
+        const roomsContainer = document.getElementById('rooms');
+        const noDatesMessage = document.getElementById('noDatesMessage');
+        
+        if (datesSelected) {
+            const checkinDate = new Date(checkin);
+            const checkoutDate = new Date(checkout);
+            
+            // Validate dates
+            if (checkoutDate <= checkinDate) {
+                // Invalid date range - hide everything
+                if (filterContainer) filterContainer.style.display = 'none';
+                if (roomsContainer) roomsContainer.style.display = 'none';
+                if (noDatesMessage) noDatesMessage.style.display = 'block';
+                return;
+            }
+            
+            // Valid dates - show filters and rooms
+            if (filterContainer) filterContainer.style.display = 'flex';
+            if (roomsContainer) roomsContainer.style.display = 'block';
+            if (noDatesMessage) noDatesMessage.style.display = 'none';
+            
+            // Calculate nights
+            const nights = Math.ceil((checkoutDate - checkinDate) / (1000 * 60 * 60 * 24));
+            
+            // Update search state
+            searchState.checkin = checkin;
+            searchState.checkout = checkout;
+            searchState.guests = guests;
+            searchState.children = children;
+            searchState.nights = nights;
+            
+            // Update summary text
+            updateSearchSummary();
+            
+            // Filter rooms by availability and capacity
+            filterRoomsByAvailability();
+            filterRooms();
+        } else {
+            // Dates not selected - hide filters and rooms, show message
+            if (filterContainer) filterContainer.style.display = 'none';
+            if (roomsContainer) roomsContainer.style.display = 'none';
+            if (noDatesMessage) noDatesMessage.style.display = 'block';
         }
-        
-        const checkinDate = new Date(checkin);
-        const checkoutDate = new Date(checkout);
-        
-        // Validate dates
-        if (checkoutDate <= checkinDate) {
-            return;
-        }
-        
-        // Calculate nights
-        const nights = Math.ceil((checkoutDate - checkinDate) / (1000 * 60 * 60 * 24));
-        
-        // Update search state
-        searchState.checkin = checkin;
-        searchState.checkout = checkout;
-        searchState.guests = guests;
-        searchState.children = children;
-        searchState.nights = nights;
-        
-        // Update summary text
-        updateSearchSummary();
-        
-        // Filter rooms by availability and capacity
-        filterRoomsByAvailability();
-        filterRooms();
     }
 
     // Modify Search Function
@@ -3059,6 +3165,13 @@
                 text: 'Please select both check-in and check-out dates',
                 confirmButtonColor: '#91278f'
             });
+            // Hide filters and rooms if dates not selected
+            const filterContainer = document.getElementById('bedFilterContainer');
+            const roomsContainer = document.getElementById('rooms');
+            const noDatesMessage = document.getElementById('noDatesMessage');
+            if (filterContainer) filterContainer.style.display = 'none';
+            if (roomsContainer) roomsContainer.style.display = 'none';
+            if (noDatesMessage) noDatesMessage.style.display = 'block';
             return;
         }
 
@@ -3072,8 +3185,23 @@
                 text: 'Check-out date must be after check-in date',
                 confirmButtonColor: '#91278f'
             });
+            // Hide filters and rooms if invalid dates
+            const filterContainer = document.getElementById('bedFilterContainer');
+            const roomsContainer = document.getElementById('rooms');
+            const noDatesMessage = document.getElementById('noDatesMessage');
+            if (filterContainer) filterContainer.style.display = 'none';
+            if (roomsContainer) roomsContainer.style.display = 'none';
+            if (noDatesMessage) noDatesMessage.style.display = 'block';
             return;
         }
+
+        // Valid dates - show filters and rooms
+        const filterContainer = document.getElementById('bedFilterContainer');
+        const roomsContainer = document.getElementById('rooms');
+        const noDatesMessage = document.getElementById('noDatesMessage');
+        if (filterContainer) filterContainer.style.display = 'flex';
+        if (roomsContainer) roomsContainer.style.display = 'block';
+        if (noDatesMessage) noDatesMessage.style.display = 'none';
 
         // Calculate nights
         const nights = Math.ceil((checkoutDate - checkinDate) / (1000 * 60 * 60 * 24));
@@ -3138,8 +3266,14 @@
 
     // Filter Rooms by Beds
     function filterRoomsByBeds() {
-        const selectedBed = document.querySelector('input[name="bedFilter"]:checked').value;
+        const selectedBed = document.querySelector('input[name="bedFilter"]:checked')?.value || 'all';
         searchState.bedFilter = selectedBed;
+        
+        // Always re-apply all filters when bed filter changes
+        // This ensures availability filter is respected
+        if (searchState.checkin && searchState.checkout) {
+            filterRoomsByAvailability();
+        }
         filterRooms();
     }
 
@@ -3155,7 +3289,7 @@
             const totalBeds = parseInt(room.getAttribute('data-beds')) || 0;
             const capacity = parseInt(room.getAttribute('data-capacity')) || 0;
 
-            // Filter by beds
+            // Filter by beds - if 'all' is selected, don't filter by beds (show all)
             if (searchState.bedFilter !== 'all') {
                 const bedFilterNum = parseInt(searchState.bedFilter);
                 if (bedFilterNum === 3) {
@@ -3164,11 +3298,45 @@
                     show = totalBeds === bedFilterNum;
                 }
             }
+            // If bedFilter is 'all', show remains true (show all rooms)
 
             // Filter by capacity (guests + children)
             if (show && (searchState.guests > 0 || searchState.children > 0)) {
                 const totalPersons = searchState.guests + searchState.children;
                 show = capacity >= totalPersons;
+            }
+
+            // Respect availability filter - if room is hidden by availability, keep it hidden
+            // Check if room was hidden by availability filter
+            const checkin = document.getElementById('checkInDate')?.value;
+            const checkout = document.getElementById('checkoutDate')?.value;
+            
+            if (show && checkin && checkout) {
+                // If dates are selected, check availability
+                const roomId = parseInt(room.getAttribute('data-room-id'));
+                const roomData = roomsData.find(r => r.id === roomId);
+                
+                if (roomData) {
+                    // If room has availability_dates set, check if dates match
+                    if (roomData.availability_dates && roomData.availability_dates.length > 0) {
+                        const checkinDate = new Date(checkin);
+                        const checkoutDate = new Date(checkout);
+                        const datesInRange = [];
+                        const currentDate = new Date(checkinDate);
+                        while (currentDate < checkoutDate) {
+                            datesInRange.push(currentDate.toISOString().split('T')[0]);
+                            currentDate.setDate(currentDate.getDate() + 1);
+                        }
+                        
+                        const allDatesAvailable = datesInRange.every(date => {
+                            return roomData.availability_dates.includes(date);
+                        });
+                        
+                        if (!allDatesAvailable) {
+                            show = false;
+                        }
+                    }
+                }
             }
 
             // Show/hide room
@@ -3283,6 +3451,25 @@
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('checkInDate').setAttribute('min', today);
         document.getElementById('checkoutDate').setAttribute('min', today);
+        
+        // Check initial state - if dates are in URL, show filters and rooms
+        const checkin = document.getElementById('checkInDate')?.value;
+        const checkout = document.getElementById('checkoutDate')?.value;
+        const filterContainer = document.getElementById('bedFilterContainer');
+        const roomsContainer = document.getElementById('rooms');
+        const noDatesMessage = document.getElementById('noDatesMessage');
+        
+        if (checkin && checkout) {
+            // Dates are selected - show filters and rooms
+            if (filterContainer) filterContainer.style.display = 'flex';
+            if (roomsContainer) roomsContainer.style.display = 'block';
+            if (noDatesMessage) noDatesMessage.style.display = 'none';
+        } else {
+            // No dates selected - hide filters and rooms, show message
+            if (filterContainer) filterContainer.style.display = 'none';
+            if (roomsContainer) roomsContainer.style.display = 'none';
+            if (noDatesMessage) noDatesMessage.style.display = 'block';
+        }
         
         // Update checkout min date when checkin changes
         document.getElementById('checkInDate').addEventListener('change', function() {

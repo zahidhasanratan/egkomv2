@@ -1204,7 +1204,7 @@
     // Global Shopping Cart Management
     let globalBookingCart = JSON.parse(localStorage.getItem('bookingCart')) || [];
 
-    function addToGlobalCart(roomId, roomName, price, maxQuantity, quantity = 1, capacity = 2) {
+    function addToGlobalCart(roomId, roomName, price, maxQuantity, quantity = 1, capacity = 2, hotelId = null, roomNumber = null, floorNumber = null) {
         // Check if room already in cart
         const existingItem = globalBookingCart.find(item => item.roomId === roomId);
         
@@ -1230,7 +1230,10 @@
                 price: price,
                 quantity: quantity,
                 maxQuantity: maxQuantity,
-                capacity: capacity || 2 // Store room capacity (total_persons)
+                capacity: capacity || 2, // Store room capacity (total_persons)
+                hotelId: hotelId || null, // Store hotel ID
+                roomNumber: roomNumber || null, // Store room number
+                floorNumber: floorNumber || null // Store floor number
             });
         }
         
@@ -1350,7 +1353,7 @@
                     <div class="room-content">
                         <div class="room-name">${item.roomName}</div>
                         <div class="pax-and-fare">
-                            ${item.quantity > 1 ? `<span class="pax">Qty: ${item.quantity} × </span>` : ''}
+                            ${item.quantity > 1 ? `<span class="pax">${item.quantity} Night${item.quantity > 1 ? 's' : ''} × </span>` : ''}
                             <span class="fare">BDT ${itemTotal.toFixed(2)}</span>
                             ${nights > 1 ? ` <small style="color: #666; font-size: 0.85em;">(${nights} nights)</small>` : ''}
                         </div>

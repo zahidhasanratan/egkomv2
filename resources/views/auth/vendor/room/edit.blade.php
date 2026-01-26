@@ -60,14 +60,33 @@
                                         </li>
                                     </ul>
 
-                                    <!-- Room Active/Inactive Button - Top Right -->
-                                    <div class="d-flex justify-content-end mb-3" style="margin-top: 15px;">
-                                        <div class="form-group" style="margin-bottom: 0px;">
-                                            <label class="form-label" style="font-weight: 600; margin-bottom: 10px;">Room Active/Inactive Button</label>
-                                            <div class="form-check form-switch custom-control custom-switch checked" style="padding-left: 2rem; margin-bottom: 0px;">
-                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="is_active" {{ old('is_active', $room->is_active) ? 'checked' : '' }}>
+                                    <!-- Room Settings - Active Status & Couple Friendly -->
+                                    <div class="card mb-3" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa; margin-top: 15px;">
+                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Room Settings</strong></h5>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group d-flex align-items-center justify-content-between" style="padding: 12px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
+                                                    <div>
+                                                        <label class="form-label mb-0" style="font-weight: 600; color: #333; font-size: 14px;">Room Status</label>
+                                                        <small class="text-muted d-block" style="font-size: 12px;">Active / Inactive</small>
+                                                    </div>
+                                                    <div class="form-check form-switch" style="margin-left: 15px;">
+                                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="is_active" style="width: 50px; height: 26px; cursor: pointer;" {{ old('is_active', $room->is_active) ? 'checked' : '' }}>
+                                                    </div>
+                                                </div>
+                                                <div id="alertMessage" style="display: none; color: red; margin-top: 5px; font-size: 12px;"></div>
                                             </div>
-                                            <div id="alertMessage" style="display: none; color: red; margin-top:0px;"></div>
+                                            <div class="col-md-6">
+                                                <div class="form-group d-flex align-items-center justify-content-between" style="padding: 12px; background: white; border-radius: 6px; border: 1px solid #dee2e6;">
+                                                    <div>
+                                                        <label class="form-label mb-0" style="font-weight: 600; color: #333; font-size: 14px;">Couple Friendly</label>
+                                                        <small class="text-muted d-block" style="font-size: 12px;">Show badge on frontend</small>
+                                                    </div>
+                                                    <div class="form-check form-switch" style="margin-left: 15px;">
+                                                        <input class="form-check-input" type="checkbox" id="coupleFriendlySwitch" name="couple_friendly" value="1" style="width: 50px; height: 26px; cursor: pointer;" {{ old('couple_friendly', $room->couple_friendly) ? 'checked' : '' }}>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 

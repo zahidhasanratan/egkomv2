@@ -47,7 +47,7 @@
                             <thead style="background: #f8f9fa;">
                                 <tr>
                                     <th>Room Name</th>
-                                    <th>Quantity</th>
+                                    <th>Night</th>
                                     <th>Price/Night</th>
                                     <th>Total</th>
                                 </tr>
@@ -55,7 +55,15 @@
                             <tbody>
                                 @foreach($booking->rooms_data as $room)
                                 <tr>
-                                    <td>{{ $room['roomName'] }}</td>
+                                    <td>
+                                        {{ $room['roomName'] }}
+                                        @if(isset($room['roomNumber']) && $room['roomNumber'])
+                                            (Room #{{ $room['roomNumber'] }})
+                                        @endif
+                                        @if(isset($room['floorNumber']) && $room['floorNumber'])
+                                            - {{ $room['floorNumber'] }}{{ $room['floorNumber'] == 1 ? 'st' : ($room['floorNumber'] == 2 ? 'nd' : ($room['floorNumber'] == 3 ? 'rd' : 'th')) }} Floor
+                                        @endif
+                                    </td>
                                     <td>{{ $room['quantity'] }}</td>
                                     <td>BDT {{ number_format($room['price'], 2) }}</td>
                                     <td>BDT {{ number_format($room['price'] * $room['quantity'] * $booking->total_nights, 2) }}</td>

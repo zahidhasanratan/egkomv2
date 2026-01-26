@@ -61,10 +61,10 @@
                                             </div>
                                         </div>
 
-                                        <!-- Quantity -->
+                                        <!-- Night -->
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label class="form-label">Quantity <span class="text-danger">*</span></label>
+                                                <label class="form-label">Night <span class="text-danger">*</span></label>
                                                 <input type="number" name="quantity" id="quantity" class="form-control" value="1" min="1" required>
                                                 @error('quantity')
                                                     <span class="text-danger">{{ $message }}</span>

@@ -174,7 +174,25 @@
                                 <td>{{ $booking->guest_name }}</td>
                                 <td>{{ $booking->guest_phone }}</td>
                                 <td>
-                                    <small>{{ count($booking->rooms_data) }} Room{{ count($booking->rooms_data) > 1 ? 's' : '' }}</small>
+                                    @php
+                                        $roomsData = is_array($booking->rooms_data) ? $booking->rooms_data : json_decode($booking->rooms_data, true);
+                                        $roomsData = $roomsData ?? [];
+                                    @endphp
+                                    <div style="max-width: 200px;">
+                                        @foreach($roomsData as $room)
+                                            <div style="margin-bottom: 5px;">
+                                                <small>
+                                                    {{ $room['roomName'] ?? 'Room' }}
+                                                    @if(isset($room['roomNumber']) && $room['roomNumber'])
+                                                        (Room #{{ $room['roomNumber'] }})
+                                                    @endif
+                                                    @if(isset($room['floorNumber']) && $room['floorNumber'])
+                                                        - {{ $room['floorNumber'] }}{{ $room['floorNumber'] == 1 ? 'st' : ($room['floorNumber'] == 2 ? 'nd' : ($room['floorNumber'] == 3 ? 'rd' : 'th')) }} Floor
+                                                    @endif
+                                                </small>
+                                            </div>
+                                        @endforeach
+                                    </div>
                                 </td>
                                 <td>{{ $booking->checkin_date->format('d M Y') }}</td>
                                 <td>{{ $booking->checkout_date->format('d M Y') }}</td>
