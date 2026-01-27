@@ -111,6 +111,13 @@ Route::prefix('vendor-admin')->group(function () {
         Route::post('/bookings/manual/store', [\App\Http\Controllers\Vendor\VendorBookingController::class, 'storeManualOrder'])->name('vendor.bookings.manual.store');
         Route::get('/bookings/manual/rooms/{hotelId}', [\App\Http\Controllers\Vendor\VendorBookingController::class, 'getRooms'])->name('vendor.bookings.manual.rooms');
         Route::get('/bookings/room/{roomId}/availability/{bookingId?}', [\App\Http\Controllers\Vendor\VendorBookingController::class, 'getRoomAvailability'])->name('vendor.bookings.room.availability');
+        
+        // Review Management (Vendor can only see and approve reviews for their own hotels)
+        Route::get('/reviews', [\App\Http\Controllers\Vendor\VendorReviewController::class, 'index'])->name('vendor.reviews.index');
+        Route::get('/reviews/{id}', [\App\Http\Controllers\Vendor\VendorReviewController::class, 'show'])->name('vendor.reviews.show');
+        Route::post('/reviews/{id}/approve', [\App\Http\Controllers\Vendor\VendorReviewController::class, 'approve'])->name('vendor.reviews.approve');
+        Route::post('/reviews/bulk-approve', [\App\Http\Controllers\Vendor\VendorReviewController::class, 'bulkApprove'])->name('vendor.reviews.bulk-approve');
+        Route::post('/reviews/{id}/response', [\App\Http\Controllers\Vendor\VendorReviewController::class, 'addResponse'])->name('vendor.reviews.add-response');
     });
     /*Admin Panel Ended */
 

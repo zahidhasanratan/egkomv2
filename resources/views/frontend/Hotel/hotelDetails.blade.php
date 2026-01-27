@@ -621,6 +621,77 @@
                     }
                 </style>
 
+                <style>
+                    /* Review Images Styles */
+                    .review-hotel-rrom-gallery {
+                        margin-top: 20px;
+                        margin-bottom: 15px;
+                    }
+                    
+                    .review-image-wrapper {
+                        position: relative;
+                        overflow: hidden;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        aspect-ratio: 1;
+                        background: #f0f0f0;
+                        transition: transform 0.3s ease, box-shadow 0.3s ease;
+                    }
+                    
+                    .review-image-wrapper:hover {
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                        transform: translateY(-2px);
+                    }
+                    
+                    .review-thumbnail {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        transition: transform 0.3s ease;
+                    }
+                    
+                    .review-thumbnail:hover {
+                        transform: scale(1.05);
+                    }
+                    
+                    /* Review Image Modal Styles */
+                    #reviewImageModal .modal-content {
+                        background: transparent;
+                        border: none;
+                    }
+                    
+                    #reviewImageModal .modal-body {
+                        padding: 0;
+                        text-align: center;
+                    }
+                    
+                    #reviewImageModal .modal-header {
+                        border: none;
+                        padding: 0;
+                    }
+                    
+                    #reviewImageModal .btn-close {
+                        background: white;
+                        opacity: 1;
+                        border-radius: 50%;
+                        padding: 10px;
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+                    }
+                    
+                    #reviewImageModal .image-navigation button {
+                        transition: all 0.3s ease;
+                    }
+                    
+                    #reviewImageModal .image-navigation button:hover:not(:disabled) {
+                        transform: scale(1.1);
+                        background: white !important;
+                    }
+                    
+                    #reviewImageModal .image-navigation button:disabled {
+                        opacity: 0.5;
+                        cursor: not-allowed;
+                    }
+                </style>
 
                 <div id="Room_Details" class="row">
                     <div class="col-md-12">
@@ -2108,7 +2179,7 @@
                             <div class="modal-body modal-body-review">
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <!--  -->
+                                        <!-- Review Header -->
                                         <div class="row mb-20">
                                             <div class="col-lg-7">
                                                 <div class="review-name-left">
@@ -2118,279 +2189,27 @@
                                             <div class="col-lg-5">
                                                 <div class="group-select-label">
                                                     <h3 class="sort-review-title">Sort reviews by:</h3>
-                                                    <select class="form-select max-w-180"
-                                                            aria-label="Default select example">
-                                                        <option selected>Most Relevant</option>
-                                                        <option>Newest</option>
-                                                        <option>Oldest</option>
-                                                        <option>High Rate</option>
-                                                        <option>Low Rate</option>
+                                                    <select id="reviewSortSelect" class="form-select max-w-180" aria-label="Default select example">
+                                                        <option value="most_relevant" selected>Most Relevant</option>
+                                                        <option value="newest">Newest</option>
+                                                        <option value="oldest">Oldest</option>
+                                                        <option value="highest_rating">High Rate</option>
+                                                        <option value="lowest_rating">Low Rate</option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <hr class="b9bfeba2b4 b288f61df6" aria-hidden="true">
                                         </div>
 
-
-                                        <div class="row mb-20">
-                                            <div class="col-lg-4">
-                                                <div class="review-profile-left">
-                                                    <div class="review-header-modal">
-                                                        <div class="reviewer-info">
-                                                            <img
-                                                                src="https://cdn3.iconfinder.com/data/icons/avatars-15/64/_Ninja-2-512.png"
-                                                                alt="Reviewer Image" class="reviewer-image">
-                                                            <div class="reviewer-details">
-                                                                <h3 class="reviewer-name">Tarun</h3>
-                                                                <p class="reviewer-country">Bangladesh</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="review-meta">
-                                                            <p class="room-type"><span><svg
-                                                                        xmlns="http://www.w3.org/2000/svg"
-                                                                        viewBox="0 0 24 24" width="15px"><path
-                                                                            d="M3.75 11.25V9a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 0 1.5 0V9a2.25 2.25 0 0 0-2.25-2.25h-6A2.25 2.25 0 0 0 2.25 9v2.25a.75.75 0 0 0 1.5 0m9 0V9a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 0 1.5 0V9a2.25 2.25 0 0 0-2.25-2.25h-6A2.25 2.25 0 0 0 11.25 9v2.25a.75.75 0 0 0 1.5 0m-10 .75h18.5c.69 0 1.25.56 1.25 1.25V18l.75-.75H.75l.75.75v-4.75c0-.69.56-1.25 1.25-1.25m0-1.5A2.75 2.75 0 0 0 0 13.25V18c0 .414.336.75.75.75h22.5A.75.75 0 0 0 24 18v-4.75a2.75 2.75 0 0 0-2.75-2.75zM0 18v3a.75.75 0 0 0 1.5 0v-3A.75.75 0 0 0 0 18m22.5 0v3a.75.75 0 0 0 1.5 0v-3a.75.75 0 0 0-1.5 0m-.75-6.75V4.5a2.25 2.25 0 0 0-2.25-2.25h-15A2.25 2.25 0 0 0 2.25 4.5v6.75a.75.75 0 0 0 1.5 0V4.5a.75.75 0 0 1 .75-.75h15a.75.75 0 0 1 .75.75v6.75a.75.75 0 0 0 1.5 0"></path></svg></span>Deluxe
-                                                                King Room
-                                                            </p>
-                                                            <p class="stay-details"><span><svg
-                                                                        xmlns="http://www.w3.org/2000/svg"
-                                                                        viewBox="0 0 24 24" width="15px"><path
-                                                                            d="M22.502 13.5v8.25a.75.75 0 0 1-.75.75h-19.5a.75.75 0 0 1-.75-.75V5.25a.75.75 0 0 1 .75-.75h19.5a.75.75 0 0 1 .75.75zm1.5 0V5.25A2.25 2.25 0 0 0 21.752 3h-19.5a2.25 2.25 0 0 0-2.25 2.25v16.5A2.25 2.25 0 0 0 2.252 24h19.5a2.25 2.25 0 0 0 2.25-2.25zm-23.25-3h22.5a.75.75 0 0 0 0-1.5H.752a.75.75 0 0 0 0 1.5M7.502 6V.75a.75.75 0 0 0-1.5 0V6a.75.75 0 0 0 1.5 0m10.5 0V.75a.75.75 0 0 0-1.5 0V6a.75.75 0 0 0 1.5 0"></path></svg></span>1
-                                                                night · October 2024
-                                                            </p>
-                                                            <p class="group-type"><span><svg
-                                                                        xmlns="http://www.w3.org/2000/svg"
-                                                                        viewBox="0 0 24 24" width="15px"><path
-                                                                            d="M8.25 3.75a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0m1.5 0a3.75 3.75 0 1 0-7.5 0 3.75 3.75 0 0 0 7.5 0M12 13.5a6 6 0 0 0-12 0v2.25c0 .414.336.75.75.75H3l-.746-.675.75 7.5A.75.75 0 0 0 3.75 24h4.5a.75.75 0 0 0 .746-.675l.75-7.5L9 16.5h2.25a.75.75 0 0 0 .75-.75zm-1.5 0v2.25l.75-.75H9a.75.75 0 0 0-.746.675l-.75 7.5.746-.675h-4.5l.746.675-.75-7.5A.75.75 0 0 0 3 15H.75l.75.75V13.5a4.5 4.5 0 1 1 9 0m9.75-9.75a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0m1.5 0a3.75 3.75 0 1 0-7.5 0 3.75 3.75 0 0 0 7.5 0M13.5 16.5H15l-.746-.675.75 7.5a.75.75 0 0 0 .746.675h4.5a.75.75 0 0 0 .746-.675l.75-7.5L21 16.5h2.25a.75.75 0 0 0 .75-.75V13.5a6 6 0 0 0-11.143-3.086.75.75 0 0 0 1.286.772 4.5 4.5 0 0 1 8.357 2.315v2.249l.75-.75H21a.75.75 0 0 0-.746.675l-.75 7.5.746-.675h-4.5l.746.675-.75-7.5A.75.75 0 0 0 15 15h-1.5a.75.75 0 0 0 0 1.5"></path></svg></span>
-                                                                Group
-                                                            </p>
-                                                        </div>
-
-                                                    </div>
-
+                                        <!-- Dynamic Reviews Container -->
+                                        <div id="reviewsContainer">
+                                            <div class="text-center py-5">
+                                                <div class="spinner-border text-primary" role="status">
+                                                    <span class="visually-hidden">Loading...</span>
                                                 </div>
+                                                <p class="mt-2">Loading reviews...</p>
                                             </div>
-                                            <div class="col-lg-8">
-                                                <div class="review-profile-details">
-
-                                                    <div class="review-inner-1">
-                                                        <div class="review-details">
-
-                                                            <span class="reviewer-choice"><span><span
-                                                                        class="fcd9eec8fb fb4ef8dd02 fc17714355"
-                                                                        aria-hidden="true"><svg
-                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                            viewBox="0 0 24 24" width="20px"><path
-                                                                                d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12C23.993 5.376 18.624.007 12 0m6.216 10.376-2.788 2.485a.5.5 0 0 0-.126.572l1.629 3.749a.5.5 0 0 1-.7.634l-3.982-2.242a.5.5 0 0 0-.491 0l-3.985 2.242a.5.5 0 0 1-.7-.634L8.7 13.433a.5.5 0 0 0-.126-.572l-2.79-2.485a.5.5 0 0 1 .332-.876h3.31a.5.5 0 0 0 .46-.3l1.655-3.84a.5.5 0 0 1 .918 0l1.655 3.84a.5.5 0 0 0 .46.3h3.31a.5.5 0 0 1 .332.873z"></path></svg></span></span> Reviewers' choice</span>
-                                                            <span class="review-date">Reviewed: 2 November 2024</span>
-
-                                                            <div class="review-header">
-                                                                <h4 class="review-title">Exceptional</h4>
-                                                                <div class="rating">
-                                                                    <h2 class="rating-score">10</h2>
-                                                                </div>
-                                                            </div>
-
-
-                                                            <P>his hotel is a gem! We were blown away by how spotlessly
-                                                                clean it was. It is recently opened, so everything is
-                                                                nice and new. The bed was so comfortable with lovely,
-                                                                soft linen and the shower was especially fantastic— good
-                                                                water pressure and always hot. The staff went out of
-                                                                their way to accommodate us, nothing was too big of an
-                                                                ask. Lahki, the manager and Judi on the desk were so
-                                                                friendly and helpful whenever we had a question.</P>
-                                                            <p class="review-text positive">😊 Brand new hotel. Roof top
-                                                                pool will open in just a couple of weeks. Very, very
-                                                                friendly staff.</p>
-                                                            <p class="review-text negative">☹️ The beds could have been
-                                                                softer.</p>
-                                                        </div>
-
-
-                                                    </div>
-
-                                                    <div class="review-hotel-rrom-gallery">
-                                                        <div class="row">
-                                                            <div class="col-6 col-md-2">
-
-                                                                <img class="img-fluid"
-                                                                     src="{{ asset('frontend')}}/images/luxury-room-1.jpg"
-                                                                     alt="luxury-room-img">
-
-                                                            </div>
-
-                                                            <div class="col-6 col-md-2 ">
-
-                                                                <img class="img-fluid"
-                                                                     src="{{ asset('frontend')}}/images/luxury-room-2.jpg"
-                                                                     alt="luxury-room-img">
-
-                                                            </div>
-
-                                                            <div class="col-6 col-md-2">
-
-                                                                <img class="img-fluid"
-                                                                     src="{{ asset('frontend')}}/images/luxury-room-3.jpg"
-                                                                     alt="luxury-room-img">
-
-                                                            </div>
-
-                                                            <div class="col-6 col-md-2">
-
-                                                                <img class="img-fluid"
-                                                                     src="{{ asset('frontend')}}/images/luxury-room-4.jpg"
-                                                                     alt="luxury-room-img">
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-
-                                                    <div class="hotel-response">
-                                                        <h5 class="response-title">Hotel response:</h5>
-                                                        <p>Thank you very much for your review! We would be
-                                                            adding...</p>
-
-                                                    </div>
-
-
-                                                </div>
-                                            </div>
-
-                                            <hr class="b9bfeba2b4 b288f61df6" aria-hidden="true">
                                         </div>
-
-
-                                        <div class="row mb-20">
-                                            <div class="col-lg-4">
-                                                <div class="review-profile-left">
-                                                    <div class="review-header-modal">
-                                                        <div class="reviewer-info">
-                                                            <img
-                                                                src="https://cdn3.iconfinder.com/data/icons/avatars-15/64/_Ninja-2-512.png"
-                                                                alt="Reviewer Image" class="reviewer-image">
-                                                            <div class="reviewer-details">
-                                                                <h3 class="reviewer-name">Tarun</h3>
-                                                                <p class="reviewer-country">Bangladesh</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="review-meta">
-                                                            <p class="room-type"><span><svg
-                                                                        xmlns="http://www.w3.org/2000/svg"
-                                                                        viewBox="0 0 24 24" width="15px"><path
-                                                                            d="M3.75 11.25V9a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 0 1.5 0V9a2.25 2.25 0 0 0-2.25-2.25h-6A2.25 2.25 0 0 0 2.25 9v2.25a.75.75 0 0 0 1.5 0m9 0V9a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 0 1.5 0V9a2.25 2.25 0 0 0-2.25-2.25h-6A2.25 2.25 0 0 0 11.25 9v2.25a.75.75 0 0 0 1.5 0m-10 .75h18.5c.69 0 1.25.56 1.25 1.25V18l.75-.75H.75l.75.75v-4.75c0-.69.56-1.25 1.25-1.25m0-1.5A2.75 2.75 0 0 0 0 13.25V18c0 .414.336.75.75.75h22.5A.75.75 0 0 0 24 18v-4.75a2.75 2.75 0 0 0-2.75-2.75zM0 18v3a.75.75 0 0 0 1.5 0v-3A.75.75 0 0 0 0 18m22.5 0v3a.75.75 0 0 0 1.5 0v-3a.75.75 0 0 0-1.5 0m-.75-6.75V4.5a2.25 2.25 0 0 0-2.25-2.25h-15A2.25 2.25 0 0 0 2.25 4.5v6.75a.75.75 0 0 0 1.5 0V4.5a.75.75 0 0 1 .75-.75h15a.75.75 0 0 1 .75.75v6.75a.75.75 0 0 0 1.5 0"></path></svg></span>Deluxe
-                                                                King Room
-                                                            </p>
-                                                            <p class="stay-details"><span><svg
-                                                                        xmlns="http://www.w3.org/2000/svg"
-                                                                        viewBox="0 0 24 24" width="15px"><path
-                                                                            d="M22.502 13.5v8.25a.75.75 0 0 1-.75.75h-19.5a.75.75 0 0 1-.75-.75V5.25a.75.75 0 0 1 .75-.75h19.5a.75.75 0 0 1 .75.75zm1.5 0V5.25A2.25 2.25 0 0 0 21.752 3h-19.5a2.25 2.25 0 0 0-2.25 2.25v16.5A2.25 2.25 0 0 0 2.252 24h19.5a2.25 2.25 0 0 0 2.25-2.25zm-23.25-3h22.5a.75.75 0 0 0 0-1.5H.752a.75.75 0 0 0 0 1.5M7.502 6V.75a.75.75 0 0 0-1.5 0V6a.75.75 0 0 0 1.5 0m10.5 0V.75a.75.75 0 0 0-1.5 0V6a.75.75 0 0 0 1.5 0"></path></svg></span>1
-                                                                night · October 2024
-                                                            </p>
-                                                            <p class="group-type"><span><svg
-                                                                        xmlns="http://www.w3.org/2000/svg"
-                                                                        viewBox="0 0 24 24" width="15px"><path
-                                                                            d="M8.25 3.75a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0m1.5 0a3.75 3.75 0 1 0-7.5 0 3.75 3.75 0 0 0 7.5 0M12 13.5a6 6 0 0 0-12 0v2.25c0 .414.336.75.75.75H3l-.746-.675.75 7.5A.75.75 0 0 0 3.75 24h4.5a.75.75 0 0 0 .746-.675l.75-7.5L9 16.5h2.25a.75.75 0 0 0 .75-.75zm-1.5 0v2.25l.75-.75H9a.75.75 0 0 0-.746.675l-.75 7.5.746-.675h-4.5l.746.675-.75-7.5A.75.75 0 0 0 3 15H.75l.75.75V13.5a4.5 4.5 0 1 1 9 0m9.75-9.75a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0m1.5 0a3.75 3.75 0 1 0-7.5 0 3.75 3.75 0 0 0 7.5 0M13.5 16.5H15l-.746-.675.75 7.5a.75.75 0 0 0 .746.675h4.5a.75.75 0 0 0 .746-.675l.75-7.5L21 16.5h2.25a.75.75 0 0 0 .75-.75V13.5a6 6 0 0 0-11.143-3.086.75.75 0 0 0 1.286.772 4.5 4.5 0 0 1 8.357 2.315v2.249l.75-.75H21a.75.75 0 0 0-.746.675l-.75 7.5.746-.675h-4.5l.746.675-.75-7.5A.75.75 0 0 0 15 15h-1.5a.75.75 0 0 0 0 1.5"></path></svg></span>
-                                                                Group
-                                                            </p>
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-8">
-                                                <div class="review-profile-details">
-
-                                                    <div class="review-inner-1">
-                                                        <div class="review-details">
-
-                                                            <span class="reviewer-choice"><span><span
-                                                                        class="fcd9eec8fb fb4ef8dd02 fc17714355"
-                                                                        aria-hidden="true"><svg
-                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                            viewBox="0 0 24 24" width="20px"><path
-                                                                                d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12C23.993 5.376 18.624.007 12 0m6.216 10.376-2.788 2.485a.5.5 0 0 0-.126.572l1.629 3.749a.5.5 0 0 1-.7.634l-3.982-2.242a.5.5 0 0 0-.491 0l-3.985 2.242a.5.5 0 0 1-.7-.634L8.7 13.433a.5.5 0 0 0-.126-.572l-2.79-2.485a.5.5 0 0 1 .332-.876h3.31a.5.5 0 0 0 .46-.3l1.655-3.84a.5.5 0 0 1 .918 0l1.655 3.84a.5.5 0 0 0 .46.3h3.31a.5.5 0 0 1 .332.873z"></path></svg></span></span> Reviewers' choice</span>
-                                                            <span class="review-date">Reviewed: 2 November 2024</span>
-
-                                                            <div class="review-header">
-                                                                <h4 class="review-title">Exceptional</h4>
-                                                                <div class="rating">
-                                                                    <h2 class="rating-score">10</h2>
-                                                                </div>
-                                                            </div>
-
-
-                                                            <P>his hotel is a gem! We were blown away by how spotlessly
-                                                                clean it was. It is recently opened, so everything is
-                                                                nice and new. The bed was so comfortable with lovely,
-                                                                soft linen and the shower was especially fantastic— good
-                                                                water pressure and always hot. The staff went out of
-                                                                their way to accommodate us, nothing was too big of an
-                                                                ask. Lahki, the manager and Judi on the desk were so
-                                                                friendly and helpful whenever we had a question.</P>
-                                                            <p class="review-text positive">😊 Brand new hotel. Roof top
-                                                                pool will open in just a couple of weeks. Very, very
-                                                                friendly staff.</p>
-                                                            <p class="review-text negative">☹️ The beds could have been
-                                                                softer.</p>
-                                                        </div>
-
-
-                                                    </div>
-
-                                                    <div class="review-hotel-rrom-gallery">
-                                                        <div class="row">
-                                                            <div class="col-6 col-md-2">
-
-                                                                <img class="img-fluid"
-                                                                     src="{{ asset('frontend')}}/images/luxury-room-1.jpg"
-                                                                     alt="luxury-room-img">
-
-                                                            </div>
-
-                                                            <div class="col-6 col-md-2 ">
-
-                                                                <img class="img-fluid"
-                                                                     src="{{ asset('frontend')}}/images/luxury-room-2.jpg"
-                                                                     alt="luxury-room-img">
-
-                                                            </div>
-
-                                                            <div class="col-6 col-md-2">
-
-                                                                <img class="img-fluid"
-                                                                     src="{{ asset('frontend')}}/images/luxury-room-3.jpg"
-                                                                     alt="luxury-room-img">
-
-                                                            </div>
-
-                                                            <div class="col-6 col-md-2">
-
-                                                                <img class="img-fluid"
-                                                                     src="{{ asset('frontend')}}/images/luxury-room-4.jpg"
-                                                                     alt="luxury-room-img">
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-
-                                                    <div class="hotel-response">
-                                                        <h5 class="response-title">Hotel response:</h5>
-                                                        <p>Thank you very much for your review! We would be
-                                                            adding...</p>
-
-                                                    </div>
-
-
-                                                </div>
-                                            </div>
-
-                                            <hr class="b9bfeba2b4 b288f61df6" aria-hidden="true">
-                                        </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -2399,6 +2218,32 @@
                     </div>
                 </div>
 
+                <!-- Review Image Popup Modal -->
+                <div class="modal fade" id="reviewImageModal" tabindex="-1" aria-labelledby="reviewImageModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content" style="background: transparent; border: none;">
+                            <div class="modal-header" style="border: none; padding: 0; position: absolute; top: -40px; right: 0; z-index: 1051;">
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" style="background: white; opacity: 1; border-radius: 50%; padding: 10px;"></button>
+                            </div>
+                            <div class="modal-body" style="padding: 0; text-align: center;">
+                                <img id="reviewModalImage" src="" alt="Review Image" style="max-width: 100%; max-height: 80vh; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+                                <div class="image-navigation mt-3" style="display: flex; justify-content: center; align-items: center; gap: 15px;">
+                                    <button id="prevImageBtn" class="btn btn-light" style="border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border: 2px solid white; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                                        </svg>
+                                    </button>
+                                    <span id="imageCounter" style="color: white; font-weight: 600; text-shadow: 0 2px 4px rgba(0,0,0,0.5); background: rgba(0,0,0,0.5); padding: 5px 15px; border-radius: 20px;"></span>
+                                    <button id="nextImageBtn" class="btn btn-light" style="border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border: 2px solid white; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Review -->
                 <div id="review" class="row">
@@ -2409,12 +2254,12 @@
                                 <div data-v-58caae98="" class="review-container">
                                     <div class="review-card">
                                         <div class="review-point">
-                                            <h3>4.5</h3>
+                                            <h3>{{ $reviewStats['overall_avg'] > 0 ? number_format($reviewStats['overall_avg'], 1) : '0.0' }}</h3>
                                         </div>
                                         <div class="review-comments">
-                                            <h2>Excellent</h2>
+                                            <h2>{{ $ratingSentiment }}</h2>
                                             <a href="#" data-bs-toggle="modal" data-bs-target="#rightSidebarModal">
-                                                10 Reviews & Comments
+                                                {{ $reviewStats['total'] }} {{ $reviewStats['total'] == 1 ? 'Review' : 'Reviews' }} & Comments
                                                 <span>
                                              <svg style="color: #91278f; margin-left: 10px; margin-top: -3px;"
                                                   xmlns="http://www.w3.org/2000/svg" width="14" height="14"
@@ -2446,15 +2291,15 @@
                                                         </h2>
                                                     </div>
                                                     <div class="review-name">
-                                                        <h2>7.9</h2>
+                                                        <h2>{{ $reviewStats['staff_avg'] > 0 ? number_format($reviewStats['staff_avg'], 1) : '0.0' }}</h2>
                                                     </div>
                                                 </div>
                                                 <div class="progress progress_custom">
                                                     <div class="progress-bar progress_custom progress-bar-success"
-                                                         role="progressbar" aria-valuenow="70" aria-valuemin="0"
-                                                         aria-valuemax="100"
-                                                         style="width: 70%; background-color: #91278f;">
-                                                        <span class="sr-only">40% Complete (success)</span>
+                                                         role="progressbar" aria-valuenow="{{ $reviewStats['staff_avg'] }}" aria-valuemin="0"
+                                                         aria-valuemax="10"
+                                                         style="width: {{ ($reviewStats['staff_avg'] / 10) * 100 }}%; background-color: #91278f;">
+                                                        <span class="sr-only">{{ $reviewStats['staff_avg'] }}% Complete</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2477,14 +2322,14 @@
                                                         </h2>
                                                     </div>
                                                     <div class="review-name">
-                                                        <h2>7.9</h2>
+                                                        <h2>{{ $reviewStats['facilities_avg'] > 0 ? number_format($reviewStats['facilities_avg'], 1) : '0.0' }}</h2>
                                                     </div>
                                                 </div>
                                                 <div class="progress progress_custom">
                                                     <div class="progress-bar progress-bar-success" role="progressbar"
-                                                         aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"
-                                                         style="width: 90%; background-color: #489b48;">
-                                                        <span class="sr-only">40% Complete (success)</span>
+                                                         aria-valuenow="{{ $reviewStats['facilities_avg'] }}" aria-valuemin="0" aria-valuemax="10"
+                                                         style="width: {{ ($reviewStats['facilities_avg'] / 10) * 100 }}%; background-color: #489b48;">
+                                                        <span class="sr-only">{{ $reviewStats['facilities_avg'] }}% Complete</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2507,14 +2352,14 @@
                                                         </h2>
                                                     </div>
                                                     <div class="review-name">
-                                                        <h2>7.9</h2>
+                                                        <h2>{{ $reviewStats['cleanliness_avg'] > 0 ? number_format($reviewStats['cleanliness_avg'], 1) : '0.0' }}</h2>
                                                     </div>
                                                 </div>
                                                 <div class="progress progress_custom">
                                                     <div class="progress-bar progress-bar-success" role="progressbar"
-                                                         aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"
-                                                         style="width: 90%; background-color: #489b48;">
-                                                        <span class="sr-only">40% Complete (success)</span>
+                                                         aria-valuenow="{{ $reviewStats['cleanliness_avg'] }}" aria-valuemin="0" aria-valuemax="10"
+                                                         style="width: {{ ($reviewStats['cleanliness_avg'] / 10) * 100 }}%; background-color: #489b48;">
+                                                        <span class="sr-only">{{ $reviewStats['cleanliness_avg'] }}% Complete</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2537,14 +2382,14 @@
                                                         </h2>
                                                     </div>
                                                     <div class="review-name">
-                                                        <h2>7.9</h2>
+                                                        <h2>{{ $reviewStats['location_avg'] > 0 ? number_format($reviewStats['location_avg'], 1) : '0.0' }}</h2>
                                                     </div>
                                                 </div>
                                                 <div class="progress progress_custom">
                                                     <div class="progress-bar progress_custom" role="progressbar"
-                                                         aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"
-                                                         style="width: 70%; background-color: #489b48;">
-                                                        <span class="sr-only">40% Complete (success)</span>
+                                                         aria-valuenow="{{ $reviewStats['location_avg'] }}" aria-valuemin="0" aria-valuemax="10"
+                                                         style="width: {{ ($reviewStats['location_avg'] / 10) * 100 }}%; background-color: #489b48;">
+                                                        <span class="sr-only">{{ $reviewStats['location_avg'] }}% Complete</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2567,15 +2412,15 @@
                                                         </h2>
                                                     </div>
                                                     <div class="review-name">
-                                                        <h2>6.7</h2>
+                                                        <h2>{{ $reviewStats['comfort_avg'] > 0 ? number_format($reviewStats['comfort_avg'], 1) : '0.0' }}</h2>
                                                     </div>
                                                 </div>
                                                 <div class="progress progress_custom">
                                                     <div class="progress-bar progress_custom progress-bar-success"
-                                                         role="progressbar" aria-valuenow="70" aria-valuemin="0"
-                                                         aria-valuemax="100"
-                                                         style="width: 70%; background-color: #91278f;">
-                                                        <span class="sr-only">40% Complete (success)</span>
+                                                         role="progressbar" aria-valuenow="{{ $reviewStats['comfort_avg'] }}" aria-valuemin="0"
+                                                         aria-valuemax="10"
+                                                         style="width: {{ ($reviewStats['comfort_avg'] / 10) * 100 }}%; background-color: #91278f;">
+                                                        <span class="sr-only">{{ $reviewStats['comfort_avg'] }}% Complete</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2598,14 +2443,14 @@
                                                         </h2>
                                                     </div>
                                                     <div class="review-name">
-                                                        <h2>7.9</h2>
+                                                        <h2>{{ $reviewStats['value_avg'] > 0 ? number_format($reviewStats['value_avg'], 1) : '0.0' }}</h2>
                                                     </div>
                                                 </div>
                                                 <div class="progress progress_custom">
                                                     <div class="progress-bar progress-bar-success" role="progressbar"
-                                                         aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"
-                                                         style="width: 90%; background-color: #489b48;">
-                                                        <span class="sr-only">40% Complete (success)</span>
+                                                         aria-valuenow="{{ $reviewStats['value_avg'] }}" aria-valuemin="0" aria-valuemax="10"
+                                                         style="width: {{ ($reviewStats['value_avg'] / 10) * 100 }}%; background-color: #489b48;">
+                                                        <span class="sr-only">{{ $reviewStats['value_avg'] }}% Complete</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2628,14 +2473,14 @@
                                                         </h2>
                                                     </div>
                                                     <div class="review-name">
-                                                        <h2>6.7</h2>
+                                                        <h2>{{ $reviewStats['wifi_avg'] > 0 ? number_format($reviewStats['wifi_avg'], 1) : '0.0' }}</h2>
                                                     </div>
                                                 </div>
                                                 <div class="progress progress_custom">
                                                     <div class="progress-bar progress_custom" role="progressbar"
-                                                         aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"
-                                                         style="width: 70%; background-color: #91278f;">
-                                                        <span class="sr-only">40% Complete (success)</span>
+                                                         aria-valuenow="{{ $reviewStats['wifi_avg'] }}" aria-valuemin="0" aria-valuemax="10"
+                                                         style="width: {{ ($reviewStats['wifi_avg'] / 10) * 100 }}%; background-color: #91278f;">
+                                                        <span class="sr-only">{{ $reviewStats['wifi_avg'] }}% Complete</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2643,6 +2488,113 @@
 
                                     </div>
                                 </div>
+                            </div>
+                            
+                            <!-- Add Review Form -->
+                            <div id="review-form-section" class="mt-4" style="display: none;">
+                                <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 25px;">
+                                    <h4 class="mb-4" style="color: #91278f;">Write a Review</h4>
+                                    <form id="reviewForm" enctype="multipart/form-data">
+                                        @csrf
+                                        <input type="hidden" name="hotel_id" value="{{ $show->id }}">
+                                        
+                                        <!-- Overall Rating -->
+                                        <div class="mb-4">
+                                            <label class="form-label fw-bold">Overall Rating <span class="text-danger">*</span></label>
+                                            <div class="rating-input">
+                                                <input type="range" class="form-range" min="0" max="10" step="0.1" name="overall_rating" id="overall_rating" value="5" required>
+                                                <div class="d-flex justify-content-between">
+                                                    <small>0</small>
+                                                    <small id="overall_rating_display">5.0</small>
+                                                    <small>10</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Review Title -->
+                                        <div class="mb-3">
+                                            <label for="review_title" class="form-label fw-bold">Review Title</label>
+                                            <input type="text" class="form-control" id="review_title" name="title" placeholder="Give your review a title">
+                                        </div>
+                                        
+                                        <!-- Review Comment -->
+                                        <div class="mb-3">
+                                            <label for="review_comment" class="form-label fw-bold">Your Review</label>
+                                            <textarea class="form-control" id="review_comment" name="comment" rows="4" placeholder="Share your experience..."></textarea>
+                                        </div>
+                                        
+                                        <!-- Category Ratings -->
+                                        <div class="row mb-3">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label fw-bold">Staff</label>
+                                                <input type="range" class="form-range" min="0" max="10" step="0.1" name="staff_rating" id="staff_rating" value="5">
+                                                <small class="text-muted"><span id="staff_rating_display">5.0</span>/10</small>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label fw-bold">Facilities</label>
+                                                <input type="range" class="form-range" min="0" max="10" step="0.1" name="facilities_rating" id="facilities_rating" value="5">
+                                                <small class="text-muted"><span id="facilities_rating_display">5.0</span>/10</small>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label fw-bold">Cleanliness</label>
+                                                <input type="range" class="form-range" min="0" max="10" step="0.1" name="cleanliness_rating" id="cleanliness_rating" value="5">
+                                                <small class="text-muted"><span id="cleanliness_rating_display">5.0</span>/10</small>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label fw-bold">Location</label>
+                                                <input type="range" class="form-range" min="0" max="10" step="0.1" name="location_rating" id="location_rating" value="5">
+                                                <small class="text-muted"><span id="location_rating_display">5.0</span>/10</small>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label fw-bold">Comfort</label>
+                                                <input type="range" class="form-range" min="0" max="10" step="0.1" name="comfort_rating" id="comfort_rating" value="5">
+                                                <small class="text-muted"><span id="comfort_rating_display">5.0</span>/10</small>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label fw-bold">Value for Money</label>
+                                                <input type="range" class="form-range" min="0" max="10" step="0.1" name="value_for_money_rating" id="value_for_money_rating" value="5">
+                                                <small class="text-muted"><span id="value_for_money_rating_display">5.0</span>/10</small>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label fw-bold">Free WiFi</label>
+                                                <input type="range" class="form-range" min="0" max="10" step="0.1" name="free_wifi_rating" id="free_wifi_rating" value="5">
+                                                <small class="text-muted"><span id="free_wifi_rating_display">5.0</span>/10</small>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Pros and Cons -->
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <label for="review_pros" class="form-label fw-bold">Pros</label>
+                                                <textarea class="form-control" id="review_pros" name="pros" rows="2" placeholder="What did you like?"></textarea>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="review_cons" class="form-label fw-bold">Cons</label>
+                                                <textarea class="form-control" id="review_cons" name="cons" rows="2" placeholder="What could be improved?"></textarea>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Images -->
+                                        <div class="mb-3">
+                                            <label for="review_images" class="form-label fw-bold">Upload Photos (Optional)</label>
+                                            <input type="file" class="form-control" id="review_images" name="images[]" multiple accept="image/*">
+                                            <small class="text-muted">You can upload up to 5 images</small>
+                                        </div>
+                                        
+                                        <!-- Submit Button -->
+                                        <div class="d-flex justify-content-end">
+                                            <button type="button" class="btn btn-secondary me-2" onclick="closeReviewForm()">Cancel</button>
+                                            <button type="submit" class="btn text-white" style="background-color: #91278f;">Submit Review</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                            <!-- Add Review Button -->
+                            <div class="mt-4 text-center" id="add-review-button-section">
+                                <button type="button" class="btn text-white" style="background-color: #91278f;" onclick="showReviewForm()" id="add-review-btn">
+                                    <i class="fa fa-plus"></i> Write a Review
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -3487,6 +3439,352 @@
         
         // Filter rooms on initial page load if dates are already set
         filterRoomsByAvailability();
+    });
+    
+    // Review System JavaScript
+    const hotelId = '{{ Crypt::encrypt($show->id) }}';
+    
+    // Check if user can review on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        checkCanReview();
+        loadReviews();
+        
+        // Rating display updates
+        const ratingInputs = ['overall_rating', 'staff_rating', 'facilities_rating', 'cleanliness_rating', 
+                             'location_rating', 'comfort_rating', 'value_for_money_rating', 'free_wifi_rating'];
+        
+        ratingInputs.forEach(inputId => {
+            const input = document.getElementById(inputId);
+            if (input) {
+                input.addEventListener('input', function() {
+                    const displayId = inputId + '_display';
+                    const display = document.getElementById(displayId);
+                    if (display) {
+                        display.textContent = parseFloat(this.value).toFixed(1);
+                    }
+                });
+            }
+        });
+    });
+    
+    // Check if user can review
+    function checkCanReview() {
+        fetch(`/reviews/can-review/${hotelId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (!data.can_review) {
+                    const addReviewBtn = document.getElementById('add-review-btn');
+                    if (addReviewBtn) {
+                        addReviewBtn.style.display = 'none';
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error checking review eligibility:', error);
+            });
+    }
+    
+    // Show review form
+    function showReviewForm() {
+        const formSection = document.getElementById('review-form-section');
+        const buttonSection = document.getElementById('add-review-button-section');
+        
+        if (formSection && buttonSection) {
+            formSection.style.display = 'block';
+            buttonSection.style.display = 'none';
+            formSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    }
+    
+    // Close review form
+    function closeReviewForm() {
+        const formSection = document.getElementById('review-form-section');
+        const buttonSection = document.getElementById('add-review-button-section');
+        
+        if (formSection && buttonSection) {
+            formSection.style.display = 'none';
+            buttonSection.style.display = 'block';
+            document.getElementById('reviewForm').reset();
+        }
+    }
+    
+    // Handle review form submission
+    document.getElementById('reviewForm')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
+        
+        fetch('/reviews/store', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || 
+                               document.querySelector('input[name="_token"]')?.value
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Review Submitted!',
+                    text: data.message,
+                    confirmButtonColor: '#91278f'
+                }).then(() => {
+                    closeReviewForm();
+                    location.reload(); // Reload to show updated reviews
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: data.message || 'Failed to submit review',
+                    confirmButtonColor: '#91278f'
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred while submitting your review',
+                confirmButtonColor: '#91278f'
+            });
+        })
+        .finally(() => {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+        });
+    });
+    
+    // Load reviews for modal
+    function loadReviews(sortBy = 'most_relevant') {
+        const container = document.getElementById('reviewsContainer');
+        if (!container) return;
+        
+        container.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2">Loading reviews...</p></div>';
+        
+        fetch(`/reviews/hotel/${hotelId}?sort=${sortBy}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    renderReviews(data.reviews);
+                } else {
+                    container.innerHTML = '<div class="text-center py-5"><p class="text-muted">No reviews found</p></div>';
+                }
+            })
+            .catch(error => {
+                console.error('Error loading reviews:', error);
+                container.innerHTML = '<div class="text-center py-5"><p class="text-danger">Error loading reviews</p></div>';
+            });
+    }
+    
+    // Render reviews in modal
+    function renderReviews(reviews) {
+        const container = document.getElementById('reviewsContainer');
+        if (!container) return;
+        
+        if (!reviews || reviews.length === 0) {
+            container.innerHTML = '<div class="text-center py-5"><p class="text-muted">No reviews yet. Be the first to review!</p></div>';
+            return;
+        }
+        
+        let html = '';
+        reviews.forEach((review, index) => {
+            const guest = review.guest || {};
+            const guestName = guest.name || 'Guest';
+            const guestCountry = guest.address ? guest.address.split(',').pop().trim() : 'Unknown';
+            const guestInitial = guestName.charAt(0).toUpperCase();
+            
+            // Get booking info if available
+            const booking = review.booking || {};
+            const roomsData = booking.rooms_data || [];
+            const firstRoom = roomsData[0] || {};
+            const roomName = firstRoom.roomName || 'Room';
+            const checkinDate = booking.checkin_date ? new Date(booking.checkin_date) : null;
+            const checkoutDate = booking.checkout_date ? new Date(booking.checkout_date) : null;
+            const nights = checkinDate && checkoutDate ? Math.ceil((checkoutDate - checkinDate) / (1000 * 60 * 60 * 24)) : null;
+            const monthYear = checkinDate ? checkinDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : '';
+            
+            // Get rating sentiment
+            const rating = parseFloat(review.overall_rating) || 0;
+            let sentiment = 'No Rating';
+            if (rating >= 9.0) sentiment = 'Exceptional';
+            else if (rating >= 8.0) sentiment = 'Excellent';
+            else if (rating >= 7.0) sentiment = 'Very Good';
+            else if (rating >= 6.0) sentiment = 'Good';
+            else if (rating >= 5.0) sentiment = 'Average';
+            else if (rating > 0) sentiment = 'Poor';
+            
+            // Format review date
+            const reviewDate = new Date(review.created_at);
+            const formattedDate = reviewDate.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+            
+            // Handle images
+            let imagesHtml = '';
+            if (review.images && Array.isArray(review.images) && review.images.length > 0) {
+                imagesHtml = '<div class="review-hotel-rrom-gallery mt-3"><div class="row g-2">';
+                review.images.forEach((image, imgIndex) => {
+                    let imageUrl = '';
+                    if (image.indexOf('http') === 0) {
+                        imageUrl = image;
+                    } else if (image.indexOf('uploads/') === 0) {
+                        imageUrl = `{{ asset('') }}${image}`;
+                    } else if (image.indexOf('storage/') === 0) {
+                        imageUrl = `{{ asset('') }}${image}`;
+                    } else {
+                        imageUrl = `{{ asset('uploads/reviews/') }}${image}`;
+                    }
+                    imagesHtml += `<div class="col-6 col-md-4 col-lg-3">
+                        <div class="review-image-wrapper" style="position: relative; overflow: hidden; border-radius: 8px; cursor: pointer; aspect-ratio: 1; background: #f0f0f0;">
+                            <img class="img-fluid review-thumbnail" src="${imageUrl}" alt="Review Image" 
+                                 style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;"
+                                 onclick="openReviewImageModal('${imageUrl}', ${review.images.length}, ${imgIndex}, [${review.images.map(img => {
+                                     if (img.indexOf('http') === 0) return `'${img}'`;
+                                     else if (img.indexOf('uploads/') === 0) return `'{{ asset('') }}${img}'`;
+                                     else if (img.indexOf('storage/') === 0) return `'{{ asset('') }}${img}'`;
+                                     else return `'{{ asset('uploads/reviews/') }}${img}'`;
+                                 }).join(',')}])"
+                                 onmouseover="this.style.transform='scale(1.05)'"
+                                 onmouseout="this.style.transform='scale(1)'">
+                        </div>
+                    </div>`;
+                });
+                imagesHtml += '</div></div>';
+            }
+            
+            html += `
+                <div class="row mb-20">
+                    <div class="col-lg-4">
+                        <div class="review-profile-left">
+                            <div class="review-header-modal">
+                                <div class="reviewer-info" style="display: flex; align-items: center; margin-bottom: 15px;">
+                                    <div class="reviewer-avatar" style="width: 60px; height: 60px; border-radius: 50%; background: #6576ff; color: white; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; margin-right: 15px; flex-shrink: 0;">
+                                        ${guestInitial}
+                                    </div>
+                                    <div class="reviewer-details">
+                                        <h3 class="reviewer-name" style="margin: 0; font-size: 16px; font-weight: 600; color: #495057;">${guestName}</h3>
+                                        <p class="reviewer-country" style="margin: 0; font-size: 13px; color: #6c757d;">${guestCountry}</p>
+                                    </div>
+                                </div>
+                                <div class="review-meta">
+                                    ${roomName ? `<p class="room-type"><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="15px"><path d="M3.75 11.25V9a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 0 1.5 0V9a2.25 2.25 0 0 0-2.25-2.25h-6A2.25 2.25 0 0 0 2.25 9v2.25a.75.75 0 0 0 1.5 0m9 0V9a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 0 1.5 0V9a2.25 2.25 0 0 0-2.25-2.25h-6A2.25 2.25 0 0 0 11.25 9v2.25a.75.75 0 0 0 1.5 0m-10 .75h18.5c.69 0 1.25.56 1.25 1.25V18l.75-.75H.75l.75.75v-4.75c0-.69.56-1.25 1.25-1.25m0-1.5A2.75 2.75 0 0 0 0 13.25V18c0 .414.336.75.75.75h22.5A.75.75 0 0 0 24 18v-4.75a2.75 2.75 0 0 0-2.75-2.75zM0 18v3a.75.75 0 0 0 1.5 0v-3A.75.75 0 0 0 0 18m22.5 0v3a.75.75 0 0 0 1.5 0v-3a.75.75 0 0 0-1.5 0m-.75-6.75V4.5a2.25 2.25 0 0 0-2.25-2.25h-15A2.25 2.25 0 0 0 2.25 4.5v6.75a.75.75 0 0 0 1.5 0V4.5a.75.75 0 0 1 .75-.75h15a.75.75 0 0 1 .75.75v6.75a.75.75 0 0 0 1.5 0"></path></svg></span>${roomName}</p>` : ''}
+                                    ${nights && monthYear ? `<p class="stay-details"><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="15px"><path d="M22.502 13.5v8.25a.75.75 0 0 1-.75.75h-19.5a.75.75 0 0 1-.75-.75V5.25a.75.75 0 0 1 .75-.75h19.5a.75.75 0 0 1 .75.75zm1.5 0V5.25A2.25 2.25 0 0 0 21.752 3h-19.5a2.25 2.25 0 0 0-2.25 2.25v16.5A2.25 2.25 0 0 0 2.252 24h19.5a2.25 2.25 0 0 0 2.25-2.25zm-23.25-3h22.5a.75.75 0 0 0 0-1.5H.752a.75.75 0 0 0 0 1.5M7.502 6V.75a.75.75 0 0 0-1.5 0V6a.75.75 0 0 0 1.5 0m10.5 0V.75a.75.75 0 0 0-1.5 0V6a.75.75 0 0 0 1.5 0"></path></svg></span>${nights} night${nights > 1 ? 's' : ''} · ${monthYear}</p>` : ''}
+                                    ${booking.relationship ? `<p class="group-type"><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="15px"><path d="M8.25 3.75a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0m1.5 0a3.75 3.75 0 1 0-7.5 0 3.75 3.75 0 0 0 7.5 0M12 13.5a6 6 0 0 0-12 0v2.25c0 .414.336.75.75.75H3l-.746-.675.75 7.5A.75.75 0 0 0 3.75 24h4.5a.75.75 0 0 0 .746-.675l.75-7.5L9 16.5h2.25a.75.75 0 0 0 .75-.75zm-1.5 0v2.25l.75-.75H9a.75.75 0 0 0-.746.675l-.75 7.5.746-.675h-4.5l.746.675-.75-7.5A.75.75 0 0 0 3 15H.75l.75.75V13.5a4.5 4.5 0 1 1 9 0m9.75-9.75a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0m1.5 0a3.75 3.75 0 1 0-7.5 0 3.75 3.75 0 0 0 7.5 0M13.5 16.5H15l-.746-.675.75 7.5a.75.75 0 0 0 .746.675h4.5a.75.75 0 0 0 .746-.675l.75-7.5L21 16.5h2.25a.75.75 0 0 0 .75-.75V13.5a6 6 0 0 0-11.143-3.086.75.75 0 0 0 1.286.772 4.5 4.5 0 0 1 8.357 2.315v2.249l.75-.75H21a.75.75 0 0 0-.746.675l-.75 7.5.746-.675h-4.5l.746.675-.75-7.5A.75.75 0 0 0 15 15h-1.5a.75.75 0 0 0 0 1.5"></path></svg></span>${booking.relationship === 'family' ? 'Family' : booking.relationship === 'friends' ? 'Friends' : booking.relationship === 'colleagues' ? 'Colleagues' : booking.relationship === 'husband' ? 'Couple' : 'Solo'}</p>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="review-profile-details">
+                            <div class="review-inner-1">
+                                <div class="review-details">
+                                    ${review.is_featured ? `<span class="reviewer-choice"><span><span class="fcd9eec8fb fb4ef8dd02 fc17714355" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20px"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12C23.993 5.376 18.624.007 12 0m6.216 10.376-2.788 2.485a.5.5 0 0 0-.126.572l1.629 3.749a.5.5 0 0 1-.7.634l-3.982-2.242a.5.5 0 0 0-.491 0l-3.985 2.242a.5.5 0 0 1-.7-.634L8.7 13.433a.5.5 0 0 0-.126-.572l-2.79-2.485a.5.5 0 0 1 .332-.876h3.31a.5.5 0 0 0 .46-.3l1.655-3.84a.5.5 0 0 1 .918 0l1.655 3.84a.5.5 0 0 0 .46.3h3.31a.5.5 0 0 1 .332.873z"></path></svg></span></span> Reviewers' choice</span>` : ''}
+                                    <span class="review-date">Reviewed: ${formattedDate}</span>
+                                    <div class="review-header">
+                                        <h4 class="review-title">${sentiment}</h4>
+                                        <div class="rating">
+                                            <h2 class="rating-score">${Math.round(rating)}</h2>
+                                        </div>
+                                    </div>
+                                    ${review.comment ? `<P>${review.comment}</P>` : ''}
+                                    ${review.pros ? `<p class="review-text positive">😊 ${review.pros}</p>` : ''}
+                                    ${review.cons ? `<p class="review-text negative">☹️ ${review.cons}</p>` : ''}
+                                </div>
+                            </div>
+                            ${imagesHtml}
+                            ${review.hotel_response ? `<div class="hotel-response"><h5 class="response-title">Hotel response:</h5><p>${review.hotel_response}</p></div>` : ''}
+                        </div>
+                    </div>
+                    ${index < reviews.length - 1 ? '<hr class="b9bfeba2b4 b288f61df6" aria-hidden="true">' : ''}
+                </div>
+            `;
+        });
+        
+        container.innerHTML = html;
+    }
+    
+    // Load reviews when modal opens
+    const reviewModal = document.getElementById('rightSidebarModal');
+    if (reviewModal) {
+        reviewModal.addEventListener('show.bs.modal', function() {
+            loadReviews('most_relevant');
+        });
+    }
+    
+    // Handle sort change in modal
+    document.getElementById('reviewSortSelect')?.addEventListener('change', function() {
+        const sortValue = this.value;
+        loadReviews(sortValue);
+    });
+
+    // Review Image Modal Functions
+    let currentImageIndex = 0;
+    let currentImageArray = [];
+
+    function openReviewImageModal(imageUrl, totalImages, currentIndex, imageArray) {
+        currentImageArray = imageArray;
+        currentImageIndex = currentIndex;
+        
+        const modal = new bootstrap.Modal(document.getElementById('reviewImageModal'));
+        document.getElementById('reviewModalImage').src = imageUrl;
+        updateImageCounter();
+        updateNavigationButtons();
+        modal.show();
+    }
+
+    function updateImageCounter() {
+        const counter = document.getElementById('imageCounter');
+        counter.textContent = `${currentImageIndex + 1} / ${currentImageArray.length}`;
+    }
+
+    function updateNavigationButtons() {
+        const prevBtn = document.getElementById('prevImageBtn');
+        const nextBtn = document.getElementById('nextImageBtn');
+        
+        prevBtn.style.display = currentImageArray.length > 1 ? 'flex' : 'none';
+        nextBtn.style.display = currentImageArray.length > 1 ? 'flex' : 'none';
+        
+        prevBtn.disabled = currentImageIndex === 0;
+        nextBtn.disabled = currentImageIndex === currentImageArray.length - 1;
+    }
+
+    document.getElementById('prevImageBtn')?.addEventListener('click', function() {
+        if (currentImageIndex > 0) {
+            currentImageIndex--;
+            document.getElementById('reviewModalImage').src = currentImageArray[currentImageIndex];
+            updateImageCounter();
+            updateNavigationButtons();
+        }
+    });
+
+    document.getElementById('nextImageBtn')?.addEventListener('click', function() {
+        if (currentImageIndex < currentImageArray.length - 1) {
+            currentImageIndex++;
+            document.getElementById('reviewModalImage').src = currentImageArray[currentImageIndex];
+            updateImageCounter();
+            updateNavigationButtons();
+        }
+    });
+
+    // Keyboard navigation for image modal
+    document.addEventListener('keydown', function(e) {
+        const modal = document.getElementById('reviewImageModal');
+        if (modal && modal.classList.contains('show')) {
+            if (e.key === 'ArrowLeft' && currentImageIndex > 0) {
+                document.getElementById('prevImageBtn').click();
+            } else if (e.key === 'ArrowRight' && currentImageIndex < currentImageArray.length - 1) {
+                document.getElementById('nextImageBtn').click();
+            } else if (e.key === 'Escape') {
+                bootstrap.Modal.getInstance(modal).hide();
+            }
+        }
     });
 </script>
 

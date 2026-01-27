@@ -15,6 +15,7 @@ use App\Http\Controllers\Vendor\VendorController;
 use App\Http\Controllers\Vendor\OwnerController;
 use App\Http\Controllers\Vendor\BankingController;
 use App\Http\Controllers\Superadmin\PopularDestinationController;
+use App\Http\Controllers\Admin\ReviewManagementController;
 
 // Super Admin Login Routes
 Route::prefix('super-admin')->group(function () {
@@ -119,6 +120,16 @@ Route::prefix('super-admin')->group(function () {
         Route::post('/bookings/manual/store', [\App\Http\Controllers\Admin\BookingManagementController::class, 'storeManualOrder'])->name('super-admin.bookings.manual.store');
         Route::get('/bookings/manual/rooms/{hotelId}', [\App\Http\Controllers\Admin\BookingManagementController::class, 'getRooms'])->name('super-admin.bookings.manual.rooms');
         Route::get('/bookings/room/{roomId}/availability/{bookingId?}', [\App\Http\Controllers\Admin\BookingManagementController::class, 'getRoomAvailability'])->name('super-admin.bookings.room.availability');
+
+        // Review Management
+        Route::get('/reviews', [ReviewManagementController::class, 'index'])->name('super-admin.reviews.index');
+        Route::get('/reviews/{id}', [ReviewManagementController::class, 'show'])->name('super-admin.reviews.show');
+        Route::post('/reviews/{id}/approve', [ReviewManagementController::class, 'approve'])->name('super-admin.reviews.approve');
+        Route::post('/reviews/{id}/reject', [ReviewManagementController::class, 'reject'])->name('super-admin.reviews.reject');
+        Route::post('/reviews/{id}/toggle-featured', [ReviewManagementController::class, 'toggleFeatured'])->name('super-admin.reviews.toggle-featured');
+        Route::post('/reviews/bulk-approve', [ReviewManagementController::class, 'bulkApprove'])->name('super-admin.reviews.bulk-approve');
+        Route::post('/reviews/bulk-reject', [ReviewManagementController::class, 'bulkReject'])->name('super-admin.reviews.bulk-reject');
+        Route::post('/reviews/{id}/response', [ReviewManagementController::class, 'addResponse'])->name('super-admin.reviews.add-response');
 
     });
     /*Admin Panel Ended */

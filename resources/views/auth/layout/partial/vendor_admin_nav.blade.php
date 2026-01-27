@@ -59,6 +59,15 @@
                 </li>
 
                 <li class="nk-menu-item">
+                    <a href="{{ route('vendor.reviews.index') }}" class="nk-menu-link">
+                        <span class="nk-menu-icon">
+                            <em class="icon ni ni-star"></em>
+                        </span>
+                        <span class="nk-menu-text">Reviews Management</span>
+                    </a>
+                </li>
+
+                <li class="nk-menu-item">
                     <form id="logout-form" action="{{ route('vendor-admin.logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>

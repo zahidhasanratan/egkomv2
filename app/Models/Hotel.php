@@ -86,4 +86,14 @@ class Hotel extends Model
     {
         return $this->belongsTo(PopularDestination::class, 'popular_destination_id');
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class)->where('is_approved', true)->orderBy('created_at', 'desc');
+    }
+
+    public function allReviews()
+    {
+        return $this->hasMany(Review::class)->orderBy('created_at', 'desc');
+    }
 }

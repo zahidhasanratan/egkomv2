@@ -49,6 +49,11 @@ Route::get('/wishlist/check', [App\Http\Controllers\Frontend\WishlistController:
 Route::post('/hotel-wishlist/toggle', [App\Http\Controllers\Frontend\HotelWishlistController::class, 'toggle'])->name('hotel.wishlist.toggle');
 Route::get('/hotel-wishlist/check', [App\Http\Controllers\Frontend\HotelWishlistController::class, 'check'])->name('hotel.wishlist.check');
 
+// Review routes
+Route::get('/reviews/hotel/{id}', [App\Http\Controllers\Frontend\ReviewController::class, 'getHotelReviews'])->name('reviews.hotel');
+Route::get('/reviews/can-review/{id}', [App\Http\Controllers\Frontend\ReviewController::class, 'canReview'])->name('reviews.can-review');
+Route::post('/reviews/store', [App\Http\Controllers\Frontend\ReviewController::class, 'store'])->name('reviews.store');
+
 
 Auth::routes();
 

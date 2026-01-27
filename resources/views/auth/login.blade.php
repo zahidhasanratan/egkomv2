@@ -302,8 +302,8 @@
             form.action = "{{ route('co-host.login.submit') }}"; // Co-Host
             forgotPasswordLink.href = "#"; // No password reset for co-hosts yet
         } else if (selectedValue === 'user') {
-            form.action = "{{ route('login') }}"; // User Login
-            forgotPasswordLink.href = "{{ route('password.request') }}";
+            form.action = "{{ route('guest.login.submit') }}"; // Guest/User – same as frontend guest login
+            forgotPasswordLink.href = "{{ route('guest.password.request') }}";
         } else {
             form.action = '#';
             forgotPasswordLink.href = '#';
