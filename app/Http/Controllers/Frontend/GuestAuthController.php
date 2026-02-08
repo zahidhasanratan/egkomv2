@@ -350,7 +350,11 @@ class GuestAuthController extends Controller
      */
     public function reviews()
     {
-        return view('frontend.guest.reviews');
+        $reviews = \App\Models\Review::where('guest_id', auth('guest')->id())
+            ->with(['hotel', 'booking'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+        return view('frontend.guest.reviews', compact('reviews'));
     }
 
     /**

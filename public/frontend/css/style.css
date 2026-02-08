@@ -4497,9 +4497,18 @@ ul.list-unstyled.list-inline.offer-price-1 {
    ----------------------------------------------------- */
 
 .modal-dialog {
-      max-width: 800px;
-      margin: 30px auto;
-  }
+	max-width: 1020px;
+	margin: 30px auto;
+}
+
+.nav-item .nav-item-rooms {
+	padding: 5px 4px;
+	font-size: 12px !important;
+}
+
+.nav-item.nav-item-rooms.nav-link.text-black {
+	font-size: 14px !important;
+}
 
 .modal-dialog-custom{
 	max-width: 900px !important;

@@ -87,6 +87,18 @@
                             By <strong>{{ $review->guest->name ?? 'Guest' }}</strong> 
                             on {{ $review->created_at->format('F d, Y') }}
                         </p>
+                        @if($review->booking)
+                        @php
+                            $booking = $review->booking;
+                            $hotelRooms = collect($booking->rooms_data ?? [])->filter(fn($r) => isset($r['hotelId']) && (int)($r['hotelId'] ?? 0) === (int)$review->hotel_id);
+                            $roomNames = $hotelRooms->map(fn($r) => ($r['quantity'] ?? 1) . 'x ' . ($r['roomName'] ?? 'Room'))->unique()->implode(', ');
+                        @endphp
+                        <p class="text-muted mb-0 mt-2">
+                            <i class="fas fa-bed"></i> Did you stay: <strong>{{ $roomNames ?: 'Room' }}</strong> 
+                            from {{ $booking->checkin_date->format('M d, Y') }} to {{ $booking->checkout_date->format('M d, Y') }} 
+                            ({{ $booking->total_nights }} {{ $booking->total_nights == 1 ? 'night' : 'nights' }})
+                        </p>
+                        @endif
                     </div>
                     <div class="text-right">
                         <div class="rating-display">{{ number_format($review->overall_rating, 1) }}</div>
@@ -209,6 +221,29 @@
                         <td><strong>Hotel:</strong></td>
                         <td>{{ $review->hotel->description ?? $review->hotel->property_category ?? 'Hotel #' . $review->hotel_id }}</td>
                     </tr>
+                    @if($review->booking)
+                    @php
+                        $booking = $review->booking;
+                        $hotelRooms = collect($booking->rooms_data ?? [])->filter(fn($r) => isset($r['hotelId']) && (int)($r['hotelId'] ?? 0) === (int)$review->hotel_id);
+                        $roomNames = $hotelRooms->map(fn($r) => ($r['quantity'] ?? 1) . 'x ' . ($r['roomName'] ?? 'Room'))->unique()->implode(', ');
+                    @endphp
+                    <tr>
+                        <td><strong>Room(s):</strong></td>
+                        <td>{{ $roomNames ?: 'N/A' }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Stay Period:</strong></td>
+                        <td>{{ $booking->checkin_date->format('M d, Y') }} to {{ $booking->checkout_date->format('M d, Y') }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Nights:</strong></td>
+                        <td>{{ $booking->total_nights }} {{ $booking->total_nights == 1 ? 'night' : 'nights' }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Booking:</strong></td>
+                        <td>{{ $booking->invoice_number }}</td>
+                    </tr>
+                    @endif
                     <tr>
                         <td><strong>Guest:</strong></td>
                         <td>{{ $review->guest->name ?? 'N/A' }}</td>

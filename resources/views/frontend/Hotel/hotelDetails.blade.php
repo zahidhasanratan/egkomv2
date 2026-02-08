@@ -2531,22 +2531,68 @@
                             
                             <!-- Add Review Form -->
                             <div id="review-form-section" class="mt-4" style="display: none;">
+                                <style>
+                                    #review-form-section .review-rating-slider {
+                                        accent-color: #2563eb;
+                                    }
+                                    #review-form-section .review-rating-slider::-webkit-slider-runnable-track {
+                                        width: 100%;
+                                        height: 8px;
+                                        background: linear-gradient(to right, #2563eb 0%, #2563eb var(--slider-fill, 0%), #e9ecef var(--slider-fill, 0%)) !important;
+                                        border-radius: 4px;
+                                    }
+                                    #review-form-section .review-rating-slider::-webkit-slider-thumb {
+                                        background: #2563eb;
+                                        -webkit-appearance: none;
+                                        appearance: none;
+                                        width: 18px;
+                                        height: 18px;
+                                        border-radius: 50%;
+                                        cursor: pointer;
+                                        margin-top: -5px;
+                                    }
+                                    #review-form-section .review-rating-slider::-moz-range-track {
+                                        height: 8px;
+                                        background: #e9ecef;
+                                        border-radius: 4px;
+                                    }
+                                    #review-form-section .review-rating-slider::-moz-range-progress {
+                                        height: 8px;
+                                        background: #2563eb;
+                                        border-radius: 4px;
+                                    }
+                                    #review-form-section .review-rating-slider::-moz-range-thumb {
+                                        background: #2563eb;
+                                        border: none;
+                                        width: 18px;
+                                        height: 18px;
+                                        border-radius: 50%;
+                                        cursor: pointer;
+                                    }
+                                </style>
                                 <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 25px;">
                                     <h4 class="mb-4" style="color: #91278f;">Write a Review</h4>
                                     <form id="reviewForm" enctype="multipart/form-data">
                                         @csrf
                                         <input type="hidden" name="hotel_id" value="{{ $show->id }}">
+                                        <input type="hidden" name="booking_id" id="review_booking_id" value="">
+                                        <input type="hidden" name="overall_rating" id="overall_rating" value="0">
                                         
-                                        <!-- Overall Rating -->
-                                        <div class="mb-4">
-                                            <label class="form-label fw-bold">Overall Rating <span class="text-danger">*</span></label>
-                                            <div class="rating-input">
-                                                <input type="range" class="form-range" min="0" max="10" step="0.1" name="overall_rating" id="overall_rating" value="5" required>
-                                                <div class="d-flex justify-content-between">
-                                                    <small>0</small>
-                                                    <small id="overall_rating_display">5.0</small>
-                                                    <small>10</small>
-                                                </div>
+                                        <!-- Which stay did you book? -->
+                                        <div class="mb-4" id="review-booking-section">
+                                            <label class="form-label fw-bold">Which stay would you like to review? <span class="text-danger">*</span></label>
+                                            <select class="form-control" id="review_booking_select" required>
+                                                <option value="">-- Select your stay --</option>
+                                            </select>
+                                            <div id="review-stay-details" class="mt-3 p-3 rounded" style="background: #f0f7ff; border: 1px solid #b8daff; display: none;">
+                                                <p class="mb-1 fw-bold text-dark">Did you stay:</p>
+                                                <p class="mb-0" id="stay-details-text"><span id="stay-room-names"></span> from <span id="stay-checkin"></span> to <span id="stay-checkout"></span> (<span id="stay-nights"></span>)</p>
+                                            </div>
+                                            <div id="review-booking-loading" class="mt-2 text-muted" style="display: none;">
+                                                <small><i class="fa fa-spinner fa-spin"></i> Loading your bookings...</small>
+                                            </div>
+                                            <div id="review-booking-error" class="mt-2 text-danger" style="display: none;">
+                                                <small>Could not load your bookings. Please refresh the page.</small>
                                             </div>
                                         </div>
                                         
@@ -2566,38 +2612,48 @@
                                         <div class="row mb-3">
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label fw-bold">Staff</label>
-                                                <input type="range" class="form-range" min="0" max="10" step="0.1" name="staff_rating" id="staff_rating" value="5">
-                                                <small class="text-muted"><span id="staff_rating_display">5.0</span>/10</small>
+                                                <input type="range" class="form-range review-rating-slider" min="0" max="10" step="0.1" name="staff_rating" id="staff_rating" value="0">
+                                                <small class="text-muted"><span id="staff_rating_display">0.0</span>/10</small>
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label fw-bold">Facilities</label>
-                                                <input type="range" class="form-range" min="0" max="10" step="0.1" name="facilities_rating" id="facilities_rating" value="5">
-                                                <small class="text-muted"><span id="facilities_rating_display">5.0</span>/10</small>
+                                                <input type="range" class="form-range review-rating-slider" min="0" max="10" step="0.1" name="facilities_rating" id="facilities_rating" value="0">
+                                                <small class="text-muted"><span id="facilities_rating_display">0.0</span>/10</small>
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label fw-bold">Cleanliness</label>
-                                                <input type="range" class="form-range" min="0" max="10" step="0.1" name="cleanliness_rating" id="cleanliness_rating" value="5">
-                                                <small class="text-muted"><span id="cleanliness_rating_display">5.0</span>/10</small>
+                                                <input type="range" class="form-range review-rating-slider" min="0" max="10" step="0.1" name="cleanliness_rating" id="cleanliness_rating" value="0">
+                                                <small class="text-muted"><span id="cleanliness_rating_display">0.0</span>/10</small>
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label fw-bold">Location</label>
-                                                <input type="range" class="form-range" min="0" max="10" step="0.1" name="location_rating" id="location_rating" value="5">
-                                                <small class="text-muted"><span id="location_rating_display">5.0</span>/10</small>
+                                                <input type="range" class="form-range review-rating-slider" min="0" max="10" step="0.1" name="location_rating" id="location_rating" value="0">
+                                                <small class="text-muted"><span id="location_rating_display">0.0</span>/10</small>
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label fw-bold">Comfort</label>
-                                                <input type="range" class="form-range" min="0" max="10" step="0.1" name="comfort_rating" id="comfort_rating" value="5">
-                                                <small class="text-muted"><span id="comfort_rating_display">5.0</span>/10</small>
+                                                <input type="range" class="form-range review-rating-slider" min="0" max="10" step="0.1" name="comfort_rating" id="comfort_rating" value="0">
+                                                <small class="text-muted"><span id="comfort_rating_display">0.0</span>/10</small>
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label fw-bold">Value for Money</label>
-                                                <input type="range" class="form-range" min="0" max="10" step="0.1" name="value_for_money_rating" id="value_for_money_rating" value="5">
-                                                <small class="text-muted"><span id="value_for_money_rating_display">5.0</span>/10</small>
+                                                <input type="range" class="form-range review-rating-slider" min="0" max="10" step="0.1" name="value_for_money_rating" id="value_for_money_rating" value="0">
+                                                <small class="text-muted"><span id="value_for_money_rating_display">0.0</span>/10</small>
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label fw-bold">Free WiFi</label>
-                                                <input type="range" class="form-range" min="0" max="10" step="0.1" name="free_wifi_rating" id="free_wifi_rating" value="5">
-                                                <small class="text-muted"><span id="free_wifi_rating_display">5.0</span>/10</small>
+                                                <input type="range" class="form-range review-rating-slider" min="0" max="10" step="0.1" name="free_wifi_rating" id="free_wifi_rating" value="0">
+                                                <small class="text-muted"><span id="free_wifi_rating_display">0.0</span>/10</small>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Overall Rating (auto-calculated, read-only) -->
+                                        <div class="mb-4 p-3 rounded" style="background: #f8f9fa; border: 1px solid #e9ecef;">
+                                            <label class="form-label fw-bold mb-0">Overall Rating <span class="text-danger">*</span></label>
+                                            <p class="mb-0 mt-1 text-muted" style="font-size: 13px;">Calculated from your category ratings above</p>
+                                            <div class="d-flex align-items-center gap-2 mt-2">
+                                                <span id="overall_rating_display" class="fw-bold" style="font-size: 24px; color: #91278f;">0.0</span>
+                                                <span class="text-muted">/ 10</span>
                                             </div>
                                         </div>
                                         
@@ -3482,28 +3538,60 @@
     
     // Review System JavaScript
     const hotelId = '{{ Crypt::encrypt($show->id) }}';
+    const categoryRatingIds = ['staff_rating', 'facilities_rating', 'cleanliness_rating', 
+                              'location_rating', 'comfort_rating', 'value_for_money_rating', 'free_wifi_rating'];
+    
+    function updateSliderFill(slider) {
+        if (!slider) return;
+        const val = parseFloat(slider.value) || 0;
+        const min = parseFloat(slider.min) || 0;
+        const max = parseFloat(slider.max) || 10;
+        const percent = ((val - min) / (max - min)) * 100;
+        slider.style.setProperty('--slider-fill', percent + '%');
+    }
+    
+    function updateOverallRating() {
+        let sum = 0;
+        let count = 0;
+        categoryRatingIds.forEach(inputId => {
+            const input = document.getElementById(inputId);
+            if (input && input.value) {
+                sum += parseFloat(input.value) || 0;
+                count++;
+            }
+        });
+        const avg = count > 0 ? (sum / count) : 0;
+        const rounded = Math.round(avg * 10) / 10;
+        const display = document.getElementById('overall_rating_display');
+        const hidden = document.getElementById('overall_rating');
+        if (display) display.textContent = rounded.toFixed(1);
+        if (hidden) hidden.value = rounded;
+    }
     
     // Check if user can review on page load
     document.addEventListener('DOMContentLoaded', function() {
         checkCanReview();
         loadReviews();
         
-        // Rating display updates
-        const ratingInputs = ['overall_rating', 'staff_rating', 'facilities_rating', 'cleanliness_rating', 
-                             'location_rating', 'comfort_rating', 'value_for_money_rating', 'free_wifi_rating'];
-        
-        ratingInputs.forEach(inputId => {
+        // Category rating display updates and overall rating auto-calculation
+        categoryRatingIds.forEach(inputId => {
             const input = document.getElementById(inputId);
             if (input) {
+                updateSliderFill(input);
                 input.addEventListener('input', function() {
                     const displayId = inputId + '_display';
                     const display = document.getElementById(displayId);
                     if (display) {
                         display.textContent = parseFloat(this.value).toFixed(1);
                     }
+                    updateSliderFill(this);
+                    updateOverallRating();
                 });
             }
         });
+        updateOverallRating();
+        const reviewBookingSelect = document.getElementById('review_booking_select');
+        if (reviewBookingSelect) reviewBookingSelect.addEventListener('change', onReviewBookingSelect);
     });
     
     // Check if user can review
@@ -3523,6 +3611,69 @@
             });
     }
     
+    let reviewBookingsData = [];
+    
+    function loadReviewBookings() {
+        const select = document.getElementById('review_booking_select');
+        const details = document.getElementById('review-stay-details');
+        const loading = document.getElementById('review-booking-loading');
+        const error = document.getElementById('review-booking-error');
+        const hidden = document.getElementById('review_booking_id');
+        if (!select) return;
+        select.innerHTML = '<option value="">-- Select your stay --</option>';
+        if (details) details.style.display = 'none';
+        if (hidden) hidden.value = '';
+        if (error) error.style.display = 'none';
+        if (loading) loading.style.display = 'block';
+        reviewBookingsData = [];
+        fetch(`/reviews/bookings/${hotelId}`)
+            .then(r => r.json())
+            .then(data => {
+                if (loading) loading.style.display = 'none';
+                if (data.success && data.bookings && data.bookings.length > 0) {
+                    reviewBookingsData = data.bookings;
+                    data.bookings.forEach(function(b) {
+                        const opt = document.createElement('option');
+                        opt.value = b.id;
+                        opt.textContent = b.room_names + ' - ' + b.checkin_date + ' to ' + b.checkout_date + ' (' + b.nights_label + ') - ' + b.invoice_number;
+                        select.appendChild(opt);
+                    });
+                } else {
+                    if (error) {
+                        error.textContent = data.message || 'No bookings found for this hotel.';
+                        error.style.display = 'block';
+                    }
+                }
+            })
+            .catch(function(err) {
+                if (loading) loading.style.display = 'none';
+                if (error) {
+                    error.textContent = 'Could not load your bookings. Please refresh the page.';
+                    error.style.display = 'block';
+                }
+            });
+    }
+    
+    function onReviewBookingSelect() {
+        const select = document.getElementById('review_booking_select');
+        const details = document.getElementById('review-stay-details');
+        const hidden = document.getElementById('review_booking_id');
+        const bid = select && select.value ? parseInt(select.value) : 0;
+        if (hidden) hidden.value = bid;
+        if (!bid || !details) {
+            if (details) details.style.display = 'none';
+            return;
+        }
+        const b = reviewBookingsData.find(function(x) { return x.id == bid; });
+        if (b) {
+            document.getElementById('stay-room-names').textContent = b.room_names;
+            document.getElementById('stay-checkin').textContent = b.checkin_date;
+            document.getElementById('stay-checkout').textContent = b.checkout_date;
+            document.getElementById('stay-nights').textContent = b.nights_label;
+            details.style.display = 'block';
+        }
+    }
+    
     // Show review form
     function showReviewForm() {
         const formSection = document.getElementById('review-form-section');
@@ -3532,6 +3683,10 @@
             formSection.style.display = 'block';
             buttonSection.style.display = 'none';
             formSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            loadReviewBookings();
+            categoryRatingIds.forEach(function(id) {
+                updateSliderFill(document.getElementById(id));
+            });
         }
     }
     
@@ -3544,13 +3699,31 @@
             formSection.style.display = 'none';
             buttonSection.style.display = 'block';
             document.getElementById('reviewForm').reset();
+            const details = document.getElementById('review-stay-details');
+            if (details) details.style.display = 'none';
+            setTimeout(function() {
+                categoryRatingIds.forEach(function(id) {
+                    updateSliderFill(document.getElementById(id));
+                });
+                updateOverallRating();
+            }, 0);
         }
     }
     
     // Handle review form submission
     document.getElementById('reviewForm')?.addEventListener('submit', function(e) {
         e.preventDefault();
-        
+        const bidInput = document.getElementById('review_booking_id');
+        if (!bidInput || !bidInput.value) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Select Your Stay',
+                text: 'Please select which stay you would like to review.',
+                confirmButtonColor: '#91278f'
+            });
+            return;
+        }
+        updateOverallRating();
         const formData = new FormData(this);
         const submitBtn = this.querySelector('button[type="submit"]');
         const originalText = submitBtn.textContent;
@@ -3641,14 +3814,19 @@
             const guestCountry = guest.address ? guest.address.split(',').pop().trim() : 'Unknown';
             const guestInitial = guestName.charAt(0).toUpperCase();
             
-            // Get booking info if available
+            // Get booking info if available - filter rooms by this hotel
             const booking = review.booking || {};
             const roomsData = booking.rooms_data || [];
-            const firstRoom = roomsData[0] || {};
-            const roomName = firstRoom.roomName || 'Room';
+            const hotelId = parseInt(review.hotel_id) || 0;
+            const hotelRooms = roomsData.filter(r => (parseInt(r.hotelId) || 0) === hotelId);
+            const roomNames = hotelRooms.length > 0 
+                ? hotelRooms.map(r => (r.quantity || 1) + 'x ' + (r.roomName || 'Room')).join(', ')
+                : (roomsData[0] ? (roomsData[0].quantity || 1) + 'x ' + (roomsData[0].roomName || 'Room') : 'Room');
             const checkinDate = booking.checkin_date ? new Date(booking.checkin_date) : null;
             const checkoutDate = booking.checkout_date ? new Date(booking.checkout_date) : null;
-            const nights = checkinDate && checkoutDate ? Math.ceil((checkoutDate - checkinDate) / (1000 * 60 * 60 * 24)) : null;
+            const nights = booking.total_nights || (checkinDate && checkoutDate ? Math.ceil((checkoutDate - checkinDate) / (1000 * 60 * 60 * 24)) : null);
+            const checkinStr = checkinDate ? checkinDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+            const checkoutStr = checkoutDate ? checkoutDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
             const monthYear = checkinDate ? checkinDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : '';
             
             // Get rating sentiment
@@ -3703,19 +3881,19 @@
                     <div class="col-lg-4">
                         <div class="review-profile-left">
                             <div class="review-header-modal">
-                                <div class="reviewer-info" style="display: flex; align-items: center; margin-bottom: 15px;">
+                                <div class="reviewer-info" style="display: flex; align-items: center; margin-bottom: 20px;">
                                     <div class="reviewer-avatar" style="width: 60px; height: 60px; border-radius: 50%; background: #6576ff; color: white; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; margin-right: 15px; flex-shrink: 0;">
                                         ${guestInitial}
                                     </div>
                                     <div class="reviewer-details">
-                                        <h3 class="reviewer-name" style="margin: 0; font-size: 16px; font-weight: 600; color: #495057;">${guestName}</h3>
-                                        <p class="reviewer-country" style="margin: 0; font-size: 13px; color: #6c757d;">${guestCountry}</p>
+                                        <h3 class="reviewer-name" style="margin: 0; font-size: 17px; font-weight: 600; color: #1a1a1a;">${guestName}</h3>
+                                        <p class="reviewer-country" style="margin: 4px 0 0 0; font-size: 14px; color: #6c757d;">${guestCountry}</p>
                                     </div>
                                 </div>
-                                <div class="review-meta">
-                                    ${roomName ? `<p class="room-type"><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="15px"><path d="M3.75 11.25V9a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 0 1.5 0V9a2.25 2.25 0 0 0-2.25-2.25h-6A2.25 2.25 0 0 0 2.25 9v2.25a.75.75 0 0 0 1.5 0m9 0V9a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 0 1.5 0V9a2.25 2.25 0 0 0-2.25-2.25h-6A2.25 2.25 0 0 0 11.25 9v2.25a.75.75 0 0 0 1.5 0m-10 .75h18.5c.69 0 1.25.56 1.25 1.25V18l.75-.75H.75l.75.75v-4.75c0-.69.56-1.25 1.25-1.25m0-1.5A2.75 2.75 0 0 0 0 13.25V18c0 .414.336.75.75.75h22.5A.75.75 0 0 0 24 18v-4.75a2.75 2.75 0 0 0-2.75-2.75zM0 18v3a.75.75 0 0 0 1.5 0v-3A.75.75 0 0 0 0 18m22.5 0v3a.75.75 0 0 0 1.5 0v-3a.75.75 0 0 0-1.5 0m-.75-6.75V4.5a2.25 2.25 0 0 0-2.25-2.25h-15A2.25 2.25 0 0 0 2.25 4.5v6.75a.75.75 0 0 0 1.5 0V4.5a.75.75 0 0 1 .75-.75h15a.75.75 0 0 1 .75.75v6.75a.75.75 0 0 0 1.5 0"></path></svg></span>${roomName}</p>` : ''}
-                                    ${nights && monthYear ? `<p class="stay-details"><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="15px"><path d="M22.502 13.5v8.25a.75.75 0 0 1-.75.75h-19.5a.75.75 0 0 1-.75-.75V5.25a.75.75 0 0 1 .75-.75h19.5a.75.75 0 0 1 .75.75zm1.5 0V5.25A2.25 2.25 0 0 0 21.752 3h-19.5a2.25 2.25 0 0 0-2.25 2.25v16.5A2.25 2.25 0 0 0 2.252 24h19.5a2.25 2.25 0 0 0 2.25-2.25zm-23.25-3h22.5a.75.75 0 0 0 0-1.5H.752a.75.75 0 0 0 0 1.5M7.502 6V.75a.75.75 0 0 0-1.5 0V6a.75.75 0 0 0 1.5 0m10.5 0V.75a.75.75 0 0 0-1.5 0V6a.75.75 0 0 0 1.5 0"></path></svg></span>${nights} night${nights > 1 ? 's' : ''} · ${monthYear}</p>` : ''}
-                                    ${booking.relationship ? `<p class="group-type"><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="15px"><path d="M8.25 3.75a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0m1.5 0a3.75 3.75 0 1 0-7.5 0 3.75 3.75 0 0 0 7.5 0M12 13.5a6 6 0 0 0-12 0v2.25c0 .414.336.75.75.75H3l-.746-.675.75 7.5A.75.75 0 0 0 3.75 24h4.5a.75.75 0 0 0 .746-.675l.75-7.5L9 16.5h2.25a.75.75 0 0 0 .75-.75zm-1.5 0v2.25l.75-.75H9a.75.75 0 0 0-.746.675l-.75 7.5.746-.675h-4.5l.746.675-.75-7.5A.75.75 0 0 0 3 15H.75l.75.75V13.5a4.5 4.5 0 1 1 9 0m9.75-9.75a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0m1.5 0a3.75 3.75 0 1 0-7.5 0 3.75 3.75 0 0 0 7.5 0M13.5 16.5H15l-.746-.675.75 7.5a.75.75 0 0 0 .746.675h4.5a.75.75 0 0 0 .746-.675l.75-7.5L21 16.5h2.25a.75.75 0 0 0 .75-.75V13.5a6 6 0 0 0-11.143-3.086.75.75 0 0 0 1.286.772 4.5 4.5 0 0 1 8.357 2.315v2.249l.75-.75H21a.75.75 0 0 0-.746.675l-.75 7.5.746-.675h-4.5l.746.675-.75-7.5A.75.75 0 0 0 15 15h-1.5a.75.75 0 0 0 0 1.5"></path></svg></span>${booking.relationship === 'family' ? 'Family' : booking.relationship === 'friends' ? 'Friends' : booking.relationship === 'colleagues' ? 'Colleagues' : booking.relationship === 'husband' ? 'Couple' : 'Solo'}</p>` : ''}
+                                <div class="review-meta" style="font-size: 14px; color: #495057; line-height: 2;">
+                                    ${roomNames ? `<p style="margin: 0 0 4px 0; display: flex; align-items: center; gap: 10px;"><span style="color: #6c757d;"><i class="fa fa-bed" style="width: 16px;"></i></span><span>${roomNames}</span></p>` : ''}
+                                    ${nights && monthYear ? `<p style="margin: 0 0 4px 0; display: flex; align-items: center; gap: 10px;"><span style="color: #6c757d;"><i class="fa fa-calendar" style="width: 16px;"></i></span><span>${nights} night${nights > 1 ? 's' : ''} · ${monthYear}</span></p>` : ''}
+                                    ${booking.relationship ? `<p style="margin: 0; display: flex; align-items: center; gap: 10px;"><span style="color: #6c757d;"><i class="fa fa-users" style="width: 16px;"></i></span><span>${booking.relationship === 'family' ? 'Family' : booking.relationship === 'friends' ? 'Friends' : booking.relationship === 'colleagues' ? 'Colleagues' : booking.relationship === 'husband' ? 'Couple' : 'Solo'}</span></p>` : ''}
                                 </div>
                             </div>
                         </div>

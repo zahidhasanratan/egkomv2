@@ -134,31 +134,28 @@
                                                     </td>
                                                     <td style="vertical-align: middle; text-align: center;">
                                                         @if($review->images && is_array($review->images) && count($review->images) > 0)
-                                                            <div class="d-flex gap-1 align-items-center justify-content-center flex-wrap" style="min-height: 40px;">
-                                                                @foreach(array_slice($review->images, 0, 2) as $image)
-                                                                    @php
-                                                                        // Handle different path formats - prioritize public/uploads
-                                                                        if (strpos($image, 'http') === 0) {
-                                                                            $imageUrl = $image;
-                                                                        } elseif (strpos($image, 'uploads/') === 0) {
-                                                                            $imageUrl = asset($image);
-                                                                        } elseif (strpos($image, 'storage/') === 0) {
-                                                                            $imageUrl = asset($image);
-                                                                        } elseif (strpos($image, '/') === 0) {
-                                                                            $imageUrl = asset($image);
-                                                                        } else {
-                                                                            // Default to uploads/reviews for new uploads
-                                                                            $imageUrl = asset('uploads/reviews/' . $image);
-                                                                        }
-                                                                    @endphp
-                                                                    <img src="{{ $imageUrl }}" alt="Review Image" 
-                                                                         onerror="this.style.display='none';"
-                                                                         style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px; cursor: pointer; border: 1px solid #e0e0e0; display: block; flex-shrink: 0;" 
-                                                                         onclick="window.open('{{ $imageUrl }}', '_blank')" 
-                                                                         title="Click to view full size">
-                                                                @endforeach
-                                                                @if(count($review->images) > 2)
-                                                                    <span class="badge badge-dim badge-sm" style="flex-shrink: 0;">+{{ count($review->images) - 2 }}</span>
+                                                            @php
+                                                                $image = $review->images[0];
+                                                                if (strpos($image, 'http') === 0) {
+                                                                    $imageUrl = $image;
+                                                                } elseif (strpos($image, 'uploads/') === 0) {
+                                                                    $imageUrl = asset($image);
+                                                                } elseif (strpos($image, 'storage/') === 0) {
+                                                                    $imageUrl = asset($image);
+                                                                } elseif (strpos($image, '/') === 0) {
+                                                                    $imageUrl = asset($image);
+                                                                } else {
+                                                                    $imageUrl = asset('uploads/reviews/' . $image);
+                                                                }
+                                                            @endphp
+                                                            <div class="d-flex gap-1 align-items-center justify-content-center" style="min-height: 40px;">
+                                                                <img src="{{ $imageUrl }}" alt="Review Image" 
+                                                                     onerror="this.style.display='none';"
+                                                                     style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px; cursor: pointer; border: 1px solid #e0e0e0; display: block;" 
+                                                                     onclick="window.open('{{ $imageUrl }}', '_blank')" 
+                                                                     title="Click to view full size{{ count($review->images) > 1 ? ' (' . count($review->images) . ' images)' : '' }}">
+                                                                @if(count($review->images) > 1)
+                                                                    <span class="badge badge-dim badge-sm" style="flex-shrink: 0;">+{{ count($review->images) - 1 }}</span>
                                                                 @endif
                                                             </div>
                                                         @else

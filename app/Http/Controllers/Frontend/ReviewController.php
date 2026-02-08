@@ -20,6 +20,7 @@ class ReviewController extends Controller
     {
         $request->validate([
             'hotel_id' => 'required|exists:hotels,id',
+            'booking_id' => 'required|exists:bookings,id',
             'overall_rating' => 'required|numeric|min:0|max:10',
             'title' => 'nullable|string|max:255',
             'comment' => 'nullable|string',
@@ -44,30 +45,32 @@ class ReviewController extends Controller
         }
 
         $guest = Auth::guard('guest')->user();
-        $hotelId = $request->hotel_id;
+        $hotelId = (int) $request->hotel_id;
+        $bookingId = (int) $request->booking_id;
 
-        // Verify that the guest has a booking for this hotel
-        $bookings = Booking::where('guest_id', $guest->id)
+        $booking = Booking::where('id', $bookingId)
+            ->where('guest_id', $guest->id)
             ->where('booking_status', '!=', 'cancelled')
-            ->get();
-        
-        $hasBooking = false;
-        $booking = null;
-        
-        foreach ($bookings as $b) {
-            foreach ($b->rooms_data as $room) {
-                if (isset($room['hotelId']) && $room['hotelId'] == $hotelId) {
-                    $hasBooking = true;
-                    $booking = $b;
-                    break 2;
-                }
-            }
-        }
+            ->first();
 
-        if (!$hasBooking) {
+        if (!$booking) {
             return response()->json([
                 'success' => false,
-                'message' => 'You can only review hotels you have booked'
+                'message' => 'Invalid or unauthorized booking'
+            ], 403);
+        }
+
+        $hasHotel = false;
+        foreach ($booking->rooms_data ?? [] as $room) {
+            if (isset($room['hotelId']) && (int)$room['hotelId'] === $hotelId) {
+                $hasHotel = true;
+                break;
+            }
+        }
+        if (!$hasHotel) {
+            return response()->json([
+                'success' => false,
+                'message' => 'This booking does not include this hotel'
             ], 403);
         }
 
@@ -82,8 +85,6 @@ class ReviewController extends Controller
                 'message' => 'You have already reviewed this hotel'
             ], 400);
         }
-
-        // Booking is already found above
 
         // Handle image uploads - Save to public/uploads/reviews folder
         $images = [];
@@ -107,7 +108,7 @@ class ReviewController extends Controller
         $review = Review::create([
             'hotel_id' => $hotelId,
             'guest_id' => $guest->id,
-            'booking_id' => $booking ? $booking->id : null,
+            'booking_id' => $booking->id,
             'overall_rating' => $request->overall_rating,
             'title' => $request->title,
             'comment' => $request->comment,
@@ -149,7 +150,7 @@ class ReviewController extends Controller
         
         $query = Review::where('hotel_id', $decryptedId)
             ->where('is_approved', true)
-            ->with('guest');
+            ->with(['guest', 'booking']);
 
         switch ($sortBy) {
             case 'newest':
@@ -253,6 +254,65 @@ class ReviewController extends Controller
         return response()->json([
             'can_review' => true,
             'message' => 'You can submit a review'
+        ]);
+    }
+
+    /**
+     * Get guest's bookings for a hotel (for review form dropdown)
+     */
+    public function getReviewBookings(Request $request, $hotelId)
+    {
+        if (!Auth::guard('guest')->check()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Please login first'
+            ], 401);
+        }
+
+        try {
+            $decryptedId = Crypt::decrypt($hotelId);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid hotel ID'
+            ], 404);
+        }
+
+        $guest = Auth::guard('guest')->user();
+
+        $bookings = Booking::where('guest_id', $guest->id)
+            ->where('booking_status', '!=', 'cancelled')
+            ->orderBy('checkin_date', 'desc')
+            ->get();
+
+        $hotelBookings = [];
+        $seenIds = [];
+        foreach ($bookings as $booking) {
+            $hasHotel = false;
+            $roomNames = [];
+            foreach ($booking->rooms_data ?? [] as $room) {
+                if (isset($room['hotelId']) && (int)$room['hotelId'] === (int)$decryptedId) {
+                    $hasHotel = true;
+                    $roomNames[] = ($room['quantity'] ?? 1) . 'x ' . ($room['roomName'] ?? 'Room');
+                }
+            }
+            if ($hasHotel && !in_array($booking->id, $seenIds)) {
+                $seenIds[] = $booking->id;
+                $hotelBookings[] = [
+                    'id' => $booking->id,
+                    'invoice_number' => $booking->invoice_number,
+                    'room_names' => implode(', ', array_unique($roomNames)) ?: 'Room',
+                    'checkin_date' => $booking->checkin_date->format('M d, Y'),
+                    'checkout_date' => $booking->checkout_date->format('M d, Y'),
+                    'total_nights' => $booking->total_nights,
+                    'nights_label' => $booking->total_nights == 1 ? '1 night' : $booking->total_nights . ' nights',
+                ];
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'bookings' => $hotelBookings,
         ]);
     }
 }

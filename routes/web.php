@@ -52,6 +52,7 @@ Route::get('/hotel-wishlist/check', [App\Http\Controllers\Frontend\HotelWishlist
 // Review routes
 Route::get('/reviews/hotel/{id}', [App\Http\Controllers\Frontend\ReviewController::class, 'getHotelReviews'])->name('reviews.hotel');
 Route::get('/reviews/can-review/{id}', [App\Http\Controllers\Frontend\ReviewController::class, 'canReview'])->name('reviews.can-review');
+Route::get('/reviews/bookings/{id}', [App\Http\Controllers\Frontend\ReviewController::class, 'getReviewBookings'])->name('reviews.bookings');
 Route::post('/reviews/store', [App\Http\Controllers\Frontend\ReviewController::class, 'store'])->name('reviews.store');
 
 
