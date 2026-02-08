@@ -18,7 +18,9 @@ class ManageHotel extends Controller
 
     public function index()
     {
-        $hotels = Hotel::where('vendor_id', auth()->user()->id)->paginate(10);
+        $hotels = Hotel::where('vendor_id', auth()->user()->id)
+            ->where('approve', 1)
+            ->paginate(10);
         return view('auth.vendor.hotel.index', compact('hotels'));
     }
 

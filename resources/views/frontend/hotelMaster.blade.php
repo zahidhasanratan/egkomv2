@@ -730,8 +730,7 @@
                             <p class="room-description-modal" style="color: #666; font-size: 14px; line-height: 1.6; margin-top: 8px; margin-bottom: 12px; display: none;"></p>
                             <p class="room-numbers">Room # 105<br> <span style="padding-left:0px" class="floor-numbers">3rd Floor</span></p>
                             <div class="option-meta" style="display: none;">
-                   <span data-v-798d4468="" data-toggle="tooltip" class="non-refundable" data-bs-original-title="Regardless of the cancellation window, customers will not get any refund under this." style="display: none;"> Non-Refundable <i data-v-798d4468="" variant="primary" class="fa fa-info-circle"></i>
-                   </span>
+                                <span data-toggle="tooltip" class="non-refundable non-refundable-inline" data-bs-original-title="Regardless of the cancellation window, customers will not get any refund under this." style="white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; font-size: 13px;"><i class="fa fa-info-circle" style="font-size: 12px;"></i> Non-Refundable</span>
                             </div>
                         </div>
                         <div class="modal-header-right">

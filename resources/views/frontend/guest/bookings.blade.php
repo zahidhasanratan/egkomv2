@@ -232,7 +232,7 @@
         justify-content: center;
     }
     
-    @media (max-width: 768px) {
+    @@media (max-width: 768px) {
         .booking-card-header {
             flex-direction: column;
             align-items: flex-start;
@@ -295,7 +295,12 @@
                                 <h4>{{ $firstRoom['hotelName'] ?? 'Hotel Booking' }}</h4>
                                 <p class="room-info">
                                     @foreach($booking->rooms_data as $room)
-                                        {{ $room['quantity'] }}x {{ $room['roomName'] }}@if(isset($room['roomNumber']) && $room['roomNumber']) (Room #{{ $room['roomNumber'] }})@endif@if(isset($room['floorNumber']) && $room['floorNumber']) - {{ $room['floorNumber'] }}{{ $room['floorNumber'] == 1 ? 'st' : ($room['floorNumber'] == 2 ? 'nd' : ($room['floorNumber'] == 3 ? 'rd' : 'th')) }} Floor@endif@if(!$loop->last), @endif
+                                        @php
+                                            $roomNum = isset($room['roomNumber']) && $room['roomNumber'] ? ' (Room #'.$room['roomNumber'].')' : '';
+                                            $floor = isset($room['floorNumber']) && $room['floorNumber'] ? ' - '.$room['floorNumber'].($room['floorNumber'] == 1 ? 'st' : ($room['floorNumber'] == 2 ? 'nd' : ($room['floorNumber'] == 3 ? 'rd' : 'th'))).' Floor' : '';
+                                            $sep = !$loop->last ? ', ' : '';
+                                        @endphp
+                                        {{ $room['quantity'] }}x {{ $room['roomName'] }}{{ $roomNum }}{{ $floor }}{{ $sep }}
                                     @endforeach
                                 </p>
                             </div>

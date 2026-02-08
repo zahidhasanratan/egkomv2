@@ -170,7 +170,7 @@
         color: #999;
     }
     
-    @media (max-width: 768px) {
+    @@media (max-width: 768px) {
         .dashboard-wrapper {
             flex-direction: column;
         }

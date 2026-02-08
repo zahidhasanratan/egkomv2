@@ -55,6 +55,9 @@
                                             <div class="nk-tb-col">
                                                 <span class="sub-text" style="font-weight: bold">Status</span>
                                             </div>
+                                            <div class="nk-tb-col">
+                                                <span class="sub-text" style="font-weight: bold">Approve</span>
+                                            </div>
                                             <div class="nk-tb-col nk-tb-col-tools text-end"></div>
                                         </div>
                                         @forelse($hotels as $hotel)
@@ -64,6 +67,9 @@
                                                 </div>
                                                 <div class="nk-tb-col">
                                                     <span class="text-primary">{{ $hotel->status ?? 'No Status' }}</span>
+                                                </div>
+                                                <div class="nk-tb-col">
+                                                    <span class="text-primary">{{ $hotel->approve ? 'Approved' : 'Not Approved' }}</span>
                                                 </div>
 
                                                 <div class="nk-tb-col nk-tb-col-tools">

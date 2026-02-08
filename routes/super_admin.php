@@ -15,7 +15,7 @@ use App\Http\Controllers\Vendor\VendorController;
 use App\Http\Controllers\Vendor\OwnerController;
 use App\Http\Controllers\Vendor\BankingController;
 use App\Http\Controllers\Superadmin\PopularDestinationController;
-use App\Http\Controllers\Admin\ReviewManagementController;
+use App\Http\Controllers\admin\ReviewManagementController;
 
 // Super Admin Login Routes
 Route::prefix('super-admin')->group(function () {
@@ -107,29 +107,32 @@ Route::prefix('super-admin')->group(function () {
         ]);
 
         // Booking Management
-        Route::get('/bookings', [\App\Http\Controllers\Admin\BookingManagementController::class, 'index'])->name('super-admin.bookings.index');
-        Route::get('/bookings/{id}', [\App\Http\Controllers\Admin\BookingManagementController::class, 'show'])->name('super-admin.bookings.show');
-        Route::get('/bookings/{id}/edit', [\App\Http\Controllers\Admin\BookingManagementController::class, 'edit'])->name('super-admin.bookings.edit');
-        Route::put('/bookings/{id}', [\App\Http\Controllers\Admin\BookingManagementController::class, 'update'])->name('super-admin.bookings.update');
-        Route::put('/bookings/{id}/status', [\App\Http\Controllers\Admin\BookingManagementController::class, 'updateStatus'])->name('super-admin.bookings.updateStatus');
-        Route::put('/bookings/{id}/currently-staying', [\App\Http\Controllers\Admin\BookingManagementController::class, 'updateCurrentlyStaying'])->name('super-admin.bookings.updateCurrentlyStaying');
-        Route::delete('/bookings/{id}', [\App\Http\Controllers\Admin\BookingManagementController::class, 'destroy'])->name('super-admin.bookings.destroy');
+        Route::get('/bookings', [\App\Http\Controllers\admin\BookingManagementController::class, 'index'])->name('super-admin.bookings.index');
+        Route::get('/bookings/{id}', [\App\Http\Controllers\admin\BookingManagementController::class, 'show'])->name('super-admin.bookings.show');
+        Route::get('/bookings/{id}/edit', [\App\Http\Controllers\admin\BookingManagementController::class, 'edit'])->name('super-admin.bookings.edit');
+        Route::put('/bookings/{id}', [\App\Http\Controllers\admin\BookingManagementController::class, 'update'])->name('super-admin.bookings.update');
+        Route::put('/bookings/{id}/status', [\App\Http\Controllers\admin\BookingManagementController::class, 'updateStatus'])->name('super-admin.bookings.updateStatus');
+        Route::put('/bookings/{id}/currently-staying', [\App\Http\Controllers\admin\BookingManagementController::class, 'updateCurrentlyStaying'])->name('super-admin.bookings.updateCurrentlyStaying');
+        Route::delete('/bookings/{id}', [\App\Http\Controllers\admin\BookingManagementController::class, 'destroy'])->name('super-admin.bookings.destroy');
         
         // Manual Order
-        Route::get('/bookings/manual/create', [\App\Http\Controllers\Admin\BookingManagementController::class, 'createManualOrder'])->name('super-admin.bookings.manual.create');
-        Route::post('/bookings/manual/store', [\App\Http\Controllers\Admin\BookingManagementController::class, 'storeManualOrder'])->name('super-admin.bookings.manual.store');
-        Route::get('/bookings/manual/rooms/{hotelId}', [\App\Http\Controllers\Admin\BookingManagementController::class, 'getRooms'])->name('super-admin.bookings.manual.rooms');
-        Route::get('/bookings/room/{roomId}/availability/{bookingId?}', [\App\Http\Controllers\Admin\BookingManagementController::class, 'getRoomAvailability'])->name('super-admin.bookings.room.availability');
+        Route::get('/bookings/manual/create', [\App\Http\Controllers\admin\BookingManagementController::class, 'createManualOrder'])->name('super-admin.bookings.manual.create');
+        Route::post('/bookings/manual/store', [\App\Http\Controllers\admin\BookingManagementController::class, 'storeManualOrder'])->name('super-admin.bookings.manual.store');
+        Route::get('/bookings/manual/rooms/{hotelId}', [\App\Http\Controllers\admin\BookingManagementController::class, 'getRooms'])->name('super-admin.bookings.manual.rooms');
+        Route::get('/bookings/room/{roomId}/availability/{bookingId?}', [\App\Http\Controllers\admin\BookingManagementController::class, 'getRoomAvailability'])->name('super-admin.bookings.room.availability');
 
-        // Review Management
+        // Review Management (Super Admin has full edit/delete authority)
         Route::get('/reviews', [ReviewManagementController::class, 'index'])->name('super-admin.reviews.index');
         Route::get('/reviews/{id}', [ReviewManagementController::class, 'show'])->name('super-admin.reviews.show');
+        Route::get('/reviews/{id}/edit', [ReviewManagementController::class, 'edit'])->name('super-admin.reviews.edit');
+        Route::put('/reviews/{id}', [ReviewManagementController::class, 'update'])->name('super-admin.reviews.update');
         Route::post('/reviews/{id}/approve', [ReviewManagementController::class, 'approve'])->name('super-admin.reviews.approve');
         Route::post('/reviews/{id}/reject', [ReviewManagementController::class, 'reject'])->name('super-admin.reviews.reject');
         Route::post('/reviews/{id}/toggle-featured', [ReviewManagementController::class, 'toggleFeatured'])->name('super-admin.reviews.toggle-featured');
         Route::post('/reviews/bulk-approve', [ReviewManagementController::class, 'bulkApprove'])->name('super-admin.reviews.bulk-approve');
         Route::post('/reviews/bulk-reject', [ReviewManagementController::class, 'bulkReject'])->name('super-admin.reviews.bulk-reject');
         Route::post('/reviews/{id}/response', [ReviewManagementController::class, 'addResponse'])->name('super-admin.reviews.add-response');
+        Route::post('/reviews/{id}/delete-response', [ReviewManagementController::class, 'deleteResponse'])->name('super-admin.reviews.delete-response');
 
     });
     /*Admin Panel Ended */

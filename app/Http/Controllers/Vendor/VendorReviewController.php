@@ -139,7 +139,7 @@ class VendorReviewController extends Controller
     }
 
     /**
-     * Add hotel response to a review
+     * Add hotel response to a review (vendor can post only ONE reply, no edit once posted)
      */
     public function addResponse(Request $request, $id)
     {
@@ -158,6 +158,11 @@ class VendorReviewController extends Controller
         // Ensure review belongs to vendor's hotel
         if (!in_array($review->hotel_id, $vendorHotelIds)) {
             abort(403, 'Unauthorized access to this review');
+        }
+        
+        // Vendor can give only one reply per review - no edit once posted
+        if (!empty($review->hotel_response)) {
+            return redirect()->back()->with('error', 'You have already replied to this review. Only one reply is allowed per review.');
         }
         
         $review->hotel_response = $request->hotel_response;

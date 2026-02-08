@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 26, 2026 at 11:31 AM
+-- Generation Time: Jan 27, 2026 at 06:09 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.23
 
@@ -357,7 +357,10 @@ INSERT INTO `activity_logs` (`id`, `browser`, `os`, `ip_address`, `activity_time
 (312, 'Chrome on Windows', 'Windows', '127.0.0.1', '04:08:11', 'Logged In', '2026-01-24 22:08:11', '2026-01-24 22:08:11'),
 (313, 'Chrome on Windows', 'Windows', '127.0.0.1', '04:46:14', 'Logged In', '2026-01-24 22:46:14', '2026-01-24 22:46:14'),
 (314, 'Chrome on Windows', 'Windows', '127.0.0.1', '05:09:34', 'Logged In', '2026-01-25 23:09:34', '2026-01-25 23:09:34'),
-(315, 'Chrome on Windows', 'Windows', '127.0.0.1', '05:10:53', 'Logged In', '2026-01-25 23:10:53', '2026-01-25 23:10:53');
+(315, 'Chrome on Windows', 'Windows', '127.0.0.1', '05:10:53', 'Logged In', '2026-01-25 23:10:53', '2026-01-25 23:10:53'),
+(316, 'Chrome on Windows', 'Windows', '127.0.0.1', '03:14:34', 'Logged In', '2026-01-26 21:14:34', '2026-01-26 21:14:34'),
+(317, 'Chrome on Windows', 'Windows', '127.0.0.1', '04:08:08', 'Logged In', '2026-01-26 22:08:08', '2026-01-26 22:08:08'),
+(318, 'Chrome on Windows', 'Windows', '127.0.0.1', '04:56:33', 'Logged Out', '2026-01-26 22:56:33', '2026-01-26 22:56:33');
 
 -- --------------------------------------------------------
 
@@ -821,7 +824,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (69, '2026_01_20_103457_add_popular_destination_id_to_hotels_table', 45),
 (70, '2026_01_20_111032_add_slug_to_popular_destinations_table', 46),
 (71, '2026_01_22_063010_add_district_and_city_to_hotels_table', 47),
-(72, '2026_01_26_075528_add_couple_friendly_to_rooms_table', 48);
+(72, '2026_01_26_075528_add_couple_friendly_to_rooms_table', 48),
+(73, '2026_01_26_111158_create_reviews_table', 49);
 
 -- --------------------------------------------------------
 
@@ -1031,6 +1035,45 @@ INSERT INTO `properties` (`id`, `vendor_id`, `property_name`, `total_car_parking
 (15, 7, 'Shopno Bilash Holiday Suites', 0, 'Hotels', 'Luxury Hotels', '[\"Single Room\",\"Double Room\",\"Suite\",\"Family Room\"]', 'Bangladesh', 'Cox\'sBazar', 'Kolatoli R/A', '4500', '90-97', 'Saikatabas Road', 2008, 100000, 9, 'Opposite of Long Beach hotel end of Mohammodia Guest house Goli', 'https://maps.app.goo.gl/Z33jgoDoBNfYzMGg7', 'storage/logos/1756880718_2-2025-05-25-6832e2d1b27cf.jpg', 3, '[]', 140, 10, 0, 0, 0, 0, 0, 5, 4, 0, 0, '', 2, 0, 0, '[]', 0, 1, 0, 1, 0, 1, 0, 'asdf asdf', 0, 'wer wer', 'submitted', '2025-03-20 02:00:59', '2025-12-09 00:10:21'),
 (18, 13, 'wqer', NULL, 'Hotels', '', '\"[]\"', 'Bangladesh', 'Bandarban', '234', '234', '234', '234', 0, 0, 0, '', '', 'storage/logos/1756890332_admin.png', 0, '\"[]\"', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '234', 0, 0, 0, '\"[]\"', 0, 0, 0, 0, 0, 0, 0, '', 0, '', 'submitted', '2025-09-03 03:05:32', '2025-09-03 03:05:32'),
 (20, 15, 'estt', 0, 'Hotels', '', '[]', 'Bangladesh', 'Bandarban', '234', '234', '234', '234', 0, 0, 0, '', '', 'storage/logos/1756891699_admin.png', 0, '[]', 234, 234, 0, 0, 0, 0, 0, 1, 1, 0, 0, '', 0, 0, 0, '[]', 0, 0, 0, 0, 0, 0, 0, '', 0, '', 'submitted', '2025-09-03 03:28:27', '2025-09-04 00:55:53');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reviews`
+--
+
+CREATE TABLE `reviews` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `hotel_id` bigint(20) UNSIGNED NOT NULL,
+  `guest_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `booking_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `overall_rating` decimal(3,1) NOT NULL DEFAULT 0.0,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `comment` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `staff_rating` decimal(3,1) DEFAULT NULL,
+  `facilities_rating` decimal(3,1) DEFAULT NULL,
+  `cleanliness_rating` decimal(3,1) DEFAULT NULL,
+  `location_rating` decimal(3,1) DEFAULT NULL,
+  `comfort_rating` decimal(3,1) DEFAULT NULL,
+  `value_for_money_rating` decimal(3,1) DEFAULT NULL,
+  `free_wifi_rating` decimal(3,1) DEFAULT NULL,
+  `pros` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cons` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `images` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`images`)),
+  `is_approved` tinyint(1) NOT NULL DEFAULT 0,
+  `is_featured` tinyint(1) NOT NULL DEFAULT 0,
+  `hotel_response` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `hotel_response_date` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `reviews`
+--
+
+INSERT INTO `reviews` (`id`, `hotel_id`, `guest_id`, `booking_id`, `overall_rating`, `title`, `comment`, `staff_rating`, `facilities_rating`, `cleanliness_rating`, `location_rating`, `comfort_rating`, `value_for_money_rating`, `free_wifi_rating`, `pros`, `cons`, `images`, `is_approved`, `is_featured`, `hotel_response`, `hotel_response_date`, `created_at`, `updated_at`) VALUES
+(2, 46, 2, 2, '9.5', 'sdfsdf', 'dsfsa', '7.5', '9.1', '8.0', '10.0', '8.4', '9.3', '8.2', 'saf', 'asdf', '[\"uploads\\/reviews\\/review-2026-01-26-6977551cdf10d.jpeg\"]', 1, 0, NULL, NULL, '2026-01-26 05:50:52', '2026-01-26 05:51:41');
 
 -- --------------------------------------------------------
 
@@ -1494,6 +1537,15 @@ ALTER TABLE `properties`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `reviews`
+--
+ALTER TABLE `reviews`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `reviews_hotel_id_foreign` (`hotel_id`),
+  ADD KEY `reviews_guest_id_foreign` (`guest_id`),
+  ADD KEY `reviews_booking_id_foreign` (`booking_id`);
+
+--
 -- Indexes for table `rooms`
 --
 ALTER TABLE `rooms`
@@ -1550,7 +1602,7 @@ ALTER TABLE `wishlists`
 -- AUTO_INCREMENT for table `activity_logs`
 --
 ALTER TABLE `activity_logs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=316;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=319;
 
 --
 -- AUTO_INCREMENT for table `bankings`
@@ -1616,7 +1668,7 @@ ALTER TABLE `menus`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
 -- AUTO_INCREMENT for table `nearby_areas`
@@ -1653,6 +1705,12 @@ ALTER TABLE `popular_destinations`
 --
 ALTER TABLE `properties`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
+-- AUTO_INCREMENT for table `reviews`
+--
+ALTER TABLE `reviews`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `rooms`
@@ -1726,6 +1784,14 @@ ALTER TABLE `hotels`
 ALTER TABLE `hotel_wishlists`
   ADD CONSTRAINT `hotel_wishlists_guest_id_foreign` FOREIGN KEY (`guest_id`) REFERENCES `guests` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `hotel_wishlists_hotel_id_foreign` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `reviews`
+--
+ALTER TABLE `reviews`
+  ADD CONSTRAINT `reviews_booking_id_foreign` FOREIGN KEY (`booking_id`) REFERENCES `bookings` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `reviews_guest_id_foreign` FOREIGN KEY (`guest_id`) REFERENCES `guests` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `reviews_hotel_id_foreign` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `rooms`

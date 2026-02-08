@@ -231,8 +231,11 @@
 
                 <hr>
 
-                <h5>Actions</h5>
+                <h5>Actions (Super Admin)</h5>
                 <div class="d-flex flex-column gap-2">
+                    <a href="{{ route('super-admin.reviews.edit', $review->id) }}" class="btn btn-info btn-block">
+                        <i class="fas fa-edit"></i> Edit Review
+                    </a>
                     @if(!$review->is_approved)
                         <form method="POST" action="{{ route('super-admin.reviews.approve', $review->id) }}">
                             @csrf
@@ -252,22 +255,32 @@
                     <form method="POST" action="{{ route('super-admin.reviews.reject', $review->id) }}" onsubmit="return confirm('Are you sure you want to reject and delete this review? This action cannot be undone.');">
                         @csrf
                         <button type="submit" class="btn btn-danger btn-block">
-                            <i class="fas fa-trash"></i> Reject & Delete
+                            <i class="fas fa-trash"></i> Reject & Delete Review
                         </button>
                     </form>
                 </div>
 
                 <hr>
 
-                <h5>Add Hotel Response</h5>
+                <h5>Edit Hotel Response (Super Admin Only)</h5>
                 <form method="POST" action="{{ route('super-admin.reviews.add-response', $review->id) }}">
                     @csrf
                     <div class="form-group">
                         <textarea name="hotel_response" class="form-control" rows="4" placeholder="Enter hotel response...">{{ $review->hotel_response }}</textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">
-                        <i class="fas fa-reply"></i> {{ $review->hotel_response ? 'Update' : 'Add' }} Response
-                    </button>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary flex-grow-1">
+                            <i class="fas fa-reply"></i> {{ $review->hotel_response ? 'Update' : 'Add' }} Response
+                        </button>
+                        @if($review->hotel_response)
+                        <form method="POST" action="{{ route('super-admin.reviews.delete-response', $review->id) }}" class="d-inline" onsubmit="return confirm('Delete this hotel response?');">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-danger">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                        @endif
+                    </div>
                 </form>
             </div>
         </div>

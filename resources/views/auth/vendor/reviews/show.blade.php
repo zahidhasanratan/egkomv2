@@ -62,6 +62,12 @@
         <i class="fas fa-check-circle"></i> {{ session('success') }}
     </div>
     @endif
+    @if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
+    </div>
+    @endif
 
     <div class="row mb-3">
         <div class="col-12">
@@ -233,16 +239,21 @@
 
                 <hr>
 
-                <h5>Add Hotel Response</h5>
-                <form method="POST" action="{{ route('vendor.reviews.add-response', $review->id) }}">
-                    @csrf
-                    <div class="form-group">
-                        <textarea name="hotel_response" class="form-control" rows="4" placeholder="Enter hotel response...">{{ $review->hotel_response }}</textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block">
-                        <i class="fas fa-reply"></i> {{ $review->hotel_response ? 'Update' : 'Add' }} Response
-                    </button>
-                </form>
+                <h5>Hotel Response</h5>
+                @if($review->hotel_response)
+                    <p class="text-muted mb-0"><small>You have already replied to this review. Only one reply is allowed per review. No edit option is available.</small></p>
+                @else
+                    <form method="POST" action="{{ route('vendor.reviews.add-response', $review->id) }}">
+                        @csrf
+                        <div class="form-group">
+                            <textarea name="hotel_response" class="form-control" rows="4" placeholder="Enter hotel response..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i class="fas fa-reply"></i> Add Response
+                        </button>
+                        <small class="text-muted d-block mt-2">Once submitted, you cannot edit or change your reply.</small>
+                    </form>
+                @endif
             </div>
         </div>
     </div>

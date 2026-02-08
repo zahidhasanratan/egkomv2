@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Review;
@@ -167,7 +167,47 @@ class ReviewManagementController extends Controller
     }
 
     /**
-     * Add hotel response to a review
+     * Edit review form (Super Admin only)
+     */
+    public function edit($id)
+    {
+        $review = Review::with(['hotel', 'guest', 'booking'])->findOrFail($id);
+        return view('auth.super_admin.reviews.edit', compact('review'));
+    }
+
+    /**
+     * Update review (Super Admin only)
+     */
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'overall_rating' => 'required|numeric|min:0|max:10',
+            'title' => 'nullable|string|max:255',
+            'comment' => 'nullable|string',
+            'staff_rating' => 'nullable|numeric|min:0|max:10',
+            'facilities_rating' => 'nullable|numeric|min:0|max:10',
+            'cleanliness_rating' => 'nullable|numeric|min:0|max:10',
+            'location_rating' => 'nullable|numeric|min:0|max:10',
+            'comfort_rating' => 'nullable|numeric|min:0|max:10',
+            'value_for_money_rating' => 'nullable|numeric|min:0|max:10',
+            'free_wifi_rating' => 'nullable|numeric|min:0|max:10',
+            'pros' => 'nullable|string',
+            'cons' => 'nullable|string',
+        ]);
+
+        $review = Review::findOrFail($id);
+        $review->fill($request->only([
+            'overall_rating', 'title', 'comment', 'staff_rating', 'facilities_rating',
+            'cleanliness_rating', 'location_rating', 'comfort_rating',
+            'value_for_money_rating', 'free_wifi_rating', 'pros', 'cons'
+        ]));
+        $review->save();
+
+        return redirect()->route('super-admin.reviews.show', $review->id)->with('success', 'Review updated successfully');
+    }
+
+    /**
+     * Add or update hotel response (Super Admin can edit reply)
      */
     public function addResponse(Request $request, $id)
     {
@@ -180,6 +220,19 @@ class ReviewManagementController extends Controller
         $review->hotel_response_date = now();
         $review->save();
         
-        return redirect()->back()->with('success', 'Hotel response added successfully');
+        return redirect()->back()->with('success', 'Hotel response saved successfully');
+    }
+
+    /**
+     * Delete hotel response (Super Admin only)
+     */
+    public function deleteResponse($id)
+    {
+        $review = Review::findOrFail($id);
+        $review->hotel_response = null;
+        $review->hotel_response_date = null;
+        $review->save();
+
+        return redirect()->back()->with('success', 'Hotel response deleted successfully');
     }
 }

@@ -1,7 +1,7 @@
 @extends('frontend.hotelMaster')
 @section('title','EGKom')
 @section('main')
-    <!--===== INNERPAGE-WRAPPER ====-->
+    <!--===== INNERPAGE-WRAPPER (per hotel-room-details.html) =====-->
     <section class="innerpage-wrapper">
         <div id="hotel-details" class="innerpage-section-padding">
             <div class="container">
@@ -16,53 +16,33 @@
                                     <div data-v-58caae98="" class="type-and-rating">
                                         <div class="hotel-title-sec">
                                             <h2 data-v-58caae98="" class="hotel-title">{{ $show->description }}  </h2>
-
                                             <img class="title-logo"
-                                                 src="{{ asset('/')}}{{ optional(\App\Models\Vendor::find($show->vendor_id))->logo }}
-                                                     ">
+                                                 src="{{ asset('/')}}{{ optional(\App\Models\Vendor::find($show->vendor_id))->logo }}"
+                                                 alt="">
                                         </div>
-
                                         <div data-v-58caae98="" class="d-flex align-items-start">
-                                        <span data-v-002f304c="" data-v-58caae98="" class="rating-wrapper">
-                                           <svg data-v-002f304c="" width="12" height="12" viewBox="0 0 12 12"
-                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                              <path data-v-002f304c="" d="M11.3642 4.06484L8.09329 3.58798L6.63135 0.623797C6.36941 0.0954392 5.61046 0.0887228
-                                                 5.34628 0.623797L3.88434 3.58798L0.613443 4.06484C0.0268763 4.14992 -0.208198 4.87305 0.217175
-                                                 5.28723L2.58359 7.5932L2.02389 10.8507C1.92314 11.4395 2.54329 11.8805 3.0627 11.6051L5.98882
-                                                 10.0671L8.91494 11.6051C9.43434 11.8783 10.0545 11.4395 9.95374 10.8507L9.39404 7.5932L11.7605
-                                                 5.28723C12.1858 4.87305 11.9508 4.14992 11.3642 4.06484V4.06484Z"
-                                                    fill="white" fill-opacity="0.01"></path>
-                                              <mask data-v-002f304c="" id="mask0_1025_22137" maskUnits="userSpaceOnUse"
-                                                    x="0" y="0" width="12" height="12" style="mask-type: alpha;">
-                                                 <path data-v-002f304c="" d="M11.3642 4.06484L8.09329 3.58798L6.63135 0.623797C6.36941 0.0954392 5.61046
-                                                    0.0887228 5.34628 0.623797L3.88434 3.58798L0.613443 4.06484C0.0268763 4.14992 -0.208198
-                                                    4.87305 0.217175 5.28723L2.58359 7.5932L2.02389 10.8507C1.92314 11.4395 2.54329 11.8805
-                                                    3.0627 11.6051L5.98882 10.0671L8.91494 11.6051C9.43434 11.8783 10.0545 11.4395 9.95374
-                                                    10.8507L9.39404 7.5932L11.7605 5.28723C12.1858 4.87305 11.9508 4.14992 11.3642
-                                                    4.06484V4.06484Z" fill="white"></path>
-                                              </mask>
-                                              <g data-v-002f304c="" mask="url(#mask0_1025_22137)">
-                                                 <rect data-v-002f304c="" width="12" height="12" fill="#FCCD03"></rect>
-                                              </g>
-                                           </svg>
-                                           <span data-v-002f304c="" class="rating-number">5 Star</span>
-                                        </span>
+                                            <span data-v-002f304c="" data-v-58caae98="" class="rating-wrapper">
+                                               <svg data-v-002f304c="" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                  <path data-v-002f304c="" d="M11.3642 4.06484L8.09329 3.58798L6.63135 0.623797C6.36941 0.0954392 5.61046 0.0887228 5.34628 0.623797L3.88434 3.58798L0.613443 4.06484C0.0268763 4.14992 -0.208198 4.87305 0.217175 5.28723L2.58359 7.5932L2.02389 10.8507C1.92314 11.4395 2.54329 11.8805 3.0627 11.6051L5.98882 10.0671L8.91494 11.6051C9.43434 11.8783 10.0545 11.4395 9.95374 10.8507L9.39404 7.5932L11.7605 5.28723C12.1858 4.87305 11.9508 4.14992 11.3642 4.06484V4.06484Z" fill="white" fill-opacity="0.01"></path>
+                                                  <mask data-v-002f304c="" id="mask0_1025_22137" maskUnits="userSpaceOnUse" x="0" y="0" width="12" height="12" style="mask-type: alpha;">
+                                                     <path data-v-002f304c="" d="M11.3642 4.06484L8.09329 3.58798L6.63135 0.623797C6.36941 0.0954392 5.61046 0.0887228 5.34628 0.623797L3.88434 3.58798L0.613443 4.06484C0.0268763 4.14992 -0.208198 4.87305 0.217175 5.28723L2.58359 7.5932L2.02389 10.8507C1.92314 11.4395 2.54329 11.8805 3.0627 11.6051L5.98882 10.0671L8.91494 11.6051C9.43434 11.8783 10.0545 11.4395 9.95374 10.8507L9.39404 7.5932L11.7605 5.28723C12.1858 4.87305 11.9508 4.14992 11.3642 4.06484V4.06484Z" fill="white"></path>
+                                                  </mask>
+                                                  <g data-v-002f304c="" mask="url(#mask0_1025_22137)">
+                                                     <rect data-v-002f304c="" width="12" height="12" fill="#FCCD03"></rect>
+                                                  </g>
+                                               </svg>
+                                               <span data-v-002f304c="" class="rating-number">5 Star</span>
+                                            </span>
                                             <div data-v-58caae98="" class="location">
-                                                <a data-v-58caae98="" target="_blank"
-                                                   href="https://www.google.com/maps?q=21.2156613574987200000000000,92.0488919829189300000000000"
-                                                   class="location-link">
-                                                    <svg data-v-58caae98="" width="12" height="14" viewBox="0 0 12 14"
-                                                         fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path data-v-58caae98="" fill-rule="evenodd" clip-rule="evenodd"
-                                                              d="M5.99984 7.66667C4.71317 7.66667 3.6665 6.62 3.6665 5.33333C3.6665 4.04667 4.71317 3 5.99984 3C7.2865 3 8.33317 4.04667 8.33317 5.33333C8.33317 6.62 7.2865 7.66667 5.99984 7.66667ZM5.99984 0.333332C3.05917 0.333332 0.666504 2.70267 0.666504 5.61533C0.666504 9.26467 5.36584 13.3347 5.56584 13.506C5.69117 13.6133 5.84517 13.6667 5.99984 13.6667C6.1545 13.6667 6.3085 13.6133 6.43384 13.506C6.63384 13.3347 11.3332 9.26467 11.3332 5.61533C11.3332 2.70267 8.9405 0.333332 5.99984 0.333332Z"
-                                                              fill="#546378"></path>
+                                                <a data-v-58caae98="" target="_blank" href="https://www.google.com/maps?q=21.2156613574987200000000000,92.0488919829189300000000000" class="location-link">
+                                                    <svg data-v-58caae98="" width="12" height="14" viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path data-v-58caae98="" fill-rule="evenodd" clip-rule="evenodd" d="M5.99984 7.66667C4.71317 7.66667 3.6665 6.62 3.6665 5.33333C3.6665 4.04667 4.71317 3 5.99984 3C7.2865 3 8.33317 4.04667 8.33317 5.33333C8.33317 6.62 7.2865 7.66667 5.99984 7.66667ZM5.99984 0.333332C3.05917 0.333332 0.666504 2.70267 0.666504 5.61533C0.666504 9.26467 5.36584 13.3347 5.56584 13.506C5.69117 13.6133 5.84517 13.6667 5.99984 13.6667C6.1545 13.6667 6.3085 13.6133 6.43384 13.506C6.63384 13.3347 11.3332 9.26467 11.3332 5.61533C11.3332 2.70267 8.9405 0.333332 5.99984 0.333332Z" fill="#546378"></path>
                                                     </svg>
                                                     <span data-v-58caae98=""> {{ $show->address }} </span>
                                                 </a>
                                             </div>
                                         </div>
-
-                                        {{-- Couple Friendly Badge SVG Symbol (defined once, used per room) --}}
+                                        {{-- Couple Friendly Badge (per hotel-room-details.html) --}}
                                         <svg style="display: none;">
                                             <symbol id="couple-tag">
                                                 <g clip-path="url(#clip0_3759_25068)">
@@ -70,14 +50,11 @@
                                                     <path d="M6.15893 1.50366H5.00183V3.23931H6.15893V1.50366Z" fill="#F44586"></path>
                                                     <path d="M7.7836 12.4957C8.02825 12.2816 8.18382 11.968 8.18382 11.6182V6.42125C8.18382 6.2865 8.09072 6.16977 7.95965 6.13932L7.89455 6.12427V0.346648C7.89455 0.187048 7.76505 0.057373 7.60527 0.057373H0.952298C0.792698 0.057373 0.663023 0.187048 0.663023 0.346648V4.45547L0.438848 4.40367C0.352923 4.38407 0.262798 4.40437 0.193848 4.45915C0.124898 4.51392 0.0846477 4.59722 0.0846477 4.68542V11.6181C0.0846477 11.9679 0.240223 12.2815 0.485048 12.4955C0.240048 12.7099 0.0844727 13.0235 0.0844727 13.3733V13.6528C0.0844727 13.8124 0.214148 13.942 0.373748 13.942H7.89455C8.05415 13.942 8.18382 13.8125 8.184 13.6528V13.3733C8.184 13.0235 8.02842 12.7097 7.7836 12.4957ZM1.2414 0.635923H7.316V5.99092L6.1589 5.72387V4.39632H5.0018V5.45682L3.55542 5.1231V4.3965H2.39832V4.85622L1.24122 4.58917V0.635923H1.2414ZM6.98682 9.88152C6.74707 10.2462 5.71475 11.1133 5.49092 11.1133C5.27182 11.1133 4.23022 10.2431 3.99205 9.88152C3.87287 9.70057 3.78817 9.50072 3.80217 9.23822C3.82702 8.7736 4.20695 8.38982 4.67227 8.38982C5.15072 8.38982 5.42932 8.9003 5.48935 8.9003C5.55812 8.9003 5.84862 8.38982 6.30642 8.38982C6.77175 8.38982 7.15167 8.7736 7.17652 9.23822C7.1907 9.5009 7.10635 9.69987 6.98682 9.88152ZM1.0923 8.1016C1.12467 7.49627 1.61957 6.99647 2.2256 6.99647C2.84877 6.99647 3.21155 7.6613 3.28977 7.6613C3.3792 7.6613 3.75772 6.99647 4.35395 6.99647C4.95997 6.99647 5.45487 7.49627 5.48725 8.1016C5.4918 8.18822 5.49232 8.26697 5.47972 8.34012C5.47115 8.38982 5.42442 8.42045 5.3847 8.37967C5.21127 8.2122 5.02577 8.09495 4.6721 8.09495C4.37057 8.09495 4.08392 8.21395 3.86482 8.42972C3.65045 8.64112 3.52357 8.92252 3.50747 9.22248C3.48717 9.6038 3.63365 9.87382 3.74547 10.0437C3.78012 10.0962 3.79395 10.1171 3.84767 10.1787C3.87375 10.2126 3.85327 10.2357 3.84015 10.2452C3.59357 10.4233 3.38655 10.5435 3.2917 10.5435C3.00645 10.5435 1.64967 9.41007 1.3394 8.93915C1.18417 8.70377 1.0741 8.44355 1.0923 8.1016ZM0.663023 13.3637C0.668273 13.044 0.930073 12.7851 1.2512 12.7851H7.0171H7.01727C7.33822 12.7851 7.6002 13.0438 7.60527 13.3637H0.663023Z" fill="#F44586"></path>
                                                 </g>
-                                                <defs>
-                                                    <clipPath id="clip0_3759_25068">
-                                                        <rect width="8.26822" height="14" transform="translate(0.0844727 0.057373)" fill="white"></rect>
-                                                    </clipPath>
-                                                </defs>
+                                                <defs><clipPath id="clip0_3759_25068"><rect width="8.26822" height="14" transform="translate(0.0844727 0.057373)" fill="white"></rect></clipPath></defs>
                                             </symbol>
                                         </svg>
-
+                                    </div>
+                                </div>
 
                                 <div class="hotel-preview hotel-nearby-lg">
                                     <div class="info-preview-container">
@@ -91,55 +68,41 @@
                                                         </span>
                                                     </div>
                                                 @endforeach
-
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
-
                             </div>
-
                         </div>
-
 
                         <div class="hotel-at-a-galance">
                             <div class="all-gallery-button">
-                                <button type="button" class="btn btn-primary btn-custim-gallery" data-bs-toggle="modal"
-                                        data-bs-target="#exampleModal">
+                                <button type="button" class="btn btn-primary btn-custim-gallery" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                     <span style="padding-right: 7px;"><i class="fa fa-solid fa-image"></i></span>
                                     View all photos
                                 </button>
                             </div>
                             <div class="owl-carousel owl-theme owl-custom-arrow" id="owl-car-offers">
-
                                 @php
-                                    // Updated hotel photo categories (hotel-level gallery)
-                                    $photoFields = [
-                                        'featured_photo',
-                                        'entrance_gate_photos',   // Hotel Exterior
-                                        'lift_stairs_photos',     // Common Areas
-                                        'rooftop_photos',         // Facilities
-                                        'spa_photos',             // Leisure & Wellness
-                                        'gym_photos',             // Guest Rooms
-                                        'amenities_photos',       // Amenities & Services
-                                    ];
+                                    $photoFields = ['featured_photo','entrance_gate_photos','lift_stairs_photos','rooftop_photos','spa_photos','gym_photos','amenities_photos'];
                                 @endphp
-
                                 @foreach($photoFields as $field)
                                     @php
-                                        $photos = is_string($show->$field) ? json_decode($show->$field, true) : [];
+                                        $raw = $show->$field ?? null;
+                                        if (is_string($raw)) {
+                                            $decoded = json_decode($raw, true);
+                                            $photos = is_array($decoded) ? $decoded : (trim($raw) ? [$raw] : []);
+                                        } else {
+                                            $photos = is_array($raw) ? $raw : [];
+                                        }
                                     @endphp
-
-                                    @if(!empty($photos) && is_array($photos))
+                                    @if(!empty($photos))
                                         @foreach($photos as $bannerPhoto)
                                             <div class="item">
                                                 <div class="main-block car-offer-block">
                                                     <div class="main-img room-main-image car-offer-img">
-                                                        <a href="" data-bs-toggle="modal"
-                                                           data-bs-target="#exampleModal">
-                                                            <img src="{{ asset('/') . $bannerPhoto }}" class="img-fluid"
-                                                                 alt="hotel"/>
+                                                        <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                            <img src="{{ asset('/') . $bannerPhoto }}" class="img-fluid" alt="hotel"/>
                                                         </a>
                                                     </div>
                                                 </div>
@@ -147,15 +110,12 @@
                                         @endforeach
                                     @endif
                                 @endforeach
-
-
                             </div>
                         </div>
                     </div>
                 </div>
 
-
-                <!-- Tabing Menu -->
+                <!-- Tabing Menu (per hotel-room-details.html) -->
                 <div class="row">
                     <div class="col-md-12">
                         <div class="tabing-section headerss">
@@ -501,6 +461,93 @@
                         position: relative;
                     }
                     
+                    /* Gap between Couple Friendly tag and image gallery */
+                    #hotel-details .hotel-room .room-info .room-feature-head + .image-gallery.multiple-row {
+                        margin-top: 14px;
+                    }
+                    #hotel-details .hotel-room .room-info .couple-friendly-card {
+                        margin-bottom: 4px;
+                    }
+                    
+                    /* Room image gallery: row 1 = feature image (top, full width), row 2 = thumbnails */
+                    #hotel-details .hotel-room .room-info .image-gallery.multiple-row {
+                        grid-template-rows: auto auto;
+                        grid-template-columns: repeat(3, minmax(70px, 1fr));
+                    }
+                    #hotel-details .hotel-room .room-info .image-gallery.multiple-row div.featured {
+                        grid-column: 1 / -1;
+                        grid-row: 1;
+                        width: 100%;
+                        min-height: 200px;
+                    }
+                    #hotel-details .hotel-room .room-info .image-gallery.multiple-row div.featured .image-box {
+                        width: 100%;
+                        min-height: 200px;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                    #hotel-details .hotel-room .room-info .image-gallery.multiple-row div.thumb-image:nth-of-type(3) {
+                        grid-column: 1;
+                        grid-row: 2;
+                    }
+                    #hotel-details .hotel-room .room-info .image-gallery.multiple-row div.thumb-image:nth-of-type(4) {
+                        grid-column: 2;
+                        grid-row: 2;
+                    }
+                    #hotel-details .hotel-room .room-info .image-gallery.multiple-row div.thumb-image:nth-of-type(5) {
+                        grid-column: 3;
+                        grid-row: 2;
+                    }
+                    #hotel-details .hotel-room .room-info .image-gallery.multiple-row div.thumb-image .image-box {
+                        width: 100%;
+                        min-height: 80px;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                    
+                    /* Room features list: consistent alignment (icon + text) */
+                    #hotel-details .hotel-room .room-info .features.fea-grid {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 6px;
+                    }
+                    #hotel-details .hotel-room .room-info .features.fea-grid small.d-block {
+                        display: flex !important;
+                        align-items: center;
+                        gap: 8px;
+                        margin: 0;
+                        padding: 0;
+                        line-height: 1.4;
+                    }
+                    #hotel-details .hotel-room .room-info .features.fea-grid small.d-block i {
+                        flex-shrink: 0;
+                        width: 20px;
+                        text-align: center;
+                    }
+                    
+                    /* Pricing section: alignment and spacing */
+                    #hotel-details .hotel-room .room-options .pricing-info .price-amount {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 4px;
+                    }
+                    #hotel-details .hotel-room .room-options .pricing-info .price-amount .tax-tag {
+                        margin: 4px 0 0 0;
+                        padding: 0;
+                        font-size: 11px;
+                        line-height: 1.3;
+                        white-space: normal;
+                        max-width: 100%;
+                    }
+                    #hotel-details .hotel-room .room-options .pricing-info .price-per {
+                        margin: 6px 0 0 0;
+                        padding: 0;
+                    }
+                    #hotel-details .hotel-room .room-options .pricing-info .option-meta-nr {
+                        margin-top: 6px !important;
+                        margin-bottom: 4px !important;
+                    }
+                    
                     .uitk-pill-container {
                         display: flex;
                         flex-wrap: nowrap;
@@ -786,27 +833,6 @@
                                                                     </span>
                                                                 </div>
                                                             @endif
-                                                            @php
-                                                                // Check if Non-refundable is selected in room's cancellation_policy field
-                                                                // The form uses cancellation_policy[] with value 'non_refundable'
-                                                                $roomCancellationPolicy = $roomList->cancellation_policy ?? [];
-                                                                if (is_string($roomCancellationPolicy)) {
-                                                                    $roomCancellationPolicy = json_decode($roomCancellationPolicy, true) ?: [];
-                                                                }
-                                                                if (!is_array($roomCancellationPolicy)) {
-                                                                    $roomCancellationPolicy = [];
-                                                                }
-                                                                
-                                                                // Check if 'non_refundable' is in the cancellation_policy array
-                                                                $isNonRefundable = in_array('non_refundable', $roomCancellationPolicy);
-                                                            @endphp
-                                                            @if($isNonRefundable)
-                                                                <div class="option-meta" style="margin-top: 8px;">
-                                                                    <span data-toggle="tooltip" class="non-refundable" data-bs-original-title="Regardless of the cancellation window, customers will not get any refund under this.">
-                                                                        Non-Refundable <i variant="primary" class="fa fa-info-circle"></i>
-                                                                    </span>
-                                                                </div>
-                                                            @endif
                                                         </div>
                                                         <div class="image-gallery multiple-row" data-bs-toggle="modal"
                                                              data-bs-target="#rightSidebarModalDetails"
@@ -938,6 +964,9 @@
                                                                 {{-- Fallback for old data format --}}
                                                                 <small class="d-block">
                                                                     <i style="color: #91278f; font-size: 18px;" class="fa fa-broom"></i>Housekeeping: <b>{{ $housekeepingType }}</b></small>
+                                                            @else
+                                                                <small class="d-block">
+                                                                    <i style="color: #91278f; font-size: 18px;" class="fa fa-broom"></i>Housekeeping: <b>—</b></small>
                                                             @endif
                                                             @php
                                                                 $parkingAvailability = $additionalInfo['parking_availability'] ?? null;
@@ -976,6 +1005,10 @@
                                                                 {{-- Fallback for old string values --}}
                                                                 <small class="d-block">
                                                                     <i style="color: #91278f; font-size: 18px;" class="fa fa-car"></i>Parking: <b>{{ $additionalInfo['parking_availability'] }}@if($parkingFeeAmount) ({{ $parkingFeeAmount }} {{ $parkingFeeCurrency }} {{ $parkingFeeUnit }})@endif</b></small>
+                                                            @else
+                                                                {{-- Always show Parking row with icon for alignment; use — when no data --}}
+                                                                <small class="d-block">
+                                                                    <i style="color: #91278f; font-size: 18px;" class="fa fa-car"></i>Parking: <b>—</b></small>
                                                             @endif
                                                             @php
                                                                 $petType = $additionalInfo['pet_type'] ?? null;
@@ -999,6 +1032,9 @@
                                                                 {{-- Fallback for old data format --}}
                                                                 <small class="d-block">
                                                                     <i style="color: #91278f; font-size: 18px;" class="fa fa-paw"></i>Pet Policy: <b>{{ $petPolicy }}@if($petFee) ({{ $petFee }})@endif</b></small>
+                                                            @else
+                                                                <small class="d-block">
+                                                                    <i style="color: #91278f; font-size: 18px;" class="fa fa-paw"></i>Pet Policy: <b>—</b></small>
                                                             @endif
                                                             @php
                                                                 $mealType = $additionalInfo['meal_type'] ?? null;
@@ -1023,6 +1059,9 @@
                                                                 {{-- Fallback for old data format --}}
                                                                 <small class="d-block">
                                                                     <i style="color: #91278f; font-size: 18px;" class="fa fa-utensils"></i>Meal: <b>{{ $mealOptions }}@if($mealFee) ({{ $mealFee }})@endif</b></small>
+                                                            @else
+                                                                <small class="d-block">
+                                                                    <i style="color: #91278f; font-size: 18px;" class="fa fa-utensils"></i>Meal: <b>—</b></small>
                                                             @endif
 
                                                         </div>
@@ -1051,15 +1090,15 @@
 
                                                                 </div>
                                                                 @php
-                                                                    $originalPrice = $roomList->price_per_night;
+                                                                    $originalPrice = (float) ($roomList->price_per_night ?? 0);
                                                                     $discountedPrice = $originalPrice;
                                                                     $discountPercentage = 0;
                                                                     
-                                                                    if ($roomList->discount_type == 'percentage' && $roomList->discount_percentage) {
-                                                                        $discountPercentage = $roomList->discount_percentage;
+                                                                    if ($originalPrice > 0 && $roomList->discount_type == 'percentage' && $roomList->discount_percentage) {
+                                                                        $discountPercentage = (float) $roomList->discount_percentage;
                                                                         $discountedPrice = $originalPrice - ($originalPrice * $discountPercentage / 100);
-                                                                    } elseif ($roomList->discount_type == 'amount' && $roomList->discount_amount) {
-                                                                        $discountedPrice = $originalPrice - $roomList->discount_amount;
+                                                                    } elseif ($originalPrice > 0 && $roomList->discount_type == 'amount' && $roomList->discount_amount) {
+                                                                        $discountedPrice = max(0, $originalPrice - (float) $roomList->discount_amount);
                                                                         $discountPercentage = (($originalPrice - $discountedPrice) / $originalPrice) * 100;
                                                                     }
                                                                 @endphp
@@ -1076,13 +1115,11 @@
                                                                     <span data-v-b6728cd0=""
                                                                           class="price-before-discount"> <del>BDT {{ number_format($originalPrice, 2) }}</del> </span>
                                                                     @endif
-                                                                    <span class="amount">Total = BDT {{ number_format($discountedPrice, 2) }} </span>
-                                                                    <p class="tax-tag"> Fee or Tax Will show at the
-                                                                        check out page (if any) </p>
+                                                                    <span class="amount">Total = BDT {{ number_format($discountedPrice, 2) }}</span>
+                                                                    <p class="tax-tag">Fee or Tax will show at checkout (if any)</p>
                                                                 </div>
 
-                                                                <div data-v-b6728cd0="" class="price-per"> Per Night
-                                                                </div>
+                                                                <div data-v-b6728cd0="" class="price-per">Per Night</div>
 
                                                                 @php
                                                                     // Check if Non-refundable is selected in room's cancellation_policy field
@@ -1098,9 +1135,9 @@
                                                                     $isNonRefundablePricing = in_array('non_refundable', $roomCancellationPolicyPricing);
                                                                 @endphp
                                                                 @if($isNonRefundablePricing)
-                                                                <div class="option-meta" style="margin-top: 10px; margin-bottom: 10px;">
-                                                                    <span data-toggle="tooltip" class="non-refundable" data-bs-original-title="Regardless of the cancellation window, customers will not get any refund under this.">
-                                                                        Non-Refundable <i variant="primary" class="fa fa-info-circle"></i>
+                                                                <div class="option-meta option-meta-nr" style="margin-top: 8px; margin-bottom: 6px;">
+                                                                    <span data-toggle="tooltip" class="non-refundable non-refundable-inline" data-bs-original-title="Regardless of the cancellation window, customers will not get any refund under this." style="white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; font-size: 13px;">
+                                                                        <i class="fa fa-info-circle" style="font-size: 12px;"></i> Non-Refundable
                                                                     </span>
                                                                 </div>
                                                                 @endif
@@ -1124,7 +1161,7 @@
 
                                                                 <div class="book_btn_2">
                                                                     <a href="javascript:void(0)" 
-                                                                       onclick="addToCart({{ $roomList->id }}, '{{ $roomList->name }}', {{ $discountedPrice }}, {{ $roomList->total_rooms ?? 1 }}, {{ $roomList->total_persons ?? 2 }}, {{ $show->id }})">
+                                                                       onclick="addToCart({{ $roomList->id }}, {!! json_encode($roomList->name) !!}, {{ $discountedPrice ?? 0 }}, {{ $roomList->total_rooms ?? 1 }}, {{ $roomList->total_persons ?? 2 }}, {{ $show->id }})">
                                                                         Add to<span> Book</span>
                                                                     </a>
                                                                 </div>
@@ -1184,15 +1221,16 @@
                 <script>
                     // Use global cart functions
                     function addToCart(roomId, roomName, price, maxQuantity, capacity, hotelId) {
+                        roomId = Number(roomId);
                         const qtyInput = document.getElementById('qty-' + roomId);
-                        const quantity = qtyInput ? parseInt(qtyInput.value) : 1;
+                        const quantity = qtyInput ? parseInt(qtyInput.value, 10) : 1;
                         
-                        // Get room number and floor number from roomsData
-                        const room = roomsData.find(r => r.id === roomId);
+                        // Get room number and floor number from roomsData (use == for id match in case of string/number)
+                        const room = roomsData.find(r => Number(r.id) === roomId);
                         const roomNumber = room ? (room.number || null) : null;
                         const floorNumber = room ? (room.floor_number || null) : null;
                         
-                        if (addToGlobalCart(roomId, roomName, price, maxQuantity, quantity, capacity, hotelId, roomNumber, floorNumber)) {
+                        if (addToGlobalCart(roomId, roomName, Number(price) || 0, maxQuantity, quantity, capacity, hotelId, roomNumber, floorNumber)) {
                             // Store booking parameters from search form
                             const bookingParams = {
                                 checkin: document.getElementById('checkInDate')?.value || '',
@@ -1264,7 +1302,8 @@
                     let currentModalRoom = null;
 
                     function loadRoomDetails(roomId) {
-                        const room = roomsData.find(r => r.id === roomId);
+                        roomId = Number(roomId);
+                        const room = roomsData.find(r => Number(r.id) === roomId);
                         if (!room) return;
 
                         // Store for modal add to book button
@@ -1331,8 +1370,8 @@
                                 if (nonRefundableBadge) {
                                     nonRefundableBadge.style.display = '';
                                 } else {
-                                    // Create badge if it doesn't exist
-                                    optionMeta.innerHTML = `<span data-toggle="tooltip" class="non-refundable" data-bs-original-title="Regardless of the cancellation window, customers will not get any refund under this."> Non-Refundable <i variant="primary" class="fa fa-info-circle"></i></span>`;
+                                    // Create badge if it doesn't exist (inline, no line break)
+                                    optionMeta.innerHTML = `<span data-toggle="tooltip" class="non-refundable non-refundable-inline" data-bs-original-title="Regardless of the cancellation window, customers will not get any refund under this." style="white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; font-size: 13px;"><i class="fa fa-info-circle" style="font-size: 12px;"></i> Non-Refundable</span>`;
                                 }
                             } else {
                                 // Hide badge if Non-refundable is not enabled
@@ -1371,7 +1410,7 @@
                                 const modalQty = document.querySelector('#rightSidebarModalDetails #qty');
                                 const quantity = modalQty ? parseInt(modalQty.value) : 1;
                                 
-                                if (addToGlobalCart(room.id, room.name, discountedPrice, room.total_rooms || 1, quantity, room.total_persons || 2, {{ $show->id }}, room.number || null, room.floor_number || null)) {
+                                if (addToGlobalCart(Number(room.id), room.name, Number(discountedPrice) || 0, room.total_rooms || 1, quantity, room.total_persons || 2, {{ $show->id }}, room.number || null, room.floor_number || null)) {
                                     // Close modal first
                                     const modalElement = document.getElementById('rightSidebarModalDetails');
                                     if (modalElement) {
@@ -2802,17 +2841,17 @@
                                                         </div>
                                                         <div class="vendor-title">
                                                             <h3>{{ $show->description }}</h3>
-                                                            <p>Super Host</p>
+                                                            <p>{{ ($reviewStats['total'] >= 5 && $reviewStats['overall_avg'] >= 8) ? 'Super Host' : 'Host' }}</p>
                                                         </div>
                                                     </div>
                                                     <div class="vendor-profile-right">
                                                         <div class="vendor-all-info">
-                                                            <h3>216</h3>
+                                                            <h3>{{ $reviewStats['total'] }}</h3>
                                                             <p>Reviews</p>
                                                         </div>
 
                                                         <div class="vendor-all-info">
-                                                            <h3>4.32 <sup><i class="fa fa-star Block"></i></sup></h3>
+                                                            <h3>{{ number_format($reviewStats['overall_avg'], 1) }} <sup><i class="fa fa-star Block"></i></sup></h3>
                                                             <p>Rating</p>
                                                         </div>
 
@@ -2976,8 +3015,8 @@
         let visibleCount = 0;
         
         rooms.forEach(roomElement => {
-            const roomId = parseInt(roomElement.getAttribute('data-room-id'));
-            const room = roomsData.find(r => r.id === roomId);
+            const roomId = Number(roomElement.getAttribute('data-room-id'));
+            const room = roomsData.find(r => Number(r.id) === roomId);
             
             if (!room) {
                 roomElement.style.display = 'none';
@@ -3265,8 +3304,8 @@
             
             if (show && checkin && checkout) {
                 // If dates are selected, check availability
-                const roomId = parseInt(room.getAttribute('data-room-id'));
-                const roomData = roomsData.find(r => r.id === roomId);
+                const roomId = Number(room.getAttribute('data-room-id'));
+                const roomData = roomsData.find(r => Number(r.id) === roomId);
                 
                 if (roomData) {
                     // If room has availability_dates set, check if dates match

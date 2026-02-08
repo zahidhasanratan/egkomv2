@@ -192,6 +192,11 @@
                                                                                     <em class="icon ni ni-eye"></em><span>View Details</span>
                                                                                 </a>
                                                                             </li>
+                                                                            <li>
+                                                                                <a href="{{ route('super-admin.reviews.edit', $review->id) }}">
+                                                                                    <em class="icon ni ni-edit"></em><span>Edit Review</span>
+                                                                                </a>
+                                                                            </li>
                                                                             @if(!$review->is_approved)
                                                                             <li>
                                                                                 <form method="POST" action="{{ route('super-admin.reviews.approve', $review->id) }}" class="d-inline">
