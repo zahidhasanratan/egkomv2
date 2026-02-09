@@ -27,6 +27,8 @@
     <link rel="stylesheet" href="{{ asset('frontend')}}/css/flexslider.css" type="text/css" />
     <!--Date-Picker Stylesheet-->
     <link rel="stylesheet" href="{{ asset('frontend')}}/css/datepicker.css">
+    <!-- jQuery UI (for sliders etc.) -->
+    <link rel="stylesheet" href="{{ asset('frontend')}}/css/jquery-ui.min.css">
     <!-- Magnific Gallery -->
     <link rel="stylesheet" href="{{ asset('frontend')}}/css/magnific-popup.css">
     <!-- Slick Stylesheet -->
@@ -1653,6 +1655,7 @@
 <script src="{{ asset('frontend')}}/js/script.js"></script>
 <script src="{{ asset('frontend')}}/https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="{{ asset('frontend')}}/js/jquery-ui.min.js"></script>
+@stack('scripts')
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

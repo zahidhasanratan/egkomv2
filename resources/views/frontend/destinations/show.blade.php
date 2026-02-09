@@ -459,8 +459,51 @@
         width: 100%;
         padding: 40px 20px;
     }
+    
+    /* Budget slider: ensure base layout (jQuery UI theme may not be loaded) */
+    .side-bar .filter-block .price-slider #slider-range.ui-slider,
+    .side-bar .filter-block .price-slider .ui-slider-horizontal {
+        position: relative;
+        height: 6px;
+        border: none;
+        border-radius: 3px;
+        background: #e0e0e0 !important;
+    }
+    .side-bar .filter-block .price-slider .ui-slider-range {
+        position: absolute !important;
+        top: 0;
+        height: 100%;
+        border: none !important;
+        border-radius: 3px;
+        background: #91278f !important;
+    }
+    .side-bar .filter-block .price-slider .ui-widget-header {
+        background: #91278f !important;
+        border: none !important;
+    }
+    .side-bar .filter-block .price-slider .ui-slider .ui-slider-handle {
+        position: absolute !important;
+        width: 18px;
+        height: 18px;
+        top: -6px !important;
+        margin-left: 0 !important;
+        transform: translateX(-50%);
+        border: 2px solid #333 !important;
+        background: #91278f !important;
+        border-radius: 4px;
+        cursor: pointer;
+        outline: none;
+    }
+    .side-bar .filter-block .price-slider .ui-slider .ui-slider-handle:hover,
+    .side-bar .filter-block .price-slider .ui-slider .ui-slider-handle:focus {
+        background: #7a2178 !important;
+        border-color: #333 !important;
+    }
 </style>
 
+@endsection
+
+@push('scripts')
 <script>
     let priceSliderMin = 0;
     let priceSliderMax = 50000;
@@ -502,10 +545,14 @@
         if (desktopSearch) desktopSearch.value = '';
         if (mobileSearch) mobileSearch.value = '';
         
-        // Reset price slider
-        if ($("#slider-range").length) {
-            $("#slider-range").slider("values", [0, 50000]);
-            $("#amount").val("BDT 0 - BDT 50000");
+        // Reset price slider (use slider max if already initialized)
+        if ($("#slider-range").length && $("#slider-range").data("ui-slider")) {
+            var maxVal = $("#slider-range").slider("option", "max") || 50000;
+            $("#slider-range").slider("values", [0, maxVal]);
+            $("#amount").val("BDT 0 - BDT " + maxVal.toLocaleString());
+            priceSliderMin = 0;
+            priceSliderMax = maxVal;
+        } else {
             priceSliderMin = 0;
             priceSliderMax = 50000;
         }
@@ -706,6 +753,10 @@
                 }
             });
             $("#amount").val("BDT 0 - BDT " + (maxPrice || 50000).toLocaleString());
+            // Set initial range and apply filter on load
+            priceSliderMin = $("#slider-range").slider("values", 0);
+            priceSliderMax = $("#slider-range").slider("values", 1);
+            applyAllFilters();
         }
         
         // Add event listeners for all filter checkboxes
@@ -808,6 +859,5 @@
         }
     });
 </script>
-
-@endsection
+@endpush
 
