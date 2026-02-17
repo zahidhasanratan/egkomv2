@@ -9,14 +9,13 @@
             <div class="slider-wrapper">
                 <div class="video-slide">
                     <video autoplay muted loop>
-                        <source src="{{ asset('frontend')}}/images/slider/hero-bg-cover.mp4">
+                        <source src="{{ asset($homepageHero->video_path ?? 'frontend/images/slider/hero-bg-cover.mp4') }}">
                     </video>
                 </div>
             </div>
             <div class="slider-content">
-                <h1>Welcome to <strong>Eg Kom!</strong>
-                </h1>
-                <p>Find Hotels, Visa & Holidays </p>
+                <h1>{!! $homepageHero->title ?? 'Welcome to <strong>Eg Kom!</strong>' !!}</h1>
+                <p>{{ $homepageHero->subtitle ?? 'Find Hotels, Visa & Holidays' }}</p>
             </div>
         </div>
     </section>
@@ -224,8 +223,10 @@
                                                         $featuredPhotos = json_decode($hotel->featured_photo, true);
                                                     @endphp
 
-                                                    @if (!empty($featuredPhotos[0]))
-                                                    <img style="height: 270px;width: 100%;" src="{{ asset($featuredPhotos[0]) }}" class="img-fluid" alt="{{ $hotel->description }}" />
+                                                        @if (!empty($featuredPhotos[0]))
+                                                        <img style="height: 270px;width: 100%;" src="{{ asset($featuredPhotos[0]) }}" class="img-fluid" alt="{{ $hotel->description }}" onerror="this.src='https://via.placeholder.com/400x270?text=Hotel'" />
+                                                    @else
+                                                        <img style="height: 270px;width: 100%;" src="https://via.placeholder.com/400x270?text=Hotel" class="img-fluid" alt="{{ $hotel->description }}" />
                                                     @endif
                                                 </a>
                                                 <div class="guest-favourite">
@@ -256,21 +257,21 @@
                                                     @endif
 
                                                 </p>
-                                                <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                                @php
+                                                    $avgRating = $hotel->reviews_avg_overall_rating !== null ? round((float) $hotel->reviews_avg_overall_rating, 1) : null;
+                                                    $reviewCount = (int) ($hotel->reviews_count ?? 0);
+                                                    $sentiment = $avgRating >= 9 ? 'Exceptional' : ($avgRating >= 8 ? 'Fabulous' : ($avgRating >= 7 ? 'Very Good' : ($avgRating >= 6 ? 'Good' : ($avgRating >= 5 ? 'Average' : 'Rating'))));
+                                                    $minPrice = $hotel->rooms_min_price_per_night ?? null;
+                                                @endphp
                                                 <div class="review-main">
-                                                    <div class="review-cat-home">8.9</div>
-                                                    <div class="review-cat">Fabulous</div>
-                                                    <div class="review-cat spna">3,022 reviews</div>
+                                                    <div class="review-cat-home">{{ $avgRating ?? '—' }}</div>
+                                                    <div class="review-cat">{{ $avgRating !== null ? $sentiment : '—' }}</div>
+                                                    <div class="review-cat spna">{{ $reviewCount > 0 ? number_format($reviewCount) . ' reviews' : 'No reviews' }}</div>
                                                 </div>
                                                 <div class="main-mask">
                                                     <ul class="list-unstyled list-inline offer-price-1">
-                                                        <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
-                                                        </li>
-                                                        <li class="list-inline-item price">
-                                                          <span class="pkg">
-                                                            <del>2000 Tk.</del>
-                                                          </span>
-                                                        </li>
+                                                        <li class="list-inline-item price">@if($minPrice !== null){{ number_format((float) $minPrice) }} Tk.@else—@endif <span class="pkg">Night</span></li>
+                                                        <li class="list-inline-item price"><span class="pkg"></span></li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -321,7 +322,9 @@
                                                         @endphp
 
                                                         @if (!empty($featuredPhotos[0]))
-                                                            <img style="height: 270px;width: 100%;" src="{{ asset($featuredPhotos[0]) }}" class="img-fluid" alt="{{ $hotel->description }}" />
+                                                            <img style="height: 270px;width: 100%;" src="{{ asset($featuredPhotos[0]) }}" class="img-fluid" alt="{{ $hotel->description }}" onerror="this.src='https://via.placeholder.com/400x270?text=Hotel'" />
+                                                        @else
+                                                            <img style="height: 270px;width: 100%;" src="https://via.placeholder.com/400x270?text=Hotel" class="img-fluid" alt="{{ $hotel->description }}" />
                                                         @endif
                                                     </a>
                                                     <div class="guest-favourite">
@@ -353,20 +356,21 @@
 
                                                     </p>
                                                     <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                                    @php
+                                                        $avgRating = $hotel->reviews_avg_overall_rating !== null ? round((float) $hotel->reviews_avg_overall_rating, 1) : null;
+                                                        $reviewCount = (int) ($hotel->reviews_count ?? 0);
+                                                        $sentiment = $avgRating >= 9 ? 'Exceptional' : ($avgRating >= 8 ? 'Fabulous' : ($avgRating >= 7 ? 'Very Good' : ($avgRating >= 6 ? 'Good' : ($avgRating >= 5 ? 'Average' : 'Rating'))));
+                                                        $minPrice = $hotel->rooms_min_price_per_night ?? null;
+                                                    @endphp
                                                     <div class="review-main">
-                                                        <div class="review-cat-home">8.9</div>
-                                                        <div class="review-cat">Fabulous</div>
-                                                        <div class="review-cat spna">3,022 reviews</div>
+                                                        <div class="review-cat-home">{{ $avgRating ?? '—' }}</div>
+                                                        <div class="review-cat">{{ $avgRating !== null ? $sentiment : '—' }}</div>
+                                                        <div class="review-cat spna">{{ $reviewCount > 0 ? number_format($reviewCount) . ' reviews' : 'No reviews' }}</div>
                                                     </div>
                                                     <div class="main-mask">
                                                         <ul class="list-unstyled list-inline offer-price-1">
-                                                            <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
-                                                            </li>
-                                                            <li class="list-inline-item price">
-                                                          <span class="pkg">
-                                                            <del>2000 Tk.</del>
-                                                          </span>
-                                                            </li>
+                                                            <li class="list-inline-item price">@if($minPrice !== null){{ number_format((float) $minPrice) }} Tk.@else—@endif <span class="pkg">Night</span></li>
+                                                            <li class="list-inline-item price"><span class="pkg"></span></li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -416,7 +420,9 @@
                                                         @endphp
 
                                                         @if (!empty($featuredPhotos[0]))
-                                                            <img style="height: 270px;width: 100%;" src="{{ asset($featuredPhotos[0]) }}" class="img-fluid" alt="{{ $hotel->description }}" />
+                                                            <img style="height: 270px;width: 100%;" src="{{ asset($featuredPhotos[0]) }}" class="img-fluid" alt="{{ $hotel->description }}" onerror="this.src='https://via.placeholder.com/400x270?text=Hotel'" />
+                                                        @else
+                                                            <img style="height: 270px;width: 100%;" src="https://via.placeholder.com/400x270?text=Hotel" class="img-fluid" alt="{{ $hotel->description }}" />
                                                         @endif
                                                     </a>
                                                     <div class="guest-favourite">
@@ -447,21 +453,21 @@
                                                         @endif
 
                                                     </p>
-                                                    <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                                    @php
+                                                        $avgRating = $hotel->reviews_avg_overall_rating !== null ? round((float) $hotel->reviews_avg_overall_rating, 1) : null;
+                                                        $reviewCount = (int) ($hotel->reviews_count ?? 0);
+                                                        $sentiment = $avgRating >= 9 ? 'Exceptional' : ($avgRating >= 8 ? 'Fabulous' : ($avgRating >= 7 ? 'Very Good' : ($avgRating >= 6 ? 'Good' : ($avgRating >= 5 ? 'Average' : 'Rating'))));
+                                                        $minPrice = $hotel->rooms_min_price_per_night ?? null;
+                                                    @endphp
                                                     <div class="review-main">
-                                                        <div class="review-cat-home">8.9</div>
-                                                        <div class="review-cat">Fabulous</div>
-                                                        <div class="review-cat spna">3,022 reviews</div>
+                                                        <div class="review-cat-home">{{ $avgRating ?? '—' }}</div>
+                                                        <div class="review-cat">{{ $avgRating !== null ? $sentiment : '—' }}</div>
+                                                        <div class="review-cat spna">{{ $reviewCount > 0 ? number_format($reviewCount) . ' reviews' : 'No reviews' }}</div>
                                                     </div>
                                                     <div class="main-mask">
                                                         <ul class="list-unstyled list-inline offer-price-1">
-                                                            <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
-                                                            </li>
-                                                            <li class="list-inline-item price">
-                                                          <span class="pkg">
-                                                            <del>2000 Tk.</del>
-                                                          </span>
-                                                            </li>
+                                                            <li class="list-inline-item price">@if($minPrice !== null){{ number_format((float) $minPrice) }} Tk.@else—@endif <span class="pkg">Night</span></li>
+                                                            <li class="list-inline-item price"><span class="pkg"></span></li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -512,7 +518,9 @@
                                                         @endphp
 
                                                         @if (!empty($featuredPhotos[0]))
-                                                            <img style="height: 270px;width: 100%;" src="{{ asset($featuredPhotos[0]) }}" class="img-fluid" alt="{{ $hotel->description }}" />
+                                                            <img style="height: 270px;width: 100%;" src="{{ asset($featuredPhotos[0]) }}" class="img-fluid" alt="{{ $hotel->description }}" onerror="this.src='https://via.placeholder.com/400x270?text=Hotel'" />
+                                                        @else
+                                                            <img style="height: 270px;width: 100%;" src="https://via.placeholder.com/400x270?text=Hotel" class="img-fluid" alt="{{ $hotel->description }}" />
                                                         @endif
                                                     </a>
                                                     <div class="guest-favourite">
@@ -544,20 +552,21 @@
 
                                                     </p>
                                                     <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                                    @php
+                                                        $avgRating = $hotel->reviews_avg_overall_rating !== null ? round((float) $hotel->reviews_avg_overall_rating, 1) : null;
+                                                        $reviewCount = (int) ($hotel->reviews_count ?? 0);
+                                                        $sentiment = $avgRating >= 9 ? 'Exceptional' : ($avgRating >= 8 ? 'Fabulous' : ($avgRating >= 7 ? 'Very Good' : ($avgRating >= 6 ? 'Good' : ($avgRating >= 5 ? 'Average' : 'Rating'))));
+                                                        $minPrice = $hotel->rooms_min_price_per_night ?? null;
+                                                    @endphp
                                                     <div class="review-main">
-                                                        <div class="review-cat-home">8.9</div>
-                                                        <div class="review-cat">Fabulous</div>
-                                                        <div class="review-cat spna">3,022 reviews</div>
+                                                        <div class="review-cat-home">{{ $avgRating ?? '—' }}</div>
+                                                        <div class="review-cat">{{ $avgRating !== null ? $sentiment : '—' }}</div>
+                                                        <div class="review-cat spna">{{ $reviewCount > 0 ? number_format($reviewCount) . ' reviews' : 'No reviews' }}</div>
                                                     </div>
                                                     <div class="main-mask">
                                                         <ul class="list-unstyled list-inline offer-price-1">
-                                                            <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
-                                                            </li>
-                                                            <li class="list-inline-item price">
-                                                          <span class="pkg">
-                                                            <del>2000 Tk.</del>
-                                                          </span>
-                                                            </li>
+                                                            <li class="list-inline-item price">@if($minPrice !== null){{ number_format((float) $minPrice) }} Tk.@else—@endif <span class="pkg">Night</span></li>
+                                                            <li class="list-inline-item price"><span class="pkg"></span></li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -608,7 +617,9 @@
                                                         @endphp
 
                                                         @if (!empty($featuredPhotos[0]))
-                                                            <img style="height: 270px;width: 100%;" src="{{ asset($featuredPhotos[0]) }}" class="img-fluid" alt="{{ $hotel->description }}" />
+                                                            <img style="height: 270px;width: 100%;" src="{{ asset($featuredPhotos[0]) }}" class="img-fluid" alt="{{ $hotel->description }}" onerror="this.src='https://via.placeholder.com/400x270?text=Hotel'" />
+                                                        @else
+                                                            <img style="height: 270px;width: 100%;" src="https://via.placeholder.com/400x270?text=Hotel" class="img-fluid" alt="{{ $hotel->description }}" />
                                                         @endif
                                                     </a>
                                                     <div class="guest-favourite">
@@ -640,20 +651,21 @@
 
                                                     </p>
                                                     <!-- <p class="block-minor"> May 1 – 6</p> -->
+                                                    @php
+                                                        $avgRating = $hotel->reviews_avg_overall_rating !== null ? round((float) $hotel->reviews_avg_overall_rating, 1) : null;
+                                                        $reviewCount = (int) ($hotel->reviews_count ?? 0);
+                                                        $sentiment = $avgRating >= 9 ? 'Exceptional' : ($avgRating >= 8 ? 'Fabulous' : ($avgRating >= 7 ? 'Very Good' : ($avgRating >= 6 ? 'Good' : ($avgRating >= 5 ? 'Average' : 'Rating'))));
+                                                        $minPrice = $hotel->rooms_min_price_per_night ?? null;
+                                                    @endphp
                                                     <div class="review-main">
-                                                        <div class="review-cat-home">8.9</div>
-                                                        <div class="review-cat">Fabulous</div>
-                                                        <div class="review-cat spna">3,022 reviews</div>
+                                                        <div class="review-cat-home">{{ $avgRating ?? '—' }}</div>
+                                                        <div class="review-cat">{{ $avgRating !== null ? $sentiment : '—' }}</div>
+                                                        <div class="review-cat spna">{{ $reviewCount > 0 ? number_format($reviewCount) . ' reviews' : 'No reviews' }}</div>
                                                     </div>
                                                     <div class="main-mask">
                                                         <ul class="list-unstyled list-inline offer-price-1">
-                                                            <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span>
-                                                            </li>
-                                                            <li class="list-inline-item price">
-                                                          <span class="pkg">
-                                                            <del>2000 Tk.</del>
-                                                          </span>
-                                                            </li>
+                                                            <li class="list-inline-item price">@if($minPrice !== null){{ number_format((float) $minPrice) }} Tk.@else—@endif <span class="pkg">Night</span></li>
+                                                            <li class="list-inline-item price"><span class="pkg"></span></li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -678,7 +690,9 @@
                                                         @endphp
 
                                                         @if (!empty($featuredPhotos[0]))
-                                                            <img style="height: 270px;width: 100%;" src="{{ asset($featuredPhotos[0]) }}" class="img-fluid" alt="{{ $hotel->description }}" />
+                                                            <img style="height: 270px;width: 100%;" src="{{ asset($featuredPhotos[0]) }}" class="img-fluid" alt="{{ $hotel->description }}" onerror="this.src='https://via.placeholder.com/400x270?text=Hotel'" />
+                                                        @else
+                                                            <img style="height: 270px;width: 100%;" src="https://via.placeholder.com/400x270?text=Hotel" class="img-fluid" alt="{{ $hotel->description }}" />
                                                         @endif
                                                     </a>
                                                     <div class="guest-favourite">
@@ -704,17 +718,21 @@
                                                             {{ $nearbyAreas[0] }}
                                                         @endif
                                                     </p>
+                                                    @php
+                                                        $avgRating = $hotel->reviews_avg_overall_rating !== null ? round((float) $hotel->reviews_avg_overall_rating, 1) : null;
+                                                        $reviewCount = (int) ($hotel->reviews_count ?? 0);
+                                                        $sentiment = $avgRating >= 9 ? 'Exceptional' : ($avgRating >= 8 ? 'Fabulous' : ($avgRating >= 7 ? 'Very Good' : ($avgRating >= 6 ? 'Good' : ($avgRating >= 5 ? 'Average' : 'Rating'))));
+                                                        $minPrice = $hotel->rooms_min_price_per_night ?? null;
+                                                    @endphp
                                                     <div class="review-main">
-                                                        <div class="review-cat-home">8.9</div>
-                                                        <div class="review-cat">Fabulous</div>
-                                                        <div class="review-cat spna">3,022 reviews</div>
+                                                        <div class="review-cat-home">{{ $avgRating ?? '—' }}</div>
+                                                        <div class="review-cat">{{ $avgRating !== null ? $sentiment : '—' }}</div>
+                                                        <div class="review-cat spna">{{ $reviewCount > 0 ? number_format($reviewCount) . ' reviews' : 'No reviews' }}</div>
                                                     </div>
                                                     <div class="main-mask">
                                                         <ul class="list-unstyled list-inline offer-price-1">
-                                                            <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span></li>
-                                                            <li class="list-inline-item price">
-                                                                <span class="pkg"><del>2000 Tk.</del></span>
-                                                            </li>
+                                                            <li class="list-inline-item price">@if($minPrice !== null){{ number_format((float) $minPrice) }} Tk.@else—@endif <span class="pkg">Night</span></li>
+                                                            <li class="list-inline-item price"><span class="pkg"></span></li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -761,7 +779,9 @@
                                                         @endphp
 
                                                         @if (!empty($featuredPhotos[0]))
-                                                            <img style="height: 270px;width: 100%;" src="{{ asset($featuredPhotos[0]) }}" class="img-fluid" alt="{{ $hotel->description }}" />
+                                                            <img style="height: 270px;width: 100%;" src="{{ asset($featuredPhotos[0]) }}" class="img-fluid" alt="{{ $hotel->description }}" onerror="this.src='https://via.placeholder.com/400x270?text=Hotel'" />
+                                                        @else
+                                                            <img style="height: 270px;width: 100%;" src="https://via.placeholder.com/400x270?text=Hotel" class="img-fluid" alt="{{ $hotel->description }}" />
                                                         @endif
                                                     </a>
                                                     <div class="guest-favourite">
@@ -787,17 +807,21 @@
                                                             {{ $nearbyAreas[0] }}
                                                         @endif
                                                     </p>
+                                                    @php
+                                                        $avgRating = $hotel->reviews_avg_overall_rating !== null ? round((float) $hotel->reviews_avg_overall_rating, 1) : null;
+                                                        $reviewCount = (int) ($hotel->reviews_count ?? 0);
+                                                        $sentiment = $avgRating >= 9 ? 'Exceptional' : ($avgRating >= 8 ? 'Fabulous' : ($avgRating >= 7 ? 'Very Good' : ($avgRating >= 6 ? 'Good' : ($avgRating >= 5 ? 'Average' : 'Rating'))));
+                                                        $minPrice = $hotel->rooms_min_price_per_night ?? null;
+                                                    @endphp
                                                     <div class="review-main">
-                                                        <div class="review-cat-home">8.9</div>
-                                                        <div class="review-cat">Fabulous</div>
-                                                        <div class="review-cat spna">3,022 reviews</div>
+                                                        <div class="review-cat-home">{{ $avgRating ?? '—' }}</div>
+                                                        <div class="review-cat">{{ $avgRating !== null ? $sentiment : '—' }}</div>
+                                                        <div class="review-cat spna">{{ $reviewCount > 0 ? number_format($reviewCount) . ' reviews' : 'No reviews' }}</div>
                                                     </div>
                                                     <div class="main-mask">
                                                         <ul class="list-unstyled list-inline offer-price-1">
-                                                            <li class="list-inline-item price">5000 Tk. <span class="pkg">Night</span></li>
-                                                            <li class="list-inline-item price">
-                                                                <span class="pkg"><del>2000 Tk.</del></span>
-                                                            </li>
+                                                            <li class="list-inline-item price">@if($minPrice !== null){{ number_format((float) $minPrice) }} Tk.@else—@endif <span class="pkg">Night</span></li>
+                                                            <li class="list-inline-item price"><span class="pkg"></span></li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -963,126 +987,34 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="owl-carousel owl-theme owl-custom-arrow" id="owl-tour-offers">
+                        @forelse($tourPackages as $pkg)
                         <div class="item">
                             <div class="explore-card-main mb-20">
-                                <a href="tour-package-details.html">
+                                <a href="{{ route('tour-package.show', $pkg->slug) }}">
                                     <div class="explore-card mui-style-lxguk4">
-                                        <img class="st-image-card__img" src="https://sharetrip.net/_next/image?url=https%3A%2F%2Ftbbd-flight.s3.ap-southeast-1.amazonaws.com%2Fpromotion%2Fsayeman_-1.PNG&w=384&q=75">
+                                        <img class="st-image-card__img" src="{{ $pkg->image ? asset($pkg->image) : 'https://via.placeholder.com/384x256?text=Tour+Package' }}" alt="{{ $pkg->title }}">
                                         <div class="MuiBox-root mui-style-1tyhrx3"></div>
                                         <div class="st-image-card__card_details MuiBox-root mui-style-a34mib">
-                                            <p class="MuiTypography-root MuiTypography-body1 mui-style-sq479" fw="semiBold">Sayeman Beach Resort</p>
+                                            <p class="MuiTypography-root MuiTypography-body1 mui-style-sq479" fw="semiBold">{{ $pkg->title }}</p>
                                             <div class="stpromo-card__rating_container MuiBox-root mui-style-dun6p3">
                                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <path d="M17.562 21.5606C17.3999 21.5602 17.2403 21.5204 17.097 21.4446L12 18.7646L6.90301 21.4446C6.73797 21.5311 6.55206 21.5697 6.36624 21.5562C6.18042 21.5426 6.00208 21.4775 5.85132 21.368C5.70057 21.2585 5.5834 21.1091 5.51302 20.9366C5.44264 20.7641 5.42186 20.5753 5.45301 20.3916L6.42601 14.7156L2.30201 10.6956C2.1686 10.5654 2.07426 10.4004 2.02965 10.2194C1.98504 10.0383 1.99194 9.84842 2.04956 9.67109C2.10717 9.49377 2.21322 9.33608 2.35573 9.21584C2.49823 9.0956 2.67151 9.01759 2.85601 8.99063L8.55501 8.16263L11.104 2.99863C11.1958 2.84247 11.3269 2.713 11.4841 2.62305C11.6413 2.5331 11.8194 2.48578 12.0005 2.48578C12.1817 2.48578 12.3597 2.5331 12.5169 2.62305C12.6742 2.713 12.8052 2.84247 12.897 2.99863L15.445 8.16263L21.144 8.99063C21.3285 9.01759 21.5018 9.0956 21.6443 9.21584C21.7868 9.33608 21.8928 9.49377 21.9505 9.67109C22.0081 9.84842 22.015 10.0383 21.9704 10.2194C21.9258 10.4004 21.8314 10.5654 21.698 10.6956L17.574 14.7156L18.548 20.3916C18.5726 20.5351 18.5656 20.6822 18.5274 20.8227C18.4893 20.9632 18.4209 21.0937 18.3271 21.205C18.2333 21.3163 18.1163 21.4058 17.9844 21.4672C17.8524 21.5287 17.7086 21.5605 17.563 21.5606H17.562Z" fill="#F27D00"></path>
                                                 </svg>
-                                                <p class="ratinmg-number" fw="bold">5</p>
-                                                <p class="MuiTypography-root MuiTypography-body1 mui-style-1h22dky">(288 reviews)</p>
+                                                <p class="ratinmg-number" fw="bold">{{ number_format($pkg->rating, 1) }}</p>
+                                                <p class="MuiTypography-root MuiTypography-body1 mui-style-1h22dky">({{ $pkg->review_count }} reviews)</p>
                                             </div>
                                         </div>
                                     </div>
                                 </a>
                             </div>
                         </div>
+                        @empty
                         <div class="item">
                             <div class="explore-card-main mb-20">
-                                <a href="tour-package-details.html">
-                                    <div class="explore-card mui-style-lxguk4">
-                                        <img class="st-image-card__img" src="https://sharetrip.net/_next/image?url=https%3A%2F%2Ftbbd-flight.s3.ap-southeast-1.amazonaws.com%2Fpromotion%2Fbest-western-plus-heritage.jpg&w=384&q=75">
-                                        <div class="MuiBox-root mui-style-1tyhrx3"></div>
-                                        <div class="st-image-card__card_details MuiBox-root mui-style-a34mib">
-                                            <p class="MuiTypography-root MuiTypography-body1 mui-style-sq479" fw="semiBold">Best Western Heritage</p>
-                                            <div class="stpromo-card__rating_container MuiBox-root mui-style-dun6p3">
-                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M17.562 21.5606C17.3999 21.5602 17.2403 21.5204 17.097 21.4446L12 18.7646L6.90301 21.4446C6.73797 21.5311 6.55206 21.5697 6.36624 21.5562C6.18042 21.5426 6.00208 21.4775 5.85132 21.368C5.70057 21.2585 5.5834 21.1091 5.51302 20.9366C5.44264 20.7641 5.42186 20.5753 5.45301 20.3916L6.42601 14.7156L2.30201 10.6956C2.1686 10.5654 2.07426 10.4004 2.02965 10.2194C1.98504 10.0383 1.99194 9.84842 2.04956 9.67109C2.10717 9.49377 2.21322 9.33608 2.35573 9.21584C2.49823 9.0956 2.67151 9.01759 2.85601 8.99063L8.55501 8.16263L11.104 2.99863C11.1958 2.84247 11.3269 2.713 11.4841 2.62305C11.6413 2.5331 11.8194 2.48578 12.0005 2.48578C12.1817 2.48578 12.3597 2.5331 12.5169 2.62305C12.6742 2.713 12.8052 2.84247 12.897 2.99863L15.445 8.16263L21.144 8.99063C21.3285 9.01759 21.5018 9.0956 21.6443 9.21584C21.7868 9.33608 21.8928 9.49377 21.9505 9.67109C22.0081 9.84842 22.015 10.0383 21.9704 10.2194C21.9258 10.4004 21.8314 10.5654 21.698 10.6956L17.574 14.7156L18.548 20.3916C18.5726 20.5351 18.5656 20.6822 18.5274 20.8227C18.4893 20.9632 18.4209 21.0937 18.3271 21.205C18.2333 21.3163 18.1163 21.4058 17.9844 21.4672C17.8524 21.5287 17.7086 21.5605 17.563 21.5606H17.562Z" fill="#F27D00"></path>
-                                                </svg>
-                                                <p class="ratinmg-number" fw="bold">5</p>
-                                                <p class="MuiTypography-root MuiTypography-body1 mui-style-1h22dky">(288 reviews)</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
+                                <p class="text-muted text-center py-4">No tour packages added yet.</p>
                             </div>
                         </div>
-                        <div class="item">
-                            <div class="explore-card-main mb-20">
-                                <a href="#">
-                                    <div class="explore-card mui-style-lxguk4">
-                                        <img class="st-image-card__img" src="https://sharetrip.net/_next/image?url=https%3A%2F%2Ftbbd-flight.s3.ap-southeast-1.amazonaws.com%2Fpromotion%2Fagoda-2564409-60592569-839740.jpg&w=384&q=75">
-                                        <div class="MuiBox-root mui-style-1tyhrx3"></div>
-                                        <div class="st-image-card__card_details MuiBox-root mui-style-a34mib">
-                                            <p class="MuiTypography-root MuiTypography-body1 mui-style-sq479" fw="semiBold">Sea Pearl Beach Resort..</p>
-                                            <div class="stpromo-card__rating_container MuiBox-root mui-style-dun6p3">
-                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M17.562 21.5606C17.3999 21.5602 17.2403 21.5204 17.097 21.4446L12 18.7646L6.90301 21.4446C6.73797 21.5311 6.55206 21.5697 6.36624 21.5562C6.18042 21.5426 6.00208 21.4775 5.85132 21.368C5.70057 21.2585 5.5834 21.1091 5.51302 20.9366C5.44264 20.7641 5.42186 20.5753 5.45301 20.3916L6.42601 14.7156L2.30201 10.6956C2.1686 10.5654 2.07426 10.4004 2.02965 10.2194C1.98504 10.0383 1.99194 9.84842 2.04956 9.67109C2.10717 9.49377 2.21322 9.33608 2.35573 9.21584C2.49823 9.0956 2.67151 9.01759 2.85601 8.99063L8.55501 8.16263L11.104 2.99863C11.1958 2.84247 11.3269 2.713 11.4841 2.62305C11.6413 2.5331 11.8194 2.48578 12.0005 2.48578C12.1817 2.48578 12.3597 2.5331 12.5169 2.62305C12.6742 2.713 12.8052 2.84247 12.897 2.99863L15.445 8.16263L21.144 8.99063C21.3285 9.01759 21.5018 9.0956 21.6443 9.21584C21.7868 9.33608 21.8928 9.49377 21.9505 9.67109C22.0081 9.84842 22.015 10.0383 21.9704 10.2194C21.9258 10.4004 21.8314 10.5654 21.698 10.6956L17.574 14.7156L18.548 20.3916C18.5726 20.5351 18.5656 20.6822 18.5274 20.8227C18.4893 20.9632 18.4209 21.0937 18.3271 21.205C18.2333 21.3163 18.1163 21.4058 17.9844 21.4672C17.8524 21.5287 17.7086 21.5605 17.563 21.5606H17.562Z" fill="#F27D00"></path>
-                                                </svg>
-                                                <p class="ratinmg-number" fw="bold">5</p>
-                                                <p class="MuiTypography-root MuiTypography-body1 mui-style-1h22dky">(288 reviews)</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="explore-card-main mb-20">
-                                <a href="#">
-                                    <div class="explore-card mui-style-lxguk4">
-                                        <img class="st-image-card__img" src="https://sharetrip.net/_next/image?url=https%3A%2F%2Ftbbd-flight.s3.ap-southeast-1.amazonaws.com%2Fpromotion%2Fsayeman_-1.PNG&w=384&q=75">
-                                        <div class="MuiBox-root mui-style-1tyhrx3"></div>
-                                        <div class="st-image-card__card_details MuiBox-root mui-style-a34mib">
-                                            <p class="MuiTypography-root MuiTypography-body1 mui-style-sq479" fw="semiBold">Sayeman Beach Resort</p>
-                                            <div class="stpromo-card__rating_container MuiBox-root mui-style-dun6p3">
-                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M17.562 21.5606C17.3999 21.5602 17.2403 21.5204 17.097 21.4446L12 18.7646L6.90301 21.4446C6.73797 21.5311 6.55206 21.5697 6.36624 21.5562C6.18042 21.5426 6.00208 21.4775 5.85132 21.368C5.70057 21.2585 5.5834 21.1091 5.51302 20.9366C5.44264 20.7641 5.42186 20.5753 5.45301 20.3916L6.42601 14.7156L2.30201 10.6956C2.1686 10.5654 2.07426 10.4004 2.02965 10.2194C1.98504 10.0383 1.99194 9.84842 2.04956 9.67109C2.10717 9.49377 2.21322 9.33608 2.35573 9.21584C2.49823 9.0956 2.67151 9.01759 2.85601 8.99063L8.55501 8.16263L11.104 2.99863C11.1958 2.84247 11.3269 2.713 11.4841 2.62305C11.6413 2.5331 11.8194 2.48578 12.0005 2.48578C12.1817 2.48578 12.3597 2.5331 12.5169 2.62305C12.6742 2.713 12.8052 2.84247 12.897 2.99863L15.445 8.16263L21.144 8.99063C21.3285 9.01759 21.5018 9.0956 21.6443 9.21584C21.7868 9.33608 21.8928 9.49377 21.9505 9.67109C22.0081 9.84842 22.015 10.0383 21.9704 10.2194C21.9258 10.4004 21.8314 10.5654 21.698 10.6956L17.574 14.7156L18.548 20.3916C18.5726 20.5351 18.5656 20.6822 18.5274 20.8227C18.4893 20.9632 18.4209 21.0937 18.3271 21.205C18.2333 21.3163 18.1163 21.4058 17.9844 21.4672C17.8524 21.5287 17.7086 21.5605 17.563 21.5606H17.562Z" fill="#F27D00"></path>
-                                                </svg>
-                                                <p class="ratinmg-number" fw="bold">5</p>
-                                                <p class="MuiTypography-root MuiTypography-body1 mui-style-1h22dky">(288 reviews)</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="explore-card-main mb-20">
-                                <a href="#">
-                                    <div class="explore-card mui-style-lxguk4">
-                                        <img class="st-image-card__img" src="https://sharetrip.net/_next/image?url=https%3A%2F%2Ftbbd-flight.s3.ap-southeast-1.amazonaws.com%2Fpromotion%2Fbest-western-plus-heritage.jpg&w=384&q=75">
-                                        <div class="MuiBox-root mui-style-1tyhrx3"></div>
-                                        <div class="st-image-card__card_details MuiBox-root mui-style-a34mib">
-                                            <p class="MuiTypography-root MuiTypography-body1 mui-style-sq479" fw="semiBold">Best Western Heritage</p>
-                                            <div class="stpromo-card__rating_container MuiBox-root mui-style-dun6p3">
-                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M17.562 21.5606C17.3999 21.5602 17.2403 21.5204 17.097 21.4446L12 18.7646L6.90301 21.4446C6.73797 21.5311 6.55206 21.5697 6.36624 21.5562C6.18042 21.5426 6.00208 21.4775 5.85132 21.368C5.70057 21.2585 5.5834 21.1091 5.51302 20.9366C5.44264 20.7641 5.42186 20.5753 5.45301 20.3916L6.42601 14.7156L2.30201 10.6956C2.1686 10.5654 2.07426 10.4004 2.02965 10.2194C1.98504 10.0383 1.99194 9.84842 2.04956 9.67109C2.10717 9.49377 2.21322 9.33608 2.35573 9.21584C2.49823 9.0956 2.67151 9.01759 2.85601 8.99063L8.55501 8.16263L11.104 2.99863C11.1958 2.84247 11.3269 2.713 11.4841 2.62305C11.6413 2.5331 11.8194 2.48578 12.0005 2.48578C12.1817 2.48578 12.3597 2.5331 12.5169 2.62305C12.6742 2.713 12.8052 2.84247 12.897 2.99863L15.445 8.16263L21.144 8.99063C21.3285 9.01759 21.5018 9.0956 21.6443 9.21584C21.7868 9.33608 21.8928 9.49377 21.9505 9.67109C22.0081 9.84842 22.015 10.0383 21.9704 10.2194C21.9258 10.4004 21.8314 10.5654 21.698 10.6956L17.574 14.7156L18.548 20.3916C18.5726 20.5351 18.5656 20.6822 18.5274 20.8227C18.4893 20.9632 18.4209 21.0937 18.3271 21.205C18.2333 21.3163 18.1163 21.4058 17.9844 21.4672C17.8524 21.5287 17.7086 21.5605 17.563 21.5606H17.562Z" fill="#F27D00"></path>
-                                                </svg>
-                                                <p class="ratinmg-number" fw="bold">5</p>
-                                                <p class="MuiTypography-root MuiTypography-body1 mui-style-1h22dky">(288 reviews)</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="explore-card-main mb-20">
-                                <a href="#">
-                                    <div class="explore-card mui-style-lxguk4">
-                                        <img class="st-image-card__img" src="https://sharetrip.net/_next/image?url=https%3A%2F%2Ftbbd-flight.s3.ap-southeast-1.amazonaws.com%2Fpromotion%2Fagoda-2564409-60592569-839740.jpg&w=384&q=75">
-                                        <div class="MuiBox-root mui-style-1tyhrx3"></div>
-                                        <div class="st-image-card__card_details MuiBox-root mui-style-a34mib">
-                                            <p class="MuiTypography-root MuiTypography-body1 mui-style-sq479" fw="semiBold">Sea Pearl Beach Resort..</p>
-                                            <div class="stpromo-card__rating_container MuiBox-root mui-style-dun6p3">
-                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M17.562 21.5606C17.3999 21.5602 17.2403 21.5204 17.097 21.4446L12 18.7646L6.90301 21.4446C6.73797 21.5311 6.55206 21.5697 6.36624 21.5562C6.18042 21.5426 6.00208 21.4775 5.85132 21.368C5.70057 21.2585 5.5834 21.1091 5.51302 20.9366C5.44264 20.7641 5.42186 20.5753 5.45301 20.3916L6.42601 14.7156L2.30201 10.6956C2.1686 10.5654 2.07426 10.4004 2.02965 10.2194C1.98504 10.0383 1.99194 9.84842 2.04956 9.67109C2.10717 9.49377 2.21322 9.33608 2.35573 9.21584C2.49823 9.0956 2.67151 9.01759 2.85601 8.99063L8.55501 8.16263L11.104 2.99863C11.1958 2.84247 11.3269 2.713 11.4841 2.62305C11.6413 2.5331 11.8194 2.48578 12.0005 2.48578C12.1817 2.48578 12.3597 2.5331 12.5169 2.62305C12.6742 2.713 12.8052 2.84247 12.897 2.99863L15.445 8.16263L21.144 8.99063C21.3285 9.01759 21.5018 9.0956 21.6443 9.21584C21.7868 9.33608 21.8928 9.49377 21.9505 9.67109C22.0081 9.84842 22.015 10.0383 21.9704 10.2194C21.9258 10.4004 21.8314 10.5654 21.698 10.6956L17.574 14.7156L18.548 20.3916C18.5726 20.5351 18.5656 20.6822 18.5274 20.8227C18.4893 20.9632 18.4209 21.0937 18.3271 21.205C18.2333 21.3163 18.1163 21.4058 17.9844 21.4672C17.8524 21.5287 17.7086 21.5605 17.563 21.5606H17.562Z" fill="#F27D00"></path>
-                                                </svg>
-                                                <p class="ratinmg-number" fw="bold">5</p>
-                                                <p class="MuiTypography-root MuiTypography-body1 mui-style-1h22dky">(288 reviews)</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
+                        @endforelse
                     </div>
                     <!-- end owl-hotel-offers -->
                 </div>

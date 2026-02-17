@@ -41,13 +41,45 @@
                     </ul>
                 </li>
 
-                <li class="nk-menu-item">
-                    <a href="{{ route('super-admin.bookings.index') }}" class="nk-menu-link">
+                <li class="nk-menu-item has-sub">
+                    <a href="#" class="nk-menu-link nk-menu-toggle">
                         <span class="nk-menu-icon">
                             <em class="icon ni ni-calendar-booking"></em>
                         </span>
                         <span class="nk-menu-text">All Bookings</span>
                     </a>
+                    <ul class="nk-menu-sub">
+                        <li class="nk-menu-item">
+                            <a href="{{ route('super-admin.bookings.index') }}" class="nk-menu-link {{ request()->routeIs('super-admin.bookings.index') && !request()->routeIs('super-admin.bookings.by-status') ? 'active' : '' }}">
+                                <span class="nk-menu-text">All</span>
+                            </a>
+                        </li>
+                        <li class="nk-menu-item">
+                            <a href="{{ route('super-admin.bookings.by-status', 'pending') }}" class="nk-menu-link {{ request()->routeIs('super-admin.bookings.by-status') && request()->route('status') === 'pending' ? 'active' : '' }}">
+                                <span class="nk-menu-text">Pending</span>
+                            </a>
+                        </li>
+                        <li class="nk-menu-item">
+                            <a href="{{ route('super-admin.bookings.by-status', 'confirmed') }}" class="nk-menu-link {{ request()->routeIs('super-admin.bookings.by-status') && request()->route('status') === 'confirmed' ? 'active' : '' }}">
+                                <span class="nk-menu-text">Confirmed</span>
+                            </a>
+                        </li>
+                        <li class="nk-menu-item">
+                            <a href="{{ route('super-admin.bookings.by-status', 'staying') }}" class="nk-menu-link {{ request()->routeIs('super-admin.bookings.by-status') && request()->route('status') === 'staying' ? 'active' : '' }}">
+                                <span class="nk-menu-text">Staying</span>
+                            </a>
+                        </li>
+                        <li class="nk-menu-item">
+                            <a href="{{ route('super-admin.bookings.by-status', 'completed') }}" class="nk-menu-link {{ request()->routeIs('super-admin.bookings.by-status') && request()->route('status') === 'completed' ? 'active' : '' }}">
+                                <span class="nk-menu-text">Completed</span>
+                            </a>
+                        </li>
+                        <li class="nk-menu-item">
+                            <a href="{{ route('super-admin.bookings.by-status', 'cancelled') }}" class="nk-menu-link {{ request()->routeIs('super-admin.bookings.by-status') && request()->route('status') === 'cancelled' ? 'active' : '' }}">
+                                <span class="nk-menu-text">Cancelled</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="nk-menu-item">
@@ -66,6 +98,30 @@
                         <li class="nk-menu-item"><a href="{{ route('super-admin.popular-destinations.create') }}"
                                                     class="nk-menu-link"><span class="nk-menu-text">Add Destination</span></a></li>
                         <li class="nk-menu-item"><a href="{{ route('super-admin.popular-destinations.index') }}" class="nk-menu-link"><span class="nk-menu-text">All Destinations</span></a></li>
+                    </ul>
+                </li>
+
+                <li class="nk-menu-item has-sub"><a href="#" class="nk-menu-link nk-menu-toggle"><span
+                            class="nk-menu-icon"><em class="icon ni ni-package-fill"></em></span><span
+                            class="nk-menu-text">Best Tour Packages</span></a>
+                    <ul class="nk-menu-sub">
+                        <li class="nk-menu-item"><a href="{{ route('super-admin.tour-packages.create') }}"
+                                                    class="nk-menu-link"><span class="nk-menu-text">Add Tour Package</span></a></li>
+                        <li class="nk-menu-item"><a href="{{ route('super-admin.tour-packages.index') }}" class="nk-menu-link"><span class="nk-menu-text">All Tour Packages</span></a></li>
+                    </ul>
+                </li>
+
+                <li class="nk-menu-item has-sub">
+                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                        <span class="nk-menu-icon"><em class="icon ni ni-monitor"></em></span>
+                        <span class="nk-menu-text">Advertisement</span>
+                    </a>
+                    <ul class="nk-menu-sub">
+                        <li class="nk-menu-item">
+                            <a href="{{ route('super-admin.homepage-hero.edit') }}" class="nk-menu-link {{ request()->routeIs('super-admin.homepage-hero.*') ? 'active' : '' }}">
+                                <span class="nk-menu-text">Homepage Video</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
 

@@ -23,7 +23,7 @@ class Hotel extends Model
         'custom_nearby_areas', 'nearby_area_category', 'custom_nearby_area_details','featured_photo',
         'kitchen_photos', 'washroom_photos', 'parking_lot_photos', 'entrance_gate_photos',
         'lift_stairs_photos', 'spa_photos', 'bar_photos', 'transport_photos', 'rooftop_photos',
-        'gym_photos', 'security_photos', 'amenities_photos', 'property_types', 'apartments', 'apartment_count',
+        'gym_photos', 'security_photos', 'amenities_photos', 'additional_photos', 'property_types', 'apartments', 'apartment_count',
     ];
 
     protected $casts = [
@@ -60,6 +60,7 @@ class Hotel extends Model
         'gym_photos' => 'array',
         'security_photos' => 'array',
         'amenities_photos' => 'array',
+        'additional_photos' => 'array',
     ];
 
     public function rooms()

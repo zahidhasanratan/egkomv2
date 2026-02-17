@@ -13,23 +13,31 @@
                                     <p>Welcome to Eg Kom Vendor Panel</p>
                                 </div>
                             </div>
-                            <div class="nk-block-head-content">
+                            <div class="nk-block-head-content d-flex align-items-center gap-2">
                                 <div class="toggle-wrap nk-block-tools-toggle"><a href="#" class="btn btn-icon btn-trigger toggle-expand me-n1" data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
                                     <div class="toggle-expand-content" data-content="pageMenu">
                                         <ul class="nk-block-tools g-3">
                                             <li>
-                                                <div class="dropdown"><a href="#" class="dropdown-toggle btn btn-white btn-dim btn-outline-light" data-bs-toggle="dropdown"><em class="d-none d-sm-inline icon ni ni-calender-date"></em><span><span class="d-none d-md-inline">Last</span> 30 Days</span><em class="dd-indc icon ni ni-chevron-right"></em></a>
-                                                    <div
-                                                        class="dropdown-menu dropdown-menu-end">
+                                                <div class="dropdown"><a href="#" class="dropdown-toggle btn btn-white btn-dim btn-outline-light" data-bs-toggle="dropdown"><em class="d-none d-sm-inline icon ni ni-calender-date"></em><span><span class="d-none d-md-inline">{{ $dateRangeLabel }}</span></span><em class="dd-indc icon ni ni-chevron-right"></em></a>
+                                                    <div class="dropdown-menu dropdown-menu-end">
                                                         <ul class="link-list-opt no-bdr">
-                                                            <li><a href="#"><span>Last 30 Days</span></a></li>
-                                                            <li><a href="#"><span>Last 6 Months</span></a></li>
-                                                            <li><a href="#"><span>Last 1 Years</span></a></li>
+                                                            <li><a href="{{ route('vendor.dashboard', ['range' => '30d']) }}"><span>Last 30 Days</span></a></li>
+                                                            <li><a href="{{ route('vendor.dashboard', ['range' => '6m']) }}"><span>Last 6 Months</span></a></li>
+                                                            <li><a href="{{ route('vendor.dashboard', ['range' => '1y']) }}"><span>Last 1 Year</span></a></li>
                                                         </ul>
                                                     </div>
                                                 </div>
                                             </li>
-                                            <li class="nk-block-tools-opt"><a href="#" class="btn btn-primary"><em class="icon ni ni-reports"></em><span>Reports</span></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="dropdown d-inline">
+                                    <a href="#" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"><em class="icon ni ni-reports"></em><span>Reports</span><em class="dd-indc icon ni ni-chevron-down"></em></a>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <ul class="link-list-opt no-bdr">
+                                            <li><a href="{{ route('vendor.bookings.index') }}"><span>View bookings</span></a></li>
+                                            <li><a href="{{ route('vendor.reports.bookings.excel') }}" target="_blank" rel="noopener"><span>Download Excel (CSV)</span></a></li>
+                                            <li><a href="{{ route('vendor.reports.bookings.pdf') }}" target="_blank" rel="noopener"><span>Download PDF</span></a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -43,8 +51,8 @@
                                 <div class="card gradient-1 card-bx card-custom-chart">
                                     <div class="card-body d-flex align-items-center">
                                         <div class="me-auto text-white">
-                                            <h2 class="text-white">872</h2>
-                                            <span class="fs-18">New Booking</span>
+                                            <h2 class="text-white">{{ number_format($totalBookings) }}</h2>
+                                            <span class="fs-18">Total Bookings</span>
                                         </div>
                                         <svg width="58" height="58" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M29.0611 39.4402L13.7104 52.5947C12.9941 53.2089 11.9873 53.3497 11.1271 52.9556C10.2697 52.5614 9.7226 51.7041 9.7226 50.7597C9.7226 50.7597 9.7226 26.8794 9.7226 14.5028C9.7226 9.16424 14.0517 4.83655 19.3904 4.83655H38.7289C44.0704 4.83655 48.3995 9.16424 48.3995 14.5028V50.7597C48.3995 51.7041 47.8495 52.5614 46.9922 52.9556C46.1348 53.3497 45.1252 53.2089 44.4088 52.5947L29.0611 39.4402ZM43.5656 14.5028C43.5656 11.8335 41.3996 9.66841 38.7289 9.66841C33.0207 9.66841 25.1014 9.66841 19.3904 9.66841C16.7196 9.66841 14.5565 11.8335 14.5565 14.5028V45.5056L27.4873 34.4215C28.3926 33.646 29.7266 33.646 30.6319 34.4215L43.5656 45.5056V14.5028Z" fill="white"></path>
@@ -57,8 +65,8 @@
                                 <div class="card gradient-3 card-bx card-custom-chart">
                                     <div class="card-body d-flex align-items-center">
                                         <div class="me-auto text-white">
-                                            <h2 class="text-white">53</h2>
-                                            <span class="fs-18">Check In</span>
+                                            <h2 class="text-white">{{ $checkInToday }}</h2>
+                                            <span class="fs-18">Check In Today</span>
                                         </div>
                                         <svg width="58" height="58" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M9.66671 38.6667V43.5C9.66671 48.8409 13.995 53.1667 19.3334 53.1667H43.5C48.8409 53.1667 53.1667 48.8409 53.1667 43.5C53.1667 35.455 53.1667 22.5475 53.1667 14.5C53.1667 9.16162 48.8409 4.83337 43.5 4.83337C36.5908 4.83337 26.245 4.83337 19.3334 4.83337C13.995 4.83337 9.66671 9.16162 9.66671 14.5V19.3334C9.66671 20.6674 10.7494 21.75 12.0834 21.75C13.4174 21.75 14.5 20.6674 14.5 19.3334C14.5 19.3334 14.5 17.069 14.5 14.5C14.5 11.832 16.6654 9.66671 19.3334 9.66671H43.5C46.1705 9.66671 48.3334 11.832 48.3334 14.5V43.5C48.3334 46.1705 46.1705 48.3334 43.5 48.3334C36.5908 48.3334 26.245 48.3334 19.3334 48.3334C16.6654 48.3334 14.5 46.1705 14.5 43.5C14.5 40.9335 14.5 38.6667 14.5 38.6667C14.5 37.3351 13.4174 36.25 12.0834 36.25C10.7494 36.25 9.66671 37.3351 9.66671 38.6667ZM27.9995 26.5834L24.8748 23.461C23.9323 22.5161 23.9323 20.9864 24.8748 20.0415C25.8197 19.099 27.3495 19.099 28.292 20.0415L35.542 27.2915C36.4869 28.2364 36.4869 29.7661 35.542 30.711L28.292 37.961C27.3495 38.9035 25.8197 38.9035 24.8748 37.961C23.9323 37.0161 23.9323 35.4864 24.8748 34.5415L27.9995 31.4167H7.25004C5.91604 31.4167 4.83337 30.334 4.83337 29C4.83337 27.6685 5.91604 26.5834 7.25004 26.5834H27.9995Z" fill="white"></path>
@@ -73,8 +81,8 @@
                                 <div class="card gradient-4 card-bx card-custom-chart">
                                     <div class="card-body d-flex align-items-center">
                                         <div class="me-auto text-white">
-                                            <h2 class="text-white">78</h2>
-                                            <span class="fs-18">Check Out</span>
+                                            <h2 class="text-white">{{ $checkOutToday }}</h2>
+                                            <span class="fs-18">Check Out Today</span>
                                         </div>
                                         <svg width="57" height="46" viewBox="0 0 57 46" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M8.55512 20.7503L11.4641 17.8435C12.3415 16.9638 12.3415 15.5397 11.4641 14.6601C10.5844 13.7827 9.16031 13.7827 8.28289 14.6601L1.53353 21.4094C0.653858 22.2891 0.653858 23.7132 1.53353 24.5929L8.28289 31.3422C9.16031 32.2197 10.5844 32.2197 11.4641 31.3422C12.3415 30.4626 12.3415 29.0385 11.4641 28.1588L8.55512 25.2498H27.8718C29.1137 25.2498 30.1216 24.2419 30.1216 23C30.1216 21.7604 29.1137 20.7503 27.8718 20.7503H8.55512Z" fill="white"></path>
@@ -88,8 +96,8 @@
                                 <div class="card gradient-2 card-bx card-custom-chart">
                                     <div class="card-body d-flex align-items-center">
                                         <div class="me-auto text-white">
-                                            <h2 class="text-white">285</h2>
-                                            <span class="fs-18">Schedule Room</span>
+                                            <h2 class="text-white">{{ number_format($totalRooms) }}</h2>
+                                            <span class="fs-18">Total Rooms</span>
                                         </div>
                                         <svg width="58" height="58" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M36.25 9.66665V7.24998C36.25 5.91598 37.3327 4.83331 38.6667 4.83331C40.0007 4.83331 41.0833 5.91598 41.0833 7.24998V9.66665C46.4242 9.66665 50.75 13.9949 50.75 19.3333V43.5C50.75 48.8384 46.4242 53.1666 41.0833 53.1666C34.1741 53.1666 23.8283 53.1666 16.9167 53.1666C11.5782 53.1666 7.25 48.8384 7.25 43.5V19.3333C7.25 13.9949 11.5782 9.66665 16.9167 9.66665V7.24998C16.9167 5.91598 17.9993 4.83331 19.3333 4.83331C20.6673 4.83331 21.75 5.91598 21.75 7.24998V9.66665H36.25ZM45.9167 29H12.0833V43.5C12.0833 46.168 14.2487 48.3333 16.9167 48.3333H41.0833C43.7537 48.3333 45.9167 46.168 45.9167 43.5V29ZM33.5748 37.8329L36.9822 34.5172C37.9392 33.5868 39.469 33.6086 40.3994 34.5656C41.3298 35.5202 41.3081 37.0523 40.3535 37.9827L35.3848 42.8161C34.4955 43.6788 33.1011 43.732 32.1513 42.9393L29.4302 40.6677C28.4055 39.8146 28.2677 38.2896 29.1232 37.265C29.9763 36.2403 31.5012 36.1026 32.5259 36.9581L33.5748 37.8329ZM41.0833 14.5V16.9166C41.0833 18.2506 40.0007 19.3333 38.6667 19.3333C37.3327 19.3333 36.25 18.2506 36.25 16.9166V14.5H21.75V16.9166C21.75 18.2506 20.6673 19.3333 19.3333 19.3333C17.9993 19.3333 16.9167 18.2506 16.9167 16.9166V14.5C14.2487 14.5 12.0833 16.6629 12.0833 19.3333V24.1666H45.9167V19.3333C45.9167 16.6629 43.7537 14.5 41.0833 14.5Z" fill="white"></path>
@@ -108,16 +116,17 @@
                                                 <h6 class="title">Total Booking</h6></div>
                                             <div class="card-tools"><em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Total Booking"></em></div>
                                         </div>
-                                        <div class="card-amount"><span class="amount"> 11,230 </span><span class="change down text-danger"><em class="icon ni ni-arrow-long-down"></em>1.93%</span></div>
+                                        <div class="card-amount"><span class="amount">{{ number_format($totalBookings) }}</span></div>
+                                        <p class="text-soft small mb-2">{{ $dateRangeLabel }}: <strong>{{ number_format($bookingsInRange) }}</strong> bookings</p>
                                         <div class="invest-data">
                                             <div class="invest-data-amount g-2">
                                                 <div class="invest-data-history">
                                                     <div class="title">This Month</div>
-                                                    <div class="amount">1913</div>
+                                                    <div class="amount">{{ number_format($bookingsThisMonth) }}</div>
                                                 </div>
                                                 <div class="invest-data-history">
                                                     <div class="title">This Week</div>
-                                                    <div class="amount">1125</div>
+                                                    <div class="amount">{{ number_format($bookingsThisWeek) }}</div>
                                                 </div>
                                             </div>
                                             <div class="invest-data-ck">
@@ -135,16 +144,16 @@
                                                 <h6 class="title">Rooms Available</h6></div>
                                             <div class="card-tools"><em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Total Room"></em></div>
                                         </div>
-                                        <div class="card-amount"><span class="amount"> 312 </span></div>
+                                        <div class="card-amount"><span class="amount">{{ number_format($totalRooms) }}</span></div>
                                         <div class="invest-data">
                                             <div class="invest-data-amount g-2">
                                                 <div class="invest-data-history">
-                                                    <div class="title">Booked (M)</div>
-                                                    <div class="amount">913</div>
+                                                    <div class="title">Bookings (M)</div>
+                                                    <div class="amount">{{ number_format($bookingsThisMonth) }}</div>
                                                 </div>
                                                 <div class="invest-data-history">
-                                                    <div class="title">Booked (W)</div>
-                                                    <div class="amount">125</div>
+                                                    <div class="title">Bookings (W)</div>
+                                                    <div class="amount">{{ number_format($bookingsThisWeek) }}</div>
                                                 </div>
                                             </div>
                                             <div class="invest-data-ck">
@@ -159,20 +168,20 @@
                                     <div class="card-inner">
                                         <div class="card-title-group align-start mb-0">
                                             <div class="card-title">
-                                                <h6 class="title">Expenses</h6></div>
-                                            <div class="card-tools"><em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Total Expenses"></em></div>
+                                                <h6 class="title">Revenue (Paid)</h6></div>
+                                            <div class="card-tools"><em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Revenue from paid bookings"></em></div>
                                         </div>
-                                        <div class="card-amount"><span class="amount"> 79,358.50 <span class="currency currency-usd">USD</span></span>
-                                        </div>
+                                        <div class="card-amount"><span class="amount">BDT {{ number_format($totalRevenue, 0) }}</span></div>
+                                        <p class="text-soft small mb-2">{{ $dateRangeLabel }}: <strong>BDT {{ number_format($revenueInRange, 0) }}</strong></p>
                                         <div class="invest-data">
                                             <div class="invest-data-amount g-2">
                                                 <div class="invest-data-history">
                                                     <div class="title">This Month</div>
-                                                    <div class="amount">3,540.59 <span class="currency currency-usd">USD</span></div>
+                                                    <div class="amount">BDT {{ number_format($revenueThisMonth, 0) }}</div>
                                                 </div>
                                                 <div class="invest-data-history">
                                                     <div class="title">This Week</div>
-                                                    <div class="amount">1,259.28 <span class="currency currency-usd">USD</span></div>
+                                                    <div class="amount">BDT {{ number_format($revenueThisWeek, 0) }}</div>
                                                 </div>
                                             </div>
                                             <div class="invest-data-ck">
@@ -208,22 +217,15 @@
                                                 <canvas class="analytics-doughnut" id="BookingData"></canvas>
                                             </div>
                                             <div class="traffic-channel-group g-2">
+                                                @php $colors = ['#9cabff', '#1ee0ac', '#f9db7b', '#ffa353', '#b695f6']; $totalRoomsChart = $roomsByType->sum(); @endphp
+                                                @forelse($roomsByType as $roomName => $count)
                                                 <div class="traffic-channel-data">
-                                                    <div class="title"><span class="dot dot-lg sq" data-bg="#9cabff"></span><span>Single</span></div>
-                                                    <div class="amount">1913 <small>58.63%</small></div>
+                                                    <div class="title"><span class="dot dot-lg sq" data-bg="{{ $colors[$loop->index % count($colors)] }}"></span><span>{{ $roomName }}</span></div>
+                                                    <div class="amount">{{ $count }} <small>{{ $totalRoomsChart > 0 ? number_format($count / $totalRoomsChart * 100, 1) : 0 }}%</small></div>
                                                 </div>
-                                                <div class="traffic-channel-data">
-                                                    <div class="title"><span class="dot dot-lg sq" data-bg="#1ee0ac"></span><span>Double</span></div>
-                                                    <div class="amount">859 <small>23.94%</small></div>
-                                                </div>
-                                                <div class="traffic-channel-data">
-                                                    <div class="title"><span class="dot dot-lg sq" data-bg="#f9db7b"></span><span>Delux</span></div>
-                                                    <div class="amount">482 <small>12.94%</small></div>
-                                                </div>
-                                                <div class="traffic-channel-data">
-                                                    <div class="title"><span class="dot dot-lg sq" data-bg="#ffa353"></span><span>Suit</span></div>
-                                                    <div class="amount">138 <small>4.49%</small></div>
-                                                </div>
+                                                @empty
+                                                <div class="traffic-channel-data"><div class="title"><span>No room types yet</span></div><div class="amount">0</div></div>
+                                                @endforelse
                                             </div>
                                         </div>
                                     </div>
@@ -322,11 +324,11 @@
                                                     <div class="card-inner position-relative card-tools-toggle">
                                                         <div class="card-title-group">
                                                             <div class="card-tools">
-                                                                <div class="form-inline flex-nowrap gx-3">
+                                                                <div class="form-inline flex-nowrap gx-3 align-items-center">
                                                                     <div class="form-wrap w-150px">
                                                                         <h6 class="title">Booking Lists</h6>
                                                                     </div>
-
+                                                                    <a href="{{ route('vendor.bookings.index') }}" class="btn btn-sm btn-primary">View All</a>
                                                                 </div>
                                                             </div>
                                                             <div class="card-tools me-n1">
@@ -425,7 +427,7 @@
                                                                 </div>
                                                                 <div class="nk-tb-col"><span class="sub-text">ID</span></div>
                                                                 <div class="nk-tb-col"><span class="sub-text">Customer</span></div>
-                                                                <div class="nk-tb-col tb-col-mb"><span class="sub-text">Package</span></div>
+                                                                <div class="nk-tb-col tb-col-mb"><span class="sub-text">Hotel</span></div>
                                                                 <div class="nk-tb-col tb-col-md"><span class="sub-text">Booking</span></div>
                                                                 <div class="nk-tb-col tb-col-lg"><span class="sub-text">Room Type</span></div>
                                                                 <div class="nk-tb-col tb-col-xxl"><span class="sub-text">Mobile</span></div>
@@ -451,26 +453,34 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            @forelse($recentBookings as $booking)
+                                                            @php
+                                                                $firstRoom = $booking->rooms_data[0] ?? [];
+                                                                $roomType = $firstRoom['roomName'] ?? $firstRoom['name'] ?? '-';
+                                                                $st = $booking->booking_status ?? '';
+                                                                $statusClass = ($st === 'completed') ? 'success' : (in_array($st, ['confirmed','staying']) ? 'info' : ($st === 'cancelled' ? 'danger' : 'warning'));
+                                                                $payClass = ($booking->payment_status ?? '') === 'paid' ? 'success' : 'warning';
+                                                            @endphp
                                                             <div class="nk-tb-item">
                                                                 <div class="nk-tb-col nk-tb-col-check">
-                                                                    <div class="custom-control custom-control-sm custom-checkbox notext"><input type="checkbox" class="custom-control-input" id="uid1"><label class="custom-control-label" for="uid1"></label></div>
+                                                                    <div class="custom-control custom-control-sm custom-checkbox notext"><input type="checkbox" class="custom-control-input" id="uid-{{ $booking->id }}"><label class="custom-control-label" for="uid-{{ $booking->id }}"></label></div>
                                                                 </div>
-                                                                <div class="nk-tb-col"><span class="text-primary">AB-357</span></div>
+                                                                <div class="nk-tb-col"><span class="text-primary">{{ $booking->invoice_number }}</span></div>
                                                                 <div class="nk-tb-col">
-                                                                    <a href="#">
+                                                                    <a href="{{ route('vendor.bookings.show', $booking->id) }}">
                                                                         <div class="user-card">
-                                                                            <div class="user-avatar bg-primary"><span>AB</span></div>
-                                                                            <div class="user-info"><span class="tb-lead">Abu Bin Ishtiyak <span class="dot dot-success d-md-none ms-1"></span></span><span>info@softnio.com</span></div>
+                                                                            <div class="user-avatar bg-primary"><span>{{ strtoupper(mb_substr($booking->guest_name ?? 'G', 0, 2)) }}</span></div>
+                                                                            <div class="user-info"><span class="tb-lead">{{ $booking->guest_name ?? 'Guest' }}</span><span>{{ $booking->guest_email ?? '' }}</span></div>
                                                                         </div>
                                                                     </a>
                                                                 </div>
-                                                                <div class="nk-tb-col tb-col-mb"><span>Continental</span></div>
-                                                                <div class="nk-tb-col tb-col-md"><span class="tb-status text-success">Active</span></div>
-                                                                <div class="nk-tb-col tb-col-lg"><span>Super Delux</span></div>
-                                                                <div class="nk-tb-col tb-col-xxl"><span>+811 847-4958</span></div>
-                                                                <div class="nk-tb-col tb-col-lg"><span>10 Feb 2020</span></div>
-                                                                <div class="nk-tb-col tb-col-xxl"><span>12 Feb 2020</span></div>
-                                                                <div class="nk-tb-col tb-col-md"><span class="tb-status text-success">Paid</span></div>
+                                                                <div class="nk-tb-col tb-col-mb"><span>{{ $booking->getHotelName() }}</span></div>
+                                                                <div class="nk-tb-col tb-col-md"><span class="tb-status text-{{ $statusClass }}">{{ ucfirst($booking->booking_status ?? '-') }}</span></div>
+                                                                <div class="nk-tb-col tb-col-lg"><span>{{ $roomType }}</span></div>
+                                                                <div class="nk-tb-col tb-col-xxl"><span>{{ $booking->guest_phone ?? '-' }}</span></div>
+                                                                <div class="nk-tb-col tb-col-lg"><span>{{ $booking->checkin_date ? $booking->checkin_date->format('d M Y') : '-' }}</span></div>
+                                                                <div class="nk-tb-col tb-col-xxl"><span>{{ $booking->checkout_date ? $booking->checkout_date->format('d M Y') : '-' }}</span></div>
+                                                                <div class="nk-tb-col tb-col-md"><span class="tb-status text-{{ $payClass }}">{{ ucfirst($booking->payment_status ?? '-') }}</span></div>
                                                                 <div class="nk-tb-col nk-tb-col-tools">
                                                                     <ul class="nk-tb-actions gx-1">
                                                                         <li>
@@ -478,8 +488,7 @@
                                                                                 <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                                                                                 <div class="dropdown-menu dropdown-menu-end">
                                                                                     <ul class="link-list-opt no-bdr">
-                                                                                        <li><a href="#"><em class="icon ni ni-mail-fill"></em><span>Send Email</span></a></li>
-                                                                                        <li><a href="booking-edit.html"><em class="icon ni ni-edit-fill"></em><span>Edit</span></a></li>
+                                                                                        <li><a href="{{ route('vendor.bookings.show', $booking->id) }}"><em class="icon ni ni-eye"></em><span>View</span></a></li>
                                                                                     </ul>
                                                                                 </div>
                                                                             </div>
@@ -487,366 +496,16 @@
                                                                     </ul>
                                                                 </div>
                                                             </div>
+                                                            @empty
                                                             <div class="nk-tb-item">
-                                                                <div class="nk-tb-col nk-tb-col-check">
-                                                                    <div class="custom-control custom-control-sm custom-checkbox notext"><input type="checkbox" class="custom-control-input" id="uid2"><label class="custom-control-label" for="uid2"></label></div>
-                                                                </div>
-                                                                <div class="nk-tb-col"><span class="text-primary">AB-753</span></div>
-                                                                <div class="nk-tb-col">
-                                                                    <div class="user-card">
-                                                                        <div class="user-avatar"><img src="../images/avatar/a-sm.jpg" alt=""></div>
-                                                                        <div class="user-info"><span class="tb-lead">Ashley Lawson <span class="dot dot-warning d-md-none ms-1"></span></span><span>ashley@softnio.com</span></div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="nk-tb-col tb-col-mb"><span>Strater </span></div>
-                                                                <div class="nk-tb-col tb-col-md"><span class="tb-status text-warning">Pending</span></div>
-                                                                <div class="nk-tb-col tb-col-lg"><span>Single</span></div>
-                                                                <div class="nk-tb-col tb-col-xxl"><span>+124 394-1787</span></div>
-                                                                <div class="nk-tb-col tb-col-lg"><span>07 Feb 2021</span></div>
-                                                                <div class="nk-tb-col tb-col-xxl"><span>08 Feb 2021</span></div>
-                                                                <div class="nk-tb-col tb-col-md"><span class="tb-status text-warning">Due</span></div>
-                                                                <div class="nk-tb-col nk-tb-col-tools">
-                                                                    <ul class="nk-tb-actions gx-1">
-                                                                        <li>
-                                                                            <div class="drodown">
-                                                                                <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
-                                                                                <div class="dropdown-menu dropdown-menu-end">
-                                                                                    <ul class="link-list-opt no-bdr">
-                                                                                        <li><a href="#"><em class="icon ni ni-mail-fill"></em><span>Send Email</span></a></li>
-                                                                                        <li><a href="booking-edit.html"><em class="icon ni ni-edit-fill"></em><span>Edit</span></a></li>
-                                                                                    </ul>
-                                                                                </div>
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
+                                                                <div class="nk-tb-col span" style="grid-column: 1 / -1; padding: 1.5rem; text-align: center; color: #8094ae;">No bookings yet.</div>
                                                             </div>
-                                                            <div class="nk-tb-item">
-                                                                <div class="nk-tb-col nk-tb-col-check">
-                                                                    <div class="custom-control custom-control-sm custom-checkbox notext"><input type="checkbox" class="custom-control-input" id="uid3"><label class="custom-control-label" for="uid3"></label></div>
-                                                                </div>
-                                                                <div class="nk-tb-col"><span class="text-primary">AB-159</span></div>
-                                                                <div class="nk-tb-col">
-                                                                    <a href="#">
-                                                                        <div class="user-card">
-                                                                            <div class="user-avatar bg-dark"><span>MM</span></div>
-                                                                            <div class="user-info"><span class="tb-lead">Micheal Murphy <span class="dot dot-success d-md-none ms-1"></span></span><span>info@niosoft.com</span></div>
-                                                                        </div>
-                                                                    </a>
-                                                                </div>
-                                                                <div class="nk-tb-col tb-col-mb"><span>All Suit</span></div>
-                                                                <div class="nk-tb-col tb-col-md"><span class="tb-status text-success">Active</span></div>
-                                                                <div class="nk-tb-col tb-col-lg"><span>Super Delux</span></div>
-                                                                <div class="nk-tb-col tb-col-xxl"><span>+811 569-6523</span></div>
-                                                                <div class="nk-tb-col tb-col-lg"><span>10 Jan 2021</span></div>
-                                                                <div class="nk-tb-col tb-col-xxl"><span>15 Jan 2021</span></div>
-                                                                <div class="nk-tb-col tb-col-md"><span class="tb-status text-success">Paid</span></div>
-                                                                <div class="nk-tb-col nk-tb-col-tools">
-                                                                    <ul class="nk-tb-actions gx-1">
-                                                                        <li>
-                                                                            <div class="drodown">
-                                                                                <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
-                                                                                <div class="dropdown-menu dropdown-menu-end">
-                                                                                    <ul class="link-list-opt no-bdr">
-                                                                                        <li><a href="#"><em class="icon ni ni-mail-fill"></em><span>Send Email</span></a></li>
-                                                                                        <li><a href="booking-edit.html"><em class="icon ni ni-edit-fill"></em><span>Edit</span></a></li>
-                                                                                    </ul>
-                                                                                </div>
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                            <div class="nk-tb-item">
-                                                                <div class="nk-tb-col nk-tb-col-check">
-                                                                    <div class="custom-control custom-control-sm custom-checkbox notext"><input type="checkbox" class="custom-control-input" id="uid4"><label class="custom-control-label" for="uid4"></label></div>
-                                                                </div>
-                                                                <div class="nk-tb-col"><span class="text-primary">AB-951</span></div>
-                                                                <div class="nk-tb-col">
-                                                                    <div class="user-card">
-                                                                        <div class="user-avatar"><img src="../images/avatar/b-sm.jpg" alt=""></div>
-                                                                        <div class="user-info"><span class="tb-lead">Eliana Stout <span class="dot dot-warning d-md-none ms-1"></span></span><span>Eliana@softnio.com</span></div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="nk-tb-col tb-col-mb"><span>Vacation</span></div>
-                                                                <div class="nk-tb-col tb-col-md"><span class="tb-status text-success">Active</span></div>
-                                                                <div class="nk-tb-col tb-col-lg"><span>Double</span></div>
-                                                                <div class="nk-tb-col tb-col-xxl"><span>+124 394-1787</span></div>
-                                                                <div class="nk-tb-col tb-col-lg"><span>07 Feb 2021</span></div>
-                                                                <div class="nk-tb-col tb-col-xxl"><span>15 Feb 2021</span></div>
-                                                                <div class="nk-tb-col tb-col-md"><span class="tb-status text-success">Paid</span></div>
-                                                                <div class="nk-tb-col nk-tb-col-tools">
-                                                                    <ul class="nk-tb-actions gx-1">
-                                                                        <li>
-                                                                            <div class="drodown">
-                                                                                <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
-                                                                                <div class="dropdown-menu dropdown-menu-end">
-                                                                                    <ul class="link-list-opt no-bdr">
-                                                                                        <li><a href="#"><em class="icon ni ni-mail-fill"></em><span>Send Email</span></a></li>
-                                                                                        <li><a href="booking-edit.html"><em class="icon ni ni-edit-fill"></em><span>Edit</span></a></li>
-                                                                                    </ul>
-                                                                                </div>
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                            <div class="nk-tb-item">
-                                                                <div class="nk-tb-col nk-tb-col-check">
-                                                                    <div class="custom-control custom-control-sm custom-checkbox notext"><input type="checkbox" class="custom-control-input" id="uid5"><label class="custom-control-label" for="uid5"></label></div>
-                                                                </div>
-                                                                <div class="nk-tb-col"><span class="text-primary">AB-903</span></div>
-                                                                <div class="nk-tb-col">
-                                                                    <a href="#">
-                                                                        <div class="user-card">
-                                                                            <div class="user-avatar bg-warning"><span>LH</span></div>
-                                                                            <div class="user-info"><span class="tb-lead">Luukas Haapala<span class="dot dot-success d-md-none ms-1"></span></span><span>Luukas@niosoft.com</span></div>
-                                                                        </div>
-                                                                    </a>
-                                                                </div>
-                                                                <div class="nk-tb-col tb-col-mb"><span>Honeymoon</span></div>
-                                                                <div class="nk-tb-col tb-col-md"><span class="tb-status text-success">Active</span></div>
-                                                                <div class="nk-tb-col tb-col-lg"><span>Double</span></div>
-                                                                <div class="nk-tb-col tb-col-xxl"><span>+811 569-6523</span></div>
-                                                                <div class="nk-tb-col tb-col-lg"><span>02 May 2021</span></div>
-                                                                <div class="nk-tb-col tb-col-xxl"><span>04 May 2021</span></div>
-                                                                <div class="nk-tb-col tb-col-md"><span class="tb-status text-success">Paid</span></div>
-                                                                <div class="nk-tb-col nk-tb-col-tools">
-                                                                    <ul class="nk-tb-actions gx-1">
-                                                                        <li>
-                                                                            <div class="drodown">
-                                                                                <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
-                                                                                <div class="dropdown-menu dropdown-menu-end">
-                                                                                    <ul class="link-list-opt no-bdr">
-                                                                                        <li><a href="#"><em class="icon ni ni-mail-fill"></em><span>Send Email</span></a></li>
-                                                                                        <li><a href="booking-edit.html"><em class="icon ni ni-edit-fill"></em><span>Edit</span></a></li>
-                                                                                    </ul>
-                                                                                </div>
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                            <div class="nk-tb-item">
-                                                                <div class="nk-tb-col nk-tb-col-check">
-                                                                    <div class="custom-control custom-control-sm custom-checkbox notext"><input type="checkbox" class="custom-control-input" id="uid6"><label class="custom-control-label" for="uid6"></label></div>
-                                                                </div>
-                                                                <div class="nk-tb-col"><span class="text-primary">AB-256</span></div>
-                                                                <div class="nk-tb-col">
-                                                                    <div class="user-card">
-                                                                        <div class="user-avatar"><img src="../images/avatar/c-sm.jpg" alt=""></div>
-                                                                        <div class="user-info"><span class="tb-lead">Azul Baldwin<span class="dot dot-warning d-md-none ms-1"></span></span><span>Azul@softnio.com</span></div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="nk-tb-col tb-col-mb"><span>Vacation</span></div>
-                                                                <div class="nk-tb-col tb-col-md"><span class="tb-status text-warning">Pending</span></div>
-                                                                <div class="nk-tb-col tb-col-lg"><span>Double</span></div>
-                                                                <div class="nk-tb-col tb-col-xxl"><span>+124 156-8756</span></div>
-                                                                <div class="nk-tb-col tb-col-lg"><span>07 Jan 2021</span></div>
-                                                                <div class="nk-tb-col tb-col-xxl"><span>10 Jan 2021</span></div>
-                                                                <div class="nk-tb-col tb-col-md"><span class="tb-status text-warning">Due</span></div>
-                                                                <div class="nk-tb-col nk-tb-col-tools">
-                                                                    <ul class="nk-tb-actions gx-1">
-                                                                        <li>
-                                                                            <div class="drodown">
-                                                                                <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
-                                                                                <div class="dropdown-menu dropdown-menu-end">
-                                                                                    <ul class="link-list-opt no-bdr">
-                                                                                        <li><a href="#"><em class="icon ni ni-mail-fill"></em><span>Send Email</span></a></li>
-                                                                                        <li><a href="booking-edit.html"><em class="icon ni ni-edit-fill"></em><span>Edit</span></a></li>
-                                                                                    </ul>
-                                                                                </div>
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                            <div class="nk-tb-item">
-                                                                <div class="nk-tb-col nk-tb-col-check">
-                                                                    <div class="custom-control custom-control-sm custom-checkbox notext"><input type="checkbox" class="custom-control-input" id="uid7"><label class="custom-control-label" for="uid7"></label></div>
-                                                                </div>
-                                                                <div class="nk-tb-col"><span class="text-primary">AB-503</span></div>
-                                                                <div class="nk-tb-col">
-                                                                    <a href="#">
-                                                                        <div class="user-card">
-                                                                            <div class="user-avatar bg-primary"><span>DL</span></div>
-                                                                            <div class="user-info"><span class="tb-lead">Dasia Lovell<span class="dot dot-success d-md-none ms-1"></span></span><span>dasia@softnio.com</span></div>
-                                                                        </div>
-                                                                    </a>
-                                                                </div>
-                                                                <div class="nk-tb-col tb-col-mb"><span>Continental</span></div>
-                                                                <div class="nk-tb-col tb-col-md"><span class="tb-status text-warning">Pending</span></div>
-                                                                <div class="nk-tb-col tb-col-lg"><span>Double</span></div>
-                                                                <div class="nk-tb-col tb-col-xxl"><span>+811 963-4759</span></div>
-                                                                <div class="nk-tb-col tb-col-lg"><span>10 Feb 2020</span></div>
-                                                                <div class="nk-tb-col tb-col-xxl"><span>12 Feb 2020</span></div>
-                                                                <div class="nk-tb-col tb-col-md"><span class="tb-status text-warning">Due</span></div>
-                                                                <div class="nk-tb-col nk-tb-col-tools">
-                                                                    <ul class="nk-tb-actions gx-1">
-                                                                        <li>
-                                                                            <div class="drodown">
-                                                                                <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
-                                                                                <div class="dropdown-menu dropdown-menu-end">
-                                                                                    <ul class="link-list-opt no-bdr">
-                                                                                        <li><a href="#"><em class="icon ni ni-mail-fill"></em><span>Send Email</span></a></li>
-                                                                                        <li><a href="booking-edit.html"><em class="icon ni ni-edit-fill"></em><span>Edit</span></a></li>
-                                                                                    </ul>
-                                                                                </div>
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                            <div class="nk-tb-item">
-                                                                <div class="nk-tb-col nk-tb-col-check">
-                                                                    <div class="custom-control custom-control-sm custom-checkbox notext"><input type="checkbox" class="custom-control-input" id="uid8"><label class="custom-control-label" for="uid8"></label></div>
-                                                                </div>
-                                                                <div class="nk-tb-col"><span class="text-primary">AB-856</span></div>
-                                                                <div class="nk-tb-col">
-                                                                    <div class="user-card">
-                                                                        <div class="user-avatar"><img src="../images/avatar/d-sm.jpg" alt=""></div>
-                                                                        <div class="user-info"><span class="tb-lead">Novalee Spicer<span class="dot dot-warning d-md-none ms-1"></span></span><span>Novalee@softnio.com</span></div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="nk-tb-col tb-col-mb"><span>Strater</span></div>
-                                                                <div class="nk-tb-col tb-col-md"><span class="tb-status text-success">Active</span></div>
-                                                                <div class="nk-tb-col tb-col-lg"><span>Single</span></div>
-                                                                <div class="nk-tb-col tb-col-xxl"><span>+124 394-1787</span></div>
-                                                                <div class="nk-tb-col tb-col-lg"><span>07 Feb 2021</span></div>
-                                                                <div class="nk-tb-col tb-col-xxl"><span>09 Feb 2021</span></div>
-                                                                <div class="nk-tb-col tb-col-md"><span class="tb-status text-success">Paid</span></div>
-                                                                <div class="nk-tb-col nk-tb-col-tools">
-                                                                    <ul class="nk-tb-actions gx-1">
-                                                                        <li>
-                                                                            <div class="drodown">
-                                                                                <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
-                                                                                <div class="dropdown-menu dropdown-menu-end">
-                                                                                    <ul class="link-list-opt no-bdr">
-                                                                                        <li><a href="#"><em class="icon ni ni-mail-fill"></em><span>Send Email</span></a></li>
-                                                                                        <li><a href="booking-edit.html"><em class="icon ni ni-edit-fill"></em><span>Edit</span></a></li>
-                                                                                    </ul>
-                                                                                </div>
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                            <div class="nk-tb-item">
-                                                                <div class="nk-tb-col nk-tb-col-check">
-                                                                    <div class="custom-control custom-control-sm custom-checkbox notext"><input type="checkbox" class="custom-control-input" id="uid9"><label class="custom-control-label" for="uid9"></label></div>
-                                                                </div>
-                                                                <div class="nk-tb-col"><span class="text-primary">AB-635</span></div>
-                                                                <div class="nk-tb-col">
-                                                                    <a href="#">
-                                                                        <div class="user-card">
-                                                                            <div class="user-avatar bg-dark"><span>Cl</span></div>
-                                                                            <div class="user-info"><span class="tb-lead">Cielo Luna<span class="dot dot-success d-md-none ms-1"></span></span><span>cielo@niosoft.com</span></div>
-                                                                        </div>
-                                                                    </a>
-                                                                </div>
-                                                                <div class="nk-tb-col tb-col-mb"><span>All Suit</span></div>
-                                                                <div class="nk-tb-col tb-col-md"><span class="tb-status text-success">Active</span></div>
-                                                                <div class="nk-tb-col tb-col-lg"><span>Double</span></div>
-                                                                <div class="nk-tb-col tb-col-xxl"><span>+811 569-6523</span></div>
-                                                                <div class="nk-tb-col tb-col-lg"><span>10 Jan 2021</span></div>
-                                                                <div class="nk-tb-col tb-col-xxl"><span>12 Jan 2021</span></div>
-                                                                <div class="nk-tb-col tb-col-md"><span class="tb-status text-success">Paid</span></div>
-                                                                <div class="nk-tb-col nk-tb-col-tools">
-                                                                    <ul class="nk-tb-actions gx-1">
-                                                                        <li>
-                                                                            <div class="drodown">
-                                                                                <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
-                                                                                <div class="dropdown-menu dropdown-menu-end">
-                                                                                    <ul class="link-list-opt no-bdr">
-                                                                                        <li><a href="#"><em class="icon ni ni-mail-fill"></em><span>Send Email</span></a></li>
-                                                                                        <li><a href="booking-edit.html"><em class="icon ni ni-edit-fill"></em><span>Edit</span></a></li>
-                                                                                    </ul>
-                                                                                </div>
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                            <div class="nk-tb-item">
-                                                                <div class="nk-tb-col nk-tb-col-check">
-                                                                    <div class="custom-control custom-control-sm custom-checkbox notext"><input type="checkbox" class="custom-control-input" id="uid10"><label class="custom-control-label" for="uid10"></label></div>
-                                                                </div>
-                                                                <div class="nk-tb-col"><span class="text-primary">AB-605</span></div>
-                                                                <div class="nk-tb-col">
-                                                                    <a href="#">
-                                                                        <div class="user-card">
-                                                                            <div class="user-avatar bg-danger"><span>MY</span></div>
-                                                                            <div class="user-info"><span class="tb-lead">Makiyah Yeager<span class="dot dot-success d-md-none ms-1"></span></span><span>makiyah@niosoft.com</span></div>
-                                                                        </div>
-                                                                    </a>
-                                                                </div>
-                                                                <div class="nk-tb-col tb-col-mb"><span>Honeymoon</span></div>
-                                                                <div class="nk-tb-col tb-col-md"><span class="tb-status text-success">Active</span></div>
-                                                                <div class="nk-tb-col tb-col-lg"><span>Delux</span></div>
-                                                                <div class="nk-tb-col tb-col-xxl"><span>+811 569-6523</span></div>
-                                                                <div class="nk-tb-col tb-col-lg"><span>02 May 2021</span></div>
-                                                                <div class="nk-tb-col tb-col-xxl"><span>04 May 2021</span></div>
-                                                                <div class="nk-tb-col tb-col-md"><span class="tb-status text-success">Paid</span></div>
-                                                                <div class="nk-tb-col nk-tb-col-tools">
-                                                                    <ul class="nk-tb-actions gx-1">
-                                                                        <li>
-                                                                            <div class="drodown">
-                                                                                <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
-                                                                                <div class="dropdown-menu dropdown-menu-end">
-                                                                                    <ul class="link-list-opt no-bdr">
-                                                                                        <li><a href="#"><em class="icon ni ni-mail-fill"></em><span>Send Email</span></a></li>
-                                                                                        <li><a href="booking-edit.html"><em class="icon ni ni-edit-fill"></em><span>Edit</span></a></li>
-                                                                                    </ul>
-                                                                                </div>
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
+                                                            @endforelse
                                                         </div>
                                                     </div>
                                                     <div class="card-inner">
-                                                        <div class="nk-block-between-md g-3">
-                                                            <div class="g">
-                                                                <ul class="pagination justify-content-center justify-content-md-start">
-                                                                    <li class="page-item"><a class="page-link" href="#">Prev</a></li>
-                                                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                                                    <li class="page-item"><span class="page-link"><em class="icon ni ni-more-h"></em></span></li>
-                                                                    <li class="page-item"><a class="page-link" href="#">6</a></li>
-                                                                    <li class="page-item"><a class="page-link" href="#">7</a></li>
-                                                                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                                                                </ul>
-                                                            </div>
-                                                            <div class="g">
-                                                                <div class="pagination-goto d-flex justify-content-center justify-content-md-start gx-3">
-                                                                    <div>Page</div>
-                                                                    <div>
-                                                                        <select class="form-select js-select2 select2-hidden-accessible" data-search="on" data-dropdown="xs center" data-select2-id="10" tabindex="-1" aria-hidden="true">
-                                                                            <option value="page-1" data-select2-id="12">1</option>
-                                                                            <option value="page-2">2</option>
-                                                                            <option value="page-4">4</option>
-                                                                            <option value="page-5">5</option>
-                                                                            <option value="page-6">6</option>
-                                                                            <option value="page-7">7</option>
-                                                                            <option value="page-8">8</option>
-                                                                            <option value="page-9">9</option>
-                                                                            <option value="page-10">10</option>
-                                                                            <option value="page-11">11</option>
-                                                                            <option value="page-12">12</option>
-                                                                            <option value="page-13">13</option>
-                                                                            <option value="page-14">14</option>
-                                                                            <option value="page-15">15</option>
-                                                                            <option value="page-16">16</option>
-                                                                            <option value="page-17">17</option>
-                                                                            <option value="page-18">18</option>
-                                                                            <option value="page-19">19</option>
-                                                                            <option value="page-20">20</option>
-                                                                        </select><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="11" style="width: 81px;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-7iev-container"><span class="select2-selection__rendered" id="select2-7iev-container" role="textbox" aria-readonly="true" title="1">1</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
-                                                                    </div>
-                                                                    <div>OF 102</div>
-                                                                </div>
-                                                            </div>
+                                                        <div class="d-flex justify-content-center justify-content-md-start">
+                                                            {{ $recentBookings->links('pagination::bootstrap-4') }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -869,89 +528,19 @@
                                             <div class="card-title-group">
                                                 <div class="card-title">
                                                     <h6 class="title">New Customer</h6></div>
-                                                <div class="card-tools"><a href="customers.html" class="link">View All</a></div>
+                                                <div class="card-tools"><a href="{{ route('vendor.bookings.index') }}" class="link">View All</a></div>
                                             </div>
                                         </div>
+                                        @forelse($newCustomers as $cust)
                                         <div class="card-inner card-inner-md">
                                             <div class="user-card">
-                                                <div class="user-avatar bg-primary-dim"><span>AB</span></div>
-                                                <div class="user-info"><span class="lead-text">Abu Bin Ishtiyak</span><span class="sub-text">info@softnio.com</span></div>
-                                                <div class="user-action">
-                                                    <div class="drodown"><a href="#" class="dropdown-toggle btn btn-icon btn-trigger me-n1" data-bs-toggle="dropdown" aria-expanded="false"><em class="icon ni ni-more-h"></em></a>
-                                                        <div class="dropdown-menu dropdown-menu-end">
-                                                            <ul class="link-list-opt no-bdr">
-                                                                <li><a href="#"><em class="icon ni ni-setting"></em><span>Action Settings</span></a></li>
-                                                                <li><a href="#"><em class="icon ni ni-notify"></em><span>Push Notification</span></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <div class="user-avatar bg-primary-dim"><span>{{ strtoupper(mb_substr($cust->guest_name ?? 'G', 0, 2)) }}</span></div>
+                                                <div class="user-info"><span class="lead-text">{{ $cust->guest_name ?? 'Guest' }}</span><span class="sub-text">{{ $cust->guest_email ?? '' }}</span></div>
                                             </div>
                                         </div>
-                                        <div class="card-inner card-inner-md">
-                                            <div class="user-card">
-                                                <div class="user-avatar bg-pink-dim"><span>SW</span></div>
-                                                <div class="user-info"><span class="lead-text">Sharon Walker</span><span class="sub-text">sharon-90@example.com</span></div>
-                                                <div class="user-action">
-                                                    <div class="drodown"><a href="#" class="dropdown-toggle btn btn-icon btn-trigger me-n1" data-bs-toggle="dropdown" aria-expanded="false"><em class="icon ni ni-more-h"></em></a>
-                                                        <div class="dropdown-menu dropdown-menu-end">
-                                                            <ul class="link-list-opt no-bdr">
-                                                                <li><a href="#"><em class="icon ni ni-setting"></em><span>Action Settings</span></a></li>
-                                                                <li><a href="#"><em class="icon ni ni-notify"></em><span>Push Notification</span></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card-inner card-inner-md">
-                                            <div class="user-card">
-                                                <div class="user-avatar bg-warning-dim"><span>GO</span></div>
-                                                <div class="user-info"><span class="lead-text">Gloria Oliver</span><span class="sub-text">gloria_72@example.com</span></div>
-                                                <div class="user-action">
-                                                    <div class="drodown"><a href="#" class="dropdown-toggle btn btn-icon btn-trigger me-n1" data-bs-toggle="dropdown" aria-expanded="false"><em class="icon ni ni-more-h"></em></a>
-                                                        <div class="dropdown-menu dropdown-menu-end">
-                                                            <ul class="link-list-opt no-bdr">
-                                                                <li><a href="#"><em class="icon ni ni-setting"></em><span>Action Settings</span></a></li>
-                                                                <li><a href="#"><em class="icon ni ni-notify"></em><span>Push Notification</span></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card-inner card-inner-md">
-                                            <div class="user-card">
-                                                <div class="user-avatar bg-success-dim"><span>PS</span></div>
-                                                <div class="user-info"><span class="lead-text">Phillip Sullivan</span><span class="sub-text">phillip-85@example.com</span></div>
-                                                <div class="user-action">
-                                                    <div class="drodown"><a href="#" class="dropdown-toggle btn btn-icon btn-trigger me-n1" data-bs-toggle="dropdown" aria-expanded="false"><em class="icon ni ni-more-h"></em></a>
-                                                        <div class="dropdown-menu dropdown-menu-end">
-                                                            <ul class="link-list-opt no-bdr">
-                                                                <li><a href="#"><em class="icon ni ni-setting"></em><span>Action Settings</span></a></li>
-                                                                <li><a href="#"><em class="icon ni ni-notify"></em><span>Push Notification</span></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card-inner card-inner-md">
-                                            <div class="user-card">
-                                                <div class="user-avatar bg-danger-dim"><span>TI</span></div>
-                                                <div class="user-info"><span class="lead-text">Tasnim Ifrat</span><span class="sub-text">tasif-85@example.com</span></div>
-                                                <div class="user-action">
-                                                    <div class="drodown"><a href="#" class="dropdown-toggle btn btn-icon btn-trigger me-n1" data-bs-toggle="dropdown" aria-expanded="false"><em class="icon ni ni-more-h"></em></a>
-                                                        <div class="dropdown-menu dropdown-menu-end">
-                                                            <ul class="link-list-opt no-bdr">
-                                                                <li><a href="#"><em class="icon ni ni-setting"></em><span>Action Settings</span></a></li>
-                                                                <li><a href="#"><em class="icon ni ni-notify"></em><span>Push Notification</span></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        @empty
+                                        <div class="card-inner card-inner-md"><p class="text-soft">No recent customers.</p></div>
+                                        @endforelse
                                     </div>
                                 </div>
                             </div>
@@ -970,31 +559,15 @@
                                         </div>
                                     </div>
                                     <ul class="nk-activity">
+                                        @forelse($recentActivities as $act)
                                         <li class="nk-activity-item">
-                                            <div class="nk-activity-media user-avatar bg-success"><img src="../images/avatar/c-sm.jpg" alt=""></div>
+                                            <div class="nk-activity-media user-avatar bg-primary">{{ $act->initials }}</div>
                                             <div class="nk-activity-data">
-                                                <div class="label">Keith Jensen requested for room.</div><span class="time">2 hours ago</span></div>
+                                                <div class="label">{{ $act->label }}</div><span class="time">{{ $act->time }}</span></div>
                                         </li>
-                                        <li class="nk-activity-item">
-                                            <div class="nk-activity-media user-avatar bg-warning">HS</div>
-                                            <div class="nk-activity-data">
-                                                <div class="label">Harry Simpson placed a Order.</div><span class="time">2 hours ago</span></div>
-                                        </li>
-                                        <li class="nk-activity-item">
-                                            <div class="nk-activity-media user-avatar bg-azure">SM</div>
-                                            <div class="nk-activity-data">
-                                                <div class="label">Stephanie Marshall cancelled booking.</div><span class="time">2 hours ago</span></div>
-                                        </li>
-                                        <li class="nk-activity-item">
-                                            <div class="nk-activity-media user-avatar bg-purple"><img src="../images/avatar/d-sm.jpg" alt=""></div>
-                                            <div class="nk-activity-data">
-                                                <div class="label">Nicholas Carr confirmed booking.</div><span class="time">2 hours ago</span></div>
-                                        </li>
-                                        <li class="nk-activity-item">
-                                            <div class="nk-activity-media user-avatar bg-pink">TM</div>
-                                            <div class="nk-activity-data">
-                                                <div class="label">Timothy Moreno placed a Order.</div><span class="time">2 hours ago</span></div>
-                                        </li>
+                                        @empty
+                                        <li class="nk-activity-item"><div class="nk-activity-data"><div class="label text-soft">No recent activity.</div></div></li>
+                                        @endforelse
                                     </ul>
                                 </div>
                             </div>

@@ -64,7 +64,7 @@
                                             - {{ $room['floorNumber'] }}{{ $room['floorNumber'] == 1 ? 'st' : ($room['floorNumber'] == 2 ? 'nd' : ($room['floorNumber'] == 3 ? 'rd' : 'th')) }} Floor
                                         @endif
                                     </td>
-                                    <td>{{ $room['quantity'] }}</td>
+                                    <td>{{ $booking->total_nights }}</td>
                                     <td>BDT {{ number_format($room['price'], 2) }}</td>
                                     <td>BDT {{ number_format($room['price'] * $room['quantity'] * $booking->total_nights, 2) }}</td>
                                 </tr>
@@ -198,16 +198,37 @@
                     <h3 class="card-title">Payment Summary</h3>
                 </div>
                 <div class="card-body">
+                    @php
+                        $subtotal = (float) ($booking->subtotal ?? 0);
+                        $discount = (float) ($booking->discount ?? 0);
+                        $grandTotalExact = $subtotal - $discount;
+                    @endphp
                     <table class="table table-sm">
                         <tr>
-                            <td>Subtotal:</td>
-                            <td class="text-right"><strong>BDT {{ number_format($booking->subtotal, 2) }}</strong></td>
+                            <td>Subtotal (Rooms):</td>
+                            <td class="text-right"><strong>BDT {{ number_format($subtotal, 2) }}</strong></td>
                         </tr>
+                        @if($discount > 0)
+                        <tr>
+                            <td>Discount:</td>
+                            <td class="text-right text-danger"><strong>-BDT {{ number_format($discount, 2) }}</strong></td>
+                        </tr>
+                        @endif
                         <tr style="background: #f8f9fa; font-size: 16px;">
                             <td><strong>Grand Total:</strong></td>
-                            <td class="text-right"><strong style="color: #90278e;">BDT {{ number_format($booking->grand_total, 2) }}</strong></td>
+                            <td class="text-right"><strong style="color: #90278e;">BDT {{ number_format($grandTotalExact, 2) }}</strong></td>
                         </tr>
                     </table>
+                    <hr>
+                    <div class="text-center">
+                        <p class="mb-2"><strong>Payment Status:</strong></p>
+                        <span class="badge badge-{{ $booking->payment_status == 'paid' ? 'success' : ($booking->payment_status == 'partial' ? 'warning' : 'danger') }} px-4 py-2">
+                            {{ strtoupper($booking->payment_status ?? 'unpaid') }}
+                        </span>
+                        @if($booking->payment_status == 'paid' && $booking->paid_amount)
+                            <p class="mt-2 mb-0 text-muted"><small>Paid amount: BDT {{ number_format($booking->paid_amount, 2) }}</small></p>
+                        @endif
+                    </div>
                 </div>
             </div>
 

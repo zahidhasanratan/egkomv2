@@ -48,214 +48,200 @@
 @endphp
 <div class="wrapper">
 
-    <!--Start:  Mobile Header- -->
+    <!--Start: Mobile Header (same structure as inner pages for consistent mobile view) -->
     <section class="mobile-header-erapper">
         <div class="container">
-            <div class="row">
+            <div class="row justify-content-center align-items-center">
                 <div class="col-3">
+                    <div class="mb-menu">
+                        <a href="javascript:void(0)" class="menu-logo" aria-label="Toggle navigation" id="sidebarCollapse" role="button">
+                            <img src="{{ asset('frontend')}}/images/icons/menu.svg" alt="Menu">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-6">
                     <div class="mb-logo">
-                        <a href="{{ asset('/') }}" class="">
+                        <a href="{{ url('/') }}" class="">
                             <img src="{{ asset('frontend')}}/images/logo.png" alt="Egkom">
                         </a>
                     </div>
                 </div>
-                <div class="col-9">
-                    @if(!request()->routeIs('booking.checkout'))
-                    <div class="mb-search-box" data-bs-toggle="modal" data-bs-target="#bookingModal">
-                        <div class="mb-search-list">
-                            <div class="mb-search-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true" role="presentation" focusable="false" style="display: block; height: 20px; width: 20px; fill: currentcolor;"><path d="M13 0a13 13 0 0 1 10.5 20.67l7.91 7.92-2.82 2.82-7.92-7.91A12.94 12.94 0 0 1 13 26a13 13 0 1 1 0-26zm0 4a9 9 0 1 0 0 18 9 9 0 0 0 0-18z"></path></svg>
+                <div class="col-3">
+                    <div class="mb-login">
+                        <a href="{{ route('login.selection') }}" class="d-flex align-items-center justify-content-end">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill login-icon" viewBox="0 0 16 16">
+                                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="sidenav-content">
+                    <nav id="sidebar" class="sidenav">
+                        <h2 id="web-name"></h2>
+                        <div id="main-menu">
+                            <div id="dismiss">
+                                <button type="button" class="btn" id="closebtn">&times;</button>
                             </div>
-                            <div class="mb-search-icon-name">
-                                <h3 class="where">Where to?</h3>
-                                <div class="location-list">
-                                    <ul>
-                                        <li>Anywhere</li>
-                                        <li>Any week</li>
-                                        <li>Add guests</li>
-                                    </ul>
+                            <div class="list-group panel">
+                                <a href="{{ url('/') }}" class="items-list">Home</a>
+                                <a href="{{ route('destinations.index') }}" class="items-list">Destinations</a>
+                                <a href="{{ url('/') }}#tourOffers" class="items-list">Tour Packages</a>
+                                <a class="items-list" href="#support-links" data-bs-toggle="collapse" aria-expanded="false">Support<span><i class="fa fa-chevron-down arrow"></i></span></a>
+                                <div class="collapse sub-menu" id="support-links">
+                                    @foreach(\App\Menu::where('footer1', 1)->get() as $main_menu)
+                                    <a class="items-list" href="{{ $main_menu->page_type == 'url' ? $main_menu->external_link : route('page.details', $main_menu->slug) }}">{{ $main_menu->menu_name }}</a>
+                                    @endforeach
+                                </div>
+                                <a class="items-list" href="#discover-links" data-bs-toggle="collapse" aria-expanded="false">Discover<span><i class="fa fa-chevron-down arrow"></i></span></a>
+                                <div class="collapse sub-menu" id="discover-links">
+                                    @foreach(\App\Menu::where('footer2', 1)->get() as $main_menu)
+                                    <a class="items-list" href="{{ $main_menu->page_type == 'url' ? $main_menu->external_link : route('page.details', $main_menu->slug) }}">{{ $main_menu->menu_name }}</a>
+                                    @endforeach
+                                </div>
+                                <a class="items-list" href="#terms-links" data-bs-toggle="collapse" aria-expanded="false">Terms and settings<span><i class="fa fa-chevron-down arrow"></i></span></a>
+                                <div class="collapse sub-menu" id="terms-links">
+                                    @foreach(\App\Menu::where('footer3', 1)->get() as $main_menu)
+                                    <a class="items-list" href="{{ $main_menu->page_type == 'url' ? $main_menu->external_link : route('page.details', $main_menu->slug) }}">{{ $main_menu->menu_name }}</a>
+                                    @endforeach
+                                </div>
+                                <a class="items-list" href="#about-links" data-bs-toggle="collapse" aria-expanded="false">About<span><i class="fa fa-chevron-down arrow"></i></span></a>
+                                <div class="collapse sub-menu" id="about-links">
+                                    @foreach(\App\Menu::where('footer4', 1)->get() as $main_menu)
+                                    <a class="items-list" href="{{ $main_menu->page_type == 'url' ? $main_menu->external_link : route('page.details', $main_menu->slug) }}">{{ $main_menu->menu_name }}</a>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    @endif
+                    </nav>
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- Modal -->
     @if(!request()->routeIs('booking.checkout'))
-    <div class="modal fade modal-main-top-search" id="bookingModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-mobile-top">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body modal-body-mb-search">
-                    <form id="mobile-search-form" action="{{ route('search') }}" method="GET">
-                    <div class="search-bar search-bar-mb-list">
-                        <div class="search-container search-item">
-                            <label for="mobile-destination-input">Where</label>
-                            <input
-                                type="text"
-                                id="mobile-destination-input"
-                                name="destination"
-                                placeholder="Search by destination"
-                                onfocus="showMobileSuggestions()"
-                                onblur="hideMobileSuggestions()"
-                                onkeyup="filterMobileSuggestionsByType()"
-                            >
-                            <input type="hidden" id="search-type-hidden-mobile" name="search_type" value="">
-                            <div class="suggestions" id="mobile-suggestions-list">
-                                <p class="suggestion-title">Suggested destinations</p>
-                                        @forelse($activeHotelsForSuggestions as $hotel)
-                                            @php
-                                                $featuredPhotos = json_decode($hotel->featured_photo, true);
-                                                $nearbyAreas = is_string($hotel->custom_nearby_areas)
-                                                    ? json_decode($hotel->custom_nearby_areas, true)
-                                                    : $hotel->custom_nearby_areas;
-                                                $propertyCategory = $hotel->property_category ?? 'Hotel';
-                                                $propertyType = $hotel->property_type ?? '';
-                                                // Get room names for this hotel
-                                                $roomNames = $hotel->rooms->pluck('name')->implode(', ');
-                                                $roomDescriptions = $hotel->rooms->pluck('description')->filter()->implode(', ');
-                                            @endphp
-                                            <div class="suggestion-item" 
-                                                 data-hotel-name="{{ $hotel->description }}"
-                                                 data-location="{{ $hotel->address ?? '' }}"
-                                                 data-nearby="{{ !empty($nearbyAreas) ? implode(', ', $nearbyAreas) : '' }}"
-                                                 data-category="{{ strtolower($propertyCategory) }}"
-                                                 data-type="{{ strtolower($propertyType) }}"
-                                                 data-room-names="{{ strtolower($roomNames) }}"
-                                                 data-room-descriptions="{{ strtolower($roomDescriptions) }}"
-                                                 data-search-type="all">
-                                                @if (!empty($featuredPhotos[0]))
-                                                    <img src="{{ asset($featuredPhotos[0]) }}" alt="{{ $hotel->description }}" class="suggestion-icon" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
-                                                @else
-                                                    <img src="{{ asset('frontend')}}/images/icons/1.webp" alt="{{ $hotel->description }}" class="suggestion-icon" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
-                                                @endif
-                                                <div class="suggestion-text">
-                                                    <strong>{{ $hotel->description }}</strong>
-                                                    <br>
-                                                    <span>
-                                                        @if (!empty($nearbyAreas[0]))
-                                                            {{ $nearbyAreas[0] }}
-                                                        @elseif(!empty($hotel->address))
-                                                            {{ $hotel->address }}
-                                                        @else
-                                                            Available for booking
-                                                        @endif
-                                                    </span>
-                                                    @if($propertyCategory)
-                                                        <br><small style="color: #666;">{{ $propertyCategory }}@if($propertyType) - {{ $propertyType }}@endif</small>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                @empty
-                                    <div class="suggestion-item">
-                                        <div class="suggestion-text">
-                                            <span>No destinations available</span>
-                                        </div>
-                                    </div>
-                                @endforelse
-                            </div>
-                        </div>
-                        <!-- Mobile View HTML -->
-                        <div id="mobile-view">
-                            <div class=" search-container search-item">
-                                <label for="checkin-mobile">Check in</label>
-                                <input type="text" id="checkin-mobile" name="checkin_display" placeholder="Add dates" readonly />
-                                <input type="hidden" id="checkin-mobile-hidden" name="checkin" />
-                            </div>
-                            <div class="search-container search-item">
-                                <label for="checkout-mobile">Check out</label>
-                                <input type="text" id="checkout-mobile" name="checkout_display" placeholder="Add dates" readonly />
-                                <input type="hidden" id="checkout-mobile-hidden" name="checkout" />
-                            </div>
+    <div class="overlay" id="overlay"></div>
+    <button type="button" class="search-button-sidebar" id="searchBtn" aria-label="Search"><i class="fa fa-search search-icon-top-mb"></i></button>
 
-                            <!-- Mobile Calendar Popup -->
-                            <div id="calendar-popup-mobile" class="calendar-popup">
-                                <div class="calendar-header">
-                                    <button type="button" id="prevMonth-mobile">&#10094;</button>
-                                    <span id="calendarMonth-mobile"></span>
-                                    <button type="button" id="nextMonth-mobile">&#10095;</button>
+    <!-- Mobile Search Bar (same as inner page: Hotel chip, Where To?, dates, guests, search button) -->
+    <section class="mb-search-bar" id="searchBar">
+        <div class="mb-search-wrapper">
+            <div class="category-item">
+                <ul>
+                    <li><a href="#">Hotel</a></li>
+                </ul>
+            </div>
+            <form id="mobile-search-form" action="{{ route('search') }}" method="GET">
+                <div class="search-bar search-bar-mb-list">
+                    <div class="search-container search-item">
+                        <label for="mobile-destination-input">Where To?</label>
+                        <input type="text" id="mobile-destination-input" name="destination" placeholder="Search destin..."
+                            onfocus="showMobileSuggestions()" onblur="hideMobileSuggestions()" onkeyup="filterMobileSuggestionsByType()">
+                        <input type="hidden" id="search-type-hidden-mobile" name="search_type" value="">
+                        <div class="suggestions" id="mobile-suggestions-list">
+                            <p class="suggestion-title">Suggested destinations</p>
+                            @forelse($activeHotelsForSuggestions as $hotel)
+                                @php
+                                    $featuredPhotos = json_decode($hotel->featured_photo, true);
+                                    $nearbyAreas = is_string($hotel->custom_nearby_areas) ? json_decode($hotel->custom_nearby_areas, true) : $hotel->custom_nearby_areas;
+                                    $propertyCategory = $hotel->property_category ?? 'Hotel';
+                                    $propertyType = $hotel->property_type ?? '';
+                                    $roomNames = $hotel->rooms->pluck('name')->implode(', ');
+                                    $roomDescriptions = $hotel->rooms->pluck('description')->filter()->implode(', ');
+                                @endphp
+                                <div class="suggestion-item" data-hotel-name="{{ $hotel->description }}" data-location="{{ $hotel->address ?? '' }}"
+                                    data-nearby="{{ !empty($nearbyAreas) ? implode(', ', $nearbyAreas) : '' }}" data-category="{{ strtolower($propertyCategory) }}"
+                                    data-type="{{ strtolower($propertyType) }}" data-room-names="{{ strtolower($roomNames) }}"
+                                    data-room-descriptions="{{ strtolower($roomDescriptions) }}" data-search-type="all">
+                                    @if(!empty($featuredPhotos[0]))
+                                        <img src="{{ asset($featuredPhotos[0]) }}" alt="{{ $hotel->description }}" class="suggestion-icon" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
+                                    @else
+                                        <img src="{{ asset('frontend')}}/images/icons/1.webp" alt="{{ $hotel->description }}" class="suggestion-icon" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
+                                    @endif
+                                    <div class="suggestion-text">
+                                        <strong>{{ $hotel->description }}</strong><br>
+                                        <span>@if(!empty($nearbyAreas[0])){{ $nearbyAreas[0] }}@elseif(!empty($hotel->address)){{ $hotel->address }}@else Available for booking @endif</span>
+                                        @if($propertyCategory)<br><small style="color: #666;">{{ $propertyCategory }}@if($propertyType) - {{ $propertyType }}@endif</small>@endif
+                                    </div>
                                 </div>
-                                <div id="calendar-mobile" class="calendar"></div>
-                            </div>
+                            @empty
+                                <div class="suggestion-item"><div class="suggestion-text"><span>No destinations available</span></div></div>
+                            @endforelse
                         </div>
-                        <div class="search-container search-item search-button-group">
-                            <div class="guest-container">
-                                <!-- Guest Button -->
-                                <div id="guest-dropdown-mobile" class="guest-dropdown">
-                                    <label>Who</label>
-                                    <button type="button" class="guest-button" onclick="toggleGuestDropdown('mobile')">Add Guests</button>
-                                    <!-- Guest Selection (Initially Hidden) -->
-                                    <div class="guest-selector hidden" id="guest-selector-mobile">
-                                        <div class="guest-type">
-                                            <div class="person-group">
-                                                <span class="guest-label">Adults</span>
-                                                <p>Ages 13 or above</p>
-                                            </div>
-                                            <div class="guest-controls">
-                                                <button type="button" class="decrease" onclick="decreaseCount('mobile', 'adultCount')">-</button>
-                                                <span class="guest-count" id="adultCountMobile">0</span>
-                                                <button type="button" class="increase" onclick="increaseCount('mobile', 'adultCount')">+</button>
-                                            </div>
+                    </div>
+                    <div id="mobile-view">
+                        <div class="search-container search-item">
+                            <label for="checkin-mobile">Add date</label>
+                            <input type="text" id="checkin-mobile" name="checkin_display" placeholder="Check In" readonly />
+                            <input type="hidden" id="checkin-mobile-hidden" name="checkin" />
+                        </div>
+                        <div class="search-container search-item">
+                            <label for="checkout-mobile">Add date</label>
+                            <input type="text" id="checkout-mobile" name="checkout_display" placeholder="Check Out" readonly />
+                            <input type="hidden" id="checkout-mobile-hidden" name="checkout" />
+                        </div>
+                        <div id="calendar-popup-mobile" class="calendar-popup">
+                            <div class="calendar-header">
+                                <button type="button" id="prevMonth-mobile">&#10094;</button>
+                                <span id="calendarMonth-mobile"></span>
+                                <button type="button" id="nextMonth-mobile">&#10095;</button>
+                            </div>
+                            <div id="calendar-mobile" class="calendar"></div>
+                        </div>
+                    </div>
+                    <div class="search-container search-item search-button-group" style="border: none;">
+                        <div class="guest-container">
+                            <div id="guest-dropdown-mobile" class="guest-dropdown">
+                                <label>Persons</label>
+                                <button type="button" class="guest-button" onclick="toggleGuestDropdown('mobile')">Add Guests</button>
+                                <div class="guest-selector hidden" id="guest-selector-mobile">
+                                    <div class="guest-type">
+                                        <div class="person-group"><span class="guest-label">Adults</span><p>Ages 13 or above</p></div>
+                                        <div class="guest-controls">
+                                            <button type="button" class="decrease" onclick="decreaseCount('mobile', 'adultCount')">-</button>
+                                            <span class="guest-count" id="adultCountMobile">0</span>
+                                            <button type="button" class="increase" onclick="increaseCount('mobile', 'adultCount')">+</button>
                                         </div>
-                                        <div class="guest-type">
-                                            <div class="person-group">
-                                                <span class="guest-label">Children</span>
-                                                <p>Ages 2 – 12</p>
-                                            </div>
-                                            <div class="guest-controls">
-                                                <button type="button" class="decrease" onclick="decreaseCount('mobile', 'childrenCount')">-</button>
-                                                <span class="guest-count" id="childrenCountMobile">0</span>
-                                                <button type="button" class="increase" onclick="increaseCount('mobile', 'childrenCount')">+</button>
-                                            </div>
+                                    </div>
+                                    <div class="guest-type">
+                                        <div class="person-group"><span class="guest-label">Children</span><p>Ages 2 – 12</p></div>
+                                        <div class="guest-controls">
+                                            <button type="button" class="decrease" onclick="decreaseCount('mobile', 'childrenCount')">-</button>
+                                            <span class="guest-count" id="childrenCountMobile">0</span>
+                                            <button type="button" class="increase" onclick="increaseCount('mobile', 'childrenCount')">+</button>
                                         </div>
-                                        <div class="guest-type">
-                                            <div class="person-group">
-                                                <span class="guest-label">Infants</span>
-                                                <p>Under 2</p>
-                                            </div>
-                                            <div class="guest-controls">
-                                                <button type="button" class="decrease" onclick="decreaseCount('mobile', 'infantCount')">-</button>
-                                                <span class="guest-count" id="infantCountMobile">0</span>
-                                                <button type="button" class="increase" onclick="increaseCount('mobile', 'infantCount')">+</button>
-                                            </div>
+                                    </div>
+                                    <div class="guest-type">
+                                        <div class="person-group"><span class="guest-label">Infants</span><p>Under 2</p></div>
+                                        <div class="guest-controls">
+                                            <button type="button" class="decrease" onclick="decreaseCount('mobile', 'infantCount')">-</button>
+                                            <span class="guest-count" id="infantCountMobile">0</span>
+                                            <button type="button" class="increase" onclick="increaseCount('mobile', 'infantCount')">+</button>
                                         </div>
-                                        <div class="guest-type">
-                                            <div class="person-group">
-                                                <span class="guest-label">Pets</span>
-                                                <p>Bringing a service animal?</p>
-                                            </div>
-                                            <div class="guest-controls">
-                                                <button type="button" class="decrease" onclick="decreaseCount('mobile', 'petCount')">-</button>
-                                                <span class="guest-count" id="petCountMobile">0</span>
-                                                <button type="button" class="increase" onclick="increaseCount('mobile', 'petCount')">+</button>
-                                            </div>
+                                    </div>
+                                    <div class="guest-type">
+                                        <div class="person-group"><span class="guest-label">Pets</span><p>Bringing a service animal?</p></div>
+                                        <div class="guest-controls">
+                                            <button type="button" class="decrease" onclick="decreaseCount('mobile', 'petCount')">-</button>
+                                            <span class="guest-count" id="petCountMobile">0</span>
+                                            <button type="button" class="increase" onclick="increaseCount('mobile', 'petCount')">+</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="search-btn search-btn-mb-filter">
-                            <button type="submit" class="search-button seach-mb-filter">
-                                <i class="fa fa-search search-icon-top-mb"></i>   Search
-                            </button>
-                        </div>
-                        <!-- Hidden inputs for guest counts -->
-                        <input type="hidden" id="adults-input-mobile" name="adults" value="0" />
-                        <input type="hidden" id="children-input-mobile" name="children" value="0" />
-                        <input type="hidden" id="infants-input-mobile" name="infants" value="0" />
-                        <input type="hidden" id="pets-input-mobile" name="pets" value="0" />
                     </div>
-                    </form>
+                    <div class="search-btn search-btn-mb-filter">
+                        <button type="submit" class="search-button seach-mb-filter">
+                            <i class="fa fa-search search-icon-top-mb"></i>
+                        </button>
+                    </div>
+                    <input type="hidden" id="adults-input-mobile" name="adults" value="0" />
+                    <input type="hidden" id="children-input-mobile" name="children" value="0" />
+                    <input type="hidden" id="infants-input-mobile" name="infants" value="0" />
+                    <input type="hidden" id="pets-input-mobile" name="pets" value="0" />
                 </div>
-            </div>
+            </form>
         </div>
-    </div>
+    </section>
     @endif
 
     <!--End:  Mobile Header- -->
@@ -475,23 +461,24 @@
                             @if(auth()->guard('guest')->check())
                                 <a href="#">{{ auth()->guard('guest')->user()->name }}</a>
                             @else
-                                <a href="#">Egkom your Home </a>
+                                <a href="#">Income from Hosting</a>
                             @endif
                         </div>
                         
                         <div class="user-section">
                             <div class="user-login-button">
                                 <a href="#" id="profileIconToggle">
+                                    
+                                    <div class="user-icon">
+                                        <svg class="user-cicle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true" role="presentation" focusable="false" style="display: block;  fill: currentcolor;">
+                                            <path d="M16 .7C7.56.7.7 7.56.7 16S7.56 31.3 16 31.3 31.3 24.44 31.3 16 24.44.7 16 .7zm0 28c-4.02 0-7.6-1.88-9.93-4.81a12.43 12.43 0 0 1 6.45-4.4A6.5 6.5 0 0 1 9.5 14a6.5 6.5 0 0 1 13 0 6.51 6.5 0 0 1-3.02 5.5 12.42 12.42 0 0 1 6.45 4.4A12.67 12.67 0 0 1 16 28.7z"></path>
+                                        </svg>
+                                    </div>
                                     <div class="user-svg-toggle">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true" role="presentation" focusable="false" style="display: block; fill: none; height: 16px; width: 16px; stroke: currentcolor; stroke-width: 3; overflow: visible;">
                                             <g fill="none">
                                                 <path d="M2 16h28M2 24h28M2 8h28"></path>
                                             </g>
-                                        </svg>
-                                    </div>
-                                    <div class="user-icon">
-                                        <svg class="user-cicle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true" role="presentation" focusable="false" style="display: block;  fill: currentcolor;">
-                                            <path d="M16 .7C7.56.7.7 7.56.7 16S7.56 31.3 16 31.3 31.3 24.44 31.3 16 24.44.7 16 .7zm0 28c-4.02 0-7.6-1.88-9.93-4.81a12.43 12.43 0 0 1 6.45-4.4A6.5 6.5 0 0 1 9.5 14a6.5 6.5 0 0 1 13 0 6.51 6.5 0 0 1-3.02 5.5 12.42 12.42 0 0 1 6.45 4.4A12.67 12.67 0 0 1 16 28.7z"></path>
                                         </svg>
                                     </div>
                                 </a>
@@ -699,6 +686,8 @@
     <!-- end footer -->
 
 </div>
+<!-- Scroll to top button (outside wrapper for correct positioning) -->
+<button id="scrollTopBtn" onclick="scrollToTop()"><i class="fa fa-long-arrow-up" aria-hidden="true"></i></button>
 <!-- Page Scripts Starts -->
 <script src="{{ asset('frontend')}}/js/jquery-3.3.1.min.js"></script>
 <script src="{{ asset('frontend')}}/js/popper.min.js"></script>
@@ -1016,9 +1005,10 @@
         transform: translateX(0);
     }
     .cart-header {
-        background: #4a5568;
+        position: relative;
+        background: #91278f;
         color: white;
-        padding: 20px;
+        padding: 16px 20px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -1031,15 +1021,21 @@
     .cart-drawer-close {
         background: transparent;
         border: none;
-        color: white;
-        font-size: 24px;
+        color: #7a7a7a;
+        font-size: 18px;
         cursor: pointer;
         padding: 0;
-        width: 30px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        position: relative;
+        flex-shrink: 0;
+        opacity: 0.7;
+        transition: opacity 0.2s, transform 0.2s;
+    }
+    .cart-drawer-close:hover {
+        opacity: 1;
+        transform: scale(1.05);
     }
     .rooms-selection-container {
         flex: 1;
@@ -1092,20 +1088,22 @@
         font-weight: 700;
         font-size: 16px;
     }
+    /* Unified small grey "X" delete icon */
     .rooms-selection-container .delete-button {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        background: #3b82f6;
+        width: 20px;
+        height: 20px;
+        border-radius: 0;
+        background: transparent;
         cursor: pointer;
         position: relative;
-        transition: all 0.3s;
+        transition: opacity 0.2s, transform 0.2s;
         flex-shrink: 0;
         margin-left: 10px;
+        opacity: 0.7;
     }
     .rooms-selection-container .delete-button:hover {
-        background: #2563eb;
-        transform: scale(1.1);
+        opacity: 1;
+        transform: scale(1.05);
     }
     .rooms-selection-container .delete-button:before,
     .rooms-selection-container .delete-button:after {
@@ -1115,7 +1113,7 @@
         left: 50%;
         width: 14px;
         height: 2px;
-        background: white;
+        background: #7a7a7a;
     }
     .rooms-selection-container .delete-button:before {
         transform: translate(-50%, -50%) rotate(45deg);
@@ -1254,6 +1252,9 @@
     function removeFromGlobalCart(roomId) {
         const item = globalBookingCart.find(i => i.roomId === roomId);
         if (!item) return;
+
+        // Close the cart drawer so only the confirmation modal is visible
+        closeCartDrawer();
         
         Swal.fire({
             title: 'Remove from Cart?',
@@ -1287,6 +1288,10 @@
         const drawerCartList = document.getElementById('globalCartItemsList');
         const drawerCartTotal = document.getElementById('globalCartTotal');
         
+        // Update sidebar cart (if on hotel details page)
+        const sidebarCartList = document.getElementById('cartItemsList');
+        const sidebarCartTotal = document.getElementById('cartTotal');
+        
         // Update floating button badge and visibility
         const globalBadge = document.getElementById('globalCartCountBadge');
         const floatingButton = document.querySelector('.global-floating-cart-btn');
@@ -1294,8 +1299,10 @@
         if (globalBookingCart.length === 0) {
             const emptyMessage = '<p class="empty-cart-message">No rooms added yet</p>';
             if (drawerCartList) drawerCartList.innerHTML = emptyMessage;
+            if (sidebarCartList) sidebarCartList.innerHTML = emptyMessage;
             
             if (drawerCartTotal) drawerCartTotal.textContent = 'Total = BDT 0.00';
+            if (sidebarCartTotal) sidebarCartTotal.textContent = 'Total = BDT 0.00';
             
             if (globalBadge) {
                 globalBadge.textContent = '0';
@@ -1367,6 +1374,10 @@
         if (drawerCartList) drawerCartList.innerHTML = itemsHtml;
         if (drawerCartTotal) drawerCartTotal.textContent = `Total = BDT ${total.toFixed(2)}`;
         
+        // Update sidebar
+        if (sidebarCartList) sidebarCartList.innerHTML = itemsHtml;
+        if (sidebarCartTotal) sidebarCartTotal.textContent = `Total = BDT ${total.toFixed(2)}`;
+        
         // Update badge with animation
         const count = globalBookingCart.length;
         if (globalBadge) {
@@ -1388,6 +1399,13 @@
         const drawer = document.getElementById('globalBookingCartDrawer');
         if (drawer) {
             drawer.classList.toggle('active');
+        }
+    }
+
+    function closeCartDrawer() {
+        const drawer = document.getElementById('globalBookingCartDrawer');
+        if (drawer) {
+            drawer.classList.remove('active');
         }
     }
     

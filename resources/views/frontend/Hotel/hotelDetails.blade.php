@@ -61,7 +61,15 @@
                                         <div class="hotel-heading-name">
                                             <div data-v-58caae98="" class="nearby">
                                                 <div data-v-58caae98="" class="label"> What's Nearby</div>
-                                                @foreach(json_decode($show->custom_nearby_areas ?? '[]', true) ?? [] as $area)
+                                                @php
+                                                    $nearbyAreas = $show->custom_nearby_areas ?? null;
+                                                    if (is_string($nearbyAreas)) {
+                                                        $nearbyAreas = json_decode($nearbyAreas, true) ?? [];
+                                                    } elseif (!is_array($nearbyAreas)) {
+                                                        $nearbyAreas = [];
+                                                    }
+                                                @endphp
+                                                @foreach(array_slice((array) $nearbyAreas, 0, 3) as $area)
                                                     <div class="landmark">
                                                         <span>
                                                             <i class="icon icon-map-marker-grey location-pin"></i> {{ $area }}
@@ -84,7 +92,7 @@
                             </div>
                             <div class="owl-carousel owl-theme owl-custom-arrow" id="owl-car-offers">
                                 @php
-                                    $photoFields = ['featured_photo','entrance_gate_photos','lift_stairs_photos','rooftop_photos','spa_photos','gym_photos','amenities_photos'];
+                                    $photoFields = ['entrance_gate_photos','lift_stairs_photos','rooftop_photos','spa_photos','gym_photos','amenities_photos','additional_photos'];
                                 @endphp
                                 @foreach($photoFields as $field)
                                     @php
@@ -144,18 +152,20 @@
                                 <div class="hotel-heading-name">
                                     <div data-v-58caae98="" class="nearby">
                                         <div data-v-58caae98="" class="label"> What's Nearby</div>
+                                        @php
+                                            $nearbyAreasMobile = $show->custom_nearby_areas ?? null;
+                                            if (is_string($nearbyAreasMobile)) {
+                                                $nearbyAreasMobile = json_decode($nearbyAreasMobile, true) ?? [];
+                                            } elseif (!is_array($nearbyAreasMobile)) {
+                                                $nearbyAreasMobile = [];
+                                            }
+                                        @endphp
+                                        @foreach(array_slice((array) $nearbyAreasMobile, 0, 3) as $area)
                                         <div data-v-58caae98="" class="landmark">
                                           <span data-v-58caae98="">
-                                          <i data-v-58caae98="" class="icon icon-map-marker-grey location-pin"></i> 16.5 km from Himchori Waterfall </span>
+                                          <i data-v-58caae98="" class="icon icon-map-marker-grey location-pin"></i> {{ $area }}</span>
                                         </div>
-                                        <div data-v-58caae98="" class="landmark">
-                                          <span data-v-58caae98="">
-                                          <i data-v-58caae98="" class="icon icon-map-marker-grey location-pin"></i> 0.25 km from Navy Jetty, from where Saint Martin bound ship sails </span>
-                                        </div>
-                                        <div data-v-58caae98="" class="landmark">
-                                          <span data-v-58caae98="">
-                                          <i data-v-58caae98="" class="icon icon-map-marker-grey location-pin"></i> 3.2 km from Cox's Bazar Airport </span>
-                                        </div>
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -309,7 +319,7 @@
 
                                                 <div class="col-12 col-md-3">
                                                     <div class="form-group left-icon">
-                                                        <input type="date" class="form-control dpd1" id="checkInDate" name="checkin"
+                                                        <input type="date" class="form-control hotel-details-date" id="checkInDate" name="checkin"
                                                                placeholder="Check In" required onchange="updateDatesAndFilter()">
                                                         <i class="fa fa-calendar"></i>
                                                     </div>
@@ -317,7 +327,7 @@
 
                                                 <div class="col-12 col-md-3">
                                                     <div class="form-group left-icon">
-                                                        <input type="date" class="form-control dpd1" id="checkoutDate" name="checkout"
+                                                        <input type="date" class="form-control hotel-details-date" id="checkoutDate" name="checkout"
                                                                placeholder="Check Out" required onchange="updateDatesAndFilter()">
                                                         <i class="fa fa-calendar"></i>
                                                     </div>
@@ -418,7 +428,10 @@
                 </script>
 
                 <style>
-                    /* Wishlist Heart Icon Styles */
+                    /* Wishlist Heart Icon - top-right of room card (like attachment 2) */
+                    .hotel-all-card {
+                        position: relative;
+                    }
                     .wishlist-heart-icon {
                         position: absolute;
                         top: 15px;
@@ -426,6 +439,7 @@
                         width: 40px;
                         height: 40px;
                         background: white;
+                        border: 2px solid #90278e;
                         border-radius: 50%;
                         display: flex;
                         align-items: center;
@@ -439,6 +453,44 @@
                     .wishlist-heart-icon:hover {
                         transform: scale(1.1);
                         box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+                    }
+                    
+                    /* Nights locked when set by search dates */
+                    .quantity-btn.nights-locked .qty-room input {
+                        cursor: default;
+                        background-color: #f5f5f5;
+                    }
+
+                    /* Pill-style nights selector */
+                    .quantity-btn .qty-room {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        gap: 4px;
+                    }
+
+                    .quantity-btn .qty-room input[type="number"] {
+                        width: 56px;
+                        height: 32px;
+                        border-radius: 999px;
+                        border: 2px solid #91278f;
+                        text-align: center;
+                        font-weight: 600;
+                        color: #1c3c6b;
+                        outline: none;
+                        -moz-appearance: textfield;
+                    }
+
+                    .quantity-btn .qty-room input[type="number"]::-webkit-outer-spin-button,
+                    .quantity-btn .qty-room input[type="number"]::-webkit-inner-spin-button {
+                        -webkit-appearance: none;
+                        margin: 0;
+                    }
+
+                    .quantity-btn .qty-room .night-label {
+                        font-size: 13px;
+                        color: #444;
+                        margin: 0;
                     }
                     
                     .wishlist-heart-icon i {
@@ -459,6 +511,17 @@
                     
                     .image-gallery {
                         position: relative;
+                    }
+
+                    /* Ensure the featured image acts as the positioning context for the main heart icon */
+                    .image-gallery .featured {
+                        position: relative;
+                    }
+
+                    /* Position of the heart icon over the main image (as requested) */
+                    .wishlist-heart-icon-main {
+                        top: 48px;
+                        right: -6px;
                     }
                     
                     /* Gap between Couple Friendly tag and image gallery */
@@ -804,6 +867,16 @@
                                                     </div>
                                                 </div>
                                             @else
+                                            @php
+                                                $searchNights = 1;
+                                                $nightsFromSearch = false;
+                                                if (isset($searchParams) && !empty($searchParams['checkin']) && !empty($searchParams['checkout'])) {
+                                                    $ci = \Carbon\Carbon::parse($searchParams['checkin']);
+                                                    $co = \Carbon\Carbon::parse($searchParams['checkout']);
+                                                    $searchNights = max(1, $ci->diffInDays($co));
+                                                    $nightsFromSearch = true;
+                                                }
+                                            @endphp
                                             @foreach($activeRooms as $roomList)
 
                                                 <div class="hotel-all-card" 
@@ -834,17 +907,9 @@
                                                                 </div>
                                                             @endif
                                                         </div>
-                                                        <div class="image-gallery multiple-row" data-bs-toggle="modal"
-                                                             data-bs-target="#rightSidebarModalDetails"
-                                                             data-room-id="{{ $roomList->id }}"
-                                                             onclick="loadRoomDetails({{ $roomList->id }})">
-                                                            {{-- Wishlist Heart Icon --}}
-                                                            <div class="wishlist-heart-icon" 
-                                                                 data-room-id="{{ $roomList->id }}"
-                                                                 onclick="event.stopPropagation(); toggleWishlist({{ $roomList->id }})">
-                                                                <i class="fa fa-heart-o"></i>
-                                                            </div>
-                                                            {{--                                                    {{ $roomList->id }}--}}
+                                                        <div class="image-gallery multiple-row" data-room-id="{{ $roomList->id }}"
+                                                             onclick="loadRoomDetails({{ $roomList->id }})"
+                                                             style="cursor: pointer;">
                                                             @php
                                                                 // Prioritize main feature photo, then other categories in order
                                                                 $photoOrder = [
@@ -872,6 +937,12 @@
                                                                 @if($key == 0)
                                                                     {{-- Featured image (Main Feature Photo if available, otherwise next in order) --}}
                                                                     <div class="featured">
+                                                                        {{-- Wishlist Heart Icon - top-right over featured image (stopPropagation prevents room-details drawer from opening) --}}
+                                                                        <div class="wishlist-heart-icon wishlist-heart-icon-main" 
+                                                                             data-room-id="{{ $roomList->id }}"
+                                                                             onclick="event.stopPropagation(); event.preventDefault(); toggleWishlist({{ $roomList->id }}); return false;">
+                                                                            <i class="fa fa-heart-o"></i>
+                                                                        </div>
                                                                         <picture>
                                                                             <img src="{{ asset($feature->photo_path) }}" alt="Room" class="image-box">
                                                                         </picture>
@@ -1067,8 +1138,6 @@
                                                         </div>
                                                         <div class="show-amenities-modal mt-1 mb-2">
                                                             <span role="button" tabindex="0"><a href="javascript:void(0)"
-                                                                                                data-bs-toggle="modal"
-                                                                                                data-bs-target="#rightSidebarModalDetails"
                                                                                                 onclick="loadRoomDetails({{ $roomList->id }})">  View Room Details</a> </span>
                                                         </div>
 
@@ -1084,10 +1153,12 @@
                                                                  class="pricing-info">
                                                                 <div class="review-main review-main-mb"
                                                                      style="margin-top: 10%;">
-
-                                                                    <div class="review-cat">Fabulous</div>
-                                                                    <div class="review-cat-home">8.9</div>
-
+                                                                    @php
+                                                                        $avgRating = isset($reviewStats['overall_avg']) && $reviewStats['overall_avg'] > 0 ? round((float) $reviewStats['overall_avg'], 1) : null;
+                                                                        $roomSentiment = $avgRating >= 9 ? 'Exceptional' : ($avgRating >= 8 ? 'Fabulous' : ($avgRating >= 7 ? 'Very Good' : ($avgRating >= 6 ? 'Good' : ($avgRating >= 5 ? 'Average' : 'Rating'))));
+                                                                    @endphp
+                                                                    <div class="review-cat">{{ $avgRating !== null ? $roomSentiment : 'Rating' }}</div>
+                                                                    <div class="review-cat-home">{{ $avgRating ?? '—' }}</div>
                                                                 </div>
                                                                 @php
                                                                     $originalPrice = (float) ($roomList->price_per_night ?? 0);
@@ -1110,16 +1181,24 @@
                                                                 </div>
                                                                 @endif
                                                                 <!---->
-                                                                <div data-v-b6728cd0="" class="price-amount">
+                                                                <div data-v-b6728cd0="" class="price-amount" data-price-per-night="{{ $discountedPrice }}" data-room-id="{{ $roomList->id }}">
                                                                     @if($discountPercentage > 0)
                                                                     <span data-v-b6728cd0=""
                                                                           class="price-before-discount"> <del>BDT {{ number_format($originalPrice, 2) }}</del> </span>
                                                                     @endif
-                                                                    <span class="amount">Total = BDT {{ number_format($discountedPrice, 2) }}</span>
+                                                                    @php
+                                                                        $roomTotal = $discountedPrice * $searchNights;
+                                                                    @endphp
+                                                                    <span class="amount room-total-display">
+                                                                        Total = BDT {{ number_format($roomTotal, 2) }}
+                                                                        @if($searchNights > 0)
+                                                                            for {{ $searchNights }} {{ $searchNights == 1 ? 'Night' : 'Nights' }}
+                                                                        @endif
+                                                                    </span>
                                                                     <p class="tax-tag">Fee or Tax will show at checkout (if any)</p>
                                                                 </div>
 
-                                                                <div data-v-b6728cd0="" class="price-per">Per Night</div>
+                                                                <div data-v-b6728cd0="" class="price-per">BDT {{ number_format($discountedPrice, 2) }} per night</div>
 
                                                                 @php
                                                                     // Check if Non-refundable is selected in room's cancellation_policy field
@@ -1142,26 +1221,31 @@
                                                                 </div>
                                                                 @endif
 
-                                                                <div class="quantity-btn">
+                                                                <div class="quantity-btn {{ $nightsFromSearch ? 'nights-locked' : '' }}">
                                                                     <form action="">
                                                                         <p class="qty qty-room">
-                                                                            <button type="button" class="qtyminus" data-room-id="{{ $roomList->id }}"
-                                                                                    aria-hidden="true">&minus;
-                                                                            </button>
+                                                                            @if($nightsFromSearch)
+                                                                            <input type="number" name="qty" id="qty-{{ $roomList->id }}" readonly
+                                                                                   min="1" max="{{ $roomList->total_rooms ?? 10 }}" step="1" value="{{ $searchNights }}"
+                                                                                   data-room-id="{{ $roomList->id }}" data-price-per-night="{{ $discountedPrice }}" data-nights-locked="1">
+                                                                            @else
                                                                             <input type="number" name="qty" id="qty-{{ $roomList->id }}"
-                                                                                   min="1" max="{{ $roomList->total_rooms ?? 10 }}" step="1" value="1">
-                                                                            <button type="button" class="qtyplus" data-room-id="{{ $roomList->id }}"
-                                                                                    aria-hidden="true">&plus;
-                                                                            </button>
-                                                                            <label style="padding-left: 15px;"
-                                                                                   for="qty-{{ $roomList->id }}">Night</label>
+                                                                                   min="1" max="{{ $roomList->total_rooms ?? 10 }}" step="1" value="{{ $searchNights }}"
+                                                                                   data-room-id="{{ $roomList->id }}" data-price-per-night="{{ $discountedPrice }}">
+                                                                            @endif
+                                                                            <label style="padding-left: 15px;" for="qty-{{ $roomList->id }}" class="night-label">{{ $searchNights }} {{ $searchNights == 1 ? 'Night' : 'Nights' }}</label>
                                                                         </p>
                                                                     </form>
                                                                 </div>
 
                                                                 <div class="book_btn_2">
-                                                                    <a href="javascript:void(0)" 
-                                                                       onclick="addToCart({{ $roomList->id }}, {!! json_encode($roomList->name) !!}, {{ $discountedPrice ?? 0 }}, {{ $roomList->total_rooms ?? 1 }}, {{ $roomList->total_persons ?? 2 }}, {{ $show->id }})">
+                                                                    <a href="javascript:void(0)" class="add-to-book-btn" role="button"
+                                                                       data-room-id="{{ $roomList->id }}"
+                                                                       data-room-name="{{ e($roomList->name) }}"
+                                                                       data-price="{{ $discountedPrice ?? 0 }}"
+                                                                       data-max-qty="{{ $roomList->total_rooms ?? 1 }}"
+                                                                       data-capacity="{{ $roomList->total_persons ?? 2 }}"
+                                                                       data-hotel-id="{{ $show->id ?? 0 }}">
                                                                         Add to<span> Book</span>
                                                                     </a>
                                                                 </div>
@@ -1219,44 +1303,77 @@
 
                 <!-- Room Data for Modal -->
                 <script>
-                    // Use global cart functions
+                    // Use global cart functions (from layout)
                     function addToCart(roomId, roomName, price, maxQuantity, capacity, hotelId) {
-                        roomId = Number(roomId);
-                        const qtyInput = document.getElementById('qty-' + roomId);
-                        const quantity = qtyInput ? parseInt(qtyInput.value, 10) : 1;
-                        
-                        // Get room number and floor number from roomsData (use == for id match in case of string/number)
-                        const room = roomsData.find(r => Number(r.id) === roomId);
-                        const roomNumber = room ? (room.number || null) : null;
-                        const floorNumber = room ? (room.floor_number || null) : null;
-                        
-                        if (addToGlobalCart(roomId, roomName, Number(price) || 0, maxQuantity, quantity, capacity, hotelId, roomNumber, floorNumber)) {
+                        try {
+                            roomId = Number(roomId);
+                            const qtyInput = document.getElementById('qty-' + roomId);
+                            let quantity = 1;
+                            if (qtyInput && qtyInput.value !== '' && !isNaN(parseInt(qtyInput.value, 10))) {
+                                quantity = Math.max(1, parseInt(qtyInput.value, 10));
+                            }
+                            maxQuantity = Math.max(1, parseInt(maxQuantity, 10) || 1);
+                            capacity = Math.max(1, parseInt(capacity, 10) || 2);
+                            hotelId = hotelId ? Number(hotelId) : null;
+                            const priceNum = Number(price) || 0;
+
+                            if (typeof addToGlobalCart !== 'function') {
+                                console.error('addToGlobalCart is not defined. Layout cart script may not have loaded.');
+                                if (typeof Swal !== 'undefined') {
+                                    Swal.fire({ icon: 'error', title: 'Error', text: 'Booking cart is not ready. Please refresh the page.' });
+                                } else {
+                                    alert('Booking cart is not ready. Please refresh the page.');
+                                }
+                                return;
+                            }
+
+                            let roomNumber = null;
+                            let floorNumber = null;
+                            if (typeof roomsData !== 'undefined' && Array.isArray(roomsData)) {
+                                const room = roomsData.find(r => Number(r.id) === roomId);
+                                if (room) {
+                                    roomNumber = room.number || null;
+                                    floorNumber = room.floor_number || null;
+                                }
+                            }
+
+                            const added = addToGlobalCart(roomId, String(roomName || 'Room'), priceNum, maxQuantity, quantity, capacity, hotelId, roomNumber, floorNumber);
+                            if (!added) return;
+
                             // Store booking parameters from search form
+                            const checkinEl = document.getElementById('checkInDate');
+                            const checkoutEl = document.getElementById('checkoutDate');
+                            const guestsEl = document.getElementById('guestsSelect');
+                            const childrenEl = document.getElementById('childrenSelect');
                             const bookingParams = {
-                                checkin: document.getElementById('checkInDate')?.value || '',
-                                checkout: document.getElementById('checkoutDate')?.value || '',
-                                adults: parseInt(document.getElementById('guestsSelect')?.value) || 0,
-                                children: parseInt(document.getElementById('childrenSelect')?.value) || 0,
+                                checkin: checkinEl ? checkinEl.value : '',
+                                checkout: checkoutEl ? checkoutEl.value : '',
+                                adults: guestsEl ? (parseInt(guestsEl.value, 10) || 0) : 0,
+                                children: childrenEl ? (parseInt(childrenEl.value, 10) || 0) : 0,
                                 infants: 0,
                                 pets: 0
                             };
-                            
-                            // Store booking parameters in localStorage
-                            localStorage.setItem('bookingParams', JSON.stringify(bookingParams));
-                            
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Added to Cart!',
-                                text: `${roomName} (${quantity} Night${quantity > 1 ? 's' : ''}) has been added to your booking cart.`,
-                                confirmButtonColor: '#91278f',
-                                timer: 2000,
-                                showConfirmButton: true,
-                                confirmButtonText: 'View Cart'
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    toggleCartDrawer();
-                                }
-                            });
+                            try {
+                                localStorage.setItem('bookingParams', JSON.stringify(bookingParams));
+                            } catch (e) {}
+
+                            if (typeof Swal !== 'undefined') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Added to Cart!',
+                                    text: roomName + ' (' + quantity + ' Night' + (quantity > 1 ? 's' : '') + ') has been added to your booking cart.',
+                                    confirmButtonColor: '#91278f',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });
+                            }
+                        } catch (err) {
+                            console.error('addToCart error:', err);
+                            if (typeof Swal !== 'undefined') {
+                                Swal.fire({ icon: 'error', title: 'Could not add to cart', text: err.message || 'Please try again.' });
+                            } else {
+                                alert('Could not add to cart: ' + (err.message || 'Please try again.'));
+                            }
                         }
                     }
 
@@ -1264,39 +1381,77 @@
                         removeFromGlobalCart(roomId);
                     }
 
-                    const roomsData = {!! json_encode(\App\Models\Room::where('hotel_id', $show->id)->where('is_active', true)->with('photos')->get()->map(function($room) {
-                        return [
-                            'id' => $room->id,
-                            'name' => $room->name,
-                            'number' => $room->number,
-                            'floor_number' => $room->floor_number,
-                            'couple_friendly' => (bool)($room->couple_friendly ?? false),
-                            'price_per_night' => $room->price_per_night,
-                            'weekend_price' => $room->weekend_price,
-                            'holiday_price' => $room->holiday_price,
-                            'discount_type' => $room->discount_type,
-                            'discount_amount' => $room->discount_amount,
-                            'discount_percentage' => $room->discount_percentage,
-                            'total_persons' => $room->total_persons,
-                            'total_rooms' => $room->total_rooms,
-                            'total_washrooms' => $room->total_washrooms,
-                            'total_beds' => $room->total_beds,
-                            'size' => $room->size,
-                            'description' => $room->description,
-                            'wifi_details' => $room->wifi_details,
-                            'appliances' => $room->appliances ?? [],
-                            'furniture' => $room->furniture ?? [],
-                            'amenities' => $room->amenities ?? [],
-                            'cancellation_policy' => $room->cancellation_policy ?? [],
-                            'display_options' => $room->display_options ?? [],
-                            'availability_dates' => $room->availability_dates ?? [],
-                            'photos' => $room->photos->groupBy('category')->map(function($photos) {
-                                return $photos->map(function($photo) {
-                                    return $photo->photo_path;
-                                });
-                            })
-                        ];
-                    })) !!};
+                    // Delegate click for Add to Book buttons (uses data attributes - avoids JSON escaping issues)
+                    document.addEventListener('DOMContentLoaded', function() {
+                        document.body.addEventListener('click', function(e) {
+                            const btn = e.target.closest('.add-to-book-btn');
+                            if (!btn) return;
+                            e.preventDefault();
+                            e.stopPropagation();
+                            const roomId = parseInt(btn.getAttribute('data-room-id'), 10);
+                            const roomName = btn.getAttribute('data-room-name') || 'Room';
+                            const price = parseFloat(btn.getAttribute('data-price')) || 0;
+                            const maxQty = parseInt(btn.getAttribute('data-max-qty'), 10) || 1;
+                            const capacity = parseInt(btn.getAttribute('data-capacity'), 10) || 2;
+                            const hotelId = parseInt(btn.getAttribute('data-hotel-id'), 10) || 0;
+                            addToCart(roomId, roomName, price, maxQty, capacity, hotelId);
+                        });
+                    });
+
+                    @php
+                        $roomsDataForJs = \App\Models\Room::where('hotel_id', $show->id)->where('is_active', true)->with('photos')->get()->map(function($room) {
+                            return [
+                                'id' => $room->id,
+                                'name' => $room->name,
+                                'number' => $room->number,
+                                'floor_number' => $room->floor_number,
+                                'couple_friendly' => (bool)($room->couple_friendly ?? false),
+                                'price_per_night' => $room->price_per_night,
+                                'weekend_price' => $room->weekend_price,
+                                'holiday_price' => $room->holiday_price,
+                                'discount_type' => $room->discount_type,
+                                'discount_amount' => $room->discount_amount,
+                                'discount_percentage' => $room->discount_percentage,
+                                'total_persons' => $room->total_persons,
+                                'total_rooms' => $room->total_rooms,
+                                'total_washrooms' => $room->total_washrooms,
+                                'total_beds' => $room->total_beds,
+                                'size' => $room->size,
+                                'description' => $room->description,
+                                'wifi_details' => $room->wifi_details,
+                                'appliances' => $room->appliances ?? [],
+                                'furniture' => $room->furniture ?? [],
+                                'amenities' => $room->amenities ?? [],
+                                'cancellation_policy' => $room->cancellation_policy ?? [],
+                                'display_options' => $room->display_options ?? [],
+                                'availability_dates' => $room->availability_dates ?? [],
+                                'photos' => $room->photos->groupBy('category')->map(function($photos) {
+                                    return $photos->map(function($photo) {
+                                        return $photo->photo_path;
+                                    });
+                                })
+                            ];
+                        })->values()->toArray();
+                        $roomsDataJson = json_encode($roomsDataForJs, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
+                        if ($roomsDataJson === false) {
+                            $roomsDataJson = '[]';
+                        }
+                        $roomsDataB64 = base64_encode($roomsDataJson);
+                    @endphp
+                    </script>
+                    <script id="rooms-data-script" type="text/plain" data-b64="1">{!! $roomsDataB64 !!}</script>
+                    <script>
+                    var roomsData = (function() {
+                        var el = document.getElementById('rooms-data-script');
+                        if (!el || !el.getAttribute('data-b64')) return [];
+                        try {
+                            var jsonStr = atob(el.textContent.replace(/\s/g, ''));
+                            return JSON.parse(jsonStr);
+                        } catch(e) {
+                            console.error('roomsData parse error', e);
+                            return [];
+                        }
+                    })();
 
                     // Store current room for modal "Add to Book" button
                     let currentModalRoom = null;
@@ -1386,6 +1541,7 @@
                         const discountTagModal = document.querySelector('#rightSidebarModalDetails .discount-tag-modal');
                         const priceBeforeDiscountModal = document.querySelector('#rightSidebarModalDetails .price-before-discount-modal');
                         const discountPriceModal = document.querySelector('#rightSidebarModalDetails .discount-price-modal');
+                        const modalTotalNightsText = document.querySelector('#rightSidebarModalDetails .modal-total-nights-text');
                         
                         if (discountPercentage > 0) {
                             if (discountTagModal) discountTagModal.style.display = 'block';
@@ -1399,6 +1555,16 @@
                             if (discountPriceModal) discountPriceModal.textContent = `BDT ${originalPrice.toFixed(2)}`;
                         }
 
+                        // Update modal total text using current nights (default 1; will sync from search state if present)
+                        let modalNights = 1;
+                        if (typeof searchState !== 'undefined' && searchState.nights && searchState.nights > 0) {
+                            modalNights = searchState.nights;
+                        }
+                        const modalTotal = discountedPrice * modalNights;
+                        if (modalTotalNightsText) {
+                            modalTotalNightsText.textContent = `Total = BDT ${modalTotal.toFixed(2)} for ${modalNights} Night${modalNights > 1 ? 's' : ''}`;
+                        }
+
                         // Update quantity max value
                         document.querySelector('#rightSidebarModalDetails #qty').setAttribute('max', room.total_rooms || 10);
 
@@ -1407,10 +1573,15 @@
                         if (modalAddBtn) {
                             modalAddBtn.onclick = function(e) {
                                 e.preventDefault();
+                                if (typeof addToGlobalCart !== 'function') {
+                                    if (typeof Swal !== 'undefined') Swal.fire({ icon: 'error', title: 'Error', text: 'Booking cart is not ready. Please refresh the page.' });
+                                    else alert('Booking cart is not ready. Please refresh the page.');
+                                    return;
+                                }
                                 const modalQty = document.querySelector('#rightSidebarModalDetails #qty');
                                 const quantity = modalQty ? parseInt(modalQty.value) : 1;
                                 
-                                if (addToGlobalCart(Number(room.id), room.name, Number(discountedPrice) || 0, room.total_rooms || 1, quantity, room.total_persons || 2, {{ $show->id }}, room.number || null, room.floor_number || null)) {
+                                if (addToGlobalCart(Number(room.id), room.name, Number(discountedPrice) || 0, room.total_rooms || 1, quantity, room.total_persons || 2, {{ $show->id ?? 0 }}, room.number || null, room.floor_number || null)) {
                                     // Close modal first
                                     const modalElement = document.getElementById('rightSidebarModalDetails');
                                     if (modalElement) {
@@ -1425,12 +1596,7 @@
                                         text: `${room.name} (${quantity} Night${quantity > 1 ? 's' : ''}) has been added to your booking cart.`,
                                         confirmButtonColor: '#91278f',
                                         timer: 2000,
-                                        showConfirmButton: true,
-                                        confirmButtonText: 'View Cart'
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            toggleCartDrawer();
-                                        }
+                                        showConfirmButton: false
                                     });
                                 }
                             };
@@ -1444,6 +1610,13 @@
 
                         // Update Room Details
                         updateRoomDetailsTab(room);
+
+                        // Open the room-details modal here so that clicking the wishlist heart (which stops propagation) does not open it
+                        const modalEl = document.getElementById('rightSidebarModalDetails');
+                        if (modalEl && typeof bootstrap !== 'undefined') {
+                            const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                            modal.show();
+                        }
                     }
 
                     function updateRoomPhotos(photos) {
@@ -1488,7 +1661,7 @@
                                     const div = document.createElement('div');
                                     div.className = 'col-6 col-md-6 luxury-room-block';
                                     div.style.cssText = 'margin-bottom: 15px;';
-                                    div.innerHTML = `<img class="img-fluid" src="/${photoPath}" alt="${category}-photo" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">`;
+                                    div.innerHTML = `<img class="img-fluid" src="/${photoPath}" alt="${category}-photo" style="width: 100%; height: 300px; object-fit: cover; border-radius: 8px;">`;
                                     photoContainer.appendChild(div);
                                     hasPhotos = true;
                                 });
@@ -2004,48 +2177,34 @@
                         // Check wishlist status for all rooms
                         checkWishlistStatus();
                         
-                        // Add click event listener to each delete button
-                        const deleteButtons = document.querySelectorAll('.delete-button');
+                        // Handle quantity input for all rooms (no +/- buttons)
+                        function updateRoomTotalAndLabel(roomId) {
+                            const qtyInput = document.getElementById('qty-' + roomId);
+                            if (!qtyInput) return;
+                            const qty = Math.max(1, parseInt(qtyInput.value, 10) || 1);
+                            const pricePerNight = parseFloat(qtyInput.getAttribute('data-price-per-night')) || 0;
+                            const total = (pricePerNight * qty).toFixed(2);
+                            const card = qtyInput.closest('.hotel-all-card');
+                            if (card) {
+                                const totalDisplay = card.querySelector('.room-total-display');
+                                if (totalDisplay) totalDisplay.textContent = 'Total = BDT ' + Number(total).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                                const nightLabel = card.querySelector('.night-label');
+                                if (nightLabel) nightLabel.textContent = qty + ' ' + (qty === 1 ? 'Night' : 'Nights');
+                            }
+                        }
 
-                        deleteButtons.forEach(function (button) {
-                            button.addEventListener('click', function () {
-                                // Find the parent .room element
-                                const roomItem = button.closest('.room');
-
-                                // Remove the room item from the DOM
-                                if (roomItem) {
-                                    roomItem.remove();
-                                }
+                        document.querySelectorAll('input[id^="qty-"]').forEach(function (input) {
+                            input.addEventListener('input', function () {
+                                const roomId = input.getAttribute('data-room-id') || input.id.replace('qty-', '');
+                                updateRoomTotalAndLabel(roomId);
                             });
-                        });
-
-                        // Handle quantity selectors for all rooms
-                        const qtyMinusButtons = document.querySelectorAll('.qtyminus');
-                        const qtyPlusButtons = document.querySelectorAll('.qtyplus');
-
-                        qtyMinusButtons.forEach(function (button) {
-                            button.addEventListener('click', function () {
-                                const roomId = button.getAttribute('data-room-id');
-                                const qtyInput = document.getElementById('qty-' + roomId);
-                                let currentValue = parseInt(qtyInput.value);
-                                const minValue = parseInt(qtyInput.getAttribute('min'));
-                                
-                                if (currentValue > minValue) {
-                                    qtyInput.value = currentValue - 1;
-                                }
-                            });
-                        });
-
-                        qtyPlusButtons.forEach(function (button) {
-                            button.addEventListener('click', function () {
-                                const roomId = button.getAttribute('data-room-id');
-                                const qtyInput = document.getElementById('qty-' + roomId);
-                                let currentValue = parseInt(qtyInput.value);
-                                const maxValue = parseInt(qtyInput.getAttribute('max'));
-                                
-                                if (currentValue < maxValue) {
-                                    qtyInput.value = currentValue + 1;
-                                }
+                            input.addEventListener('change', function () {
+                                const roomId = input.getAttribute('data-room-id') || input.id.replace('qty-', '');
+                                let val = parseInt(input.value, 10);
+                                if (isNaN(val) || val < 1) { input.value = 1; val = 1; }
+                                const max = parseInt(input.getAttribute('max'), 10);
+                                if (max && val > max) { input.value = max; val = max; }
+                                updateRoomTotalAndLabel(roomId);
                             });
                         });
                     });
@@ -2066,8 +2225,8 @@
                                         <iframe id="dynamicMap" width="100%" height="250" style="border:0;" allowfullscreen loading="lazy"></iframe>
 
                                         <script>
-                                            const lat = "{{ $show->lati ?? 0 }}";
-                                            const lng = "{{ $show->longi ?? 0 }}";
+                                            const lat = {!! json_encode($show->lati ?? 0) !!};
+                                            const lng = {!! json_encode($show->longi ?? 0) !!};
                                             const mapUrl = `https://www.google.com/maps?q=${lat},${lng}&z=15&output=embed`;
 
                                             document.getElementById('dynamicMap').src = mapUrl;
@@ -2167,7 +2326,14 @@
                             <div data-v-58caae98="" class="facilities-flex">
 
                                 @php
-                                    $facilities = json_decode($show->hotel_facilities ?? '[]', true) ?? [];
+                                    $facilitiesRaw = $show->hotel_facilities ?? null;
+                                    if (is_string($facilitiesRaw)) {
+                                        $facilities = json_decode($facilitiesRaw, true) ?? [];
+                                    } elseif (is_array($facilitiesRaw)) {
+                                        $facilities = $facilitiesRaw;
+                                    } else {
+                                        $facilities = [];
+                                    }
 
                                     // Group facilities by category
                                     $groupedFacilities = collect($facilities)->groupBy('category');
@@ -2811,8 +2977,7 @@
                                             <div class="vendor-right-section">
 
                                                 <div class="vendor-top-information">
-                                                    <h5 class="Superhost-subtitle"> {{ $show->description }} is a
-                                                        Superhost</h5>
+                                                    <h5 class="Superhost-subtitle" style="color: #91278f;">What EZBooking Says about the Host?</h5>
 
                                                     <div class="vendor-personal-info">
 
@@ -2869,12 +3034,196 @@
                                                         </div>
                                                     </div>
 
+                                                    <div class="mt-3">
+                                                        <button type="button" class="btn btn-primary" id="openMessageBtn" style="background: #91278f; border-color: #91278f; padding: 12px 28px; font-size: 16px; min-width: 160px;">Message</button>
+                                                    </div>
+
+                                                    <!-- Message compose panel (shown when Message clicked) -->
+                                                    <div id="messageComposePanel" class="message-compose-panel" style="display: none;">
+                                                        <div class="message-compose-header">
+                                                            <h6 class="mb-0">Send a message</h6>
+                                                            <button type="button" class="btn-close-message" id="closeMessageCompose" aria-label="Close">&times;</button>
+                                                        </div>
+                                                        <div class="message-compose-body">
+                                                            <textarea id="messageTextInput" class="form-control" rows="4" placeholder="Type your message here..."></textarea>
+                                                            <button type="button" class="btn btn-primary btn-send-message" id="sendMessageBtn" style="background: #91278f; border-color: #91278f; margin-top: 10px;">Send</button>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Message sent bubble + floating inbox (bottom-left) -->
+                                                    <div id="messageSentBubble" class="message-sent-bubble" style="display: none;">
+                                                        <div class="message-bubble-content">
+                                                            <div class="message-bubble-icon">✓</div>
+                                                            <p class="message-bubble-text">Message sent!</p>
+                                                            <button type="button" class="btn btn-sm btn-primary btn-continue" id="messageBubbleContinue" style="background: #91278f; border-color: #91278f;">Continue</button>
+                                                        </div>
+                                                        <div class="message-bubble-tail"></div>
+                                                    </div>
+
+                                                    <!-- Floating Inbox button (always visible at same position) -->
+                                                    <button id="floatingInboxButton" class="floating-inbox-btn" type="button">
+                                                        <span class="inbox-icon">
+                                                            <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                                                            <span class="inbox-badge" id="inboxUnreadBadge" style="display:none;">1</span>
+                                                        </span>
+                                                        <span class="inbox-label">Inbox</span>
+                                                        <span class="inbox-avatar"></span>
+                                                    </button>
 
                                                     <!-- <div class="border-bottom-line"></div> -->
                                                 </div>
 
                                             </div>
                                         </div>
+
+                                        <style>
+                                        .message-compose-panel {
+                                            margin-top: 15px;
+                                            border: 1px solid #e0e0e0;
+                                            border-radius: 12px;
+                                            overflow: hidden;
+                                            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+                                        }
+                                        .message-compose-header {
+                                            display: flex;
+                                            justify-content: space-between;
+                                            align-items: center;
+                                            padding: 12px 16px;
+                                            background: #f8f9fa;
+                                            border-bottom: 1px solid #e0e0e0;
+                                        }
+                                        .message-compose-header h6 { color: #333; font-weight: 600; }
+                                        .btn-close-message {
+                                            background: none;
+                                            border: none;
+                                            font-size: 24px;
+                                            line-height: 1;
+                                            cursor: pointer;
+                                            color: #666;
+                                            padding: 0;
+                                            width: 28px;
+                                            height: 28px;
+                                        }
+                                        .btn-close-message:hover { color: #333; }
+                                        .message-compose-body {
+                                            padding: 16px;
+                                        }
+                                        .message-compose-body textarea {
+                                            border-radius: 8px;
+                                            resize: vertical;
+                                            min-height: 100px;
+                                        }
+                                        .message-sent-bubble {
+                                            position: fixed;
+                                            left: 24px;
+                                            bottom: 24px;
+                                            z-index: 9999;
+                                            animation: messageBubbleIn 0.3s ease;
+                                        }
+                                        @keyframes messageBubbleIn {
+                                            from { opacity: 0; transform: translateY(10px); }
+                                            to { opacity: 1; transform: translateY(0); }
+                                        }
+                                        .message-bubble-content {
+                                            background: #fff;
+                                            border-radius: 12px;
+                                            padding: 16px 20px;
+                                            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+                                            border: 1px solid #e8e8e8;
+                                            min-width: 200px;
+                                            position: relative;
+                                        }
+                                        .message-bubble-icon {
+                                            width: 36px;
+                                            height: 36px;
+                                            border-radius: 50%;
+                                            background: #91278f;
+                                            color: #fff;
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: center;
+                                            font-weight: bold;
+                                            font-size: 18px;
+                                            margin-bottom: 10px;
+                                        }
+                                        .message-bubble-text {
+                                            margin: 0 0 12px 0;
+                                            font-weight: 500;
+                                            color: #333;
+                                        }
+                                        .message-bubble-tail {
+                                            position: absolute;
+                                            left: 20px;
+                                            bottom: -8px;
+                                            width: 0;
+                                            height: 0;
+                                            border-left: 10px solid transparent;
+                                            border-right: 10px solid transparent;
+                                            border-top: 10px solid #e8e8e8;
+                                        }
+
+                                        /* Floating Inbox pill button (bottom-left, same area as message bubble) */
+                                        .floating-inbox-btn {
+                                            position: fixed;
+                                            left: 24px;
+                                            bottom: 24px;
+                                            z-index: 9998;
+                                            display: inline-flex;
+                                            align-items: center;
+                                            justify-content: space-between;
+                                            gap: 10px;
+                                            padding: 8px 14px 8px 12px;
+                                            background: #ffffff;
+                                            border-radius: 999px;
+                                            border: 1px solid #e0e0e0;
+                                            box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+                                            cursor: pointer;
+                                            min-width: 160px;
+                                            transition: box-shadow 0.2s ease, transform 0.2s ease;
+                                        }
+                                        .floating-inbox-btn:hover {
+                                            box-shadow: 0 6px 18px rgba(0,0,0,0.16);
+                                            transform: translateY(-1px);
+                                        }
+                                        .floating-inbox-btn .inbox-icon {
+                                            position: relative;
+                                            display: inline-flex;
+                                            align-items: center;
+                                            justify-content: center;
+                                            width: 26px;
+                                            height: 26px;
+                                            border-radius: 50%;
+                                            border: 1px solid #91278f;
+                                            color: #91278f;
+                                            font-size: 14px;
+                                        }
+                                        .floating-inbox-btn .inbox-badge {
+                                            position: absolute;
+                                            top: -5px;
+                                            right: -5px;
+                                            min-width: 16px;
+                                            height: 16px;
+                                            border-radius: 50%;
+                                            background: #e53e3e;
+                                            color: #fff;
+                                            font-size: 10px;
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: center;
+                                            padding: 0 3px;
+                                        }
+                                        .floating-inbox-btn .inbox-label {
+                                            font-size: 14px;
+                                            font-weight: 600;
+                                            color: #333;
+                                        }
+                                        .floating-inbox-btn .inbox-avatar {
+                                            width: 26px;
+                                            height: 26px;
+                                            border-radius: 50%;
+                                            background: url('{{ asset('frontend/images/reviewer-1.jpg') }}') center/cover no-repeat;
+                                        }
+                                        </style>
 
                                         <div class="col-lg-3 order-1 order-lg-2">
                                             <div class="vendor-left-section">
@@ -3141,6 +3490,83 @@
         filterRooms();
     }
 
+    /**
+     * Sync all room cards (nights input, night label, and total price)
+     * with the current searchState.nights value. This is used when the
+     * user changes dates on the page without reloading (instant update),
+     * so the UI matches what a full "Modify Search" reload would show.
+     */
+    function updateRoomNightsAndTotalsFromState() {
+        const nights = Math.max(1, parseInt(searchState.nights || 1, 10));
+        const hasLockedDates = !!(searchState.checkin && searchState.checkout);
+
+        document.querySelectorAll('.hotel-all-card').forEach(card => {
+            const roomId = card.getAttribute('data-room-id');
+            if (!roomId) {
+                return;
+            }
+
+            const qtyInput = card.querySelector('#qty-' + roomId);
+            if (!qtyInput) {
+                return;
+            }
+
+            // Update quantity input to reflect nights
+            qtyInput.value = nights;
+            qtyInput.setAttribute('data-nights-locked', hasLockedDates ? '1' : '0');
+            qtyInput.readOnly = hasLockedDates;
+
+            // Recalculate total using price-per-night stored on the input
+            const pricePerNight = parseFloat(qtyInput.getAttribute('data-price-per-night')) || 0;
+            const total = (pricePerNight * nights).toFixed(2);
+
+            const totalDisplay = card.querySelector('.room-total-display');
+            if (totalDisplay) {
+                totalDisplay.textContent = 'Total = BDT ' + Number(total).toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            }
+
+            // Update "X Night(s)" label beside the qty input
+            const nightLabel = card.querySelector('.night-label');
+            if (nightLabel) {
+                nightLabel.textContent = nights + ' ' + (nights === 1 ? 'Night' : 'Nights');
+            }
+
+            // Update the small "Total for X nights" text in the per-night line
+            const pricePerLine = card.querySelector('.price-per .nights-label');
+            if (pricePerLine) {
+                if (nights > 1) {
+                    pricePerLine.textContent = ' · Total for ' + nights + ' nights';
+                    pricePerLine.style.display = 'inline';
+                } else {
+                    // For 1 night we hide the extra label to avoid confusion
+                    pricePerLine.style.display = 'none';
+                }
+            }
+
+            // Lock/unlock the +/- buttons visually and functionally when dates are set
+            const qtyMinus = card.querySelector('.qtyminus');
+            const qtyPlus = card.querySelector('.qtyplus');
+            const quantityBtn = card.querySelector('.quantity-btn');
+
+            if (hasLockedDates) {
+                if (quantityBtn) {
+                    quantityBtn.classList.add('nights-locked');
+                }
+                if (qtyMinus) qtyMinus.disabled = true;
+                if (qtyPlus) qtyPlus.disabled = true;
+            } else {
+                if (quantityBtn) {
+                    quantityBtn.classList.remove('nights-locked');
+                }
+                if (qtyMinus) qtyMinus.disabled = false;
+                if (qtyPlus) qtyPlus.disabled = false;
+            }
+        });
+    }
+
     // Update Dates and Filter Instantly
     function updateDatesAndFilter() {
         const checkin = document.getElementById('checkInDate').value;
@@ -3186,6 +3612,9 @@
             
             // Update summary text
             updateSearchSummary();
+
+            // Ensure all room cards reflect the new number of nights and totals instantly
+            updateRoomNightsAndTotalsFromState();
             
             // Filter rooms by availability and capacity
             filterRoomsByAvailability();
@@ -3242,44 +3671,13 @@
             return;
         }
 
-        // Valid dates - show filters and rooms
-        const filterContainer = document.getElementById('bedFilterContainer');
-        const roomsContainer = document.getElementById('rooms');
-        const noDatesMessage = document.getElementById('noDatesMessage');
-        if (filterContainer) filterContainer.style.display = 'flex';
-        if (roomsContainer) roomsContainer.style.display = 'block';
-        if (noDatesMessage) noDatesMessage.style.display = 'none';
-
-        // Calculate nights
-        const nights = Math.ceil((checkoutDate - checkinDate) / (1000 * 60 * 60 * 24));
-        
-        // Update search state
-        searchState = {
-            checkin: checkin,
-            checkout: checkout,
-            guests: guests,
-            children: children,
-            nights: nights,
-            bedFilter: searchState.bedFilter
-        };
-
-        // Update summary text
-        updateSearchSummary();
-        
-        // Filter rooms by availability dates
-        filterRoomsByAvailability();
-        
-        // Filter rooms
-        filterRooms();
-
-        Swal.fire({
-            icon: 'success',
-            title: 'Search Updated!',
-            text: `Showing available rooms for ${nights} night${nights > 1 ? 's' : ''}`,
-            confirmButtonColor: '#91278f',
-            timer: 2000,
-            showConfirmButton: false
-        });
+        // Redirect to same page with search params so room details (nights, price) reflect selection
+        const params = new URLSearchParams();
+        params.set('checkin', checkin);
+        params.set('checkout', checkout);
+        params.set('adults', String(guests));
+        params.set('children', String(children));
+        window.location = window.location.pathname + '?' + params.toString();
     }
 
     // Update Search Summary
@@ -3518,6 +3916,14 @@
             if (noDatesMessage) noDatesMessage.style.display = 'block';
         }
         
+        // Open date picker when clicking anywhere inside the date input (not just the icon)
+        ['checkInDate', 'checkoutDate'].forEach(function(id) {
+            const el = document.getElementById(id);
+            if (el && typeof el.showPicker === 'function') {
+                el.addEventListener('click', function() { this.showPicker(); });
+            }
+        });
+
         // Update checkout min date when checkin changes
         document.getElementById('checkInDate').addEventListener('change', function() {
             const checkinDate = new Date(this.value);
@@ -3537,7 +3943,7 @@
     });
     
     // Review System JavaScript
-    const hotelId = '{{ Crypt::encrypt($show->id) }}';
+    const hotelId = {!! json_encode(\Illuminate\Support\Facades\Crypt::encrypt($show->id)) !!};
     const categoryRatingIds = ['staff_rating', 'facilities_rating', 'cleanliness_rating', 
                               'location_rating', 'comfort_rating', 'value_for_money_rating', 'free_wifi_rating'];
     
@@ -4001,6 +4407,56 @@
             } else if (e.key === 'Escape') {
                 bootstrap.Modal.getInstance(modal).hide();
             }
+        }
+    });
+
+    // Message button UI (Host Profile tab)
+    document.addEventListener('DOMContentLoaded', function() {
+        const openBtn = document.getElementById('openMessageBtn');
+        const composePanel = document.getElementById('messageComposePanel');
+        const closeBtn = document.getElementById('closeMessageCompose');
+        const sendBtn = document.getElementById('sendMessageBtn');
+        const messageInput = document.getElementById('messageTextInput');
+        const sentBubble = document.getElementById('messageSentBubble');
+        const continueBtn = document.getElementById('messageBubbleContinue');
+        const inboxBtn = document.getElementById('floatingInboxButton');
+        const inboxBadge = document.getElementById('inboxUnreadBadge');
+
+        if (!openBtn || !composePanel) return;
+
+        openBtn.addEventListener('click', function() {
+            composePanel.style.display = 'block';
+            sentBubble.style.display = 'none';
+            messageInput.value = '';
+        });
+
+        if (closeBtn) closeBtn.addEventListener('click', function() {
+            composePanel.style.display = 'none';
+        });
+
+        if (sendBtn) sendBtn.addEventListener('click', function() {
+            composePanel.style.display = 'none';
+            sentBubble.style.display = 'block';
+            // Simulate 1 unread in inbox when a message is sent
+            if (inboxBadge) {
+                inboxBadge.style.display = 'flex';
+                inboxBadge.textContent = '1';
+            }
+        });
+
+        if (continueBtn) continueBtn.addEventListener('click', function() {
+            sentBubble.style.display = 'none';
+        });
+
+        // Floating inbox button opens the compose panel (or could link to a real inbox page)
+        if (inboxBtn) {
+            inboxBtn.addEventListener('click', function () {
+                sentBubble.style.display = 'none';
+                composePanel.style.display = 'block';
+                if (inboxBadge) {
+                    inboxBadge.style.display = 'none';
+                }
+            });
         }
     });
 </script>

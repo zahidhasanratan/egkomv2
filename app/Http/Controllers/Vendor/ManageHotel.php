@@ -81,6 +81,7 @@ class ManageHotel extends Controller
             'spa_photos.*'             => 'nullable|image|max:5120',
             'gym_photos.*'             => 'nullable|image|max:5120',
             'amenities_photos.*'       => 'nullable|image|max:5120',
+            'additional_photos.*'      => 'nullable|image|max:5120',
             'custom_facilities_icon.*' => 'nullable|image|max:5120',
 
             // 👇 add validation for apartments block
@@ -155,9 +156,10 @@ class ManageHotel extends Controller
             $data['custom_facilities'] = !empty($cf) ? json_encode($cf) : null;
         }
 
-        // ✅ custom_nearby_areas[]
+        // ✅ custom_nearby_areas[] (max 3)
         if ($request->has('custom_nearby_areas') && is_array($request->custom_nearby_areas)) {
             $customAreas = array_values(array_filter(array_map('trim', $request->custom_nearby_areas), fn ($v) => $v !== ''));
+            $customAreas = array_slice($customAreas, 0, 3);
             $data['custom_nearby_areas'] = !empty($customAreas) ? json_encode($customAreas) : null;
         }
 
@@ -178,6 +180,7 @@ class ManageHotel extends Controller
             'spa_photos',            // Leisure & Wellness
             'gym_photos',            // Guest Rooms
             'amenities_photos',      // Amenities & Services
+            'additional_photos',     // Additional Photos
             'custom_facilities_icon',
         ];
         $uploadDir = public_path('hotel_photos');
@@ -471,6 +474,7 @@ class ManageHotel extends Controller
             'gym_photos.*'                => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'security_photos.*'           => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'amenities_photos.*'          => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'additional_photos.*'       => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         // 2) Filter out null/empty values, but preserve property_category and description
@@ -540,13 +544,13 @@ class ManageHotel extends Controller
             }
         }
 
-        // 5) Handle custom nearby areas (simple list) -> JSON
+        // 5) Handle custom nearby areas (simple list) -> JSON (max 3)
         $customNearby = array_filter(
             $request->input('custom_nearby_areas', []),
             fn($v) => is_string($v) && trim($v) !== ''
         );
         if (!empty($customNearby)) {
-            $data['custom_nearby_areas'] = json_encode(array_values($customNearby));
+            $data['custom_nearby_areas'] = json_encode(array_values(array_slice($customNearby, 0, 3)));
         }
 
         // 6) Handle custom facilities icons (remove + upload to storage/app/public)
@@ -586,6 +590,7 @@ class ManageHotel extends Controller
             'spa_photos',            // Leisure & Wellness
             'gym_photos',            // Guest Rooms
             'amenities_photos',      // Amenities & Services
+            'additional_photos',     // Additional Photos
             'custom_facilities_icon',
         ];
 
@@ -711,6 +716,7 @@ class ManageHotel extends Controller
             'gym_photos.*'              => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'security_photos.*'         => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'amenities_photos.*'        => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'additional_photos.*'     => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         // 2) Filter out null/empty values, but preserve property_category and description
@@ -813,10 +819,10 @@ class ManageHotel extends Controller
             }
         }
 
-        // 5) Handle custom nearby areas
+        // 5) Handle custom nearby areas (max 3)
         $customNearby = array_filter($request->input('custom_nearby_areas', []), fn($v) => trim($v) !== '');
         if (!empty($customNearby)) {
-            $data['custom_nearby_areas'] = json_encode(array_values($customNearby));
+            $data['custom_nearby_areas'] = json_encode(array_values(array_slice($customNearby, 0, 3)));
         }
 
         // 6) Handle custom facilities icons (remove + upload)
@@ -847,7 +853,7 @@ class ManageHotel extends Controller
             'featured_photo','kitchen_photos', 'washroom_photos', 'parking_lot_photos',
             'entrance_gate_photos', 'lift_stairs_photos', 'spa_photos',
             'bar_photos', 'transport_photos', 'rooftop_photos',
-            'gym_photos', 'security_photos', 'amenities_photos'
+            'gym_photos', 'security_photos', 'amenities_photos', 'additional_photos'
         ];
 
         foreach ($photoFields as $field) {
@@ -929,7 +935,7 @@ class ManageHotel extends Controller
             $photoFields = [
                 'kitchen_photos', 'washroom_photos', 'parking_lot_photos', 'entrance_gate_photos',
                 'lift_stairs_photos', 'spa_photos', 'bar_photos', 'transport_photos', 'rooftop_photos',
-                'gym_photos', 'security_photos', 'amenities_photos',
+                'gym_photos', 'security_photos', 'amenities_photos', 'additional_photos',
             ];
 
             foreach ($photoFields as $field) {

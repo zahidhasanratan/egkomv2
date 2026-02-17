@@ -6,34 +6,150 @@ use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\Hotel;
 use App\Models\Room;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class VendorBookingController extends Controller
 {
+    /** Allowed booking statuses for filtering */
+    private const BOOKING_STATUSES = ['pending', 'confirmed', 'staying', 'completed', 'cancelled'];
+
     /**
      * Display bookings for vendor's hotels
      */
     public function index()
     {
         $vendorId = Auth::user()->id;
-        
+
         // Get all hotel IDs for this vendor
         $hotelIds = Hotel::where('vendor_id', $vendorId)->pluck('id')->toArray();
-        
+
         // Get bookings that include any of vendor's hotels
         $bookings = Booking::with('guest')
-            ->where(function($query) use ($hotelIds) {
+            ->where(function ($query) use ($hotelIds) {
                 foreach ($hotelIds as $hotelId) {
                     $query->orWhereJsonContains('rooms_data', ['hotelId' => $hotelId]);
                 }
             })
             ->orderBy('created_at', 'desc')
-            ->paginate(20);
-        
+            ->paginate(7);
+
         return view('auth.vendor.bookings.index', compact('bookings'));
+    }
+
+    /**
+     * Display vendor bookings filtered by status.
+     */
+    public function indexByStatus(string $status)
+    {
+        $status = strtolower($status);
+        if (!in_array($status, self::BOOKING_STATUSES, true)) {
+            return redirect()->route('vendor.bookings.index')->with('error', 'Invalid status.');
+        }
+
+        $vendorId = Auth::user()->id;
+        $hotelIds = Hotel::where('vendor_id', $vendorId)->pluck('id')->toArray();
+
+        $bookings = Booking::with('guest')
+            ->where('booking_status', $status)
+            ->where(function ($query) use ($hotelIds) {
+                foreach ($hotelIds as $hotelId) {
+                    $query->orWhereJsonContains('rooms_data', ['hotelId' => $hotelId]);
+                }
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(7);
+
+        $currentStatus = $status;
+
+        return view('auth.vendor.bookings.index', compact('bookings', 'currentStatus'));
+    }
+
+    /**
+     * Export vendor's bookings as Excel (CSV)
+     */
+    public function exportExcel()
+    {
+        $vendorId = Auth::user()->id;
+        $hotelIds = Hotel::where('vendor_id', $vendorId)->pluck('id')->toArray();
+
+        $bookings = Booking::with('guest')
+            ->where(function ($query) use ($hotelIds) {
+                if (empty($hotelIds)) {
+                    $query->whereRaw('1 = 0');
+                    return;
+                }
+                foreach ($hotelIds as $hotelId) {
+                    $query->orWhereJsonContains('rooms_data', ['hotelId' => $hotelId]);
+                }
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $filename = 'vendor-bookings-report-' . date('Y-m-d-His') . '.csv';
+        $headers = [
+            'Content-Type'        => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ];
+
+        $callback = function () use ($bookings) {
+            $stream = fopen('php://output', 'w');
+            fprintf($stream, chr(0xEF) . chr(0xBB) . chr(0xBF));
+            fputcsv($stream, [
+                'Invoice #', 'Guest Name', 'Email', 'Phone', 'Hotel', 'Check-in', 'Check-out', 'Nights', 'Status', 'Grand Total', 'Payment Status', 'Created',
+            ]);
+            foreach ($bookings as $b) {
+                fputcsv($stream, [
+                    $b->invoice_number,
+                    $b->guest_name,
+                    $b->guest_email,
+                    $b->guest_phone ?? '',
+                    $b->getHotelName(),
+                    $b->checkin_date ? $b->checkin_date->format('Y-m-d') : '',
+                    $b->checkout_date ? $b->checkout_date->format('Y-m-d') : '',
+                    $b->total_nights ?? '',
+                    $b->booking_status ?? '',
+                    $b->grand_total ?? '',
+                    $b->payment_status ?? '',
+                    $b->created_at ? $b->created_at->format('Y-m-d H:i') : '',
+                ]);
+            }
+            fclose($stream);
+        };
+
+        return new StreamedResponse($callback, 200, $headers);
+    }
+
+    /**
+     * Export vendor's bookings as PDF
+     */
+    public function exportPdf()
+    {
+        $vendorId = Auth::user()->id;
+        $hotelIds = Hotel::where('vendor_id', $vendorId)->pluck('id')->toArray();
+
+        $bookings = Booking::with('guest')
+            ->where(function ($query) use ($hotelIds) {
+                if (empty($hotelIds)) {
+                    $query->whereRaw('1 = 0');
+                    return;
+                }
+                foreach ($hotelIds as $hotelId) {
+                    $query->orWhereJsonContains('rooms_data', ['hotelId' => $hotelId]);
+                }
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $pdf = Pdf::loadView('auth.vendor.reports.bookings_pdf', compact('bookings'))
+            ->setPaper('a4', 'landscape')
+            ->setOption('defaultFont', 'sans-serif');
+
+        return $pdf->download('vendor-bookings-report-' . date('Y-m-d-His') . '.pdf');
     }
 
     /**
@@ -207,6 +323,8 @@ class VendorBookingController extends Controller
             'admin_note' => 'nullable|string|max:1000',
             'room_id' => 'nullable|exists:rooms,id',
             'quantity' => 'nullable|integer|min:1',
+            'payment_status' => 'nullable|in:unpaid,partial,paid',
+            'paid_amount' => 'nullable|numeric|min:0',
         ]);
         
         DB::beginTransaction();
@@ -427,6 +545,13 @@ class VendorBookingController extends Controller
             if ($request->has('admin_note')) {
                 $booking->admin_note = $validated['admin_note'];
             }
+
+            if (array_key_exists('payment_status', $validated) && $validated['payment_status'] !== null) {
+                $booking->payment_status = $validated['payment_status'];
+            }
+            if (array_key_exists('paid_amount', $validated) && $validated['paid_amount'] !== null) {
+                $booking->paid_amount = $validated['paid_amount'];
+            }
             
             $booking->save();
             
@@ -560,6 +685,7 @@ class VendorBookingController extends Controller
             'price_per_night' => 'required|numeric|min:0',
             'discount' => 'nullable|numeric|min:0',
             'tax_percentage' => 'nullable|numeric|min:0|max:100',
+            'platform_fee' => 'nullable|numeric|min:0',
             'arrival_time' => 'nullable|string',
             'property_note' => 'nullable|string',
             'organization' => 'nullable|string',
@@ -614,11 +740,14 @@ class VendorBookingController extends Controller
                 'hotelPhoto' => $hotelPhoto,
             ]];
 
-            // Calculate pricing (no tax)
+            // Calculate pricing with tax
             $subtotal = $validated['price_per_night'] * $validated['quantity'] * $totalNights;
             $discount = $validated['discount'] ?? 0;
-            $tax = 0; // No tax calculation
-            $grandTotal = $subtotal - $discount;
+            $taxPercentage = $validated['tax_percentage'] ?? 0;
+            $platformFee = $validated['platform_fee'] ?? 0;
+            $afterDiscount = $subtotal - $discount;
+            $tax = $afterDiscount * ($taxPercentage / 100);
+            $grandTotal = $afterDiscount + $tax + $platformFee;
 
             // Handle file uploads
             $nidFront = null;
@@ -712,6 +841,8 @@ class VendorBookingController extends Controller
                 'subtotal' => $subtotal,
                 'discount' => $discount,
                 'tax' => $tax,
+                'tax_percentage' => $taxPercentage,
+                'platform_fee' => $platformFee,
                 'grand_total' => $grandTotal,
                 'payment_status' => $request->payment_status ?? 'unpaid',
                 'paid_amount' => $request->paid_amount ?? 0,

@@ -337,6 +337,33 @@
                                             </small>
                                         </div>
 
+                                        <h5 style="color: #90278e; border-bottom: 2px solid #90278e; padding-bottom: 8px; margin: 20px 0 15px 0;">Payment</h5>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="payment_status">Payment Status</label>
+                                                    <select class="form-control @error('payment_status') is-invalid @enderror" id="payment_status" name="payment_status">
+                                                        <option value="unpaid" {{ old('payment_status', $booking->payment_status) == 'unpaid' ? 'selected' : '' }}>Unpaid</option>
+                                                        <option value="partial" {{ old('payment_status', $booking->payment_status) == 'partial' ? 'selected' : '' }}>Partial</option>
+                                                        <option value="paid" {{ old('payment_status', $booking->payment_status) == 'paid' ? 'selected' : '' }}>Paid</option>
+                                                    </select>
+                                                    @error('payment_status')
+                                                        <span class="invalid-feedback">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="paid_amount">Paid Amount (BDT)</label>
+                                                    <input type="number" step="0.01" min="0" class="form-control @error('paid_amount') is-invalid @enderror" id="paid_amount" name="paid_amount" value="{{ old('paid_amount', $booking->paid_amount ?? 0) }}" placeholder="0.00">
+                                                    @error('paid_amount')
+                                                        <span class="invalid-feedback">{{ $message }}</span>
+                                                    @enderror
+                                                    <small class="form-text text-muted">Grand total: BDT {{ number_format($booking->grand_total, 2) }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <div class="alert alert-info">
                                             <i class="fas fa-info-circle"></i> 
                                             <strong>How to select dates:</strong>

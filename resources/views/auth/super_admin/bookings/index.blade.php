@@ -87,7 +87,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">All Bookings</h3>
+                    <h3 class="card-title">All Bookings @if(isset($currentStatus)) &ndash; {{ ucfirst($currentStatus) }} @endif</h3>
                     <div class="card-tools" style="display: flex; gap: 10px; align-items: center;">
                         <a href="{{ route('super-admin.bookings.manual.create') }}" class="btn btn-primary btn-sm" style="background: white; color: #90278e; border: 1px solid white;">
                             <em class="icon ni ni-plus"></em> Create Manual Booking
@@ -117,6 +117,7 @@
                                 <th>Nights</th>
                                 <th>Guests</th>
                                 <th>Total Amount</th>
+                                <th>Payment</th>
                                 <th>Status</th>
                                 <th>Booking Date</th>
                                 <th>Actions</th>
@@ -170,18 +171,23 @@
                                 </td>
                                 <td>{{ $booking->checkin_date->format('d M Y') }}</td>
                                 <td>{{ $booking->checkout_date->format('d M Y') }}</td>
-                                <td><span class="badge badge-info">{{ $booking->total_nights }}</span></td>
+                                <td><span class="badge badge-info" style="background: #e7f1ff; color: #1a1a1a;">{{ $booking->total_nights }}</span></td>
                                 <td>{{ $booking->total_persons }}</td>
                                 <td><strong>BDT {{ number_format($booking->grand_total, 2) }}</strong></td>
                                 <td>
-                                    <span class="badge badge-{{ 
-                                        $booking->booking_status == 'confirmed' ? 'success' : 
-                                        ($booking->booking_status == 'pending' ? 'warning' : 
-                                        ($booking->booking_status == 'cancelled' ? 'danger' : 
-                                        ($booking->booking_status == 'staying' ? 'primary' : 'info'))) 
-                                    }}">
-                                        {{ ucfirst($booking->booking_status) }}
+                                    <span class="badge badge-{{ $booking->payment_status == 'paid' ? 'success' : ($booking->payment_status == 'partial' ? 'warning' : 'secondary') }}" style="{{ $booking->payment_status == 'paid' ? 'background: #28a745;' : ($booking->payment_status == 'partial' ? 'background: #ffc107; color: #333;' : 'background: #6c757d;') }}">
+                                        {{ ucfirst($booking->payment_status ?? 'unpaid') }}
                                     </span>
+                                    @if($booking->payment_status == 'paid' && $booking->paid_amount)
+                                        <br><small class="text-muted">BDT {{ number_format($booking->paid_amount, 0) }}</small>
+                                    @endif
+                                </td>
+                                <td>
+                                    @php
+                                        $status = trim($booking->booking_status ?? '') ?: 'confirmed';
+                                        $statusStyle = $status == 'confirmed' ? 'background:#28a745;color:#fff' : ($status == 'pending' ? 'background:#ffc107;color:#333' : ($status == 'cancelled' ? 'background:#dc3545;color:#fff' : ($status == 'staying' ? 'background:#90278e;color:#fff' : 'background:#17a2b8;color:#fff')));
+                                    @endphp
+                                    <span class="badge px-2 py-1" style="font-size:12px;{{ $statusStyle }}">{{ ucfirst($status) }}</span>
                                 </td>
                                 <td>{{ $booking->created_at->format('d M Y') }}</td>
                                 <td>
@@ -203,7 +209,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="12" class="text-center py-5">
+                                <td colspan="13" class="text-center py-5">
                                     <div style="color: #999;">
                                         <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 15px; opacity: 0.3;"></i>
                                         <p>No bookings found</p>
@@ -216,7 +222,7 @@
                 </div>
 
                 <div class="card-footer clearfix">
-                    {{ $bookings->links() }}
+                    {{ $bookings->links('pagination::bootstrap-4') }}
                 </div>
             </div>
         </div>
@@ -290,17 +296,34 @@
     .table thead th {
         background: #f8f9fa;
         border-bottom: 2px solid #90278e;
-        color: #1a1a1a;
+        color: #1a1a1a !important;
         font-weight: 600;
         font-size: 12px;
         text-transform: uppercase;
         letter-spacing: 0.5px;
         padding: 12px 8px;
+        text-shadow: none;
+        -webkit-text-stroke: 0 transparent;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
     }
     .table td {
         vertical-align: middle;
         padding: 12px 8px;
         font-size: 13px;
+        color: #212529 !important;
+    }
+    .table tbody td,
+    .table tbody td strong,
+    .table tbody td small {
+        color: #212529 !important;
+    }
+    .table tbody td .text-muted {
+        color: #6c757d !important;
+    }
+    #bookingsTable tbody td .badge.badge-info {
+        background: #e7f1ff !important;
+        color: #1a1a1a !important;
     }
     .table tbody tr:hover {
         background: rgba(144, 39, 142, 0.05);

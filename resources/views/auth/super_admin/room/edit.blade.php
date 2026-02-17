@@ -370,68 +370,72 @@
                                                         </div>
                                                     </div>
 
-                                                    <!-- Layout Details -->
-                                                    <h5 class="mt-4 mb-2"><strong>Layout Details</strong></h5>
-                                                    @php
-                                                        $layoutOptions = old('room_info.layout', $roomInfo['layout'] ?? []);
-                                                        if (!is_array($layoutOptions)) {
-                                                            $layoutOptions = [];
-                                                        }
-                                                    @endphp
-                                                    <label><input type="checkbox" name="room_info[layout][]" class="checkbox-item-room-info" value="Apartment Style" {{ in_array('Apartment Style', $layoutOptions) ? 'checked' : '' }}> Apartment Style</label><br>
-                                                    <label><input type="checkbox" name="room_info[layout][]" class="checkbox-item-room-info" value="Suite" {{ in_array('Suite', $layoutOptions) ? 'checked' : '' }}> Suite</label><br>
-                                                    <label><input type="checkbox" name="room_info[layout][]" class="checkbox-item-room-info" value="Studio" {{ in_array('Studio', $layoutOptions) ? 'checked' : '' }}> Studio</label><br>
-                                                    <label><input type="checkbox" name="room_info[layout][]" class="checkbox-item-room-info" value="Duplex" {{ in_array('Duplex', $layoutOptions) ? 'checked' : '' }}> Duplex</label><br>
-                                                    
-                                                    <!-- Custom Layout Container -->
-                                                    <div class="custom-layout-container mt-3">
-                                                        @php
-                                                            $fixedLayouts = ['Apartment Style', 'Suite', 'Studio', 'Duplex'];
-                                                            $customLayouts = array_diff($layoutOptions, $fixedLayouts);
-                                                        @endphp
-                                                        @foreach($customLayouts as $customLayout)
-                                                            <label><input type="checkbox" name="room_info[layout][]" class="checkbox-item-room-info" value="{{ $customLayout }}" checked> {{ $customLayout }}</label><br>
-                                                        @endforeach
-                                                    </div>
-                                                    
-                                                    <!-- Add More Layout -->
-                                                    <div class="add-more-section mt-3">
-                                                        <div class="input-group" style="max-width: 400px;">
-                                                            <input type="text" class="form-control" id="custom-layout-input" placeholder="Enter custom layout type">
-                                                            <button type="button" class="btn btn-primary btn-sm" id="add-layout-btn">Add</button>
+                                                    <!-- Layout Details (Left) and View from the Room (Right) - Two Column -->
+                                                    <div class="row mt-4">
+                                                        <div class="col-md-6">
+                                                            <div class="card h-100" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                                <h5 class="mb-3" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Layout Details</strong></h5>
+                                                                @php
+                                                                    $layoutOptions = old('room_info.layout', $roomInfo['layout'] ?? []);
+                                                                    if (!is_array($layoutOptions)) {
+                                                                        $layoutOptions = [];
+                                                                    }
+                                                                @endphp
+                                                                <label><input type="checkbox" name="room_info[layout][]" class="checkbox-item-room-info" value="Apartment Style" {{ in_array('Apartment Style', $layoutOptions) ? 'checked' : '' }}> Apartment Style</label><br>
+                                                                <label><input type="checkbox" name="room_info[layout][]" class="checkbox-item-room-info" value="Suite" {{ in_array('Suite', $layoutOptions) ? 'checked' : '' }}> Suite</label><br>
+                                                                <label><input type="checkbox" name="room_info[layout][]" class="checkbox-item-room-info" value="Studio" {{ in_array('Studio', $layoutOptions) ? 'checked' : '' }}> Studio</label><br>
+                                                                <label><input type="checkbox" name="room_info[layout][]" class="checkbox-item-room-info" value="Duplex" {{ in_array('Duplex', $layoutOptions) ? 'checked' : '' }}> Duplex</label><br>
+                                                                
+                                                                <div class="custom-layout-container mt-3">
+                                                                    @php
+                                                                        $fixedLayouts = ['Apartment Style', 'Suite', 'Studio', 'Duplex'];
+                                                                        $customLayouts = array_diff($layoutOptions, $fixedLayouts);
+                                                                    @endphp
+                                                                    @foreach($customLayouts as $customLayout)
+                                                                        <label><input type="checkbox" name="room_info[layout][]" class="checkbox-item-room-info" value="{{ $customLayout }}" checked> {{ $customLayout }}</label><br>
+                                                                    @endforeach
+                                                                </div>
+                                                                
+                                                                <div class="add-more-section mt-3">
+                                                                    <div class="input-group" style="max-width: 100%;">
+                                                                        <input type="text" class="form-control" id="custom-layout-input" placeholder="Enter custom layout type">
+                                                                        <button type="button" class="btn btn-primary btn-sm" id="add-layout-btn">Add</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
-
-                                                    <!-- View from the Room -->
-                                                    <h5 class="mt-4 mb-2"><strong>View from the Room</strong></h5>
-                                                    @php
-                                                        $viewOptions = old('room_info.view', $roomInfo['view'] ?? []);
-                                                        if (!is_array($viewOptions)) {
-                                                            $viewOptions = [];
-                                                        }
-                                                    @endphp
-                                                    <label><input type="checkbox" name="room_info[view][]" class="checkbox-item-room-info" value="Sea View" {{ in_array('Sea View', $viewOptions) ? 'checked' : '' }}> Sea View</label><br>
-                                                    <label><input type="checkbox" name="room_info[view][]" class="checkbox-item-room-info" value="City View" {{ in_array('City View', $viewOptions) ? 'checked' : '' }}> City View</label><br>
-                                                    <label><input type="checkbox" name="room_info[view][]" class="checkbox-item-room-info" value="Garden View" {{ in_array('Garden View', $viewOptions) ? 'checked' : '' }}> Garden View</label><br>
-                                                    <label><input type="checkbox" name="room_info[view][]" class="checkbox-item-room-info" value="Partial View" {{ in_array('Partial View', $viewOptions) ? 'checked' : '' }}> Partial View</label><br>
-                                                    <label><input type="checkbox" name="room_info[view][]" class="checkbox-item-room-info" value="No View" {{ in_array('No View', $viewOptions) ? 'checked' : '' }}> No View</label><br>
-                                                    
-                                                    <!-- Custom View Container -->
-                                                    <div class="custom-view-container mt-3">
-                                                        @php
-                                                            $fixedViews = ['Sea View', 'City View', 'Garden View', 'Partial View', 'No View'];
-                                                            $customViews = array_diff($viewOptions, $fixedViews);
-                                                        @endphp
-                                                        @foreach($customViews as $customView)
-                                                            <label><input type="checkbox" name="room_info[view][]" class="checkbox-item-room-info" value="{{ $customView }}" checked> {{ $customView }}</label><br>
-                                                        @endforeach
-                                                    </div>
-                                                    
-                                                    <!-- Add More View -->
-                                                    <div class="add-more-section mt-3">
-                                                        <div class="input-group" style="max-width: 400px;">
-                                                            <input type="text" class="form-control" id="custom-view-input" placeholder="Enter custom view type">
-                                                            <button type="button" class="btn btn-primary btn-sm" id="add-view-btn">Add</button>
+                                                        <div class="col-md-6">
+                                                            <div class="card h-100" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                                <h5 class="mb-3" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>View from the Room</strong></h5>
+                                                                @php
+                                                                    $viewOptions = old('room_info.view', $roomInfo['view'] ?? []);
+                                                                    if (!is_array($viewOptions)) {
+                                                                        $viewOptions = [];
+                                                                    }
+                                                                @endphp
+                                                                <label><input type="checkbox" name="room_info[view][]" class="checkbox-item-room-info" value="Sea View" {{ in_array('Sea View', $viewOptions) ? 'checked' : '' }}> Sea View</label><br>
+                                                                <label><input type="checkbox" name="room_info[view][]" class="checkbox-item-room-info" value="City View" {{ in_array('City View', $viewOptions) ? 'checked' : '' }}> City View</label><br>
+                                                                <label><input type="checkbox" name="room_info[view][]" class="checkbox-item-room-info" value="Garden View" {{ in_array('Garden View', $viewOptions) ? 'checked' : '' }}> Garden View</label><br>
+                                                                <label><input type="checkbox" name="room_info[view][]" class="checkbox-item-room-info" value="Partial View" {{ in_array('Partial View', $viewOptions) ? 'checked' : '' }}> Partial View</label><br>
+                                                                <label><input type="checkbox" name="room_info[view][]" class="checkbox-item-room-info" value="No View" {{ in_array('No View', $viewOptions) ? 'checked' : '' }}> No View</label><br>
+                                                                
+                                                                <div class="custom-view-container mt-3">
+                                                                    @php
+                                                                        $fixedViews = ['Sea View', 'City View', 'Garden View', 'Partial View', 'No View'];
+                                                                        $customViews = array_diff($viewOptions, $fixedViews);
+                                                                    @endphp
+                                                                    @foreach($customViews as $customView)
+                                                                        <label><input type="checkbox" name="room_info[view][]" class="checkbox-item-room-info" value="{{ $customView }}" checked> {{ $customView }}</label><br>
+                                                                    @endforeach
+                                                                </div>
+                                                                
+                                                                <div class="add-more-section mt-3">
+                                                                    <div class="input-group" style="max-width: 100%;">
+                                                                        <input type="text" class="form-control" id="custom-view-input" placeholder="Enter custom view type">
+                                                                        <button type="button" class="btn btn-primary btn-sm" id="add-view-btn">Add</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
 
@@ -490,78 +494,80 @@
                                                         </div>
                                                     </div>
 
-                                                    <!-- Kitchen Facilities -->
-                                                    <h5 class="mt-4 mb-2"><strong>Kitchen Facilities</strong></h5>
-                                                    @php
-                                                        $kitchenOptions = old('room_info.kitchen_facilities', $roomInfo['kitchen_facilities'] ?? []);
-                                                        if (!is_array($kitchenOptions)) {
-                                                            $kitchenOptions = [];
-                                                        }
-                                                    @endphp
-                                                    <label><input type="checkbox" name="room_info[kitchen_facilities][]" class="checkbox-item-room-info" value="Fully Equipped" {{ in_array('Fully Equipped', $kitchenOptions) ? 'checked' : '' }}> Fully Equipped</label><br>
-                                                    <label><input type="checkbox" name="room_info[kitchen_facilities][]" class="checkbox-item-room-info" value="Partial" {{ in_array('Partial', $kitchenOptions) ? 'checked' : '' }}> Partial</label><br>
-                                                    <label><input type="checkbox" name="room_info[kitchen_facilities][]" class="checkbox-item-room-info" value="None" {{ in_array('None', $kitchenOptions) ? 'checked' : '' }}> None</label><br>
-                                                    <label><input type="checkbox" name="room_info[kitchen_facilities][]" class="checkbox-item-room-info" value="Fridge" {{ in_array('Fridge', $kitchenOptions) ? 'checked' : '' }}> Fridge</label><br>
-                                                    <label><input type="checkbox" name="room_info[kitchen_facilities][]" class="checkbox-item-room-info" value="Stove" {{ in_array('Stove', $kitchenOptions) ? 'checked' : '' }}> Stove</label><br>
-                                                    <label><input type="checkbox" name="room_info[kitchen_facilities][]" class="checkbox-item-room-info" value="Microwave" {{ in_array('Microwave', $kitchenOptions) ? 'checked' : '' }}> Microwave</label><br>
-                                                    <label><input type="checkbox" name="room_info[kitchen_facilities][]" class="checkbox-item-room-info" value="Utensils" {{ in_array('Utensils', $kitchenOptions) ? 'checked' : '' }}> Utensils</label><br>
-                                                    
-                                                    <!-- Custom Kitchen Container -->
-                                                    <div class="custom-kitchen-container mt-3">
-                                                        @php
-                                                            $fixedKitchens = ['Fully Equipped', 'Partial', 'None', 'Fridge', 'Stove', 'Microwave', 'Utensils'];
-                                                            $customKitchens = array_diff($kitchenOptions, $fixedKitchens);
-                                                        @endphp
-                                                        @foreach($customKitchens as $customKitchen)
-                                                            <label><input type="checkbox" name="room_info[kitchen_facilities][]" class="checkbox-item-room-info" value="{{ $customKitchen }}" checked> {{ $customKitchen }}</label><br>
-                                                        @endforeach
-                                                    </div>
-                                                    
-                                                    <!-- Add More Kitchen -->
-                                                    <div class="add-more-section mt-3">
-                                                        <div class="input-group" style="max-width: 400px;">
-                                                            <input type="text" class="form-control" id="custom-kitchen-input" placeholder="Enter custom kitchen facility">
-                                                            <button type="button" class="btn btn-primary btn-sm" id="add-kitchen-btn">Add</button>
+                                                    <!-- Kitchen Facilities (Left) | Balcony + Accessibility (Right) - Two Column -->
+                                                    <div class="row mt-4">
+                                                        <div class="col-md-6">
+                                                            <div class="card h-100" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                                <h5 class="mb-3" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Kitchen Facilities</strong></h5>
+                                                                @php
+                                                                    $kitchenOptions = old('room_info.kitchen_facilities', $roomInfo['kitchen_facilities'] ?? []);
+                                                                    if (!is_array($kitchenOptions)) {
+                                                                        $kitchenOptions = [];
+                                                                    }
+                                                                @endphp
+                                                                <label><input type="checkbox" name="room_info[kitchen_facilities][]" class="checkbox-item-room-info" value="Fully Equipped" {{ in_array('Fully Equipped', $kitchenOptions) ? 'checked' : '' }}> Fully Equipped</label><br>
+                                                                <label><input type="checkbox" name="room_info[kitchen_facilities][]" class="checkbox-item-room-info" value="Partial" {{ in_array('Partial', $kitchenOptions) ? 'checked' : '' }}> Partial</label><br>
+                                                                <label><input type="checkbox" name="room_info[kitchen_facilities][]" class="checkbox-item-room-info" value="None" {{ in_array('None', $kitchenOptions) ? 'checked' : '' }}> None</label><br>
+                                                                <label><input type="checkbox" name="room_info[kitchen_facilities][]" class="checkbox-item-room-info" value="Fridge" {{ in_array('Fridge', $kitchenOptions) ? 'checked' : '' }}> Fridge</label><br>
+                                                                <label><input type="checkbox" name="room_info[kitchen_facilities][]" class="checkbox-item-room-info" value="Stove" {{ in_array('Stove', $kitchenOptions) ? 'checked' : '' }}> Stove</label><br>
+                                                                <label><input type="checkbox" name="room_info[kitchen_facilities][]" class="checkbox-item-room-info" value="Microwave" {{ in_array('Microwave', $kitchenOptions) ? 'checked' : '' }}> Microwave</label><br>
+                                                                <label><input type="checkbox" name="room_info[kitchen_facilities][]" class="checkbox-item-room-info" value="Utensils" {{ in_array('Utensils', $kitchenOptions) ? 'checked' : '' }}> Utensils</label><br>
+                                                                
+                                                                <div class="custom-kitchen-container mt-3">
+                                                                    @php
+                                                                        $fixedKitchens = ['Fully Equipped', 'Partial', 'None', 'Fridge', 'Stove', 'Microwave', 'Utensils'];
+                                                                        $customKitchens = array_diff($kitchenOptions, $fixedKitchens);
+                                                                    @endphp
+                                                                    @foreach($customKitchens as $customKitchen)
+                                                                        <label><input type="checkbox" name="room_info[kitchen_facilities][]" class="checkbox-item-room-info" value="{{ $customKitchen }}" checked> {{ $customKitchen }}</label><br>
+                                                                    @endforeach
+                                                                </div>
+                                                                
+                                                                <div class="add-more-section mt-3">
+                                                                    <div class="input-group" style="max-width: 100%;">
+                                                                        <input type="text" class="form-control" id="custom-kitchen-input" placeholder="Enter custom kitchen facility">
+                                                                        <button type="button" class="btn btn-primary btn-sm" id="add-kitchen-btn">Add</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
-
-                                                    <!-- Balcony / Terrace Availability -->
-                                                    <h5 class="mt-4 mb-2"><strong>Balcony / Terrace Availability</strong></h5>
-                                                    <div class="col-md-4">
-                                                        <select class="form-control" name="room_info[balcony]">
-                                                            <option value="">Select Option</option>
-                                                            <option value="Yes" {{ old('room_info.balcony', $roomInfo['balcony'] ?? '') == 'Yes' ? 'selected' : '' }}>Yes</option>
-                                                            <option value="No" {{ old('room_info.balcony', $roomInfo['balcony'] ?? '') == 'No' ? 'selected' : '' }}>No</option>
-                                                        </select>
-                                                    </div>
-
-                                                    <!-- Accessibility Features -->
-                                                    <h5 class="mt-4 mb-2"><strong>Accessibility Features</strong></h5>
-                                                    @php
-                                                        $accessibilityOptions = old('room_info.accessibility', $roomInfo['accessibility'] ?? []);
-                                                        if (!is_array($accessibilityOptions)) {
-                                                            $accessibilityOptions = [];
-                                                        }
-                                                    @endphp
-                                                    <label><input type="checkbox" name="room_info[accessibility][]" class="checkbox-item-room-info" value="Wheelchair Friendly" {{ in_array('Wheelchair Friendly', $accessibilityOptions) ? 'checked' : '' }}> Wheelchair Friendly</label><br>
-                                                    <label><input type="checkbox" name="room_info[accessibility][]" class="checkbox-item-room-info" value="Elevator Access" {{ in_array('Elevator Access', $accessibilityOptions) ? 'checked' : '' }}> Elevator Access</label><br>
-                                                    
-                                                    <!-- Custom Accessibility Container -->
-                                                    <div class="custom-accessibility-container mt-3">
-                                                        @php
-                                                            $fixedAccessibility = ['Wheelchair Friendly', 'Elevator Access'];
-                                                            $customAccessibility = array_diff($accessibilityOptions, $fixedAccessibility);
-                                                        @endphp
-                                                        @foreach($customAccessibility as $customAcc)
-                                                            <label><input type="checkbox" name="room_info[accessibility][]" class="checkbox-item-room-info" value="{{ $customAcc }}" checked> {{ $customAcc }}</label><br>
-                                                        @endforeach
-                                                    </div>
-                                                    
-                                                    <!-- Add More Accessibility -->
-                                                    <div class="add-more-section mt-3">
-                                                        <div class="input-group" style="max-width: 400px;">
-                                                            <input type="text" class="form-control" id="custom-accessibility-input" placeholder="Enter custom accessibility feature">
-                                                            <button type="button" class="btn btn-primary btn-sm" id="add-accessibility-btn">Add</button>
+                                                        <div class="col-md-6">
+                                                            <div class="card mb-3" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                                <h5 class="mb-3" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Balcony / Terrace Availability</strong></h5>
+                                                                <select class="form-control" name="room_info[balcony]" style="max-width: 200px;">
+                                                                    <option value="">Select Option</option>
+                                                                    <option value="Yes" {{ old('room_info.balcony', $roomInfo['balcony'] ?? '') == 'Yes' ? 'selected' : '' }}>Yes</option>
+                                                                    <option value="No" {{ old('room_info.balcony', $roomInfo['balcony'] ?? '') == 'No' ? 'selected' : '' }}>No</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                                <h5 class="mb-3" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Accessibility Features</strong></h5>
+                                                                @php
+                                                                    $accessibilityOptions = old('room_info.accessibility', $roomInfo['accessibility'] ?? []);
+                                                                    if (!is_array($accessibilityOptions)) {
+                                                                        $accessibilityOptions = [];
+                                                                    }
+                                                                @endphp
+                                                                <label><input type="checkbox" name="room_info[accessibility][]" class="checkbox-item-room-info" value="Wheelchair Friendly" {{ in_array('Wheelchair Friendly', $accessibilityOptions) ? 'checked' : '' }}> Wheelchair Friendly</label><br>
+                                                                <label><input type="checkbox" name="room_info[accessibility][]" class="checkbox-item-room-info" value="Elevator Access" {{ in_array('Elevator Access', $accessibilityOptions) ? 'checked' : '' }}> Elevator Access</label><br>
+                                                                
+                                                                <div class="custom-accessibility-container mt-3">
+                                                                    @php
+                                                                        $fixedAccessibility = ['Wheelchair Friendly', 'Elevator Access'];
+                                                                        $customAccessibility = array_diff($accessibilityOptions, $fixedAccessibility);
+                                                                    @endphp
+                                                                    @foreach($customAccessibility as $customAcc)
+                                                                        <label><input type="checkbox" name="room_info[accessibility][]" class="checkbox-item-room-info" value="{{ $customAcc }}" checked> {{ $customAcc }}</label><br>
+                                                                    @endforeach
+                                                                </div>
+                                                                
+                                                                <div class="add-more-section mt-3">
+                                                                    <div class="input-group" style="max-width: 100%;">
+                                                                        <input type="text" class="form-control" id="custom-accessibility-input" placeholder="Enter custom accessibility feature">
+                                                                        <button type="button" class="btn btn-primary btn-sm" id="add-accessibility-btn">Add</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1714,121 +1720,104 @@
                                                 </div>
                                             </div>
 
+                                            <!-- Appliances + Furniture (Left) | Room Amenities (Right) - Two Column -->
                                             <div class="row mt-15">
-                                                <div class="checkbox-section">
-                                                    <h3 class="can-tittle">Appliances Information</h3>
-                                                    <div class="chk-all-sec">
-                                                        <div class="form-group">
-                                                            <div class="custom-control custom-switch checked">
-                                                                <input type="checkbox" class="custom-control-input sync-checkbox-master" data-target=".checkbox-item-appliances" id="appliances-all-facilities">
-                                                                <label class="custom-control-label" for="appliances-all-facilities">Select All</label>
+                                                <div class="col-md-6">
+                                                    <div class="card checkbox-section mb-3" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h3 class="can-tittle">Appliances Information</h3>
+                                                        <div class="chk-all-sec">
+                                                            <div class="form-group">
+                                                                <div class="custom-control custom-switch checked">
+                                                                    <input type="checkbox" class="custom-control-input sync-checkbox-master" data-target=".checkbox-item-appliances" id="appliances-all-facilities">
+                                                                    <label class="custom-control-label" for="appliances-all-facilities">Select All</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="appliances-list-facilities"></div>
+                                                        <div class="custom-appliances-container-facilities mt-3" data-section="appliances"></div>
+                                                        <div class="add-more-section mt-3">
+                                                            <div class="input-group" style="max-width: 100%;">
+                                                                <input type="text" class="form-control" id="custom-appliance-input-facilities" placeholder="Enter custom appliance name">
+                                                                <button type="button" class="btn btn-primary btn-sm" id="add-appliance-btn-facilities">Add</button>
                                                             </div>
                                                         </div>
                                                     </div>
-
-                                                    <div class="appliances-list-facilities"></div>
-                                                    
-                                                    <!-- Custom Appliances Container for Facilities Tab -->
-                                                    <div class="custom-appliances-container-facilities mt-3" data-section="appliances"></div>
-                                                    
-                                                    <!-- Add More Appliances in Facilities Tab -->
-                                                    <div class="add-more-section mt-3">
-                                                        <div class="input-group" style="max-width: 400px;">
-                                                            <input type="text" class="form-control" id="custom-appliance-input-facilities" placeholder="Enter custom appliance name">
-                                                            <button type="button" class="btn btn-primary btn-sm" id="add-appliance-btn-facilities">Add</button>
+                                                    <div class="card checkbox-section" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h3 class="can-tittle">Furniture Information</h3>
+                                                        <div class="chk-all-sec">
+                                                            <div class="form-group">
+                                                                <div class="custom-control custom-switch checked">
+                                                                    <input type="checkbox" class="custom-control-input sync-checkbox-master" data-target=".checkbox-item-furniture" id="furniture-all-facilities">
+                                                                    <label class="custom-control-label" for="furniture-all-facilities">Select All</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="furniture-list-facilities">
+                                                            @php
+                                                                $existingFurniture = is_array($room->furniture) ? $room->furniture : (is_string($room->furniture) ? json_decode($room->furniture, true) : []);
+                                                            @endphp
+                                                            <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Bed" {{ in_array('Bed', old('furniture', $existingFurniture)) ? 'checked' : '' }}> Bed</label><br>
+                                                            <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Dining Table with Chair" {{ in_array('Dining Table with Chair', old('furniture', $existingFurniture)) ? 'checked' : '' }}> Dining Table with Chair</label><br>
+                                                            <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Sofa/Couch" {{ in_array('Sofa/Couch', old('furniture', $existingFurniture)) ? 'checked' : '' }}> Sofa/Couch</label><br>
+                                                            <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Tea Table" {{ in_array('Tea Table', old('furniture', $existingFurniture)) ? 'checked' : '' }}> Tea Table</label><br>
+                                                            <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Bedside Table" {{ in_array('Bedside Table', old('furniture', $existingFurniture)) ? 'checked' : '' }}> Bedside Table</label><br>
+                                                            <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Shoe Rack" {{ in_array('Shoe Rack', old('furniture', $existingFurniture)) ? 'checked' : '' }}> Shoe Rack</label><br>
+                                                            <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Clothing Cabinet" {{ in_array('Clothing Cabinet', old('furniture', $existingFurniture)) ? 'checked' : '' }}> Clothing Cabinet</label><br>
+                                                            <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Clothes Drying Hanger" {{ in_array('Clothes Drying Hanger', old('furniture', $existingFurniture)) ? 'checked' : '' }}> Clothes Drying Hanger</label><br>
+                                                            <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Iron Stand" {{ in_array('Iron Stand', old('furniture', $existingFurniture)) ? 'checked' : '' }}> Iron Stand</label><br>
+                                                            <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Locker/Safe" {{ in_array('Locker/Safe', old('furniture', $existingFurniture)) ? 'checked' : '' }}> Locker/Safe</label><br>
+                                                        </div>
+                                                        <div class="custom-furniture-container-facilities mt-3" data-section="furniture"></div>
+                                                        <div class="add-more-section mt-3">
+                                                            <div class="input-group" style="max-width: 100%;">
+                                                                <input type="text" class="form-control" id="custom-furniture-input-facilities" placeholder="Enter custom furniture name">
+                                                                <button type="button" class="btn btn-primary btn-sm" id="add-furniture-btn-facilities">Add</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-
-                                            <div class="row mt-15">
-                                                <div class="checkbox-section">
-                                                    <h3 class="can-tittle">Furniture Information</h3>
-                                                    <div class="chk-all-sec">
-                                                        <div class="form-group">
-                                                            <div class="custom-control custom-switch checked">
-                                                                <input type="checkbox" class="custom-control-input sync-checkbox-master" data-target=".checkbox-item-furniture" id="furniture-all-facilities">
-                                                                <label class="custom-control-label" for="furniture-all-facilities">Select All</label>
-                                                                    </div>
+                                                <div class="col-md-6">
+                                                    <div class="card checkbox-section h-100" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h3 class="label-chk">Room Amenities</h3>
+                                                        <div class="chk-all-sec">
+                                                            <div class="form-group">
+                                                                <div class="custom-control custom-switch checked">
+                                                                    <input type="checkbox" class="custom-control-input sync-checkbox-master" data-target=".checkbox-item-amenities" id="amenities-all-facilities">
+                                                                    <label class="custom-control-label" for="amenities-all-facilities">Check All</label>
                                                                 </div>
-                                                                            </div>
-                                                    
-                                                    <div class="furniture-list-facilities">
-                                                        @php
-                                                            $existingFurniture = is_array($room->furniture) ? $room->furniture : (is_string($room->furniture) ? json_decode($room->furniture, true) : []);
-                                                        @endphp
-                                                        <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Bed" {{ in_array('Bed', old('furniture', $existingFurniture)) ? 'checked' : '' }}> Bed</label><br>
-                                                        <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Dining Table with Chair" {{ in_array('Dining Table with Chair', old('furniture', $existingFurniture)) ? 'checked' : '' }}> Dining Table with Chair</label><br>
-                                                        <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Sofa/Couch" {{ in_array('Sofa/Couch', old('furniture', $existingFurniture)) ? 'checked' : '' }}> Sofa/Couch</label><br>
-                                                        <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Tea Table" {{ in_array('Tea Table', old('furniture', $existingFurniture)) ? 'checked' : '' }}> Tea Table</label><br>
-                                                        <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Bedside Table" {{ in_array('Bedside Table', old('furniture', $existingFurniture)) ? 'checked' : '' }}> Bedside Table</label><br>
-                                                        <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Shoe Rack" {{ in_array('Shoe Rack', old('furniture', $existingFurniture)) ? 'checked' : '' }}> Shoe Rack</label><br>
-                                                        <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Clothing Cabinet" {{ in_array('Clothing Cabinet', old('furniture', $existingFurniture)) ? 'checked' : '' }}> Clothing Cabinet</label><br>
-                                                        <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Clothes Drying Hanger" {{ in_array('Clothes Drying Hanger', old('furniture', $existingFurniture)) ? 'checked' : '' }}> Clothes Drying Hanger</label><br>
-                                                        <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Iron Stand" {{ in_array('Iron Stand', old('furniture', $existingFurniture)) ? 'checked' : '' }}> Iron Stand</label><br>
-                                                        <label><input type="checkbox" name="furniture[]" class="checkbox-item checkbox-item-furniture" value="Locker/Safe" {{ in_array('Locker/Safe', old('furniture', $existingFurniture)) ? 'checked' : '' }}> Locker/Safe</label><br>
-                                                    </div>
-                                                    
-                                                    <!-- Custom Furniture Container for Facilities Tab -->
-                                                    <div class="custom-furniture-container-facilities mt-3" data-section="furniture"></div>
-                                                    
-                                                    <!-- Add More Furniture in Facilities Tab -->
-                                                    <div class="add-more-section mt-3">
-                                                        <div class="input-group" style="max-width: 400px;">
-                                                            <input type="text" class="form-control" id="custom-furniture-input-facilities" placeholder="Enter custom furniture name">
-                                                            <button type="button" class="btn btn-primary btn-sm" id="add-furniture-btn-facilities">Add</button>
-                                                        </div>
-                                                    </div>
-                                                                        </div>
-                                                                </div>
-
-                                            <div class="row mt-15">
-                                                <div class="checkbox-section">
-                                                    <h3 class="label-chk">Room Amenities</h3>
-                                                    <div class="chk-all-sec">
-                                                        <div class="form-group">
-                                                            <div class="custom-control custom-switch checked">
-                                                                <input type="checkbox" class="custom-control-input sync-checkbox-master" data-target=".checkbox-item-amenities" id="amenities-all-facilities">
-                                                                <label class="custom-control-label" for="amenities-all-facilities">Check All</label>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    
-                                                    @php
-                                                        $amenities = old('amenities', is_string($room->amenities) ? (json_decode($room->amenities, true) ?? []) : ($room->amenities ?? []));
-                                                        if (!is_array($amenities)) {
-                                                            $amenities = [];
-                                                        }
-                                                    @endphp
-                                                    
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Soap" {{ in_array('Soap', $amenities) ? 'checked' : '' }}> Soap</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Tissue" {{ in_array('Tissue', $amenities) ? 'checked' : '' }}> Tissue</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Shampoo" {{ in_array('Shampoo', $amenities) ? 'checked' : '' }}> Shampoo</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Toothbrush" {{ in_array('Toothbrush', $amenities) ? 'checked' : '' }}> Toothbrush</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Towel" {{ in_array('Towel', $amenities) ? 'checked' : '' }}> Towel</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Water bottle" {{ in_array('Water bottle', $amenities) ? 'checked' : '' }}> Water bottle</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Free laundry" {{ in_array('Free laundry', $amenities) ? 'checked' : '' }}> Free laundry</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Air freshener" {{ in_array('Air freshener', $amenities) ? 'checked' : '' }}> Air freshener</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Fruit basket" {{ in_array('Fruit basket', $amenities) ? 'checked' : '' }}> Fruit basket</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Complimentary drinks" {{ in_array('Complimentary drinks', $amenities) ? 'checked' : '' }}> Complimentary drinks</label><br>
-                                                    <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Buffet breakfast" {{ in_array('Buffet breakfast', $amenities) ? 'checked' : '' }}> Buffet breakfast</label><br>
-                                                    
-                                                    <!-- Custom Amenities Container for Facilities Tab -->
-                                                    <div class="custom-amenities-container-facilities mt-3" data-section="amenities">
                                                         @php
-                                                            $fixedAmenities = ['Soap', 'Tissue', 'Shampoo', 'Toothbrush', 'Towel', 'Water bottle', 'Free laundry', 'Air freshener', 'Fruit basket', 'Complimentary drinks', 'Buffet breakfast'];
-                                                            $customAmenities = array_diff($amenities, $fixedAmenities);
+                                                            $amenities = old('amenities', is_string($room->amenities) ? (json_decode($room->amenities, true) ?? []) : ($room->amenities ?? []));
+                                                            if (!is_array($amenities)) {
+                                                                $amenities = [];
+                                                            }
                                                         @endphp
-                                                        @foreach($customAmenities as $customAmenity)
-                                                            <label><input type="checkbox" name="custom_amenities[]" class="checkbox-item-amenities" value="{{ $customAmenity }}" checked> {{ $customAmenity }}</label><br>
-                                                        @endforeach
-                                                    </div>
-                                                    
-                                                    <!-- Add More Amenities in Facilities Tab -->
-                                                    <div class="add-more-section mt-3">
-                                                        <div class="input-group" style="max-width: 400px;">
-                                                            <input type="text" class="form-control" id="custom-amenity-input-facilities" placeholder="Enter custom amenity name">
-                                                            <button type="button" class="btn btn-primary btn-sm" id="add-amenity-btn-facilities">Add</button>
+                                                        <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Soap" {{ in_array('Soap', $amenities) ? 'checked' : '' }}> Soap</label><br>
+                                                        <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Tissue" {{ in_array('Tissue', $amenities) ? 'checked' : '' }}> Tissue</label><br>
+                                                        <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Shampoo" {{ in_array('Shampoo', $amenities) ? 'checked' : '' }}> Shampoo</label><br>
+                                                        <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Toothbrush" {{ in_array('Toothbrush', $amenities) ? 'checked' : '' }}> Toothbrush</label><br>
+                                                        <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Towel" {{ in_array('Towel', $amenities) ? 'checked' : '' }}> Towel</label><br>
+                                                        <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Water bottle" {{ in_array('Water bottle', $amenities) ? 'checked' : '' }}> Water bottle</label><br>
+                                                        <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Free laundry" {{ in_array('Free laundry', $amenities) ? 'checked' : '' }}> Free laundry</label><br>
+                                                        <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Air freshener" {{ in_array('Air freshener', $amenities) ? 'checked' : '' }}> Air freshener</label><br>
+                                                        <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Fruit basket" {{ in_array('Fruit basket', $amenities) ? 'checked' : '' }}> Fruit basket</label><br>
+                                                        <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Complimentary drinks" {{ in_array('Complimentary drinks', $amenities) ? 'checked' : '' }}> Complimentary drinks</label><br>
+                                                        <label><input type="checkbox" name="amenities[]" class="checkbox-item checkbox-item-amenities" value="Buffet breakfast" {{ in_array('Buffet breakfast', $amenities) ? 'checked' : '' }}> Buffet breakfast</label><br>
+                                                        <div class="custom-amenities-container-facilities mt-3" data-section="amenities">
+                                                            @php
+                                                                $fixedAmenities = ['Soap', 'Tissue', 'Shampoo', 'Toothbrush', 'Towel', 'Water bottle', 'Free laundry', 'Air freshener', 'Fruit basket', 'Complimentary drinks', 'Buffet breakfast'];
+                                                                $customAmenities = array_diff($amenities, $fixedAmenities);
+                                                            @endphp
+                                                            @foreach($customAmenities as $customAmenity)
+                                                                <label><input type="checkbox" name="custom_amenities[]" class="checkbox-item-amenities" value="{{ $customAmenity }}" checked> {{ $customAmenity }}</label><br>
+                                                            @endforeach
+                                                        </div>
+                                                        <div class="add-more-section mt-3">
+                                                            <div class="input-group" style="max-width: 100%;">
+                                                                <input type="text" class="form-control" id="custom-amenity-input-facilities" placeholder="Enter custom amenity name">
+                                                                <button type="button" class="btn btn-primary btn-sm" id="add-amenity-btn-facilities">Add</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

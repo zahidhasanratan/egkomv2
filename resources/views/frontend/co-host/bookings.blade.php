@@ -126,6 +126,12 @@
         .table td {
             padding: 15px;
             vertical-align: middle;
+            color: #212529 !important;
+        }
+        .table tbody td,
+        .table tbody td strong,
+        .table tbody td small {
+            color: #212529 !important;
         }
 
         .status-badge {

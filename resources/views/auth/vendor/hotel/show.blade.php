@@ -250,11 +250,11 @@
                                                 <div class="card-body">
                                                     <div class="row gy-4">
                                                         <div class="col-md-4">
-                                                            <label class="form-label">Location Latitude</label>
+                                                            <label class="form-label">Google Map Latitude</label>
                                                             <p class="form-control-static">{{ $hotel->lati }}</p>
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <label class="form-label">Location Longitude</label>
+                                                            <label class="form-label">Google Map Longitude</label>
                                                             <p class="form-control-static">{{ $hotel->longi }}</p>
                                                         </div>
                                                         <div class="col-md-4">
@@ -351,7 +351,7 @@
                                             <div class="card">
 
                                                 <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
-                                                    <h3 class="section-title">Property Info</h3>
+                                                    <h3 class="section-title">Important Things to Know</h3>
                                                     <a href="{{ route('vendor-admin.hotel.editOne3', $hotel) }}" title="Edit">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
@@ -1030,6 +1030,7 @@
                                                                 'spa_photos',
                                                                 'gym_photos',
                                                                 'amenities_photos',
+                                                                'additional_photos',
                                                             ];
                                                             $labels = [
                                                                 'featured_photo' => 'Featured Photo / Thumbnail (Dynamically Selected)',
@@ -1039,6 +1040,7 @@
                                                                 'spa_photos' => 'Leisure & Wellness (Gym, Game Room, Kids Zone, Spa & Massage Center, Bar)',
                                                                 'gym_photos' => 'Guest Rooms (All room types in the hotel/property)',
                                                                 'amenities_photos' => 'Amenities & Services (Car, Bus, CCTV, Fire Extinguisher, Surveillance, Room Amenities)',
+                                                                'additional_photos' => 'Additional Photos',
                                                             ];
                                                         @endphp
 

@@ -142,7 +142,7 @@
 
                                                             <div class="col-md-6 col-lg-6 col-xxl-12">
                                                                 <div class="form-group">
-                                                                    <label class="form-label" for="hotel-description">Location Latitude</label>
+                                                                    <label class="form-label" for="hotel-description">Google Map Latitude</label>
                                                                     <div class="form-control-wrap">
                                                                         <input class="form-control" id="hotel-description" name="lati" placeholder="Enter Latitude" value="{{ $hotel->lati }}"></input>
                                                                         @error('lati') <span class="text-danger">{{ $lati }}</span> @enderror
@@ -151,7 +151,7 @@
                                                             </div>
                                                             <div class="col-md-6 col-lg-6 col-xxl-12">
                                                                 <div class="form-group">
-                                                                    <label class="form-label" for="hotel-description">Location Longitude</label>
+                                                                    <label class="form-label" for="hotel-description">Google Map Longitude</label>
                                                                     <div class="form-control-wrap">
                                                                         <input class="form-control" id="hotel-description" name="longi" placeholder="Enter Longitude" value="{{ $hotel->longi }}"></input>
                                                                         @error('longi') <span class="text-danger">{{ $longi }}</span> @enderror

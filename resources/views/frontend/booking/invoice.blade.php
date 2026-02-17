@@ -673,7 +673,6 @@
                                 <th>Check-in</th>
                                 <th>Check-out</th>
                                 <th class="text-right">Nights</th>
-                                <th class="text-right">Night</th>
                                 <th class="text-right">Adults</th>
                                 <th class="text-right">Kids</th>
                                 <th class="text-right">Price/Night</th>
@@ -695,7 +694,6 @@
                                 <td>{{ $booking->checkin_date->format('d M Y') }}</td>
                                 <td>{{ $booking->checkout_date->format('d M Y') }}</td>
                                 <td class="text-right">{{ $booking->total_nights }}</td>
-                                <td class="text-right">{{ $room['quantity'] }}</td>
                                 <td class="text-right">{{ $booking->total_male + $booking->total_female }}</td>
                                 <td class="text-right">{{ $booking->total_kids }}</td>
                                 <td class="text-right">BDT {{ number_format($room['price'], 2) }}</td>
@@ -704,20 +702,64 @@
                             @endforeach
                         </tbody>
                         <tfoot>
+                            @php 
+                                $invoiceSubtotal = (float) ($booking->subtotal ?? 0); 
+                                $invoiceDiscount = (float) ($booking->discount ?? 0); 
+                                $invoiceTax = (float) ($booking->tax ?? 0);
+                                $invoicePlatformFee = (float) ($booking->platform_fee ?? 0);
+                                // Use stored grand_total if available, otherwise calculate
+                                $invoiceGrandTotal = (float) ($booking->grand_total ?? ($invoiceSubtotal - $invoiceDiscount + $invoiceTax + $invoicePlatformFee));
+                                $paidAmount = (float) ($booking->paid_amount ?? 0);
+                                $paymentStatus = $booking->payment_status ?? 'unpaid';
+                            @endphp
                             <tr>
-                                <td colspan="8" class="text-right tfoot-subtotal"><strong>Subtotal:</strong></td>
-                                <td class="text-right tfoot-subtotal"><strong>BDT {{ number_format($booking->subtotal, 2) }}</strong></td>
+                                <td colspan="7" class="text-right tfoot-subtotal"><strong>Subtotal:</strong></td>
+                                <td class="text-right tfoot-subtotal"><strong>BDT {{ number_format($invoiceSubtotal, 2) }}</strong></td>
                             </tr>
-                            @if($booking->discount > 0)
+                            @if($invoiceDiscount > 0)
                             <tr>
-                                <td colspan="8" class="text-right tfoot-discount"><strong>Discount:</strong></td>
-                                <td class="text-right tfoot-discount"><strong>-BDT {{ number_format($booking->discount, 2) }}</strong></td>
+                                <td colspan="7" class="text-right tfoot-discount"><strong>Discount:</strong></td>
+                                <td class="text-right tfoot-discount"><strong>-BDT {{ number_format($invoiceDiscount, 2) }}</strong></td>
+                            </tr>
+                            @endif
+                            @php
+                                $taxPercentage = (float) ($booking->tax_percentage ?? 0);
+                            @endphp
+                            @if($invoiceTax > 0 || $taxPercentage > 0)
+                            <tr>
+                                <td colspan="7" class="text-right tfoot-tax">
+                                    <strong>Tax{{ $taxPercentage > 0 ? ' (' . number_format($taxPercentage, 2) . '%)' : '' }}:</strong>
+                                </td>
+                                <td class="text-right tfoot-tax">
+                                    <strong>BDT {{ number_format($invoiceTax, 2) }}</strong>
+                                </td>
+                            </tr>
+                            @endif
+                            @if($invoicePlatformFee > 0)
+                            <tr>
+                                <td colspan="7" class="text-right"><strong>Platform Fee:</strong></td>
+                                <td class="text-right"><strong>BDT {{ number_format($invoicePlatformFee, 2) }}</strong></td>
                             </tr>
                             @endif
                             <tr class="grand-total">
-                                <td colspan="8" class="text-right"><strong>Grand Total:</strong></td>
-                                <td class="text-right"><strong>BDT {{ number_format($booking->grand_total, 2) }}</strong></td>
+                                <td colspan="7" class="text-right"><strong>Grand Total:</strong></td>
+                                <td class="text-right"><strong>BDT {{ number_format($invoiceGrandTotal, 2) }}</strong></td>
                             </tr>
+                            @if($paymentStatus === 'partial' && $paidAmount > 0)
+                            <tr>
+                                <td colspan="7" class="text-right" style="color: #90278e;"><strong>Paid Amount:</strong></td>
+                                <td class="text-right" style="color: #90278e;"><strong>BDT {{ number_format($paidAmount, 2) }}</strong></td>
+                            </tr>
+                            <tr>
+                                <td colspan="7" class="text-right" style="color: #e74c3c;"><strong>Remaining Amount:</strong></td>
+                                <td class="text-right" style="color: #e74c3c;"><strong>BDT {{ number_format($invoiceGrandTotal - $paidAmount, 2) }}</strong></td>
+                            </tr>
+                            @elseif($paymentStatus === 'paid')
+                            <tr>
+                                <td colspan="7" class="text-right" style="color: #27ae60;"><strong>Payment Status:</strong></td>
+                                <td class="text-right" style="color: #27ae60;"><strong>Fully Paid</strong></td>
+                            </tr>
+                            @endif
                         </tfoot>
                     </table>
                 </div>
@@ -873,13 +915,72 @@
         </section>
         @endif
 
+        <!-- Payment Status Section -->
+        @php
+            $paymentStatus = $booking->payment_status ?? 'unpaid';
+            $paidAmount = (float) ($booking->paid_amount ?? 0);
+            $grandTotal = (float) ($booking->grand_total ?? 0);
+        @endphp
+        @if($paymentStatus === 'partial' || $paymentStatus === 'paid')
+        <section class="invoice-section" style="background: #f8f9fa; border: 2px solid #90278e; border-radius: 8px; padding: 20px; margin-top: 30px;">
+            <h2 class="section-title" style="color: #90278e; margin-bottom: 15px;">Payment Information</h2>
+            <div class="section-content">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                    <div>
+                        <div style="font-size: 12px; color: #666; margin-bottom: 5px;">Payment Status</div>
+                        <div style="font-size: 18px; font-weight: 600; color: #90278e;">
+                            @if($paymentStatus === 'paid')
+                                <span style="color: #27ae60;">✓ Fully Paid</span>
+                            @elseif($paymentStatus === 'partial')
+                                <span style="color: #f39c12;">⚠ Partially Paid</span>
+                            @else
+                                <span style="color: #e74c3c;">Unpaid</span>
+                            @endif
+                        </div>
+                    </div>
+                    @if($paymentStatus === 'partial' && $paidAmount > 0)
+                    <div>
+                        <div style="font-size: 12px; color: #666; margin-bottom: 5px;">Paid Amount</div>
+                        <div style="font-size: 18px; font-weight: 600; color: #27ae60;">BDT {{ number_format($paidAmount, 2) }}</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 12px; color: #666; margin-bottom: 5px;">Remaining Amount</div>
+                        <div style="font-size: 18px; font-weight: 600; color: #e74c3c;">BDT {{ number_format($grandTotal - $paidAmount, 2) }}</div>
+                    </div>
+                    @endif
+                    <div>
+                        <div style="font-size: 12px; color: #666; margin-bottom: 5px;">Grand Total</div>
+                        <div style="font-size: 18px; font-weight: 600; color: #90278e;">BDT {{ number_format($grandTotal, 2) }}</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        @endif
+
         <!-- Footer -->
         <footer style="margin-top: 25px; padding-top: 15px; border-top: 2px solid var(--border-color); text-align: center; color: var(--text-muted); font-size: 11px;">
             <p>This is an electronically generated invoice. No signature required.</p>
             <p style="margin-top: 3px;">Thank you for booking with EGKom!</p>
-            <p style="margin-top: 10px; font-weight: 600;">Status: <span style="color: var(--brand);">{{ strtoupper($booking->booking_status) }}</span></p>
+            <p style="margin-top: 10px; font-weight: 600;">Booking Status: <span style="color: var(--brand);">{{ strtoupper($booking->booking_status) }}</span></p>
+            @if($paymentStatus !== 'unpaid')
+            <p style="margin-top: 5px; font-weight: 600;">Payment Status: 
+                <span style="color: {{ $paymentStatus === 'paid' ? '#27ae60' : ($paymentStatus === 'partial' ? '#f39c12' : '#e74c3c') }};">
+                    {{ strtoupper($paymentStatus) }}
+                </span>
+            </p>
+            @endif
         </footer>
     </div>
+    {{-- Clear booking cart only after successful payment (user reached invoice) --}}
+    <script>
+        (function() {
+            try {
+                localStorage.removeItem('bookingCart');
+                localStorage.removeItem('bookingParams');
+                if (typeof updateGlobalCartDisplay === 'function') updateGlobalCartDisplay();
+            } catch (e) {}
+        })();
+    </script>
 </body>
 </html>
 

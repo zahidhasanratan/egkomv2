@@ -100,6 +100,9 @@ Route::prefix('vendor-admin')->group(function () {
         
         // Booking Management
         Route::get('/bookings', [\App\Http\Controllers\Vendor\VendorBookingController::class, 'index'])->name('vendor.bookings.index');
+        Route::get('/reports/bookings/excel', [\App\Http\Controllers\Vendor\VendorBookingController::class, 'exportExcel'])->name('vendor.reports.bookings.excel');
+        Route::get('/reports/bookings/pdf', [\App\Http\Controllers\Vendor\VendorBookingController::class, 'exportPdf'])->name('vendor.reports.bookings.pdf');
+        Route::get('/bookings/status/{status}', [\App\Http\Controllers\Vendor\VendorBookingController::class, 'indexByStatus'])->name('vendor.bookings.by-status');
         Route::get('/bookings/{id}', [\App\Http\Controllers\Vendor\VendorBookingController::class, 'show'])->name('vendor.bookings.show');
         Route::get('/bookings/{id}/edit', [\App\Http\Controllers\Vendor\VendorBookingController::class, 'edit'])->name('vendor.bookings.edit');
         Route::put('/bookings/{id}', [\App\Http\Controllers\Vendor\VendorBookingController::class, 'update'])->name('vendor.bookings.update');

@@ -49,6 +49,8 @@ class Booking extends Model
         'subtotal',
         'discount',
         'tax',
+        'tax_percentage',
+        'platform_fee',
         'grand_total',
         'coupon_code',
         'payment_status',

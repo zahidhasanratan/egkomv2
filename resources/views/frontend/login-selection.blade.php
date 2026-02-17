@@ -135,14 +135,53 @@
             color: #666;
             line-height: 1.5;
         }
+
+        .go-home-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 12px 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        .go-home-bar a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .go-home-bar a:hover {
+            color: #764ba2;
+        }
+        @media (max-width: 768px) {
+            .go-home-bar {
+                display: block;
+            }
+            body {
+                padding-top: 56px;
+            }
+        }
     </style>
 </head>
 <body>
+    <div class="go-home-bar">
+        <a href="{{ url('/') }}">
+            <i class="fas fa-arrow-left"></i> Go to Home
+        </a>
+    </div>
     <div class="selection-container">
         <div class="logo-section">
-            <div class="logo">
-                <i class="fas fa-hotel"></i>
-            </div>
+            <a href="{{ url('/') }}" class="d-inline-block" style="text-decoration: none;" title="Go to Home">
+                <div class="logo">
+                    <i class="fas fa-hotel"></i>
+                </div>
+            </a>
             <h1 class="main-title">Welcome to EGKom</h1>
             <p class="main-subtitle">Select your role to continue</p>
         </div>

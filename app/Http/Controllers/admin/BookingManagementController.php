@@ -6,12 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\Hotel;
 use App\Models\Room;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class BookingManagementController extends Controller
 {
+    /** Allowed booking statuses for filtering */
+    private const BOOKING_STATUSES = ['pending', 'confirmed', 'staying', 'completed', 'cancelled'];
+
     /**
      * Display all bookings for super admin
      */
@@ -19,9 +24,88 @@ class BookingManagementController extends Controller
     {
         $bookings = Booking::with('guest')
             ->orderBy('created_at', 'desc')
-            ->paginate(20);
-        
+            ->paginate(7);
+
         return view('auth.super_admin.bookings.index', compact('bookings'));
+    }
+
+    /**
+     * Display bookings filtered by status (super admin).
+     */
+    public function indexByStatus(string $status)
+    {
+        $status = strtolower($status);
+        if (!in_array($status, self::BOOKING_STATUSES, true)) {
+            return redirect()->route('super-admin.bookings.index')->with('error', 'Invalid status.');
+        }
+
+        $bookings = Booking::with('guest')
+            ->where('booking_status', $status)
+            ->orderBy('created_at', 'desc')
+            ->paginate(7);
+
+        $currentStatus = $status;
+
+        return view('auth.super_admin.bookings.index', compact('bookings', 'currentStatus'));
+    }
+
+    /**
+     * Export bookings report as Excel (CSV)
+     */
+    public function exportExcel()
+    {
+        $bookings = Booking::with('guest')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $filename = 'bookings-report-' . date('Y-m-d-His') . '.csv';
+        $headers = [
+            'Content-Type'        => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ];
+
+        $callback = function () use ($bookings) {
+            $stream = fopen('php://output', 'w');
+            fprintf($stream, chr(0xEF) . chr(0xBB) . chr(0xBF)); // UTF-8 BOM for Excel
+            fputcsv($stream, [
+                'Invoice #', 'Guest Name', 'Email', 'Phone', 'Hotel', 'Check-in', 'Check-out', 'Nights', 'Status', 'Grand Total', 'Payment Status', 'Created',
+            ]);
+            foreach ($bookings as $b) {
+                fputcsv($stream, [
+                    $b->invoice_number,
+                    $b->guest_name,
+                    $b->guest_email,
+                    $b->guest_phone ?? '',
+                    $b->getHotelName(),
+                    $b->checkin_date ? $b->checkin_date->format('Y-m-d') : '',
+                    $b->checkout_date ? $b->checkout_date->format('Y-m-d') : '',
+                    $b->total_nights ?? '',
+                    $b->booking_status ?? '',
+                    $b->grand_total ?? '',
+                    $b->payment_status ?? '',
+                    $b->created_at ? $b->created_at->format('Y-m-d H:i') : '',
+                ]);
+            }
+            fclose($stream);
+        };
+
+        return new StreamedResponse($callback, 200, $headers);
+    }
+
+    /**
+     * Export bookings report as PDF
+     */
+    public function exportPdf()
+    {
+        $bookings = Booking::with('guest')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $pdf = Pdf::loadView('auth.super_admin.reports.bookings_pdf', compact('bookings'))
+            ->setPaper('a4', 'landscape')
+            ->setOption('defaultFont', 'sans-serif');
+
+        return $pdf->download('bookings-report-' . date('Y-m-d-His') . '.pdf');
     }
 
     /**
@@ -111,6 +195,8 @@ class BookingManagementController extends Controller
             'admin_note' => 'nullable|string|max:1000',
             'room_id' => 'nullable|exists:rooms,id',
             'quantity' => 'nullable|integer|min:1',
+            'payment_status' => 'nullable|in:unpaid,partial,paid',
+            'paid_amount' => 'nullable|numeric|min:0',
         ]);
         
         DB::beginTransaction();
@@ -284,6 +370,14 @@ class BookingManagementController extends Controller
             if ($request->has('admin_note')) {
                 $booking->admin_note = $validated['admin_note'];
             }
+
+            // Update payment status (super-admin can set paid/unpaid for manual reconciliation)
+            if (array_key_exists('payment_status', $validated) && $validated['payment_status'] !== null) {
+                $booking->payment_status = $validated['payment_status'];
+            }
+            if (array_key_exists('paid_amount', $validated) && $validated['paid_amount'] !== null) {
+                $booking->paid_amount = $validated['paid_amount'];
+            }
             
             $booking->save();
             
@@ -415,6 +509,7 @@ class BookingManagementController extends Controller
             'price_per_night' => 'required|numeric|min:0',
             'discount' => 'nullable|numeric|min:0',
             'tax_percentage' => 'nullable|numeric|min:0|max:100',
+            'platform_fee' => 'nullable|numeric|min:0',
             'arrival_time' => 'nullable|string',
             'property_note' => 'nullable|string',
             'organization' => 'nullable|string',
@@ -467,11 +562,14 @@ class BookingManagementController extends Controller
                 'hotelPhoto' => $hotelPhoto,
             ]];
 
-            // Calculate pricing (no tax)
+            // Calculate pricing with tax
             $subtotal = $validated['price_per_night'] * $validated['quantity'] * $totalNights;
             $discount = $validated['discount'] ?? 0;
-            $tax = 0; // No tax calculation
-            $grandTotal = $subtotal - $discount;
+            $taxPercentage = $validated['tax_percentage'] ?? 0;
+            $platformFee = $validated['platform_fee'] ?? 0;
+            $afterDiscount = $subtotal - $discount;
+            $tax = $afterDiscount * ($taxPercentage / 100);
+            $grandTotal = $afterDiscount + $tax + $platformFee;
 
             // Handle file uploads
             $nidFront = null;
@@ -565,6 +663,8 @@ class BookingManagementController extends Controller
                 'subtotal' => $subtotal,
                 'discount' => $discount,
                 'tax' => $tax,
+                'tax_percentage' => $taxPercentage,
+                'platform_fee' => $platformFee,
                 'grand_total' => $grandTotal,
                 'payment_status' => $request->payment_status ?? 'unpaid',
                 'paid_amount' => $request->paid_amount ?? 0,

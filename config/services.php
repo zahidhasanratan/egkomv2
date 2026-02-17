@@ -30,4 +30,13 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'shurjopay' => [
+        'username' => env('SP_USERNAME', env('MERCHANT_USERNAME')),
+        'password' => env('SP_PASSWORD', env('MERCHANT_PASSWORD')),
+        'prefix' => env('SP_PREFIX', env('MERCHANT_PREFIX', 'SIC')),
+        'api' => env('SHURJOPAY_API', 'https://sandbox.shurjopayment.com'),
+        'callback' => env('SP_CALLBACK'),
+        'log_path' => env('SP_LOG_LOCATION', storage_path('logs')),
+    ],
+
 ];

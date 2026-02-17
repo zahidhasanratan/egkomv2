@@ -734,13 +734,35 @@
         // Auto-fill booking parameters from localStorage
         const bookingParams = JSON.parse(localStorage.getItem('bookingParams')) || {};
         
-        // Auto-fill dates
-        if (bookingParams.checkin) {
-            document.getElementById('checkin-date').value = bookingParams.checkin;
+        // Auto-fill dates - use defaults (tomorrow, day after) if not in bookingParams
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const dayAfter = new Date(tomorrow);
+        dayAfter.setDate(dayAfter.getDate() + 1);
+        const defaultCheckin = tomorrow.toISOString().split('T')[0];
+        const defaultCheckout = dayAfter.toISOString().split('T')[0];
+        
+        const checkinVal = bookingParams.checkin || defaultCheckin;
+        let checkoutVal = bookingParams.checkout;
+        if (!checkoutVal) {
+            const ci = new Date(checkinVal);
+            ci.setDate(ci.getDate() + 1);
+            checkoutVal = ci.toISOString().split('T')[0];
         }
-        if (bookingParams.checkout) {
-            document.getElementById('checkout-date').value = bookingParams.checkout;
+        document.getElementById('checkin-date').value = checkinVal;
+        document.getElementById('checkout-date').value = checkoutVal;
+        if (!bookingParams.checkin || !bookingParams.checkout) {
+            bookingParams.checkin = checkinVal;
+            bookingParams.checkout = checkoutVal;
+            localStorage.setItem('bookingParams', JSON.stringify(bookingParams));
         }
+        
+        // Set min attributes on date inputs to prevent past dates
+        document.getElementById('checkin-date').setAttribute('min', today.toISOString().split('T')[0]);
+        const minCheckout = new Date(checkinVal);
+        minCheckout.setDate(minCheckout.getDate() + 1);
+        document.getElementById('checkout-date').setAttribute('min', minCheckout.toISOString().split('T')[0]);
         
         // Update total nights and render price summary after dates are set
         setTimeout(() => {
@@ -748,7 +770,7 @@
             renderPriceSummary(cart); // Call after dates are set
         }, 100);
         
-        // Auto-fill Room Type from cart
+        // Auto-fill Room Type and Room/Apartment Number from cart
         if (cart.length > 0) {
             // Get unique room names from cart
             const roomNames = cart.map(item => {
@@ -757,6 +779,32 @@
             });
             const roomTypeValue = roomNames.join(', ');
             document.getElementById('room-type').value = roomTypeValue;
+            
+            // Auto-fill Room/Apartment Number from cart (room number and optional floor)
+            const roomNumberParts = [];
+            cart.forEach(item => {
+                const roomNumber = item.roomNumber || item.number || null;
+                const floorNumber = item.floorNumber || item.floor_number || null;
+                if (roomNumber) {
+                    let part = roomNumber;
+                    if (floorNumber) {
+                        const floorNum = parseInt(floorNumber);
+                        let suffix = 'th';
+                        if (floorNum == 1) suffix = 'st';
+                        else if (floorNum == 2) suffix = 'nd';
+                        else if (floorNum == 3) suffix = 'rd';
+                        part += ` - ${floorNum}${suffix} Floor`;
+                    }
+                    const count = item.quantity || 1;
+                    for (let i = 0; i < count; i++) {
+                        roomNumberParts.push(part);
+                    }
+                }
+            });
+            const roomNumberInput = document.getElementById('room-number');
+            if (roomNumberInput) {
+                roomNumberInput.value = roomNumberParts.length > 0 ? roomNumberParts.join(', ') : '';
+            }
             
             // Calculate and update total nights
             updateTotalNights();
@@ -849,6 +897,32 @@
                     // Re-render cards and summary with updated hotelId
                     renderBookingCards(cart);
                     renderPriceSummary(cart);
+                    
+                    // Auto-fill Room/Apartment Number now that room data (number, floor) is in cart
+                    const roomNumberParts = [];
+                    cart.forEach(item => {
+                        const roomNumber = item.roomNumber || item.number || null;
+                        const floorNumber = item.floorNumber || item.floor_number || null;
+                        if (roomNumber) {
+                            let part = roomNumber;
+                            if (floorNumber) {
+                                const floorNum = parseInt(floorNumber);
+                                let suffix = 'th';
+                                if (floorNum == 1) suffix = 'st';
+                                else if (floorNum == 2) suffix = 'nd';
+                                else if (floorNum == 3) suffix = 'rd';
+                                part += ` - ${floorNum}${suffix} Floor`;
+                            }
+                            const count = item.quantity || 1;
+                            for (let i = 0; i < count; i++) {
+                                roomNumberParts.push(part);
+                            }
+                        }
+                    });
+                    const roomNumberInputEl = document.getElementById('room-number');
+                    if (roomNumberInputEl) {
+                        roomNumberInputEl.value = roomNumberParts.length > 0 ? roomNumberParts.join(', ') : '';
+                    }
                     
                     // Collect all available requests from all rooms
                     const allAvailableRequests = new Set();
@@ -1131,13 +1205,6 @@
             if (nights < 1) nights = 1; // Ensure at least 1 night
         }
         
-        console.log('Price Calculation:', {
-            checkin: checkinInput,
-            checkout: checkoutInput,
-            nights: nights,
-            cart: cart
-        });
-        
         let total = 0;
         let subTotal = 0;
         let rackRate = 0;
@@ -1169,8 +1236,6 @@
             // Format room number
             const itemRoomNumberText = itemRoomNumber ? ` (Room #${itemRoomNumber})` : '';
             
-            console.log(`Room: ${item.roomName}, Price: ${item.price}, Night: ${item.quantity}, Nights: ${nights}, Total: ${itemTotal}`);
-            
             // Calculate rack rate (assuming 69% discount as in reference)
             const itemRackRate = itemTotal / 0.31; // If discounted price is 31% of rack rate
             rackRate += itemRackRate;
@@ -1194,8 +1259,8 @@
         
         discount = rackRate - subTotal;
         const discountPercentage = ((discount / rackRate) * 100).toFixed(0);
-        taxesAndFees = subTotal * 0.265; // Approximately 26.5% as in reference
-        total = subTotal + taxesAndFees;
+        taxesAndFees = 0; // No tax – exact calculation only
+        total = subTotal;
         
         // Update selected rooms summary
         const totalRooms = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -1299,15 +1364,8 @@
                                     </span>
                                 </div>
                                
-                                <div data-v-67f096c7="" class="aggregated-discount">
-                                    <p data-v-67f096c7="" class="redeem-info">
-                                        <span data-v-67f096c7="" id="coupon-toggle" class="coupon-text">Have a coupon?</span>
-                                    </p>
-                                    <div id="coupon-input" style="display: none;" class="coupon-input-container">
-                                        <input type="text" placeholder="Enter coupon code" id="coupon-code" class="coupon-input">
-                                        <button id="apply-coupon" class="apply-btn">Apply</button>
-                                    </div>
-                                </div>
+                              
+                                
                             </div>
                         </div>
                     </div>
@@ -1533,16 +1591,10 @@
             Swal.close();
             
             if (data.success) {
-                // Clear cart and booking params
-                localStorage.removeItem('bookingCart');
-                localStorage.removeItem('bookingParams');
+                // Do NOT clear cart here – only clear after successful payment (on invoice page).
+                // If user cancels payment and clicks "Back to Checkout", cart will still be there.
                 
-                // Update global cart display if function exists
-                if (typeof updateGlobalCartDisplay === 'function') {
-                    updateGlobalCartDisplay();
-                }
-                
-                // Determine redirect URL (use redirect_url from response or construct from booking_id)
+                // Server sends redirect_url to payment gateway (/booking/pay/ID); use it so user goes to ShurjoPay
                 const redirectUrl = data.redirect_url || (data.booking_id ? '/booking/invoice/' + data.booking_id : null);
                 
                 if (!redirectUrl) {
@@ -1556,41 +1608,10 @@
                     return;
                 }
                 
-                console.log('Booking successful. Redirecting to:', redirectUrl);
+                console.log('Booking successful. Redirecting to payment:', redirectUrl);
                 
-                // Show success message and redirect
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Booking Confirmed!',
-                    html: `
-                        <div style="text-align: left;">
-                            <p style="margin-bottom: 15px;">Your booking has been confirmed successfully!</p>
-                            <p style="margin-bottom: 10px;"><strong>Invoice Number:</strong> <span style="color: #91278f;">${data.invoice_number || 'N/A'}</span></p>
-                            <p style="margin-bottom: 5px;"><strong>Booking ID:</strong> ${data.booking_id || 'N/A'}</p>
-                            <p style="margin-top: 15px; font-size: 0.9em; color: #666;">Redirecting to invoice page...</p>
-                        </div>
-                    `,
-                    confirmButtonColor: '#91278f',
-                    confirmButtonText: 'View Invoice',
-                    allowOutsideClick: false,
-                    showConfirmButton: true,
-                    timer: 2000,
-                    timerProgressBar: true
-                }).then((result) => {
-                    // Redirect to invoice page - always redirect
-                    console.log('Redirecting to:', redirectUrl);
-                    window.location.href = redirectUrl;
-                }).catch((error) => {
-                    // If Swal fails, still redirect
-                    console.error('Swal error, redirecting anyway:', error);
-                    window.location.href = redirectUrl;
-                });
-                
-                // Backup redirect in case Swal doesn't fire properly
-                setTimeout(() => {
-                    console.log('Backup redirect to:', redirectUrl);
-                    window.location.href = redirectUrl;
-                }, 2500);
+                // Redirect immediately to payment gateway (no delay)
+                window.location.replace(redirectUrl);
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -1841,9 +1862,21 @@
                 const isHidden = changeOptions.style.display === 'none' || changeOptions.style.display === '';
                 changeOptions.style.display = isHidden ? 'block' : 'none';
                 
-                // Update button text
                 if (isHidden) {
                     this.querySelector('.bui-button__text').textContent = 'Hide selection';
+                    // Sync change options from main form when opening (in case main form was updated)
+                    const mainCheckin = document.getElementById('checkin-date')?.value;
+                    const mainCheckout = document.getElementById('checkout-date')?.value;
+                    const mainAdults = document.getElementById('qty')?.value;
+                    const mainChildren = document.getElementById('qty3')?.value;
+                    const ccIn = document.getElementById('change-checkin-date');
+                    const ccOut = document.getElementById('change-checkout-date');
+                    const aSel = document.getElementById('adults-select');
+                    const cSel = document.getElementById('children-select');
+                    if (ccIn && mainCheckin) ccIn.value = mainCheckin;
+                    if (ccOut && mainCheckout) ccOut.value = mainCheckout;
+                    if (aSel && mainAdults) aSel.value = mainAdults;
+                    if (cSel && mainChildren) cSel.value = mainChildren;
                 } else {
                     this.querySelector('.bui-button__text').textContent = 'Change your selection';
                 }

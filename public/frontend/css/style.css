@@ -173,8 +173,8 @@ h6 {
     display: flex;
     justify-content: space-evenly;
     gap: 10px;
-    box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.08);
     padding: 5px 3px;
+    align-items: center;
     border-radius: 10px;
     transition: 0.5s;
 }
@@ -7164,7 +7164,7 @@ div#form-field__helper--checkin_eta_hour {
     font-size: 24px;
     font-weight: 600;
     padding: 6px 0px;
-    /* text-align: center; */
+     text-align: center; 
 }
 
 section#tourOffers {
@@ -7816,13 +7816,7 @@ div#nav {
 }
 
 .pricing-info .price-amount .price-before-discount[data-v-b6728cd0]:after {
-    border-bottom: 1px solid #d10606;
-    content: "";
-    position: absolute;
-    right: 0;
-    top: 57%;
-    transform: skewY(-8deg);
-    width: 100%;
+    display: none; /* Single line strikethrough via <del> only */
 }
 .pricing-info .price-amount .discount-price[data-v-b6728cd0] {
     display: block;
@@ -10398,11 +10392,13 @@ section.innerpage-wrapper-custom {
 
 /********************Explore Bd**********************/
 
-.short-pera{
+.short-pera {
 	max-width: 550px;
 	line-height: 22px;
 	font-size: 16px;
 	padding-bottom: 20px;
+	text-align: center;
+	margin: 0 auto;
 }
 .explore-card {
 /*    width: 263px;*/
@@ -10939,10 +10935,14 @@ p.per-night {
 
         .slider-content {
             position: absolute;
-            top: 34%;
-            left: 3%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             color: #fff;
             z-index: 99;
+            text-align: center;
+            width: 100%;
+            padding: 0 15px;
         }
         .slider-content h1 {
             font-size: 34px;
@@ -13257,22 +13257,22 @@ h2.wishlist-title {
 
         /* Initially hide the submenu */
         .user-submenu {
-			display: none;
-			position: absolute;
-			top: 57px;
-			right: 23px;
-			background-color: white;
-			border: 1px solid #ddd;
-			box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-			border-radius: 8px;
-			border-top-left-radius: 8px;
-			border-top-right-radius: 8px;
-			border-bottom-left-radius: 12px;
-			border-bottom-right-radius: 12px;
-			width: 180px;
-			z-index: 99999;
-			padding: 8px 0;
-		}
+        	display: none;
+        	position: absolute;
+        	top: 38px;
+        	right: -9px;
+        	background-color: white;
+        	border: 1px solid #ddd;
+        	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        	border-radius: 8px;
+        	border-top-left-radius: 8px;
+        	border-top-right-radius: 8px;
+        	border-bottom-left-radius: 12px;
+        	border-bottom-right-radius: 12px;
+        	width: 180px;
+        	z-index: 99999;
+        	padding: 8px 0;
+        }
 		
 		.user-submenu.show {
 			display: block !important;
@@ -13330,6 +13330,9 @@ h2.wishlist-title {
         
         .user-section {
           position: relative;
+		  box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.08);
+		  padding: 5px 3px;
+		  border-radius: 10px;
         }
 
         .calendar-popup {
@@ -13457,16 +13460,16 @@ h2.wishlist-title {
 }
 
 .book_btn_2 {
-    background-color: #90278e;
-    width: 70px;
-    height: 70px;
-    border-radius: 100%;
-    align-content: center;
-    align-items: center;
-    transition: 0.5s;
-    float: right;
-    margin-top: 80px;
-    margin-right: 14px;
+	background-color: #90278e;
+	width: 70px;
+	height: 70px;
+	border-radius: 100%;
+	align-content: center;
+	align-items: center;
+	transition: 0.5s;
+	float: right;
+	margin-top: 35px;
+	margin-right: 14px;
 }
 .book_btn_2 a {
     font-size: 16px;
@@ -13512,20 +13515,21 @@ h2.wishlist-title {
 }
 
 .discount-tag-modal {
-    background-color: #fd7e14;
-    border-radius: 20px;
-    color: #fff;
-    display: inline-block;
-    font-size: .8571428571rem;
-    font-weight: 600;
-    line-height: 22px;
-    line-height: 18px;
-    margin: 5px 0;
-    padding: 5px 10px;
+	background-color: #fd7e14;
+	border-radius: 20px;
+	color: #fff;
+	display: inline-block;
+	font-size: .8571428571rem;
+	font-weight: 600;
+	line-height: 22px;
+	line-height: 18px;
+	margin: 5px 0;
+	padding: 5px 10px;
+	display: inline-block !important;
 }
 .price-before-discount-modal {
     color: #f33a3a;
-    display: inline-block;
+    display: inline-block !important;
     font-size: 14px;
     font-weight: 400;
     line-height: 22px;
@@ -13533,13 +13537,7 @@ h2.wishlist-title {
 }
 
 .price-before-discount-modal:after {
-    border-bottom: 1px solid #d10606;
-    content: "";
-    position: absolute;
-    right: 0;
-    top: 57%;
-    transform: skewY(-8deg);
-    width: 100%;
+    display: none; /* Single line strikethrough via <del> only */
 }
 
 .discount-price-modal {
@@ -13567,10 +13565,11 @@ h2.wishlist-title {
 }
 
 .action-btn-group {
-    display: flex;
-    justify-content: space-between;
-    align-content: center;
-    align-items: center;
+	display: flex;
+	justify-content: flex-end;
+	align-content: center;
+	align-items: center;
+	gap: 10px;
 }
 
 .hotel-all-card {

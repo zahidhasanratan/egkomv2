@@ -41,7 +41,7 @@
                                             <!-- Start: Property Information -->
                                             <div class="row mt-15">
                                                 <div class="checkbox-section">
-                                                    <h3 class="can-tittle">Property Info</h3>
+                                                    <h3 class="can-tittle">Important Things to Know</h3>
                                                     <div class="chk-all-sec">
                                                         <div class="form-group">
                                                             <div class="custom-control custom-switch checked">

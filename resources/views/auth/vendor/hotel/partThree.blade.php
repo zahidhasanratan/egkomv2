@@ -65,14 +65,14 @@
 
                                             <div class="col-lg-12">
                                                 <div class="form-group">
-                                                    <h3 class="can-tittle">Most Popular Nearby Area</h3>
+                                                    <h3 class="can-tittle">Most Popular Nearby Area <small class="text-muted">(Maximum 3)</small></h3>
                                                     <div id="nearby-areas-wrapper">
                                                         @php
-                                                            // Ensure nearby_areas is a valid array. If it's not, decode it.
                                                             $nearbyAreas = is_array($hotel->custom_nearby_areas) ? $hotel->custom_nearby_areas : json_decode($hotel->custom_nearby_areas, true);
+                                                            $nearbyAreas = is_array($nearbyAreas) ? array_slice($nearbyAreas, 0, 3) : [];
                                                         @endphp
 
-                                                        @if(is_array($nearbyAreas) && count($nearbyAreas) > 0)
+                                                        @if(count($nearbyAreas) > 0)
                                                             @foreach($nearbyAreas as $nearbyArea)
                                                                 <div class="form-group mb-3 d-flex align-items-center">
                                                                     <input type="text" name="custom_nearby_areas[]" class="form-control" placeholder="Enter something" value="{{ is_string($nearbyArea) ? htmlspecialchars($nearbyArea) : '' }}">
@@ -97,29 +97,28 @@
 
                                                 @push('scripts')
                                                     <script>
-                                                        // Add More functionality
+                                                        function updateAddNearbyBtnState() {
+                                                            var count = document.querySelectorAll('#nearby-areas-wrapper .form-group').length;
+                                                            var btn = document.getElementById('add-nearby-area');
+                                                            if (btn) btn.disabled = count >= 3;
+                                                        }
                                                         document.getElementById('add-nearby-area').addEventListener('click', function() {
+                                                            var wrapper = document.getElementById('nearby-areas-wrapper');
+                                                            if (wrapper.querySelectorAll('.form-group').length >= 3) return;
                                                             var newInput = document.createElement('div');
                                                             newInput.classList.add('form-group', 'mb-3', 'd-flex', 'align-items-center');
-
-                                                            newInput.innerHTML =
-                                                        <input type="text" name="custom_nearby_areas[]" class="form-control" placeholder="Enter something">
-                                                                <button type="button" class="btn btn-danger btn-sm ms-2 remove-area-btn">Delete</button>
-                                                            ;
-
-                                                            // Append the new input field to the wrapper
-                                                            document.getElementById('nearby-areas-wrapper').appendChild(newInput);
-
-                                                            // Show the delete button on new fields
+                                                            newInput.innerHTML = '<input type="text" name="custom_nearby_areas[]" class="form-control" placeholder="Enter something"><button type="button" class="btn btn-danger btn-sm ms-2 remove-area-btn">Delete</button>';
+                                                            wrapper.appendChild(newInput);
                                                             newInput.querySelector('.remove-area-btn').style.display = 'inline-block';
+                                                            updateAddNearbyBtnState();
                                                         });
-
-                                                        // Remove area functionality
                                                         document.getElementById('nearby-areas-wrapper').addEventListener('click', function(e) {
                                                             if (e.target && e.target.classList.contains('remove-area-btn')) {
                                                                 e.target.closest('.form-group').remove();
+                                                                updateAddNearbyBtnState();
                                                             }
                                                         });
+                                                        document.addEventListener('DOMContentLoaded', updateAddNearbyBtnState);
                                                     </script>
                                                 @endpush
 
@@ -195,22 +194,33 @@
                                         </div>
 
                                         <script>
-                                            document.getElementById('add-nearby-area').addEventListener('click', function () {
-                                                const wrapper = document.getElementById('nearby-areas-wrapper');
-                                                const newField = document.createElement('div');
-                                                newField.classList.add('form-group', 'mb-3', 'd-flex', 'align-items-center');
-                                                newField.innerHTML = `
-            <input type="text" name="custom_nearby_areas[]" class="form-control" placeholder="Enter something">
-            <button type="button" class="btn btn-danger btn-sm ms-2 remove-area-btn">Delete</button>
-        `;
-                                                wrapper.appendChild(newField);
-                                            });
-
-                                            document.addEventListener('click', function (event) {
-                                                if (event.target.classList.contains('remove-area-btn')) {
-                                                    event.target.closest('.form-group').remove();
+                                            (function() {
+                                                function updateAddNearbyBtnState() {
+                                                    var count = document.querySelectorAll('#nearby-areas-wrapper .form-group').length;
+                                                    var btn = document.getElementById('add-nearby-area');
+                                                    if (btn) btn.disabled = count >= 3;
                                                 }
-                                            });
+                                                var addBtn = document.getElementById('add-nearby-area');
+                                                if (addBtn) {
+                                                    addBtn.addEventListener('click', function () {
+                                                        const wrapper = document.getElementById('nearby-areas-wrapper');
+                                                        if (wrapper && wrapper.querySelectorAll('.form-group').length >= 3) return;
+                                                        const newField = document.createElement('div');
+                                                        newField.classList.add('form-group', 'mb-3', 'd-flex', 'align-items-center');
+                                                        newField.innerHTML = '<input type="text" name="custom_nearby_areas[]" class="form-control" placeholder="Enter something"><button type="button" class="btn btn-danger btn-sm ms-2 remove-area-btn">Delete</button>';
+                                                        wrapper.appendChild(newField);
+                                                        updateAddNearbyBtnState();
+                                                    });
+                                                }
+                                                document.addEventListener('click', function (event) {
+                                                    if (event.target.classList.contains('remove-area-btn')) {
+                                                        event.target.closest('.form-group').remove();
+                                                        updateAddNearbyBtnState();
+                                                    }
+                                                });
+                                                if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', updateAddNearbyBtnState);
+                                                else updateAddNearbyBtnState();
+                                            })();
                                         </script>
 
 
@@ -227,6 +237,7 @@
                                                     'spa_photos',
                                                     'gym_photos',
                                                     'amenities_photos',
+                                                    'additional_photos',
                                                 ];
                                                 $labels = [
                                                     'featured_photo' => 'Featured Photo / Thumbnail (Dynamically Selected)',
@@ -236,6 +247,7 @@
                                                     'spa_photos' => 'Leisure & Wellness (Gym, Game Room, Kids Zone, Spa & Massage Center, Bar)',
                                                     'gym_photos' => 'Guest Rooms (All room types in the hotel/property)',
                                                     'amenities_photos' => 'Amenities & Services (Car, Bus, CCTV, Fire Extinguisher, Surveillance, Room Amenities)',
+                                                    'additional_photos' => 'Additional Photos',
                                                 ];
                                             @endphp
 

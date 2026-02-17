@@ -122,13 +122,18 @@ class HomeController extends Controller
             'Crisis' => 'Crisis'
         ];
         
-        // Get paginated data for all categories
+        // Get paginated data for all categories (with rating, review count, min price per hotel)
         $allCategoriesData = [];
         foreach ($categoryMap as $tabName => $dbCat) {
             $currentPage = ($category === $tabName) ? $page : 1;
             $query = \App\Models\Hotel::where('property_category', $dbCat)
                 ->where('approve', 1)
-                ->where('status', 'submitted');
+                ->where('status', 'submitted')
+                ->withCount('reviews')
+                ->withAvg('reviews', 'overall_rating')
+                ->withMin(['rooms' => function ($q) {
+                    $q->where('is_active', true);
+                }], 'price_per_night');
             
             $allCategoriesData[$tabName] = $query->paginate(16, ['*'], 'page', $currentPage)
                 ->withPath(route('welcome'))
@@ -136,7 +141,14 @@ class HomeController extends Controller
 
         }
 
-        return view('frontend/home.index', compact('main', 'footer', 'popularDestinations', 'districts', 'cities', 'category', 'allCategoriesData', 'categoryMap'));
+        $tourPackages = \App\Models\TourPackage::where('is_active', 1)
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
+
+        $homepageHero = \App\Models\HomepageHeroSetting::get();
+
+        return view('frontend/home.index', compact('main', 'footer', 'popularDestinations', 'districts', 'cities', 'category', 'allCategoriesData', 'categoryMap', 'tourPackages', 'homepageHero'));
     }
 
     /**

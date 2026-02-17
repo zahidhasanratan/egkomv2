@@ -104,7 +104,7 @@
 
                                                             <div class="col-md-6 col-lg-6 col-xxl-12">
                                                                 <div class="form-group">
-                                                                    <label class="form-label" for="hotel-description">Location Latitude</label>
+                                                                    <label class="form-label" for="hotel-description">Google Map Latitude</label>
                                                                     <div class="form-control-wrap">
                                                                         <input class="form-control" id="hotel-description" name="lati" placeholder="Enter Latitude" value="{{ $hotel->lati }}"></input>
                                                                         @error('lati') <span class="text-danger">{{ $lati }}</span> @enderror
@@ -113,7 +113,7 @@
                                                             </div>
                                                             <div class="col-md-6 col-lg-6 col-xxl-12">
                                                                 <div class="form-group">
-                                                                    <label class="form-label" for="hotel-description">Location Longitude</label>
+                                                                    <label class="form-label" for="hotel-description">Google Map Longitude</label>
                                                                     <div class="form-control-wrap">
                                                                         <input class="form-control" id="hotel-description" name="longi" placeholder="Enter Longitude" value="{{ $hotel->longi }}"></input>
                                                                         @error('longi') <span class="text-danger">{{ $longi }}</span> @enderror
@@ -634,7 +634,7 @@
                                             <div class="row mt-4">
                                                 <div class="col-md-12">
                                                     <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
-                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Property Info</strong></h5>
+                                                        <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Important Things to Know</strong></h5>
                                                         
                                                         <div class="checkbox-section">
                                                     <div class="chk-all-sec">

@@ -96,44 +96,33 @@
                                 <button class="btn" id="closebtn">&times;</button>
                             </div>
                             <div class="list-group panel">
-                                <a href="#home-links" class="items-list" data-bs-toggle="collapse" aria-expanded="false">
-                                    Home</a>
-
-
-                                <a class="items-list" href="#flights-links" data-bs-toggle="collapse">Hotels<span><i class="fa fa-chevron-down arrow"></i></span></a>
-                                <div class="collapse sub-menu" id="flights-links">
-                                    <a class="items-list" href="#">Sub Menu 1</a>
-                                    <a class="items-list" href="#">Sub Menu 2</a>
-                                    <a class="items-list" href="#">Sub Menu 3</a>
-                                    <a class="items-list" href="#">Sub Menu 4</a>
-
-                                </div><!-- end sub-menu -->
-
-                                <a class="items-list" href="#hotels-links" data-bs-toggle="collapse"><span></span>Menu 1<span><i class="fa fa-chevron-down arrow"></i></span></a>
-                                <div class="collapse sub-menu" id="hotels-links">
-                                    <a class="items-list" href="#">Sub Menu 1</a>
-                                    <a class="items-list" href="#">Sub Menu 2</a>
-                                    <a class="items-list" href="#">Sub Menu 3</a>
-                                    <a class="items-list" href="#">Sub Menu 4</a>
-                                </div><!-- end sub-menu -->
-
-                                <a class="items-list" href="#tours-links" data-bs-toggle="collapse">Menu 2<span><i class="fa fa-chevron-down arrow"></i></span></a>
-                                <div class="collapse sub-menu" id="tours-links">
-                                    <a class="items-list" href="#">Sub Menu 1</a>
-                                    <a class="items-list" href="#">Sub Menu 2</a>
-                                    <a class="items-list" href="#">Sub Menu 3</a>
-                                    <a class="items-list" href="#">Sub Menu 4</a>
-                                </div><!-- end sub-menu -->
-
-                                <a class="items-list" href="#cruise-links" data-bs-toggle="collapse">Menu 3<span><i class="fa fa-chevron-down arrow"></i></span></a>
-                                <div class="collapse sub-menu" id="cruise-links">
-                                    <a class="items-list" href="#">Sub Menu 1</a>
-                                    <a class="items-list" href="#">Sub Menu 2</a>
-                                    <a class="items-list" href="#">Sub Menu 3</a>
-                                    <a class="items-list" href="#">Sub Menu 4</a>
-                                </div><!-- end sub-menu -->
-
-
+                                <a href="{{ url('/') }}" class="items-list">Home</a>
+                                <a href="{{ route('destinations.index') }}" class="items-list">Destinations</a>
+                                <a href="{{ url('/') }}#tourOffers" class="items-list">Tour Packages</a>
+                                <a class="items-list" href="#support-links" data-bs-toggle="collapse" aria-expanded="false">Support<span><i class="fa fa-chevron-down arrow"></i></span></a>
+                                <div class="collapse sub-menu" id="support-links">
+                                    @foreach(\App\Menu::where('footer1', 1)->get() as $main_menu)
+                                    <a class="items-list" href="{{ $main_menu->page_type == 'url' ? $main_menu->external_link : route('page.details', $main_menu->slug) }}">{{ $main_menu->menu_name }}</a>
+                                    @endforeach
+                                </div>
+                                <a class="items-list" href="#discover-links" data-bs-toggle="collapse" aria-expanded="false">Discover<span><i class="fa fa-chevron-down arrow"></i></span></a>
+                                <div class="collapse sub-menu" id="discover-links">
+                                    @foreach(\App\Menu::where('footer2', 1)->get() as $main_menu)
+                                    <a class="items-list" href="{{ $main_menu->page_type == 'url' ? $main_menu->external_link : route('page.details', $main_menu->slug) }}">{{ $main_menu->menu_name }}</a>
+                                    @endforeach
+                                </div>
+                                <a class="items-list" href="#terms-links" data-bs-toggle="collapse" aria-expanded="false">Terms and settings<span><i class="fa fa-chevron-down arrow"></i></span></a>
+                                <div class="collapse sub-menu" id="terms-links">
+                                    @foreach(\App\Menu::where('footer3', 1)->get() as $main_menu)
+                                    <a class="items-list" href="{{ $main_menu->page_type == 'url' ? $main_menu->external_link : route('page.details', $main_menu->slug) }}">{{ $main_menu->menu_name }}</a>
+                                    @endforeach
+                                </div>
+                                <a class="items-list" href="#about-links" data-bs-toggle="collapse" aria-expanded="false">About<span><i class="fa fa-chevron-down arrow"></i></span></a>
+                                <div class="collapse sub-menu" id="about-links">
+                                    @foreach(\App\Menu::where('footer4', 1)->get() as $main_menu)
+                                    <a class="items-list" href="{{ $main_menu->page_type == 'url' ? $main_menu->external_link : route('page.details', $main_menu->slug) }}">{{ $main_menu->menu_name }}</a>
+                                    @endforeach
+                                </div>
                             </div><!-- End list-group panel -->
                         </div><!-- End main-menu -->
                     </nav>
@@ -550,21 +539,21 @@
                 <div class="col-lg-2">
                     <div class="user-bendor">
                         <div class="bendor-section">
-                            <a href="#">Egkom you Home</a>
+                            <a href="#">Income from Hosting</a>
                         </div>
                         <div class="user-section">
                             <div class="user-login-button">
                                 <a href="#" id="profileIconToggle">
+                                    <div class="user-icon">
+                                        <svg class="user-cicle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true" role="presentation" focusable="false" style="display: block;  fill: currentcolor;">
+                                            <path d="M16 .7C7.56.7.7 7.56.7 16S7.56 31.3 16 31.3 31.3 24.44 31.3 16 24.44.7 16 .7zm0 28c-4.02 0-7.6-1.88-9.93-4.81a12.43 12.43 0 0 1 6.45-4.4A6.5 6.5 0 0 1 9.5 14a6.5 6.5 0 0 1 13 0 6.51 6.5 0 0 1-3.02 5.5 12.42 12.42 0 0 1 6.45 4.4A12.67 12.67 0 0 1 16 28.7z"></path>
+                                        </svg>
+                                    </div>
                                     <div class="user-svg-toggle">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true" role="presentation" focusable="false" style="display: block; fill: none; height: 16px; width: 16px; stroke: currentcolor; stroke-width: 3; overflow: visible;">
                                             <g fill="none">
                                                 <path d="M2 16h28M2 24h28M2 8h28"></path>
                                             </g>
-                                        </svg>
-                                    </div>
-                                    <div class="user-icon">
-                                        <svg class="user-cicle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true" role="presentation" focusable="false" style="display: block;  fill: currentcolor;">
-                                            <path d="M16 .7C7.56.7.7 7.56.7 16S7.56 31.3 16 31.3 31.3 24.44 31.3 16 24.44.7 16 .7zm0 28c-4.02 0-7.6-1.88-9.93-4.81a12.43 12.43 0 0 1 6.45-4.4A6.5 6.5 0 0 1 9.5 14a6.5 6.5 0 0 1 13 0 6.51 6.5 0 0 1-3.02 5.5 12.42 12.42 0 0 1 6.45 4.4A12.67 12.67 0 0 1 16 28.7z"></path>
                                         </svg>
                                     </div>
                                 </a>
@@ -737,13 +726,16 @@
                         </div>
                         <div class="modal-header-right">
                             <div class="discount-tag-modal">
-                                <span  class="discount-tag"> 69% off </span>
+                                <span  class="discount-tag">69% off</span>
                             </div>
                             <div class="price-amount">
-                                <span class="price-before-discount-modal"> BDT 6,000 </span>
-                                <span  class="discount-price-modal"> BDT 4,000 </span>
+                                <span class="price-before-discount-modal">BDT 6,000</span>
+                                <span class="discount-price-modal">BDT 4,000</span>
+                                <span class="modal-total-nights-text" style="display:block; font-weight:600; margin-top:4px;">
+                                    Total = BDT 12,000 for 3 Nights
+                                </span>
                             </div>
-                            <div class="price-per-modal"> Per Night </div>
+                            <div class="price-per-modal">BDT 4,000 per night</div>
                         </div>
 
                     </div>
@@ -759,12 +751,10 @@
 
                             <div class="col-lg-4">
                                 <div class="action-btn-group">
-                                    <div class="quantity-btn" >
+                                    <div class="quantity-btn">
                                         <form action="">
                                             <p class="qty qty-room" style="margin: 0px;">
-                                                <button type="button" class="qtyminus" aria-hidden="true">&minus;</button>
                                                 <input type="number" name="qty" id="qty" min="1" max="10" step="1" value="1">
-                                                <button type="button" class="qtyplus" aria-hidden="true">&plus;</button>
                                                 <label style="padding-left: 15px;" for="qty">Night</label>
                                             </p>
                                         </form>
@@ -1096,14 +1086,10 @@
     
     #rightSidebarModalDetails .luxury-room-block img {
         width: 100%;
-        height: 200px;
+        height: 300px;
         object-fit: cover;
         border-radius: 8px;
         display: block;
-    }
-    
-    #rightSidebarModalDetails .luxury-room-block.col-12 img {
-        height: 300px;
     }
     
     #rightSidebarModalDetails .luxury-room-block.col-6 {
@@ -1115,6 +1101,36 @@
         flex: 0 0 100%;
         max-width: 100%;
     }
+    /* Modal pricing layout (total + per night) */
+    #rightSidebarModalDetails .modal-header-right {
+        text-align: right;
+    }
+    #rightSidebarModalDetails .price-amount {
+        text-align: right;
+    }
+    #rightSidebarModalDetails .price-amount .price-before-discount-modal {
+        color: #999;
+        font-size: 14px;
+        display: block;
+    }
+    #rightSidebarModalDetails .price-amount .discount-price-modal {
+        color: #e55353;
+        font-size: 18px;
+        font-weight: 700;
+        display: block;
+    }
+    #rightSidebarModalDetails .price-amount .modal-total-nights-text {
+        color: #1c3c6b;
+        font-size: 15px;
+        font-weight: 700;
+        display: block;
+        margin-top: 2px;
+    }
+    #rightSidebarModalDetails .price-per-modal {
+    	color: #666;
+    	font-size: 13px;
+    	margin-bottom: 4px;
+    }
     
     @media (max-width: 768px) {
         #rightSidebarModalDetails .luxury-room-block.col-6 {
@@ -1123,12 +1139,17 @@
         }
         
         #rightSidebarModalDetails .luxury-room-block img {
-            height: 250px;
-        }
-        
-        #rightSidebarModalDetails .luxury-room-block.col-12 img {
             height: 300px;
         }
+    }
+
+    /* Hotel photos modal - all images 300px */
+       #exampleModal img.hotel-rom-gal {
+    	height: 445px;
+    	object-fit: cover;
+    	width: 100%;
+    	border-radius: 8px;
+    	max-height: fit-content !important;
     }
 
     div#hotel-details {
@@ -1160,6 +1181,12 @@
     #cart-bar {
         position: sticky;
         top: 120px;
+        transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+    #cart-bar.cart-hidden-by-remove-modal {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
     }
     #cart-bar .backdrop {
         display: none;
@@ -1227,22 +1254,22 @@
         color: #91278f;
         font-size: 14px;
     }
+    /* Unified small grey "X" delete icon */
     .rooms-selection-container .delete-button {
-        width: 26px;
-        height: 26px;
-        border-radius: 50%;
-        background: #3b82f6;
+        width: 20px;
+        height: 20px;
+        border-radius: 0;
+        background: transparent;
         cursor: pointer;
         position: relative;
-        transition: all 0.3s;
+        transition: opacity 0.2s, transform 0.2s;
         flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        display: inline-block;
+        opacity: 0.7;
     }
     .rooms-selection-container .delete-button:hover {
-        background: #2563eb;
-        transform: scale(1.15);
+        opacity: 1;
+        transform: scale(1.05);
     }
     .rooms-selection-container .delete-button::before,
     .rooms-selection-container .delete-button::after {
@@ -1251,9 +1278,8 @@
         top: 50%;
         left: 50%;
         width: 14px;
-        height: 2.5px;
-        background: white;
-        border-radius: 2px;
+        height: 2px;
+        background: #7a7a7a;
     }
     .rooms-selection-container .delete-button::before {
         transform: translate(-50%, -50%) rotate(45deg);
@@ -1327,6 +1353,11 @@
     }
     .global-floating-cart-btn.visible {
         display: flex; /* Show when cart has items */
+    }
+    /* Hide cart when room details modal is open */
+    .global-floating-cart-btn.cart-hidden-by-modal,
+    .booking-cart-drawer.cart-hidden-by-modal {
+        display: none !important;
     }
     .global-floating-cart-btn:hover {
         transform: scale(1.08);
@@ -1420,22 +1451,44 @@
     .booking-cart-drawer.active .cart-drawer-content {
         transform: translateX(0);
     }
+    .booking-cart-drawer .cart-header {
+        position: relative;
+        background: #91278f;
+        color: white;
+        padding: 16px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .booking-cart-drawer .cart-header h2 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+    }
     .cart-drawer-close {
-        position: absolute;
-        right: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: none;
+        position: relative;
+        right: 0;
+        top: 0;
+        transform: none;
+        background: rgba(255,255,255,0.2);
         border: none;
         color: white;
-        font-size: 24px;
+        font-size: 22px;
         cursor: pointer;
-        padding: 5px;
+        padding: 8px;
+        width: 36px;
+        height: 36px;
         line-height: 1;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
         transition: all 0.3s;
     }
     .cart-drawer-close:hover {
-        transform: translateY(-50%) scale(1.2);
+        transform: scale(1.1);
+        background: rgba(255,255,255,0.35);
     }
 
     /* Responsive */
@@ -1641,10 +1694,10 @@
 <script src="{{ asset('frontend')}}/js/jquery.mCustomScrollbar.concat.min.js"></script>
 <script src="{{ asset('frontend')}}/js/bootstrap-5.3.2.min.js"></script>
 <script src="{{ asset('frontend')}}/js/jquery.flexslider.js"></script>
-<script src="{{ asset('frontend')}}/{{ asset('frontend')}}/js/bootstrap-datepicker.js"></script>
+<script src="{{ asset('frontend')}}/js/bootstrap-datepicker.js"></script>
 <script src="{{ asset('frontend')}}/js/owl.carousel.min.js"></script>
 <script src="{{ asset('frontend')}}/js/custom-navigation.js"></script>
-<script src="{{ asset('frontend')}}/{{ asset('frontend')}}/js/custom-flex.js"></script>
+<script src="{{ asset('frontend')}}/js/custom-flex.js"></script>
 <script src="{{ asset('frontend')}}/js/custom-owl.js"></script>
 <script src="{{ asset('frontend')}}/js/custom-date-picker.js"></script>
 <script src="{{ asset('frontend')}}/js/custom-video.js"></script>
@@ -1653,7 +1706,7 @@
 <script src="{{ asset('frontend')}}/js/custom-slick.js"></script>
 <script src="{{ asset('frontend')}}/js/custom-gallery.js"></script>
 <script src="{{ asset('frontend')}}/js/script.js"></script>
-<script src="{{ asset('frontend')}}/https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="{{ asset('frontend')}}/js/jquery-ui.min.js"></script>
 @stack('scripts')
 <!-- SweetAlert2 -->
@@ -1670,34 +1723,30 @@
 
     let lastScrollPosition = 0;
 
-    // Show large search box when clicking on small search box
-    smallSearchBox.addEventListener('click', () => {
-        largeSearchBox.style.display = 'block';
-    });
+    if (smallSearchBox && largeSearchBox) {
+        smallSearchBox.addEventListener('click', () => {
+            largeSearchBox.style.display = 'block';
+        });
 
-    // Handle scroll behavior
-    window.addEventListener('scroll', () => {
-        const currentScrollPosition = window.pageYOffset;
+        document.addEventListener('click', (event) => {
+            if (!largeSearchBox.contains(event.target) && !smallSearchBox.contains(event.target)) {
+                largeSearchBox.style.display = 'none';
+            }
+        });
+    }
 
-        if (currentScrollPosition > lastScrollPosition) {
-            // Scrolling down - hide the sticky bar
-            stickyBar.style.transform = 'translateY(-100%)';
-            stickyBar.style.transition = 'transform 0.3s ease-in-out'; // Smooth hide animation
-        } else {
-            // Scrolling up - show the sticky bar
-            stickyBar.style.transform = 'translateY(0)';
-        }
-
-        // Update the last scroll position
-        lastScrollPosition = currentScrollPosition;
-    });
-
-    // Optional: Hide large search box when clicking outside
-    document.addEventListener('click', (event) => {
-        if (!largeSearchBox.contains(event.target) && !smallSearchBox.contains(event.target)) {
-            largeSearchBox.style.display = 'none';
-        }
-    });
+    if (stickyBar) {
+        window.addEventListener('scroll', () => {
+            const currentScrollPosition = window.pageYOffset;
+            if (currentScrollPosition > lastScrollPosition) {
+                stickyBar.style.transform = 'translateY(-100%)';
+                stickyBar.style.transition = 'transform 0.3s ease-in-out';
+            } else {
+                stickyBar.style.transform = 'translateY(0)';
+            }
+            lastScrollPosition = currentScrollPosition;
+        });
+    }
 
     // Handle hotel master search form submission
     document.addEventListener('DOMContentLoaded', function() {
@@ -2078,7 +2127,12 @@
     function removeFromGlobalCart(roomId) {
         const item = globalBookingCart.find(i => i.roomId === roomId);
         if (!item) return;
-        
+
+        // Close the cart drawer so only the confirmation modal is visible
+        closeCartDrawer();
+        const cartBar = document.getElementById('cart-bar');
+        if (cartBar) cartBar.classList.add('cart-hidden-by-remove-modal');
+
         Swal.fire({
             title: 'Remove from Cart?',
             text: `Remove ${item.roomName} from your booking cart?`,
@@ -2089,6 +2143,8 @@
             confirmButtonText: 'Yes, Remove',
             cancelButtonText: 'Cancel'
         }).then((result) => {
+            // Restore cart bar visibility when modal is dismissed
+            if (cartBar) cartBar.classList.remove('cart-hidden-by-remove-modal');
             if (result.isConfirmed) {
                 globalBookingCart = globalBookingCart.filter(i => i.roomId !== roomId);
                 localStorage.setItem('bookingCart', JSON.stringify(globalBookingCart));
@@ -2210,6 +2266,13 @@
         }
     }
 
+    function closeCartDrawer() {
+        const drawer = document.getElementById('globalBookingCartDrawer');
+        if (drawer) {
+            drawer.classList.remove('active');
+        }
+    }
+
     function proceedToCheckout() {
         if (globalBookingCart.length === 0) {
             Swal.fire({
@@ -2228,6 +2291,21 @@
     // Initialize cart on page load
     document.addEventListener('DOMContentLoaded', function() {
         updateGlobalCartDisplay();
+
+        // Hide cart when room details modal opens, show when it closes
+        const roomModal = document.getElementById('rightSidebarModalDetails');
+        const cartBtn = document.querySelector('.global-floating-cart-btn');
+        const cartDrawer = document.getElementById('globalBookingCartDrawer');
+        if (roomModal && cartBtn && cartDrawer) {
+            roomModal.addEventListener('show.bs.modal', function() {
+                cartBtn.classList.add('cart-hidden-by-modal');
+                cartDrawer.classList.add('cart-hidden-by-modal');
+            });
+            roomModal.addEventListener('hidden.bs.modal', function() {
+                cartBtn.classList.remove('cart-hidden-by-modal');
+                cartDrawer.classList.remove('cart-hidden-by-modal');
+            });
+        }
     });
 </script>
 

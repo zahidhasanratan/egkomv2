@@ -21,10 +21,14 @@ Route::get('/hotel-details/{id}', [App\Http\Controllers\HomeController::class, '
 Route::get('/search', [App\Http\Controllers\Frontend\SearchController::class, 'search'])->name('search');
 Route::get('/destinations', [App\Http\Controllers\Frontend\DestinationController::class, 'index'])->name('destinations.index');
 Route::get('/destinations/{slug}', [App\Http\Controllers\Frontend\DestinationController::class, 'show'])->name('destination.show');
+Route::get('/tour-package/{slug}', [App\Http\Controllers\Frontend\TourPackageController::class, 'show'])->name('tour-package.show');
 Route::get('/booking/checkout', [App\Http\Controllers\Frontend\BookingController::class, 'checkout'])->name('booking.checkout');
 Route::post('/booking/rooms-data', [App\Http\Controllers\Frontend\BookingController::class, 'getRoomsData'])->name('booking.rooms-data');
 Route::post('/booking/validate-availability', [App\Http\Controllers\Frontend\BookingController::class, 'validateRoomAvailability'])->name('booking.validate-availability');
 Route::post('/booking/store', [App\Http\Controllers\Frontend\BookingController::class, 'store'])->name('booking.store');
+Route::get('/booking/pay/{booking}', [App\Http\Controllers\Frontend\BookingController::class, 'pay'])->name('booking.pay');
+Route::get('/booking/payment/return', [App\Http\Controllers\Frontend\BookingController::class, 'paymentReturn'])->name('booking.payment.return');
+Route::get('/booking/payment/failed', [App\Http\Controllers\Frontend\BookingController::class, 'paymentFailed'])->name('booking.payment.failed');
 Route::get('/booking/invoice/{id}', [App\Http\Controllers\Frontend\BookingController::class, 'invoice'])->name('booking.invoice');
 
 // Co-Host Authentication Routes

@@ -5,19 +5,113 @@ namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
+use App\Models\Booking;
+use App\Models\Hotel;
 use App\Models\HotelSetting;
+use App\Models\Room;
 use App\Models\Vendor;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
-    // Show the Super Admin Dashboard
-    public function index()
+    /**
+     * Build base query for bookings that include any of the vendor's hotels.
+     */
+    private function vendorBookingsQuery(array $hotelIds)
     {
+        $query = Booking::with('guest');
+        if (empty($hotelIds)) {
+            $query->whereRaw('1 = 0');
+            return $query;
+        }
+        $query->where(function ($q) use ($hotelIds) {
+            foreach ($hotelIds as $hotelId) {
+                $q->orWhereJsonContains('rooms_data', ['hotelId' => $hotelId]);
+            }
+        });
+        return $query;
+    }
 
-        return view('auth.vendor.dashboard');
+    /**
+     * Show the Vendor Dashboard with real data for this vendor's hotels.
+     */
+    public function index(Request $request)
+    {
+        $vendorId = Auth::guard('vendor')->id();
+        $hotelIds = Hotel::where('vendor_id', $vendorId)->pluck('id')->toArray();
+
+        $today = Carbon::today();
+        $range = $request->get('range', '30d');
+        $rangeStart = $range === '6m' ? Carbon::now()->subMonths(6) : ($range === '1y' ? Carbon::now()->subYear() : Carbon::now()->subDays(30));
+        $dateRangeLabel = $range === '6m' ? 'Last 6 Months' : ($range === '1y' ? 'Last 1 Year' : 'Last 30 Days');
+
+        $baseBookings = $this->vendorBookingsQuery($hotelIds);
+
+        // Top stat cards (vendor's data only)
+        $totalBookings = (clone $baseBookings)->count();
+        $checkInToday = (clone $baseBookings)->whereDate('checkin_date', $today)->whereIn('booking_status', ['confirmed', 'pending', 'staying'])->count();
+        $checkOutToday = (clone $baseBookings)->whereDate('checkout_date', $today)->whereIn('booking_status', ['confirmed', 'staying'])->count();
+        $totalRooms = empty($hotelIds) ? 0 : Room::whereIn('hotel_id', $hotelIds)->count();
+        $totalHotels = count($hotelIds);
+
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
+
+        $bookingsThisMonth = (clone $baseBookings)->whereBetween('created_at', [$startOfMonth, $endOfMonth])->count();
+        $bookingsThisWeek = (clone $baseBookings)->whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
+        $bookingsInRange = (clone $baseBookings)->where('created_at', '>=', $rangeStart)->count();
+
+        $revenueQuery = (clone $baseBookings)->where('payment_status', 'paid');
+        $totalRevenue = (float) (clone $revenueQuery)->sum(DB::raw('COALESCE(paid_amount, grand_total, 0)'));
+        $revenueThisMonth = (float) (clone $revenueQuery)->whereBetween('created_at', [$startOfMonth, $endOfMonth])->sum(DB::raw('COALESCE(paid_amount, grand_total, 0)'));
+        $revenueThisWeek = (float) (clone $revenueQuery)->whereBetween('created_at', [$startOfWeek, $endOfWeek])->sum(DB::raw('COALESCE(paid_amount, grand_total, 0)'));
+        $revenueInRange = (float) (clone $baseBookings)->where('payment_status', 'paid')->where('created_at', '>=', $rangeStart)->sum(DB::raw('COALESCE(paid_amount, grand_total, 0)'));
+
+        $recentBookings = (clone $baseBookings)->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
+
+        $roomsByType = empty($hotelIds) ? collect() : Room::whereIn('hotel_id', $hotelIds)
+            ->select('name')
+            ->whereNotNull('name')
+            ->where('name', '!=', '')
+            ->get()
+            ->groupBy('name')
+            ->map->count()
+            ->sortDesc()
+            ->take(5);
+
+        $newCustomers = (clone $baseBookings)->orderBy('created_at', 'desc')
+            ->get()
+            ->unique(fn ($b) => $b->guest_email ?: 'id-' . $b->id)
+            ->take(5)
+            ->values();
+
+        $activityLogs = ActivityLog::latest()->take(5)->get();
+        $recentActivities = $activityLogs->isNotEmpty()
+            ? $activityLogs->map(fn ($log) => (object)[
+                'name'     => class_basename($log->activity ?? 'Activity'),
+                'initials' => strtoupper(mb_substr($log->activity ?? 'Ac', 0, 2)),
+                'label'    => $log->activity ?? 'Activity',
+                'time'     => $log->created_at ? $log->created_at->diffForHumans() : 'Recently',
+            ])
+            : (clone $baseBookings)->orderBy('created_at', 'desc')->take(5)->get()->map(fn ($b) => (object)[
+                'name'     => $b->guest_name ?? 'Guest',
+                'initials' => strtoupper(mb_substr($b->guest_name ?? 'G', 0, 2)),
+                'label'    => ($b->guest_name ?? 'Guest') . ' – ' . ($b->booking_status === 'cancelled' ? 'cancelled' : 'booking ' . $b->invoice_number),
+                'time'     => $b->created_at ? $b->created_at->diffForHumans() : 'Recently',
+            ]);
+
+        return view('auth.vendor.dashboard', compact(
+            'totalBookings', 'checkInToday', 'checkOutToday', 'totalRooms', 'totalHotels',
+            'bookingsThisMonth', 'bookingsThisWeek', 'bookingsInRange', 'dateRangeLabel', 'range',
+            'totalRevenue', 'revenueThisMonth', 'revenueThisWeek', 'revenueInRange',
+            'recentBookings', 'roomsByType', 'newCustomers', 'recentActivities'
+        ));
     }
 
     public function vendorInfo()

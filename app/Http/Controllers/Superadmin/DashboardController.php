@@ -5,9 +5,14 @@ namespace App\Http\Controllers\Superadmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
+use App\Models\Booking;
+use App\Models\Hotel;
 use App\Models\HotelSetting;
 use App\Models\Property;
+use App\Models\Review;
+use App\Models\Room;
 use App\Models\Vendor;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -20,10 +25,126 @@ use Illuminate\Validation\Rule;
 class DashboardController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
+        $today = Carbon::today();
 
-        return view('auth.super_admin.dashboard');
+        // Date range filter: 30d, 6m, 1y
+        $range = $request->get('range', '30d');
+        $rangeStart = match ($range) {
+            '6m' => Carbon::now()->subMonths(6),
+            '1y' => Carbon::now()->subYear(),
+            default => Carbon::now()->subDays(30),
+        };
+        $dateRangeLabel = match ($range) {
+            '6m' => 'Last 6 Months',
+            '1y' => 'Last 1 Year',
+            default => 'Last 30 Days',
+        };
+
+        // Top stat cards
+        $totalBookings = Booking::count();
+        $checkInToday = Booking::whereDate('checkin_date', $today)->whereIn('booking_status', ['confirmed', 'pending', 'staying'])->count();
+        $checkOutToday = Booking::whereDate('checkout_date', $today)->whereIn('booking_status', ['confirmed', 'staying'])->count();
+        $totalRooms = Room::count();
+        $totalHotels = Hotel::where('approve', 1)->where('status', 'submitted')->count();
+        $totalVendors = Vendor::count();
+
+        // Period counts (this month, this week)
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
+        $bookingsThisMonth = Booking::whereBetween('created_at', [$startOfMonth, $endOfMonth])->count();
+        $bookingsThisWeek = Booking::whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
+
+        // In selected date range (for dashboard filter)
+        $bookingsInRange = Booking::where('created_at', '>=', $rangeStart)->count();
+        $revenueInRange = (float) Booking::where('payment_status', 'paid')
+            ->where('created_at', '>=', $rangeStart)
+            ->sum(DB::raw('COALESCE(paid_amount, grand_total, 0)'));
+
+        // Revenue: sum of paid_amount for paid bookings, or grand_total where paid
+        $totalRevenue = (float) Booking::where('payment_status', 'paid')->sum(DB::raw('COALESCE(paid_amount, grand_total, 0)'));
+        $revenueThisMonth = (float) Booking::where('payment_status', 'paid')
+            ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+            ->sum(DB::raw('COALESCE(paid_amount, grand_total, 0)'));
+        $revenueThisWeek = (float) Booking::where('payment_status', 'paid')
+            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+            ->sum(DB::raw('COALESCE(paid_amount, grand_total, 0)'));
+
+        // Recent bookings for list (paginated), preserve range in links
+        $recentBookings = Booking::with('guest')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
+
+        // Room type distribution from rooms (for chart placeholder)
+        $roomsByType = Room::select('name')
+            ->whereNotNull('name')
+            ->where('name', '!=', '')
+            ->get()
+            ->groupBy('name')
+            ->map->count()
+            ->sortDesc()
+            ->take(5);
+
+        // New customers: unique guests from latest bookings (by email), take 5
+        $newCustomers = Booking::orderBy('created_at', 'desc')
+            ->get()
+            ->unique(function ($b) {
+                return $b->guest_email ?: 'id-' . $b->id;
+            })
+            ->take(5)
+            ->values();
+
+        // Recent activities: from ActivityLog if any, else from recent bookings
+        $activityLogs = ActivityLog::latest()->take(5)->get();
+        $recentActivities = $activityLogs->isNotEmpty()
+            ? $activityLogs->map(function ($log) {
+                $label = $log->activity ?? 'Activity';
+                return (object)[
+                    'name'     => class_basename($label),
+                    'initials' => strtoupper(mb_substr($label, 0, 2)),
+                    'label'    => $label,
+                    'time'     => $log->created_at ? $log->created_at->diffForHumans() : 'Recently',
+                ];
+            })
+            : Booking::orderBy('created_at', 'desc')->take(5)->get()->map(function ($b) {
+                $name = $b->guest_name ?? 'Guest';
+                $initials = strtoupper(mb_substr($name, 0, 2));
+                $label = $b->booking_status === 'cancelled'
+                    ? $name . ' cancelled a booking.'
+                    : $name . ' made a booking (' . $b->invoice_number . ').';
+                return (object)[
+                    'name'     => $name,
+                    'initials' => $initials,
+                    'label'    => $label,
+                    'time'     => $b->created_at->diffForHumans(),
+                ];
+            });
+
+        return view('auth.super_admin.dashboard', compact(
+            'totalBookings',
+            'checkInToday',
+            'checkOutToday',
+            'totalRooms',
+            'totalHotels',
+            'totalVendors',
+            'bookingsThisMonth',
+            'bookingsThisWeek',
+            'totalRevenue',
+            'revenueThisMonth',
+            'revenueThisWeek',
+            'recentBookings',
+            'roomsByType',
+            'newCustomers',
+            'recentActivities',
+            'dateRangeLabel',
+            'range',
+            'bookingsInRange',
+            'revenueInRange'
+        ));
     }
 
 

@@ -7,7 +7,11 @@ use App\Models\Booking;
 use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use ShurjopayPlugin\PaymentRequest;
+use ShurjopayPlugin\Shurjopay;
+use ShurjopayPlugin\ShurjopayConfig;
 
 class BookingController extends Controller
 {
@@ -462,12 +466,15 @@ class BookingController extends Controller
 
             DB::commit();
 
+            // Use current request base URL so redirect works from any domain/path (not just APP_URL)
+            $redirectUrl = $request->getSchemeAndHttpHost() . $request->getBasePath() . '/booking/pay/' . $booking->id;
+
             return response()->json([
                 'success' => true,
-                'message' => 'Booking confirmed successfully!',
+                'message' => 'Redirecting to payment gateway...',
                 'booking_id' => $booking->id,
                 'invoice_number' => $booking->invoice_number,
-                'redirect_url' => route('booking.invoice', $booking->id),
+                'redirect_url' => $redirectUrl,
             ]);
 
         } catch (\Exception $e) {
@@ -477,6 +484,148 @@ class BookingController extends Controller
                 'message' => 'Failed to create booking: ' . $e->getMessage(),
             ], 500);
         }
+    }
+
+    /**
+     * Redirect to ShurjoPay gateway. User hits this after checkout; we send them to payment page.
+     */
+    public function pay(Booking $booking)
+    {
+        if ($booking->payment_status === 'paid') {
+            return redirect()->route('booking.invoice', $booking->id);
+        }
+        // Allow unpaid/partial to proceed to gateway (enum has unpaid, partial, paid only)
+        if (!in_array($booking->payment_status, ['unpaid', 'partial'], true)) {
+            return redirect()->route('booking.checkout')->with('error', 'Invalid booking state.');
+        }
+
+        try {
+            // Build callback URL from current request so cancel/return works (same host:port as user)
+            $callbackUrl = request()->getSchemeAndHttpHost() . request()->getBasePath() . '/booking/payment/return';
+            $config = new ShurjopayConfig();
+            $config->username = config('services.shurjopay.username', env('SP_USERNAME'));
+            $config->password = config('services.shurjopay.password', env('SP_PASSWORD'));
+            $config->api_endpoint = config('services.shurjopay.api', env('SHURJOPAY_API'));
+            $config->callback_url = $callbackUrl;
+            $config->log_path = config('services.shurjopay.log_path', env('SP_LOG_LOCATION', storage_path('logs')));
+            $config->order_prefix = config('services.shurjopay.prefix', env('SP_PREFIX', 'SIC'));
+            $config->ssl_verifypeer = (bool) (env('CURLOPT_SSL_VERIFYPEER', 1));
+            $sp = new Shurjopay($config);
+
+            $paymentRequest = new PaymentRequest();
+            $paymentRequest->currency = 'BDT';
+            // $paymentRequest->amount = (float) $booking->grand_total;
+            $paymentRequest->amount = 11;
+
+            $paymentRequest->discountAmount = (float) ($booking->discount ?? 0);
+            $paymentRequest->discPercent = 0;
+            $paymentRequest->customerName = $booking->guest_name;
+            $paymentRequest->customerPhone = $booking->guest_phone ?? '0000000000';
+            $paymentRequest->customerEmail = $booking->guest_email ?? 'guest@example.com';
+            $paymentRequest->customerAddress = $booking->home_address ?? 'N/A';
+            $paymentRequest->customerCity = 'N/A';
+            $paymentRequest->customerState = 'N/A';
+            $paymentRequest->customerPostcode = 'N/A';
+            $paymentRequest->customerCountry = 'Bangladesh';
+            $paymentRequest->shippingAddress = $booking->home_address ?? 'N/A';
+            $paymentRequest->shippingCity = 'N/A';
+            $paymentRequest->shippingCountry = 'Bangladesh';
+            $paymentRequest->receivedPersonName = $booking->guest_name;
+            $paymentRequest->shippingPhoneNumber = $booking->guest_phone ?? '0000000000';
+            $paymentRequest->value1 = (string) $booking->id;
+            $paymentRequest->value2 = $booking->invoice_number ?? '';
+            $paymentRequest->value3 = '';
+            $paymentRequest->value4 = '';
+
+            $sp->makePayment($paymentRequest);
+        } catch (\Throwable $e) {
+            Log::error('ShurjoPay makePayment error: ' . $e->getMessage(), ['booking_id' => $booking->id]);
+            return redirect()->route('booking.payment.failed')->with('message', 'Could not connect to payment gateway. Please try again or contact support.');
+        }
+
+        return null;
+    }
+
+    /**
+     * ShurjoPay redirects here after payment (success or cancel). Verify and redirect to invoice or failed page.
+     */
+    public function paymentReturn(Request $request)
+    {
+        $orderId = $request->get('order_id') ?? $request->get('sp_order_id');
+        if (!$orderId) {
+            Log::warning('ShurjoPay return: missing order_id');
+            return redirect()->route('booking.payment.failed')->with('message', 'Invalid return from payment gateway.');
+        }
+
+        try {
+            $sp = app(Shurjopay::class);
+            $response = $sp->verifyPayment($orderId);
+        } catch (\Throwable $e) {
+            Log::error('ShurjoPay verify error: ' . $e->getMessage());
+            return redirect()->route('booking.payment.failed')->with('message', 'Payment verification failed.');
+        }
+
+        $raw = is_object($response) ? (array) $response : $response;
+        Log::info('ShurjoPay verify response', ['order_id' => $orderId, 'response' => $raw]);
+
+        // API returns { "response": [ { transaction object } ] } - use first element of list
+        $payload = $raw['response'] ?? $raw['data'] ?? $raw;
+        if (is_array($payload) && isset($payload[0])) {
+            $payload = $payload[0];
+        }
+        if (is_object($payload)) {
+            $payload = (array) $payload;
+        }
+        if (!is_array($payload)) {
+            $payload = $raw;
+        }
+
+        // Booking ID was sent as value1
+        $value1 = $payload['value1'] ?? $payload['value_1'] ?? null;
+        $bookingId = is_array($value1) ? ($value1[0] ?? null) : $value1;
+        if ($bookingId !== null) {
+            $bookingId = (string) $bookingId;
+        }
+
+        $amount = $payload['amount'] ?? $payload['recived_amount'] ?? $payload['payable_amount'] ?? $payload['total_amount'] ?? null;
+
+        if (!$bookingId) {
+            return redirect()->route('booking.payment.failed')->with('message', 'Payment was cancelled or could not be completed. You can try again from checkout.');
+        }
+
+        $booking = Booking::find($bookingId);
+        if (!$booking) {
+            return redirect()->route('booking.payment.failed')->with('message', 'Booking not found.');
+        }
+
+        // Success: sp_code 1000 or sp_message/sp_massage contains Success (API typo: sp_massage)
+        $spCode = $payload['sp_code'] ?? $payload['spCode'] ?? null;
+        $message = $payload['sp_message'] ?? $payload['sp_massage'] ?? $payload['message'] ?? '';
+        $bankStatus = $payload['bank_status'] ?? '';
+
+        $success = ((int) $spCode === 1000)
+            || (isset($payload['success']) && $payload['success'])
+            || (stripos((string) $message, 'success') !== false)
+            || (strtolower((string) $bankStatus) === 'completed');
+
+        if ($success) {
+            $booking->update([
+                'payment_status' => 'paid',
+                'paid_amount' => $amount ?? $booking->grand_total,
+            ]);
+            return redirect()->route('booking.invoice', $booking->id);
+        }
+
+        return redirect()->route('booking.payment.failed')->with('message', $message ?: 'Payment was not successful.');
+    }
+
+    /**
+     * Show payment failed / cancelled page.
+     */
+    public function paymentFailed(Request $request)
+    {
+        $message = $request->session()->get('message', 'Payment was cancelled or failed. You can try again from your bookings.');
+        return view('frontend.booking.payment-failed', compact('message'));
     }
 
     public function invoice($id)

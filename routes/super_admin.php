@@ -15,6 +15,8 @@ use App\Http\Controllers\Vendor\VendorController;
 use App\Http\Controllers\Vendor\OwnerController;
 use App\Http\Controllers\Vendor\BankingController;
 use App\Http\Controllers\Superadmin\PopularDestinationController;
+use App\Http\Controllers\Superadmin\TourPackageController;
+use App\Http\Controllers\Superadmin\HomepageHeroController;
 use App\Http\Controllers\admin\ReviewManagementController;
 
 // Super Admin Login Routes
@@ -106,8 +108,26 @@ Route::prefix('super-admin')->group(function () {
             'destroy' => 'super-admin.popular-destinations.destroy',
         ]);
 
+        // Tour Packages (Best Tour Packages)
+        Route::resource('tour-packages', TourPackageController::class)->names([
+            'index' => 'super-admin.tour-packages.index',
+            'create' => 'super-admin.tour-packages.create',
+            'store' => 'super-admin.tour-packages.store',
+            'show' => 'super-admin.tour-packages.show',
+            'edit' => 'super-admin.tour-packages.edit',
+            'update' => 'super-admin.tour-packages.update',
+            'destroy' => 'super-admin.tour-packages.destroy',
+        ]);
+
+        // Homepage Hero (video, title, subtitle) - under Advertisement
+        Route::get('/homepage-hero/edit', [HomepageHeroController::class, 'edit'])->name('super-admin.homepage-hero.edit');
+        Route::put('/homepage-hero', [HomepageHeroController::class, 'update'])->name('super-admin.homepage-hero.update');
+
         // Booking Management
         Route::get('/bookings', [\App\Http\Controllers\admin\BookingManagementController::class, 'index'])->name('super-admin.bookings.index');
+        Route::get('/reports/bookings/excel', [\App\Http\Controllers\admin\BookingManagementController::class, 'exportExcel'])->name('super-admin.reports.bookings.excel');
+        Route::get('/reports/bookings/pdf', [\App\Http\Controllers\admin\BookingManagementController::class, 'exportPdf'])->name('super-admin.reports.bookings.pdf');
+        Route::get('/bookings/status/{status}', [\App\Http\Controllers\admin\BookingManagementController::class, 'indexByStatus'])->name('super-admin.bookings.by-status');
         Route::get('/bookings/{id}', [\App\Http\Controllers\admin\BookingManagementController::class, 'show'])->name('super-admin.bookings.show');
         Route::get('/bookings/{id}/edit', [\App\Http\Controllers\admin\BookingManagementController::class, 'edit'])->name('super-admin.bookings.edit');
         Route::put('/bookings/{id}', [\App\Http\Controllers\admin\BookingManagementController::class, 'update'])->name('super-admin.bookings.update');
