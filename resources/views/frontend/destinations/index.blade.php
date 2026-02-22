@@ -1,5 +1,5 @@
 @extends('frontend.app')
-@section('title', 'All Destinations - EGKom')
+@section('title', 'All Destinations - EZBOOKING')
 @section('main')
 
 <section class="section-padding" style="background-color: #F5F7FA;">

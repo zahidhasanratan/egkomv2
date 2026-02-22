@@ -36,7 +36,10 @@ class HomeController extends Controller
         } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
             abort(404);
         }
-        $show = Hotel::where('id', $decryptedId)->firstOrFail();
+        $show = Hotel::where('id', $decryptedId)
+            ->where('approve', 1)
+            ->where('is_suspended', 0)
+            ->firstOrFail();
         
         // Get search parameters from URL query string
         $searchParams = [

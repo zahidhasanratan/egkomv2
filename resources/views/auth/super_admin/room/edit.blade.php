@@ -230,42 +230,6 @@
 
                                             <div class="row mt-15">
                                                 <div class="checkbox-section">
-                                                    <!-- Room Facilities & Amenities -->
-                                                    <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px; margin-top: 20px;"><strong>Room Facilities & Amenities</strong></h5>
-                                                            <div class="chk-all-sec">
-                                                                <div class="form-group">
-                                                                    <div class="custom-control custom-switch checked">
-                                                                        <input type="checkbox" class="custom-control-input" name="room-info-all" id="room-info-all">
-                                                                        <label class="custom-control-label" for="room-info-all">Select All</label>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="AC" {{ in_array('AC', $appliances) ? 'checked' : '' }}> AC</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Smart TV" {{ in_array('Smart TV', $appliances) ? 'checked' : '' }}> Smart TV</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Wi-Fi" {{ in_array('Wi-Fi', $appliances) ? 'checked' : '' }}> Wi-Fi</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Minibar" {{ in_array('Minibar', $appliances) ? 'checked' : '' }}> Minibar</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Safe" {{ in_array('Safe', $appliances) ? 'checked' : '' }}> Safe</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Desk" {{ in_array('Desk', $appliances) ? 'checked' : '' }}> Desk</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Wardrobe" {{ in_array('Wardrobe', $appliances) ? 'checked' : '' }}> Wardrobe</label><br>
-                                                    
-                                                    <!-- Custom Facilities Container -->
-                                                    <div class="custom-appliances-container mt-3" data-section="appliances">
-                                                        @php
-                                                            $fixedAppliances = ['AC', 'Smart TV', 'Wi-Fi', 'Minibar', 'Safe', 'Desk', 'Wardrobe'];
-                                                            $customAppliances = array_diff($appliances, $fixedAppliances);
-                                                        @endphp
-                                                        @foreach($customAppliances as $customAppliance)
-                                                            <label><input type="checkbox" name="custom_appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="{{ $customAppliance }}" checked> {{ $customAppliance }}</label><br>
-                                                        @endforeach
-                                                    </div>
-                                                    
-                                                    <!-- Add More Facilities -->
-                                                    <div class="add-more-section mt-3">
-                                                        <div class="input-group" style="max-width: 400px;">
-                                                            <input type="text" class="form-control" id="custom-appliance-input" placeholder="Enter custom facility/amenity name">
-                                                            <button type="button" class="btn btn-primary btn-sm" id="add-appliance-btn">Add</button>
-                                                        </div>
-                                                    </div>
 
                                                     <!-- Bed Details -->
                                                     <div class="row mt-4">
@@ -433,6 +397,47 @@
                                                                     <div class="input-group" style="max-width: 100%;">
                                                                         <input type="text" class="form-control" id="custom-view-input" placeholder="Enter custom view type">
                                                                         <button type="button" class="btn btn-primary btn-sm" id="add-view-btn">Add</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Appliances Information (Room Details - synced to Facilities tab) -->
+                                                    <div class="row mt-4 appliances-section">
+                                                        <div class="col-md-12">
+                                                            <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                                <h5 class="mb-3" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Appliances Information</strong></h5>
+                                                                <div class="form-group">
+                                                                    <div class="custom-control custom-switch">
+                                                                        <input type="checkbox" class="custom-control-input" name="appliances-all" id="appliances-all" data-target=".checkbox-item-appliances">
+                                                                        <label class="custom-control-label" for="appliances-all">Select All</label>
+                                                                    </div>
+                                                                </div>
+                                                                @php
+                                                                    $applianceOptions = [
+                                                                        'Air Conditioner (AC)', 'Ceiling Fan', 'TV', 'Wi-Fi', 'Minibar', 'Digital Safe',
+                                                                        'Refrigerator', 'Electric Kettle', 'Microwave Oven', 'Induction Cooker',
+                                                                        'Washing Machine', 'Hair Dryer', 'Iron & Iron Board', 'Intercom',
+                                                                        'Water Heater (Geyser)', 'Coffee Maker',
+                                                                    ];
+                                                                @endphp
+                                                                @foreach($applianceOptions as $opt)
+                                                                <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="{{ $opt }}" {{ in_array($opt, $appliances) ? 'checked' : '' }}> {{ $opt }}</label><br>
+                                                                @endforeach
+                                                                <div class="custom-appliances-container mt-3" data-section="appliances">
+                                                                    @php
+                                                                        $fixedAppliances = $applianceOptions;
+                                                                        $customAppliancesEdit = array_diff($appliances, $fixedAppliances);
+                                                                    @endphp
+                                                                    @foreach($customAppliancesEdit as $customApp)
+                                                                        <label><input type="checkbox" name="custom_appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="{{ $customApp }}" checked> {{ $customApp }}</label><br>
+                                                                    @endforeach
+                                                                </div>
+                                                                <div class="add-more-section mt-3">
+                                                                    <div class="input-group" style="max-width: 100%;">
+                                                                        <input type="text" class="form-control" id="custom-appliance-input" placeholder="Enter custom appliance name">
+                                                                        <button type="button" class="btn btn-primary btn-sm" id="add-appliance-btn">Add</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -2257,15 +2262,21 @@
                                                 @endphp
 
                                                 @foreach ($photo_categories as $input_name => $label)
+                                                    @php $fieldKey = str_replace('_photos', '', $input_name); $hasPhotos = isset($room_photos[$fieldKey]) && $room_photos[$fieldKey]->isNotEmpty(); @endphp
                                                     <div class="col-md-6 col-lg-4 col-xxl-3">
                                                         <div class="form-group mt-15">
-                                                            <label class="form-label">{{ $label }}</label>
-                                                            <div class="multiple-upload-container" id="upload-container-{{ str_replace('_photos', '', $input_name) }}">
-                                                                <input type="file" class="multiple-file-input" id="file-input-{{ str_replace('_photos', '', $input_name) }}" name="{{ $input_name }}[]" accept="image/*" multiple>
-                                                                <label class="upload-label" for="file-input-{{ str_replace('_photos', '', $input_name) }}">+ Add More Images</label>
+                                                            <label class="form-label d-block mb-1">{{ $label }}</label>
+                                                            <div class="mb-2 photo-delete-all-wrap" style="{{ $hasPhotos ? '' : 'display: none;' }}">
+                                                                <button type="button" class="btn btn-sm btn-outline-danger multiple-remove-all-btn" data-field="{{ $fieldKey }}" title="Remove all photos in this category">
+                                                                    <i class="fa fa-trash-o"></i> Delete All Photos
+                                                                </button>
+                                                            </div>
+                                                            <div class="multiple-upload-container" id="upload-container-{{ $fieldKey }}" data-field="{{ $fieldKey }}">
+                                                                <input type="file" class="multiple-file-input" id="file-input-{{ $fieldKey }}" name="{{ $input_name }}[]" accept="image/*" multiple>
+                                                                <label class="upload-label" for="file-input-{{ $fieldKey }}">+ Add More Images</label>
                                                                 <div class="multiple-thumbnail-gallery">
-                                                                    @if (isset($room_photos[str_replace('_photos', '', $input_name)]))
-                                                                        @foreach ($room_photos[str_replace('_photos', '', $input_name)] as $photo)
+                                                                    @if (isset($room_photos[$fieldKey]))
+                                                                        @foreach ($room_photos[$fieldKey] as $photo)
                                                                             <div class="multiple-thumbnail-item" data-photo-id="{{ $photo->id }}">
                                                                                 <img src="{{ asset($photo->photo_path) }}" style="max-width: 100px; max-height: 100px;" onerror="this.onerror=null; this.style.display='none';">
                                                                                 <button type="button" class="multiple-remove-btn" onclick="removePhoto({{ $photo->id }}, this)">×</button>
@@ -2914,6 +2925,11 @@
                                 });
                             }
                                 button.closest('.multiple-thumbnail-item').remove();
+                                var container = button.closest('.multiple-upload-container');
+                                if (container && container.querySelectorAll('.multiple-thumbnail-item').length === 0) {
+                                    var wrap = container.closest('.form-group').querySelector('.photo-delete-all-wrap');
+                                    if (wrap) wrap.style.display = 'none';
+                                }
                         } else {
                             if (typeof Swal !== 'undefined') {
                                 Swal.fire({
@@ -2942,6 +2958,17 @@
 
             document.addEventListener('DOMContentLoaded', () => {
                 const uploadedImages = {};
+                window._superAdminRoomEditUploadedImages = uploadedImages;
+
+                function toggleDeleteAllForContainer(container) {
+                    const formGroup = container.closest('.form-group');
+                    const wrap = formGroup ? formGroup.querySelector('.photo-delete-all-wrap') : null;
+                    if (wrap) {
+                        const total = container.querySelectorAll('.multiple-thumbnail-item').length;
+                        wrap.style.display = total > 0 ? 'block' : 'none';
+                    }
+                }
+
                 function initializeMultipleUpload(container) {
                     const fileInput = container.querySelector('.multiple-file-input');
                     const thumbnailGallery = container.querySelector('.multiple-thumbnail-gallery');
@@ -2976,11 +3003,13 @@
                                     if (index > -1) {
                                         uploadedImages[containerId].splice(index, 1);
                                     }
+                                    toggleDeleteAllForContainer(container);
                                 });
                                 thumbnailItem.appendChild(img);
                                 thumbnailItem.appendChild(removeBtn);
                                 thumbnailGallery.appendChild(thumbnailItem);
                                 uploadedImages[containerId].push(file);
+                                toggleDeleteAllForContainer(container);
                             };
                             reader.readAsDataURL(file);
                             }
@@ -2990,6 +3019,42 @@
                 const uploadContainers = document.querySelectorAll('.multiple-upload-container');
                 uploadContainers.forEach(container => {
                     initializeMultipleUpload(container);
+                });
+
+                document.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('multiple-remove-all-btn') || (e.target.closest && e.target.closest('.multiple-remove-all-btn'))) {
+                        var btn = e.target.classList.contains('multiple-remove-all-btn') ? e.target : e.target.closest('.multiple-remove-all-btn');
+                        if (!btn) return;
+                        e.preventDefault();
+                        var field = btn.getAttribute('data-field');
+                        var container = document.querySelector('.multiple-upload-container[data-field="' + field + '"]');
+                        if (!container) return;
+                        var thumbnailGallery = container.querySelector('.multiple-thumbnail-gallery');
+                        var items = thumbnailGallery ? thumbnailGallery.querySelectorAll('.multiple-thumbnail-item') : [];
+                        var withId = [];
+                        items.forEach(function(el) { if (el.getAttribute('data-photo-id')) withId.push(el); });
+                        if (typeof Swal !== 'undefined') {
+                            Swal.fire({ title: 'Delete all photos?', text: 'All photos in this category will be removed.', icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#3085d6', confirmButtonText: 'Yes, delete all' }).then(function(r) {
+                                if (!r.isConfirmed) return;
+                                items.forEach(function(el) { if (!el.getAttribute('data-photo-id')) el.remove(); });
+                                var fileInput = container.querySelector('.multiple-file-input');
+                                var containerId = container.id;
+                                if (containerId && window._superAdminRoomEditUploadedImages) window._superAdminRoomEditUploadedImages[containerId] = [];
+                                if (fileInput) fileInput.value = '';
+                                if (withId.length === 0) { var w = btn.closest('.photo-delete-all-wrap'); if (w) w.style.display = 'none'; }
+                                withId.forEach(function(el) { var pid = el.getAttribute('data-photo-id'); var b = el.querySelector('.multiple-remove-btn'); if (pid && b) deletePhotoRequest(parseInt(pid, 10), b); });
+                            });
+                        } else {
+                            if (!confirm('Delete all photos in this category?')) return;
+                            items.forEach(function(el) { if (!el.getAttribute('data-photo-id')) el.remove(); });
+                            var fileInput = container.querySelector('.multiple-file-input');
+                            var containerId = container.id;
+                            if (containerId && window._superAdminRoomEditUploadedImages) window._superAdminRoomEditUploadedImages[containerId] = [];
+                            if (fileInput) fileInput.value = '';
+                            var w = btn.closest('.photo-delete-all-wrap'); if (w) w.style.display = 'none';
+                            withId.forEach(function(el) { var pid = el.getAttribute('data-photo-id'); var b = el.querySelector('.multiple-remove-btn'); if (pid && b) deletePhotoRequest(parseInt(pid, 10), b); });
+                        }
+                    }
                 });
             });
 

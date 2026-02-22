@@ -1,8 +1,9 @@
 @extends('frontend.app')
-@section('title','My Hotel Wishlist - EGKom')
+@section('title','My Hotel Wishlist - EZBOOKING')
 @section('main')
 
 @include('frontend.guest.dashboard-styles')
+@include('frontend.guest.dashboard-header')
 
 <style>
     .wishlist-grid {

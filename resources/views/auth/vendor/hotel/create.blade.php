@@ -102,7 +102,7 @@
                                                                     @enderror
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-12">
+                                                            <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label class="form-label" for="hotel_name">Hotel / Property Name</label>
                                                                     <input class="form-control" 
@@ -112,6 +112,23 @@
                                                                            placeholder="Enter Hotel / Property Name"
                                                                            style="border: 1px solid #dee2e6; border-radius: 6px; padding: 8px 12px;">
                                                                     @error('description')
+                                                                        <span class="text-danger">{{ $message }}</span>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="total_rooms">Total Number of Room</label>
+                                                                    <input type="number" 
+                                                                           class="form-control" 
+                                                                           name="total_rooms" 
+                                                                           id="total_rooms"
+                                                                           value="{{ old('total_rooms', 0) }}"
+                                                                           min="0"
+                                                                           placeholder="Enter number of rooms"
+                                                                           style="border: 1px solid #dee2e6; border-radius: 6px; padding: 8px 12px;">
+                                                                    <small class="text-muted">Blank rooms will be created automatically for editing</small>
+                                                                    @error('total_rooms')
                                                                         <span class="text-danger">{{ $message }}</span>
                                                                     @enderror
                                                                 </div>
@@ -1331,8 +1348,10 @@
                                     <!-- Most Popular Facilities -->
                                         <div class="tab-pane" id="tabItem4">
                                             <div class="row mt-15">
-                                                <div class="checkbox-section">
-                                                    <h3 class="can-tittle">Most Popular Facilities</h3>
+                                                <!-- Left: Most Popular Facilities -->
+                                                <div class="col-md-6 col-lg-6">
+                                                    <div class="checkbox-section">
+                                                        <h3 class="can-tittle">Most Popular Facilities</h3>
 
                                                     <!-- Select All Toggle -->
                                                     <div class="chk-all-sec">
@@ -1505,9 +1524,10 @@
                                                     @error('facilities')
                                                     <span class="text-danger">{{ $message }}</span>
                                                     @enderror
+                                                    </div>
                                                 </div>
-                                                <div class="row">
-
+                                                <!-- Right: Hotel Facilities Categories -->
+                                                <div class="col-md-6 col-lg-6">
                                                     <div class="container mt-15">
                                                         <div class="row">
                                                             <h3 class="can-tittle">Hotel Facilities Categories</h3>
@@ -1552,9 +1572,7 @@
 
                                                         </div>
                                                     </div>
-
-
-
+                                                </div>
                                                 </div>
                                                 <!-- Save / Submit Buttons -->
                                                 <div class="row">
@@ -1581,9 +1599,9 @@
                                         </div>
 
 
-                                        <div class="tab-pane" id="tabItem1">
-
-                                            <div class="col-lg-12">
+                                        <div class="tab-pane fade" id="tabItem1">
+                                            <div class="row">
+                                                <div class="col-lg-12">
                                                 <div class="form-group">
                                                     <h3 class="can-tittle">Most Popular Nearby Area <small class="text-muted">(Maximum 3)</small></h3>
                                                     <div id="nearby-areas-wrapper">
@@ -1718,6 +1736,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            </div>
                                         </div>
 
                                         <script>
@@ -1753,7 +1772,7 @@
 
 
                                         <!-- Photos -->
-                                        <div class="tab-pane" id="Photos">
+                                        <div class="tab-pane fade" id="Photos">
                                             @php
                                                 // Updated hotel photo categories
                                                 $photoFields = [
@@ -1777,44 +1796,27 @@
                                                     'additional_photos' => 'Additional Photos',
                                                 ];
                                             @endphp
-
-                                            <div class="row gy-4">
-
+                                            <div class="row" style="margin-top: 0; padding-top: 0; margin-bottom: 15px;">
                                                 @foreach($photoFields as $index => $field)
-                                                    <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                        <div class="form-group mt-15">
-                                                            <label class="form-label">{{ $labels[$field] }}</label>
+                                                    <div class="col-md-6 col-lg-4 col-xxl-3" style="{{ $index === 0 ? 'margin-top: 0; padding-top: 0;' : '' }}">
+                                                        <div class="form-group" style="{{ $index === 0 ? 'margin-top: 0 !important; padding-top: 0 !important;' : '' }}">
+                                                            <label class="form-label d-block mb-1">{{ $labels[$field] }}</label>
+                                                            <div class="mb-2 photo-delete-all-wrap" style="display: none;">
+                                                                <button type="button" class="btn btn-sm btn-outline-danger multiple-remove-all-btn" data-field="{{ $field }}" title="Remove all photos in this category">
+                                                                    <i class="fa fa-trash-o"></i> Delete All Photos
+                                                                </button>
+                                                            </div>
                                                             <div class="multiple-upload-container"
-                                                                 id="upload-container-{{ $index + 1 }}">
-                                                                @php
-                                                                    // No existing photos for create form
-                                                                    $photos = [];
-                                                                @endphp
-
-                                                                @if(!empty($photos))
-                                                                    @foreach($photos as $photoIndex => $photo)
-                                                                        <div class="multiple-thumbnail-item">
-                                                                            <img src="{{ asset('/' . $photo) }}"
-                                                                                 alt="{{ $labels[$field] }} {{ $photoIndex }}"
-                                                                                 class="img-thumbnail"
-                                                                                 style="height: 100px; width: auto;">
-                                                                            <button type="button"
-                                                                                    class="multiple-remove-btn"
-                                                                                    data-index="{{ $photoIndex }}"
-                                                                                    data-field="{{ $field }}">×
-                                                                            </button>
-                                                                        </div>
-                                                                    @endforeach
-                                                                @endif
-
+                                                                 id="upload-container-{{ $index + 1 }}"
+                                                                 data-field="{{ $field }}">
                                                                 @if($field === 'featured_photo')
                                                                     <input type="file" class="multiple-file-input"
-                                                                           name="{{ $field }}" accept="image/*">
-                                                                    <label class="upload-label">Select Single Image</label>
+                                                                           id="file-input-{{ $field }}" name="{{ $field }}" accept="image/*">
+                                                                    <label class="upload-label" for="file-input-{{ $field }}">Select Single Image</label>
                                                                 @else
                                                                     <input type="file" class="multiple-file-input"
-                                                                           name="{{ $field }}[]" accept="image/*" multiple>
-                                                                    <label class="upload-label">Select Multiple Images</label>
+                                                                           id="file-input-{{ $field }}" name="{{ $field }}[]" accept="image/*" multiple>
+                                                                    <label class="upload-label" for="file-input-{{ $field }}">Select Multiple Images</label>
                                                                 @endif
 
                                                                 <div class="multiple-thumbnail-gallery"></div>
@@ -1834,15 +1836,11 @@
                                                                     const index = e.target.getAttribute('data-index');
                                                                     const field = e.target.getAttribute('data-field');
                                                                     const removedInput = document.getElementById('removed_' + field);
-
-                                                                    // Mark the index for removal
                                                                     if (removedInput) {
                                                                         let current = removedInput.value ? removedInput.value.split(',') : [];
                                                                         current.push(index);
                                                                         removedInput.value = current.join(',');
                                                                     }
-
-                                                                    // Remove the thumbnail visually
                                                                     e.target.parentElement.remove();
                                                                 }
                                                             });
@@ -1870,9 +1868,121 @@
                                             </div>
                                         </div>
 
-
                                     </div>
                                 </form>
+                                
+                                <style>
+                                    .tab-content {
+                                        padding-top: 0 !important;
+                                    }
+                                    #Photos.tab-pane {
+                                        padding: 0 !important;
+                                        margin: 0 !important;
+                                        min-height: auto !important;
+                                        display: block !important;
+                                    }
+                                    #Photos.tab-pane.fade:not(.show) {
+                                        display: none !important;
+                                    }
+                                    #Photos.tab-pane.fade.show {
+                                        display: block !important;
+                                    }
+                                    #tabItem1.tab-pane.fade:not(.show) {
+                                        display: none !important;
+                                    }
+                                    #tabItem1.tab-pane.fade.show {
+                                        display: block !important;
+                                    }
+                                    .tab-content > .tab-pane:not(.active):not(.show) {
+                                        display: none !important;
+                                        visibility: hidden !important;
+                                    }
+                                    .tab-content > .tab-pane.active.show {
+                                        display: block !important;
+                                        visibility: visible !important;
+                                    }
+                                    #Photos .row {
+                                        margin: 0 !important;
+                                        padding: 0 !important;
+                                    }
+                                    #Photos .row > div:first-child {
+                                        margin-top: 0 !important;
+                                        padding-top: 0 !important;
+                                    }
+                                    #Photos .row > div:first-child .form-group {
+                                        margin-top: 0 !important;
+                                        padding-top: 0 !important;
+                                    }
+                                    #Photos .form-group:first-of-type {
+                                        margin-top: 0 !important;
+                                        padding-top: 0 !important;
+                                    }
+                                    #Photos .col-md-6:first-child,
+                                    #Photos .col-lg-4:first-child,
+                                    #Photos .col-xxl-3:first-child {
+                                        margin-top: 0 !important;
+                                        padding-top: 0 !important;
+                                    }
+                                    #Photos .row > div:first-child .form-group,
+                                    #Photos .row > div:first-child .form-group label {
+                                        margin-top: 0 !important;
+                                        padding-top: 0 !important;
+                                    }
+                                    #tabItem1.tab-pane {
+                                        padding-top: 0 !important;
+                                        margin-top: 0 !important;
+                                    }
+                                </style>
+                                
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        // Ensure Bootstrap tabs work correctly and prevent overlap
+                                        var tabLinks = document.querySelectorAll('[data-bs-toggle="tab"]');
+                                        
+                                        // Function to hide all tabs except the active one
+                                        function hideAllTabs() {
+                                            document.querySelectorAll('.tab-content .tab-pane').forEach(function(pane) {
+                                                pane.classList.remove('active', 'show');
+                                                pane.style.display = 'none';
+                                            });
+                                        }
+                                        
+                                        // Function to show specific tab
+                                        function showTab(tabId) {
+                                            hideAllTabs();
+                                            var targetPane = document.querySelector(tabId);
+                                            if (targetPane) {
+                                                targetPane.classList.add('active', 'show');
+                                                targetPane.style.display = 'block';
+                                            }
+                                        }
+                                        
+                                        // Initialize - hide all tabs except the default active one
+                                        hideAllTabs();
+                                        var activeTab = document.querySelector('.tab-pane.active');
+                                        if (activeTab) {
+                                            activeTab.classList.add('show');
+                                            activeTab.style.display = 'block';
+                                        }
+                                        
+                                        // Handle tab clicks
+                                        tabLinks.forEach(function(link) {
+                                            link.addEventListener('click', function(e) {
+                                                var targetId = this.getAttribute('href');
+                                                if (targetId) {
+                                                    showTab(targetId);
+                                                }
+                                            });
+                                            
+                                            link.addEventListener('shown.bs.tab', function(e) {
+                                                var targetId = e.target.getAttribute('href');
+                                                if (targetId) {
+                                                    showTab(targetId);
+                                                }
+                                            });
+                                        });
+                                    });
+                                </script>
 
                             </div>
                         </div>
@@ -1945,9 +2055,16 @@
             function initializeMultipleUpload(container) {
                 const fileInput = container.querySelector('.multiple-file-input');
                 const thumbnailGallery = container.querySelector('.multiple-thumbnail-gallery');
-                const containerId = container.id || `dynamic-${Date.now()}`; // Fallback ID for dynamic containers
+                const containerId = container.id || `dynamic-${Date.now()}`;
+                if (!uploadedImages[containerId]) uploadedImages[containerId] = [];
 
-                uploadedImages[containerId] = [];
+                function toggleDeleteAllBtn() {
+                    const formGroup = container.closest('.form-group');
+                    const clearAllWrap = formGroup ? formGroup.querySelector('.photo-delete-all-wrap') : null;
+                    if (clearAllWrap) {
+                        clearAllWrap.style.display = thumbnailGallery.children.length > 0 ? 'block' : 'none';
+                    }
+                }
 
                 fileInput.addEventListener('change', function (event) {
                     console.log(`File input changed in container: ${containerId}`);
@@ -1963,6 +2080,9 @@
                             thumbnailItem.classList.add('multiple-thumbnail-item');
                             const img = document.createElement('img');
                             img.src = e.target.result;
+                            img.style.height = '100px';
+                            img.style.width = 'auto';
+                            img.classList.add('img-thumbnail');
                             const removeBtn = document.createElement('button');
                             removeBtn.innerHTML = '×';
                             removeBtn.classList.add('multiple-remove-btn');
@@ -1973,17 +2093,37 @@
                                     uploadedImages[containerId].splice(index, 1);
                                     console.log(`Removed file ${file.name} from container ${containerId}`);
                                 }
+                                toggleDeleteAllBtn();
                             });
                             thumbnailItem.appendChild(img);
                             thumbnailItem.appendChild(removeBtn);
                             thumbnailGallery.appendChild(thumbnailItem);
                             uploadedImages[containerId].push(file);
                             console.log(`Added thumbnail for file ${file.name} in container ${containerId}`);
+                            toggleDeleteAllBtn();
                         };
                         reader.readAsDataURL(file);
                     }
                 });
             }
+
+            document.addEventListener('click', function (e) {
+                if (e.target.classList.contains('multiple-remove-all-btn') || (e.target.closest && e.target.closest('.multiple-remove-all-btn'))) {
+                    var btn = e.target.classList.contains('multiple-remove-all-btn') ? e.target : e.target.closest('.multiple-remove-all-btn');
+                    if (!btn) return;
+                    var field = btn.getAttribute('data-field');
+                    var container = document.querySelector('.multiple-upload-container[data-field="' + field + '"]');
+                    if (!container) return;
+                    var thumbnailGallery = container.querySelector('.multiple-thumbnail-gallery');
+                    var fileInput = container.querySelector('.multiple-file-input');
+                    var containerId = container.id;
+                    if (thumbnailGallery) thumbnailGallery.innerHTML = '';
+                    if (uploadedImages[containerId]) uploadedImages[containerId] = [];
+                    if (fileInput) fileInput.value = '';
+                    var wrap = btn.closest('.photo-delete-all-wrap');
+                    if (wrap) wrap.style.display = 'none'; else btn.style.display = 'none';
+                }
+            });
 
             // Initialize for all upload containers dynamically
             const uploadContainers = document.querySelectorAll('.multiple-upload-container');

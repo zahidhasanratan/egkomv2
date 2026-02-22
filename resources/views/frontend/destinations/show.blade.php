@@ -1,5 +1,5 @@
 @extends('frontend.hotelMaster')
-@section('title', $destination->name . ' - EGKom')
+@section('title', $destination->name . ' - EZBOOKING')
 @section('main')
 
 <section class="innerpage-wrapper">

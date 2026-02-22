@@ -168,4 +168,15 @@ class Room extends Model
               });
         });
     }
+    
+    /**
+     * Scope to filter rooms from active (approved and not suspended) hotels
+     */
+    public function scopeFromActiveHotels($query)
+    {
+        return $query->whereHas('hotel', function($q) {
+            $q->where('approve', 1)
+              ->where('is_suspended', 0);
+        });
+    }
 }

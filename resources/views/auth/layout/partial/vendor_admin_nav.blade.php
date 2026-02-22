@@ -10,12 +10,15 @@
                     <ul class="nk-menu-sub">
                         <li class="nk-menu-item"><a href="{{ route('vendor-admin.vendor.create') }}" class="nk-menu-link"><span class="nk-menu-text">Vendor Info</span></a></li>
                         <li class="nk-menu-item"><a href="{{ route('vendor-admin.owner.create') }}" class="nk-menu-link"><span class="nk-menu-text">Owner Details</span></a></li>
+                        @if(Auth::guard('vendor')->user()->isApproved())
                         <li class="nk-menu-item"><a href="{{ route('owners.bankInfo') }}" class="nk-menu-link"><span class="nk-menu-text">Owner Banking Info</span></a></li>
+                        @endif
                     </ul>
                 </li>
 
 
 
+                @if(Auth::guard('vendor')->user()->isApproved())
                 <li class="nk-menu-item has-sub"><a href="#" class="nk-menu-link nk-menu-toggle"><span class="nk-menu-icon"><em class="icon ni ni-dashlite-alt"></em></span><span class="nk-menu-text">Manage Hotel</span></a>
                     <ul class="nk-menu-sub">
                         <li class="nk-menu-item"><a href="{{ route('vendor-admin.hotel.create') }}" class="nk-menu-link"><span class="nk-menu-text">Create Hotel</span></a></li>
@@ -25,6 +28,7 @@
 
                 <li class="nk-menu-item has-sub"><a href="#" class="nk-menu-link nk-menu-toggle"><span class="nk-menu-icon"><em class="icon ni ni-dashlite-alt"></em></span><span class="nk-menu-text">Manage Room List</span></a>
                     <ul class="nk-menu-sub">
+                        <li class="nk-menu-item"><a href="{{ route('vendor-admin.room.all') }}" class="nk-menu-link"><span class="nk-menu-text">All Room</span></a></li>
                         @foreach(\App\Models\Hotel::where('vendor_id', Auth::guard('vendor')->id())->where('approve','1')->where('status','submitted')->get() as $hotel)
                         <li class="nk-menu-item"><a href="{{ route('vendor-admin.room.index',\Illuminate\Support\Facades\Crypt::encrypt($hotel->id)) }}" class="nk-menu-link"><span class="nk-menu-text">{{ $hotel->description }}</span></a></li>
                         @endforeach
@@ -39,6 +43,11 @@
                         <span class="nk-menu-text">Manage Co-Hosts</span>
                     </a>
                     <ul class="nk-menu-sub">
+                        <li class="nk-menu-item">
+                            <a href="{{ route('vendor.co-hosts.all') }}" class="nk-menu-link">
+                                <span class="nk-menu-text">All Co Host</span>
+                            </a>
+                        </li>
                         @foreach(\App\Models\Hotel::where('vendor_id', Auth::guard('vendor')->id())->where('approve','1')->where('status','submitted')->get() as $hotel)
                         <li class="nk-menu-item">
                             <a href="{{ route('vendor.co-hosts.index', $hotel->id) }}" class="nk-menu-link">
@@ -98,6 +107,7 @@
                         <span class="nk-menu-text">Reviews Management</span>
                     </a>
                 </li>
+                @endif
 
                 <li class="nk-menu-item">
                     <form id="logout-form" action="{{ route('vendor-admin.logout') }}" method="POST" style="display: none;">

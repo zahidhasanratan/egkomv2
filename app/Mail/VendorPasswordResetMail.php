@@ -34,7 +34,7 @@ class VendorPasswordResetMail extends Mailable
     {
         $resetUrl = url('/vendor-admin/password/reset/' . $this->token);
         
-        return $this->subject('Reset Your Password - EGKom')
+        return $this->subject('Reset Your Password - EZBOOKING')
                     ->view('emails.vendor-password-reset')
                     ->with([
                         'name' => $this->name,

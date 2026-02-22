@@ -10,7 +10,7 @@ class Hotel extends Model
     use HasFactory;
 
     protected $fillable = [
-        'vendor_id','popular_destination_id','property_category','property_type','room_types','details','address', 'district', 'city', 'status','lati','longi', 'approve', 'description', 'pets_allowed', 'pets_details',
+        'vendor_id','popular_destination_id','property_category','property_type','room_types','details','address', 'district', 'city', 'status','lati','longi', 'approve', 'is_suspended', 'description', 'pets_allowed', 'pets_details',
         'events_allowed', 'events_details', 'smoking_allowed', 'smoking_details',
         'quiet_hours', 'photography_allowed', 'photography_details', 'check_in_window',
         'check_out_time', 'food_laundry', 'check_in_rules', 'custom_check_in_rules',
@@ -96,5 +96,21 @@ class Hotel extends Model
     public function allReviews()
     {
         return $this->hasMany(Review::class)->orderBy('created_at', 'desc');
+    }
+    
+    /**
+     * Check if hotel is suspended/disabled
+     */
+    public function isSuspended(): bool
+    {
+        return (bool) ($this->is_suspended ?? false);
+    }
+    
+    /**
+     * Check if hotel is active (approved and not suspended)
+     */
+    public function isActive(): bool
+    {
+        return $this->approve == 1 && !$this->isSuspended();
     }
 }

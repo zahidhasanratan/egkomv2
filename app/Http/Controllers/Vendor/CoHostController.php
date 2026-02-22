@@ -150,4 +150,27 @@ class CoHostController extends Controller
         return redirect()->route('vendor.co-hosts.index', $hotelId)
             ->with('success', 'Co-host deleted successfully!');
     }
+
+    public function allCoHosts()
+    {
+        try {
+            $vendor = Auth::guard('vendor')->user();
+            
+            if (!$vendor) {
+                return redirect()->route('vendor-admin.login')->with('error', 'Please login first');
+            }
+            
+            // Get all co-hosts for this vendor with hotel relationship loaded
+            $coHosts = CoHost::where('vendor_id', $vendor->id)
+                ->with('hotel')
+                ->orderBy('created_at', 'desc')
+                ->get();
+            
+            return view('auth.vendor.co-hosts.all', compact('coHosts'));
+            
+        } catch (\Exception $e) {
+            return redirect()->route('vendor-admin.dashboard')
+                ->with('error', 'Error: ' . $e->getMessage());
+        }
+    }
 }

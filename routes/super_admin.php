@@ -17,6 +17,7 @@ use App\Http\Controllers\Vendor\BankingController;
 use App\Http\Controllers\Superadmin\PopularDestinationController;
 use App\Http\Controllers\Superadmin\TourPackageController;
 use App\Http\Controllers\Superadmin\HomepageHeroController;
+use App\Http\Controllers\Superadmin\CouponController;
 use App\Http\Controllers\admin\ReviewManagementController;
 
 // Super Admin Login Routes
@@ -33,6 +34,7 @@ Route::prefix('super-admin')->group(function () {
 
     Route::middleware('auth:super-admin')->group(function () {
         Route::post('/update-smtp-settings', [SettingsController::class, 'updateSmtpSettings'])->name('super-admin.update.smtp');
+        Route::post('/logo/update', [SettingsController::class, 'updateLogo'])->name('super-admin.logo.update');
 
         Route::get('account-settings', [DashboardController::class, 'accountSettings'])->name('super-admin.accountSettings');
         Route::post('super-admin/update-settings', [DashboardController::class, 'updateSettings'])->name('super-admin.update.settings');
@@ -51,6 +53,8 @@ Route::prefix('super-admin')->group(function () {
         Route::get('vendor/create', [DashboardController::class, 'vendor_create'])->name('super-admin.vendor.create');
         Route::post('vendor/store', [DashboardController::class, 'vendor_store'])->name('super-admin.vendor.store');
         Route::get('vendor/allList', [DashboardController::class, 'allVendorList'])->name('super-admin.vendor.index');
+        Route::post('vendor/{id}/approve', [DashboardController::class, 'approveVendor'])->name('super-admin.vendor.approve');
+        Route::post('vendor/{id}/reject', [DashboardController::class, 'rejectVendor'])->name('super-admin.vendor.reject');
         Route::get('vendor/{id}/show', [DashboardController::class, 'vendor_show'])->name('super-admin.vendor.show');
         Route::get('vendor/{id}/edit', [DashboardController::class, 'vendor_edit'])->name('super-admin.vendor.edit');
         Route::put('vendor/{id}', [DashboardController::class, 'vendor_update'])->name('super-admin.vendor.update');
@@ -75,6 +79,7 @@ Route::prefix('super-admin')->group(function () {
         Route::get('/hotel/{hotel}/edit', [ManageHotel::class, 'editSuper'])->name('super-admin.hotel.edit');
         Route::put('/hotel/{hotel}', [ManageHotel::class, 'updateSuper'])->name('super-admin.hotel.update');
         Route::post('/admin/hotel/{hotel}/toggle-approve', [ManageHotel::class, 'toggleApprove']);
+        Route::post('/admin/hotel/{hotel}/toggle-suspend', [ManageHotel::class, 'toggleSuspend'])->name('super-admin.hotel.toggle-suspend');
 
 
 //      Mange Room
@@ -122,6 +127,17 @@ Route::prefix('super-admin')->group(function () {
         // Homepage Hero (video, title, subtitle) - under Advertisement
         Route::get('/homepage-hero/edit', [HomepageHeroController::class, 'edit'])->name('super-admin.homepage-hero.edit');
         Route::put('/homepage-hero', [HomepageHeroController::class, 'update'])->name('super-admin.homepage-hero.update');
+
+        // Coupon Code Management
+        Route::resource('coupons', CouponController::class)->names([
+            'index' => 'super-admin.coupons.index',
+            'create' => 'super-admin.coupons.create',
+            'store' => 'super-admin.coupons.store',
+            'show' => 'super-admin.coupons.show',
+            'edit' => 'super-admin.coupons.edit',
+            'update' => 'super-admin.coupons.update',
+            'destroy' => 'super-admin.coupons.destroy',
+        ]);
 
         // Booking Management
         Route::get('/bookings', [\App\Http\Controllers\admin\BookingManagementController::class, 'index'])->name('super-admin.bookings.index');

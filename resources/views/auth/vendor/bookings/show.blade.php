@@ -210,7 +210,7 @@
                         </tr>
                         @if($discount > 0)
                         <tr>
-                            <td>Discount:</td>
+                            <td>Discount@if($booking->coupon_code) (Coupon: <span class="badge bg-secondary">{{ $booking->coupon_code }}</span>)@endif:</td>
                             <td class="text-right text-danger"><strong>-BDT {{ number_format($discount, 2) }}</strong></td>
                         </tr>
                         @endif

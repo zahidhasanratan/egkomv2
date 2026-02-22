@@ -74,10 +74,14 @@
                                             <div class="form-group">
                                                 <label class="form-label" for="image">Image</label>
                                                 @if($tour_package->image)
-                                                    <div class="mb-2">
+                                                    <div class="mb-2" id="current-image-container" style="position: relative; display: inline-block;">
                                                         <img src="{{ asset($tour_package->image) }}" alt="{{ $tour_package->title }}"
-                                                             style="max-width: 200px; max-height: 150px; object-fit: contain; border-radius: 8px;">
-                                                        <small class="d-block text-muted">Current image. Upload new to replace.</small>
+                                                             style="max-width: 200px; max-height: 150px; object-fit: contain; border-radius: 8px; display: block;">
+                                                        <button type="button" id="remove-current-image" class="btn btn-sm btn-danger" style="position: absolute; top: -5px; right: -5px; width: 28px; height: 28px; border-radius: 50%; padding: 0; display: flex; align-items: center; justify-content: center; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index: 10;" title="Remove current image">
+                                                            <span style="font-size: 16px; line-height: 1;">&times;</span>
+                                                        </button>
+                                                        <small class="d-block text-muted mt-1">Current image. Upload new to replace.</small>
+                                                        <input type="hidden" name="remove_current_image" id="remove_current_image" value="0">
                                                     </div>
                                                 @endif
                                                 <input type="file" class="form-control" id="image" name="image" accept="image/*">
@@ -85,9 +89,12 @@
                                                 @error('image')
                                                     <span class="text-danger d-block">{{ $message }}</span>
                                                 @enderror
-                                                <div id="image-preview" class="mt-2" style="display: none;">
-                                                    <strong>New preview:</strong>
-                                                    <img id="preview-img" src="" alt="Preview" style="max-width: 200px; max-height: 150px; object-fit: contain; border-radius: 8px;">
+                                                <div id="image-preview" class="mt-2" style="display: none; position: relative; display: inline-block;">
+                                                    <strong class="d-block mb-1">New preview:</strong>
+                                                    <img id="preview-img" src="" alt="Preview" style="max-width: 200px; max-height: 150px; object-fit: contain; border-radius: 8px; display: block;">
+                                                    <button type="button" id="remove-preview" class="btn btn-sm btn-danger" style="position: absolute; top: -5px; right: -5px; width: 28px; height: 28px; border-radius: 50%; padding: 0; display: flex; align-items: center; justify-content: center; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index: 10;" title="Remove preview">
+                                                        <span style="font-size: 16px; line-height: 1;">&times;</span>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -159,13 +166,41 @@
                 var reader = new FileReader();
                 reader.onload = function(e) {
                     img.src = e.target.result;
-                    preview.style.display = 'block';
+                    preview.style.display = 'inline-block';
                 };
                 reader.readAsDataURL(file);
             } else {
                 preview.style.display = 'none';
             }
         });
+
+        // Remove preview image
+        var removePreviewBtn = document.getElementById('remove-preview');
+        if (removePreviewBtn) {
+            removePreviewBtn.addEventListener('click', function() {
+                var preview = document.getElementById('image-preview');
+                var img = document.getElementById('preview-img');
+                var fileInput = document.getElementById('image');
+                
+                preview.style.display = 'none';
+                img.src = '';
+                fileInput.value = '';
+            });
+        }
+
+        // Remove current image
+        var removeCurrentBtn = document.getElementById('remove-current-image');
+        if (removeCurrentBtn) {
+            removeCurrentBtn.addEventListener('click', function() {
+                var container = document.getElementById('current-image-container');
+                var removeFlag = document.getElementById('remove_current_image');
+                
+                if (confirm('Are you sure you want to remove the current image? It will be deleted when you save.')) {
+                    container.style.display = 'none';
+                    removeFlag.value = '1';
+                }
+            });
+        }
     </script>
 
 @endsection

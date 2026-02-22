@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Egkom</title>
+    <title>EZBOOKING</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -367,7 +367,7 @@
                 <div class="col-lg-2">
                     <div class="egkom-logo">
                         <a href="{{ asset('/') }}" class="navbar-brand main-logo py-1 m-0">
-                            <img src="{{ asset('frontend')}}/images/logo.png" alt="Egkom">
+                            <img src="{{ asset('frontend')}}/images/logo.png" alt="EZBOOKING">
                         </a>
                     </div>
                 </div>
@@ -390,7 +390,7 @@
                             <div class="search-bar">
                                 <div class="search-container search-item search-box-first" style="position: relative;">
                                     <label for="desktop-destination-input">Where</label>
-                                    <input type="text" id="desktop-destination-input" name="destination" placeholder="Search by destination" onfocus="showDesktopSuggestions()" onblur="hideDesktopSuggestions()" onkeyup="filterSuggestionsByType()">
+                                    <input type="text" id="desktop-destination-input" name="destination" placeholder="Search by destination" onfocus="showDesktopSuggestions()" onblur="handleDesktopDestinationBlur(event)" onkeyup="filterSuggestionsByType()">
                                     <input type="hidden" id="search-type-hidden-master" name="search_type" value="">
                                     <div class="suggestions" id="desktop-suggestions-list">
                                         <p class="suggestion-title">Suggested destinations</p>
@@ -539,15 +539,23 @@
                 <div class="col-lg-2">
                     <div class="user-bendor">
                         <div class="bendor-section">
-                            <a href="#">Income from Hosting</a>
+                            @if(auth()->guard('vendor')->check())
+                                <a href="{{ route('vendor-admin.dashboard') }}">Vendor Dashboard</a>
+                            @else
+                                <a href="{{ route('vendor-admin.login') }}" title="Login or contact admin to become a vendor">Income from Hosting</a>
+                            @endif
                         </div>
                         <div class="user-section">
                             <div class="user-login-button">
                                 <a href="#" id="profileIconToggle">
                                     <div class="user-icon">
-                                        <svg class="user-cicle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true" role="presentation" focusable="false" style="display: block;  fill: currentcolor;">
-                                            <path d="M16 .7C7.56.7.7 7.56.7 16S7.56 31.3 16 31.3 31.3 24.44 31.3 16 24.44.7 16 .7zm0 28c-4.02 0-7.6-1.88-9.93-4.81a12.43 12.43 0 0 1 6.45-4.4A6.5 6.5 0 0 1 9.5 14a6.5 6.5 0 0 1 13 0 6.51 6.5 0 0 1-3.02 5.5 12.42 12.42 0 0 1 6.45 4.4A12.67 12.67 0 0 1 16 28.7z"></path>
-                                        </svg>
+                                        @if(auth()->guard('guest')->check() && auth()->guard('guest')->user()->photo)
+                                            <img src="{{ asset(auth()->guard('guest')->user()->photo) }}" alt="Profile" class="header-guest-avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; display: block;">
+                                        @else
+                                            <svg class="user-cicle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true" role="presentation" focusable="false" style="display: block;  fill: currentcolor;">
+                                                <path d="M16 .7C7.56.7.7 7.56.7 16S7.56 31.3 16 31.3 31.3 24.44 31.3 16 24.44.7 16 .7zm0 28c-4.02 0-7.6-1.88-9.93-4.81a12.43 12.43 0 0 1 6.45-4.4A6.5 6.5 0 0 1 9.5 14a6.5 6.5 0 0 1 13 0 6.51 6.5 0 0 1-3.02 5.5 12.42 12.42 0 0 1 6.45 4.4A12.67 12.67 0 0 1 16 28.7z"></path>
+                                            </svg>
+                                        @endif
                                     </div>
                                     <div class="user-svg-toggle">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true" role="presentation" focusable="false" style="display: block; fill: none; height: 16px; width: 16px; stroke: currentcolor; stroke-width: 3; overflow: visible;">
@@ -1376,23 +1384,26 @@
     }
     .cart-count-badge {
         position: absolute;
-        top: -10px;
-        right: -10px;
+        top: -8px;
+        right: -8px;
         background: #91278f;
         color: white;
         border-radius: 50%;
-        width: 26px;
-        height: 26px;
+        min-width: 24px;
+        height: 24px;
+        padding: 0 6px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 13px;
+        font-size: 12px;
         font-weight: 700;
         opacity: 0;
         transform: scale(0);
-        transition: all 0.3s ease;
-        border: 2px solid white;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        border: 2.5px solid white;
+        box-shadow: 0 3px 10px rgba(145, 39, 143, 0.4), 0 0 0 1px rgba(0,0,0,0.05);
+        z-index: 10;
+        line-height: 1;
     }
     .cart-count-badge.visible {
         opacity: 1;
@@ -1665,7 +1676,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-12 col-md-6 col-lg-6 col-xl-6" id="copyright">
-                    <p>Copyright © 2024 Egkom. All Rights Reserved.</p>
+                    <p>Copyright © 2024 EZBOOKING. All Rights Reserved.</p>
                 </div>
                 <!-- end columns -->
                 <div class="col-12 col-md-6 col-lg-6 col-xl-6" id="terms">
@@ -1838,12 +1849,20 @@
             };
         }
         
-        // Update suggestion item click handlers
+        // Update suggestion item handlers: use mousedown so value is set before blur runs
         document.querySelectorAll("#desktop-suggestions-list .suggestion-item").forEach(item => {
-            item.addEventListener("click", function () {
-                const hotelName = this.getAttribute('data-hotel-name') || this.querySelector("strong")?.innerText;
+            item.addEventListener("mousedown", function (e) {
+                e.preventDefault();
+                const hotelName = this.getAttribute('data-hotel-name') || this.querySelector("strong")?.innerText?.trim();
                 if (hotelName) {
-                    document.getElementById("desktop-destination-input").value = hotelName;
+                    const input = document.getElementById("desktop-destination-input");
+                    if (input) {
+                        input.value = hotelName;
+                        if (document.getElementById('search-type-hidden-master')) {
+                            const searchType = (this.getAttribute('data-category') || '').toLowerCase();
+                            document.getElementById('search-type-hidden-master').value = searchType === 'apartment' ? 'apartment' : (searchType === 'room' ? 'room' : 'location');
+                        }
+                    }
                     if (typeof hideDesktopSuggestions === 'function') {
                         hideDesktopSuggestions();
                     }
@@ -1870,6 +1889,15 @@
             suggestionsList.style.display = 'block';
             filterSuggestionsByType();
         }
+    }
+
+    // Don't hide suggestions when focus moves into the suggestions list (so click can register and set value)
+    function handleDesktopDestinationBlur(ev) {
+        const suggestionsList = document.getElementById('desktop-suggestions-list');
+        if (suggestionsList && ev.relatedTarget && suggestionsList.contains(ev.relatedTarget)) {
+            return;
+        }
+        hideDesktopSuggestions();
     }
 
     // Function to hide desktop suggestions
@@ -2116,10 +2144,25 @@
         // Force immediate update
         updateGlobalCartDisplay();
         
-        // Force badge update
+        // Force badge update with multiple attempts to ensure it updates
         setTimeout(() => {
             updateGlobalCartDisplay();
         }, 10);
+        
+        // Additional badge update after a short delay to ensure visibility
+        setTimeout(() => {
+            const globalBadge = document.getElementById('globalCartCountBadge');
+            if (globalBadge) {
+                const count = globalBookingCart.length;
+                globalBadge.textContent = count;
+                if (count > 0) {
+                    globalBadge.classList.add('visible');
+                    globalBadge.style.display = 'block';
+                    globalBadge.style.opacity = '1';
+                    globalBadge.style.visibility = 'visible';
+                }
+            }
+        }, 50);
         
         return true;
     }
@@ -2240,8 +2283,12 @@
             globalBadge.textContent = count;
             if (count > 0) {
                 globalBadge.classList.add('visible');
+                globalBadge.style.display = 'block';
+                globalBadge.style.opacity = '1';
+                globalBadge.style.visibility = 'visible';
             } else {
                 globalBadge.classList.remove('visible');
+                globalBadge.style.display = 'none';
             }
         }
         if (localBadge) {
@@ -2291,6 +2338,18 @@
     // Initialize cart on page load
     document.addEventListener('DOMContentLoaded', function() {
         updateGlobalCartDisplay();
+        // Force badge update on load
+        setTimeout(() => {
+            updateGlobalCartDisplay();
+            const globalBadge = document.getElementById('globalCartCountBadge');
+            if (globalBadge && globalBookingCart && globalBookingCart.length > 0) {
+                globalBadge.textContent = globalBookingCart.length;
+                globalBadge.classList.add('visible');
+                globalBadge.style.display = 'block';
+                globalBadge.style.opacity = '1';
+                globalBadge.style.visibility = 'visible';
+            }
+        }, 100);
 
         // Hide cart when room details modal opens, show when it closes
         const roomModal = document.getElementById('rightSidebarModalDetails');
@@ -2306,6 +2365,90 @@
                 cartDrawer.classList.remove('cart-hidden-by-modal');
             });
         }
+    });
+</script>
+
+<!-- Global script to make all date inputs open calendar on click -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle all native HTML5 date inputs (type="date")
+        document.querySelectorAll('input[type="date"]').forEach(function(input) {
+            // Remove readonly if present to allow calendar opening
+            if (input.hasAttribute('readonly')) {
+                input.removeAttribute('readonly');
+                input.style.cursor = 'pointer';
+            }
+            
+            // Add click handler to open native date picker
+            input.addEventListener('click', function(e) {
+                // Check if browser supports showPicker() method
+                if (this.showPicker && typeof this.showPicker === 'function') {
+                    e.preventDefault();
+                    this.showPicker();
+                }
+            });
+            
+            // Also handle focus event
+            input.addEventListener('focus', function(e) {
+                if (this.showPicker && typeof this.showPicker === 'function') {
+                    e.preventDefault();
+                    this.showPicker();
+                }
+            });
+        });
+        
+        // Handle flatpickr instances - ensure clickOpens is true
+        if (typeof flatpickr !== 'undefined') {
+            // Find all inputs that might use flatpickr
+            document.querySelectorAll('input[data-flatpickr], input.flatpickr-input').forEach(function(input) {
+                // Check if flatpickr is already initialized
+                if (input._flatpickr) {
+                    // Update existing instance to allow click opening
+                    input._flatpickr.config.clickOpens = true;
+                }
+            });
+        }
+        
+        // Handle bootstrap-datepicker inputs
+        if (typeof $.fn.datepicker !== 'undefined') {
+            $('input[data-provide="datepicker"], input.datepicker').each(function() {
+                var $input = $(this);
+                // Ensure datepicker opens on input click
+                $input.on('click', function() {
+                    if ($input.data('datepicker')) {
+                        $input.data('datepicker').show();
+                    }
+                });
+            });
+        }
+        
+        // Make calendar icons clickable - trigger click on associated input
+        document.querySelectorAll('.fa-calendar, .fa-calendar-check, [class*="calendar"]').forEach(function(icon) {
+            // Find the nearest input field
+            var parent = icon.closest('.form-group, .input-group, .search-container, div[style*="position: relative"]');
+            if (parent) {
+                var input = parent.querySelector('input[type="date"], input[type="text"][readonly], input.datepicker, input[data-provide="datepicker"]');
+                if (input) {
+                    icon.style.cursor = 'pointer';
+                    icon.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        input.focus();
+                        input.click();
+                        
+                        // For native date inputs
+                        if (input.type === 'date' && input.showPicker) {
+                            input.showPicker();
+                        }
+                        
+                        // For bootstrap-datepicker
+                        if (typeof $.fn.datepicker !== 'undefined' && $(input).data('datepicker')) {
+                            $(input).data('datepicker').show();
+                        }
+                    });
+                }
+            }
+        });
     });
 </script>
 

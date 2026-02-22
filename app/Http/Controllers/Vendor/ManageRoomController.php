@@ -9,13 +9,31 @@ use App\Models\Room;
 use App\Models\RoomPhoto;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ManageRoomController extends Controller
 {
-    public function index($id)
+    public function allRooms()
+    {
+        $vendor = Auth::guard('vendor')->user();
+        if (!$vendor) {
+            return redirect()->route('vendor-admin.login')->with('error', 'Please login first');
+        }
+
+        $rooms = Room::whereHas('hotel', function ($q) use ($vendor) {
+            $q->where('vendor_id', $vendor->id)->where('approve', '1')->where('status', 'submitted');
+        })
+            ->with('hotel')
+            ->orderBy('created_at', 'desc')
+            ->paginate(20);
+
+        return view('auth.vendor.room.all', compact('rooms'));
+    }
+
+    public function index($id, Request $request)
     {
         try {
             $hotelId = Crypt::decrypt($id);
@@ -60,8 +78,21 @@ class ManageRoomController extends Controller
             }
         }
 
+        // Search functionality
+        $query = Room::where('hotel_id', $hotel->id);
+        
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('number', 'like', "%{$search}%")
+                  ->orWhere('floor_number', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+        
         // Fetch rooms with pagination (e.g., 10 rooms per page)
-        $roomList = Room::where('hotel_id', $hotel->id)->paginate(10);
+        $roomList = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
 
         return view('auth.vendor.room.index', [
             'hotel' => $hotel,
@@ -69,7 +100,7 @@ class ManageRoomController extends Controller
         ]);
     }
 
-    public function indexSuper($id)
+    public function indexSuper($id, Request $request)
     {
         try {
             $hotelId = Crypt::decrypt($id);
@@ -114,8 +145,21 @@ class ManageRoomController extends Controller
             }
         }
 
+        // Search functionality
+        $query = Room::where('hotel_id', $hotel->id);
+        
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('number', 'like', "%{$search}%")
+                  ->orWhere('floor_number', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+        
         // Fetch rooms with pagination (e.g., 10 rooms per page)
-        $roomList = Room::where('hotel_id', $hotel->id)->paginate(10);
+        $roomList = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
 
         return view('auth.super_admin.room.index', [
             'hotel' => $hotel,

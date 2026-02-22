@@ -10,6 +10,8 @@
     <link href="{{ asset('admin/assets/css/font-awesome.css')}}" rel="stylesheet" />
     <!-- CUSTOM STYLES-->
     <link href="{{ asset('admin/assets/css/custom.css')}}" rel="stylesheet" />
+    <!-- Password Toggle -->
+    <link rel="stylesheet" href="{{ asset('frontend')}}/css/password-toggle.css">
     <!-- GOOGLE FONTS-->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
 @push('css')
@@ -101,6 +103,8 @@
 <script src="{{ asset('admin/assets/js/jquery.metisMenu.js')}}"></script>
 <!-- CUSTOM SCRIPTS -->
 <script src="{{ asset('admin/assets/js/custom.js')}}"></script>
+<!-- Password Toggle -->
+<script src="{{ asset('frontend')}}/js/password-toggle.js"></script>
 
 </body>
 </html>

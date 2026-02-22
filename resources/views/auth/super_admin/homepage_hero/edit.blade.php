@@ -75,24 +75,36 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label class="form-label" for="video">Hero Video</label>
+                                                <input type="hidden" name="remove_video" id="remove_video" value="0">
+
                                                 @if($hero->video_path)
-                                                    <div class="mb-3 border rounded p-3" style="background: #f8f9fa;">
-                                                        <strong>Current video:</strong>
-                                                        @if(\Illuminate\Support\Facades\File::exists(public_path($hero->video_path)))
-                                                            <span class="text-muted">{{ $hero->video_path }}</span>
-                                                            <div class="mt-2">
-                                                                <video src="{{ asset($hero->video_path) }}" controls width="320" height="180" style="max-width:100%; border-radius:8px;"></video>
-                                                            </div>
-                                                        @else
-                                                            <span class="text-muted">{{ $hero->video_path }}</span>
-                                                        @endif
-                                                        <small class="d-block mt-2 text-muted">Upload a new file to replace. Leave empty to keep current.</small>
-                                                    </div>
+                                                <div class="mb-3 border rounded p-3 position-relative" id="currentVideoBox" style="background: #f8f9fa;">
+                                                    <button type="button" class="btn btn-sm btn-danger position-absolute" id="removeCurrentVideoBtn" title="Remove current video" style="top: 12px; right: 12px; z-index: 2; width: 32px; height: 32px; padding: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; line-height: 1;">&times;</button>
+                                                    <strong>Current video (preview):</strong>
+                                                    @if(\Illuminate\Support\Facades\File::exists(public_path($hero->video_path)))
+                                                        <div class="mt-2">
+                                                            <video src="{{ asset($hero->video_path) }}" controls width="320" height="180" style="max-width:100%; border-radius:8px;" id="currentVideoPreview"></video>
+                                                        </div>
+                                                    @else
+                                                        <span class="text-muted d-block mt-2">{{ $hero->video_path }}</span>
+                                                    @endif
+                                                    <small class="d-block mt-2 text-muted">Upload a new file to replace, or click &times; to remove.</small>
+                                                </div>
                                                 @endif
+
+                                                <div class="mb-3 border rounded p-3 position-relative" id="newFilePreviewBox" style="background: #e8f4fd; display: none;">
+                                                    <button type="button" class="btn btn-sm btn-danger position-absolute" id="clearNewFileBtn" title="Remove selected file" style="top: 12px; right: 12px; z-index: 2; width: 32px; height: 32px; padding: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; line-height: 1;">&times;</button>
+                                                    <strong>New video (preview):</strong>
+                                                    <div class="mt-2">
+                                                        <video id="newFilePreview" controls width="320" height="180" style="max-width:100%; border-radius:8px;"></video>
+                                                    </div>
+                                                    <small class="d-block mt-2 text-muted">Click &times; to cancel this selection.</small>
+                                                </div>
+
                                                 <input type="file" class="form-control" id="video" name="video"
                                                        accept="video/mp4,video/webm,video/ogg,video/quicktime">
                                                 <small class="form-text text-muted d-block mt-2">
-                                                    <em class="icon ni ni-info"></em> MP4, WebM, OGG or MOV. Max 100MB.
+                                                    <em class="icon ni ni-info"></em> MP4, WebM, OGG or MOV. <strong>Maximum 10 MB</strong> file size.
                                                 </small>
                                                 @error('video')
                                                     <span class="text-danger d-block mt-2">{{ $message }}</span>
@@ -115,4 +127,52 @@
         </div>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var videoInput = document.getElementById('video');
+            var removeVideoInput = document.getElementById('remove_video');
+            var currentVideoBox = document.getElementById('currentVideoBox');
+            var removeCurrentVideoBtn = document.getElementById('removeCurrentVideoBtn');
+            var newFilePreviewBox = document.getElementById('newFilePreviewBox');
+            var newFilePreview = document.getElementById('newFilePreview');
+            var clearNewFileBtn = document.getElementById('clearNewFileBtn');
+            var newFileObjectUrl = null;
+
+            if (removeCurrentVideoBtn && currentVideoBox) {
+                removeCurrentVideoBtn.addEventListener('click', function() {
+                    removeVideoInput.value = '1';
+                    currentVideoBox.style.display = 'none';
+                });
+            }
+
+            if (videoInput) {
+                videoInput.addEventListener('change', function() {
+                    if (newFileObjectUrl) {
+                        URL.revokeObjectURL(newFileObjectUrl);
+                        newFileObjectUrl = null;
+                    }
+                    if (this.files && this.files[0]) {
+                        newFileObjectUrl = URL.createObjectURL(this.files[0]);
+                        newFilePreview.src = newFileObjectUrl;
+                        newFilePreviewBox.style.display = 'block';
+                    } else {
+                        newFilePreviewBox.style.display = 'none';
+                        newFilePreview.removeAttribute('src');
+                    }
+                });
+            }
+
+            if (clearNewFileBtn) {
+                clearNewFileBtn.addEventListener('click', function() {
+                    if (videoInput) videoInput.value = '';
+                    if (newFileObjectUrl) {
+                        URL.revokeObjectURL(newFileObjectUrl);
+                        newFileObjectUrl = null;
+                    }
+                    newFilePreview.removeAttribute('src');
+                    newFilePreviewBox.style.display = 'none';
+                });
+            }
+        });
+    </script>
 @endsection

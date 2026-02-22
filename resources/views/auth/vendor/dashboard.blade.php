@@ -5,6 +5,31 @@
         <div class="container-fluid">
             <div class="nk-content-inner">
                 <div class="nk-content-body">
+                    @if(session('error'))
+                        <div class="alert alert-warning alert-dismissible mb-3" role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+                    @if(Auth::guard('vendor')->user()->isRejected())
+                        <div class="alert alert-danger alert-dismissible mb-3" role="alert">
+                            <strong>Account Rejected.</strong>
+                            @if(Auth::guard('vendor')->user()->rejection_message)
+                                <div class="mt-2">
+                                    <strong>Reason:</strong> {{ Auth::guard('vendor')->user()->rejection_message }}
+                                </div>
+                            @endif
+                            <div class="mt-2">
+                                Please review the rejection reason above and resubmit your application with the necessary corrections.
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @elseif(!Auth::guard('vendor')->user()->isApproved())
+                        <div class="alert alert-info alert-dismissible mb-3" role="alert">
+                            <strong>Account pending approval.</strong> You can complete Vendor Info, Owner Details, and Owner Banking Info. Manage Hotel, Room List, Co-Hosts, Bookings, and Reviews will be available after superadmin approval.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
                     <div class="nk-block-head nk-block-head-sm">
                         <div class="nk-block-between">
                             <div class="nk-block-head-content">
@@ -31,6 +56,7 @@
                                         </ul>
                                     </div>
                                 </div>
+                                @if(Auth::guard('vendor')->user()->isApproved())
                                 <div class="dropdown d-inline">
                                     <a href="#" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"><em class="icon ni ni-reports"></em><span>Reports</span><em class="dd-indc icon ni ni-chevron-down"></em></a>
                                     <div class="dropdown-menu dropdown-menu-end">
@@ -41,6 +67,7 @@
                                         </ul>
                                     </div>
                                 </div>
+                                @endif
                             </div>
                         </div>
                     </div>

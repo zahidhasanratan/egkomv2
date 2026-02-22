@@ -1,5 +1,5 @@
 @extends('frontend.app')
-@section('title','Reset Password - EGKom')
+@section('title','Reset Password - EZBOOKING')
 @section('main')
 
 <style>

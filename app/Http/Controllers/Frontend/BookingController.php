@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Models\Coupon;
 use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +29,11 @@ class BookingController extends Controller
             return response()->json(['rooms' => []]);
         }
         
-        $rooms = Room::whereIn('id', $roomIds)->with('hotel')->get()->map(function($room) {
+        $rooms = Room::whereIn('id', $roomIds)
+            ->fromActiveHotels()
+            ->with('hotel')
+            ->get()
+            ->map(function($room) {
             // Parse display_options to get available additional requests
             $displayOptions = is_string($room->display_options) 
                 ? json_decode($room->display_options, true) 
@@ -279,6 +284,66 @@ class BookingController extends Controller
         ]);
     }
 
+    /**
+     * Validate coupon and return discount amount for checkout.
+     */
+    public function validateCoupon(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|string|max:64',
+            'subtotal' => 'required|numeric|min:0',
+            'hotel_id' => 'nullable|integer|exists:hotels,id',
+            'checkin_date' => 'required|date',
+            'checkout_date' => 'required|date|after:checkin_date',
+        ]);
+
+        $code = strtoupper(trim($request->code));
+        $subtotal = (float) $request->subtotal;
+        $hotelId = $request->hotel_id ? (int) $request->hotel_id : null;
+        $checkin = new \DateTime($request->checkin_date);
+        $checkout = new \DateTime($request->checkout_date);
+
+        $coupon = Coupon::where('code', $code)->first();
+        if (!$coupon) {
+            return response()->json([
+                'valid' => false,
+                'message' => 'Invalid coupon code.',
+            ]);
+        }
+
+        if (!$coupon->isValidFor($subtotal, $hotelId, $checkin, $checkout)) {
+            if (!$coupon->is_active) {
+                return response()->json(['valid' => false, 'message' => 'This coupon is no longer active.']);
+            }
+            if ($coupon->usage_limit !== null && $coupon->usage_count >= $coupon->usage_limit) {
+                return response()->json(['valid' => false, 'message' => 'This coupon has reached its usage limit.']);
+            }
+            if ($coupon->min_booking_amount !== null && $subtotal < (float) $coupon->min_booking_amount) {
+                return response()->json(['valid' => false, 'message' => 'Minimum booking amount for this coupon is BDT ' . number_format($coupon->min_booking_amount, 0) . '.']);
+            }
+            if (!$coupon->apply_to_all_hotels && $hotelId !== null) {
+                $ids = $coupon->hotel_ids ?? [];
+                if (!in_array($hotelId, array_map('intval', $ids), true)) {
+                    return response()->json(['valid' => false, 'message' => 'This coupon is not valid for the selected hotel.']);
+                }
+            }
+            $today = now()->startOfDay();
+            if ($coupon->valid_from->gt($today) || $coupon->valid_to->lt($today)) {
+                return response()->json(['valid' => false, 'message' => 'This coupon is not valid for the selected dates.']);
+            }
+            return response()->json(['valid' => false, 'message' => 'Coupon cannot be applied.']);
+        }
+
+        $discountAmount = $coupon->calculateDiscount($subtotal);
+        return response()->json([
+            'valid' => true,
+            'message' => 'Coupon applied successfully.',
+            'discount' => round($discountAmount, 2),
+            'grand_total' => round($subtotal - $discountAmount, 2),
+            'coupon_code' => $coupon->code,
+        ]);
+    }
+
     public function store(Request $request)
     {
         try {
@@ -350,10 +415,20 @@ class BookingController extends Controller
                 $subtotal += ($item['price'] * $item['quantity']);
             }
             $subtotal = $subtotal * $totalNights;
-            
-            $discount = 0; // Can be calculated based on coupon
-            $tax = 0; // Tax not applicable
-            $grandTotal = $subtotal - $discount; // Grand total without tax
+
+            $discount = 0;
+            $couponCode = $request->coupon_code ? strtoupper(trim($request->coupon_code)) : null;
+            $hotelIdFromCart = isset($roomsData[0]['hotelId']) ? (int) $roomsData[0]['hotelId'] : null;
+
+            if ($couponCode) {
+                $coupon = Coupon::where('code', $couponCode)->first();
+                if ($coupon && $coupon->isValidFor($subtotal, $hotelIdFromCart, $checkinDate, $checkoutDate)) {
+                    $discount = $coupon->calculateDiscount($subtotal);
+                }
+            }
+
+            $tax = 0;
+            $grandTotal = $subtotal - $discount;
 
             // Handle file uploads - save directly to public folder
             $nidFront = null;
@@ -460,9 +535,13 @@ class BookingController extends Controller
                 'discount' => $discount,
                 'tax' => $tax,
                 'grand_total' => $grandTotal,
-                'coupon_code' => $request->coupon_code,
+                'coupon_code' => $couponCode,
                 'payment_status' => 'unpaid',
             ]);
+
+            if ($couponCode && $discount > 0) {
+                Coupon::where('code', $couponCode)->increment('usage_count');
+            }
 
             DB::commit();
 
@@ -502,13 +581,56 @@ class BookingController extends Controller
         try {
             // Build callback URL from current request so cancel/return works (same host:port as user)
             $callbackUrl = request()->getSchemeAndHttpHost() . request()->getBasePath() . '/booking/payment/return';
+            
+            // Get ShurjoPay credentials with fallbacks - try multiple sources
+            $username = config('services.shurjopay.username');
+            if (empty($username)) {
+                $username = env('SP_USERNAME');
+            }
+            if (empty($username)) {
+                $username = env('MERCHANT_USERNAME');
+            }
+            
+            $password = config('services.shurjopay.password');
+            if (empty($password)) {
+                $password = env('SP_PASSWORD');
+            }
+            if (empty($password)) {
+                $password = env('MERCHANT_PASSWORD');
+            }
+            
+            $apiEndpoint = config('services.shurjopay.api');
+            if (empty($apiEndpoint)) {
+                $apiEndpoint = env('SHURJOPAY_API', 'https://engine.shurjopayment.com');
+            }
+            
+            // Validate credentials are not empty
+            if (empty($username) || empty($password)) {
+                Log::error('ShurjoPay credentials missing', [
+                    'username_set' => !empty($username),
+                    'password_set' => !empty($password),
+                    'config_username' => config('services.shurjopay.username'),
+                    'config_password' => config('services.shurjopay.password'),
+                    'env_sp_username' => env('SP_USERNAME'),
+                    'env_sp_password' => env('SP_PASSWORD'),
+                    'env_merchant_username' => env('MERCHANT_USERNAME'),
+                    'env_merchant_password' => env('MERCHANT_PASSWORD'),
+                    'booking_id' => $booking->id,
+                ]);
+                return redirect()->route('booking.payment.failed')->with('message', 'Payment gateway configuration error. Please contact support with Booking ID: ' . $booking->invoice_number);
+            }
+            
+            // Trim whitespace from credentials
+            $username = trim($username);
+            $password = trim($password);
+            
             $config = new ShurjopayConfig();
-            $config->username = config('services.shurjopay.username', env('SP_USERNAME'));
-            $config->password = config('services.shurjopay.password', env('SP_PASSWORD'));
-            $config->api_endpoint = config('services.shurjopay.api', env('SHURJOPAY_API'));
+            $config->username = $username;
+            $config->password = $password;
+            $config->api_endpoint = $apiEndpoint;
             $config->callback_url = $callbackUrl;
             $config->log_path = config('services.shurjopay.log_path', env('SP_LOG_LOCATION', storage_path('logs')));
-            $config->order_prefix = config('services.shurjopay.prefix', env('SP_PREFIX', 'SIC'));
+            $config->order_prefix = config('services.shurjopay.prefix', env('SP_PREFIX', env('MERCHANT_PREFIX', 'SIC')));
             $config->ssl_verifypeer = (bool) (env('CURLOPT_SSL_VERIFYPEER', 1));
             $sp = new Shurjopay($config);
 

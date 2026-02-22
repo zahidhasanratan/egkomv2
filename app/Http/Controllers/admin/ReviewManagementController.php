@@ -43,7 +43,7 @@ class ReviewManagementController extends Controller
         }
         
         $reviews = $query->orderBy('created_at', 'desc')->paginate(20);
-        $hotels = Hotel::where('approve', 1)->orderBy('description', 'asc')->get();
+        $hotels = Hotel::where('approve', 1)->where('is_suspended', 0)->orderBy('description', 'asc')->get();
         
         return view('auth.super_admin.reviews.index', compact('reviews', 'hotels'));
     }

@@ -81,6 +81,14 @@ class TourPackageController extends Controller
         $data = $validated;
         $data['is_active'] = $request->boolean('is_active', true);
 
+        // Handle image removal
+        if ($request->input('remove_current_image') == '1') {
+            if ($tour_package->image && file_exists(public_path($tour_package->image))) {
+                unlink(public_path($tour_package->image));
+            }
+            $data['image'] = null;
+        }
+
         if ($request->hasFile('image')) {
             if ($tour_package->image && file_exists(public_path($tour_package->image))) {
                 unlink(public_path($tour_package->image));

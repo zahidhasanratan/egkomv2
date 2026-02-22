@@ -1,5 +1,5 @@
 @extends('frontend.app')
-@section('title','EGKom')
+@section('title','EZBOOKING')
 @section('main')
 
 
@@ -962,7 +962,7 @@
                 <div class="col-xl-4 col-12">
                     <div class="card-add-home" style="background: url({{ asset('uploads')}}/smalladvertise/{{ $small->image }}) no-repeat center;">
                         <h2 class="project-title">{{ $small->title }}</h2>
-                        <!-- <h3 class="project-subtitle"><a href="https://booking.egkom.com/hotel-room-details.html#review"> View More</a></h3> -->
+                        <!-- <h3 class="project-subtitle"><a href="https://booking.ezbooking.com/hotel-room-details.html#review"> View More</a></h3> -->
                     </div>
                 </div>
                    @endforeach

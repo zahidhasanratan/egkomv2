@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EGKOM Login</title>
+    <title>EZBOOKING Login</title>
+    <link rel="stylesheet" href="{{ asset('frontend')}}/css/password-toggle.css">
 </head>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
@@ -113,14 +114,23 @@
         color: #212121;
     }
 
+    #signup:checked ~ .title-text .login{
+        margin-left: -50%;
+    }
+
     .form-container .form-inner{
         display: flex;
         width: 200%;
+        transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     }
 
     .form-container .form-inner form{
         width: 50%;
-        transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);;
+        transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    #signup:checked ~ .form-inner{
+        margin-left: -50%;
     }
 
     .form-inner form .field{
@@ -185,17 +195,24 @@
 <body>
 <div class="wrapper">
     <div class="title-text">
-        <div class="title login">EGKOM Login</div>
+        <div class="title login">Vendor Login</div>
+        <div class="title signup">Vendor Signup</div>
     </div>
     <div class="form-container">
-
+        <div class="slide-controls">
+            <input type="radio" name="slide" id="login" checked>
+            <input type="radio" name="slide" id="signup">
+            <label for="login" class="slide login">Login</label>
+            <label for="signup" class="slide signup">Signup</label>
+            <div class="slide-tab"></div>
+        </div>
         <div class="form-inner">
             @if ($errors->any())
                 <script>
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: '{{ $errors->first() }}', // Display the first error message
+                        text: '{{ $errors->first() }}',
                     });
                 </script>
             @endif
@@ -210,27 +227,53 @@
                 </script>
             @endif
 
-            <form action="{{ route('super-admin.login.submit') }}" method="POST" class="login">
+            <form action="{{ route('vendor-admin.login.submit') }}" method="POST" class="login">
                 @csrf
                 <div class="field">
                     <input type="email" name="email" placeholder="Email Address" required>
                 </div>
-
                 <div class="field">
                     <input type="password" name="password" placeholder="Password" required>
                 </div>
                 <div class="pass-link">
-                    <a href="{{ route('super-admin.password.request') }}">Forgot Password</a>
+                    <a href="{{ route('vendor-admin.password.request') }}">Forgot Password</a>
                 </div>
                 <div class="field">
                     <input type="submit" value="Login">
                 </div>
             </form>
 
+            <form action="{{ route('vendor-admin.signup.submit') }}" method="POST" class="signup">
+                @csrf
+                <div class="field">
+                    <input type="text" name="property_name" placeholder="Property/Hotel Name" value="{{ old('property_name') }}" required>
+                </div>
+                <div class="field">
+                    <input type="text" name="contact_person_name" placeholder="Contact Person Name" value="{{ old('contact_person_name') }}">
+                </div>
+                <div class="field">
+                    <input type="email" name="email" placeholder="Email Address" value="{{ old('email') }}" required>
+                </div>
+                <div class="field">
+                    <input type="tel" name="phone" placeholder="Phone Number" value="{{ old('phone') }}">
+                </div>
+                <div class="field">
+                    <input type="password" name="password" placeholder="Password (Min 8 characters)" required minlength="8">
+                </div>
+                <div class="field">
+                    <input type="password" name="password_confirmation" placeholder="Confirm Password" required minlength="8">
+                </div>
+                <div class="field">
+                    <input type="submit" value="Signup">
+                </div>
+                <div class="signup-link" style="color: #fff; text-align: center; margin-top: 20px; font-size: 14px;">
+                    By signing up, you agree that your account will be reviewed and approved by admin before you can access the dashboard.
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
-<script src="script.js"></script>
+<script src="{{ asset('frontend')}}/js/password-toggle.js"></script>
 </body>
 </html>

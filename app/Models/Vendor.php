@@ -30,10 +30,27 @@ class Vendor extends Authenticatable // Extend Authenticatable
         'trade_license_bin_tin',
         'bank_details',
         'password',
+        'status',
         'vendorId',
         'password_reset_token',
         'password_reset_expires_at',
+        'rejection_message',
     ];
 
     protected $hidden = ['password', 'remember_token'];
+
+    /** Vendor approval: pending | approved | rejected */
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_APPROVED = 'approved';
+    public const STATUS_REJECTED = 'rejected';
+
+    public function isApproved(): bool
+    {
+        return ($this->status ?? '') === self::STATUS_APPROVED;
+    }
+    
+    public function isRejected(): bool
+    {
+        return ($this->status ?? '') === self::STATUS_REJECTED;
+    }
 }

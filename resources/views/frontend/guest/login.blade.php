@@ -1,5 +1,5 @@
 @extends('frontend.app')
-@section('title','Guest Login - EGKom')
+@section('title','Guest Login - EZBOOKING')
 @section('main')
 
 <style>
@@ -170,7 +170,7 @@
 <div class="guest-auth-container">
     <div class="guest-auth-card">
         <h1 class="guest-auth-title">Log in or sign up</h1>
-        <h2 class="guest-auth-welcome">Welcome to Egkom</h2>
+        <h2 class="guest-auth-welcome">Welcome to EZBOOKING</h2>
         
         @if(session('success'))
             <div class="alert alert-success">

@@ -254,31 +254,34 @@
                                             <div class="row gy-4">
 
                                                 @foreach($photoFields as $index => $field)
+                                                    @php
+                                                        $fieldValue = $hotel->$field ?? null;
+                                                        if (is_string($fieldValue)) {
+                                                            $photos = json_decode($fieldValue, true) ?: [];
+                                                        } elseif (is_array($fieldValue)) {
+                                                            $photos = $fieldValue;
+                                                        } else {
+                                                            $photos = [];
+                                                        }
+                                                        if (is_array($photos)) {
+                                                            $photos = array_map(function ($photo) {
+                                                                return str_replace("\\", "/", $photo);
+                                                            }, $photos);
+                                                        } else {
+                                                            $photos = [];
+                                                        }
+                                                    @endphp
                                                     <div class="col-md-6 col-lg-4 col-xxl-3">
                                                         <div class="form-group mt-15">
-                                                            <label class="form-label">{{ $labels[$field] }}</label>
+                                                            <label class="form-label d-block mb-1">{{ $labels[$field] }}</label>
+                                                            <div class="mb-2 photo-delete-all-wrap" style="{{ !empty($photos) ? '' : 'display: none;' }}">
+                                                                <button type="button" class="btn btn-sm btn-outline-danger multiple-remove-all-btn" data-field="{{ $field }}" title="Remove all photos in this category">
+                                                                    <i class="fa fa-trash-o"></i> Delete All Photos
+                                                                </button>
+                                                            </div>
                                                             <div class="multiple-upload-container"
-                                                                 id="upload-container-{{ $index + 1 }}">
-                                                                @php
-                                                                    // Handle the field - it might be a string (JSON) or already an array
-                                                                    $fieldValue = $hotel->$field ?? null;
-                                                                    if (is_string($fieldValue)) {
-                                                                        $photos = json_decode($fieldValue, true) ?: [];
-                                                                    } elseif (is_array($fieldValue)) {
-                                                                        $photos = $fieldValue;
-                                                                    } else {
-                                                                        $photos = [];
-                                                                    }
-                                                                    // Remove extra backslashes from photo paths
-                                                                    if (is_array($photos)) {
-                                                                        $photos = array_map(function ($photo) {
-                                                                            return str_replace("\\", "/", $photo);
-                                                                        }, $photos);
-                                                                    } else {
-                                                                        $photos = [];
-                                                                    }
-                                                                @endphp
-
+                                                                 id="upload-container-{{ $index + 1 }}"
+                                                                 data-field="{{ $field }}">
                                                                 @if(!empty($photos))
                                                                     @foreach($photos as $photoIndex => $photo)
                                                                         <div class="multiple-thumbnail-item">
@@ -323,18 +326,47 @@
                                                                     const index = e.target.getAttribute('data-index');
                                                                     const field = e.target.getAttribute('data-field');
                                                                     const removedInput = document.getElementById('removed_' + field);
-
-                                                                    // Mark the index for removal
                                                                     if (removedInput) {
                                                                         let current = removedInput.value ? removedInput.value.split(',') : [];
                                                                         current.push(index);
                                                                         removedInput.value = current.join(',');
                                                                     }
-
-                                                                    // Remove the thumbnail visually
                                                                     e.target.parentElement.remove();
+                                                                    var cont = e.target.closest('.multiple-upload-container');
+                                                                    if (cont && cont.querySelectorAll('.multiple-thumbnail-item').length === 0) {
+                                                                        var w = cont.closest('.form-group').querySelector('.photo-delete-all-wrap');
+                                                                        if (w) w.style.display = 'none';
+                                                                    }
                                                                 }
                                                             });
+                                                        });
+                                                        document.addEventListener('click', function (e) {
+                                                            if (e.target.classList.contains('multiple-remove-all-btn') || (e.target.closest && e.target.closest('.multiple-remove-all-btn'))) {
+                                                                var btn = e.target.classList.contains('multiple-remove-all-btn') ? e.target : e.target.closest('.multiple-remove-all-btn');
+                                                                if (!btn) return;
+                                                                const field = btn.getAttribute('data-field');
+                                                                const removedInput = document.getElementById('removed_' + field);
+                                                                const container = document.querySelector('.multiple-upload-container[data-field="' + field + '"]');
+                                                                if (!container) return;
+                                                                const items = container.querySelectorAll('.multiple-thumbnail-item');
+                                                                const indices = [];
+                                                                items.forEach(function (el) {
+                                                                    var b = el.querySelector('.multiple-remove-btn');
+                                                                    if (b && b.getAttribute('data-index')) indices.push(b.getAttribute('data-index'));
+                                                                });
+                                                                if (removedInput && indices.length) {
+                                                                    const existing = removedInput.value ? removedInput.value.split(',') : [];
+                                                                    const combined = [...new Set(existing.concat(indices))];
+                                                                    removedInput.value = combined.join(',');
+                                                                }
+                                                                items.forEach(function (el) { el.remove(); });
+                                                                var fileInput = container.querySelector('.multiple-file-input');
+                                                                if (fileInput) fileInput.value = '';
+                                                                var containerId = container.id;
+                                                                if (containerId && window._partThreeUploadedImages) window._partThreeUploadedImages[containerId] = [];
+                                                                var wrap = btn.closest('.photo-delete-all-wrap');
+                                                                if (wrap) wrap.style.display = 'none';
+                                                            }
                                                         });
                                                     });
                                                 </script>
@@ -419,11 +451,21 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const uploadedImages = {};
+            window._partThreeUploadedImages = uploadedImages;
+
+            function toggleDeleteAllForContainer(container) {
+                const formGroup = container.closest('.form-group');
+                const wrap = formGroup ? formGroup.querySelector('.photo-delete-all-wrap') : null;
+                if (wrap) {
+                    const total = container.querySelectorAll('.multiple-thumbnail-item').length;
+                    wrap.style.display = total > 0 ? 'block' : 'none';
+                }
+            }
 
             function initializeMultipleUpload(container) {
                 const fileInput = container.querySelector('.multiple-file-input');
                 const thumbnailGallery = container.querySelector('.multiple-thumbnail-gallery');
-                const containerId = container.id || `dynamic-${Date.now()}`; // Fallback ID for dynamic containers
+                const containerId = container.id || `dynamic-${Date.now()}`;
 
                 if (!uploadedImages[containerId]) {
                     uploadedImages[containerId] = [];
@@ -460,20 +502,20 @@
                                     if (index > -1) {
                                         uploadedImages[containerId].splice(index, 1);
                                     }
-                                    // Clear file input if it's a single file input (featured_photo)
                                     if (!fileInput.hasAttribute('multiple')) {
                                         fileInput.value = '';
                                     }
+                                    toggleDeleteAllForContainer(container);
                                 });
                                 thumbnailItem.appendChild(img);
                                 thumbnailItem.appendChild(removeBtn);
                                 thumbnailGallery.appendChild(thumbnailItem);
                                 uploadedImages[containerId].push(file);
                                 console.log(`Added thumbnail for file ${file.name} in container ${containerId}`);
+                                toggleDeleteAllForContainer(container);
                             };
                             reader.readAsDataURL(file);
                         }
-                        // Don't reset file input value - let it submit with the form
                     }
                 });
             }

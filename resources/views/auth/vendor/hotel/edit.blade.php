@@ -93,7 +93,24 @@
                                                                     @enderror
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-12">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="total_rooms">Total Number of Room</label>
+                                                                    <input type="number" 
+                                                                           class="form-control" 
+                                                                           name="total_rooms" 
+                                                                           id="total_rooms"
+                                                                           value="{{ old('total_rooms', \App\Models\Room::where('hotel_id', $hotel->id)->count()) }}"
+                                                                           min="0"
+                                                                           placeholder="Enter number of rooms"
+                                                                           style="border: 1px solid #dee2e6; border-radius: 6px; padding: 8px 12px;">
+                                                                    <small class="text-muted">Current: {{ \App\Models\Room::where('hotel_id', $hotel->id)->count() }} rooms. Increase to add blank rooms.</small>
+                                                                    @error('total_rooms')
+                                                                        <span class="text-danger">{{ $message }}</span>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label class="form-label" for="address">Address</label>
                                                                     <textarea class="form-control" 
@@ -1154,8 +1171,10 @@
                                     <!-- Most Popular Facilities -->
                                         <div class="tab-pane" id="tabItem4">
                                             <div class="row mt-15">
-                                                <div class="checkbox-section">
-                                                    <h3 class="can-tittle">Most Popular Facilities</h3>
+                                                <!-- Left: Most Popular Facilities -->
+                                                <div class="col-md-6 col-lg-6">
+                                                    <div class="checkbox-section">
+                                                        <h3 class="can-tittle">Most Popular Facilities</h3>
 
                                                     <!-- Select All Toggle -->
                                                     <div class="chk-all-sec">
@@ -1330,9 +1349,10 @@
                                                     @error('facilities')
                                                     <span class="text-danger">{{ $message }}</span>
                                                     @enderror
+                                                    </div>
                                                 </div>
-                                                <div class="row">
-
+                                                <!-- Right: Hotel Facilities Categories -->
+                                                <div class="col-md-6 col-lg-6">
                                                     <div class="container mt-15">
                                                         <div class="row">
                                                             <h3 class="can-tittle">Hotel Facilities Categories</h3>
@@ -1377,9 +1397,7 @@
 
                                                         </div>
                                                     </div>
-
-
-
+                                                </div>
                                                 </div>
                                                 <!-- Save / Submit Buttons -->
                                                 <div class="row">
@@ -1599,24 +1617,29 @@
                                             <div class="row gy-4">
 
                                                 @foreach($photoFields as $index => $field)
+                                                    @php
+                                                        $photos = json_decode($hotel->$field, true);
+                                                        if (is_array($photos)) {
+                                                            $photos = array_map(function ($photo) {
+                                                                return str_replace("\\", "/", $photo);
+                                                            }, $photos);
+                                                        } else {
+                                                            $photos = [];
+                                                        }
+                                                    @endphp
                                                     <div class="col-md-6 col-lg-4 col-xxl-3">
                                                         <div class="form-group mt-15">
-                                                            <label class="form-label">{{ $labels[$field] }}</label>
+                                                            <label class="form-label d-block mb-1">{{ $labels[$field] }}</label>
+                                                            @if(!empty($photos))
+                                                                <div class="mb-2">
+                                                                    <button type="button" class="btn btn-sm btn-outline-danger multiple-remove-all-btn" data-field="{{ $field }}" title="Remove all photos in this category">
+                                                                        <i class="fa fa-trash-o"></i> Delete All Photos
+                                                                    </button>
+                                                                </div>
+                                                            @endif
                                                             <div class="multiple-upload-container"
-                                                                 id="upload-container-{{ $index + 1 }}">
-                                                                @php
-                                                                    // Decode the field and handle extra backslashes
-                                                                    $photos = json_decode($hotel->$field, true);
-                                                                    // Check if the decoded photos are an array
-                                                                    if (is_array($photos)) {
-                                                                        $photos = array_map(function ($photo) {
-                                                                            return str_replace("\\", "/", $photo); // Remove extra backslashes
-                                                                        }, $photos);
-                                                                    } else {
-                                                                        $photos = []; // If not an array, set to an empty array
-                                                                    }
-                                                                @endphp
-
+                                                                 id="upload-container-{{ $index + 1 }}"
+                                                                 data-field="{{ $field }}">
                                                                 @if(!empty($photos))
                                                                     @foreach($photos as $photoIndex => $photo)
                                                                         <div class="multiple-thumbnail-item">
@@ -1659,18 +1682,37 @@
                                                                         const index = e.target.getAttribute('data-index');
                                                                         const field = e.target.getAttribute('data-field');
                                                                         const removedInput = document.getElementById('removed_' + field);
-
-                                                                        // Mark the index for removal
                                                                         if (removedInput) {
                                                                             let current = removedInput.value ? removedInput.value.split(',') : [];
                                                                             current.push(index);
                                                                             removedInput.value = current.join(',');
                                                                         }
-
-                                                                        // Remove the thumbnail visually
                                                                         e.target.parentElement.remove();
                                                                     }
                                                                 });
+                                                            });
+                                                            document.addEventListener('click', function (e) {
+                                                                if (e.target.classList.contains('multiple-remove-all-btn') || (e.target.closest && e.target.closest('.multiple-remove-all-btn'))) {
+                                                                    var btn = e.target.classList.contains('multiple-remove-all-btn') ? e.target : e.target.closest('.multiple-remove-all-btn');
+                                                                    if (!btn) return;
+                                                                    const field = btn.getAttribute('data-field');
+                                                                    const removedInput = document.getElementById('removed_' + field);
+                                                                    const container = document.querySelector('.multiple-upload-container[data-field="' + field + '"]');
+                                                                    const items = container ? container.querySelectorAll('.multiple-thumbnail-item') : [];
+                                                                    const indices = [];
+                                                                    items.forEach(function (el) {
+                                                                        var b = el.querySelector('.multiple-remove-btn');
+                                                                        if (b) indices.push(b.getAttribute('data-index'));
+                                                                    });
+                                                                    if (removedInput && indices.length) {
+                                                                        const existing = removedInput.value ? removedInput.value.split(',') : [];
+                                                                        const combined = [...new Set(existing.concat(indices))];
+                                                                        removedInput.value = combined.join(',');
+                                                                    }
+                                                                    items.forEach(function (el) { el.remove(); });
+                                                                    var btnParent = btn.closest('.mb-2');
+                                                                if (btnParent) btnParent.remove(); else if (btn.parentNode) btn.remove();
+                                                                }
                                                             });
                                                         });
                                                     </script>

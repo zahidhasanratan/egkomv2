@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Superadmin;
 
 use App\Http\Controllers\Controller;
-
+use App\Models\HotelSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Artisan;
@@ -71,5 +71,70 @@ class SettingsController extends Controller
         Artisan::call('config:clear');
 
         return back()->with('success', 'SMTP settings updated successfully.');
+    }
+
+    /**
+     * Update logo
+     */
+    public function updateLogo(Request $request)
+    {
+        $request->validate([
+            'logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Max 2MB
+        ]);
+
+        try {
+            // Get or create hotel setting
+            $hotelSetting = HotelSetting::first();
+            if (!$hotelSetting) {
+                $hotelSetting = new HotelSetting();
+                $hotelSetting->hotel_name = 'EZBOOKING';
+                $hotelSetting->hotel_address = '';
+                $hotelSetting->email = '';
+                $hotelSetting->phone = '';
+                $hotelSetting->copyright = 'Copyright © 2024 EZBOOKING. All Rights Reserved.';
+            }
+
+            // Handle file upload
+            if ($request->hasFile('logo')) {
+                $file = $request->file('logo');
+                $fileName = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
+                $destinationPath = public_path('uploads/logos');
+                
+                // Create directory if it doesn't exist
+                if (!File::exists($destinationPath)) {
+                    File::makeDirectory($destinationPath, 0755, true);
+                }
+
+                // Delete old logo if exists
+                if ($hotelSetting->hotel_logo && File::exists(public_path($hotelSetting->hotel_logo))) {
+                    File::delete(public_path($hotelSetting->hotel_logo));
+                }
+
+                // Move uploaded file
+                $file->move($destinationPath, $fileName);
+                $logoPath = 'uploads/logos/' . $fileName;
+
+                // Update hotel setting
+                $hotelSetting->hotel_logo = $logoPath;
+                $hotelSetting->save();
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Logo updated successfully!',
+                    'logo_path' => asset($logoPath)
+                ]);
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'No logo file uploaded.'
+            ], 400);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error updating logo: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

@@ -34,7 +34,7 @@ class GuestPasswordResetMail extends Mailable
     {
         $resetUrl = url('/guest/password/reset/' . $this->token);
         
-        return $this->subject('Reset Your Password - EGKom')
+        return $this->subject('Reset Your Password - EZBOOKING')
                     ->view('emails.guest-password-reset')
                     ->with([
                         'name' => $this->name,

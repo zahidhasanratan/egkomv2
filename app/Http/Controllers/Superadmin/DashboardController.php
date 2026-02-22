@@ -47,7 +47,7 @@ class DashboardController extends Controller
         $checkInToday = Booking::whereDate('checkin_date', $today)->whereIn('booking_status', ['confirmed', 'pending', 'staying'])->count();
         $checkOutToday = Booking::whereDate('checkout_date', $today)->whereIn('booking_status', ['confirmed', 'staying'])->count();
         $totalRooms = Room::count();
-        $totalHotels = Hotel::where('approve', 1)->where('status', 'submitted')->count();
+        $totalHotels = Hotel::where('approve', 1)->where('is_suspended', 0)->where('status', 'submitted')->count();
         $totalVendors = Vendor::count();
 
         // Period counts (this month, this week)
@@ -377,8 +377,32 @@ class DashboardController extends Controller
 
     public function allVendorList()
     {
-        $vendorList = Vendor::all();
-        return view('auth.super_admin.allVendorList', compact('vendorList'));
+        $pendingVendors = Vendor::whereIn('status', [Vendor::STATUS_PENDING, Vendor::STATUS_REJECTED])->orderBy('created_at', 'desc')->get();
+        $approvedVendors = Vendor::where('status', Vendor::STATUS_APPROVED)->orderBy('created_at', 'desc')->get();
+        return view('auth.super_admin.allVendorList', compact('pendingVendors', 'approvedVendors'));
+    }
+
+    public function approveVendor($id)
+    {
+        $vendor = Vendor::findOrFail($id);
+        $vendor->status = Vendor::STATUS_APPROVED;
+        $vendor->rejection_message = null; // Clear rejection message on approval
+        $vendor->save();
+        return redirect()->route('super-admin.vendor.index')->with('success', 'Vendor approved successfully.');
+    }
+    
+    public function rejectVendor(Request $request, $id)
+    {
+        $request->validate([
+            'rejection_message' => 'required|string|max:1000',
+        ]);
+        
+        $vendor = Vendor::findOrFail($id);
+        $vendor->status = Vendor::STATUS_REJECTED;
+        $vendor->rejection_message = $request->rejection_message;
+        $vendor->save();
+        
+        return redirect()->route('super-admin.vendor.index')->with('success', 'Vendor rejected successfully.');
     }
 
     public function vendorInfoCreate($id)
@@ -483,6 +507,7 @@ class DashboardController extends Controller
             $vendor->hotel_name = $request->input('property_name');
             $vendor->email      = $request->input('email');
             $vendor->password   = bcrypt($request->input('password'));
+            $vendor->status     = Vendor::STATUS_PENDING;
 
             // If your vendors table has other NOT NULL columns, set safe defaults
             $maybeCols = [

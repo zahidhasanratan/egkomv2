@@ -94,7 +94,7 @@ class GuestAuthController extends Controller
         $request->session()->save();
         session()->save();
 
-        return redirect('/')->with('success', 'Account created successfully! Welcome to Egkom!');
+        return redirect('/')->with('success', 'Account created successfully! Welcome to EZBOOKING!');
     }
 
     /**

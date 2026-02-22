@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Failed / Cancelled - EGKOM</title>
+    <title>Payment Failed / Cancelled - EZBOOKING</title>
     <style>
         :root { --brand: #90278e; --text-primary: #1a1a1a; --text-secondary: #666; }
         * { margin: 0; padding: 0; box-sizing: border-box; }

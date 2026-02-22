@@ -137,7 +137,7 @@
     <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="{{ route('co-host.dashboard') }}">
-                <i class="fas fa-hotel me-2"></i> EGKom Co-Host
+                <i class="fas fa-hotel me-2"></i> EZBOOKING Co-Host
             </a>
             <div class="ms-auto">
                 <div class="user-info">
@@ -332,7 +332,7 @@
                         </tr>
                         @if($booking->discount > 0)
                         <tr>
-                            <td>Discount:</td>
+                            <td>Discount@if($booking->coupon_code) (Coupon: {{ $booking->coupon_code }})@endif:</td>
                             <td class="text-end" style="color: #1ee0ac;"><strong>- BDT {{ number_format($booking->discount, 2) }}</strong></td>
                         </tr>
                         @endif

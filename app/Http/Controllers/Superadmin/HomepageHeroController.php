@@ -26,7 +26,7 @@ class HomepageHeroController extends Controller
         $request->validate([
             'title'   => 'required|string|max:255',
             'subtitle'=> 'required|string|max:500',
-            'video'   => 'nullable|file|mimes:mp4,webm,ogg,mov|max:102400', // max 100MB
+            'video'   => 'nullable|file|mimes:mp4,webm,ogg,mov|max:10240', // max 10 MB
         ]);
 
         $hero = HomepageHeroSetting::get();
@@ -36,7 +36,14 @@ class HomepageHeroController extends Controller
             'subtitle' => strip_tags($request->subtitle),
         ];
 
-        if ($request->hasFile('video')) {
+        // Remove current video if requested (revert to default)
+        if ($request->filled('remove_video')) {
+            $oldPath = $hero->video_path;
+            if ($oldPath && str_starts_with($oldPath, 'uploads/homepage_hero/') && File::exists(public_path($oldPath))) {
+                File::delete(public_path($oldPath));
+            }
+            $data['video_path'] = 'frontend/images/slider/hero-bg-cover.mp4';
+        } elseif ($request->hasFile('video')) {
             $uploadPath = public_path('uploads/homepage_hero');
             if (!File::isDirectory($uploadPath)) {
                 File::makeDirectory($uploadPath, 0755, true);
@@ -46,7 +53,6 @@ class HomepageHeroController extends Controller
             $file->move($uploadPath, $name);
             $data['video_path'] = 'uploads/homepage_hero/' . $name;
 
-            // Optionally remove old uploaded file (if it was under uploads/homepage_hero/)
             $oldPath = $hero->video_path;
             if ($oldPath && str_starts_with($oldPath, 'uploads/homepage_hero/') && File::exists(public_path($oldPath))) {
                 File::delete(public_path($oldPath));

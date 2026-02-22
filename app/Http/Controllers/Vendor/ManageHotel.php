@@ -16,17 +16,47 @@ use Illuminate\Support\Facades\Storage;
 class ManageHotel extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $hotels = Hotel::where('vendor_id', auth()->user()->id)
-            ->where('approve', 1)
-            ->paginate(10);
+        $query = Hotel::where('vendor_id', auth()->user()->id)
+            ->where('approve', 1);
+        
+        // Search functionality
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('description', 'like', "%{$search}%")
+                  ->orWhere('address', 'like', "%{$search}%")
+                  ->orWhere('city', 'like', "%{$search}%")
+                  ->orWhere('district', 'like', "%{$search}%")
+                  ->orWhere('status', 'like', "%{$search}%");
+            });
+        }
+        
+        $hotels = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
         return view('auth.vendor.hotel.index', compact('hotels'));
     }
 
-    public function indexSuper()
+    public function indexSuper(Request $request)
     {
-        $hotels = Hotel::paginate(10);
+        $query = Hotel::query();
+        
+        // Search functionality
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('description', 'like', "%{$search}%")
+                  ->orWhere('address', 'like', "%{$search}%")
+                  ->orWhere('city', 'like', "%{$search}%")
+                  ->orWhere('district', 'like', "%{$search}%")
+                  ->orWhereHas('vendor', function($vendorQuery) use ($search) {
+                      $vendorQuery->where('contact_person_name', 'like', "%{$search}%")
+                                   ->orWhere('email', 'like', "%{$search}%");
+                  });
+            });
+        }
+        
+        $hotels = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
         return view('auth.super_admin.hotel.index', compact('hotels'));
     }
 
@@ -90,6 +120,9 @@ class ManageHotel extends Controller
             'apartments.*.name'       => 'nullable|string|max:255',
             'apartments.*.number'     => 'nullable|string|max:255',
             'apartments.*.floor'      => 'nullable|string|max:255',
+            
+            // Total Number of Room
+            'total_rooms'             => 'nullable|integer|min:0|max:1000',
         ]);
 
         // Start with safe copy (exclude token/method/status)
@@ -225,17 +258,52 @@ class ManageHotel extends Controller
 
         // 🔑 Save apartment_count - rooms will be created as blank entries on the room list page
         $data['apartment_count'] = (int) $request->input('apartment_count', 0);
+        
+        // Total Number of Room
+        $totalRooms = (int) $request->input('total_rooms', 0);
 
         Log::debug('Final data (before transaction):', $data);
 
         try {
-            DB::transaction(function () use ($data, $request) {
+            DB::transaction(function () use ($data, $request, $totalRooms) {
                 // 1) Create the Hotel
                 /** @var \App\Models\Hotel $hotel */
                 $hotel = Hotel::create($data);
 
-                // Rooms will be created as blank entries when the room list page is first accessed
-                Log::info('Hotel created', ['hotel_id' => $hotel->id, 'apartment_count' => $hotel->apartment_count]);
+                // 2) Create blank rooms if total_rooms is specified
+                if ($totalRooms > 0) {
+                    $blankRooms = [];
+                    for ($i = 1; $i <= $totalRooms; $i++) {
+                        $blankRooms[] = [
+                            'hotel_id' => $hotel->id,
+                            'name' => '',
+                            'number' => '',
+                            'floor_number' => '',
+                            'price_per_night' => 0,
+                            'weekend_price' => 0,
+                            'holiday_price' => 0,
+                            'total_persons' => 0,
+                            'size' => 0,
+                            'total_rooms' => 0,
+                            'total_washrooms' => 0,
+                            'total_beds' => 0,
+                            'is_active' => 0,
+                            'status' => 'draft',
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+                    }
+                    
+                    if (!empty($blankRooms)) {
+                        Room::insert($blankRooms);
+                        Log::info('Created blank rooms for hotel', [
+                            'hotel_id' => $hotel->id,
+                            'rooms_created' => count($blankRooms)
+                        ]);
+                    }
+                }
+
+                Log::info('Hotel created', ['hotel_id' => $hotel->id, 'apartment_count' => $hotel->apartment_count, 'total_rooms' => $totalRooms]);
             });
         } catch (\Throwable $e) {
             Log::error('Error creating hotel/rooms: '.$e->getMessage(), ['trace' => $e->getTraceAsString()]);
@@ -461,6 +529,8 @@ class ManageHotel extends Controller
             'custom_nearby_areas'         => 'nullable|array',
 
             'status'                      => 'required|in:draft,submitted',
+            
+            'total_rooms'                 => 'nullable|integer|min:0|max:1000',
 
             'kitchen_photos.*'            => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'washroom_photos.*'           => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -637,6 +707,44 @@ class ManageHotel extends Controller
 
         // 8) Always keep vendor_id unchanged
         $data['vendor_id'] = $hotel->vendor_id;
+
+        // 9) Handle total_rooms - create additional blank rooms if count increased
+        $totalRooms = (int) $request->input('total_rooms', 0);
+        if ($totalRooms > 0) {
+            $existingRoomsCount = Room::where('hotel_id', $hotel->id)->count();
+            if ($totalRooms > $existingRoomsCount) {
+                $roomsToAdd = $totalRooms - $existingRoomsCount;
+                $blankRooms = [];
+                for ($i = 1; $i <= $roomsToAdd; $i++) {
+                    $blankRooms[] = [
+                        'hotel_id' => $hotel->id,
+                        'name' => '',
+                        'number' => '',
+                        'floor_number' => '',
+                        'price_per_night' => 0,
+                        'weekend_price' => 0,
+                        'holiday_price' => 0,
+                        'total_persons' => 0,
+                        'size' => 0,
+                        'total_rooms' => 0,
+                        'total_washrooms' => 0,
+                        'total_beds' => 0,
+                        'is_active' => 0,
+                        'status' => 'draft',
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+                
+                if (!empty($blankRooms)) {
+                    Room::insert($blankRooms);
+                    Log::info('Added blank rooms for hotel', [
+                        'hotel_id' => $hotel->id,
+                        'rooms_added' => count($blankRooms)
+                    ]);
+                }
+            }
+        }
 
         // 10) Update and redirect
         $hotel->update($data);
@@ -918,6 +1026,25 @@ class ManageHotel extends Controller
     {
         $hotel = Hotel::findOrFail($id);
         $hotel->approve = $request->approve == 1 ? 1 : 0;
+        // Clear suspend status when unapproving
+        if ($request->approve != 1) {
+            $hotel->is_suspended = 0;
+        }
+        $hotel->save();
+
+        return response()->json(['success' => true]);
+    }
+    
+    public function toggleSuspend(Request $request, $id)
+    {
+        $hotel = Hotel::findOrFail($id);
+        
+        // Only allow suspending approved hotels
+        if ($hotel->approve != 1) {
+            return response()->json(['success' => false, 'message' => 'Only approved hotels can be suspended.'], 400);
+        }
+        
+        $hotel->is_suspended = $request->is_suspended == 1 ? 1 : 0;
         $hotel->save();
 
         return response()->json(['success' => true]);

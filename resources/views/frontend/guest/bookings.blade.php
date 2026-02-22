@@ -1,8 +1,9 @@
 @extends('frontend.app')
-@section('title','My Bookings - EGKom')
+@section('title','My Bookings - EZBOOKING')
 @section('main')
 
 @include('frontend.guest.dashboard-styles')
+@include('frontend.guest.dashboard-header')
 
 <style>
     .bookings-grid {
@@ -328,6 +329,11 @@
                         </div>
                         
                         <div class="booking-card-footer">
+                            @if($booking->coupon_code && ($booking->discount ?? 0) > 0)
+                            <div class="small text-muted mb-1" style="padding: 0 20px;">
+                                <i class="fa fa-tag"></i> Coupon <strong>{{ $booking->coupon_code }}</strong> applied (-BDT {{ number_format($booking->discount, 2) }})
+                            </div>
+                            @endif
                             <div class="booking-total">
                                 <span class="total-label">Total Amount</span>
                                 <span class="total-amount">BDT {{ number_format($booking->grand_total, 2) }}</span>

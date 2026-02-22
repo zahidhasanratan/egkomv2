@@ -292,9 +292,13 @@ $(document).ready(function() {
         }
 
         document.querySelectorAll("#desktop-suggestions-list .suggestion-item").forEach(item => {
-          item.addEventListener("click", function () {
-            document.getElementById("desktop-destination-input").value = this.querySelector("strong").innerText;
-            hideDesktopSuggestions();
+          item.addEventListener("mousedown", function (e) {
+            var hotelName = item.getAttribute("data-hotel-name") || (item.querySelector("strong") && item.querySelector("strong").innerText);
+            if (hotelName && document.getElementById("desktop-destination-input")) {
+              e.preventDefault();
+              document.getElementById("desktop-destination-input").value = hotelName.trim();
+              hideDesktopSuggestions();
+            }
           });
         });
 

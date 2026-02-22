@@ -173,38 +173,210 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <form action="{{ route('vendor.bookings.update', $booking->id) }}" method="POST">
+                                    <form id="editBookingForm" action="{{ route('vendor.bookings.update', $booking->id) }}" method="POST">
                                         @csrf
                                         @method('PUT')
                                         
+                                        @php
+                                            $firstRoom = $booking->rooms_data[0] ?? null;
+                                            $currentHotelId = $firstRoom['hotelId'] ?? null;
+                                            $currentRoomId = $firstRoom['roomId'] ?? null;
+                                            $pricePerNight = $firstRoom['price'] ?? 0;
+                                        @endphp
+
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
+                                                    <label for="hotel_id">Hotel <span class="text-danger">*</span></label>
+                                                    <select class="form-select" id="hotel_id" name="hotel_id" required>
+                                                        <option value="">-- Select Hotel --</option>
+                                                        @foreach($hotels as $hotel)
+                                                            <option value="{{ $hotel->id }}" {{ $currentHotelId == $hotel->id ? 'selected' : '' }}>
+                                                                {{ $hotel->description ?? $hotel->property_category ?? 'Hotel #' . $hotel->id }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="room_id">Room <span class="text-danger">*</span></label>
+                                                    <select class="form-select @error('room_id') is-invalid @enderror" id="room_id" name="room_id" required>
+                                                        <option value="">-- Select Room --</option>
+                                                        @foreach($rooms as $room)
+                                                            <option value="{{ $room->id }}" {{ $currentRoomId == $room->id ? 'selected' : '' }} data-price="{{ $room->price_per_night }}">
+                                                                {{ $room->name }} - BDT {{ number_format($room->price_per_night, 2) }}/night
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    @error('room_id')
+                                                        <span class="invalid-feedback">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="price_per_night">Price Per Night (BDT) <span class="text-danger">*</span></label>
+                                                    <input type="number" name="price_per_night" id="price_per_night" class="form-control" step="0.01" min="0" value="{{ old('price_per_night', $pricePerNight) }}" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
                                                     <label for="checkin_date">Check-in Date <span class="text-danger">*</span></label>
-                                                    <input type="date" 
-                                                           class="form-control @error('checkin_date') is-invalid @enderror" 
-                                                           id="checkin_date" 
-                                                           name="checkin_date" 
-                                                           value="{{ old('checkin_date', $booking->checkin_date->format('Y-m-d')) }}" 
-                                                           required>
+                                                    <input type="date" class="form-control @error('checkin_date') is-invalid @enderror" id="checkin_date" name="checkin_date" value="{{ old('checkin_date', $booking->checkin_date->format('Y-m-d')) }}" required>
                                                     @error('checkin_date')
                                                         <span class="invalid-feedback">{{ $message }}</span>
                                                     @enderror
                                                 </div>
                                             </div>
-                                            
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="checkout_date">Check-out Date <span class="text-danger">*</span></label>
-                                                    <input type="date" 
-                                                           class="form-control @error('checkout_date') is-invalid @enderror" 
-                                                           id="checkout_date" 
-                                                           name="checkout_date" 
-                                                           value="{{ old('checkout_date', $booking->checkout_date->format('Y-m-d')) }}" 
-                                                           required>
+                                                    <input type="date" class="form-control @error('checkout_date') is-invalid @enderror" id="checkout_date" name="checkout_date" value="{{ old('checkout_date', $booking->checkout_date->format('Y-m-d')) }}" required>
                                                     @error('checkout_date')
                                                         <span class="invalid-feedback">{{ $message }}</span>
                                                     @enderror
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="total_nights_display">Total Nights</label>
+                                                    <input type="text" id="total_nights_display" class="form-control" readonly value="{{ $booking->total_nights }}">
+                                                    <small class="text-muted">Auto-calculated from check-in / check-out dates</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="quantity">Room Quantity</label>
+                                                    <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity" value="{{ old('quantity', $firstRoom['quantity'] ?? 1) }}" min="1">
+                                                    @error('quantity')
+                                                        <span class="invalid-feedback">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="booking_status">Booking Status</label>
+                                                    <select class="form-select" id="booking_status" name="booking_status">
+                                                        <option value="pending" {{ old('booking_status', $booking->booking_status) == 'pending' ? 'selected' : '' }}>Pending</option>
+                                                        <option value="confirmed" {{ old('booking_status', $booking->booking_status) == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
+                                                        <option value="staying" {{ old('booking_status', $booking->booking_status) == 'staying' ? 'selected' : '' }}>Staying</option>
+                                                        <option value="completed" {{ old('booking_status', $booking->booking_status) == 'completed' ? 'selected' : '' }}>Completed</option>
+                                                        <option value="cancelled" {{ old('booking_status', $booking->booking_status) == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="payment_status">Payment Status</label>
+                                                    <select class="form-select @error('payment_status') is-invalid @enderror" id="payment_status" name="payment_status">
+                                                        <option value="unpaid" {{ old('payment_status', $booking->payment_status) == 'unpaid' ? 'selected' : '' }}>Unpaid</option>
+                                                        <option value="partial" {{ old('payment_status', $booking->payment_status) == 'partial' ? 'selected' : '' }}>Partial</option>
+                                                        <option value="paid" {{ old('payment_status', $booking->payment_status) == 'paid' ? 'selected' : '' }}>Paid</option>
+                                                    </select>
+                                                    @error('payment_status')
+                                                        <span class="invalid-feedback">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="paid_amount">Paid Amount (BDT)</label>
+                                                    <input type="number" step="0.01" min="0" class="form-control @error('paid_amount') is-invalid @enderror" id="paid_amount" name="paid_amount" value="{{ old('paid_amount', $booking->paid_amount ?? 0) }}">
+                                                    @error('paid_amount')
+                                                        <span class="invalid-feedback">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="discount">Discount (BDT)</label>
+                                                    <input type="number" name="discount" id="discount" class="form-control" step="0.01" min="0" value="{{ old('discount', $booking->discount ?? 0) }}">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="tax_percentage">Tax Percentage (%)</label>
+                                                    <input type="number" name="tax_percentage" id="tax_percentage" class="form-control" step="0.01" min="0" max="100" value="{{ old('tax_percentage', $booking->tax_percentage ?? 15) }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="platform_fee">Platform Fee (BDT)</label>
+                                                    <input type="number" name="platform_fee" id="platform_fee" class="form-control" step="0.01" min="0" value="{{ old('platform_fee', $booking->platform_fee ?? 0) }}">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 mb-3">
+                                            <div class="card" style="background: #f8f9fa;">
+                                                <div class="card-body">
+                                                    <h6 class="mb-3">Pricing Summary</h6>
+                                                    @if($booking->coupon_code)
+                                                    <div class="row mb-2">
+                                                        <div class="col-12"><span class="badge bg-secondary">Coupon applied: {{ $booking->coupon_code }}</span></div>
+                                                    </div>
+                                                    @endif
+                                                    <div class="row">
+                                                        <div class="col-md-2"><strong>Subtotal:</strong> <span id="subtotal_display">BDT 0.00</span></div>
+                                                        <div class="col-md-2"><strong>Discount:</strong> <span id="discount_display">BDT 0.00</span></div>
+                                                        <div class="col-md-2"><strong>Tax:</strong> <span id="tax_display">BDT 0.00</span></div>
+                                                        <div class="col-md-2"><strong>Platform Fee:</strong> <span id="platform_fee_display">BDT 0.00</span></div>
+                                                        <div class="col-md-4"><strong>Grand Total:</strong> <span id="grand_total_display" style="font-size: 1.2em; color: #90278e;">BDT 0.00</span></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12"><hr><h5 class="mb-3">Guest Information</h5></div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="guest_name">Guest Name <span class="text-danger">*</span></label>
+                                                    <input type="text" name="guest_name" id="guest_name" class="form-control" value="{{ old('guest_name', $booking->guest_name) }}" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="guest_phone">Guest Phone</label>
+                                                    <input type="text" name="guest_phone" id="guest_phone" class="form-control" value="{{ old('guest_phone', $booking->guest_phone) }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="guest_email">Guest Email</label>
+                                                    <input type="email" name="guest_email" id="guest_email" class="form-control" value="{{ old('guest_email', $booking->guest_email) }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="home_address">Home Address</label>
+                                                    <textarea name="home_address" id="home_address" class="form-control" rows="2">{{ old('home_address', $booking->home_address) }}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mt-3">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="admin_note">Admin Note</label>
+                                                    <textarea class="form-control @error('admin_note') is-invalid @enderror" id="admin_note" name="admin_note" rows="4" placeholder="Add any notes about this booking...">{{ old('admin_note', $booking->admin_note) }}</textarea>
+                                                    @error('admin_note')
+                                                        <span class="invalid-feedback">{{ $message }}</span>
+                                                    @enderror
+                                                    <small class="form-text text-muted">This note is only visible to admins</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -258,113 +430,7 @@
                                             </div>
                                         </div>
 
-                                        @php
-                                            $firstRoom = $booking->rooms_data[0] ?? null;
-                                            $currentHotelId = $firstRoom['hotelId'] ?? null;
-                                            $currentRoomId = $firstRoom['roomId'] ?? null;
-                                        @endphp
-
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="hotel_id">Hotel</label>
-                                                    <select class="form-control" id="hotel_id" name="hotel_id" onchange="loadRooms(this.value)">
-                                                        <option value="">Select Hotel</option>
-                                                        @foreach($hotels as $hotel)
-                                                            <option value="{{ $hotel->id }}" 
-                                                                {{ $currentHotelId == $hotel->id ? 'selected' : '' }}>
-                                                                {{ $hotel->description ?? $hotel->property_category ?? 'Hotel' }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="room_id">Room</label>
-                                                    <select class="form-control @error('room_id') is-invalid @enderror" 
-                                                            id="room_id" 
-                                                            name="room_id">
-                                                        <option value="">Select Room</option>
-                                                        @foreach($rooms as $room)
-                                                            <option value="{{ $room->id }}" 
-                                                                {{ $currentRoomId == $room->id ? 'selected' : '' }}
-                                                                data-price="{{ $room->price_per_night }}">
-                                                                {{ $room->name }} - BDT {{ number_format($room->price_per_night, 2) }}/night
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                    @error('room_id')
-                                                        <span class="invalid-feedback">{{ $message }}</span>
-                                                    @enderror
-                                                    <small class="form-text text-muted">
-                                                        <i class="fas fa-info-circle"></i> Changing room will check availability for selected dates
-                                                    </small>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="quantity">Night</label>
-                                                    <input type="number" 
-                                                           class="form-control @error('quantity') is-invalid @enderror" 
-                                                           id="quantity" 
-                                                           name="quantity" 
-                                                           value="{{ old('quantity', $firstRoom['quantity'] ?? 1) }}" 
-                                                           min="1">
-                                                    @error('quantity')
-                                                        <span class="invalid-feedback">{{ $message }}</span>
-                                                    @enderror
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="admin_note">Admin Note</label>
-                                            <textarea class="form-control @error('admin_note') is-invalid @enderror" 
-                                                      id="admin_note" 
-                                                      name="admin_note" 
-                                                      rows="4" 
-                                                      placeholder="Add any notes about this booking...">{{ old('admin_note', $booking->admin_note) }}</textarea>
-                                            @error('admin_note')
-                                                <span class="invalid-feedback">{{ $message }}</span>
-                                            @enderror
-                                            <small class="form-text text-muted">
-                                                <i class="fas fa-info-circle"></i> This note is only visible to admins
-                                            </small>
-                                        </div>
-
-                                        <h5 style="color: #90278e; border-bottom: 2px solid #90278e; padding-bottom: 8px; margin: 20px 0 15px 0;">Payment</h5>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="payment_status">Payment Status</label>
-                                                    <select class="form-control @error('payment_status') is-invalid @enderror" id="payment_status" name="payment_status">
-                                                        <option value="unpaid" {{ old('payment_status', $booking->payment_status) == 'unpaid' ? 'selected' : '' }}>Unpaid</option>
-                                                        <option value="partial" {{ old('payment_status', $booking->payment_status) == 'partial' ? 'selected' : '' }}>Partial</option>
-                                                        <option value="paid" {{ old('payment_status', $booking->payment_status) == 'paid' ? 'selected' : '' }}>Paid</option>
-                                                    </select>
-                                                    @error('payment_status')
-                                                        <span class="invalid-feedback">{{ $message }}</span>
-                                                    @enderror
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="paid_amount">Paid Amount (BDT)</label>
-                                                    <input type="number" step="0.01" min="0" class="form-control @error('paid_amount') is-invalid @enderror" id="paid_amount" name="paid_amount" value="{{ old('paid_amount', $booking->paid_amount ?? 0) }}" placeholder="0.00">
-                                                    @error('paid_amount')
-                                                        <span class="invalid-feedback">{{ $message }}</span>
-                                                    @enderror
-                                                    <small class="form-text text-muted">Grand total: BDT {{ number_format($booking->grand_total, 2) }}</small>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="alert alert-info">
+                                        <div class="alert alert-info mt-3">
                                             <i class="fas fa-info-circle"></i> 
                                             <strong>How to select dates:</strong>
                                             <ul style="margin: 10px 0 0 0; padding-left: 20px;">
@@ -642,13 +708,100 @@
         }
     }
 
-    // Set minimum date to today
+    function calculateNights() {
+        const checkinInput = document.getElementById('checkin_date');
+        const checkoutInput = document.getElementById('checkout_date');
+        const totalNightsDisplay = document.getElementById('total_nights_display');
+        if (!checkinInput || !checkoutInput || !totalNightsDisplay) return 0;
+        if (checkinInput.value && checkoutInput.value) {
+            const checkin = new Date(checkinInput.value);
+            const checkout = new Date(checkoutInput.value);
+            if (checkout > checkin) {
+                const diffTime = Math.abs(checkout - checkin);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                totalNightsDisplay.value = diffDays;
+                return diffDays;
+            }
+        }
+        totalNightsDisplay.value = '0';
+        return 0;
+    }
+
+    function calculatePricing() {
+        const priceInput = document.getElementById('price_per_night');
+        const quantityInput = document.getElementById('quantity');
+        const discountInput = document.getElementById('discount');
+        const taxInput = document.getElementById('tax_percentage');
+        const platformFeeInput = document.getElementById('platform_fee');
+        if (!priceInput || !quantityInput) return;
+        const price = parseFloat(priceInput.value) || 0;
+        const quantity = parseInt(quantityInput.value, 10) || 1;
+        const nights = calculateNights();
+        const discount = parseFloat(discountInput?.value) || 0;
+        const taxPct = parseFloat(taxInput?.value) || 15;
+        const platformFee = parseFloat(platformFeeInput?.value) || 0;
+        const subtotal = price * quantity * nights;
+        const afterDiscount = subtotal - discount;
+        const tax = afterDiscount * (taxPct / 100);
+        const grandTotal = afterDiscount + tax + platformFee;
+        const subtotalEl = document.getElementById('subtotal_display');
+        const discountEl = document.getElementById('discount_display');
+        const taxEl = document.getElementById('tax_display');
+        const platformFeeEl = document.getElementById('platform_fee_display');
+        const grandTotalEl = document.getElementById('grand_total_display');
+        if (subtotalEl) subtotalEl.textContent = 'BDT ' + subtotal.toFixed(2);
+        if (discountEl) discountEl.textContent = 'BDT ' + discount.toFixed(2);
+        if (taxEl) taxEl.textContent = 'BDT ' + tax.toFixed(2);
+        if (platformFeeEl) platformFeeEl.textContent = 'BDT ' + platformFee.toFixed(2);
+        if (grandTotalEl) grandTotalEl.textContent = 'BDT ' + grandTotal.toFixed(2);
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('checkin_date').setAttribute('min', today);
         document.getElementById('checkout_date').setAttribute('min', today);
-        
-        // Update checkout min date when checkin changes
+
+        document.getElementById('hotel_id').addEventListener('change', function() {
+            const hotelId = this.value;
+            const roomSelect = document.getElementById('room_id');
+            roomSelect.innerHTML = '<option value="">Loading...</option>';
+            roomSelect.disabled = true;
+            if (hotelId) {
+                fetch(`{{ url('vendor-admin/bookings/manual/rooms') }}/${hotelId}`)
+                    .then(r => r.json())
+                    .then(data => {
+                        roomSelect.innerHTML = '<option value="">-- Select Room --</option>';
+                        data.forEach(room => {
+                            const opt = document.createElement('option');
+                            opt.value = room.id;
+                            opt.textContent = (room.name || 'Room') + ' - BDT ' + (room.price_per_night || 0) + '/night';
+                            opt.setAttribute('data-price', room.price_per_night || 0);
+                            roomSelect.appendChild(opt);
+                        });
+                        roomSelect.disabled = false;
+                        calculatePricing();
+                    })
+                    .catch(() => { roomSelect.innerHTML = '<option value="">Error loading rooms</option>'; roomSelect.disabled = false; });
+            } else {
+                roomSelect.innerHTML = '<option value="">-- Select Hotel First --</option>';
+            }
+        });
+
+        document.getElementById('room_id').addEventListener('change', function() {
+            const opt = this.options[this.selectedIndex];
+            if (opt && opt.getAttribute('data-price')) {
+                document.getElementById('price_per_night').value = opt.getAttribute('data-price');
+            }
+            calculatePricing();
+            if (this.value) loadAvailability(this.value);
+            else document.getElementById('availabilityCalendar').style.display = 'none';
+        });
+
+        ['price_per_night', 'quantity', 'discount', 'tax_percentage', 'platform_fee'].forEach(function(id) {
+            const el = document.getElementById(id);
+            if (el) { el.addEventListener('input', calculatePricing); el.addEventListener('change', calculatePricing); }
+        });
+
         document.getElementById('checkin_date').addEventListener('change', function() {
             const checkinDate = this.value;
             if (checkinDate) {
@@ -659,6 +812,7 @@
                 updateSelectionInfo(checkinDate, checkoutValue || null);
                 renderCalendar();
             }
+            calculatePricing();
         });
         
         document.getElementById('checkout_date').addEventListener('change', function() {
@@ -666,18 +820,9 @@
             const checkoutValue = this.value;
             updateSelectionInfo(checkinValue || null, checkoutValue || null);
             renderCalendar();
+            calculatePricing();
         });
         
-        // Load availability when room is selected
-        document.getElementById('room_id').addEventListener('change', function() {
-            if (this.value) {
-                loadAvailability(this.value);
-            } else {
-                document.getElementById('availabilityCalendar').style.display = 'none';
-            }
-        });
-        
-        // Calendar navigation
         document.getElementById('prevMonth').addEventListener('click', function() {
             currentCalendarMonth.setMonth(currentCalendarMonth.getMonth() - 1);
             renderCalendar();
@@ -688,10 +833,25 @@
             renderCalendar();
         });
         
-        // Load availability if room is already selected
         const roomId = document.getElementById('room_id').value;
-        if (roomId) {
-            loadAvailability(roomId);
+        if (roomId) loadAvailability(roomId);
+        calculatePricing();
+
+        const editForm = document.getElementById('editBookingForm');
+        if (editForm) {
+            editForm.addEventListener('submit', function(e) {
+                if (!this.checkValidity()) {
+                    e.preventDefault();
+                    this.reportValidity();
+                    var firstInvalid = this.querySelector(':invalid');
+                    if (firstInvalid) {
+                        firstInvalid.focus();
+                        firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    alert('Please complete all required fields (marked with *). The first missing or invalid field has been highlighted.');
+                    return false;
+                }
+            });
         }
     });
 </script>

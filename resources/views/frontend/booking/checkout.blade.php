@@ -1,5 +1,5 @@
 @extends('frontend.app')
-@section('title','Booking Checkout - EGKom')
+@section('title','Booking Checkout - EZBOOKING')
 @section('main')
 
 <!--===== INNERPAGE-WRAPPER ====-->
@@ -14,9 +14,9 @@
                                 <path data-v-1b1a5b0b="" id="a" transform="translate(-2 -2)" d="M13.75 11.875a3.75 3.75 0 0 1 3.745 3.55l.005.2v.938c0 .517-.42.937-.938.937H3.438a.937.937 0 0 1-.937-.938v-.937a3.75 3.75 0 0 1 3.75-3.75h7.5ZM10 2.5a3.754 3.754 0 0 1 3.75 3.75A3.754 3.754 0 0 1 10 10a3.754 3.754 0 0 1-3.75-3.75A3.754 3.754 0 0 1 10 2.5Z"></path>
                             </svg>
                             @auth('guest')
-                                <span style="color: #1C3C6B; font-weight: 600;" data-v-1b1a5b0b="">Welcome, {{ auth('guest')->user()->name }}!</span> Egkom.com will send your booking confirmation (including the hotel's contact information) to <strong>{{ auth('guest')->user()->email }}</strong>.
+                                <span style="color: #1C3C6B; font-weight: 600;" data-v-1b1a5b0b="">Welcome, {{ auth('guest')->user()->name }}!</span> EZBOOKING.com will send your booking confirmation (including the hotel's contact information) to <strong>{{ auth('guest')->user()->email }}</strong>.
                             @else
-                                <a href="{{ route('guest.login') }}" style="color: #1C3C6B; text-decoration: underline; font-weight: 600;" data-v-1b1a5b0b="">Sign In</a> and Egkom.com will send your booking confirmation (including the hotel's contact information) to this.
+                                <a href="{{ route('guest.login') }}" style="color: #1C3C6B; text-decoration: underline; font-weight: 600;" data-v-1b1a5b0b="">Sign In</a> and EZBOOKING.com will send your booking confirmation (including the hotel's contact information) to this.
                             @endauth
                         </p>
                     </div>
@@ -408,11 +408,27 @@
                                             <div id="nid-upload" style="display: none;">
                                                 <div class="mb-3 col-md-5 mt-1">
                                                     <label for="nidFront" class="form-label">Upload NID Front Side Photo:</label>
-                                                    <input class="form-control" type="file" id="nidFront">
+                                                    <input class="form-control" type="file" id="nidFront" accept="image/*" onchange="handleFilePreview(this, 'nidFrontPreview')">
+                                                    <div id="nidFrontPreview" class="file-preview-container" style="display: none;">
+                                                        <div class="file-preview-wrapper">
+                                                            <img id="nidFrontPreviewImg" src="" alt="NID Front Preview" class="file-preview-image">
+                                                            <button type="button" class="file-remove-btn" onclick="removeFilePreview('nidFront', 'nidFrontPreview')" title="Remove">
+                                                                <i class="fa fa-times"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="mb-3 col-md-5 mt-1">
                                                     <label for="nidBack" class="form-label">Upload NID Back Side Photo:</label>
-                                                    <input class="form-control" type="file" id="nidBack">
+                                                    <input class="form-control" type="file" id="nidBack" accept="image/*" onchange="handleFilePreview(this, 'nidBackPreview')">
+                                                    <div id="nidBackPreview" class="file-preview-container" style="display: none;">
+                                                        <div class="file-preview-wrapper">
+                                                            <img id="nidBackPreviewImg" src="" alt="NID Back Preview" class="file-preview-image">
+                                                            <button type="button" class="file-remove-btn" onclick="removeFilePreview('nidBack', 'nidBackPreview')" title="Remove">
+                                                                <i class="fa fa-times"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -420,11 +436,27 @@
                                             <div id="passport-upload" style="display: none;">
                                                 <div class="mb-3 col-md-5 mt-1">
                                                     <label for="passport" class="form-label">Upload Passport Front Side Photo:</label>
-                                                    <input class="form-control" type="file" id="passport">
+                                                    <input class="form-control" type="file" id="passport" accept="image/*" onchange="handleFilePreview(this, 'passportPreview')">
+                                                    <div id="passportPreview" class="file-preview-container" style="display: none;">
+                                                        <div class="file-preview-wrapper">
+                                                            <img id="passportPreviewImg" src="" alt="Passport Preview" class="file-preview-image">
+                                                            <button type="button" class="file-remove-btn" onclick="removeFilePreview('passport', 'passportPreview')" title="Remove">
+                                                                <i class="fa fa-times"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="mb-3 col-md-5 mt-1">
                                                     <label for="visa" class="form-label">Upload Visa Photo:</label>
-                                                    <input class="form-control" type="file" id="visa">
+                                                    <input class="form-control" type="file" id="visa" accept="image/*" onchange="handleFilePreview(this, 'visaPreview')">
+                                                    <div id="visaPreview" class="file-preview-container" style="display: none;">
+                                                        <div class="file-preview-wrapper">
+                                                            <img id="visaPreviewImg" src="" alt="Visa Preview" class="file-preview-image">
+                                                            <button type="button" class="file-remove-btn" onclick="removeFilePreview('visa', 'visaPreview')" title="Remove">
+                                                                <i class="fa fa-times"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -1260,7 +1292,10 @@
         discount = rackRate - subTotal;
         const discountPercentage = ((discount / rackRate) * 100).toFixed(0);
         taxesAndFees = 0; // No tax – exact calculation only
-        total = subTotal;
+        // Applied coupon (set by Apply button)
+        if (typeof window.appliedCoupon === 'undefined') window.appliedCoupon = { code: '', discount: 0 };
+        const couponDiscount = window.appliedCoupon.discount || 0;
+        total = subTotal - couponDiscount;
         
         // Update selected rooms summary
         const totalRooms = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -1363,9 +1398,28 @@
                                         <span data-v-30094f07="" class="lg-text"> ${subTotal.toFixed(0)} </span>
                                     </span>
                                 </div>
-                               
-                              
-                                
+                                ${couponDiscount > 0 ? `
+                                <div data-v-30094f07="" class="fare-item">
+                                    <span data-v-30094f07="" class="fare">Coupon (${window.appliedCoupon.code})</span>
+                                    <span data-v-30094f07="" class="fare-price text-success">
+                                        <span data-v-30094f07="" class="sm-text">- BDT</span>
+                                        <span data-v-30094f07="" class="lg-text"> ${couponDiscount.toFixed(0)} </span>
+                                    </span>
+                                </div>
+                                ` : ''}
+                                <div data-v-30094f07="" class="fare-item mt-3" style="border-top: 1px solid #eee; padding-top: 10px;">
+                                    <span data-v-30094f07="" class="fare">Have a coupon?</span>
+                                    <span data-v-30094f07="" class="fare-price"></span>
+                                </div>
+                                <div data-v-30094f07="" class="fare-item" id="coupon-input-wrap" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                    <input type="text" id="coupon-code-input" class="form-control" placeholder="Enter code" style="max-width: 160px;" value="${window.appliedCoupon.code || ''}" ${couponDiscount > 0 ? 'readonly' : ''}>
+                                    ${couponDiscount > 0 ? `
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" id="coupon-remove-btn">Remove</button>
+                                    ` : `
+                                    <button type="button" class="btn btn-sm btn-primary" id="coupon-apply-btn">Apply</button>
+                                    `}
+                                </div>
+                                <div id="coupon-message" class="small mt-1" style="min-height: 18px;"></div>
                             </div>
                         </div>
                     </div>
@@ -1377,7 +1431,7 @@
                         </div>
                         <span data-v-30094f07="" class="text-blue text-white">
                             <span data-v-30094f07="" class="sm-text">BDT</span>
-                            <span data-v-30094f07="" class="lg-text"> ${subTotal.toFixed(0)} </span>
+                            <span data-v-30094f07="" class="lg-text"> ${total.toFixed(0)} </span>
                         </span>
                     </div>
                 </div>
@@ -1385,17 +1439,72 @@
         `;
 
         container.innerHTML = html;
-        
-        // Reattach coupon toggle event
-        setTimeout(() => {
-            const couponToggle = document.getElementById('coupon-toggle');
-            const couponInput = document.getElementById('coupon-input');
-            if (couponToggle && couponInput) {
-                couponToggle.addEventListener('click', function() {
-                    couponInput.style.display = couponInput.style.display === "none" ? "flex" : "none";
+
+        // Coupon Apply button
+        const applyBtn = document.getElementById('coupon-apply-btn');
+        const removeBtn = document.getElementById('coupon-remove-btn');
+        const couponInput = document.getElementById('coupon-code-input');
+        const couponMessage = document.getElementById('coupon-message');
+
+        if (applyBtn && couponInput) {
+            applyBtn.addEventListener('click', function() {
+                const code = (couponInput.value || '').trim();
+                if (!code) {
+                    if (couponMessage) couponMessage.innerHTML = '<span class="text-danger">Enter a coupon code.</span>';
+                    return;
+                }
+                const checkinDate = document.getElementById('checkin-date')?.value;
+                const checkoutDate = document.getElementById('checkout-date')?.value;
+                if (!checkinDate || !checkoutDate) {
+                    if (couponMessage) couponMessage.innerHTML = '<span class="text-danger">Select check-in and check-out dates first.</span>';
+                    return;
+                }
+                const hotelId = cart.length > 0 ? (cart[0].hotelId || null) : null;
+                const subtotal = subTotal;
+
+                applyBtn.disabled = true;
+                if (couponMessage) couponMessage.innerHTML = '<span class="text-muted">Checking...</span>';
+
+                fetch('{{ route('booking.validate-coupon') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        code: code,
+                        subtotal: subtotal,
+                        hotel_id: hotelId,
+                        checkin_date: checkinDate,
+                        checkout_date: checkoutDate,
+                    }),
+                })
+                .then(r => r.json())
+                .then(data => {
+                    applyBtn.disabled = false;
+                    if (data.valid) {
+                        window.appliedCoupon = { code: data.coupon_code, discount: data.discount };
+                        if (couponMessage) couponMessage.innerHTML = '<span class="text-success">' + (data.message || 'Coupon applied.') + '</span>';
+                        renderPriceSummary(cart);
+                    } else {
+                        window.appliedCoupon = { code: '', discount: 0 };
+                        if (couponMessage) couponMessage.innerHTML = '<span class="text-danger">' + (data.message || 'Invalid coupon.') + '</span>';
+                    }
+                })
+                .catch(() => {
+                    applyBtn.disabled = false;
+                    if (couponMessage) couponMessage.innerHTML = '<span class="text-danger">Could not validate coupon. Try again.</span>';
                 });
-            }
-        }, 100);
+            });
+        }
+
+        if (removeBtn) {
+            removeBtn.addEventListener('click', function() {
+                window.appliedCoupon = { code: '', discount: 0 };
+                renderPriceSummary(cart);
+            });
+        }
     }
 
     function confirmBooking() {
@@ -1500,8 +1609,8 @@
         formData.append('citizenship', document.getElementById('citizenship')?.value || '');
         formData.append('rooms_data', JSON.stringify(cart));
         
-        // Get coupon code if applied
-        const couponCode = document.getElementById('coupon-code')?.value || '';
+        // Get coupon code if applied (from global set by Apply button)
+        const couponCode = (typeof window.appliedCoupon !== 'undefined' && window.appliedCoupon && window.appliedCoupon.code) ? window.appliedCoupon.code : '';
         if (couponCode) {
             formData.append('coupon_code', couponCode);
         }
@@ -2477,7 +2586,117 @@
     .coupon-text:hover {
         color: #6b1f6e;
     }
+    
+    /* File Preview Styles */
+    .file-preview-container {
+        margin-top: 15px;
+    }
+    .file-preview-wrapper {
+        position: relative;
+        display: inline-block;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 8px;
+        background: #f9f9f9;
+        max-width: 300px;
+    }
+    .file-preview-image {
+        max-width: 100%;
+        max-height: 200px;
+        display: block;
+        border-radius: 4px;
+        object-fit: contain;
+    }
+    .file-remove-btn {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: #dc3545;
+        color: white;
+        border: 2px solid white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        z-index: 10;
+    }
+    .file-remove-btn:hover {
+        background: #c82333;
+        transform: scale(1.1);
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+    }
+    .file-remove-btn:active {
+        transform: scale(0.95);
+    }
+    .file-remove-btn i {
+        font-size: 12px;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .file-preview-wrapper {
+            max-width: 100%;
+        }
+        .file-preview-image {
+            max-height: 150px;
+        }
+    }
 </style>
+
+<script>
+    // Handle file preview when file is selected
+    function handleFilePreview(input, previewContainerId) {
+        const file = input.files[0];
+        const previewContainer = document.getElementById(previewContainerId);
+        const previewImg = document.getElementById(previewContainerId + 'Img');
+        
+        if (file) {
+            // Validate file type
+            if (!file.type.match('image.*')) {
+                alert('Please select an image file.');
+                input.value = '';
+                return;
+            }
+            
+            // Validate file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('File size must be less than 5MB.');
+                input.value = '';
+                return;
+            }
+            
+            // Create preview using FileReader
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                previewContainer.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            previewContainer.style.display = 'none';
+        }
+    }
+    
+    // Remove file preview and clear input
+    function removeFilePreview(inputId, previewContainerId) {
+        const input = document.getElementById(inputId);
+        const previewContainer = document.getElementById(previewContainerId);
+        const previewImg = document.getElementById(previewContainerId + 'Img');
+        
+        // Clear the file input
+        input.value = '';
+        
+        // Hide preview
+        previewContainer.style.display = 'none';
+        previewImg.src = '';
+    }
+</script>
 
 @endsection
 

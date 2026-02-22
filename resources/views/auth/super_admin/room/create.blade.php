@@ -202,34 +202,6 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row mt-15">
-                                                <div class="checkbox-section">
-                                                    <h5 class="mb-4" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px; margin-top: 20px;"><strong>Room Facilities & Amenities</strong></h5>
-                                                    <div class="chk-all-sec">
-                                                        <div class="form-group">
-                                                            <div class="custom-control custom-switch checked">
-                                                                <input type="checkbox" class="custom-control-input" name="room-info-all" id="room-info-all">
-                                                                <label class="custom-control-label" for="room-info-all">Select All</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="AC" {{ in_array('AC', old('appliances', [])) ? 'checked' : '' }}> AC</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="TV" {{ in_array('TV', old('appliances', [])) ? 'checked' : '' }}> TV</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Fridge" {{ in_array('Fridge', old('appliances', [])) ? 'checked' : '' }}> Fridge</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Microwave" {{ in_array('Microwave', old('appliances', [])) ? 'checked' : '' }}> Microwave</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Fan" {{ in_array('Fan', old('appliances', [])) ? 'checked' : '' }}> Fan</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Lamp" {{ in_array('Lamp', old('appliances', [])) ? 'checked' : '' }}> Lamp</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Light" {{ in_array('Light', old('appliances', [])) ? 'checked' : '' }}> Light</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Water heater/Geyser" {{ in_array('Water heater/Geyser', old('appliances', [])) ? 'checked' : '' }}> Water heater/Geyser</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="WiFi Router" {{ in_array('WiFi Router', old('appliances', [])) ? 'checked' : '' }}> WiFi Router</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Crockeries" {{ in_array('Crockeries', old('appliances', [])) ? 'checked' : '' }}> Crockeries</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Gas Stove" {{ in_array('Gas Stove', old('appliances', [])) ? 'checked' : '' }}> Gas Stove</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Electric Kettle" {{ in_array('Electric Kettle', old('appliances', [])) ? 'checked' : '' }}> Electric Kettle</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Room Heater" {{ in_array('Room Heater', old('appliances', [])) ? 'checked' : '' }}> Room Heater</label><br>
-                                                    <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="Hair Dryer" {{ in_array('Hair Dryer', old('appliances', [])) ? 'checked' : '' }}> Hair Dryer</label><br>
-                                                </div>
-                                            </div>
                                             <script>
                                                 (function initRoomInfoSelectAll() {
                                                     const containers = document.querySelectorAll('.checkbox-section');
@@ -1003,6 +975,40 @@
                                                                     <label class="form-label" style="font-weight: 600; margin-bottom: 8px;">Minimum Occupancy</label>
                                                                     <input type="number" class="form-control" name="room_info[min_occupancy]" value="{{ old('room_info.min_occupancy', '') }}" placeholder="0" min="0" style="border: 1px solid #dee2e6; border-radius: 6px;">
                                                                 </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Appliances Information (Room Details - synced to Facilities tab) -->
+                                            <div class="row mt-4 appliances-section">
+                                                <div class="col-md-12">
+                                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+                                                        <h5 class="mb-3" style="color: #91278f; border-bottom: 2px solid #91278f; padding-bottom: 10px;"><strong>Appliances Information</strong></h5>
+                                                        <div class="form-group">
+                                                            <div class="custom-control custom-switch">
+                                                                <input type="checkbox" class="custom-control-input" name="appliances-all" id="appliances-all" data-target=".checkbox-item-appliances">
+                                                                <label class="custom-control-label" for="appliances-all">Select All</label>
+                                                            </div>
+                                                        </div>
+                                                        @php
+                                                            $applianceOptions = [
+                                                                'Air Conditioner (AC)', 'Ceiling Fan', 'TV', 'Wi-Fi', 'Minibar', 'Digital Safe',
+                                                                'Refrigerator', 'Electric Kettle', 'Microwave Oven', 'Induction Cooker',
+                                                                'Washing Machine', 'Hair Dryer', 'Iron & Iron Board', 'Intercom',
+                                                                'Water Heater (Geyser)', 'Coffee Maker',
+                                                            ];
+                                                            $oldAppliances = old('appliances', []);
+                                                        @endphp
+                                                        @foreach($applianceOptions as $opt)
+                                                        <label><input type="checkbox" name="appliances[]" class="checkbox-item-appliances checkbox-item-room-info" value="{{ $opt }}" {{ in_array($opt, $oldAppliances) ? 'checked' : '' }}> {{ $opt }}</label><br>
+                                                        @endforeach
+                                                        <div class="custom-appliances-container mt-3" data-section="appliances"></div>
+                                                        <div class="add-more-section mt-3">
+                                                            <div class="input-group" style="max-width: 100%;">
+                                                                <input type="text" class="form-control" id="custom-appliance-input" placeholder="Enter custom appliance name">
+                                                                <button type="button" class="btn btn-primary btn-sm" id="add-appliance-btn">Add</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1870,8 +1876,8 @@
                                                         <div class="form-group mt-15">
                                                             <label class="form-label">{{ $label }}</label>
                                                             <div class="multiple-upload-container" id="upload-container-{{ $category }}">
-                                                                <input type="file" class="multiple-file-input" name="{{ $category }}_photos[]" accept="image/*" multiple>
-                                                                <label class="upload-label">Select Multiple Images</label>
+                                                                <input type="file" class="multiple-file-input" id="file-input-{{ $category }}" name="{{ $category }}_photos[]" accept="image/*" multiple>
+                                                                <label class="upload-label" for="file-input-{{ $category }}">Select Multiple Images</label>
                                                                 <div class="multiple-thumbnail-gallery"></div>
                                                             </div>
                                                             @error("{$category}_photos.*")

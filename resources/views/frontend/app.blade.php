@@ -33,6 +33,8 @@
     <link rel="stylesheet" href="{{ asset('frontend')}}/css/slick-theme.css">
     <!-- Swiper slider -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <!-- Password Toggle -->
+    <link rel="stylesheet" href="{{ asset('frontend')}}/css/password-toggle.css">
 </head>
 
 
@@ -49,6 +51,7 @@
 <div class="wrapper">
 
     <!--Start: Mobile Header (same structure as inner pages for consistent mobile view) -->
+    @if(!request()->routeIs('guest.dashboard', 'guest.bookings', 'guest.wishlist', 'guest.hotel.wishlist', 'guest.payment-history', 'guest.reviews', 'guest.notifications'))
     <section class="mobile-header-erapper">
         <div class="container">
             <div class="row justify-content-center align-items-center">
@@ -62,7 +65,7 @@
                 <div class="col-6">
                     <div class="mb-logo">
                         <a href="{{ url('/') }}" class="">
-                            <img src="{{ asset('frontend')}}/images/logo.png" alt="Egkom">
+                            <img src="{{ asset('frontend')}}/images/logo.png" alt="EZBOOKING">
                         </a>
                     </div>
                 </div>
@@ -117,7 +120,8 @@
             </div>
         </div>
     </section>
-    @if(!request()->routeIs('booking.checkout'))
+    @endif
+    @if(!request()->routeIs('booking.checkout') && !request()->routeIs('guest.dashboard', 'guest.bookings', 'guest.wishlist', 'guest.hotel.wishlist', 'guest.payment-history', 'guest.reviews', 'guest.notifications', 'guest.login'))
     <div class="overlay" id="overlay"></div>
     <button type="button" class="search-button-sidebar" id="searchBtn" aria-label="Search"><i class="fa fa-search search-icon-top-mb"></i></button>
 
@@ -247,18 +251,19 @@
     <!--End:  Mobile Header- -->
 
     <!--Start: Top Bar -->
+    @if(!request()->routeIs('guest.dashboard', 'guest.bookings', 'guest.wishlist', 'guest.hotel.wishlist', 'guest.payment-history', 'guest.reviews', 'guest.notifications'))
     <section class="top-bar-area" id="stickyBar" >
         <div class="container">
             <div class="row ">
                 <div class="col-lg-2">
                     <div class="egkom-logo">
                         <a href="{{ asset('/') }}" class="navbar-brand main-logo py-1 m-0">
-                            <img src="{{ asset('frontend')}}/images/logo.png" alt="Egkom">
+                            <img src="{{ asset('frontend')}}/images/logo.png" alt="EZBOOKING">
                         </a>
                     </div>
                 </div>
                 <div class="col-lg-8">
-                    @if(!request()->routeIs('booking.checkout'))
+                    @if(!request()->routeIs('booking.checkout') && !request()->routeIs('guest.login'))
                     <div class="sticky-top-search" id="smallSearchBox">
                         <div class="search-bars">
                             <div class="search-itemss">Anywhere</div>
@@ -458,11 +463,7 @@
                 <div class="col-lg-2">
                     <div class="user-bendor">
                         <div class="bendor-section">
-                            @if(auth()->guard('guest')->check())
-                                <a href="#">{{ auth()->guard('guest')->user()->name }}</a>
-                            @else
-                                <a href="#">Income from Hosting</a>
-                            @endif
+                            <a href="{{ route('vendor-admin.login') }}" title="Login or contact admin to become a vendor">Income from Hosting</a>
                         </div>
                         
                         <div class="user-section">
@@ -470,9 +471,13 @@
                                 <a href="#" id="profileIconToggle">
                                     
                                     <div class="user-icon">
-                                        <svg class="user-cicle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true" role="presentation" focusable="false" style="display: block;  fill: currentcolor;">
-                                            <path d="M16 .7C7.56.7.7 7.56.7 16S7.56 31.3 16 31.3 31.3 24.44 31.3 16 24.44.7 16 .7zm0 28c-4.02 0-7.6-1.88-9.93-4.81a12.43 12.43 0 0 1 6.45-4.4A6.5 6.5 0 0 1 9.5 14a6.5 6.5 0 0 1 13 0 6.51 6.5 0 0 1-3.02 5.5 12.42 12.42 0 0 1 6.45 4.4A12.67 12.67 0 0 1 16 28.7z"></path>
-                                        </svg>
+                                        @if(auth()->guard('guest')->check() && auth()->guard('guest')->user()->photo)
+                                            <img src="{{ asset(auth()->guard('guest')->user()->photo) }}" alt="Profile" class="header-guest-avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; display: block;">
+                                        @else
+                                            <svg class="user-cicle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true" role="presentation" focusable="false" style="display: block;  fill: currentcolor;">
+                                                <path d="M16 .7C7.56.7.7 7.56.7 16S7.56 31.3 16 31.3 31.3 24.44 31.3 16 24.44.7 16 .7zm0 28c-4.02 0-7.6-1.88-9.93-4.81a12.43 12.43 0 0 1 6.45-4.4A6.5 6.5 0 0 1 9.5 14a6.5 6.5 0 0 1 13 0 6.51 6.5 0 0 1-3.02 5.5 12.42 12.42 0 0 1 6.45 4.4A12.67 12.67 0 0 1 16 28.7z"></path>
+                                            </svg>
+                                        @endif
                                     </div>
                                     <div class="user-svg-toggle">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true" role="presentation" focusable="false" style="display: block; fill: none; height: 16px; width: 16px; stroke: currentcolor; stroke-width: 3; overflow: visible;">
@@ -496,8 +501,7 @@
                                     </li>
                                     
                                     @if(auth()->guard('guest')->check())
- 
-    <li>
+                                    <li>
                                         <a href="{{ route('guest.dashboard') }}">Dashboard</a>
                                     </li>
                                     <li>
@@ -512,14 +516,30 @@
                                             <a href="#" onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
                                         </form>
                                     </li>
-@else
-<li>
+                                    @elseif(auth()->guard('vendor')->check())
+                                    <li>
+                                        <a href="{{ route('vendor-admin.dashboard') }}">Dashboard</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('vendor-admin.accountSettings') }}">Profile</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('vendor-admin.accountSettings') }}">Settings</a>
+                                    </li>
+                                    <li>
+                                        <form method="POST" action="{{ route('vendor-admin.logout') }}" style="display: inline;">
+                                            @csrf
+                                            <a href="#" onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
+                                        </form>
+                                    </li>
+                                    @else
+                                    <li>
                                         <a href="{{ route('guest.login') }}" id="loginMenu">Login</a>
                                     </li>
                                     <li>
                                         <a href="{{ route('guest.signup') }}">Signup</a>
                                     </li>
-@endif
+                                    @endif
                                 </ul>
                             </div>
                             
@@ -591,7 +611,8 @@
             </div>
         </div>
     </section>
-    <!--Start: Top Bar -->
+    @endif
+    <!--End: Top Bar -->
 
 
 @yield('main')
@@ -664,7 +685,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12 col-md-6 col-lg-6 col-xl-6" id="copyright">
-                        <p>Copyright © 2024 Egkom. All Rights Reserved.</p>
+                        <p>Copyright © 2024 EZBOOKING. All Rights Reserved.</p>
                     </div>
                     <!-- end columns -->
                     <div class="col-12 col-md-6 col-lg-6 col-xl-6" id="terms">
@@ -700,6 +721,7 @@
 <script src="{{ asset('frontend')}}/js/custom-navigation.js"></script>
 <script src="{{ asset('frontend')}}/js/custom-flex.js"></script>
 <script src="{{ asset('frontend')}}/js/custom-owl.js"></script>
+<script src="{{ asset('frontend')}}/js/password-toggle.js"></script>
 <script src="{{ asset('frontend')}}/js/custom-date-picker.js"></script>
 <script src="{{ asset('frontend')}}/js/custom-video.js"></script>
 <script src="{{ asset('frontend')}}/js/popup-ad.js"></script>
@@ -779,7 +801,8 @@
     // Initialize date picker
     flatpickr("#selectDate", {
         mode: "range",
-        dateFormat: "Y-m-d"
+        dateFormat: "Y-m-d",
+        clickOpens: true  // Allow opening calendar on input click
     });
 
 </script>
@@ -847,13 +870,14 @@
     }
 </script>
 
-<!-- Global Booking Cart Drawer -->
+@if(!request()->routeIs('guest.dashboard', 'guest.bookings', 'guest.wishlist', 'guest.hotel.wishlist', 'guest.payment-history', 'guest.reviews', 'guest.notifications', 'guest.login'))
+<!-- Global Booking Cart Drawer (hidden on guest dashboard and login) -->
 <div id="globalBookingCartDrawer" class="booking-cart-drawer">
-    <div class="cart-drawer-overlay" onclick="toggleCartDrawer()"></div>
+    <div class="cart-drawer-overlay" onclick="closeCartDrawer()"></div>
     <div class="cart-drawer-content">
         <div class="cart-header">
             <h2>Pricing Summary</h2>
-            <button class="cart-drawer-close" onclick="toggleCartDrawer()">
+            <button class="cart-drawer-close" onclick="toggleCartDrawer(event)">
                 <i class="fa fa-times"></i>
             </button>
         </div>
@@ -878,13 +902,14 @@
 </div>
 
 <!-- Global Floating Booking Cart Button -->
-<div class="global-floating-cart-btn" onclick="toggleCartDrawer()">
+<div class="global-floating-cart-btn" onclick="toggleCartDrawer(event)">
     <div class="cart-icon-wrapper">
         <i class="fa fa-shopping-cart"></i>
         <span class="cart-count-badge" id="globalCartCountBadge">0</span>
     </div>
     <span class="cart-text">Booking Cart</span>
 </div>
+@endif
 
 <!-- SweetAlert2 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -908,7 +933,7 @@
         cursor: pointer;
         box-shadow: 0 4px 20px rgba(145, 39, 143, 0.3);
         transition: all 0.3s;
-        z-index: 9999;
+        z-index: 100001; /* Above guest dashboard wrapper (99999) so button stays visible */
     }
     .global-floating-cart-btn.visible {
         display: flex; /* Show when cart has items */
@@ -930,23 +955,26 @@
     }
     .cart-count-badge {
         position: absolute;
-        top: -10px;
-        right: -10px;
+        top: -8px;
+        right: -8px;
         background: #91278f;
         color: white;
         border-radius: 50%;
-        width: 26px;
-        height: 26px;
+        min-width: 24px;
+        height: 24px;
+        padding: 0 6px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 13px;
+        font-size: 12px;
         font-weight: 700;
         opacity: 0;
         transform: scale(0);
-        transition: all 0.3s ease;
-        border: 2px solid white;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        border: 2.5px solid white;
+        box-shadow: 0 3px 10px rgba(145, 39, 143, 0.4), 0 0 0 1px rgba(0,0,0,0.05);
+        z-index: 10;
+        line-height: 1;
     }
     .cart-count-badge.visible {
         opacity: 1;
@@ -974,6 +1002,7 @@
     }
     .booking-cart-drawer.active {
         pointer-events: all;
+        z-index: 100000; /* Above guest dashboard when open so user can interact with drawer */
     }
     .cart-drawer-overlay {
         position: absolute;
@@ -1241,10 +1270,25 @@
         // Force immediate update
         updateGlobalCartDisplay();
         
-        // Force badge update
+        // Force badge update with multiple attempts to ensure it updates
         setTimeout(() => {
             updateGlobalCartDisplay();
         }, 10);
+        
+        // Additional badge update after a short delay to ensure visibility
+        setTimeout(() => {
+            const globalBadge = document.getElementById('globalCartCountBadge');
+            if (globalBadge) {
+                const count = globalBookingCart.length;
+                globalBadge.textContent = count;
+                if (count > 0) {
+                    globalBadge.classList.add('visible');
+                    globalBadge.style.display = 'block';
+                    globalBadge.style.opacity = '1';
+                    globalBadge.style.visibility = 'visible';
+                }
+            }
+        }, 50);
         
         return true;
     }
@@ -1384,8 +1428,12 @@
             globalBadge.textContent = count;
             if (count > 0) {
                 globalBadge.classList.add('visible');
+                globalBadge.style.display = 'block';
+                globalBadge.style.opacity = '1';
+                globalBadge.style.visibility = 'visible';
             } else {
                 globalBadge.classList.remove('visible');
+                globalBadge.style.display = 'none';
             }
         }
         
@@ -1395,7 +1443,21 @@
         }
     }
 
-    function toggleCartDrawer() {
+    function toggleCartDrawer(event) {
+        // Overlay click: only close, never open (prevents nav clicks that hit overlay from opening drawer)
+        if (event && event.target && event.target.closest && event.target.closest('.cart-drawer-overlay')) {
+            closeCartDrawer();
+            return;
+        }
+        // On guest dashboard: never open when click or pointer-down was on dashboard (nav or content)
+        if (document.body.classList.contains('guest-dashboard-page')) {
+            var fromDashboard = (event && event.target && event.target.closest && event.target.closest('.dashboard-container')) ||
+                (window._lastCartPointerTarget && window._lastCartPointerTarget.closest && window._lastCartPointerTarget.closest('.dashboard-container'));
+            if (fromDashboard) {
+                closeCartDrawer();
+                return;
+            }
+        }
         const drawer = document.getElementById('globalBookingCartDrawer');
         if (drawer) {
             drawer.classList.toggle('active');
@@ -1407,6 +1469,25 @@
         if (drawer) {
             drawer.classList.remove('active');
         }
+    }
+    
+    // Record pointer target so we can block cart open when user started on dashboard nav
+    (function() {
+        function capturePointerTarget(e) { window._lastCartPointerTarget = e.target; }
+        document.addEventListener('mousedown', capturePointerTarget, true);
+        document.addEventListener('touchstart', capturePointerTarget, true);
+        document.addEventListener('pointerdown', capturePointerTarget, true);
+    })();
+    
+    // Initialize cart on page load
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            updateGlobalCartDisplay();
+            setTimeout(() => updateGlobalCartDisplay(), 100);
+        });
+    } else {
+        updateGlobalCartDisplay();
+        setTimeout(() => updateGlobalCartDisplay(), 100);
     }
     
     // Listen for storage changes to update cart when bookingParams change
@@ -1781,6 +1862,90 @@
             }
         });
     }
+</script>
+
+<!-- Global script to make all date inputs open calendar on click -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle all native HTML5 date inputs (type="date")
+        document.querySelectorAll('input[type="date"]').forEach(function(input) {
+            // Remove readonly if present to allow calendar opening
+            if (input.hasAttribute('readonly')) {
+                input.removeAttribute('readonly');
+                input.style.cursor = 'pointer';
+            }
+            
+            // Add click handler to open native date picker
+            input.addEventListener('click', function(e) {
+                // Check if browser supports showPicker() method
+                if (this.showPicker && typeof this.showPicker === 'function') {
+                    e.preventDefault();
+                    this.showPicker();
+                }
+            });
+            
+            // Also handle focus event
+            input.addEventListener('focus', function(e) {
+                if (this.showPicker && typeof this.showPicker === 'function') {
+                    e.preventDefault();
+                    this.showPicker();
+                }
+            });
+        });
+        
+        // Handle flatpickr instances - ensure clickOpens is true
+        if (typeof flatpickr !== 'undefined') {
+            // Find all inputs that might use flatpickr
+            document.querySelectorAll('input[data-flatpickr], input.flatpickr-input').forEach(function(input) {
+                // Check if flatpickr is already initialized
+                if (input._flatpickr) {
+                    // Update existing instance to allow click opening
+                    input._flatpickr.config.clickOpens = true;
+                }
+            });
+        }
+        
+        // Handle bootstrap-datepicker inputs
+        if (typeof $.fn.datepicker !== 'undefined') {
+            $('input[data-provide="datepicker"], input.datepicker').each(function() {
+                var $input = $(this);
+                // Ensure datepicker opens on input click
+                $input.on('click', function() {
+                    if ($input.data('datepicker')) {
+                        $input.data('datepicker').show();
+                    }
+                });
+            });
+        }
+        
+        // Make calendar icons clickable - trigger click on associated input
+        document.querySelectorAll('.fa-calendar, .fa-calendar-check, [class*="calendar"]').forEach(function(icon) {
+            // Find the nearest input field
+            var parent = icon.closest('.form-group, .input-group, .search-container, div[style*="position: relative"]');
+            if (parent) {
+                var input = parent.querySelector('input[type="date"], input[type="text"][readonly], input.datepicker, input[data-provide="datepicker"]');
+                if (input) {
+                    icon.style.cursor = 'pointer';
+                    icon.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        input.focus();
+                        input.click();
+                        
+                        // For native date inputs
+                        if (input.type === 'date' && input.showPicker) {
+                            input.showPicker();
+                        }
+                        
+                        // For bootstrap-datepicker
+                        if (typeof $.fn.datepicker !== 'undefined' && $(input).data('datepicker')) {
+                            $(input).data('datepicker').show();
+                        }
+                    });
+                }
+            }
+        });
+    });
 </script>
 
 </body>

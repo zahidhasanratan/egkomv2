@@ -12,28 +12,47 @@
                                 <div class="nk-block-des text-soft">
                                     <p>Here are your various hotels.</p>
                                 </div>
-
                             </div>
                             <div class="nk-block-head-content">
-
-                                <ul class="nk-block-tools g-3">
-                                    <li>
-                                        <div class="drodown">
-                                            <a href="#" class="dropdown-toggle btn btn-icon btn-primary" data-bs-toggle="dropdown">
-                                                <em class="icon ni ni-plus"></em>
+                                <div class="d-flex align-items-center gap-2">
+                                    <!-- Search Form - Right Side -->
+                                    <form method="GET" action="{{ route('vendor-admin.hotel.index') }}" class="search-form-inline">
+                                        <div class="input-group">
+                                            <input type="text" 
+                                                   name="search" 
+                                                   class="form-control form-control-sm" 
+                                                   placeholder="Search hotels..." 
+                                                   value="{{ request('search') }}">
+                                            @if(request('search'))
+                                            <a href="{{ route('vendor-admin.hotel.index') }}" class="btn btn-outline-light btn-sm" title="Clear search">
+                                                <em class="icon ni ni-cross"></em>
                                             </a>
-                                            <div class="dropdown-menu dropdown-menu-end">
-                                                <ul class="link-list-opt no-bdr">
-                                                    <li>
-                                                        <a href="{{ route('vendor-admin.hotel.create') }}">
-                                                            <span>Add Hotel</span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                            @endif
+                                            <button type="submit" class="btn btn-primary btn-sm" title="Search">
+                                                <em class="icon ni ni-search"></em>
+                                            </button>
                                         </div>
-                                    </li>
-                                </ul>
+                                    </form>
+                                    
+                                    <ul class="nk-block-tools g-3 mb-0">
+                                        <li>
+                                            <div class="drodown">
+                                                <a href="#" class="dropdown-toggle btn btn-icon btn-primary" data-bs-toggle="dropdown">
+                                                    <em class="icon ni ni-plus"></em>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-end">
+                                                    <ul class="link-list-opt no-bdr">
+                                                        <li>
+                                                            <a href="{{ route('vendor-admin.hotel.create') }}">
+                                                                <span>Add Hotel</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -43,6 +62,7 @@
                                 {{ session('success') }}
                             </div>
                         @endif
+                        
                         <div class="card card-bordered card-stretch">
                             <div class="card-inner-group">
 
@@ -66,7 +86,11 @@
                                                     <span class="text-primary">{{ $hotel->description ?? 'No description' }}</span>
                                                 </div>
                                                 <div class="nk-tb-col">
-                                                    <span class="text-primary">{{ $hotel->status ?? 'No Status' }}</span>
+                                                    @php
+                                                        $hotelStatus = $hotel->status ?? 'draft';
+                                                        $isSuccess = in_array($hotelStatus, ['submitted', 'published']);
+                                                    @endphp
+                                                    <span class="badge" style="{{ $isSuccess ? 'background:#198754;color:#fff' : 'background:#495057;color:#fff' }};">{{ ucfirst($hotelStatus) }}</span>
                                                 </div>
                                                 <div class="nk-tb-col">
                                                     <span class="text-primary">{{ $hotel->approve ? 'Approved' : 'Not Approved' }}</span>
@@ -143,6 +167,11 @@
                                 <div class="card-inner">
                                     <div class="nk-block-between-md g-3">
                                         <div class="g">
+                                            @if(request('search'))
+                                                <p class="text-muted small mb-2">
+                                                    Showing {{ $hotels->total() }} result(s) for "<strong>{{ request('search') }}</strong>"
+                                                </p>
+                                            @endif
                                             {{ $hotels->links() }}
                                         </div>
                                     </div>
@@ -172,6 +201,80 @@
         .badge-danger { background-color: rgba(255, 59, 48, .1); color: #ff3b30; }
         em.icon.ni.ni-edit, em.icon.ni.ni-trash { margin-right: 0px; }
         td.action-buttons { display: flex; justify-content: center; gap: 10px; }
+        
+        /* Beautiful Search Form Styling - Right Side */
+        .search-form-inline {
+            display: inline-flex;
+        }
+        
+        .search-form-inline .input-group {
+            display: flex;
+            align-items: center;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .search-form-inline .input-group:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .search-form-inline .form-control-sm {
+            border: 1px solid #e0e0e0;
+            border-right: none;
+            padding: 0.5rem 1rem;
+            min-width: 250px;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+        
+        .search-form-inline .form-control-sm:focus {
+            border-color: #5263ff;
+            box-shadow: 0 0 0 0.2rem rgba(82, 99, 255, 0.1);
+            outline: none;
+        }
+        
+        .search-form-inline .btn-sm {
+            padding: 0.5rem 0.75rem;
+            border-radius: 0;
+            border-left: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .search-form-inline .btn-primary.btn-sm {
+            background: linear-gradient(135deg, #5263ff 0%, #7c3aed 100%);
+            border-color: #5263ff;
+        }
+        
+        .search-form-inline .btn-primary.btn-sm:hover {
+            background: linear-gradient(135deg, #4050e6 0%, #6b2dd8 100%);
+            transform: translateY(-1px);
+        }
+        
+        .search-form-inline .btn-outline-light.btn-sm {
+            background-color: #f8f9fa;
+            border-color: #e0e0e0;
+            color: #6c757d;
+        }
+        
+        .search-form-inline .btn-outline-light.btn-sm:hover {
+            background-color: #e9ecef;
+            color: #495057;
+        }
+        
+        .nk-block-head-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .d-flex.gap-2 {
+            gap: 0.5rem;
+        }
     </style>
 
     <script>

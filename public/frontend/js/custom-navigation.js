@@ -152,6 +152,14 @@
 		// ***********Custom SideBar & SideNav************
 		
 			$(document).ready(function () {
+				    // Skip sidebar initialization on guest dashboard pages
+				    if ($('body').hasClass('guest-dashboard-page')) {
+				        // Ensure sidebar stays closed
+				        $('#sidebar').removeClass('active');
+				        $('.overlay').removeClass('active');
+				        return; // Exit early, don't attach handlers
+				    }
+				    
 				    $("#sidebar").mCustomScrollbar({
 				        theme: "minimal"
 				    });
@@ -162,6 +170,12 @@
 				    });
 
 				    $('#sidebarCollapse').on('click', function () {
+				        // Prevent sidebar from opening on guest dashboard pages
+				        if ($('body').hasClass('guest-dashboard-page')) {
+				            $('#sidebar').removeClass('active');
+				            $('.overlay').removeClass('active');
+				            return false;
+				        }
 				        $('#sidebar').addClass('active');
 				        $('.overlay').addClass('active');
 				        $('.collapse.in').toggleClass('in');
@@ -170,6 +184,13 @@
 
 				    // Close sidebar when clicking outside (only for mobile view)
 				    $(document).on('click', function (event) {
+				        // Don't handle clicks on guest dashboard pages - completely skip
+				        if ($('body').hasClass('guest-dashboard-page')) {
+				            // Ensure sidebar stays closed
+				            $('#sidebar').removeClass('active');
+				            $('.overlay').removeClass('active');
+				            return false;
+				        }
 				        if ($(window).width() <= 768) { // Only for mobile view
 				            if (!$(event.target).closest("#sidebar, #sidebarCollapse").length) {
 				                $('#sidebar').removeClass('active');
@@ -177,6 +198,24 @@
 				            }
 				        }
 				    });
+				    
+				    // Additional prevention for guest dashboard pages
+				    if ($('body').hasClass('guest-dashboard-page')) {
+				        // Prevent sidebar from opening on ANY click
+				        $(document).on('click.guest-dashboard', function(e) {
+				            $('#sidebar').removeClass('active');
+				            $('.overlay').removeClass('active');
+				        });
+				        
+				        // Prevent sidebar toggle
+				        $('#sidebarCollapse').off('click').on('click', function(e) {
+				            e.preventDefault();
+				            e.stopPropagation();
+				            $('#sidebar').removeClass('active');
+				            $('.overlay').removeClass('active');
+				            return false;
+				        });
+				    }
 				});
 
 

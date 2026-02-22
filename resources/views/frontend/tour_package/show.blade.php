@@ -1,5 +1,5 @@
 @extends('frontend.hotelMaster')
-@section('title', $tourPackage->title . ' - EGKom')
+@section('title', $tourPackage->title . ' - EZBOOKING')
 @section('main')
     <!--===== INNERPAGE-WRAPPER (same structure as tour-package-details.html) =====-->
     <section class="innerpage-wrapper">

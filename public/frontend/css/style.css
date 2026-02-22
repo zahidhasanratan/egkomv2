@@ -1,5 +1,5 @@
 /* ----------------------------------------------------
-Theme Name:		Egkom
+Theme Name:		EZBOOKING
 COmpany:		e-soft
 Designer:	    Abdur Rahman Tarun
 ------------------------------------------------------- */
@@ -179,7 +179,7 @@ h6 {
     transition: 0.5s;
 }
 .user-bendor:hover {
-	background-color: #f0f0f0;
+	
 }
 
 
@@ -13334,6 +13334,10 @@ h2.wishlist-title {
 		  padding: 5px 3px;
 		  border-radius: 10px;
         }
+
+		.user-section:hover {
+background-color: #f0f0f0;
+		}
 
         .calendar-popup {
   display: none;

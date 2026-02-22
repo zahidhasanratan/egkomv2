@@ -28,7 +28,20 @@
                     <a href="#" class="nk-nav-compact nk-quick-nav-icon d-none d-xl-inline-flex" data-target="sidebarMenu"><em class="icon ni ni-menu"></em></a>
                 </div>
                 <div class="nk-sidebar-brand">
-                    <a href="{{ route('super-admin.dashboard') }}" class="logo-link nk-sidebar-logo"><img class="logo-light logo-img" src="{{ asset('assets/super_admin') }}/images/logo.png" srcset="{{ asset('assets/super_admin') }}/demo1/images/logo2x.png 2x" alt="logo"><img class="logo-dark logo-img" src="{{ asset('assets/super_admin') }}/images/logo-dark.png" srcset="/demo1/images/logo-dark2x.png 2x" alt="logo-dark"></a>
+                    <div style="position: relative; display: inline-block; width: 100%;">
+                        <a href="{{ route('super-admin.dashboard') }}" class="logo-link nk-sidebar-logo" id="logoLink">
+                            @php
+                                $hotelSetting = \App\Models\HotelSetting::first();
+                                $logoPath = $hotelSetting && $hotelSetting->hotel_logo ? asset($hotelSetting->hotel_logo) : asset('assets/super_admin/images/logo.png');
+                                $logoDarkPath = $hotelSetting && $hotelSetting->hotel_logo ? asset($hotelSetting->hotel_logo) : asset('assets/super_admin/images/logo-dark.png');
+                            @endphp
+                            <img class="logo-light logo-img" src="{{ $logoPath }}" alt="logo" id="logoLight">
+                            <img class="logo-dark logo-img" src="{{ $logoDarkPath }}" alt="logo-dark" id="logoDark">
+                        </a>
+                        <button type="button" class="logo-edit-btn" data-bs-toggle="modal" data-bs-target="#logoEditModal" title="Edit Logo" style="position: absolute; top: 50%; right: -43px; transform: translateY(-50%); background: rgba(145, 39, 143, 0.8); color: white; border: none; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; z-index: 10;">
+                            <em class="icon ni ni-edit" style="font-size: 14px;"></em>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -43,7 +56,11 @@
                     <div class="nk-header-wrap">
                         <div class="nk-menu-trigger d-xl-none ms-n1"><a href="#" class="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em class="icon ni ni-menu"></em></a></div>
                         <div class="nk-header-brand d-xl-none">
-                            <a href="https://dashlite.net/demo1/index.html" class="logo-link"><img class="logo-light logo-img" src="../images/logo.png" srcset="/demo1/images/logo2x.png 2x" alt="logo"><img class="logo-dark logo-img" src="../images/logo-dark.png" srcset="/demo1/images/logo-dark2x.png 2x" alt="logo-dark"></a>
+                            @php
+                                $hotelSetting = \App\Models\HotelSetting::first();
+                                $mobileLogoPath = $hotelSetting && $hotelSetting->hotel_logo ? asset($hotelSetting->hotel_logo) : asset('assets/super_admin/images/logo.png');
+                            @endphp
+                            <a href="{{ route('super-admin.dashboard') }}" class="logo-link"><img class="logo-light logo-img" src="{{ $mobileLogoPath }}" alt="logo"><img class="logo-dark logo-img" src="{{ $mobileLogoPath }}" alt="logo-dark"></a>
                         </div>
                         <div class="nk-header-news d-none d-xl-block">
                             <div class="nk-news-list">
@@ -107,7 +124,7 @@
             <div class="nk-footer">
                 <div class="container-fluid">
                     <div class="nk-footer-wrap">
-                        <div class="nk-footer-copyright"> &copy; 2024 Egkom. All Rights Reserved.</div>
+                        <div class="nk-footer-copyright"> &copy; 2024 EZBOOKING. All Rights Reserved.</div>
                         <div class="nk-footer-links">
                             <ul class="nav nav-sm">
                                 <p class="footer-copytext"> <a href="https://www.esoft.com.bd/" target="_blank"> Software Developed by :</a> <span style="font-family:cursive">e-<span style="color:red">S</span>oft</span></p>
@@ -409,10 +426,237 @@
 </script>
 
 
+<!-- Logo Edit Modal -->
+<div class="modal fade" id="logoEditModal" tabindex="-1" aria-labelledby="logoEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="logoEditModalLabel">Edit Logo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="logoEditForm" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Current Logo</label>
+                        <div class="current-logo-preview mb-3" style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                            @php
+                                $hotelSetting = \App\Models\HotelSetting::first();
+                                $currentLogo = $hotelSetting && $hotelSetting->hotel_logo ? asset($hotelSetting->hotel_logo) : asset('assets/super_admin/images/logo.png');
+                            @endphp
+                            <img src="{{ $currentLogo }}" alt="Current Logo" id="currentLogoPreview" style="max-width: 200px; max-height: 100px; object-fit: contain;">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Upload New Logo</label>
+                        <div class="form-control-wrap">
+                            <div class="form-file">
+                                <input type="file" class="form-file-input" id="logoFile" name="logo" accept="image/*" onchange="previewLogo(this)">
+                                <label class="form-file-label" for="logoFile">
+                                    <span class="form-file-text">Choose file</span>
+                                    <span class="form-file-button">Browse</span>
+                                </label>
+                            </div>
+                            <div style="margin-top: 12px; padding: 10px; background-color: #f8f9fa; border-left: 3px solid #91278f; border-radius: 4px;">
+                                <small style="font-size: 13px; color: #495057; display: block; line-height: 1.5;">
+                                    <strong style="color: #91278f;">Logo Size:</strong> Height: <strong>60px</strong>; Width: <strong>260px</strong><br>
+                                    <span style="color: #6c757d;">Max file size: 2MB</span>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" id="newLogoPreview" style="display: none;">
+                        <label class="form-label">New Logo Preview</label>
+                        <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                            <img id="newLogoPreviewImg" src="" alt="New Logo Preview" style="max-width: 200px; max-height: 100px; object-fit: contain;">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="saveLogoBtn">
+                        <em class="icon ni ni-save"></em> Save Logo
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .logo-edit-btn:hover {
+        background: rgba(145, 39, 143, 1) !important;
+        transform: translateY(-50%) scale(1.1);
+    }
+    .logo-edit-btn:active {
+        transform: translateY(-50%) scale(0.95);
+    }
+    #logoEditForm .form-file-input:focus ~ .form-file-label {
+        border-color: #91278f;
+    }
+</style>
+
+<script>
+    function previewLogo(input) {
+        const previewContainer = document.getElementById('newLogoPreview');
+        const previewImg = document.getElementById('newLogoPreviewImg');
+        
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
+            
+            // Validate file type
+            if (!file.type.match('image.*')) {
+                alert('Please select an image file.');
+                input.value = '';
+                return;
+            }
+            
+            // Validate file size (max 2MB)
+            if (file.size > 2 * 1024 * 1024) {
+                alert('File size must be less than 2MB.');
+                input.value = '';
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                previewContainer.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            previewContainer.style.display = 'none';
+        }
+    }
+    
+    document.getElementById('logoEditForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const saveBtn = document.getElementById('saveLogoBtn');
+        const originalBtnText = saveBtn.innerHTML;
+        
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<em class="icon ni ni-loader"></em> Uploading...';
+        
+        fetch('{{ route("super-admin.logo.update") }}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update logo images
+                if (data.logo_path) {
+                    // Update sidebar logos
+                    document.getElementById('logoLight').src = data.logo_path;
+                    document.getElementById('logoDark').src = data.logo_path;
+                    document.getElementById('currentLogoPreview').src = data.logo_path;
+                    
+                    // Update mobile header logos if they exist
+                    const mobileLogos = document.querySelectorAll('.nk-header-brand .logo-img');
+                    mobileLogos.forEach(logo => {
+                        logo.src = data.logo_path;
+                    });
+                }
+                
+                // Show success message
+                alert('Logo updated successfully!');
+                
+                // Close modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('logoEditModal'));
+                modal.hide();
+                
+                // Reset form
+                document.getElementById('logoEditForm').reset();
+                document.getElementById('newLogoPreview').style.display = 'none';
+            } else {
+                alert(data.message || 'Failed to update logo. Please try again.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        })
+        .finally(() => {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = originalBtnText;
+        });
+    });
+</script>
+
 <script src="{{ asset('assets/super_admin') }}/assets/js/bundlee1e3.js?ver=3.2.4"></script>
 <script src="{{ asset('assets/super_admin') }}/assets/js/scriptse1e3.js?ver=3.2.4"></script>
 <script src="{{ asset('assets/super_admin') }}/assets/js/demo-settingse1e3.js?ver=3.2.4"></script>
 <script src="{{ asset('assets/super_admin') }}/assets/js/charts/chart-hotele1e3.js?ver=3.2.4"></script>
+<!-- Global script to make all date inputs open calendar on click -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle all native HTML5 date inputs (type="date")
+        document.querySelectorAll('input[type="date"]').forEach(function(input) {
+            // Remove readonly if present to allow calendar opening
+            if (input.hasAttribute('readonly')) {
+                input.removeAttribute('readonly');
+                input.style.cursor = 'pointer';
+            }
+            
+            // Add click handler to open native date picker
+            input.addEventListener('click', function(e) {
+                if (this.showPicker && typeof this.showPicker === 'function') {
+                    e.preventDefault();
+                    this.showPicker();
+                }
+            });
+            
+            // Also handle focus event
+            input.addEventListener('focus', function(e) {
+                if (this.showPicker && typeof this.showPicker === 'function') {
+                    e.preventDefault();
+                    this.showPicker();
+                }
+            });
+        });
+        
+        // Handle bootstrap-datepicker inputs
+        if (typeof $.fn.datepicker !== 'undefined') {
+            $('input[data-provide="datepicker"], input.datepicker').each(function() {
+                var $input = $(this);
+                $input.on('click', function() {
+                    if ($input.data('datepicker')) {
+                        $input.data('datepicker').show();
+                    }
+                });
+            });
+        }
+        
+        // Make calendar icons clickable
+        document.querySelectorAll('.fa-calendar, .fa-calendar-check, [class*="calendar"]').forEach(function(icon) {
+            var parent = icon.closest('.form-group, .input-group, .search-container, div[style*="position: relative"]');
+            if (parent) {
+                var input = parent.querySelector('input[type="date"], input[type="text"][readonly], input.datepicker, input[data-provide="datepicker"]');
+                if (input) {
+                    icon.style.cursor = 'pointer';
+                    icon.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        input.focus();
+                        input.click();
+                        if (input.type === 'date' && input.showPicker) {
+                            input.showPicker();
+                        }
+                        if (typeof $.fn.datepicker !== 'undefined' && $(input).data('datepicker')) {
+                            $(input).data('datepicker').show();
+                        }
+                    });
+                }
+            }
+        });
+    });
+</script>
+
 </body>
 
 </html>

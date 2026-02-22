@@ -1,5 +1,5 @@
 @extends('frontend.hotelMaster')
-@section('title','EGKom')
+@section('title','EZBOOKING')
 @section('main')
     <!--===== INNERPAGE-WRAPPER (per hotel-room-details.html) =====-->
     <section class="innerpage-wrapper">
@@ -848,7 +848,10 @@
 
                                         <div class="hotel-room">
                                             @php
-                                                $activeRooms = \App\Models\Room::where('hotel_id', $show->id)->where('is_active', true)->get();
+                                                // Only show rooms if hotel is not suspended
+                                                $activeRooms = ($show->approve == 1 && !$show->is_suspended) 
+                                                    ? \App\Models\Room::where('hotel_id', $show->id)->where('is_active', true)->get()
+                                                    : collect();
                                             @endphp
                                             
                                             @if($activeRooms->isEmpty())
@@ -1582,6 +1585,22 @@
                                 const quantity = modalQty ? parseInt(modalQty.value) : 1;
                                 
                                 if (addToGlobalCart(Number(room.id), room.name, Number(discountedPrice) || 0, room.total_rooms || 1, quantity, room.total_persons || 2, {{ $show->id ?? 0 }}, room.number || null, room.floor_number || null)) {
+                                    // Force immediate badge update
+                                    if (typeof updateGlobalCartDisplay === 'function') {
+                                        updateGlobalCartDisplay();
+                                    }
+                                    
+                                    // Also manually update badge if function exists
+                                    const globalBadge = document.getElementById('globalCartCountBadge');
+                                    if (globalBadge && typeof globalBookingCart !== 'undefined') {
+                                        const count = globalBookingCart.length;
+                                        globalBadge.textContent = count;
+                                        if (count > 0) {
+                                            globalBadge.classList.add('visible');
+                                            globalBadge.style.display = 'block';
+                                        }
+                                    }
+                                    
                                     // Close modal first
                                     const modalElement = document.getElementById('rightSidebarModalDetails');
                                     if (modalElement) {

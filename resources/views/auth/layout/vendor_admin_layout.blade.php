@@ -93,7 +93,12 @@
                     <a href="#" class="nk-nav-compact nk-quick-nav-icon d-none d-xl-inline-flex" data-target="sidebarMenu"><em class="icon ni ni-menu"></em></a>
                 </div>
                 <div class="nk-sidebar-brand">
-                    <a href="{{ route('vendor-admin.dashboard') }}" class="logo-link nk-sidebar-logo"><img class="logo-light logo-img" src="{{ asset('assets/super_admin') }}/images/logo.png" srcset="{{ asset('assets/super_admin') }}/demo1/images/logo2x.png 2x" alt="logo"><img class="logo-dark logo-img" src="{{ asset('assets/super_admin') }}/images/logo-dark.png" srcset="/demo1/images/logo-dark2x.png 2x" alt="logo-dark"></a>
+                    @php
+                        $hotelSetting = \App\Models\HotelSetting::first();
+                        $logoPath = $hotelSetting && $hotelSetting->hotel_logo ? asset($hotelSetting->hotel_logo) : asset('assets/super_admin/images/logo.png');
+                        $logoDarkPath = $hotelSetting && $hotelSetting->hotel_logo ? asset($hotelSetting->hotel_logo) : asset('assets/super_admin/images/logo-dark.png');
+                    @endphp
+                    <a href="{{ route('vendor-admin.dashboard') }}" class="logo-link nk-sidebar-logo"><img class="logo-light logo-img" src="{{ $logoPath }}" alt="logo"><img class="logo-dark logo-img" src="{{ $logoDarkPath }}" alt="logo-dark"></a>
                 </div>
             </div>
 
@@ -108,7 +113,7 @@
                     <div class="nk-header-wrap">
                         <div class="nk-menu-trigger d-xl-none ms-n1"><a href="#" class="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em class="icon ni ni-menu"></em></a></div>
                         <div class="nk-header-brand d-xl-none">
-                            <a href="https://dashlite.net/demo1/index.html" class="logo-link"><img class="logo-light logo-img" src="../images/logo.png" srcset="/demo1/images/logo2x.png 2x" alt="logo"><img class="logo-dark logo-img" src="../images/logo-dark.png" srcset="/demo1/images/logo-dark2x.png 2x" alt="logo-dark"></a>
+                            <a href="{{ route('vendor-admin.dashboard') }}" class="logo-link"><img class="logo-light logo-img" src="{{ $logoPath }}" alt="logo"><img class="logo-dark logo-img" src="{{ $logoPath }}" alt="logo-dark"></a>
                         </div>
                         <div class="nk-header-news d-none d-xl-block">
                             <div class="nk-news-list">
@@ -171,7 +176,7 @@
             <div class="nk-footer">
                 <div class="container-fluid">
                     <div class="nk-footer-wrap">
-                        <div class="nk-footer-copyright"> &copy; 2024 Egkom. All Rights Reserved.</div>
+                        <div class="nk-footer-copyright"> &copy; 2024 EZBOOKING. All Rights Reserved.</div>
                         <div class="nk-footer-links">
                             <ul class="nav nav-sm">
                                 <p class="footer-copytext"> <a href="https://www.esoft.com.bd/" target="_blank"> Software Developed by :</a> <span style="font-family:cursive">e-<span style="color:red">S</span>oft</span></p>
@@ -457,6 +462,71 @@
 <script src="{{ asset('assets/super_admin') }}/assets/js/demo-settingse1e3.js?ver=3.2.4"></script>
 <script src="{{ asset('assets/super_admin') }}/assets/js/charts/chart-hotele1e3.js?ver=3.2.4"></script>
 
+
+<!-- Global script to make all date inputs open calendar on click -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle all native HTML5 date inputs (type="date")
+        document.querySelectorAll('input[type="date"]').forEach(function(input) {
+            // Remove readonly if present to allow calendar opening
+            if (input.hasAttribute('readonly')) {
+                input.removeAttribute('readonly');
+                input.style.cursor = 'pointer';
+            }
+            
+            // Add click handler to open native date picker
+            input.addEventListener('click', function(e) {
+                if (this.showPicker && typeof this.showPicker === 'function') {
+                    e.preventDefault();
+                    this.showPicker();
+                }
+            });
+            
+            // Also handle focus event
+            input.addEventListener('focus', function(e) {
+                if (this.showPicker && typeof this.showPicker === 'function') {
+                    e.preventDefault();
+                    this.showPicker();
+                }
+            });
+        });
+        
+        // Handle bootstrap-datepicker inputs
+        if (typeof $.fn.datepicker !== 'undefined') {
+            $('input[data-provide="datepicker"], input.datepicker').each(function() {
+                var $input = $(this);
+                $input.on('click', function() {
+                    if ($input.data('datepicker')) {
+                        $input.data('datepicker').show();
+                    }
+                });
+            });
+        }
+        
+        // Make calendar icons clickable
+        document.querySelectorAll('.fa-calendar, .fa-calendar-check, [class*="calendar"]').forEach(function(icon) {
+            var parent = icon.closest('.form-group, .input-group, .search-container, div[style*="position: relative"]');
+            if (parent) {
+                var input = parent.querySelector('input[type="date"], input[type="text"][readonly], input.datepicker, input[data-provide="datepicker"]');
+                if (input) {
+                    icon.style.cursor = 'pointer';
+                    icon.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        input.focus();
+                        input.click();
+                        if (input.type === 'date' && input.showPicker) {
+                            input.showPicker();
+                        }
+                        if (typeof $.fn.datepicker !== 'undefined' && $(input).data('datepicker')) {
+                            $(input).data('datepicker').show();
+                        }
+                    });
+                }
+            }
+        });
+    });
+</script>
 
 </body>
 

@@ -77,8 +77,11 @@
                                                 @error('image')
                                                     <span class="text-danger d-block">{{ $message }}</span>
                                                 @enderror
-                                                <div id="image-preview" class="mt-2" style="display: none;">
-                                                    <img id="preview-img" src="" alt="Preview" style="max-width: 200px; max-height: 150px; object-fit: contain; border-radius: 8px;">
+                                                <div id="image-preview" class="mt-2" style="display: none; position: relative; display: inline-block;">
+                                                    <img id="preview-img" src="" alt="Preview" style="max-width: 200px; max-height: 150px; object-fit: contain; border-radius: 8px; display: block;">
+                                                    <button type="button" id="remove-preview" class="btn btn-sm btn-danger" style="position: absolute; top: -5px; right: -5px; width: 28px; height: 28px; border-radius: 50%; padding: 0; display: flex; align-items: center; justify-content: center; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index: 10;" title="Remove image">
+                                                        <span style="font-size: 16px; line-height: 1;">&times;</span>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -150,12 +153,22 @@
                 var reader = new FileReader();
                 reader.onload = function(e) {
                     img.src = e.target.result;
-                    preview.style.display = 'block';
+                    preview.style.display = 'inline-block';
                 };
                 reader.readAsDataURL(file);
             } else {
                 preview.style.display = 'none';
             }
+        });
+
+        document.getElementById('remove-preview').addEventListener('click', function() {
+            var preview = document.getElementById('image-preview');
+            var img = document.getElementById('preview-img');
+            var fileInput = document.getElementById('image');
+            
+            preview.style.display = 'none';
+            img.src = '';
+            fileInput.value = '';
         });
     </script>
 

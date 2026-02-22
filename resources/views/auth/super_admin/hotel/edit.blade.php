@@ -1332,8 +1332,10 @@
                                     <!-- Most Popular Facilities -->
                                         <div class="tab-pane" id="tabItem4">
                                             <div class="row mt-15">
-                                                <div class="checkbox-section">
-                                                    <h3 class="can-tittle">Most Popular Facilities</h3>
+                                                <!-- Left: Most Popular Facilities -->
+                                                <div class="col-md-6 col-lg-6">
+                                                    <div class="checkbox-section">
+                                                        <h3 class="can-tittle">Most Popular Facilities</h3>
 
                                                     <!-- Select All Toggle -->
                                                     <div class="chk-all-sec">
@@ -1508,9 +1510,10 @@
                                                     @error('facilities')
                                                     <span class="text-danger">{{ $message }}</span>
                                                     @enderror
+                                                    </div>
                                                 </div>
-                                                <div class="row">
-
+                                                <!-- Right: Hotel Facilities Categories -->
+                                                <div class="col-md-6 col-lg-6">
                                                     <div class="container mt-15">
                                                         <div class="row">
                                                             <h3 class="can-tittle">Hotel Facilities Categories</h3>
@@ -1555,9 +1558,7 @@
 
                                                         </div>
                                                     </div>
-
-
-
+                                                </div>
                                                 </div>
                                                 <!-- Save / Submit Buttons -->
                                                 <div class="row">
@@ -1584,9 +1585,9 @@
                                         </div>
 
 
-                                        <div class="tab-pane" id="tabItem1">
-
-                                            <div class="col-lg-12">
+                                        <div class="tab-pane fade" id="tabItem1">
+                                            <div class="row">
+                                                <div class="col-lg-12">
                                                 <div class="form-group">
                                                     <h3 class="can-tittle">Most Popular Nearby Area <small class="text-muted">(Maximum 3)</small></h3>
                                                     <div id="nearby-areas-wrapper">
@@ -1714,6 +1715,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            </div>
                                         </div>
 
                                         <script>
@@ -1749,8 +1751,7 @@
 
 
                                         <!-- Photos -->
-                                        <div class="tab-pane" id="Photos">
-                                            @php
+                                        <div class="tab-pane fade" id="Photos" style="padding: 0; margin: 0;">@php
                                                 // Updated hotel photo categories
                                                 $photoFields = [
                                                     'featured_photo',           // single
@@ -1772,28 +1773,29 @@
                                                     'amenities_photos' => 'Amenities & Services (Car, Bus, CCTV, Fire Extinguisher, Surveillance, Room Amenities)',
                                                     'additional_photos' => 'Additional Photos',
                                                 ];
-                                            @endphp
-
-                                            <div class="row gy-4">
-
+                                            @endphp<div class="row" style="margin: 0; padding: 0;">
                                                 @foreach($photoFields as $index => $field)
-                                                    <div class="col-md-6 col-lg-4 col-xxl-3">
-                                                        <div class="form-group mt-15">
-                                                            <label class="form-label">{{ $labels[$field] }}</label>
+                                                    @php
+                                                        $photos = json_decode($hotel->$field, true);
+                                                        if (is_array($photos)) {
+                                                            $photos = array_map(function ($photo) {
+                                                                return str_replace("\\", "/", $photo);
+                                                            }, $photos);
+                                                        } else {
+                                                            $photos = [];
+                                                        }
+                                                    @endphp
+                                                    <div class="col-md-6 col-lg-4 col-xxl-3" style="{{ $index === 0 ? 'margin-top: 0; padding-top: 0;' : '' }}">
+                                                        <div class="form-group" style="{{ $index === 0 ? 'margin-top: 0 !important; padding-top: 0 !important;' : '' }}">
+                                                            <label class="form-label d-block mb-1">{{ $labels[$field] }}</label>
+                                                            <div class="mb-2 photo-delete-all-wrap" style="{{ !empty($photos) ? '' : 'display: none;' }}">
+                                                                <button type="button" class="btn btn-sm btn-outline-danger multiple-remove-all-btn" data-field="{{ $field }}" title="Remove all photos in this category">
+                                                                    <i class="fa fa-trash-o"></i> Delete All Photos
+                                                                </button>
+                                                            </div>
                                                             <div class="multiple-upload-container"
-                                                                 id="upload-container-{{ $index + 1 }}">
-                                                                @php
-                                                                    $photos = json_decode($hotel->$field, true);
-                                                                    // Check if the decoded photos are an array
-                                                                    if (is_array($photos)) {
-                                                                        $photos = array_map(function ($photo) {
-                                                                            return str_replace("\\", "/", $photo); // Remove extra backslashes
-                                                                        }, $photos);
-                                                                    } else {
-                                                                        $photos = [];
-                                                                    }
-                                                                @endphp
-
+                                                                 id="upload-container-{{ $index + 1 }}"
+                                                                 data-field="{{ $field }}">
                                                                 @if(!empty($photos))
                                                                     @foreach($photos as $photoIndex => $photo)
                                                                         <div class="multiple-thumbnail-item">
@@ -1812,12 +1814,12 @@
 
                                                                 @if($field === 'featured_photo')
                                                                     <input type="file" class="multiple-file-input"
-                                                                           name="{{ $field }}" accept="image/*">
-                                                                    <label class="upload-label">Select Single Image</label>
+                                                                           id="file-input-{{ $field }}" name="{{ $field }}" accept="image/*">
+                                                                    <label class="upload-label" for="file-input-{{ $field }}">Select Single Image</label>
                                                                 @else
                                                                     <input type="file" class="multiple-file-input"
-                                                                           name="{{ $field }}[]" accept="image/*" multiple>
-                                                                    <label class="upload-label">Select Multiple Images</label>
+                                                                           id="file-input-{{ $field }}" name="{{ $field }}[]" accept="image/*" multiple>
+                                                                    <label class="upload-label" for="file-input-{{ $field }}">Select Multiple Images</label>
                                                                 @endif
 
                                                                 <div class="multiple-thumbnail-gallery"></div>
@@ -1837,18 +1839,47 @@
                                                                     const index = e.target.getAttribute('data-index');
                                                                     const field = e.target.getAttribute('data-field');
                                                                     const removedInput = document.getElementById('removed_' + field);
-
-                                                                    // Mark the index for removal
                                                                     if (removedInput) {
                                                                         let current = removedInput.value ? removedInput.value.split(',') : [];
                                                                         current.push(index);
                                                                         removedInput.value = current.join(',');
                                                                     }
-
-                                                                    // Remove the thumbnail visually
                                                                     e.target.parentElement.remove();
+                                                                    var cont = e.target.closest('.multiple-upload-container');
+                                                                    if (cont && cont.querySelectorAll('.multiple-thumbnail-item').length === 0) {
+                                                                        var w = cont.closest('.form-group').querySelector('.photo-delete-all-wrap');
+                                                                        if (w) w.style.display = 'none';
+                                                                    }
                                                                 }
                                                             });
+                                                        });
+                                                        document.addEventListener('click', function (e) {
+                                                            if (e.target.classList.contains('multiple-remove-all-btn') || (e.target.closest && e.target.closest('.multiple-remove-all-btn'))) {
+                                                                var btn = e.target.classList.contains('multiple-remove-all-btn') ? e.target : e.target.closest('.multiple-remove-all-btn');
+                                                                if (!btn) return;
+                                                                const field = btn.getAttribute('data-field');
+                                                                const removedInput = document.getElementById('removed_' + field);
+                                                                const container = document.querySelector('.multiple-upload-container[data-field="' + field + '"]');
+                                                                if (!container) return;
+                                                                const items = container.querySelectorAll('.multiple-thumbnail-item');
+                                                                const indices = [];
+                                                                items.forEach(function (el) {
+                                                                    var b = el.querySelector('.multiple-remove-btn');
+                                                                    if (b && b.getAttribute('data-index')) indices.push(b.getAttribute('data-index'));
+                                                                });
+                                                                if (removedInput && indices.length) {
+                                                                    const existing = removedInput.value ? removedInput.value.split(',') : [];
+                                                                    const combined = [...new Set(existing.concat(indices))];
+                                                                    removedInput.value = combined.join(',');
+                                                                }
+                                                                items.forEach(function (el) { el.remove(); });
+                                                                var fileInput = container.querySelector('.multiple-file-input');
+                                                                if (fileInput) fileInput.value = '';
+                                                                var containerId = container.id;
+                                                                if (containerId && window._superAdminUploadedImages) window._superAdminUploadedImages[containerId] = [];
+                                                                var wrap = btn.closest('.photo-delete-all-wrap');
+                                                                if (wrap) wrap.style.display = 'none';
+                                                            }
                                                         });
                                                     });
                                                 </script>
@@ -1876,6 +1907,119 @@
 
                                     </div>
                                 </form>
+                                
+                                <style>
+                                    .tab-content {
+                                        padding-top: 0 !important;
+                                    }
+                                    #Photos.tab-pane {
+                                        padding: 0 !important;
+                                        margin: 0 !important;
+                                        min-height: auto !important;
+                                        display: block !important;
+                                    }
+                                    #Photos.tab-pane.fade:not(.show) {
+                                        display: none !important;
+                                    }
+                                    #Photos.tab-pane.fade.show {
+                                        display: block !important;
+                                    }
+                                    #tabItem1.tab-pane.fade:not(.show) {
+                                        display: none !important;
+                                    }
+                                    #tabItem1.tab-pane.fade.show {
+                                        display: block !important;
+                                    }
+                                    .tab-content > .tab-pane:not(.active):not(.show) {
+                                        display: none !important;
+                                        visibility: hidden !important;
+                                    }
+                                    .tab-content > .tab-pane.active.show {
+                                        display: block !important;
+                                        visibility: visible !important;
+                                    }
+                                    #Photos .row {
+                                        margin: 0 !important;
+                                        padding: 0 !important;
+                                    }
+                                    #Photos .row > div:first-child {
+                                        margin-top: 0 !important;
+                                        padding-top: 0 !important;
+                                    }
+                                    #Photos .row > div:first-child .form-group {
+                                        margin-top: 0 !important;
+                                        padding-top: 0 !important;
+                                    }
+                                    #Photos .form-group:first-of-type {
+                                        margin-top: 0 !important;
+                                        padding-top: 0 !important;
+                                    }
+                                    #Photos .col-md-6:first-child,
+                                    #Photos .col-lg-4:first-child,
+                                    #Photos .col-xxl-3:first-child {
+                                        margin-top: 0 !important;
+                                        padding-top: 0 !important;
+                                    }
+                                    #Photos .row > div:first-child .form-group,
+                                    #Photos .row > div:first-child .form-group label {
+                                        margin-top: 0 !important;
+                                        padding-top: 0 !important;
+                                    }
+                                    #tabItem1.tab-pane {
+                                        padding-top: 0 !important;
+                                        margin-top: 0 !important;
+                                    }
+                                </style>
+                                
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        // Ensure Bootstrap tabs work correctly and prevent overlap
+                                        var tabLinks = document.querySelectorAll('[data-bs-toggle="tab"]');
+                                        
+                                        // Function to hide all tabs except the active one
+                                        function hideAllTabs() {
+                                            document.querySelectorAll('.tab-content .tab-pane').forEach(function(pane) {
+                                                pane.classList.remove('active', 'show');
+                                                pane.style.display = 'none';
+                                            });
+                                        }
+                                        
+                                        // Function to show specific tab
+                                        function showTab(tabId) {
+                                            hideAllTabs();
+                                            var targetPane = document.querySelector(tabId);
+                                            if (targetPane) {
+                                                targetPane.classList.add('active', 'show');
+                                                targetPane.style.display = 'block';
+                                            }
+                                        }
+                                        
+                                        // Initialize - hide all tabs except the default active one
+                                        hideAllTabs();
+                                        var activeTab = document.querySelector('.tab-pane.active');
+                                        if (activeTab) {
+                                            activeTab.classList.add('show');
+                                            activeTab.style.display = 'block';
+                                        }
+                                        
+                                        // Handle tab clicks
+                                        tabLinks.forEach(function(link) {
+                                            link.addEventListener('click', function(e) {
+                                                var targetId = this.getAttribute('href');
+                                                if (targetId) {
+                                                    showTab(targetId);
+                                                }
+                                            });
+                                            
+                                            link.addEventListener('shown.bs.tab', function(e) {
+                                                var targetId = e.target.getAttribute('href');
+                                                if (targetId) {
+                                                    showTab(targetId);
+                                                }
+                                            });
+                                        });
+                                    });
+                                </script>
 
                             </div>
                         </div>
@@ -1944,13 +2088,22 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const uploadedImages = {};
+            window._superAdminUploadedImages = uploadedImages;
+
+            function toggleDeleteAllForContainer(container) {
+                const formGroup = container.closest('.form-group');
+                const wrap = formGroup ? formGroup.querySelector('.photo-delete-all-wrap') : null;
+                if (wrap) {
+                    const total = container.querySelectorAll('.multiple-thumbnail-item').length;
+                    wrap.style.display = total > 0 ? 'block' : 'none';
+                }
+            }
 
             function initializeMultipleUpload(container) {
                 const fileInput = container.querySelector('.multiple-file-input');
                 const thumbnailGallery = container.querySelector('.multiple-thumbnail-gallery');
-                const containerId = container.id || `dynamic-${Date.now()}`; // Fallback ID for dynamic containers
-
-                uploadedImages[containerId] = [];
+                const containerId = container.id || `dynamic-${Date.now()}`;
+                if (!uploadedImages[containerId]) uploadedImages[containerId] = [];
 
                 fileInput.addEventListener('change', function (event) {
                     console.log(`File input changed in container: ${containerId}`);
@@ -1966,6 +2119,9 @@
                             thumbnailItem.classList.add('multiple-thumbnail-item');
                             const img = document.createElement('img');
                             img.src = e.target.result;
+                            img.style.height = '100px';
+                            img.style.width = 'auto';
+                            img.classList.add('img-thumbnail');
                             const removeBtn = document.createElement('button');
                             removeBtn.innerHTML = '×';
                             removeBtn.classList.add('multiple-remove-btn');
@@ -1976,12 +2132,14 @@
                                     uploadedImages[containerId].splice(index, 1);
                                     console.log(`Removed file ${file.name} from container ${containerId}`);
                                 }
+                                toggleDeleteAllForContainer(container);
                             });
                             thumbnailItem.appendChild(img);
                             thumbnailItem.appendChild(removeBtn);
                             thumbnailGallery.appendChild(thumbnailItem);
                             uploadedImages[containerId].push(file);
                             console.log(`Added thumbnail for file ${file.name} in container ${containerId}`);
+                            toggleDeleteAllForContainer(container);
                         };
                         reader.readAsDataURL(file);
                     }

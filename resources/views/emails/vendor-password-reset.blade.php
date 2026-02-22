@@ -13,7 +13,7 @@
                     <!-- Header -->
                     <tr>
                         <td style="background: linear-gradient(90deg, #648b45 0%, #223f1f 100%); padding: 30px; text-align: center;">
-                            <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 600;">EGKom - Vendor Portal</h1>
+                            <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 600;">EZBOOKING - Vendor Portal</h1>
                         </td>
                     </tr>
                     
@@ -51,7 +51,7 @@
                     <tr>
                         <td style="background-color: #f9f9f9; padding: 20px; text-align: center; border-top: 1px solid #eee;">
                             <p style="color: #999; font-size: 12px; margin: 0;">
-                                © {{ date('Y') }} EGKom. All rights reserved.
+                                © {{ date('Y') }} EZBOOKING. All rights reserved.
                             </p>
                         </td>
                     </tr>

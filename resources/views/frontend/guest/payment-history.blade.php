@@ -1,8 +1,9 @@
 @extends('frontend.app')
-@section('title','Payment History - EGKom')
+@section('title','Payment History - EZBOOKING')
 @section('main')
 
 @include('frontend.guest.dashboard-styles')
+@include('frontend.guest.dashboard-header')
 
 <div class="dashboard-container">
     <div class="dashboard-wrapper">

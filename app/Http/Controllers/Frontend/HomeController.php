@@ -69,6 +69,7 @@ class HomeController extends Controller
             ->map(function ($destination) {
                 $destination->hotels_count = \App\Models\Hotel::where('popular_destination_id', $destination->id)
                     ->where('approve', 1)
+                    ->where('is_suspended', 0)
                     ->where('status', 'submitted')
                     ->count();
                 return $destination;
@@ -76,6 +77,7 @@ class HomeController extends Controller
 
         // Fetch districts dynamically from hotels
         $districts = \App\Models\Hotel::where('approve', 1)
+            ->where('is_suspended', 0)
             ->where('status', 'submitted')
             ->whereNotNull('district')
             ->where('district', '!=', '')
@@ -86,6 +88,7 @@ class HomeController extends Controller
             ->map(function ($hotel) {
                 $hotel->properties_count = \App\Models\Hotel::where('district', $hotel->district)
                     ->where('approve', 1)
+                    ->where('is_suspended', 0)
                     ->where('status', 'submitted')
                     ->count();
                 return $hotel;
@@ -93,6 +96,7 @@ class HomeController extends Controller
 
         // Fetch cities dynamically from hotels
         $cities = \App\Models\Hotel::where('approve', 1)
+            ->where('is_suspended', 0)
             ->where('status', 'submitted')
             ->whereNotNull('city')
             ->where('city', '!=', '')
@@ -103,6 +107,7 @@ class HomeController extends Controller
             ->map(function ($hotel) {
                 $hotel->properties_count = \App\Models\Hotel::where('city', $hotel->city)
                     ->where('approve', 1)
+                    ->where('is_suspended', 0)
                     ->where('status', 'submitted')
                     ->count();
                 return $hotel;
@@ -128,6 +133,7 @@ class HomeController extends Controller
             $currentPage = ($category === $tabName) ? $page : 1;
             $query = \App\Models\Hotel::where('property_category', $dbCat)
                 ->where('approve', 1)
+                ->where('is_suspended', 0)
                 ->where('status', 'submitted')
                 ->withCount('reviews')
                 ->withAvg('reviews', 'overall_rating')

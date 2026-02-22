@@ -190,13 +190,23 @@ class BookingManagementController extends Controller
         $booking = Booking::findOrFail($id);
         
         $validated = $request->validate([
+            'hotel_id' => 'required|exists:hotels,id',
             'checkin_date' => 'required|date',
             'checkout_date' => 'required|date|after:checkin_date',
             'admin_note' => 'nullable|string|max:1000',
-            'room_id' => 'nullable|exists:rooms,id',
+            'room_id' => 'required|exists:rooms,id',
             'quantity' => 'nullable|integer|min:1',
+            'price_per_night' => 'required|numeric|min:0',
+            'booking_status' => 'nullable|in:pending,confirmed,staying,completed,cancelled',
             'payment_status' => 'nullable|in:unpaid,partial,paid',
             'paid_amount' => 'nullable|numeric|min:0',
+            'discount' => 'nullable|numeric|min:0',
+            'tax_percentage' => 'nullable|numeric|min:0|max:100',
+            'platform_fee' => 'nullable|numeric|min:0',
+            'guest_name' => 'required|string|max:255',
+            'guest_phone' => 'nullable|string|max:20',
+            'guest_email' => 'nullable|email|max:255',
+            'home_address' => 'nullable|string',
         ]);
         
         DB::beginTransaction();
@@ -293,91 +303,63 @@ class BookingManagementController extends Controller
                 $booking->total_nights = $newTotalNights;
             }
             
-            // Update room if changed
-            if ($roomChanged && $request->has('room_id') && $request->room_id) {
-                $room = Room::findOrFail($request->room_id);
-                $hotel = $room->hotel;
-                
-                // Get hotel photo
-                $hotelPhoto = null;
-                if ($hotel->featured_photo) {
-                    $featuredPhotos = is_string($hotel->featured_photo) 
-                        ? json_decode($hotel->featured_photo, true) 
-                        : $hotel->featured_photo;
-                    if (!empty($featuredPhotos) && is_array($featuredPhotos) && isset($featuredPhotos[0])) {
-                        $hotelPhoto = $featuredPhotos[0];
-                    }
-                }
-                
-                // Update rooms_data
-                $roomsData = [[
-                    'roomId' => $room->id,
-                    'roomName' => $room->name ?? 'Room',
-                    'quantity' => $validated['quantity'] ?? ($booking->rooms_data[0]['quantity'] ?? 1),
-                    'price' => $room->price_per_night,
-                    'hotelId' => $hotel->id,
-                    'hotelName' => $hotel->description ?? $hotel->property_category ?? 'Hotel',
-                    'hotelAddress' => $hotel->address ?? 'Address not available',
-                    'hotelEmail' => null,
-                    'hotelPhone' => null,
-                    'hotelPhoto' => $hotelPhoto,
-                ]];
-                
-                $booking->rooms_data = $roomsData;
-            }
-            
-            // Update quantity in rooms_data if changed
-            if ($quantityChanged && !$roomChanged) {
-                $roomsData = $booking->rooms_data;
-                if (!empty($roomsData) && isset($roomsData[0])) {
-                    $roomsData[0]['quantity'] = $validated['quantity'] ?? $roomsData[0]['quantity'];
-                    $booking->rooms_data = $roomsData;
+            // Build rooms_data from selected room and form price/quantity
+            $room = Room::findOrFail($validated['room_id']);
+            $hotel = $room->hotel;
+            $hotelPhoto = null;
+            if ($hotel->featured_photo) {
+                $featuredPhotos = is_string($hotel->featured_photo)
+                    ? json_decode($hotel->featured_photo, true)
+                    : $hotel->featured_photo;
+                if (!empty($featuredPhotos) && is_array($featuredPhotos) && isset($featuredPhotos[0])) {
+                    $hotelPhoto = $featuredPhotos[0];
                 }
             }
-            
-            // ALWAYS recalculate pricing when dates, room, or quantity are provided
-            // This ensures the price is always correct based on current values
-            // Force recalculation if dates are provided (even if they appear unchanged)
-            $shouldRecalculate = $datesChanged || $roomChanged || $quantityChanged || 
-                                 ($request->has('checkin_date') && $request->has('checkout_date')) ||
-                                 ($booking->total_nights != $newTotalNights);
-            
-            // Always recalculate to ensure prices are correct
-            if ($shouldRecalculate || true) { // Force recalculation every time
-                $firstRoom = $booking->rooms_data[0] ?? null;
-                if ($firstRoom) {
-                    $pricePerNight = floatval($firstRoom['price'] ?? 0);
-                    $quantity = intval($firstRoom['quantity'] ?? 1);
-                    // Use newTotalNights which was calculated above
-                    $totalNights = intval($newTotalNights);
-                    
-                    // Calculate subtotal: price per night × quantity × total nights
-                    $subtotal = $pricePerNight * $quantity * $totalNights;
-                    $discount = floatval($booking->discount ?? 0);
-                    
-                    // No tax calculation - grand total = subtotal - discount
-                    $tax = 0;
-                    $grandTotal = $subtotal - $discount;
-                    
-                    // Update booking with new calculated values
-                    $booking->subtotal = round($subtotal, 2);
-                    $booking->tax = 0;
-                    $booking->grand_total = round($grandTotal, 2);
-                }
-            }
-            
-            // Update admin note
-            if ($request->has('admin_note')) {
-                $booking->admin_note = $validated['admin_note'];
+            $pricePerNight = floatval($validated['price_per_night']);
+            $roomsData = [[
+                'roomId' => $room->id,
+                'roomName' => $room->name ?? 'Room',
+                'quantity' => intval($validated['quantity'] ?? 1),
+                'price' => $pricePerNight,
+                'hotelId' => $hotel->id,
+                'hotelName' => $hotel->description ?? $hotel->property_category ?? 'Hotel',
+                'hotelAddress' => $hotel->address ?? 'Address not available',
+                'hotelEmail' => null,
+                'hotelPhone' => null,
+                'hotelPhoto' => $hotelPhoto,
+            ]];
+            $booking->rooms_data = $roomsData;
+
+            // Recalculate pricing (same formula as create: subtotal - discount + tax + platform_fee)
+            $firstRoom = $booking->rooms_data[0] ?? null;
+            if ($firstRoom) {
+                $pricePerNight = floatval($firstRoom['price'] ?? 0);
+                $quantity = intval($firstRoom['quantity'] ?? 1);
+                $totalNights = intval($newTotalNights);
+                $subtotal = $pricePerNight * $quantity * $totalNights;
+                $discount = floatval($validated['discount'] ?? $booking->discount ?? 0);
+                $taxPct = floatval($validated['tax_percentage'] ?? $booking->tax_percentage ?? 0);
+                $platformFee = floatval($validated['platform_fee'] ?? $booking->platform_fee ?? 0);
+                $afterDiscount = $subtotal - $discount;
+                $tax = $afterDiscount * ($taxPct / 100);
+                $grandTotal = $afterDiscount + $tax + $platformFee;
+
+                $booking->subtotal = round($subtotal, 2);
+                $booking->discount = $discount;
+                $booking->tax_percentage = $taxPct;
+                $booking->tax = round($tax, 2);
+                $booking->platform_fee = $platformFee;
+                $booking->grand_total = round($grandTotal, 2);
             }
 
-            // Update payment status (super-admin can set paid/unpaid for manual reconciliation)
-            if (array_key_exists('payment_status', $validated) && $validated['payment_status'] !== null) {
-                $booking->payment_status = $validated['payment_status'];
-            }
-            if (array_key_exists('paid_amount', $validated) && $validated['paid_amount'] !== null) {
-                $booking->paid_amount = $validated['paid_amount'];
-            }
+            $booking->admin_note = $validated['admin_note'] ?? $booking->admin_note;
+            $booking->booking_status = $validated['booking_status'] ?? $booking->booking_status;
+            $booking->payment_status = $validated['payment_status'] ?? $booking->payment_status;
+            $booking->paid_amount = $validated['paid_amount'] ?? $booking->paid_amount ?? 0;
+            $booking->guest_name = $validated['guest_name'];
+            $booking->guest_phone = $validated['guest_phone'] ?? null;
+            $booking->guest_email = $validated['guest_email'] ?? null;
+            $booking->home_address = $validated['home_address'] ?? null;
             
             $booking->save();
             

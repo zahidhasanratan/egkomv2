@@ -34,7 +34,7 @@ class SuperAdminPasswordResetMail extends Mailable
     {
         $resetUrl = url('/super-admin/password/reset/' . $this->token);
         
-        return $this->subject('Reset Your Password - EGKom')
+        return $this->subject('Reset Your Password - EZBOOKING')
                     ->view('emails.superadmin-password-reset')
                     ->with([
                         'name' => $this->name,

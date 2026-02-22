@@ -210,7 +210,7 @@
     <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="{{ route('co-host.dashboard') }}">
-                <i class="fas fa-hotel me-2"></i> EGKom Co-Host
+                <i class="fas fa-hotel me-2"></i> EZBOOKING Co-Host
             </a>
             <div class="ms-auto">
                 <div class="user-info">

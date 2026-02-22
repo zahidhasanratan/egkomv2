@@ -73,8 +73,9 @@ class SearchController extends Controller
         $totalGuests = $adults + $children;
         $hasGuestRequirement = $totalGuests > 0;
         
-        // Start with approved hotels only
-        $query = Hotel::where('approve', 1);
+        // Start with approved and non-suspended hotels only
+        $query = Hotel::where('approve', 1)
+            ->where('is_suspended', 0);
         
         // Filter by search type (location, apartment, room)
         if ($searchType === 'apartment') {
@@ -86,8 +87,12 @@ class SearchController extends Controller
             });
         } elseif ($searchType === 'room') {
             // For room search, we need to check if hotels have rooms matching the search term
-            // First, get hotel IDs that have matching rooms
+            // First, get hotel IDs that have matching rooms (excluding suspended hotels)
             $matchingRoomHotelIds = Room::where('is_active', true)
+                ->whereHas('hotel', function($q) {
+                    $q->where('approve', 1)
+                      ->where('is_suspended', 0);
+                })
                 ->where(function($q) use ($destination) {
                     $q->where('name', 'like', '%' . $destination . '%')
                       ->orWhere('description', 'like', '%' . $destination . '%');
@@ -141,7 +146,7 @@ class SearchController extends Controller
             $filteredHotels = $hotels;
         } else {
             foreach ($hotels as $hotel) {
-                // Get active rooms for this hotel
+                // Get active rooms for this hotel (hotel is already filtered to be non-suspended)
                 $rooms = Room::where('hotel_id', $hotel->id)
                     ->where('is_active', true)
                     ->get();
@@ -349,7 +354,62 @@ class SearchController extends Controller
         }
         
         $totalHotelsCount = $filteredHotels->count();
-        
+
+        // Eager load rooms (filteredHotels is a Support\Collection, so load via a fresh query and set relation)
+        if ($filteredHotels->isNotEmpty()) {
+            $hotelIds = $filteredHotels->pluck('id')->toArray();
+            $hotelsWithRooms = Hotel::whereIn('id', $hotelIds)
+                ->with(['rooms' => function ($q) {
+                    $q->where('is_active', true);
+                }])
+                ->get()
+                ->keyBy('id');
+            foreach ($filteredHotels as $hotel) {
+                $withRooms = $hotelsWithRooms->get($hotel->id);
+                if ($withRooms) {
+                    $hotel->setRelation('rooms', $withRooms->rooms);
+                }
+            }
+        }
+
+        // Enrich hotels with min_price and display_images (same structure as destinations/show)
+        $filteredHotels = $filteredHotels->map(function ($hotel) {
+            $minPrice = $hotel->rooms->min('price_per_night') ?? 0;
+            $hotel->min_price = $minPrice;
+
+            $images = [];
+            if ($hotel->featured_photo) {
+                $featuredPhotos = is_string($hotel->featured_photo) ? json_decode($hotel->featured_photo, true) : $hotel->featured_photo;
+                if (is_array($featuredPhotos) && !empty($featuredPhotos[0])) {
+                    $images[] = $featuredPhotos[0];
+                } elseif (is_string($hotel->featured_photo)) {
+                    $images[] = $hotel->featured_photo;
+                }
+            }
+            $photoFields = ['kitchen_photos', 'washroom_photos', 'parking_lot_photos', 'entrance_gate_photos'];
+            foreach ($photoFields as $field) {
+                if (!empty($hotel->$field)) {
+                    $photos = is_string($hotel->$field) ? json_decode($hotel->$field, true) : $hotel->$field;
+                    if (is_array($photos)) {
+                        $images = array_merge($images, array_slice($photos, 0, 1));
+                    }
+                }
+            }
+            $hotel->display_images = array_slice($images, 0, 4);
+
+            return $hotel;
+        });
+
+        // Property types for filter sidebar (from filtered hotels)
+        $propertyTypes = $filteredHotels
+            ->groupBy(function ($h) {
+                return $h->property_category ?? 'Hotel';
+            })
+            ->map(function ($group) {
+                return (object)['property_category' => $group->keys()->first(), 'count' => $group->count()];
+            })
+            ->values();
+
         // Pass search parameters to view for display
         return view('frontend.search.results', compact(
             'filteredHotels',
@@ -363,7 +423,8 @@ class SearchController extends Controller
             'children',
             'infants',
             'pets',
-            'totalGuests'
+            'totalGuests',
+            'propertyTypes'
         ));
     }
 

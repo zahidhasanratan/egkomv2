@@ -17,10 +17,11 @@ use App\Http\Controllers\admin\BigAdvertiseController;
 use App\Http\Controllers\admin\SmallAdvertiseController;
 use App\Http\Controllers\Superadmin\SettingsController;
 
-// Super Admin Login Routes
+// Vendor Login & Signup Routes
 Route::prefix('vendor-admin')->group(function () {
     Route::get('login', [VendorAdminLoginController::class, 'showLoginForm'])->name('vendor-admin.login');
     Route::post('login', [VendorAdminLoginController::class, 'login'])->name('vendor-admin.login.submit');
+    Route::post('signup', [VendorAdminLoginController::class, 'signup'])->name('vendor-admin.signup.submit');
     
     // Password reset routes
     Route::get('password/forgot', [VendorAdminLoginController::class, 'showForgotPasswordForm'])->name('vendor-admin.password.request');
@@ -47,11 +48,12 @@ Route::prefix('vendor-admin')->group(function () {
         Route::post('/owners', [OwnerController::class, 'store'])->name('owners.store');
 
         Route::get('/owner-info', [OwnerController::class, 'create'])->name('vendor-admin.owner.create');
-        Route::get('/owners-bankInfo', [OwnerController::class, 'bankInfo'])->name('owners.bankInfo');
-        Route::post('/owners-banking', [BankingController::class, 'store'])->name('bankings.store');
 //        Route::post('/owners-banking', [BankingController::class, 'store'])->name('bankings.store');
 
-
+        // Approved vendors only: owner banking, hotel, room, co-hosts, bookings, reviews
+        Route::middleware('vendor.approved')->group(function () {
+        Route::get('/owners-bankInfo', [OwnerController::class, 'bankInfo'])->name('owners.bankInfo');
+        Route::post('/owners-banking', [BankingController::class, 'store'])->name('bankings.store');
         Route::get('/hotel-create', [ManageHotel::class, 'create'])->name('vendor-admin.hotel.create');
         Route::post('/hotel/store', [ManageHotel::class, 'store'])->name('vendor-admin.hotel.store');
         Route::get('/hotel', [ManageHotel::class, 'index'])->name('vendor-admin.hotel.index');
@@ -82,9 +84,11 @@ Route::prefix('vendor-admin')->group(function () {
         Route::delete('/hotel/{hotel}', [ManageHotel::class, 'destroy'])->name('vendor-admin.hotel.destroy');
 
 
+        Route::get('/rooms/all', [ManageRoomController::class, 'allRooms'])->name('vendor-admin.room.all');
         Route::get('/vendor-admin/room/{id}', [ManageRoomController::class, 'index'])->name('vendor-admin.room.index');
         
         // Co-Host Management Routes
+        Route::get('/co-hosts/all', [CoHostController::class, 'allCoHosts'])->name('vendor.co-hosts.all');
         Route::get('/hotel/{hotelId}/co-hosts', [CoHostController::class, 'index'])->name('vendor.co-hosts.index');
         Route::get('/hotel/{hotelId}/co-hosts/create', [CoHostController::class, 'create'])->name('vendor.co-hosts.create');
         Route::post('/hotel/{hotelId}/co-hosts', [CoHostController::class, 'store'])->name('vendor.co-hosts.store');
@@ -121,6 +125,7 @@ Route::prefix('vendor-admin')->group(function () {
         Route::post('/reviews/{id}/approve', [\App\Http\Controllers\Vendor\VendorReviewController::class, 'approve'])->name('vendor.reviews.approve');
         Route::post('/reviews/bulk-approve', [\App\Http\Controllers\Vendor\VendorReviewController::class, 'bulkApprove'])->name('vendor.reviews.bulk-approve');
         Route::post('/reviews/{id}/response', [\App\Http\Controllers\Vendor\VendorReviewController::class, 'addResponse'])->name('vendor.reviews.add-response');
+        });
     });
     /*Admin Panel Ended */
 

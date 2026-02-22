@@ -19,6 +19,7 @@ class DestinationController extends Controller
             ->map(function ($destination) {
                 $destination->hotels_count = Hotel::where('popular_destination_id', $destination->id)
                     ->where('approve', 1)
+                    ->where('is_suspended', 0)
                     ->where('status', 'submitted')
                     ->count();
                 return $destination;
@@ -40,7 +41,9 @@ class DestinationController extends Controller
 
         if ($destination) {
             // It's a popular destination
-            $query = Hotel::where('popular_destination_id', $destination->id);
+            $query = Hotel::where('popular_destination_id', $destination->id)
+                ->where('approve', 1)
+                ->where('is_suspended', 0);
             $name = $destination->name;
         } else {
             // Check if it's a district
@@ -48,7 +51,9 @@ class DestinationController extends Controller
             
             foreach ($districts as $district) {
                 if (Str::slug($district) === $slug) {
-                    $query = Hotel::where('district', $district);
+                    $query = Hotel::where('district', $district)
+                        ->where('approve', 1)
+                        ->where('is_suspended', 0);
                     $name = $district;
                     $type = 'district';
                     break;
@@ -58,6 +63,7 @@ class DestinationController extends Controller
             // If not a district, check if it's a city
             if (!$query) {
                 $cities = Hotel::where('approve', 1)
+                    ->where('is_suspended', 0)
                     ->where('status', 'submitted')
                     ->whereNotNull('city')
                     ->where('city', '!=', '')
@@ -68,7 +74,9 @@ class DestinationController extends Controller
 
                 foreach ($cities as $city) {
                     if (Str::slug($city) === $slug) {
-                        $query = Hotel::where('city', $city);
+                        $query = Hotel::where('city', $city)
+                            ->where('approve', 1)
+                            ->where('is_suspended', 0);
                         $name = $city;
                         $type = 'city';
                         break;
@@ -85,9 +93,10 @@ class DestinationController extends Controller
         // Get hotels for this destination/district/city
         $hotels = $query
             ->where('approve', 1)
+            ->where('is_suspended', 0)
             ->where('status', 'submitted')
             ->with(['rooms' => function($roomQuery) {
-                $roomQuery->where('is_active', 1);
+                $roomQuery->where('is_active', true);
             }])
             ->get()
             ->map(function ($hotel) {

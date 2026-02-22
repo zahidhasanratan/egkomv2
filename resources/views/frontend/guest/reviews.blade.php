@@ -1,8 +1,9 @@
 @extends('frontend.app')
-@section('title','My Reviews - EGKom')
+@section('title','My Reviews - EZBOOKING')
 @section('main')
 
 @include('frontend.guest.dashboard-styles')
+@include('frontend.guest.dashboard-header')
 
 <style>
     .reviews-grid {

@@ -718,7 +718,7 @@
                             </tr>
                             @if($invoiceDiscount > 0)
                             <tr>
-                                <td colspan="7" class="text-right tfoot-discount"><strong>Discount:</strong></td>
+                                <td colspan="7" class="text-right tfoot-discount"><strong>Discount@if($booking->coupon_code) (Coupon: {{ $booking->coupon_code }})@endif:</strong></td>
                                 <td class="text-right tfoot-discount"><strong>-BDT {{ number_format($invoiceDiscount, 2) }}</strong></td>
                             </tr>
                             @endif
@@ -960,7 +960,7 @@
         <!-- Footer -->
         <footer style="margin-top: 25px; padding-top: 15px; border-top: 2px solid var(--border-color); text-align: center; color: var(--text-muted); font-size: 11px;">
             <p>This is an electronically generated invoice. No signature required.</p>
-            <p style="margin-top: 3px;">Thank you for booking with EGKom!</p>
+            <p style="margin-top: 3px;">Thank you for booking with EZBOOKING!</p>
             <p style="margin-top: 10px; font-weight: 600;">Booking Status: <span style="color: var(--brand);">{{ strtoupper($booking->booking_status) }}</span></p>
             @if($paymentStatus !== 'unpaid')
             <p style="margin-top: 5px; font-weight: 600;">Payment Status: 

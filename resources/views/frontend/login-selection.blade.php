@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - EGKom</title>
+    <title>Login - EZBOOKING</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -182,7 +182,7 @@
                     <i class="fas fa-hotel"></i>
                 </div>
             </a>
-            <h1 class="main-title">Welcome to EGKom</h1>
+            <h1 class="main-title">Welcome to EZBOOKING</h1>
             <p class="main-subtitle">Select your role to continue</p>
         </div>
 

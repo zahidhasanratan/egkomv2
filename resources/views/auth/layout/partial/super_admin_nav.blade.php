@@ -113,6 +113,17 @@
 
                 <li class="nk-menu-item has-sub">
                     <a href="#" class="nk-menu-link nk-menu-toggle">
+                        <span class="nk-menu-icon"><em class="icon ni ni-tag-fill"></em></span>
+                        <span class="nk-menu-text">Coupon Codes</span>
+                    </a>
+                    <ul class="nk-menu-sub">
+                        <li class="nk-menu-item"><a href="{{ route('super-admin.coupons.create') }}" class="nk-menu-link"><span class="nk-menu-text">Add Coupon</span></a></li>
+                        <li class="nk-menu-item"><a href="{{ route('super-admin.coupons.index') }}" class="nk-menu-link {{ request()->routeIs('super-admin.coupons.*') ? 'active' : '' }}"><span class="nk-menu-text">All Coupons</span></a></li>
+                    </ul>
+                </li>
+
+                <li class="nk-menu-item has-sub">
+                    <a href="#" class="nk-menu-link nk-menu-toggle">
                         <span class="nk-menu-icon"><em class="icon ni ni-monitor"></em></span>
                         <span class="nk-menu-text">Advertisement</span>
                     </a>
