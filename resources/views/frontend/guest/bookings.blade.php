@@ -226,6 +226,40 @@
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(147, 51, 234, 0.3);
     }
+
+    .btn-cancel-booking {
+        padding: 10px 20px;
+        background: #6c757d;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: not-allowed;
+        opacity: 0.8;
+    }
+
+    .btn-cancellation-policy {
+        padding: 10px 20px;
+        background: #0d6efd;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-cancellation-policy:hover {
+        background: #0b5ed7;
+        color: white;
+        transform: translateY(-1px);
+    }
     
     .pagination-wrapper {
         margin-top: 30px;
@@ -339,10 +373,30 @@
                                 <span class="total-amount">BDT {{ number_format($booking->grand_total, 2) }}</span>
                             </div>
                             <div class="booking-actions">
+                                <button type="button" class="btn-cancellation-policy" data-bs-toggle="modal" data-bs-target="#cancellationPolicyModal" data-policy-target="cancellation-policy-{{ $booking->id }}" title="View cancellation policy for this booking">
+                                    <i class="fa fa-info-circle"></i> Cancellation policy
+                                </button>
+                                <button type="button" class="btn-cancel-booking" disabled title="Cancel booking (coming soon)">
+                                    <i class="fa fa-times-circle"></i> Cancel booking
+                                </button>
                                 <a href="{{ route('booking.invoice', $booking->id) }}" class="btn btn-view-invoice" target="_blank">
                                     <i class="fa fa-file-text-o"></i> View Invoice
                                 </a>
                             </div>
+                        </div>
+                        {{-- Hidden block with this booking's cancellation policy (loaded into modal, no JSON) --}}
+                        <div id="cancellation-policy-{{ $booking->id }}" class="d-none" aria-hidden="true">
+                            @php $policies = $cancellationPoliciesByBooking[$booking->id] ?? []; @endphp
+                            @if(count($policies) > 0)
+                                @foreach($policies as $hp)
+                                <div class="mb-4">
+                                    <h6 class="text-primary border-bottom pb-2">{{ $hp['hotel_name'] ?? 'Hotel' }}</h6>
+                                    <p class="mb-0" style="white-space: pre-wrap; font-size: 13px; line-height: 1.5; color: #666;">{{ $hp['policy'] ?? '' }}</p>
+                                </div>
+                                @endforeach
+                            @else
+                                <p class="text-muted mb-0">No cancellation policy has been set for this booking. Please contact the property for details.</p>
+                            @endif
                         </div>
                     </div>
                     @endforeach
@@ -363,6 +417,47 @@
             @endif
         </div>
 </div>
+
+<!-- Cancellation policy modal (content filled per booking) -->
+<div class="modal fade" id="cancellationPolicyModal" tabindex="-1" aria-labelledby="cancellationPolicyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background: #91278f; color: white;">
+                <h5 class="modal-title" id="cancellationPolicyModalLabel"><i class="fa fa-info-circle"></i> Cancellation policy</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="cancellationPolicyModalBody">
+                <p class="text-muted mb-0">Select a booking to view its cancellation policy.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var modalEl = document.getElementById('cancellationPolicyModal');
+    if (!modalEl) return;
+    modalEl.addEventListener('show.bs.modal', function(e) {
+        var btn = e.relatedTarget;
+        var body = document.getElementById('cancellationPolicyModalBody');
+        if (!body) return;
+        var targetId = btn && btn.getAttribute('data-policy-target');
+        if (!targetId) {
+            body.innerHTML = '<p class="text-muted mb-0">No cancellation policy data for this booking.</p>';
+            return;
+        }
+        var source = document.getElementById(targetId);
+        if (source) {
+            body.innerHTML = source.innerHTML;
+        } else {
+            body.innerHTML = '<p class="text-muted mb-0">No cancellation policy has been set for this booking.</p>';
+        }
+    });
+});
+</script>
 
 @endsection
 

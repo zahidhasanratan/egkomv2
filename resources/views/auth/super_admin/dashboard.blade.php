@@ -22,6 +22,7 @@
                                                     <a href="#" class="dropdown-toggle btn btn-white btn-dim btn-outline-light" data-bs-toggle="dropdown"><em class="d-none d-sm-inline icon ni ni-calender-date"></em><span><span class="d-none d-md-inline">{{ $dateRangeLabel }}</span></span><em class="dd-indc icon ni ni-chevron-right"></em></a>
                                                     <div class="dropdown-menu dropdown-menu-end">
                                                         <ul class="link-list-opt no-bdr">
+                                                            <li><a href="{{ route('super-admin.dashboard', ['range' => '7d']) }}"><span>Last 7 Days</span></a></li>
                                                             <li><a href="{{ route('super-admin.dashboard', ['range' => '30d']) }}"><span>Last 30 Days</span></a></li>
                                                             <li><a href="{{ route('super-admin.dashboard', ['range' => '6m']) }}"><span>Last 6 Months</span></a></li>
                                                             <li><a href="{{ route('super-admin.dashboard', ['range' => '1y']) }}"><span>Last 1 Year</span></a></li>
@@ -45,6 +46,14 @@
                             </div>
                         </div>
                     </div>
+
+                    @if(!empty($pendingPayoutsCount) && $pendingPayoutsCount > 0)
+                    <div class="alert alert-warning alert-dismissible mb-3" role="alert">
+                        <strong>Pending payout requests:</strong> {{ $pendingPayoutsCount }} vendor payout request(s) need your action.
+                        <a href="{{ route('super-admin.vendor-payments.index') }}" class="alert-link ms-1">Manage payouts</a>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    @endif
 
                     <div class="nk-block">
                         <div class="row g-gs">
@@ -142,7 +151,7 @@
                                     <div class="card-inner">
                                         <div class="card-title-group align-start mb-0">
                                             <div class="card-title">
-                                                <h6 class="title">Rooms Available</h6></div>
+                                                <h6 class="title">Total Room in this Platform</h6></div>
                                             <div class="card-tools"><em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Total Room"></em></div>
                                         </div>
                                         <div class="card-amount"><span class="amount">{{ number_format($totalRooms) }}</span></div>
@@ -194,7 +203,20 @@
                                 </div>
                             </div>
 
-
+                            <div class="col-md-4">
+                                <div class="card card-bordered card-full">
+                                    <div class="card-inner">
+                                        <div class="card-title-group align-start mb-0">
+                                            <div class="card-title">
+                                                <h6 class="title">Platform Profit</h6></div>
+                                            <div class="card-tools"><em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" title="Commission + Platform Fee from paid bookings (platform earnings)"></em></div>
+                                        </div>
+                                        <div class="card-amount"><span class="amount">BDT {{ number_format($platformProfit ?? 0, 0) }}</span></div>
+                                        <p class="text-soft small mb-2">{{ $dateRangeLabel }}: <strong>BDT {{ number_format($platformProfitInRange ?? 0, 0) }}</strong></p>
+                                        <p class="text-soft small mb-0">This month: <strong>BDT {{ number_format($platformProfitThisMonth ?? 0, 0) }}</strong></p>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="col-md-6 col-xxl-3">
                                 <div class="card card-bordered h-100">
@@ -234,87 +256,6 @@
                                                 <div class="traffic-channel-data">
                                                     <div class="title"><span class="dot dot-lg sq" data-bg="#ffa353"></span><span>Suit</span></div>
                                                     <div class="amount">138 <small>4.49%</small></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="col-md-6 col-xxl-5">
-                                <div class="card card-bordered card-full">
-                                    <div class="card-inner d-flex flex-column h-100">
-                                        <div class="card-title-group mb-3">
-                                            <div class="card-title me-1">
-                                                <h6 class="title">Top Selected Package</h6>
-                                                <p>In last 30 days top selected package.</p>
-                                            </div>
-                                            <div class="card-tools mt-n1 me-n1">
-                                                <div class="drodown"><a href="#" class="dropdown-toggle dropdown-indicator btn btn-sm btn-outline-light btn-white" data-bs-toggle="dropdown">30 Days</a>
-                                                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-xs">
-                                                        <ul class="link-list-opt no-bdr">
-                                                            <li><a href="#"><span>7 Days</span></a></li>
-                                                            <li><a href="#"><span>15 Days</span></a></li>
-                                                            <li><a href="#"><span>30 Days</span></a></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="progress-list gy-3">
-                                            <div class="progress-wrap">
-                                                <div class="progress-text">
-                                                    <div class="progress-label">Strater Package</div>
-                                                    <div class="progress-amount">58%</div>
-                                                </div>
-                                                <div class="progress progress-md">
-                                                    <div class="progress-bar" data-progress="58"></div>
-                                                </div>
-                                            </div>
-                                            <div class="progress-wrap">
-                                                <div class="progress-text">
-                                                    <div class="progress-label">Honeymoon Package</div>
-                                                    <div class="progress-amount">43%</div>
-                                                </div>
-                                                <div class="progress progress-md">
-                                                    <div class="progress-bar bg-warning" data-progress="43"></div>
-                                                </div>
-                                            </div>
-                                            <div class="progress-wrap">
-                                                <div class="progress-text">
-                                                    <div class="progress-label">Vacation Package</div>
-                                                    <div class="progress-amount">33%</div>
-                                                </div>
-                                                <div class="progress progress-md">
-                                                    <div class="progress-bar bg-azure" data-progress="33"></div>
-                                                </div>
-                                            </div>
-                                            <div class="progress-wrap">
-                                                <div class="progress-text">
-                                                    <div class="progress-label">Continental Package</div>
-                                                    <div class="progress-amount">29%</div>
-                                                </div>
-                                                <div class="progress progress-md">
-                                                    <div class="progress-bar bg-pink" data-progress="29"></div>
-                                                </div>
-                                            </div>
-                                            <div class="progress-wrap">
-                                                <div class="progress-text">
-                                                    <div class="progress-label">Spring Package</div>
-                                                    <div class="progress-amount">18.49%</div>
-                                                </div>
-                                                <div class="progress progress-md">
-                                                    <div class="progress-bar bg-orange" data-progress="18.49"></div>
-                                                </div>
-                                            </div>
-                                            <div class="progress-wrap">
-                                                <div class="progress-text">
-                                                    <div class="progress-label">All suite Package</div>
-                                                    <div class="progress-amount">16%</div>
-                                                </div>
-                                                <div class="progress progress-md">
-                                                    <div class="progress-bar bg-teal" data-progress="16"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -540,7 +481,7 @@
                                             <div class="card-title-group">
                                                 <div class="card-title">
                                                     <h6 class="title">New Customer</h6></div>
-                                                <div class="card-tools"><a href="{{ route('super-admin.bookings.index') }}" class="link">View All</a></div>
+                                                <div class="card-tools"><a href="{{ route('super-admin.customers.index') }}" class="link">View All</a></div>
                                             </div>
                                         </div>
                                         @forelse($newCustomers as $customer)
@@ -559,7 +500,8 @@
                                                     <div class="drodown"><a href="#" class="dropdown-toggle btn btn-icon btn-trigger me-n1" data-bs-toggle="dropdown" aria-expanded="false"><em class="icon ni ni-more-h"></em></a>
                                                         <div class="dropdown-menu dropdown-menu-end">
                                                             <ul class="link-list-opt no-bdr">
-                                                                <li><a href="{{ route('super-admin.bookings.index') }}"><em class="icon ni ni-calendar"></em><span>View Bookings</span></a></li>
+                                                                <li><a href="{{ route('super-admin.customers.index') }}"><em class="icon ni ni-list"></em><span>View Customers</span></a></li>
+                                                <li><a href="{{ route('super-admin.bookings.index') }}"><em class="icon ni ni-calendar"></em><span>View Bookings</span></a></li>
                                                             </ul>
                                                         </div>
                                                     </div>

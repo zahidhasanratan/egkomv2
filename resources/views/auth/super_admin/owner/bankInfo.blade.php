@@ -128,6 +128,15 @@
                                             </div>
                                             <div class="col-md-6 col-lg-4 col-xxl-3">
                                                 <div class="form-group">
+                                                    <label class="form-label" for="branch_name">Branch Name</label>
+                                                    <input type="text" name="branch_name" class="form-control" id="branch_name" placeholder="Branch Name" value="{{ old('branch_name', $banking->branch_name ?? '') }}">
+                                                    @error('branch_name')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-lg-4 col-xxl-3">
+                                                <div class="form-group">
                                                     <label class="form-label" for="routing_number">Routing Number</label>
                                                     <input type="number" name="routing_number" class="form-control" id="routing_number" placeholder="Routing Number" value="{{ old('routing_number', $banking->routing_number ?? '') }}">
                                                     @error('routing_number')

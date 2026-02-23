@@ -12,6 +12,7 @@ use App\Models\Property;
 use App\Models\Review;
 use App\Models\Room;
 use App\Models\Vendor;
+use App\Models\VendorPayout;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,14 +30,16 @@ class DashboardController extends Controller
     {
         $today = Carbon::today();
 
-        // Date range filter: 30d, 6m, 1y
+        // Date range filter: 7d, 30d, 6m, 1y
         $range = $request->get('range', '30d');
         $rangeStart = match ($range) {
+            '7d' => Carbon::now()->subDays(7),
             '6m' => Carbon::now()->subMonths(6),
             '1y' => Carbon::now()->subYear(),
             default => Carbon::now()->subDays(30),
         };
         $dateRangeLabel = match ($range) {
+            '7d' => 'Last 7 Days',
             '6m' => 'Last 6 Months',
             '1y' => 'Last 1 Year',
             default => 'Last 30 Days',
@@ -63,6 +66,23 @@ class DashboardController extends Controller
         $revenueInRange = (float) Booking::where('payment_status', 'paid')
             ->where('created_at', '>=', $rangeStart)
             ->sum(DB::raw('COALESCE(paid_amount, grand_total, 0)'));
+
+        // Platform profit = commission + platform_fee from paid bookings (tax is not platform profit)
+        $platformProfit = (float) Booking::where('payment_status', 'paid')
+            ->sum(DB::raw('COALESCE(commission_amount, 0) + COALESCE(platform_fee, 0)'));
+        $platformProfitInRange = (float) Booking::where('payment_status', 'paid')
+            ->where('created_at', '>=', $rangeStart)
+            ->sum(DB::raw('COALESCE(commission_amount, 0) + COALESCE(platform_fee, 0)'));
+        $platformProfitThisMonth = (float) Booking::where('payment_status', 'paid')
+            ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+            ->sum(DB::raw('COALESCE(commission_amount, 0) + COALESCE(platform_fee, 0)'));
+
+        // Pending vendor payout requests (need Super Admin action)
+        $pendingPayoutsCount = VendorPayout::whereIn('status', [
+            VendorPayout::STATUS_PENDING,
+            VendorPayout::STATUS_IN_PROCESS,
+            VendorPayout::STATUS_ON_HOLD,
+        ])->count();
 
         // Revenue: sum of paid_amount for paid bookings, or grand_total where paid
         $totalRevenue = (float) Booking::where('payment_status', 'paid')->sum(DB::raw('COALESCE(paid_amount, grand_total, 0)'));
@@ -136,6 +156,10 @@ class DashboardController extends Controller
             'totalRevenue',
             'revenueThisMonth',
             'revenueThisWeek',
+            'platformProfit',
+            'platformProfitInRange',
+            'platformProfitThisMonth',
+            'pendingPayoutsCount',
             'recentBookings',
             'roomsByType',
             'newCustomers',

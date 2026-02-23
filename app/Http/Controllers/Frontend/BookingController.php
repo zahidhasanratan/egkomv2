@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\Coupon;
+use App\Models\Hotel;
+use App\Models\HotelSetting;
 use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +20,19 @@ class BookingController extends Controller
 {
     public function checkout(Request $request)
     {
-        return view('frontend.booking.checkout');
+        $platformSettings = HotelSetting::getPlatformSettings();
+        $platformSettingsJson = [
+            'commission_percentage' => (float) ($platformSettings->commission_percentage ?? 0),
+            'platform_fee_enabled' => (bool) ($platformSettings->platform_fee_enabled ?? false),
+            'platform_fee_amount' => (float) ($platformSettings->platform_fee_amount ?? 0),
+            'tax_enabled' => (bool) ($platformSettings->tax_enabled ?? false),
+            'tax_percentage' => (float) ($platformSettings->tax_percentage ?? 0),
+            'platform_discount_enabled' => (bool) ($platformSettings->platform_discount_enabled ?? false),
+            'platform_discount_percentage' => (float) ($platformSettings->platform_discount_percentage ?? 0),
+            'platform_discount_apply_to_all_hotels' => (bool) ($platformSettings->platform_discount_apply_to_all_hotels ?? true),
+            'platform_discount_hotel_ids' => $platformSettings->platform_discount_hotel_ids ?? [],
+        ];
+        return view('frontend.booking.checkout', compact('platformSettingsJson'));
     }
     
     public function getRoomsData(Request $request)
@@ -409,12 +423,30 @@ class BookingController extends Controller
             $checkoutDate = new \DateTime($request->checkout_date);
             $totalNights = $checkinDate->diff($checkoutDate)->days;
 
-            // Calculate pricing
-            $subtotal = 0;
+            // Calculate pricing: vendor base → + commission → + platform fee → + tax → - coupon → - platform discount
+            $baseSubtotal = 0;
             foreach ($roomsData as $item) {
-                $subtotal += ($item['price'] * $item['quantity']);
+                $baseSubtotal += ($item['price'] * $item['quantity']);
             }
-            $subtotal = $subtotal * $totalNights;
+            $baseSubtotal = round($baseSubtotal * $totalNights, 2);
+
+            $platform = HotelSetting::getPlatformSettings();
+            $commissionPercentage = (float) ($platform->commission_percentage ?? 0);
+            $commissionAmount = round($baseSubtotal * ($commissionPercentage / 100), 2);
+            $subtotal = round($baseSubtotal + $commissionAmount, 2);
+
+            $platformFee = 0;
+            if ($platform->platform_fee_enabled && (float) ($platform->platform_fee_amount ?? 0) > 0) {
+                $platformFee = round((float) $platform->platform_fee_amount, 2);
+            }
+
+            $taxPercentage = 0;
+            $tax = 0;
+            if ($platform->tax_enabled && (float) ($platform->tax_percentage ?? 0) > 0) {
+                $taxPercentage = (float) $platform->tax_percentage;
+                $taxBase = $subtotal + $platformFee;
+                $tax = round($taxBase * ($taxPercentage / 100), 2);
+            }
 
             $discount = 0;
             $couponCode = $request->coupon_code ? strtoupper(trim($request->coupon_code)) : null;
@@ -427,8 +459,13 @@ class BookingController extends Controller
                 }
             }
 
-            $tax = 0;
-            $grandTotal = $subtotal - $discount;
+            $platformDiscount = 0;
+            if ($platform->platformDiscountAppliesToHotel($hotelIdFromCart) && (float) ($platform->platform_discount_percentage ?? 0) > 0) {
+                $beforePlatformDiscount = $subtotal + $platformFee + $tax;
+                $platformDiscount = round($beforePlatformDiscount * ((float) $platform->platform_discount_percentage / 100), 2);
+            }
+
+            $grandTotal = round($subtotal + $platformFee + $tax - $discount - $platformDiscount, 2);
 
             // Handle file uploads - save directly to public folder
             $nidFront = null;
@@ -532,8 +569,13 @@ class BookingController extends Controller
                 'passport' => $passport,
                 'visa' => $visa,
                 'subtotal' => $subtotal,
+                'commission_amount' => $commissionAmount,
+                'commission_percentage' => $commissionPercentage > 0 ? $commissionPercentage : null,
                 'discount' => $discount,
+                'platform_discount' => $platformDiscount,
                 'tax' => $tax,
+                'tax_percentage' => $taxPercentage > 0 ? $taxPercentage : null,
+                'platform_fee' => $platformFee,
                 'grand_total' => $grandTotal,
                 'coupon_code' => $couponCode,
                 'payment_status' => 'unpaid',
@@ -753,7 +795,53 @@ class BookingController extends Controller
     public function invoice($id)
     {
         $booking = Booking::findOrFail($id);
-        return view('frontend.booking.invoice', compact('booking'));
+        $roomsData = $booking->rooms_data ?? [];
+        $hotelIds = [];
+        $roomIds = [];
+        foreach ($roomsData as $room) {
+            if (isset($room['hotelId']) && $room['hotelId'] !== '' && $room['hotelId'] !== null) {
+                $hotelIds[(int) $room['hotelId']] = true;
+            }
+            if (isset($room['roomId']) && $room['roomId'] !== '' && $room['roomId'] !== null) {
+                $roomIds[(int) $room['roomId']] = true;
+            }
+        }
+        $hotelIds = array_keys($hotelIds);
+        $roomIds = array_keys($roomIds);
+
+        $hotels = empty($hotelIds) ? collect() : Hotel::whereIn('id', $hotelIds)->get()->keyBy('id');
+        $rooms = empty($roomIds) ? collect() : Room::whereIn('id', $roomIds)->with('hotel')->get()->keyBy('id');
+
+        $invoiceHotelPolicies = [];
+        foreach ($hotelIds as $hid) {
+            $hid = (int) $hid;
+            $hotel = $hotels->get($hid);
+            $name = $hotel ? ($hotel->description ?? $hotel->property_category ?? 'Hotel #' . $hid) : 'Hotel #' . $hid;
+            $policy = $hotel ? $hotel->getFormattedCancellationPolicy() : 'Cancellation policy not available.';
+            $invoiceHotelPolicies[] = ['name' => $name, 'policy' => $policy];
+        }
+
+        $invoiceRoomPolicies = [];
+        $seenRoomIds = [];
+        foreach ($roomsData as $room) {
+            $roomId = isset($room['roomId']) && $room['roomId'] !== '' && $room['roomId'] !== null ? (int) $room['roomId'] : null;
+            $roomName = $room['roomName'] ?? 'Room';
+            if ($roomId && isset($seenRoomIds[$roomId])) {
+                continue;
+            }
+            if ($roomId) {
+                $seenRoomIds[$roomId] = true;
+            }
+            if ($roomId && $rooms->has($roomId)) {
+                $roomModel = $rooms->get($roomId);
+                $policy = $roomModel->getFormattedCancellationPolicy();
+            } else {
+                $policy = 'No specific room cancellation policy available. Hotel cancellation policy may apply.';
+            }
+            $invoiceRoomPolicies[] = ['name' => $roomName, 'policy' => $policy];
+        }
+
+        return view('frontend.booking.invoice', compact('booking', 'invoiceHotelPolicies', 'invoiceRoomPolicies'));
     }
 }
 

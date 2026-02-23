@@ -115,6 +115,7 @@
                                                                         <li><a href="{{ route('super.vendor.infoShow', $vendor->id) }}"><em class="icon ni ni-user"></em><span>Vendor Info</span></a></li>
                                                                         <li><a href="{{ route('super.vendor-admin.owner.show', $vendor->id) }}"><em class="icon ni ni-building"></em><span>Owner Details</span></a></li>
                                                                         <li><a href="{{ route('super.owners.bankInfo.show', $vendor->id) }}"><em class="icon ni ni-bag"></em><span>Owner Banking Info</span></a></li>
+                                                                        <li><a href="{{ route('super-admin.vendor.payment-profile', $vendor->id) }}"><em class="icon ni ni-wallet"></em><span>Payment & Income</span></a></li>
                                                                     </ul>
                                                                 </div>
                                                             </div>
@@ -171,6 +172,7 @@
                                                                                 <li><a href="{{ route('super.vendor.infoShow', $vendor->id) }}"><em class="icon ni ni-user"></em><span>Vendor Info</span></a></li>
                                                                                 <li><a href="{{ route('super.vendor-admin.owner.show', $vendor->id) }}"><em class="icon ni ni-building"></em><span>Owner Details</span></a></li>
                                                                                 <li><a href="{{ route('super.owners.bankInfo.show', $vendor->id) }}"><em class="icon ni ni-bag"></em><span>Owner Banking Info</span></a></li>
+                                                                        <li><a href="{{ route('super-admin.vendor.payment-profile', $vendor->id) }}"><em class="icon ni ni-wallet"></em><span>Payment & Income</span></a></li>
                                                                             </ul>
                                                                         </div>
                                                                     </div>

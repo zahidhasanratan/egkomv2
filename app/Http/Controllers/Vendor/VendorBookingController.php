@@ -275,6 +275,12 @@ class VendorBookingController extends Controller
         if (!$hasAccess) {
             abort(403, 'Unauthorized access to this booking');
         }
+
+        // Vendor can only edit manual bookings; website bookings are edited by Super Admin
+        if (!$booking->is_manual) {
+            return redirect()->route('vendor.bookings.index')
+                ->with('error', 'You can only edit manual bookings. Bookings from the website can be edited by Super Admin.');
+        }
         
         // Get vendor's hotels
         $hotels = Hotel::where('vendor_id', $vendorId)->get();
@@ -315,6 +321,12 @@ class VendorBookingController extends Controller
         
         if (!$hasAccess) {
             abort(403, 'Unauthorized access to this booking');
+        }
+
+        // Vendor can only update manual bookings; website bookings are edited by Super Admin
+        if (!$booking->is_manual) {
+            return redirect()->route('vendor.bookings.index')
+                ->with('error', 'You can only edit manual bookings. Bookings from the website can be edited by Super Admin.');
         }
         
         $validated = $request->validate([

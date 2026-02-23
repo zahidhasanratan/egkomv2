@@ -46,8 +46,18 @@ class DashboardController extends Controller
 
         $today = Carbon::today();
         $range = $request->get('range', '30d');
-        $rangeStart = $range === '6m' ? Carbon::now()->subMonths(6) : ($range === '1y' ? Carbon::now()->subYear() : Carbon::now()->subDays(30));
-        $dateRangeLabel = $range === '6m' ? 'Last 6 Months' : ($range === '1y' ? 'Last 1 Year' : 'Last 30 Days');
+        $rangeStart = match ($range) {
+            '7d' => Carbon::now()->subDays(7),
+            '6m' => Carbon::now()->subMonths(6),
+            '1y' => Carbon::now()->subYear(),
+            default => Carbon::now()->subDays(30),
+        };
+        $dateRangeLabel = match ($range) {
+            '7d' => 'Last 7 Days',
+            '6m' => 'Last 6 Months',
+            '1y' => 'Last 1 Year',
+            default => 'Last 30 Days',
+        };
 
         $baseBookings = $this->vendorBookingsQuery($hotelIds);
 

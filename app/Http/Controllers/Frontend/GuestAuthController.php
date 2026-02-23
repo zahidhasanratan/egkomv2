@@ -326,7 +326,37 @@ class GuestAuthController extends Controller
         $bookings = \App\Models\Booking::where('guest_id', auth('guest')->id())
             ->orderBy('created_at', 'desc')
             ->paginate(10);
-        return view('frontend.guest.bookings', compact('bookings'));
+
+        // Build cancellation policy per booking (per hotel) for modal display
+        $cancellationPoliciesByBooking = [];
+        $hotelIds = [];
+        foreach ($bookings as $b) {
+            foreach ($b->rooms_data ?? [] as $room) {
+                $hid = isset($room['hotelId']) && $room['hotelId'] !== '' && $room['hotelId'] !== null ? (int) $room['hotelId'] : null;
+                if ($hid !== null && !in_array($hid, $hotelIds, true)) {
+                    $hotelIds[] = $hid;
+                }
+            }
+        }
+        $hotels = empty($hotelIds) ? collect() : \App\Models\Hotel::whereIn('id', $hotelIds)->get()->keyBy('id');
+        foreach ($bookings as $b) {
+            $policies = [];
+            $seen = [];
+            foreach ($b->rooms_data ?? [] as $room) {
+                $hid = isset($room['hotelId']) && $room['hotelId'] !== '' && $room['hotelId'] !== null ? (int) $room['hotelId'] : null;
+                if ($hid === null || isset($seen[$hid])) {
+                    continue;
+                }
+                $seen[$hid] = true;
+                $hotel = $hotels->get($hid);
+                $hotelName = $room['hotelName'] ?? ($hotel ? ($hotel->description ?? $hotel->property_category ?? 'Hotel') : 'Hotel');
+                $policyText = $hotel ? $hotel->getFormattedCancellationPolicy() : 'Cancellation policy not available.';
+                $policies[] = ['hotel_name' => $hotelName, 'policy' => $policyText];
+            }
+            $cancellationPoliciesByBooking[$b->id] = $policies;
+        }
+
+        return view('frontend.guest.bookings', compact('bookings', 'cancellationPoliciesByBooking'));
     }
 
     /**

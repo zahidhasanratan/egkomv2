@@ -460,6 +460,7 @@
 <script src="{{ asset('assets/super_admin') }}/assets/js/bundlee1e3.js?ver=3.2.4"></script>
 <script src="{{ asset('assets/super_admin') }}/assets/js/scriptse1e3.js?ver=3.2.4"></script>
 <script src="{{ asset('assets/super_admin') }}/assets/js/demo-settingse1e3.js?ver=3.2.4"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
 <script src="{{ asset('assets/super_admin') }}/assets/js/charts/chart-hotele1e3.js?ver=3.2.4"></script>
 
 

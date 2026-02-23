@@ -11,7 +11,7 @@
                                 <h3 class="nk-block-title page-title">Banking Information - Preview</h3>
                             </div>
                             <div class="nk-block-head-content">
-                                <a href="{{ route('super.owners.bankInfo', $banking->vendor_id ?? '') }}" class="btn btn-primary">
+                                <a href="{{ route('super.owners.bankInfo', $banking->vendor_id ?? '') }}" class="btn btn-primary edit-banking-btn" data-edit-url="{{ route('super.owners.bankInfo', $banking->vendor_id ?? '') }}">
                                     <em class="icon ni ni-edit"></em> Edit
                                 </a>
                             </div>
@@ -58,6 +58,12 @@
                                             <div class="form-group">
                                                 <label class="form-label">Bank Name</label>
                                                 <div class="form-control-plaintext">{{ $getValue('bank_name') }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-lg-4 col-xxl-3">
+                                            <div class="form-group">
+                                                <label class="form-label">Branch Name</label>
+                                                <div class="form-control-plaintext">{{ $getValue('branch_name') }}</div>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-lg-4 col-xxl-3">
@@ -112,7 +118,7 @@
 
                                 <div class="mt-3">
                                     <a href="{{ route('super-admin.vendor.index') }}" class="btn btn-secondary">Back to List</a>
-                                    <a href="{{ route('super.owners.bankInfo', $banking->vendor_id ?? '') }}" class="btn btn-primary">
+                                    <a href="{{ route('super.owners.bankInfo', $banking->vendor_id ?? '') }}" class="btn btn-primary edit-banking-btn" data-edit-url="{{ route('super.owners.bankInfo', $banking->vendor_id ?? '') }}">
                                         <em class="icon ni ni-edit"></em> Edit Banking Info
                                     </a>
                                 </div>
@@ -123,5 +129,32 @@
             </div>
         </div>
     </div>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.edit-banking-btn').forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var editUrl = this.getAttribute('data-edit-url') || this.getAttribute('href');
+                    Swal.fire({
+                        title: 'Edit Banking Info',
+                        text: 'Do you want to edit Banking info of this vendor?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Yes, Edit',
+                        cancelButtonText: 'Cancel'
+                    }).then(function(result) {
+                        if (result.isConfirmed && editUrl) {
+                            window.location.href = editUrl;
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 @endsection
 

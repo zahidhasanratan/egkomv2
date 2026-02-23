@@ -18,6 +18,7 @@ use App\Http\Controllers\Superadmin\PopularDestinationController;
 use App\Http\Controllers\Superadmin\TourPackageController;
 use App\Http\Controllers\Superadmin\HomepageHeroController;
 use App\Http\Controllers\Superadmin\CouponController;
+use App\Http\Controllers\Superadmin\CommissionFeesController;
 use App\Http\Controllers\admin\ReviewManagementController;
 
 // Super Admin Login Routes
@@ -66,6 +67,9 @@ Route::prefix('super-admin')->group(function () {
         Route::get('/Super-vendor-owner-info', [OwnerController::class, 'createSuper'])->name('super-admin.owner.create');
 
         Route::get('vendor/details/{id}', [DashboardController::class, 'vendor_index'])->name('super-admin.vendor.details');
+        Route::get('vendor-payments', [\App\Http\Controllers\Superadmin\VendorPaymentProfileController::class, 'index'])->name('super-admin.vendor-payments.index');
+        Route::get('vendor/{id}/payment-profile', [\App\Http\Controllers\Superadmin\VendorPaymentProfileController::class, 'show'])->name('super-admin.vendor.payment-profile');
+        Route::post('vendor/payout/{payoutId}/status', [\App\Http\Controllers\Superadmin\VendorPaymentProfileController::class, 'updatePayoutStatus'])->name('super-admin.vendor.payout.update-status');
         Route::get('/owner-info/{id}', [OwnerController::class, 'createSuper'])->name('super.vendor-admin.owner.details');
         Route::get('/owner-info/{id}/show', [OwnerController::class, 'ownerInfoShow'])->name('super.vendor-admin.owner.show');
         Route::post('/vendor-info', [VendorController::class, 'storeSuper'])->name('super.vendor.info.store');
@@ -128,6 +132,10 @@ Route::prefix('super-admin')->group(function () {
         Route::get('/homepage-hero/edit', [HomepageHeroController::class, 'edit'])->name('super-admin.homepage-hero.edit');
         Route::put('/homepage-hero', [HomepageHeroController::class, 'update'])->name('super-admin.homepage-hero.update');
 
+        // Commission & Platform Fees (Super Admin)
+        Route::get('/commission-fees', [CommissionFeesController::class, 'index'])->name('super-admin.commission-fees.index');
+        Route::post('/commission-fees', [CommissionFeesController::class, 'update'])->name('super-admin.commission-fees.update');
+
         // Coupon Code Management
         Route::resource('coupons', CouponController::class)->names([
             'index' => 'super-admin.coupons.index',
@@ -156,6 +164,11 @@ Route::prefix('super-admin')->group(function () {
         Route::post('/bookings/manual/store', [\App\Http\Controllers\admin\BookingManagementController::class, 'storeManualOrder'])->name('super-admin.bookings.manual.store');
         Route::get('/bookings/manual/rooms/{hotelId}', [\App\Http\Controllers\admin\BookingManagementController::class, 'getRooms'])->name('super-admin.bookings.manual.rooms');
         Route::get('/bookings/room/{roomId}/availability/{bookingId?}', [\App\Http\Controllers\admin\BookingManagementController::class, 'getRoomAvailability'])->name('super-admin.bookings.room.availability');
+
+        // Customer list (unique guests from all bookings)
+        Route::get('/customers', [\App\Http\Controllers\Superadmin\CustomerController::class, 'index'])->name('super-admin.customers.index');
+        Route::get('/customers/export/excel', [\App\Http\Controllers\Superadmin\CustomerController::class, 'exportExcel'])->name('super-admin.customers.export.excel');
+        Route::get('/customers/export/csv', [\App\Http\Controllers\Superadmin\CustomerController::class, 'exportCsv'])->name('super-admin.customers.export.csv');
 
         // Review Management (Super Admin has full edit/delete authority)
         Route::get('/reviews', [ReviewManagementController::class, 'index'])->name('super-admin.reviews.index');

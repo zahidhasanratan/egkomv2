@@ -14,6 +14,7 @@ class Banking extends Model
         'payment_method',
         'account_number',
         'bank_name',
+        'branch_name',
         'routing_number',
         'account_type',
         'bank_cheque_image',

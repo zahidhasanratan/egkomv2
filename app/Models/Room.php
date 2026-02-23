@@ -179,4 +179,53 @@ class Room extends Model
               ->where('is_suspended', 0);
         });
     }
+
+    /**
+     * Default cancellation policy texts for rooms (keys: flexible, non_refundable, etc.)
+     */
+    private static function defaultRoomCancellationPolicyTexts(): array
+    {
+        return [
+            'flexible' => 'Flexible (Guests get a full refund if they cancel up to a day before check-in at least 24 hours.)',
+            'non_refundable' => 'Non-refundable (Regardless of the cancellation window, customers will not get any refund under this.)',
+            'partially_refundable' => 'Partially refundable (Cancellations that take place in less than 24 hours and Rooms that are labeled with this badge, after deducting a 30% cancellation fee, rest of the amount will be refunded.)',
+            'long_term' => 'Long-term/Monthly staying policy (Stays more than 30 days will fall under this scope and a specific contract paper shall be signed. T&C paper will be found in the system.)',
+        ];
+    }
+
+    /**
+     * Get formatted cancellation policy text for this room (for display on invoice etc.).
+     */
+    public function getFormattedCancellationPolicy(): string
+    {
+        $defaults = self::defaultRoomCancellationPolicyTexts();
+        $texts = is_array($this->cancellation_policy_texts ?? null)
+            ? array_merge($defaults, $this->cancellation_policy_texts)
+            : $defaults;
+        $enabled = $this->enabled_cancellation_policies ?? [];
+        if (!is_array($enabled)) {
+            $enabled = [];
+        }
+        $custom = $this->custom_cancellation_policies ?? [];
+        if (!is_array($custom)) {
+            $custom = [];
+        }
+
+        $lines = [];
+        foreach ($enabled as $key) {
+            if (isset($texts[$key]) && trim((string) $texts[$key]) !== '') {
+                $lines[] = trim($texts[$key]);
+            }
+        }
+        foreach ($custom as $item) {
+            $t = is_string($item) ? $item : ($item['text'] ?? $item['description'] ?? '');
+            if (trim($t) !== '') {
+                $lines[] = trim($t);
+            }
+        }
+        if (empty($lines)) {
+            return 'No specific cancellation policy has been set for this room. Hotel cancellation policy may apply.';
+        }
+        return implode("\n\n", $lines);
+    }
 }

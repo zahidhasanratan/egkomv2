@@ -95,6 +95,8 @@
                                             <ul class="link-list">
 {{--                                                <li><a href="#"><em class="icon ni ni-user-alt"></em><span>View Profile</span></a></li>--}}
                                                 <li><a href="{{ route('super-admin.accountSettings') }}"><em class="icon ni ni-setting-alt"></em><span>Account Setting</span></a></li>
+                                                <li><a href="{{ route('super-admin.commission-fees.index') }}"><em class="icon ni ni-percent"></em><span>Commission & Fees</span></a></li>
+                                                <li><a href="{{ route('super-admin.vendor-payments.index') }}"><em class="icon ni ni-wallet"></em><span>Payment & Income</span></a></li>
                                                 <li><a href="{{ route('super-admin.cancellationPolicySettings') }}"><em class="icon ni ni-file-text"></em><span>Cancellation Policy Settings</span></a></li>
                                                 <li><a href="{{ route('super-admin.activityLog') }}"><em class="icon ni ni-activity-alt"></em><span>Login Activity</span></a></li>
                                             </ul>
@@ -591,6 +593,7 @@
 <script src="{{ asset('assets/super_admin') }}/assets/js/bundlee1e3.js?ver=3.2.4"></script>
 <script src="{{ asset('assets/super_admin') }}/assets/js/scriptse1e3.js?ver=3.2.4"></script>
 <script src="{{ asset('assets/super_admin') }}/assets/js/demo-settingse1e3.js?ver=3.2.4"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
 <script src="{{ asset('assets/super_admin') }}/assets/js/charts/chart-hotele1e3.js?ver=3.2.4"></script>
 <!-- Global script to make all date inputs open calendar on click -->
 <script>

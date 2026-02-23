@@ -592,7 +592,17 @@
     </div>
 </section>
 
+@php
+    $platformSettingsForJs = isset($platformSettingsJson) ? $platformSettingsJson : [
+        'commission_percentage' => 0, 'platform_fee_enabled' => false, 'platform_fee_amount' => 0,
+        'tax_enabled' => false, 'tax_percentage' => 0, 'platform_discount_enabled' => false,
+        'platform_discount_percentage' => 0, 'platform_discount_apply_to_all_hotels' => true, 'platform_discount_hotel_ids' => []
+    ];
+@endphp
 <script>
+    // Platform settings (commission, fee, tax, platform discount) from Super Admin
+    window.platformSettings = @json($platformSettingsForJs);
+
     // Filter Additional Requests based on room configuration
     function filterAdditionalRequests(availableRequests) {
         const requestMapping = {
@@ -1288,15 +1298,31 @@
                 </li>
             `;
         });
-        
+
+        const ps = window.platformSettings || {};
+        const baseSubtotal = subTotal;
+        const commissionPct = parseFloat(ps.commission_percentage) || 0;
+        const commissionAmount = Math.round(baseSubtotal * (commissionPct / 100) * 100) / 100;
+        const subtotalAfterCommission = baseSubtotal + commissionAmount;
+        const platformFee = (ps.platform_fee_enabled && parseFloat(ps.platform_fee_amount) > 0) ? parseFloat(ps.platform_fee_amount) : 0;
+        const taxPct = (ps.tax_enabled && parseFloat(ps.tax_percentage) > 0) ? parseFloat(ps.tax_percentage) : 0;
+        const taxBase = subtotalAfterCommission + platformFee;
+        const taxAmount = Math.round(taxBase * (taxPct / 100) * 100) / 100;
+        const platformDiscountPct = (ps.platform_discount_enabled && parseFloat(ps.platform_discount_percentage) > 0) ? parseFloat(ps.platform_discount_percentage) : 0;
+        const hotelId = cart.length > 0 ? (cart[0].hotelId || null) : null;
+        const applyToAll = ps.platform_discount_apply_to_all_hotels !== false;
+        const hotelIds = ps.platform_discount_hotel_ids || [];
+        const platformDiscountApplies = platformDiscountPct > 0 && (applyToAll || (hotelId !== null && hotelIds.map(Number).indexOf(Number(hotelId)) >= 0));
+        const beforePlatformDiscount = subtotalAfterCommission + platformFee + taxAmount;
+        const platformDiscountAmount = platformDiscountApplies ? Math.round(beforePlatformDiscount * (platformDiscountPct / 100) * 100) / 100 : 0;
+
         discount = rackRate - subTotal;
         const discountPercentage = ((discount / rackRate) * 100).toFixed(0);
-        taxesAndFees = 0; // No tax – exact calculation only
-        // Applied coupon (set by Apply button)
+        taxesAndFees = platformFee + taxAmount;
         if (typeof window.appliedCoupon === 'undefined') window.appliedCoupon = { code: '', discount: 0 };
         const couponDiscount = window.appliedCoupon.discount || 0;
-        total = subTotal - couponDiscount;
-        
+        total = Math.round((subtotalAfterCommission + platformFee + taxAmount - couponDiscount - platformDiscountAmount) * 100) / 100;
+
         // Update selected rooms summary
         const totalRooms = cart.reduce((sum, item) => sum + item.quantity, 0);
         const adults = parseInt(document.getElementById('qty')?.value) || 1;
@@ -1395,9 +1421,36 @@
                                     <span data-v-30094f07="" class="fare">Room Rate (${nights} ${nights === 1 ? 'night' : 'nights'})</span>
                                     <span data-v-30094f07="" class="fare-price">
                                         <span data-v-30094f07="" class="sm-text">BDT</span>
-                                        <span data-v-30094f07="" class="lg-text"> ${subTotal.toFixed(0)} </span>
+                                        <span data-v-30094f07="" class="lg-text"> ${subtotalAfterCommission.toFixed(0)} </span>
                                     </span>
                                 </div>
+                                ${platformFee > 0 ? `
+                                <div data-v-30094f07="" class="fare-item">
+                                    <span data-v-30094f07="" class="fare">Platform Fee</span>
+                                    <span data-v-30094f07="" class="fare-price">
+                                        <span data-v-30094f07="" class="sm-text">BDT</span>
+                                        <span data-v-30094f07="" class="lg-text"> ${platformFee.toFixed(0)} </span>
+                                    </span>
+                                </div>
+                                ` : ''}
+                                ${taxAmount > 0 ? `
+                                <div data-v-30094f07="" class="fare-item">
+                                    <span data-v-30094f07="" class="fare">Tax (${taxPct}%)</span>
+                                    <span data-v-30094f07="" class="fare-price">
+                                        <span data-v-30094f07="" class="sm-text">BDT</span>
+                                        <span data-v-30094f07="" class="lg-text"> ${taxAmount.toFixed(0)} </span>
+                                    </span>
+                                </div>
+                                ` : ''}
+                                ${platformDiscountAmount > 0 ? `
+                                <div data-v-30094f07="" class="fare-item">
+                                    <span data-v-30094f07="" class="fare">Platform Discount (${platformDiscountPct}%)</span>
+                                    <span data-v-30094f07="" class="fare-price text-success">
+                                        <span data-v-30094f07="" class="sm-text">- BDT</span>
+                                        <span data-v-30094f07="" class="lg-text"> ${platformDiscountAmount.toFixed(0)} </span>
+                                    </span>
+                                </div>
+                                ` : ''}
                                 ${couponDiscount > 0 ? `
                                 <div data-v-30094f07="" class="fare-item">
                                     <span data-v-30094f07="" class="fare">Coupon (${window.appliedCoupon.code})</span>
@@ -1460,7 +1513,7 @@
                     return;
                 }
                 const hotelId = cart.length > 0 ? (cart[0].hotelId || null) : null;
-                const subtotal = subTotal;
+                const subtotal = subtotalAfterCommission;
 
                 applyBtn.disabled = true;
                 if (couponMessage) couponMessage.innerHTML = '<span class="text-muted">Checking...</span>';

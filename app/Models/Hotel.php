@@ -113,4 +113,54 @@ class Hotel extends Model
     {
         return $this->approve == 1 && !$this->isSuspended();
     }
+
+    /**
+     * Default cancellation policy labels/descriptions (hotel-level keys).
+     */
+    private static function defaultCancellationPolicyTexts(): array
+    {
+        return [
+            'Flexible' => 'Flexible (Guests get a full refund if they cancel up to a day before check-in at least 24 hours.)',
+            'Non-refundable' => 'Non-refundable (Regardless of the cancellation window, customers will not get any refund under this.)',
+            'Partially refundable' => 'Partially refundable (Cancellations less than 24 hours… after deducting a 30% cancellation fee.)',
+            'Long-term/Monthly staying policy' => 'Long-term/Monthly staying policy (Stays more than 30 days will fall under this scope and a specific contract paper shall be signed.)',
+        ];
+    }
+
+    /**
+     * Get formatted cancellation policy text for display (e.g. in guest booking modal).
+     * Uses hotel's enabled_cancellation_policies, cancellation_policy_texts, and custom_cancellation_policies.
+     */
+    public function getFormattedCancellationPolicy(): string
+    {
+        $defaults = self::defaultCancellationPolicyTexts();
+        $texts = is_array($this->cancellation_policy_texts ?? null)
+            ? array_merge($defaults, $this->cancellation_policy_texts)
+            : $defaults;
+        $enabled = $this->enabled_cancellation_policies ?? [];
+        if (!is_array($enabled)) {
+            $enabled = [];
+        }
+        $custom = $this->custom_cancellation_policies ?? [];
+        if (!is_array($custom)) {
+            $custom = [];
+        }
+
+        $lines = [];
+        foreach ($enabled as $key) {
+            if (isset($texts[$key]) && trim((string) $texts[$key]) !== '') {
+                $lines[] = trim($texts[$key]);
+            }
+        }
+        foreach ($custom as $item) {
+            $t = is_string($item) ? $item : ($item['text'] ?? $item['description'] ?? '');
+            if (trim($t) !== '') {
+                $lines[] = trim($t);
+            }
+        }
+        if (empty($lines)) {
+            return 'No specific cancellation policy has been set for this property. Please contact the property for details.';
+        }
+        return implode("\n\n", $lines);
+    }
 }

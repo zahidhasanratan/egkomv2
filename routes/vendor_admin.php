@@ -52,6 +52,8 @@ Route::prefix('vendor-admin')->group(function () {
 
         // Approved vendors only: owner banking, hotel, room, co-hosts, bookings, reviews
         Route::middleware('vendor.approved')->group(function () {
+        Route::get('/my-payment', [\App\Http\Controllers\Vendor\PaymentController::class, 'index'])->name('vendor-admin.payment.index');
+        Route::post('/my-payment/request', [\App\Http\Controllers\Vendor\PaymentController::class, 'requestPayout'])->name('vendor-admin.payment.request');
         Route::get('/owners-bankInfo', [OwnerController::class, 'bankInfo'])->name('owners.bankInfo');
         Route::post('/owners-banking', [BankingController::class, 'store'])->name('bankings.store');
         Route::get('/hotel-create', [ManageHotel::class, 'create'])->name('vendor-admin.hotel.create');
@@ -118,6 +120,11 @@ Route::prefix('vendor-admin')->group(function () {
         Route::post('/bookings/manual/store', [\App\Http\Controllers\Vendor\VendorBookingController::class, 'storeManualOrder'])->name('vendor.bookings.manual.store');
         Route::get('/bookings/manual/rooms/{hotelId}', [\App\Http\Controllers\Vendor\VendorBookingController::class, 'getRooms'])->name('vendor.bookings.manual.rooms');
         Route::get('/bookings/room/{roomId}/availability/{bookingId?}', [\App\Http\Controllers\Vendor\VendorBookingController::class, 'getRoomAvailability'])->name('vendor.bookings.room.availability');
+
+        // Customer list (unique guests from vendor's bookings)
+        Route::get('/customers', [\App\Http\Controllers\Vendor\CustomerController::class, 'index'])->name('vendor.customers.index');
+        Route::get('/customers/export/excel', [\App\Http\Controllers\Vendor\CustomerController::class, 'exportExcel'])->name('vendor.customers.export.excel');
+        Route::get('/customers/export/csv', [\App\Http\Controllers\Vendor\CustomerController::class, 'exportCsv'])->name('vendor.customers.export.csv');
         
         // Review Management (Vendor can only see and approve reviews for their own hotels)
         Route::get('/reviews', [\App\Http\Controllers\Vendor\VendorReviewController::class, 'index'])->name('vendor.reviews.index');

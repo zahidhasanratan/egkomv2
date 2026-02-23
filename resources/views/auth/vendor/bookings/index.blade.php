@@ -240,9 +240,11 @@
                                         <a href="{{ route('vendor.bookings.show', $booking->id) }}" class="action-btn action-btn-primary" title="View Details">
                                             <i class="fas fa-eye"></i>
                                         </a>
+                                        @if($booking->is_manual)
                                         <a href="{{ route('vendor.bookings.edit', $booking->id) }}" class="action-btn action-btn-warning" title="Edit Booking">
                                             <i class="fas fa-edit"></i>
                                         </a>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>

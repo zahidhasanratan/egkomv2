@@ -16,6 +16,8 @@
                                     class="nk-menu-text">Add Vendor</span></a></li>
                         <li class="nk-menu-item"><a href="{{ route('super-admin.vendor.index') }}" class="nk-menu-link"><span
                                     class="nk-menu-text">All Vendor</span></a></li>
+                        <li class="nk-menu-item"><a href="{{ route('super-admin.vendor-payments.index') }}" class="nk-menu-link {{ request()->routeIs('super-admin.vendor-payments.*') || request()->routeIs('super-admin.vendor.payment-profile') ? 'active' : '' }}"><span
+                                    class="nk-menu-text">Payment & Income</span></a></li>
                     </ul>
                 </li>
 
@@ -109,6 +111,13 @@
                                                     class="nk-menu-link"><span class="nk-menu-text">Add Tour Package</span></a></li>
                         <li class="nk-menu-item"><a href="{{ route('super-admin.tour-packages.index') }}" class="nk-menu-link"><span class="nk-menu-text">All Tour Packages</span></a></li>
                     </ul>
+                </li>
+
+                <li class="nk-menu-item">
+                    <a href="{{ route('super-admin.commission-fees.index') }}" class="nk-menu-link {{ request()->routeIs('super-admin.commission-fees.*') ? 'active' : '' }}">
+                        <span class="nk-menu-icon"><em class="icon ni ni-percent"></em></span>
+                        <span class="nk-menu-text">Commission & Fees</span>
+                    </a>
                 </li>
 
                 <li class="nk-menu-item has-sub">

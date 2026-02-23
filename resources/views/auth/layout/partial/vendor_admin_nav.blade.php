@@ -9,12 +9,32 @@
                 <li class="nk-menu-item has-sub"><a href="#" class="nk-menu-link nk-menu-toggle"><span class="nk-menu-icon"><em class="icon ni ni-calendar-booking-fill"></em></span><span class="nk-menu-text">Vendor</span></a>
                     <ul class="nk-menu-sub">
                         <li class="nk-menu-item"><a href="{{ route('vendor-admin.vendor.create') }}" class="nk-menu-link"><span class="nk-menu-text">Vendor Info</span></a></li>
-                        <li class="nk-menu-item"><a href="{{ route('vendor-admin.owner.create') }}" class="nk-menu-link"><span class="nk-menu-text">Owner Details</span></a></li>
-                        @if(Auth::guard('vendor')->user()->isApproved())
-                        <li class="nk-menu-item"><a href="{{ route('owners.bankInfo') }}" class="nk-menu-link"><span class="nk-menu-text">Owner Banking Info</span></a></li>
-                        @endif
                     </ul>
                 </li>
+
+                @if(Auth::guard('vendor')->user()->isApproved())
+                <li class="nk-menu-item has-sub">
+                    <a href="#" class="nk-menu-link nk-menu-toggle {{ request()->routeIs('vendor-admin.payment.*') || request()->routeIs('vendor-admin.owner.*') || request()->routeIs('owners.bankInfo') ? 'active' : '' }}">
+                        <span class="nk-menu-icon"><em class="icon ni ni-wallet-alt"></em></span>
+                        <span class="nk-menu-text">My Payment</span>
+                    </a>
+                    <ul class="nk-menu-sub">
+                        <li class="nk-menu-item"><a href="{{ route('vendor-admin.payment.index') }}" class="nk-menu-link {{ request()->routeIs('vendor-admin.payment.index') ? 'active' : '' }}"><span class="nk-menu-text">Income & Payouts</span></a></li>
+                        <li class="nk-menu-item"><a href="{{ route('vendor-admin.owner.create') }}" class="nk-menu-link"><span class="nk-menu-text">Owner Details</span></a></li>
+                        <li class="nk-menu-item"><a href="{{ route('owners.bankInfo') }}" class="nk-menu-link"><span class="nk-menu-text">Owner Banking Info</span></a></li>
+                    </ul>
+                </li>
+                @else
+                <li class="nk-menu-item has-sub">
+                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                        <span class="nk-menu-icon"><em class="icon ni ni-wallet-alt"></em></span>
+                        <span class="nk-menu-text">My Payment</span>
+                    </a>
+                    <ul class="nk-menu-sub">
+                        <li class="nk-menu-item"><a href="{{ route('vendor-admin.owner.create') }}" class="nk-menu-link"><span class="nk-menu-text">Owner Details</span></a></li>
+                    </ul>
+                </li>
+                @endif
 
 
 

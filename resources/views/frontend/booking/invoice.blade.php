@@ -705,10 +705,10 @@
                             @php 
                                 $invoiceSubtotal = (float) ($booking->subtotal ?? 0); 
                                 $invoiceDiscount = (float) ($booking->discount ?? 0); 
+                                $invoicePlatformDiscount = (float) ($booking->platform_discount ?? 0);
                                 $invoiceTax = (float) ($booking->tax ?? 0);
                                 $invoicePlatformFee = (float) ($booking->platform_fee ?? 0);
-                                // Use stored grand_total if available, otherwise calculate
-                                $invoiceGrandTotal = (float) ($booking->grand_total ?? ($invoiceSubtotal - $invoiceDiscount + $invoiceTax + $invoicePlatformFee));
+                                $invoiceGrandTotal = (float) ($booking->grand_total ?? ($invoiceSubtotal - $invoiceDiscount - $invoicePlatformDiscount + $invoiceTax + $invoicePlatformFee));
                                 $paidAmount = (float) ($booking->paid_amount ?? 0);
                                 $paymentStatus = $booking->payment_status ?? 'unpaid';
                             @endphp
@@ -716,29 +716,29 @@
                                 <td colspan="7" class="text-right tfoot-subtotal"><strong>Subtotal:</strong></td>
                                 <td class="text-right tfoot-subtotal"><strong>BDT {{ number_format($invoiceSubtotal, 2) }}</strong></td>
                             </tr>
-                            @if($invoiceDiscount > 0)
-                            <tr>
-                                <td colspan="7" class="text-right tfoot-discount"><strong>Discount@if($booking->coupon_code) (Coupon: {{ $booking->coupon_code }})@endif:</strong></td>
-                                <td class="text-right tfoot-discount"><strong>-BDT {{ number_format($invoiceDiscount, 2) }}</strong></td>
-                            </tr>
-                            @endif
-                            @php
-                                $taxPercentage = (float) ($booking->tax_percentage ?? 0);
-                            @endphp
-                            @if($invoiceTax > 0 || $taxPercentage > 0)
-                            <tr>
-                                <td colspan="7" class="text-right tfoot-tax">
-                                    <strong>Tax{{ $taxPercentage > 0 ? ' (' . number_format($taxPercentage, 2) . '%)' : '' }}:</strong>
-                                </td>
-                                <td class="text-right tfoot-tax">
-                                    <strong>BDT {{ number_format($invoiceTax, 2) }}</strong>
-                                </td>
-                            </tr>
-                            @endif
                             @if($invoicePlatformFee > 0)
                             <tr>
                                 <td colspan="7" class="text-right"><strong>Platform Fee:</strong></td>
                                 <td class="text-right"><strong>BDT {{ number_format($invoicePlatformFee, 2) }}</strong></td>
+                            </tr>
+                            @endif
+                            @php $taxPercentage = (float) ($booking->tax_percentage ?? 0); @endphp
+                            @if($invoiceTax > 0 || $taxPercentage > 0)
+                            <tr>
+                                <td colspan="7" class="text-right tfoot-tax"><strong>Tax{{ $taxPercentage > 0 ? ' (' . number_format($taxPercentage, 2) . '%)' : '' }}:</strong></td>
+                                <td class="text-right tfoot-tax"><strong>BDT {{ number_format($invoiceTax, 2) }}</strong></td>
+                            </tr>
+                            @endif
+                            @if($invoicePlatformDiscount > 0)
+                            <tr>
+                                <td colspan="7" class="text-right tfoot-discount"><strong>Platform Discount:</strong></td>
+                                <td class="text-right tfoot-discount"><strong>-BDT {{ number_format($invoicePlatformDiscount, 2) }}</strong></td>
+                            </tr>
+                            @endif
+                            @if($invoiceDiscount > 0)
+                            <tr>
+                                <td colspan="7" class="text-right tfoot-discount"><strong>Discount{{ $booking->coupon_code ? ' (Coupon: ' . $booking->coupon_code . ')' : '' }}:</strong></td>
+                                <td class="text-right tfoot-discount"><strong>-BDT {{ number_format($invoiceDiscount, 2) }}</strong></td>
                             </tr>
                             @endif
                             <tr class="grand-total">
@@ -808,6 +808,40 @@
                 </div>
             </div>
         </section>
+
+        <!-- Cancellation Policies (Hotel & Room - dynamic per property) -->
+        @if(!empty($booking->rooms_data))
+        <section class="invoice-section" style="background: #f8f9fa; border-radius: 8px; padding: 20px;">
+            <h2 class="section-title" style="color: var(--brand); margin-bottom: 15px;"><i class="fa fa-info-circle"></i> Cancellation policies</h2>
+            <div class="section-content">
+                @if(!empty($invoiceHotelPolicies))
+                <div style="margin-bottom: 20px;">
+                    <h3 style="font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">Hotel cancellation policy</h3>
+                    @foreach($invoiceHotelPolicies as $hp)
+                    <div style="margin-bottom: 12px;">
+                        <div style="font-weight: 600; color: var(--brand); margin-bottom: 4px;">{{ $hp['name'] }}</div>
+                        <div style="white-space: pre-wrap; font-size: 12px; line-height: 1.5; color: var(--text-secondary);">{{ $hp['policy'] }}</div>
+                    </div>
+                    @endforeach
+                </div>
+                @endif
+                @if(!empty($invoiceRoomPolicies))
+                <div style="margin-bottom: {{ !empty($invoiceHotelPolicies) ? '20px' : '0' }};">
+                    <h3 style="font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">Room cancellation policy</h3>
+                    @foreach($invoiceRoomPolicies as $rp)
+                    <div style="margin-bottom: 12px;">
+                        <div style="font-weight: 600; color: var(--brand); margin-bottom: 4px;">{{ $rp['name'] }}</div>
+                        <div style="white-space: pre-wrap; font-size: 12px; line-height: 1.5; color: var(--text-secondary);">{{ $rp['policy'] }}</div>
+                    </div>
+                    @endforeach
+                </div>
+                @endif
+                @if(empty($invoiceHotelPolicies) && empty($invoiceRoomPolicies))
+                <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 0;">Cancellation policies are set by each property. Please contact the property directly for details.</p>
+                @endif
+            </div>
+        </section>
+        @endif
 
         <!-- Booking Information & Arrival Time - Side by Side -->
         <div class="sections-row">
